@@ -26,11 +26,11 @@ namespace His_Pos
         {
             User userLogin = new User();
             string[] auth = new string[2];
-            userLogin.UserId = UserName.Text;
-            userLogin.UserPassword = Password.Text;
+            userLogin.Id = UserName.Text;
+            userLogin.Password = Password.Text;
             if (CheckAccount(ref userLogin, ref auth))
             {
-                userLogin.UserHisAuth = auth.ToList();
+                userLogin.Authority.HisFeatures = auth.ToList();
                 LoadingWindow loadingWindow = new LoadingWindow();
                 loadingWindow.Show();
                 loadingWindow.GetMedicineData(userLogin);
@@ -48,7 +48,7 @@ namespace His_Pos
                 value += (int)(LoginAuth)Enum.Parse(typeof(LoginAuth),auth);
             }
             List<SqlParameter> listparam = new List<SqlParameter>();
-            SqlParameter sqlEmpId= new SqlParameter("@EMPID", MainWindow.CurrentUser.UserId);
+            SqlParameter sqlEmpId= new SqlParameter("@EMPID", MainWindow.CurrentUser.Id);
             SqlParameter sqlAuth = new SqlParameter("@AUTH", value);
             listparam.Add(sqlEmpId);
             listparam.Add(sqlAuth);
@@ -63,8 +63,8 @@ namespace His_Pos
             try
             {
                 List<SqlParameter> listparam = new List<SqlParameter>();
-                SqlParameter sqlAccount = new SqlParameter("@ACCOUNT", Login.UserId);
-                SqlParameter sqlPassword = new SqlParameter("@PASSWORD", Login.UserPassword);
+                SqlParameter sqlAccount = new SqlParameter("@ACCOUNT", Login.Id);
+                SqlParameter sqlPassword = new SqlParameter("@PASSWORD", Login.Password);
                 listparam.Add(sqlAccount);
                 listparam.Add(sqlPassword);
                 DbConnection dbConn = new DbConnection(Properties.Settings.Default.SQL_global);
@@ -72,9 +72,9 @@ namespace His_Pos
                 if (table.Rows.Count != 0){
                     auth = (LoginAuth) table.Rows[0]["EMPAUT_POS"];
                     authArray = auth.ToString().Split(',');
-                    Login.UserId = table.Rows[0]["EMP_ID"].ToString();
-                    Login.UserIdentityNumber = table.Rows[0]["EMP_IDNUM"].ToString();
-                    Login.UserName = table.Rows[0]["EMP_NAME"].ToString();
+                    Login.Id = table.Rows[0]["EMP_ID"].ToString();
+                    Login.IcNumber = table.Rows[0]["EMP_IDNUM"].ToString();
+                    Login.Name = table.Rows[0]["EMP_NAME"].ToString();
                     isPass = true;
                 }
             }

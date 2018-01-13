@@ -1,23 +1,21 @@
 ﻿using System.Collections.Generic;
+using His_Pos.Interface;
 
 namespace His_Pos.Class
 {
-    public class User
+    public class User : IPerson
 	{
-        public string UserId { get; set; }
-	    public string UserPassword { get; set; }
-        public string UserName { get; set; }
-        public string UserEmail { get; set; }
-        public string UserQuickName { get; set; }
-        public string UserBirth { get; set; }
-        public string UserAddress { get; set; }
-        public string UserPhone { get; set; }
-        public string UserIdentityNumber { get; set; }
-        public string UserGender { get; set; }
-        public string UserWorkPlace { get; set; }
-        public string UserPosition { get; set; }
-        public List<string> UserPosAuth { get; set; }
-        public List<string> UserHisAuth { get; set; }
-        public Leave UserLeave { get; set; }
-    }
+	    #region --IPerson--
+	    public string Id { get; set; }
+	    public string Name { get; set; }
+	    public string IcNumber { get; set; }
+	    #endregion
+	    public string Password { get; set; }
+        public string Birthday { get; set; }
+        public string Position { get; set; }
+	    public Department Department { get; set; }
+        public Leave Leave { get; set; }
+	    public ContactInfo ContactInfo { get; set; }
+        public Authority Authority { get; set; }
+	}
 }

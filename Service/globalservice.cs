@@ -48,7 +48,7 @@ namespace His_Pos.Service
                 SqlCommand myCommand = new SqlCommand(sql, myConn);
                 myCommand.Parameters.AddWithValue("@comname", Environment.MachineName);
                 myCommand.Parameters.AddWithValue("@system", system);
-                myCommand.Parameters.AddWithValue("@userId",MainWindow.CurrentUser.UserId);
+                myCommand.Parameters.AddWithValue("@userId",MainWindow.CurrentUser.Id);
                 myCommand.Parameters.AddWithValue("@functionName", functionName);
                 myCommand.Parameters.AddWithValue("@systime", Convert.ToDateTime(DateTime.Now));
                 myCommand.Parameters.AddWithValue("@description", description);

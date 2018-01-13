@@ -67,8 +67,8 @@ namespace His_Pos
                 SqlCommand myCommand = new SqlCommand(sql, myConn);
                 myCommand.Parameters.AddWithValue("@comname", Environment.MachineName);
                 myCommand.Parameters.AddWithValue("@system", system);
-               if (MainWindow.CurrentUser.UserId == null) MainWindow.CurrentUser.UserId = "";
-                myCommand.Parameters.AddWithValue("@userId", MainWindow.CurrentUser.UserId);
+               if (MainWindow.CurrentUser.Id == null) MainWindow.CurrentUser.Id = "";
+                myCommand.Parameters.AddWithValue("@userId", MainWindow.CurrentUser.Id);
                 myCommand.Parameters.AddWithValue("@functionName", functionName);
                 myCommand.Parameters.AddWithValue("@systime", Convert.ToDateTime(DateTime.Now));
                 myCommand.Parameters.AddWithValue("@description", description);
