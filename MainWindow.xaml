@@ -1,0 +1,125 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:menuusercontrol="clr-namespace:MenuUserControl;assembly=MenuUserControl"
+        xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
+        xmlns:prescriptionInquire="clr-namespace:His_Pos.PrescriptionInquire"
+        xmlns:prescriptionRevise="clr-namespace:His_Pos.PrescriptionRevise"
+        xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
+        xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
+        x:Class="His_Pos.MainWindow"
+        mc:Ignorable="d" Title="MainWindow"
+        WindowStartupLocation="CenterScreen"  Height="900" Width="1600"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}" VerticalContentAlignment="Stretch" 
+        HorizontalContentAlignment="Stretch" MinWidth="800" MinHeight="450"
+        DataContext="{Binding Source={StaticResource Locator},Path=ViewModelMainWindow}">
+    <Window.Resources>
+        <Style>
+            <Style.TargetType>
+                <x:Type TypeName="ScrollBar" />
+            </Style.TargetType>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="True" />
+            <Setter Property="Background" Value="DimGray" />
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="MinWidth" Value="8" />
+        </Style>
+        <DataTemplate DataType="{x:Type prescriptionDec:PrescriptionDec}">
+            <prescriptionDec:PrescriptionDecView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prescriptionInquire:PrescriptionInquire}">
+            <prescriptionInquire:PrescriptionInquireView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type prescriptionRevise:PrescriptionRevise}">
+            <prescriptionRevise:PrescriptionReviseView/>
+        </DataTemplate>
+    </Window.Resources>
+    <Viewbox Stretch="Fill">
+        <Grid>
+            <Grid.Background>
+                <ImageBrush ImageSource="Images/SystemBackground2.jpg"/>
+            </Grid.Background>
+            <StackPanel Name="MenuStack"  Background="#FF363535" Width="230" HorizontalAlignment="Left" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Image Name="SystemIcon" Source="Images/His.png" Height="60" Width="60" Margin="0,0,0,5" />
+                    <Label Name="HisSwitch" FontFamily="Arial" Foreground="LightSkyBlue" Content="H I S" Margin="25,10,0,0" FontWeight="Medium" FontSize="16" TextOptions.TextFormattingMode="Display" FontStretch="SemiExpanded" MouseDown="MenuSwitchMouseDown"/>
+                    <Label Name="PosSwitch" FontFamily="Arial" Foreground="DarkGray" Content="P O S" Margin="25,10,0,0" FontWeight="Medium" FontSize="16" TextOptions.TextFormattingMode="Display" FontStretch="SemiExpanded" MouseDown="MenuSwitchMouseDown"/>
+                </StackPanel>
+                <ScrollViewer Name="HisMenu" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left">
+                    <StackPanel Orientation="Vertical">
+                        <menuusercontrol:UserControl1 Name="HisFeature1" MouseDown="FeatureMouseDown"/>
+                        <menuusercontrol:UserControl1 Name="HisFeature2" MouseDown="FeatureMouseDown"/>
+                    </StackPanel>
+                </ScrollViewer>
+                <ScrollViewer Name="PosMenu" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
+                    <StackPanel Orientation="Vertical">
+                        <menuusercontrol:UserControl1 Name="PosFeature1" MouseDown="FeatureMouseDown"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </StackPanel>
+            <DockPanel Name="FeatureDock" Height="Auto" Width="Auto" Margin="230,0,355,0">
+                <DockPanel.Background>
+                    <ImageBrush ImageSource="Images/SystemBackgroundWhite.jpg"/>
+                </DockPanel.Background>
+                <chromeTabs:ChromeTabControl x:Name="MyChromeTabControl" Width="1015" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
+                             Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="WhiteSmoke"
+                             CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" TabTearTriggerDistance="10">
+                    <!--We override the control template here to show how you can modify the properties of tab panel and content presenter-->
+                    <chromeTabs:ChromeTabControl.Template>
+                        <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
+                            <ControlTemplate.Resources>
+                                <converters:TabPersistBehaviorToContentPresenterVisibilityConverter x:Key="TabPersistBehaviorToContentPresenterVisibilityConverter" />
+                                <converters:TabPersistBehaviorToItemHolderVisibilityConverter x:Key="TabPersistBehaviorToItemHolderVisibilityConverter" />
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border Background="{TemplateBinding Background}" BorderThickness="0,0,0,1" BorderBrush="#FF999999" Grid.Row="0" Padding="10,5,10,0">
+                                    <chromeTabs:ChromeTabPanel IsItemsHost="True" Background="{TemplateBinding Background}" />
+                                </Border>
+                                <Grid Grid.Row="1" Visibility="{TemplateBinding TabPersistBehavior,Converter={StaticResource TabPersistBehaviorToContentPresenterVisibilityConverter}}">
+                                    <ContentPresenter Content="{TemplateBinding SelectedContent}" />
+                                </Grid>
+                                <Grid x:Name="PART_ItemsHolder" Grid.Row="1" Visibility="{TemplateBinding TabPersistBehavior,Converter={StaticResource TabPersistBehaviorToItemHolderVisibilityConverter}}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </chromeTabs:ChromeTabControl.Template>
+                    <!--We must override the item template to show our tab name in the header. Here we use a simple
+            textblock, but you could put any combination of controls here. Uncomment the orange border to show
+            the bounds of the header content presenter-->
+                    <chromeTabs:ChromeTabControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type chromeTabs:ChromeTabItem}}}">
+                                <!--<Border BorderBrush="Orange"
+                                BorderThickness="1">-->
+                                <StackPanel Orientation="Horizontal" Background="Transparent">
+                                    <TextBlock Text="{Binding TabName}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                </StackPanel>
+                                <!--</Border>-->
+                                <!--We can implement a context menu for the header here. The ChromeTabItems expose for convenience the following commands, "CloseTabCommand: close the current tab, "CloseAllTabsCommand", and "CloseOtherTabsCommand", which closes all tabs except the current.-->
+                            </Grid>
+                        </DataTemplate>
+                    </chromeTabs:ChromeTabControl.ItemTemplate>
+                </chromeTabs:ChromeTabControl>
+            </DockPanel>
+            <StackPanel Name="PaymentBlock" Orientation="Vertical" Width="350" HorizontalAlignment="Right" >
+                <TextBox Name="Barcode" Height="0" TextWrapping="Wrap" Width="240"/>
+                <!--<Image Name="PaymentSwitchButton" Source="Icons/PaymentSwitchIcon.png" Height="30" Width="30" HorizontalAlignment="Left" MouseDown="PaymentSwitch"/>-->
+                <DataGrid Name="BarcodeDataGrid" Height="800" Width="350">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="品名" />
+                        <DataGridTextColumn Header="單價" />
+                        <DataGridTextColumn Header="條碼" />
+                        <DataGridTextColumn Header="描述" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button Content="Button" Width="75" VerticalContentAlignment="Bottom" Command="{Binding AddTabCommand}" CommandParameter="Hi"/>
+            </StackPanel>
+        </Grid>
+    </Viewbox>
+</Window>

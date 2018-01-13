@@ -1,0 +1,76 @@
+<DockPanel x:Name="MainPage" LastChildFill="true" DockPanel.Dock="Top" Width="auto">
+        <DockPanel LastChildFill="true" DockPanel.Dock="Top" Width="auto" Height="900" Visibility="Collapsed">
+            <DockPanel.Background>
+                <ImageBrush />
+            </DockPanel.Background>
+        </DockPanel>
+        <Border x:Name="HisPosMenu" Background="Transparent" Width="230" MouseEnter="Menu_MouseEnter">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="HisPosStack" Background="DimGray" Width="auto" CanVerticallyScroll="True" >
+                    <DockPanel Name="HisPosDock" HorizontalAlignment="Left" ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="0" Background="Transparent">
+                        <Image x:Name ="PosIcon" Height="70" Width="80" Margin="0,0,0,5" MouseDown="Image_MouseDown"/>
+                        <Label x:Name="HisLabel" FontFamily="Arial" Foreground="DarkGray" Content="H I S" Margin="25,10,0,0" FontWeight="Medium" FontSize="16" UseLayoutRounding="False" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" FontStretch="SemiExpanded"/>
+                        <Label x:Name="HisPosLabelOn"  FontFamily="Arial" Foreground="Orange" Content="P O S" Margin="20,10,0,0" FontWeight="Medium" FontSize="16" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" FontStretch="SemiExpanded"/>
+                    </DockPanel>
+                    <menuusercontrol:UserControl1 Name="HisPosFeature1" MouseDown="HisPosFeature_MouseDown"/>
+                    <menuusercontrol:UserControl1 Name="HisPosFeature2" MouseDown="HisPosFeature_MouseDown"/>
+                    <menuusercontrol:UserControl1 Name="HisPosFeature3" MouseDown="HisPosFeature_MouseDown"/>
+                    <menuusercontrol:UserControl1 Name="HisPosFeature4" MouseDown="HisPosFeature_MouseDown"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        <Border x:Name="HisMenu" Background="Transparent" Width="230" Visibility="Collapsed" MouseEnter="Menu_MouseEnter">
+            <StackPanel x:Name="HisStack" Background="DimGray"  Width="auto" CanVerticallyScroll="True">
+                <DockPanel HorizontalAlignment="Left">
+                    <Image Source="icons\H.png" Height="70" Width="80" Margin="0,0,0,5" MouseDown="Image_MouseDown"/>
+                    <Label x:Name="HisLabelOn" FontFamily="Arial" Foreground="LightSkyBlue" Content="H I S" Margin="25,10,0,0" FontWeight="Medium" FontSize="16" UseLayoutRounding="False" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" FontStretch="SemiExpanded"/>
+                    <Label x:Name="HisPosLabel" FontFamily="Arial" Foreground="DarkGray" Content="P O S" Margin="20,10,0,0" FontWeight="Medium" FontSize="16" UseLayoutRounding="True" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" FontStretch="SemiExpanded" />
+                </DockPanel>
+            </StackPanel>
+        </Border>
+        <Canvas x:Name="Payment" DockPanel.Dock="Right" HorizontalAlignment="Right" MinWidth="25" Width="350" MouseDown="Payment_MouseDown">
+            <Canvas.Background>
+                <ImageBrush ImageSource="1.jpg"  />
+            </Canvas.Background>
+            <Button Content="" Canvas.Left="0" Canvas.Top="0" Width="20" Height="20" Click="Button_Click" Background="#FFEDEDF7"/>
+            <TextBox x:Name="Barcode" Height="0" Canvas.Left="25" TextWrapping="Wrap" Canvas.Top="10" Width="240" KeyDown="barcode_KeyDown"/>
+            <DataGrid x:Name="BarcodeDataGrid" Height="488" Canvas.Left="10" Canvas.Top="25" Width="330">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="品名" Binding="{Binding Path=PRODUCT_NAME}"/>
+                    <DataGridTextColumn Header="單價" Binding="{Binding Path=PRODUCT_PRICE}"/>
+                    <DataGridTextColumn Header="條碼" Binding="{Binding Path=PRODUCT_BARCODE}"/>
+                    <DataGridTextColumn Header="描述" Binding="{Binding Path=PRODUCT_DESCRIPTION}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Button Content="Button" Canvas.Left="138" Canvas.Top="161" Width="75" Click="Button_Click_1"/>
+        </Canvas>
+        <Border x:Name="DockBorder">
+            <Border.Background>
+                <ImageBrush ImageSource="Background/SystemBackground.jpg"/>
+            </Border.Background>
+            <TabControl x:Name="FunctionsTabControl" Margin="10,20,10,10" ItemsSource="{Binding TabCollection}">
+                <TabControl.Resources>
+                    <DataTemplate DataType="{x:Type newFunction:NewTab}">
+                        <newFunction:NewTabView/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type prescriptionDec:PrescriptionDec}">
+                        <prescriptionDec:PrescriptionDecView/>
+                    </DataTemplate>
+                </TabControl.Resources>
+                <TabControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type tabClass:ITab}">
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Width="Auto">
+                            <TextBlock Width="100" FontSize="16" Margin="5,3,5,3">
+                            <Run Text="{Binding Name}"/>
+                            </TextBlock>
+                            <TextBlock>
+                            <Hyperlink Command="{Binding CloseCommand}" Foreground="Transparent">
+                                <Image Source="Icons\close.png" Width="15" Margin="0,3,0,0" MouseEnter="Image_MouseEnterLeave"  MouseLeave="Image_MouseEnterLeave"/>
+                            </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+            </TabControl>
+        </Border>
+    </DockPanel>

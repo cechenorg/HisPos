@@ -1,0 +1,157 @@
+﻿<Window x:Class="His_Pos.PrescriptionInquire.PrescriptionInquireOutcome"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:His_Pos.PrescriptionInquire"
+        xmlns:hisPos="clr-namespace:His_Pos"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+        mc:Ignorable="d"
+        Title="PrescriptionInquireOutcome" Height="595" Width="1014">
+    <Window.Resources>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="5,10,5,10"/>
+        </Style>
+        <Style x:Key="CenterGridHeaderStyle2" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#99BFBFBF"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="5,10,5,10"/>
+        </Style>
+    </Window.Resources>
+    <Window.Background>
+        <ImageBrush ImageSource="/Images/SystemBackgroundWhite.jpg"/>
+    </Window.Background>
+    <Viewbox  VerticalAlignment="Top">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition Height="290"/>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                        <hisPos:IconLabel x:Name="PatientName" HorizontalAlignment="Left"/>
+                        <hisPos:IconLabel x:Name="PatientBirthday" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0">
+                        <hisPos:IconLabel x:Name="PatientId" HorizontalAlignment="Left"/>
+                        <hisPos:IconLabel x:Name="PatientEmergentTel" HorizontalAlignment="Left"/>
+                    </StackPanel>
+                </StackPanel>
+            </DockPanel>
+            <Grid Background="#7FEEEEEE" Grid.Row="1" Margin="10,10,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <DockPanel LastChildFill="False"  Margin="10,0,0,0">
+                    <Label Content="釋出院所" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
+                                   BorderThickness="0,0,0,1"/>
+                    <Label Name="ReleasePalace" Background="{x:Null}" Width="387" Height="30" FontSize="14" FontStretch="ExtraExpanded" BorderThickness="0,0,0,1" 
+                           FontWeight="Bold" VerticalContentAlignment="Center" Padding="0,8,0,0" Margin="0" MaxHeight="50" BorderBrush="DimGray"/>
+                </DockPanel>
+                <DockPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0">
+                    <Label Content="就醫科別" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
+                                   HorizontalContentAlignment="Stretch" />
+                    <Label x:Name="DivisionCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False" Margin="10,0,0,0">
+                    <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                    <Label x:Name="DoctorName"  Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="1" Grid.Column="0"  Margin="10,0,0,0">
+                    <Label Content="就醫日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label x:Name="PrescriptionPicker" Width="147" Height="30" MinWidth="147" FontSize="14" FontWeight="Bold" Padding="0" 
+                                            FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                    <Label Content="調劑日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label x:Name="AdjustPicker" Width="auto" Height="30" MinWidth="143" FontSize="14" FontWeight="Bold" Padding="0" FontStretch="ExtraExpanded" 
+                                            HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="1" Grid.Column="1"  Margin="10,0,0,0">
+                    <Label Content="主要診斷" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label x:Name="MainDiagnosis"  Width="auto" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="1" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
+                    <Label Width="auto" Content="次要診斷" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label x:Name="SeconDiagnosis" Width="auto" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="2" Grid.Column="0"  Margin="10,0,0,0">
+                    <Label Content="就醫序號" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                    <Label x:Name="TreatmentNumber" MinWidth="147" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
+                            BorderThickness="0,0,0,1" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" VerticalContentAlignment="Center"/>
+                    <Label Content="特定治療" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                    <Label x:Name="SpecialCode" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="2" Grid.Column="1"  Margin="10,0,0,0">
+                    <Label Content="給付類別" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label Name="PaymentCategoryCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="2" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
+                    <Label Content="部分負擔" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label Name="CopaymentCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                </DockPanel>
+                <DockPanel Grid.Row="3" Grid.Column="0"  Margin="10,0,0,0">
+                    <Label Content="處方案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                    <Label x:Name="MedCateCombo" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                    <Label Content="給藥日份" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                    <Label x:Name="MedicineDays" MinWidth="60" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
+                                     BorderThickness="0,0,0,1" HorizontalContentAlignment="Left" BorderBrush="DimGray" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="3" Grid.Column="1"  Margin="10,0,0,0">
+                    <Label Content="調劑案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                    <Label x:Name="CaseCateCombo" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded"  HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                </DockPanel>
+                <DockPanel Grid.Row="3" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
+                    <Label Content="領藥次數" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                    <Label x:Name="ChronicSequence" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" 
+                                     Margin="10,0,0,0" HorizontalContentAlignment="Center"/>
+                    <Label Content="/" FontSize="16" Width="auto" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" HorizontalContentAlignment="Stretch"/>
+                    <Label x:Name="ChronicTotal"  Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
+                </DockPanel>
+            </Grid>
+            <DataGrid Name="PrescriptionSet" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"
+                           AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191">
+                <DataGrid.HorizontalGridLinesBrush>
+                    <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
+                </DataGrid.HorizontalGridLinesBrush>
+                <DataGrid.Background>
+                    <SolidColorBrush Color="#FFEEEEEE" Opacity="0.5"/>
+                </DataGrid.Background>
+                <DataGrid.BorderBrush>
+                    <SolidColorBrush Color="Black" Opacity="0.9"/>
+                </DataGrid.BorderBrush>
+                <DataGrid.Columns>
+                    <DataGridTextColumn MinWidth="130" Header="健保代碼" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="320" Header="藥品名稱" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="60" Header="用量" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="40" Header="用法" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="40" Header="天數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="40" Header="總數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTemplateColumn MinWidth="40" Header="自費" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:Name="MedicinePaysDataTemplate">
+                                <CheckBox Name="ProductmPaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn MinWidth="40" Header="途徑" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="60" Header="健保價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Viewbox>
+</Window>
