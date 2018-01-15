@@ -11,7 +11,6 @@ namespace His_Pos.Class
         public Prescription()
         {
         }
-
         private Pharmacy Pharmacy { get; set; }
         private Treatment Treatment { get; set; }
         private List<Medicine> Medicines { get; set; }
