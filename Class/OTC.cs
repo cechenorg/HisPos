@@ -7,8 +7,15 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class
 {
-    public class OTC : IProduct
+    public class Otc : IProduct
     {
+        public Otc(string id, string name, double price, double inventory)
+        {
+            Id = id;
+            Name = name;
+            Price = price;
+            Inventory = inventory;
+        }
         #region -- IProduct --
         public string Id { get; set; }
         public string Name { get; set; }

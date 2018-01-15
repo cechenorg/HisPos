@@ -171,7 +171,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Class\AdjustCase.cs" />
-    <Compile Include="Class\AdjustCode.cs" />
     <Compile Include="Class\Authority.cs" />
     <Compile Include="Class\ChronicPrescription.cs" />
     <Compile Include="Class\ContactInfo.cs" />

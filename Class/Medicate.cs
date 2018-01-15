@@ -8,6 +8,14 @@ namespace His_Pos.Class
 {
     public class Medicate
     {
+        public Medicate(double dosage, string usage, int days, string position)
+        {
+            Dosage = dosage;
+            Usage = usage;
+            Days = days;
+            Position = position;
+        }
+
         public double Dosage { get; set; }
         public string Usage { get; set; }
         public int Days { get; set; }

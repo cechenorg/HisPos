@@ -8,8 +8,12 @@ namespace His_Pos.Class
 {
     public class Prescription
     {
-        public Pharmacy Pharmacy { get; set; }
-        public Treatment Treatment { get; set; }
-        public List<Medicine> Medicines { get; set; } = new List<Medicine>();
+        public Prescription()
+        {
+        }
+
+        private Pharmacy Pharmacy { get; set; }
+        private Treatment Treatment { get; set; }
+        private List<Medicine> Medicines { get; set; }
     }
 }

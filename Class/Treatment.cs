@@ -20,6 +20,5 @@ namespace His_Pos.Class
         public string TreatmentDate { get; set; }
         public string AdjustDate { get; set; }
         public string MedicineDays { get; set; }
-
     }
 }

@@ -1,22 +1,25 @@
-﻿namespace His_Pos.Class
+﻿using System.Collections.Generic;
+
+namespace His_Pos.Class
 {
     public struct Leave
 	{
-        public  int SickLeave { get; set; }
-        public int FuneralLeave { get; set; }
-        public int MaternityLeave { get; set; }
-        public int AnnualLeave { get; set; }
-        public int AdjustLeave { get; set; }
-        public int MarriageLeave { get; set; }
+	    public int[] Leaves { get; set; }
 
-        public Leave(int sick, int funeral, int maternity, int annual, int adjust, int marriage)
+	    public Leave(int sick, int funeral, int maternity, int annual, int adjust, int marriage)
         {
-            SickLeave = sick;
-            FuneralLeave = funeral;
-            MaternityLeave = maternity;
-            AnnualLeave = annual;
-            AdjustLeave = adjust;
-            MarriageLeave = marriage;
+            Leaves = new int[6]{0,0,0,0,0,0};
+            Leaves[0] += sick;
+            Leaves[1] += funeral;
+            Leaves[2] += maternity;
+            Leaves[3] += annual;
+            Leaves[4] += adjust;
+            Leaves[5] += marriage;
         }
-    }
+
+	    public void SetLeave(int type,int date)
+	    {
+	        Leaves[type] += date;
+        }
+	}
 }
