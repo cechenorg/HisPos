@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -20,6 +21,8 @@ namespace His_Pos.ViewModel
         public ObservableCollection<TabBase> ItemCollection { get; set; }
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
         private TabBase _selectedTab;
+        private readonly Dictionary<string, TabBase> TabDictionary = new Dictionary<string, TabBase>();
+
         public TabBase SelectedTab
         {
             get { return _selectedTab; }
@@ -54,6 +57,17 @@ namespace His_Pos.ViewModel
             this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
+            TabFactory();
+        }
+
+        private void TabFactory()
+        {
+            TabDictionary[His_Pos.MainWindow.HisFeatures1Item[0]] =
+                new PrescriptionDec.PrescriptionDec() {TabName = His_Pos.MainWindow.HisFeatures1Item[0]};
+            TabDictionary[His_Pos.MainWindow.HisFeatures1Item[1]] =
+                new PrescriptionInquire.PrescriptionInquire() { TabName = His_Pos.MainWindow.HisFeatures1Item[1] };
+            TabDictionary[His_Pos.MainWindow.HisFeatures1Item[2]] =
+                new PrescriptionRevise.PrescriptionRevise() { TabName = His_Pos.MainWindow.HisFeatures1Item[2] };
         }
 
         protected virtual void ReorderTabsCommandAction(TabReorder reorder)
@@ -117,45 +131,10 @@ namespace His_Pos.ViewModel
         //Adds a random tab
         public void AddTabCommandAction(object tab)
         {
-            if (tab == null)
-            {
-                this.ItemCollection.Add(CreateTabPrescriptionDec("YES"));
-                return;
-            }
-            switch (tab.ToString())
-            {
-                case "處方登錄":
-                    this.ItemCollection.Add(CreateTabPrescriptionDec(tab.ToString()));
-                    this.SelectedTab = this.ItemCollection[ItemCollection.Count-1];
-                    break;
-                case "處方查詢":
-                    this.ItemCollection.Add(CreateTabPrescriptionInquire(tab.ToString()));
-                    this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
-                    break;
-                case "處方修改":
-                    this.ItemCollection.Add(CreateTabPrescriptionRevise(tab.ToString()));
-                    this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
-                    break;
-            }
-            
-        }
+            TabBase newTab = TabDictionary[tab.ToString()];
 
-        public  PrescriptionDec.PrescriptionDec CreateTabPrescriptionDec(string name)
-        {
-            var tab = new PrescriptionDec.PrescriptionDec() { TabName = name };
-            return tab;
-        }
-
-        public PrescriptionInquire.PrescriptionInquire CreateTabPrescriptionInquire(string name)
-        {
-            var tab = new PrescriptionInquire.PrescriptionInquire(){TabName = name};
-            return tab;
-        }
-
-        public PrescriptionRevise.PrescriptionRevise CreateTabPrescriptionRevise(string name)
-        {
-            var tab = new PrescriptionRevise.PrescriptionRevise() { TabName = name };
-            return tab;
+            this.ItemCollection.Add(newTab.getTab());
+            this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
         }
     }
 }

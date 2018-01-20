@@ -9,7 +9,7 @@ namespace His_Pos
     public partial class MainWindow
     {
         public string[] HisFeatures = { Properties.Resources.hisPrescription };
-        public string[] HisFeatures1Item = { Properties.Resources.hisPrescriptionDeclare ,Properties.Resources.hisPrescriptionInquire,Properties.Resources.hisPrescriptionRevise};
+        public static string[] HisFeatures1Item = { Properties.Resources.hisPrescriptionDeclare ,Properties.Resources.hisPrescriptionInquire,Properties.Resources.hisPrescriptionRevise};
         public string[] HisFeaturesIcon = { @"..\Images\PrescriptionIcon.png"};
         public List<UserControl1> HisFeaturesList;
         public List<string[]> HisFeaturesItemsList;

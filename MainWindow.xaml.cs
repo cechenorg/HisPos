@@ -95,18 +95,7 @@ namespace His_Pos
         {
             var m = sender as MenuItem;
             Debug.Assert(m != null, nameof(m) + " != null");
-            switch (m.Name)
-            {
-                case "處方登錄":
-                    ((ViewModelMainWindow) DataContext).AddTabCommandAction("處方登錄");
-                    break;
-                case "處方查詢":
-                    ((ViewModelMainWindow) DataContext).AddTabCommandAction("處方查詢");
-                    break;
-                case "處方修改":
-                    ((ViewModelMainWindow)DataContext).AddTabCommandAction("處方修改");
-                    break;
-            }
+            ((ViewModelMainWindow) DataContext).AddTabCommandAction(m.Name);
         }
 
         private void MenuSwitchMouseDown(object sender, MouseButtonEventArgs e)
