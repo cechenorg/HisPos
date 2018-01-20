@@ -183,6 +183,7 @@
     <Compile Include="Class\Division.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Hospital.cs" />
+    <Compile Include="Class\MedicalInfo.cs" />
     <Compile Include="Class\MedicalPersonnel.cs" />
     <Compile Include="Class\PaymentCategory.cs" />
     <Compile Include="Class\Pharmacy.cs" />

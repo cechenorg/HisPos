@@ -16,6 +16,6 @@ namespace His_Pos.Class
 	    public Department Department { get; set; }
         public Leave Leave { get; set; }
 	    public ContactInfo ContactInfo { get; set; }
-        public Authority Authority { get; set; }
+        public Authority Authority { get; set; } = new Authority();
 	}
 }

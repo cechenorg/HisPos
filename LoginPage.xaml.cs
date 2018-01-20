@@ -24,14 +24,14 @@ namespace His_Pos
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            User userLogin = new User();
-            string[] auth = new string[2];
+            var userLogin = new User();
+            var auth = new string[2];
             userLogin.Id = UserName.Text;
             userLogin.Password = Password.Text;
             if (CheckAccount(ref userLogin, ref auth))
             {
                 userLogin.Authority.HisFeatures = auth.ToList();
-                LoadingWindow loadingWindow = new LoadingWindow();
+                var loadingWindow = new LoadingWindow();
                 loadingWindow.Show();
                 loadingWindow.GetMedicineData(userLogin);
                 Close();
@@ -58,7 +58,7 @@ namespace His_Pos
 
         private bool CheckAccount(ref User Login, ref string[] authArray)
         {
-            bool isPass = false;
+            var isPass = false;
             LoginAuth auth;
             try
             {
