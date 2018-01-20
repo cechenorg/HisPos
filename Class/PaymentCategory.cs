@@ -7,7 +7,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class
 {
-    public class PaymentCategory : ISelection
+    public class PaymentCategory : Selection
     {
         public string Id { get; set; }
         public string Name { get; set; }

@@ -12,22 +12,15 @@ namespace His_Pos.Class
         {
         }
 
-        private string Address { get; set; }
-        private string Tel { get; set; }
-        private string Email { get; set; }
-
-        public void SetAddress(string address)
+        public ContactInfo(string address, string tel, string email)
         {
             Address = address;
-        }
-        public void SetTel(string tel)
-        {
             Tel = tel;
-        }
-
-        public void SetEmail(string email)
-        {
             Email = email;
         }
+
+        public string Address { get; set; }
+        public string Tel { get; set; }
+        public string Email { get; set; }
     }
 }

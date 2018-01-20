@@ -13,5 +13,7 @@ namespace His_Pos.Class
         public string Id { get; set; }
         public string Name { get; set; }
         #endregion
+        public MedicalPersonnel Doctor { get; set; }
+        public Selection Division { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class
 {
-    public class Copayment : ISelection
+    public class Copayment : Selection
     {
         public string Id { get; set; }
         public string Name { get; set; }
