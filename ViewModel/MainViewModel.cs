@@ -62,12 +62,10 @@ namespace His_Pos.ViewModel
 
         private void TabFactory()
         {
-            TabDictionary[His_Pos.MainWindow.HisFeatures1Item[0]] =
-                new PrescriptionDec.PrescriptionDec() {TabName = His_Pos.MainWindow.HisFeatures1Item[0]};
-            TabDictionary[His_Pos.MainWindow.HisFeatures1Item[1]] =
-                new PrescriptionInquire.PrescriptionInquire() { TabName = His_Pos.MainWindow.HisFeatures1Item[1] };
-            TabDictionary[His_Pos.MainWindow.HisFeatures1Item[2]] =
-                new PrescriptionRevise.PrescriptionRevise() { TabName = His_Pos.MainWindow.HisFeatures1Item[2] };
+            var functionNames = His_Pos.MainWindow.HisFeatures[0].Functions;
+            TabDictionary[functionNames[0]] = new PrescriptionDec.PrescriptionDec() {TabName = functionNames[0] };
+            TabDictionary[functionNames[1]] = new PrescriptionInquire.PrescriptionInquire() { TabName = functionNames[1] };
+            TabDictionary[functionNames[2]] = new PrescriptionRevise.PrescriptionRevise() { TabName = functionNames[2] };
         }
 
         protected virtual void ReorderTabsCommandAction(TabReorder reorder)
