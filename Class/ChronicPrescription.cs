@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class
 {
-    public class ChronicPrescription : Prescription
+    internal class ChronicPrescription : Prescription
     {
         public int ChronicSequence { get; set; }
         public int ChronicTotal { get; set; }

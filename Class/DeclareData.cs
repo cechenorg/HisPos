@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class
 {
-    public class DeclareData
+    internal class DeclareData
     {
         public DeclareData(Prescription prescription)
         {

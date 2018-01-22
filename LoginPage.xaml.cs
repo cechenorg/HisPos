@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using His_Pos.Class;
+using His_Pos.Service;
 
 namespace His_Pos
 {
@@ -73,7 +74,7 @@ namespace His_Pos
                     auth = (LoginAuth) table.Rows[0]["EMPAUT_POS"];
                     authArray = auth.ToString().Split(',');
                     Login.Id = table.Rows[0]["EMP_ID"].ToString();
-                    Login.IcNumber = table.Rows[0]["EMP_IDNUM"].ToString();
+                    Login.IdNumber = table.Rows[0]["EMP_IDNUM"].ToString();
                     Login.Name = table.Rows[0]["EMP_NAME"].ToString();
                     isPass = true;
                 }

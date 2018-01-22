@@ -171,26 +171,37 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Class\AdjustCase.cs" />
+    <Compile Include="Class\AdjustCases.cs" />
     <Compile Include="Class\Authority.cs" />
     <Compile Include="Class\ChronicPrescription.cs" />
     <Compile Include="Class\ContactInfo.cs" />
     <Compile Include="Class\Copayment.cs" />
+    <Compile Include="Class\Copayments.cs" />
     <Compile Include="Class\Customer.cs" />
     <Compile Include="Class\DeclareData.cs" />
     <Compile Include="Class\DeclareDetail.cs" />
     <Compile Include="Class\Department.cs" />
+    <Compile Include="Class\Division.cs" />
+    <Compile Include="Class\Divisions.cs" />
     <Compile Include="Class\Enum.cs" />
     <Compile Include="Class\Feature.cs" />
     <Compile Include="Class\Hospital.cs" />
+    <Compile Include="Class\IcCard.cs" />
+    <Compile Include="Class\IcMarks.cs" />
+    <Compile Include="Class\Institutions.cs" />
     <Compile Include="Class\MedicalInfo.cs" />
     <Compile Include="Class\MedicalPersonnel.cs" />
+    <Compile Include="Class\NewbornsData.cs" />
     <Compile Include="Class\PaymentCategory.cs" />
+    <Compile Include="Class\PaymentCategroies.cs" />
     <Compile Include="Class\Pharmacy.cs" />
     <Compile Include="Class\Prescription.cs" />
+    <Compile Include="Class\TreatmentCase.cs" />
+    <Compile Include="Class\TreatmentCases.cs" />
     <Compile Include="Class\Treatment.cs" />
-    <Compile Include="Interface\IInstution.cs" />
-    <Compile Include="Interface\IPerson.cs" />
-    <Compile Include="Interface\IProduct.cs" />
+    <Compile Include="AbstractClass\Instution.cs" />
+    <Compile Include="AbstractClass\Person.cs" />
+    <Compile Include="AbstractClass\Product.cs" />
     <Compile Include="Class\Selection.cs" />
     <Compile Include="Class\Leave.cs" />
     <Compile Include="Class\Medicate.cs" />
@@ -203,6 +214,7 @@
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Interface\ISelection.cs" />
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>

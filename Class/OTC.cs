@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using His_Pos.Interface;
+using His_Pos.AbstractClass;
 
 namespace His_Pos.Class
 {
-    public class Otc : IProduct
+    public class Otc : Product
     {
         public Otc(string id, string name, double price, double inventory)
         {
@@ -16,11 +16,5 @@ namespace His_Pos.Class
             Price = price;
             Inventory = inventory;
         }
-        #region -- IProduct --
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public double Inventory { get; set; }
-        #endregion
     }
 }

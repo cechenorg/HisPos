@@ -77,5 +77,10 @@ namespace His_Pos
             string date = (int.Parse(selectedDate.Year.ToString()) - 1911) + month + day;
             return date;
         }
+        public string BirthdayFormatConverter(string birthday)
+        {
+            var year = birthday.Substring(0, 3).StartsWith("0") ? birthday.Substring(1, 2) : birthday.Substring(0, 3);
+            return year + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class
 {
-    public class DeclareDetail
+    internal class DeclareDetail
     {
         public DeclareDetail(string medicalId, double percent,double price,int sequence,string start,string end)
         {
@@ -22,7 +22,7 @@ namespace His_Pos.Class
 
         public DeclareDetail(Medicine medicine,string adjustCase,int sequence, string start, string end,string id)
         {
-            if(!medicine.PaySelf || adjustCase == "3")//p1
+            if(medicine.PaySelf == "0" || adjustCase == "3")//p1
                 MedicalOrder = "1";
             else
                 MedicalOrder = "4";
@@ -51,10 +51,10 @@ namespace His_Pos.Class
 
         private void SetMedicate(Medicine medicine)
         {
-            Dosage = medicine.Medicate.Dosage;//p3
-            Usage = medicine.Medicate.Usage;//p4
-            Position = medicine.Medicate.Position;//p5
-            Days = medicine.Medicate.Days;//p11
+            Dosage = medicine.MedicalCategory.Dosage;//p3
+            Usage = medicine.MedicalCategory.Usage;//p4
+            Position = medicine.MedicalCategory.Position;//p5
+            Days = medicine.MedicalCategory.Days;//p11
         }
         private void SetMedicine(Medicine medicine)
         {

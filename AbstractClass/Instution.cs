@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Class;
+using His_Pos.Interface;
 
-namespace His_Pos.Class
+namespace His_Pos.AbstractClass
 {
-    public class AdjustCase : Selection
+    public class Institution : Selection
     {
-        public AdjustCase(string id, string name)
+        public Institution(string id,string name)
         {
             Id = id;
             Name = name;

@@ -3,30 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.AbstractClass;
 
 namespace His_Pos.Class
 {
-    public class Department
+    public class Department : Institution
     {
-        public Department(string id, string name)
+        public Department(string id, string name) : base(id, name)
         {
             Id = id;
             Name = name;
         }
 
-        private string Id { get; set; }
-        private string Name { get; set; }
-        private string Tel { get; set; }
-        private string Fax { get; set; }
-
-        public void SetTel(string tel)
-        {
-            Tel = tel;
-        }
-
-        public void SetFax(string fax)
-        {
-            Fax = fax;
-        }
+        public string Position { get; set; }
+        public string Tel { get; set; }
+        public string Fax { get; set; }
     }
 }

@@ -28,8 +28,8 @@
         </Style>
         <DataTemplate x:Key="MedcineCodeAutoComplete">
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="Promid" Width="100" />
-                <Label x:Name="PromName" Width="350"/>
+                <Label x:Name="Promid" Width="100" Content="{Binding Id}"/>
+                <Label x:Name="PromName" Width="350" Content="{Binding Name}"/>
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
@@ -55,7 +55,7 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Vertical" Margin="0,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Right" DockPanel.Dock="Right">
-                            <Button Content="取得病患資料" Background="DeepSkyBlue" Margin="10,10,0,0" Height="45" FontSize="16" MinWidth="130" BorderThickness="0" />
+                            <Button Content="取得病患資料" Background="DeepSkyBlue" Margin="10,10,0,0" Height="45" FontSize="16" MinWidth="130" BorderThickness="0" Click="GetPatientDataButtonClick"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                             <StackPanel Orientation="Horizontal">
@@ -123,7 +123,7 @@
                         <DockPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0">
                             <Label Content="就醫科別" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
                                    HorizontalContentAlignment="Stretch" />
-                            <ComboBox x:Name="DivisionCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch"/>
+                            <ComboBox x:Name="DivisionCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
@@ -158,22 +158,22 @@
                         </DockPanel>
                         <DockPanel Grid.Row="2" Grid.Column="1"  Margin="10,0,0,0">
                             <Label Content="給付類別" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <ComboBox Name="PaymentCategoryCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top"/>
+                            <ComboBox Name="PaymentCategoryCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                         </DockPanel>
                         <DockPanel Grid.Row="2" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
                             <Label Content="部分負擔" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <ComboBox Name="CopaymentCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top"/>
+                            <ComboBox Name="CopaymentCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                         </DockPanel>
                         <DockPanel Grid.Row="3" Grid.Column="0"  Margin="10,0,0,0">
                             <Label Content="處方案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <ComboBox x:Name="MedCateCombo" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch"/>
+                            <ComboBox x:Name="TreatmentCaseCombo" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                             <Label Content="給藥日份" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                             <TextBox x:Name="MedicineDays" MinWidth="60" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
                                      BorderThickness="0,0,0,1" HorizontalContentAlignment="Left"/>
                         </DockPanel>
                         <DockPanel Grid.Row="3" Grid.Column="1"  Margin="10,0,0,0">
                             <Label Content="調劑案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <ComboBox x:Name="CaseCateCombo" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch"/>
+                            <ComboBox x:Name="AdjustCaseCombo" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                         </DockPanel>
                         <DockPanel Grid.Row="3" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
                             <Label Content="領藥次數" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
@@ -184,7 +184,7 @@
                         </DockPanel>
                     </Grid>
                     <DataGrid Name="PrescriptionSet" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"
-                          AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191">
+                          AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" ItemsSource="{Binding PrescriptionList}">
                         <DataGrid.HorizontalGridLinesBrush>
                             <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
                         </DataGrid.HorizontalGridLinesBrush>
@@ -199,9 +199,9 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineCodeDataTemplate">
                                         <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
-                                                              VerticalContentAlignment="Stretch" ValueMemberPath="ProductmId" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
-                                                              MaxHeight="50" MinimumPrefixLength="2" ItemFilter="{Binding ProductmFilter}" 
-                                                              BorderBrush="DimGray" >
+                                                                  VerticalContentAlignment="Stretch" ValueMemberPath="ProductmId" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
+                                                                  Populating="MedicineCodeAuto_Populating" MaxHeight="50" MinimumPrefixLength="2" ItemFilter="{Binding MedicineFilter}" PreviewKeyDown="MedicineCodeAuto_PreviewKeyDown" 
+                                                                  DropDownClosing="MedicineCodeAuto_DropDownClosing" Text="{Binding Id}" BorderBrush="DimGray" DropDownClosed="MedicineCodeAuto_DropDownClosed">
                                             <controls:AutoCompleteBox.ItemContainerStyle>
                                                 <Style TargetType="ListBoxItem">
                                                     <Setter Property="Template">

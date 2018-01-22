@@ -1,14 +1,19 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
 
-namespace His_Pos
+namespace His_Pos.Service
 {
     class DbConnection
     {
         private SqlConnection _connection;
+
+        public DbConnection()
+        {
+        }
+
         public DbConnection(string connection) { _connection = new SqlConnection(connection); }
 
         ///<summary>
@@ -72,7 +77,10 @@ namespace His_Pos
                 _connection.Close();
         }//Log()
 
-
-
+        public DataTable SetProcName(string procName,DbConnection connection)
+        {
+            var table = connection.ExecuteProc(procName);
+            return table;
+        }
     }
 }

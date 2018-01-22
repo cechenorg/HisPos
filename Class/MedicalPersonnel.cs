@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using His_Pos.Interface;
+using His_Pos.AbstractClass;
 
 namespace His_Pos.Class
 {
-    public class MedicalPersonnel : IPerson
+    public class MedicalPersonnel : Person
     {
-        #region --IPerson--
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string IcNumber { get; set; }
-        #endregion
+        protected MedicalPersonnel(string id,string name,string idNumber)
+        {
+            Id = id;
+            Name = name;
+            IdNumber = idNumber;
+        }
     }
 }

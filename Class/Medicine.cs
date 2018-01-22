@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using His_Pos.Interface;
+using System.Windows.Controls;
+using His_Pos.AbstractClass;
 
 namespace His_Pos.Class
 {
-    public class Medicine : IProduct
+    public class Medicine : Product
     {
         public Medicine()
         {
         }
 
-        public Medicine(string id, string name, double price, double inventory, double total, bool paySelf, double hcPrice, Medicate medicate)
+        public Medicine(string id, string name, double price, double inventory, double total, string paySelf, double hcPrice, Medicate medicalCategory)
         {
             Id = id;
             Name = name;
@@ -22,17 +23,21 @@ namespace His_Pos.Class
             Total = total;
             PaySelf = paySelf;
             HcPrice = hcPrice;
-            Medicate = medicate;
+            MedicalCategory = medicalCategory;
         }
-        #region -- IProduct --
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public double Price { get; set; }
-        public double Inventory { get; set; }
-        #endregion
         public double Total { get; set; }
-        public bool PaySelf { get; set; }
+        public string PaySelf { get; set; }
         public double HcPrice { get; set; }
-        public Medicate Medicate { get; set;}
+        public Medicate MedicalCategory { get; set;}
+
+        public AutoCompleteFilterPredicate<object> MedicineFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    (obj as Medicine).Id.Contains(searchText)
+                    || (obj as Medicine).Name.Contains(searchText);
+            }
+        }
     }
 }

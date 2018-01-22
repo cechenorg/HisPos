@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.Class
+namespace His_Pos.AbstractClass
 {
-    public abstract class Selection
+    public abstract class Person
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string IdNumber { get; set; }
+        public string Birthday { get; set; }
     }
 }

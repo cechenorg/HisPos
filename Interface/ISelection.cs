@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Interface
 {
-    public interface IPerson
+    public interface ISelection
     {
-        string Id { get; set; }
-        string Name { get; set; }
-        string IcNumber { get; set; }
+        void GetData();
     }
 }

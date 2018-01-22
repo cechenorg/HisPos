@@ -2,7 +2,7 @@
 
 namespace His_Pos.HisApi
 {
-    class HisApiFunction
+    public class HisApiFunction
     {
         public string VerifySamdc() {   //安全模組認證
             string msg = string.Empty;
@@ -107,9 +107,20 @@ namespace His_Pos.HisApi
             return lEncoding.GetString(lByte, startIndex, byteLength);
         }
 
-        private string GetIcData(StringBuilder data, int startIndex, int length)
+        public string GetIcData(StringBuilder data, int startIndex, int length)
         {
             return ByteSubStr(data.ToString(), startIndex, length);
+        }
+
+        public void ErrorDetect(int _res)
+        {
+            var _message = new StringBuilder(100);
+            var errorDescription = new Function();
+            _message.Clear();
+            if (_res == 0)
+                return;
+            var errorCodrDescription = errorDescription.GetEnumDescription("ErrorCode", _res.ToString());
+            _message.Append(errorCodrDescription);
         }
     }
 }

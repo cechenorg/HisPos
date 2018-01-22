@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class
 {
-    public class AdjustCase : Selection
+    public class TreatmentCase : Selection
     {
-        public AdjustCase(string id, string name)
+        public TreatmentCase(string id,string name)
         {
             Id = id;
             Name = name;
