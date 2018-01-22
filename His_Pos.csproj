@@ -180,6 +180,7 @@
     <Compile Include="Class\DeclareDetail.cs" />
     <Compile Include="Class\Department.cs" />
     <Compile Include="Class\Enum.cs" />
+    <Compile Include="Class\Feature.cs" />
     <Compile Include="Class\Hospital.cs" />
     <Compile Include="Class\MedicalInfo.cs" />
     <Compile Include="Class\MedicalPersonnel.cs" />
@@ -230,8 +231,6 @@
     </Compile>
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
-    <Compile Include="Service\globalservice.cs" />
-    <Compile Include="Service\localservice.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\TabBase.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

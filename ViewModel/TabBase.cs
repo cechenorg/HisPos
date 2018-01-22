@@ -2,7 +2,7 @@
 
 namespace His_Pos.ViewModel
 {
-    public class TabBase : ViewModelBase
+    public abstract class TabBase : ViewModelBase
     {
         private int _tabNumber;
         public int TabNumber
@@ -29,5 +29,8 @@ namespace His_Pos.ViewModel
                 }
             }
         }
+
+        public abstract TabBase getTab();
+
     }
 }
