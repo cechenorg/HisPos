@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using His_Pos.AbstractClass;
+using His_Pos.Interface;
 
 namespace His_Pos.Class
 {
@@ -14,7 +16,7 @@ namespace His_Pos.Class
         {
         }
 
-        public Medicine(string id, string name, double price, double inventory, double total, string paySelf, double hcPrice, Medicate medicalCategory)
+        public Medicine(string id, string name, string price, string inventory, string total, string paySelf, string hcPrice, Medicate medicalCategory)
         {
             Id = id;
             Name = name;
@@ -25,9 +27,9 @@ namespace His_Pos.Class
             HcPrice = hcPrice;
             MedicalCategory = medicalCategory;
         }
-        public double Total { get; set; }
+        public string Total { get; set; }
         public string PaySelf { get; set; }
-        public double HcPrice { get; set; }
+        public string HcPrice { get; set; }
         public Medicate MedicalCategory { get; set;}
 
         public AutoCompleteFilterPredicate<object> MedicineFilter
@@ -38,6 +40,20 @@ namespace His_Pos.Class
                     (obj as Medicine).Id.Contains(searchText)
                     || (obj as Medicine).Name.Contains(searchText);
             }
+        }
+
+        public void GetData(DataRow d)
+        {
+            Id = d["HISMED_ID"].ToString();
+            Name = d["PRO_NAME"].ToString();
+            MedicalCategory = new Medicate
+            {
+                Dosage = d["HISMED_UNIT"].ToString(),
+                Form = d["HISMED_FORM"].ToString()
+            };
+            Cost = d["HISMED_COST"].ToString();
+            Price = d["HISMED_SELLPRICE"].ToString();
+            PaySelf = "0";
         }
     }
 }

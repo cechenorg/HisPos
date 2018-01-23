@@ -24,21 +24,26 @@ namespace His_Pos.PrescriptionDec
     /// </summary>
     public partial class PrescriptionDecView
     {
-        private StringBuilder _pBuffer = new StringBuilder(100);
         private int _res = -1;
-        private Customer _currentCustomer = new Customer();
-        private IcCard _icCard = new IcCard();
-        private HisApiFunction _hisApiFunction = new HisApiFunction(); 
-        private Function _function = new Function();
-        private ObservableCollection<Medicine> MedicineList { get; }
-        public ObservableCollection<Medicine> PrescriptionList { get; set; }
+        private int _selectedIindex = -1;
         private bool _isDropDownClosed = true;
+        private IcCard _icCard = new IcCard();
+        private Customer _currentCustomer = new Customer();
+        private StringBuilder _pBuffer = new StringBuilder(100);
+        private readonly Function _function = new Function();
+        private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
+        private Medicine _selectedMedicine = new Medicine();
+        private ObservableCollection<Medicine> MedicineList { get; set; }
+        public ObservableCollection<Medicine> PrescriptionList { get; set; }
+        
         public PrescriptionDecView()
         {
             InitializeComponent();
+            StratClock();
+            DataContext = this;
+            SetPrescriptionMedicines();
             LoadPatentDataFromIcCard();
             InitializeUiElementData();
-            StratClock();
         }
         /*
          *初始化UI元件資料
@@ -263,92 +268,78 @@ namespace His_Pos.PrescriptionDec
             comboBox.Text = comboBox.SelectedItem?.ToString() ?? "";
             comboBox.IsReadOnly = true;
         }
-        /*
-         * 載入藥品資料至MedicineCodeAuto
-         */
+        private void SetPrescriptionMedicines()
+        {
+            PrescriptionList = new ObservableCollection<Medicine>();
+            MedicineList = new ObservableCollection<Medicine>();
+            PrescriptionMedicines.ItemsSource = PrescriptionList;
+        }
+        private void MedicineCodeAuto_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is AutoCompleteBox autoCompleteBox)
+            {
+                var innerListBox = (ListBox)autoCompleteBox.Template.FindName("Selector", autoCompleteBox);
+                innerListBox.ScrollIntoView(innerListBox.SelectedItem);
+            }
+        }
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
             var medicineAuto = sender as AutoCompleteBox;
             Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
             var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + medicineAuto.Text + "%' OR PRO_NAME Like '" + medicineAuto.Text + "%'");
-            InitialMedicineList(tmp);
+            MedicineList.Clear();
+
+            foreach (var d in tmp.Take(50))
+            {
+                var medicine = new Medicine();
+                medicine.GetData(d);
+                MedicineList.Add(medicine);
+            }
             medicineAuto.ItemsSource = MedicineList;
             medicineAuto.PopulateComplete();
         }
 
-        private void InitialMedicineList(DataRow[] tmp)
-        {
-            MedicineList.Clear();
-            foreach (var d in tmp.Take(50))
-            {
-                var medicate = new Medicate
-                {
-                    Dosage = double.Parse(d["HISMED_UNIT"].ToString()),
-                    Form = d["HISMED_FORM"].ToString()
-                };
-                var medicine = new Medicine
-                {
-                    Id = d["HISMED_ID"].ToString(),
-                    Name = d["PRO_NAME"].ToString(),
-                    HcPrice = double.Parse(d["HISMED_PRICE"].ToString()),
-                    Cost = double.Parse(d["HISMED_COST"].ToString()),
-                    Price = double.Parse(d["HISMED_SELLPRICE"].ToString()),
-                    PaySelf = "0",
-                    MedicalCategory = medicate
-                };
-                MedicineList.Add(medicine);
-            }
-        }
-
         private void MedicineCodeAuto_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var MedicineAuto = sender as AutoCompleteBox;
-
-            Console.WriteLine(e.GetType().Name);
-
-            if (e.Key == Key.Enter)
-            {
+            var medicineAuto = sender as AutoCompleteBox;
+            _selectedIindex = PrescriptionMedicines.SelectedIndex;
+            if (e.Key != Key.Enter) return;
+            _isDropDownClosed = false;
+            AddPrescriptionMedicine(medicineAuto);
+        }
+        private void MedicineCodeAuto_DropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
+        {
+            var medicineAuto = sender as AutoCompleteBox;
+            Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
+            if (medicineAuto.Text.Length == 10 && _isDropDownClosed)
                 _isDropDownClosed = false;
-                AddPrescriptionMedicine(MedicineAuto);
-            }
         }
         private void AddPrescriptionMedicine(AutoCompleteBox MedicineAuto)
         {
             Debug.Assert(MedicineAuto != null, nameof(MedicineAuto) + " != null");
-            var selected = new Medicine();
+            _selectedMedicine = new Medicine();
             foreach (var med in MedicineList)
             {
                 if (med.Id.Contains(MedicineAuto.Text))
                 {
-                    selected = med;
-                    if (!MedicineDays.Text.Equals(string.Empty)) selected.MedicalCategory.Days = int.Parse(MedicineDays.Text);
+                    _selectedMedicine = med;
+                    if (!MedicineDays.Text.Equals(string.Empty)) _selectedMedicine.MedicalCategory.Days = int.Parse(MedicineDays.Text);
                 }
             }
-            if (PrescriptionSet.SelectedIndex == -1)
-            {
-                return;
-            }
-            if (PrescriptionList.Count <= PrescriptionSet.SelectedIndex)
-                PrescriptionList.Add(selected);
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex)
+                PrescriptionList.Add(_selectedMedicine);
             else
             {
-                PrescriptionList[PrescriptionSet.SelectedIndex] = selected;
+                PrescriptionList[PrescriptionMedicines.SelectedIndex] = _selectedMedicine;
                 return;
             }
             MedicineAuto.Text = "";
         }
-        private void MedicineCodeAuto_DropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
-        {
-            var MedicineAuto = sender as AutoCompleteBox;
-            Debug.Assert(MedicineAuto != null, nameof(MedicineAuto) + " != null");
-            if (MedicineAuto.Text.Length == 10 && _isDropDownClosed)
-            {
-                AddPrescriptionMedicine(MedicineAuto);
-                _isDropDownClosed = false;
-            }
-        }
         private void MedicineCodeAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
+            List<AutoCompleteBox> medicineCodeList = new List<AutoCompleteBox>();
+            _function.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref medicineCodeList);
+            medicineCodeList[_selectedIindex].Text = PrescriptionList[_selectedIindex].Id;
             _isDropDownClosed = true;
         }
     }

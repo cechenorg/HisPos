@@ -51,7 +51,7 @@ namespace His_Pos.Class
 
         private void SetMedicate(Medicine medicine)
         {
-            Dosage = medicine.MedicalCategory.Dosage;//p3
+            Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
             Usage = medicine.MedicalCategory.Usage;//p4
             Position = medicine.MedicalCategory.Position;//p5
             Days = medicine.MedicalCategory.Days;//p11
@@ -59,8 +59,8 @@ namespace His_Pos.Class
         private void SetMedicine(Medicine medicine)
         {
             MedicalId = medicine.Id;//p2
-            Total = medicine.Total;//p7
-            Price = medicine.HcPrice;//p8
+            Total = double.Parse(medicine.Total);//p7
+            Price = double.Parse(medicine.HcPrice);//p8
         }
         private void SetDate(string start,string end)
         {
