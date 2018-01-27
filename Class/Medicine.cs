@@ -14,7 +14,7 @@ namespace His_Pos.Class
         {
         }
 
-        public Medicine(string id, string name, double price, double inventory, double total, string paySelf, double hcPrice, Medicate medicalCategory)
+        public Medicine(string id, string name, string price, string inventory, string total, string paySelf, string hcPrice, Medicate medicalCategory)
         {
             Id = id;
             Name = name;
@@ -23,12 +23,16 @@ namespace His_Pos.Class
             Total = total;
             PaySelf = paySelf;
             HcPrice = hcPrice;
-            MedicalCategory = medicalCategory;
+
         }
-        public double Total { get; set; }
+        public string Total { get; set; }
         public string PaySelf { get; set; }
-        public double HcPrice { get; set; }
-        public Medicate MedicalCategory { get; set;}
+        public string HcPrice { get; set; }
+        public string Dosage { get; set; }
+        public string Usage { get; set; }
+        public string Days { get; set; }
+        public string Position { get; set; }
+        public string Form { get; set; }
 
         public AutoCompleteFilterPredicate<object> MedicineFilter
         {

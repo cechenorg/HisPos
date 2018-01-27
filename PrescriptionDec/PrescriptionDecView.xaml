@@ -184,7 +184,7 @@
                         </DockPanel>
                     </Grid>
                     <DataGrid Name="PrescriptionSet" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"
-                          AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" ItemsSource="{Binding PrescriptionList}">
+                          ItemsSource="{Binding PrescriptionList}" AutoGenerateColumns="False" CanUserResizeRows="False" SelectionChanged="MedicineCodeAuto_SelectionChanged" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191">
                         <DataGrid.HorizontalGridLinesBrush>
                             <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
                         </DataGrid.HorizontalGridLinesBrush>
@@ -199,9 +199,10 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineCodeDataTemplate">
                                         <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
-                                                                  VerticalContentAlignment="Stretch" ValueMemberPath="ProductmId" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
-                                                                  Populating="MedicineCodeAuto_Populating" MaxHeight="50" MinimumPrefixLength="2" ItemFilter="{Binding MedicineFilter}" PreviewKeyDown="MedicineCodeAuto_PreviewKeyDown" 
-                                                                  DropDownClosing="MedicineCodeAuto_DropDownClosing" Text="{Binding Id}" BorderBrush="DimGray" DropDownClosed="MedicineCodeAuto_DropDownClosed">
+                                                              VerticalContentAlignment="Stretch" ValueMemberPath="ProductmId" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
+                                                              Populating="MedicineCodeAuto_Populating" MaxHeight="50" MinimumPrefixLength="2" ItemFilter="{Binding MedicineFilter}" PreviewKeyDown="MedicineCodeAuto_PreviewKeyDown" 
+                                                              DropDownClosing="MedicineCodeAuto_DropDownClosing" Text="{Binding Id}" BorderBrush="DimGray" DropDownClosed="MedicineCodeAuto_DropDownClosed"
+                                                              ItemsSource="{Binding MedicineList}">
                                             <controls:AutoCompleteBox.ItemContainerStyle>
                                                 <Style TargetType="ListBoxItem">
                                                     <Setter Property="Template">
@@ -236,39 +237,39 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn MinWidth="320" Header="藥品名稱"  FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                            <DataGridTextColumn MinWidth="320" Header="藥品名稱" Binding="{Binding Name}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
                             <DataGridTemplateColumn MinWidth="60" Header="用量" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineAmountDataTemplate">
-                                        <TextBox x:Name="MedicineAmount"  MinWidth="60" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                                        <TextBox x:Name="MedicineAmount" Text="{Binding Dosage}" MinWidth="60" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" PreviewKeyDown="Medicine_PreviewKeyDown" TextChanged="MedicineAmount_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="用法">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineUsageDataTemplate">
-                                        <TextBox x:Name="MedicineUsage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                                        <TextBox x:Name="MedicineUsage" Text="{Binding Usage}" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" PreviewKeyDown="Medicine_PreviewKeyDown" TextChanged="MedicineUsage_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="天數">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineDaysDataTemplate">
-                                        <TextBox Name="MedicineDays" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                                        <TextBox Name="MedicineDays" Text="{Binding Days}" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" PreviewKeyDown="Medicine_PreviewKeyDown" TextChanged="MedicineDays_OnTextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="總數">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineTotalDataTemplate">
-                                        <TextBox Name="MedicineTotal" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" />
+                                        <TextBox Name="MedicineTotal" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" PreviewKeyDown="Medicine_PreviewKeyDown" TextChanged="MedicineTotal_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="自費">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicinePaysDataTemplate">
-                                        <CheckBox Name="ProductmPaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                        <CheckBox Name="ProductmPaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" Checked="ToggleButton_OnChecked" Unchecked="CheckBox_Unchecked_1"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -276,7 +277,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineWaysDataTemplate">
                                         <controls:AutoCompleteBox x:Name="MedicineWaysAuto" MinWidth="40" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
-                                                              VerticalContentAlignment="Stretch" Background="Transparent" MaxHeight="50" BorderBrush="DimGray">
+                                                              VerticalContentAlignment="Stretch" Background="Transparent" MaxHeight="50" BorderBrush="DimGray" Populating="MedicinePositionAuto_Populating" SelectionChanged="MedicinePositionAuto_SelectionChanged">
                                             <controls:AutoCompleteBox.ItemContainerStyle>
                                                 <Style TargetType="ListBoxItem">
                                                     <Setter Property="Template">
@@ -311,7 +312,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn MinWidth="60" Header="健保價格"  FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <DataGridTextColumn MinWidth="60" Header="健保價格" Binding="{Binding HcPrice}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Margin="10,0,10,10" Width="Auto" Height="auto" Grid.Row="3">

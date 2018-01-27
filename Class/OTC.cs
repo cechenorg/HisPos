@@ -9,7 +9,7 @@ namespace His_Pos.Class
 {
     public class Otc : Product
     {
-        public Otc(string id, string name, double price, double inventory)
+        public Otc(string id, string name, string price, string inventory)
         {
             Id = id;
             Name = name;
