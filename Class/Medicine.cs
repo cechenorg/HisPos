@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using His_Pos.AbstractClass;
+using His_Pos.Interface;
 
 namespace His_Pos.Class
 {
@@ -23,16 +25,13 @@ namespace His_Pos.Class
             Total = total;
             PaySelf = paySelf;
             HcPrice = hcPrice;
-
+            MedicalCategory = medicalCategory;
         }
+
         public string Total { get; set; }
         public string PaySelf { get; set; }
         public string HcPrice { get; set; }
-        public string Dosage { get; set; }
-        public string Usage { get; set; }
-        public string Days { get; set; }
-        public string Position { get; set; }
-        public string Form { get; set; }
+        public Medicate MedicalCategory { get; set;}
 
         public AutoCompleteFilterPredicate<object> MedicineFilter
         {
@@ -42,6 +41,21 @@ namespace His_Pos.Class
                     (obj as Medicine).Id.Contains(searchText)
                     || (obj as Medicine).Name.Contains(searchText);
             }
+        }
+
+        public void GetData(DataRow d)
+        {
+            Id = d["HISMED_ID"].ToString();
+            Name = d["PRO_NAME"].ToString();
+            MedicalCategory = new Medicate
+            {
+                Dosage = d["HISMED_UNIT"].ToString(),
+                Form = d["HISMED_FORM"].ToString()
+            };
+            Cost = d["HISMED_COST"].ToString();
+            Price = d["HISMED_SELLPRICE"].ToString();
+            PaySelf = "0";
+            HcPrice = d["HISMED_PRICE"].ToString();
         }
     }
 }

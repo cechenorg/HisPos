@@ -51,10 +51,10 @@ namespace His_Pos.Class
 
         private void SetMedicate(Medicine medicine)
         {
-            Dosage = double.Parse(medicine.Dosage);//p3
-            Usage = medicine.Usage;//p4
-            Position = medicine.Position;//p5
-            Days = int.Parse(medicine.Days);//p11
+            Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
+            Usage = medicine.MedicalCategory.Usage;//p4
+            Position = medicine.MedicalCategory.Position;//p5
+            Days = medicine.MedicalCategory.Days;//p11
         }
         private void SetMedicine(Medicine medicine)
         {

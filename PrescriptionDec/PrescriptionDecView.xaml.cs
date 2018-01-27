@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -10,9 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.HisApi;
 using His_Pos.PrescriptionInquire;
@@ -24,118 +21,25 @@ namespace His_Pos.PrescriptionDec
     /// </summary>
     public partial class PrescriptionDecView
     {
-        private StringBuilder _pBuffer = new StringBuilder(100);
         private int _res = -1;
-        private Customer _currentCustomer = new Customer();
+        private int _selectedIindex = -1;
         private IcCard _icCard = new IcCard();
-        private HisApiFunction _hisApiFunction = new HisApiFunction(); 
-        private Function _function = new Function();
+        private Customer _currentCustomer = new Customer();
+        private StringBuilder _pBuffer = new StringBuilder(100);
+        private readonly Function _function = new Function();
+        private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
         public ObservableCollection<Medicine> PrescriptionList { get; set; }
-        private int selectedIndex = 0;
-        private readonly string[] _positions = {"AD","AS","AU","ET","GAR","HD","HD","ID","IA","IE","IM","IV","IP","ICV","IMP","INHL","IS","IT",
-            "IVA","IVD:靜脈點滴滴入","IVI","IVP","LA","LI","NA","OD","OS","OU","PO","SC","SCI","SKIN","SL","SPI","RECT","TOPI","TPN","VAG","IRRI",
-            "EXT","XX"};
-        private bool _isDropDownClosed = true;
+        
         public PrescriptionDecView()
         {
             InitializeComponent();
-            PrescriptionList = new ObservableCollection<Medicine>();
-            MedicineList = new ObservableCollection<Medicine>();
             DataContext = this;
+            SetPrescriptionMedicines();
             LoadPatentDataFromIcCard();
             InitializeUiElementData();
-            StratClock();
         }
-        /*
-         *初始化UI元件資料
-         */
-        private void InitializeUiElementData()
-        {
-            LoadCopayments();
-            LoadAdjustCases();
-            LoadHospitalData();
-            LoadTreatmentCases();
-            LoadPaymentCategories();
-            InitializeUiElementResource();
-        }
-        private void InitializeUiElementResource()
-        {
-            PatientName.SetIconSource(new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative)));
-            PatientId.SetIconSource(new BitmapImage(new Uri(@"..\Images\ID_Card.png", UriKind.Relative)));
-            PatientBirthday.SetIconSource(new BitmapImage(new Uri(@"..\Images\birthday.png", UriKind.Relative)));
-            PatientEmergentTel.SetIconSource(new BitmapImage(new Uri(@"..\Images\EmergentPhone.png", UriKind.Relative)));
-        }
-        /*
-         *載入醫療院所資料
-         */
-        private void LoadHospitalData()
-        {
-            var institutions = new Institutions();
-            institutions.GetData();
-            ReleasePalace.ItemsSource = institutions.InstitutionsCollection;
-            LoadDivisionsData();
-        }
-        /*
-         * 載入科別資料
-         */
-        private void LoadDivisionsData()
-        {
-            var divisions = new Divisions();
-            divisions.GetData();
-            foreach (var division in divisions.DivisionsList)
-            {
-                DivisionCombo.Items.Add(division.Id + ". " + division.Name);
-            }
-        }
-        /*
-         *載入給付類別
-         */
-        private void LoadPaymentCategories()
-        {
-            var paymentCategroies = new PaymentCategroies();
-            paymentCategroies.GetData();
-            foreach (var paymentCategory in paymentCategroies.PaymentCategoryList)
-            {
-                PaymentCategoryCombo.Items.Add(paymentCategory.Id + ". " + paymentCategory.Name);
-            }
-        }
-        /*
-         *載入部分負擔
-         */
-        private void LoadCopayments()
-        {
-            var copayments = new Copayments();
-            copayments.GetData();
-            foreach (var copayment in copayments.CopaymentList)
-            {
-                CopaymentCombo.Items.Add(copayment.Id + ". " + copayment.Name);
-            }
-        }
-        /*
-         *載入原處方案件類別
-         */
-        private void LoadTreatmentCases()
-        {
-            var treatmentCases = new TreatmentCases();
-            treatmentCases.GetData();
-            foreach (var treatmentCase in treatmentCases.TreatmentCaseLsit)
-            {
-                TreatmentCaseCombo.Items.Add(treatmentCase.Id + ". " + treatmentCase.Name);
-            }
-        }
-        /*
-         *載入原處方案件類別
-         */
-        private void LoadAdjustCases()
-        {
-            var adjustCases = new AdjustCases();
-            adjustCases.GetData();
-            foreach (var adjustCase in adjustCases.AdjustCaseList)
-            {
-                AdjustCaseCombo.Items.Add(adjustCase.Id + ". " + adjustCase.Name);
-            }
-        }
+        
         /*
          *自健保卡讀取病患資料
          */
@@ -165,7 +69,6 @@ namespace His_Pos.PrescriptionDec
             PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
             PatientId.SetIconLabel(200, 50, _icCard.Customer.IdNumber);
             PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
-            PrescriptionSet.ItemsSource = PrescriptionList;
         }
         /*
          *取得病人基本資料
@@ -208,6 +111,7 @@ namespace His_Pos.PrescriptionDec
         private void Row_Loaded(object sender, RoutedEventArgs e)
         {
             var row = sender as DataGridRow;
+            Debug.Assert(row != null, nameof(row) + " != null");
             row.InputBindings.Add(new MouseBinding(InsertChronicDataCommand,
                 new MouseGesture() {MouseAction = MouseAction.LeftDoubleClick}));
         }
@@ -236,22 +140,6 @@ namespace His_Pos.PrescriptionDec
         {
             
         }
-        /*
-         *處方登錄時間TimerTick
-         */
-        private void TickEvent(Object sender, EventArgs e)
-        {
-            PrescriptionClock.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture);
-        }
-        /*
-         *啟動處方登錄時間Timer
-         */
-        private void StratClock()
-        {
-            var timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
-            timer.Tick += TickEvent;
-            timer.Start();
-        }
         private void GetPatientDataButtonClick(object sender, RoutedEventArgs e)
         {
             LoadPatentDataFromIcCard();
@@ -271,149 +159,44 @@ namespace His_Pos.PrescriptionDec
             comboBox.Text = comboBox.SelectedItem?.ToString() ?? "";
             comboBox.IsReadOnly = true;
         }
-        private void MedicineCodeAuto_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SetPrescriptionMedicines()
         {
-            if (sender is AutoCompleteBox autoCompleteBox)
-            {
-                var innerListBox = (ListBox)autoCompleteBox.Template.FindName("Selector", autoCompleteBox);
-                innerListBox.ScrollIntoView(innerListBox.SelectedItem);
-            }
+            PrescriptionList = new ObservableCollection<Medicine>();
+            MedicineList = new ObservableCollection<Medicine>();
+            PrescriptionMedicines.ItemsSource = PrescriptionList;
         }
-        /*
-         * 載入藥品資料至MedicineCodeAuto
-         */
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
-            var MedicineAuto = sender as AutoCompleteBox;
-            Debug.Assert(MedicineAuto != null, nameof(MedicineAuto) + " != null");
-            var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + MedicineAuto.Text + "%' OR PRO_NAME Like '" + MedicineAuto.Text + "%'");
-
+            var medicineAuto = sender as AutoCompleteBox;
+            Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
+            var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + medicineAuto.Text + "%' OR PRO_NAME Like '" + medicineAuto.Text + "%'");
             MedicineList.Clear();
 
             foreach (var d in tmp.Take(50))
             {
-                var medicine = new Medicine()
-                {
-                    Id = d["HISMED_ID"].ToString(),
-                    Name = d["PRO_NAME"].ToString(),
-                    Dosage = d["HISMED_UNIT"].ToString(),
-                    HcPrice = d["HISMED_PRICE"].ToString(),
-                    Form = d["HISMED_FORM"].ToString(),
-                    Cost = d["HISMED_COST"].ToString(),
-                    Price = d["HISMED_SELLPRICE"].ToString(),
-                    PaySelf = "0"
-                };
+                var medicine = new Medicine();
+                medicine.GetData(d);
                 MedicineList.Add(medicine);
             }
-            MedicineAuto.ItemsSource = MedicineList;
-            MedicineAuto.PopulateComplete();
-        }
-
-        private void MedicineCodeAuto_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            var MedicineAuto = sender as AutoCompleteBox;
-
-            Console.WriteLine(e.GetType().Name);
-
-            if (e.Key == Key.Enter)
-            {
-                _isDropDownClosed = false;
-                AddPrescriptionMedicine(MedicineAuto);
-            }
-        }
-        private void AddPrescriptionMedicine(AutoCompleteBox MedicineAuto)
-        {
-            Debug.Assert(MedicineAuto != null, nameof(MedicineAuto) + " != null");
-            var selected = new Medicine();
-            foreach (var med in MedicineList)
-            {
-                if (med.Id.Contains(MedicineAuto.Text))
-                {
-                    selected = med;
-                    if (!MedicineDays.Text.Equals(string.Empty)) selected.Days = MedicineDays.Text;
-                }
-            }
-            if (PrescriptionSet.SelectedIndex == -1)
-            {
-                return;
-            }
-            if (PrescriptionList.Count <= PrescriptionSet.SelectedIndex)
-                PrescriptionList.Add(selected);
-            else
-            {
-                PrescriptionList[PrescriptionSet.SelectedIndex] = selected;
-                return;
-            }
-            MedicineAuto.Text = "";
+            medicineAuto.ItemsSource = MedicineList;
+            medicineAuto.PopulateComplete();
         }
         private void MedicineCodeAuto_DropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
-            var MedicineAuto = sender as AutoCompleteBox;
-            Debug.Assert(MedicineAuto != null, nameof(MedicineAuto) + " != null");
-            if (MedicineAuto.Text.Length == 10 && _isDropDownClosed)
+            AddPrescriptionMedicine(sender as AutoCompleteBox);
+        }
+        private void AddPrescriptionMedicine(AutoCompleteBox medicineAuto)
+        {
+            Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
+            if (medicineAuto.SelectedItem is null) return;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex)
+                PrescriptionList.Add((Medicine)medicineAuto.SelectedItem);
+            else
             {
-                AddPrescriptionMedicine(MedicineAuto);
-                _isDropDownClosed = false;
+                PrescriptionList[PrescriptionMedicines.SelectedIndex] = (Medicine)medicineAuto.SelectedItem;
+                return;
             }
-        }
-        private void MedicineCodeAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
-        {
-            _isDropDownClosed = true;
-        }
-        private void MedicinePositionAuto_Populating(object sender, PopulatingEventArgs e)
-        {
-            
-        }
-        private void MedicinePositionAuto_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
-        private void Medicine_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-           
-        }
-        private void MedicineAmount_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
-        private void MedicineUsage_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
-
-        private void MedicineDays_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
-        private void MedicineTotal_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            
-        }
-
-        private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
-        {
-            
-        }
-        private void CheckBox_Unchecked_1(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private bool CheckDataComplete()
-        {
-            if (PrescriptionList[PrescriptionSet.SelectedIndex].Dosage.Equals(string.Empty) ||
-                PrescriptionList[PrescriptionSet.SelectedIndex].Days == "0" ||
-                PrescriptionList[PrescriptionSet.SelectedIndex].Usage.Equals(string.Empty))
-                return false;
-            return true;
-        }
-
-        private void AlterPrice(int priceChange)
-        {
-            Price.Content = (priceChange + double.Parse(Price.Content.ToString())).ToString(CultureInfo.InvariantCulture);
-
-            //價錢高過一定門檻 要加上部分負擔
-            TotalPrice.Content = (priceChange + double.Parse(TotalPrice.Content.ToString())).ToString(CultureInfo.InvariantCulture);
+            medicineAuto.Text = "";
         }
     }
 }

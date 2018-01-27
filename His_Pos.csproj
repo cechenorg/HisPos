@@ -222,6 +222,7 @@
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="PrescriptionDec\PrescriptionDec.cs" />
+    <Compile Include="PrescriptionDec\PrescriptionDecView.cs" />
     <Compile Include="PrescriptionDec\PrescriptionDecView.xaml.cs">
       <DependentUpon>PrescriptionDecView.xaml</DependentUpon>
     </Compile>
@@ -377,6 +378,7 @@
     <Resource Include="Images\SystemBackground2.jpg" />
     <Resource Include="Images\SystemBackgroundWhite.jpg" />
     <Resource Include="Images\Truck_50px.png" />
+    <Resource Include="Images\Settings.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -12,7 +12,7 @@ namespace His_Pos.Class
         {
         }
 
-        public Medicate(string dosage, string usage, string days, string position)
+        public Medicate(string dosage, string usage, int days, string position)
         {
             Dosage = dosage;
             Usage = usage;
