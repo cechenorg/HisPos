@@ -8,6 +8,9 @@ using His_Pos.Class;
 
 namespace His_Pos.PrescriptionDec
 {
+    /*
+     *初始化元件
+     */
     public partial class PrescriptionDecView
     {
         /*

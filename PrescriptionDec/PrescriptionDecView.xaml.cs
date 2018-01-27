@@ -34,7 +34,6 @@ namespace His_Pos.PrescriptionDec
         public PrescriptionDecView()
         {
             InitializeComponent();
-            //StratClock();
             DataContext = this;
             SetPrescriptionMedicines();
             LoadPatentDataFromIcCard();
@@ -140,22 +139,6 @@ namespace His_Pos.PrescriptionDec
         private void LoadChronicPrescriptionData()
         {
             
-        }
-        /*
-         *處方登錄時間TimerTick
-         */
-        private void TickEvent(Object sender, EventArgs e)
-        {
-            PrescriptionClock.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture);
-        }
-        /*
-         *啟動處方登錄時間Timer
-         */
-        private void StratClock()
-        {
-            var timer = new DispatcherTimer {Interval = TimeSpan.FromSeconds(1)};
-            timer.Tick += TickEvent;
-            timer.Start();
         }
         private void GetPatientDataButtonClick(object sender, RoutedEventArgs e)
         {

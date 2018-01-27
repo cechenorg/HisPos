@@ -108,27 +108,15 @@
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal">
-                            <StackPanel Orientation="Vertical" Margin="20,0,0,0">
-                                <my:IconLabel x:Name="PatientName" HorizontalAlignment="Left"/>
-                                <my:IconLabel x:Name="PatientId" HorizontalAlignment="Left"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Vertical" Margin="0">
-                                <my:IconLabel x:Name="PatientBirthday" HorizontalAlignment="Left"/>
-                                <my:IconLabel x:Name="PatientEmergentTel" HorizontalAlignment="Left"/>
-                            </StackPanel>
+                            <my:IconLabel x:Name="PatientName" HorizontalAlignment="Left"/>
+                            <my:IconLabel x:Name="PatientId" HorizontalAlignment="Left"/>
+                            <my:IconLabel x:Name="PatientBirthday" HorizontalAlignment="Left"/>
+                            <my:IconLabel x:Name="PatientEmergentTel" HorizontalAlignment="Left"/>
+                            <Label x:Name="PrescriptionProfitText" Content="藥品毛利 : " FontSize="18" Foreground="#FF424040" Margin="0,10,0,10"/>
+                            <TextBlock x:Name="PrescriptionProfit" TextWrapping="Wrap" FontSize="16"  Foreground="#FF424040" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Vertical" Margin="0,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Right" DockPanel.Dock="Right">
                             <Button Content="取得病患資料" Background="DeepSkyBlue" Margin="10,10,0,0" Height="45" FontSize="16" MinWidth="130" BorderThickness="0" Click="GetPatientDataButtonClick"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                            <StackPanel Orientation="Horizontal">
-                                <Label x:Name="PrescriptionCounter" Content="處方張數 : " FontSize="18" Foreground="#FF424040" Margin="0,10,0,10"/>
-                                <Label x:Name="PrescriptionClockText" Content="時間 : " FontSize="18" Foreground="#FF424040" VerticalAlignment="Center"/>
-                                <TextBlock x:Name="PrescriptionClock" TextWrapping="Wrap" FontSize="16"  Foreground="#FF424040" VerticalAlignment="Center"/>
-                                <Label x:Name="PrescriptionProfitText" Content="藥品毛利 : " FontSize="18" Foreground="#FF424040" Margin="0,10,0,10"/>
-                                <TextBlock x:Name="PrescriptionProfit" TextWrapping="Wrap" FontSize="16"  Foreground="#FF424040" VerticalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0,0,20,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DockPanel>
                     <Grid Background="#7FEEEEEE" Grid.Row="1" Margin="10,10,10,0">

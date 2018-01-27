@@ -14,7 +14,7 @@ namespace His_Pos
         public static List<Feature> PosFeatures = new List<Feature>();
 
         public static DataTable MedicineDataTable = new DataTable();
-        public static User CurrentUser = new User();
+        public static User CurrentUser;
         private List<DockingWindow> _openWindows;
         public static DataView View;
     }
