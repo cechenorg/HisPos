@@ -9,11 +9,11 @@ namespace His_Pos.Class
 {
     public class MedicalPersonnel : Person
     {
-        protected MedicalPersonnel(string id,string name,string idNumber)
+        protected MedicalPersonnel(string id,string name,string icNumber)
         {
             Id = id;
             Name = name;
-            IdNumber = idNumber;
+            IcNumber = icNumber;
         }
     }
 }

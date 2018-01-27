@@ -60,7 +60,7 @@ namespace His_Pos.PrescriptionDec
             //HisApiBase.csCloseCom();
             _currentCustomer.Name = "許文章";
             _currentCustomer.Birthday = "37/10/01";
-            _currentCustomer.IdNumber = "S88824769A";
+            _currentCustomer.IcNumber = "S88824769A";
             _currentCustomer.Gender = true;
             _icCard.Customer = _currentCustomer;
             _icCard.AvailableTimes = 5;
@@ -70,7 +70,7 @@ namespace His_Pos.PrescriptionDec
             _icCard.ValidityPeriod = "108/01/01";
             _icCard.IcMarks.InsuranceMark = "3";
             PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
-            PatientId.SetIconLabel(200, 50, _icCard.Customer.IdNumber);
+            PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
             PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
         }
         /*
@@ -101,7 +101,7 @@ namespace His_Pos.PrescriptionDec
         private void SetCustomerData()
         {
             _currentCustomer.Name = _hisApiFunction.GetIcData(_pBuffer, 12, 20);
-            _currentCustomer.IdNumber = _hisApiFunction.GetIcData(_pBuffer, 32, 10);
+            _currentCustomer.IcNumber = _hisApiFunction.GetIcData(_pBuffer, 32, 10);
             _currentCustomer.Birthday = _function.BirthdayFormatConverter(_hisApiFunction.GetIcData(_pBuffer, 42, 7));
             if (_hisApiFunction.GetIcData(_pBuffer, 49, 1) == "M")
                 _currentCustomer.Gender = true;

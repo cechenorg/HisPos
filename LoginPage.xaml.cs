@@ -74,7 +74,7 @@ namespace His_Pos
                     auth = (LoginAuth) table.Rows[0]["EMPAUT_POS"];
                     authArray = auth.ToString().Split(',');
                     Login.Id = table.Rows[0]["EMP_ID"].ToString();
-                    Login.IdNumber = table.Rows[0]["EMP_IDNUM"].ToString();
+                    Login.IcNumber = table.Rows[0]["EMP_IDNUM"].ToString();
                     Login.Name = table.Rows[0]["EMP_NAME"].ToString();
                     isPass = true;
                 }

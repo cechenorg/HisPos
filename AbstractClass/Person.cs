@@ -10,7 +10,7 @@ namespace His_Pos.AbstractClass
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string IdNumber { get; set; }
+        public string IcNumber { get; set; }
         public string Birthday { get; set; }
     }
 }

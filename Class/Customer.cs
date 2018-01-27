@@ -36,7 +36,7 @@ namespace His_Pos.Class
             var birth = new SqlParameter("@BIRTH", Convert.ToDateTime(newCustomer.Birthday));
             var addr = new SqlParameter("@ADDR", newCustomer.ContactInfo.Address);
             var tel = new SqlParameter("@TEL", newCustomer.ContactInfo.Tel);
-            var idnum = new SqlParameter("@IDNUM", newCustomer.IdNumber);
+            var idnum = new SqlParameter("@IDNUM", newCustomer.IcNumber);
             var email = new SqlParameter("@EMAIL", newCustomer.ContactInfo.Email);
             var gender = new SqlParameter("@GENDER", newCustomer.Gender);
             listparam.Add(name);
