@@ -43,7 +43,7 @@
             </Grid.Background>
             <StackPanel Name="MenuStack"  Background="#FF363535" Width="230" HorizontalAlignment="Left" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <Image Name="SystemIcon" Source="Images/His.png" Height="60" Width="60" Margin="0,0,0,5" />
+                    <Image Name="SystemIcon" Source="Images/His.png" Height="60" Width="60" Margin="0,-1,0,5" />
                     <Label Name="HisSwitch" FontFamily="Arial" Foreground="LightSkyBlue" Content="H I S" Margin="25,10,0,0" FontWeight="Medium" FontSize="16" TextOptions.TextFormattingMode="Display" FontStretch="SemiExpanded" MouseDown="MenuSwitchMouseDown"/>
                     <Label Name="PosSwitch" FontFamily="Arial" Foreground="DarkGray" Content="P O S" Margin="25,10,0,0" FontWeight="Medium" FontSize="16" TextOptions.TextFormattingMode="Display" FontStretch="SemiExpanded" MouseDown="MenuSwitchMouseDown"/>
                 </StackPanel>
@@ -58,6 +58,17 @@
                         <menuusercontrol:UserControl1 Name="PosFeature1" MouseDown="FeatureMouseDown"/>
                     </StackPanel>
                 </ScrollViewer>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Width="230" HorizontalAlignment="Left" VerticalAlignment="Bottom" Background="#FF494949">
+                <StackPanel Orientation="Horizontal">
+                    <Label Name="UserName" FontFamily="Arial" Foreground="White" Margin="10,10,0,0" FontSize="18" FontWeight="Bold"/>
+                    <Label FontFamily="Arial" Foreground="White" Margin="0,10,0,0" FontSize="15" Content="處方張數: " VerticalAlignment="Center"/>
+                    <Label Name="PrescriptionCount" FontFamily="Arial" Foreground="White" Margin="0,10,10,0" FontSize="15"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"> 
+                    <Image Margin="10,5,0,10" Height="20" Source="Images/Settings.png"/>
+                    <TextBlock Name="SystemTime" FontSize="15" TextWrapping="Wrap" Margin="10,5,10,10" Foreground="DarkGray" VerticalAlignment="Center"/>
+                </StackPanel>
             </StackPanel>
             <DockPanel Name="FeatureDock" Height="Auto" Width="Auto" Margin="230,0,355,0">
                 <DockPanel.Background>

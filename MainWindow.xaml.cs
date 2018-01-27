@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using His_Pos.Class;
 using His_Pos.ViewModel;
 using MenuUserControl;
@@ -29,7 +31,14 @@ namespace His_Pos
             CurrentUser = userLogin;
             InitializePosMenu();
             InitializeHisMenu();
+            InitialUserBlock();
+            StratClock();
             _openWindows = new List<DockingWindow>();
+        }
+
+        private void InitialUserBlock()
+        {
+            UserName.Content = CurrentUser.Name;
         }
 
         private void FeatureFactory()
@@ -111,6 +120,19 @@ namespace His_Pos
                     MenuChange();
                     break;
             }
+        }
+        private void TickEvent(Object sender, EventArgs e)
+        {
+            SystemTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+        }
+        /*
+         *啟動處方登錄時間Timer
+         */
+        private void StratClock()
+        {
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            timer.Tick += TickEvent;
+            timer.Start();
         }
     }
 }

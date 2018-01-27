@@ -378,6 +378,7 @@
     <Resource Include="Images\SystemBackground2.jpg" />
     <Resource Include="Images\SystemBackgroundWhite.jpg" />
     <Resource Include="Images\Truck_50px.png" />
+    <Resource Include="Images\Settings.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
