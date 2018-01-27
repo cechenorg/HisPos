@@ -16,5 +16,6 @@ namespace His_Pos.Class
             Price = price;
             Inventory = inventory;
         }
+
     }
 }

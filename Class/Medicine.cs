@@ -27,6 +27,7 @@ namespace His_Pos.Class
             HcPrice = hcPrice;
             MedicalCategory = medicalCategory;
         }
+
         public string Total { get; set; }
         public string PaySelf { get; set; }
         public string HcPrice { get; set; }
@@ -54,6 +55,7 @@ namespace His_Pos.Class
             Cost = d["HISMED_COST"].ToString();
             Price = d["HISMED_SELLPRICE"].ToString();
             PaySelf = "0";
+            HcPrice = d["HISMED_PRICE"].ToString();
         }
     }
 }

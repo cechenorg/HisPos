@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -10,9 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.HisApi;
 using His_Pos.PrescriptionInquire;
@@ -26,20 +23,18 @@ namespace His_Pos.PrescriptionDec
     {
         private int _res = -1;
         private int _selectedIindex = -1;
-        private bool _isDropDownClosed = true;
         private IcCard _icCard = new IcCard();
         private Customer _currentCustomer = new Customer();
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly Function _function = new Function();
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
-        private Medicine _selectedMedicine = new Medicine();
         private ObservableCollection<Medicine> MedicineList { get; set; }
         public ObservableCollection<Medicine> PrescriptionList { get; set; }
         
         public PrescriptionDecView()
         {
             InitializeComponent();
-            StratClock();
+            //StratClock();
             DataContext = this;
             SetPrescriptionMedicines();
             LoadPatentDataFromIcCard();
@@ -117,6 +112,7 @@ namespace His_Pos.PrescriptionDec
         private void Row_Loaded(object sender, RoutedEventArgs e)
         {
             var row = sender as DataGridRow;
+            Debug.Assert(row != null, nameof(row) + " != null");
             row.InputBindings.Add(new MouseBinding(InsertChronicDataCommand,
                 new MouseGesture() {MouseAction = MouseAction.LeftDoubleClick}));
         }
@@ -186,14 +182,6 @@ namespace His_Pos.PrescriptionDec
             MedicineList = new ObservableCollection<Medicine>();
             PrescriptionMedicines.ItemsSource = PrescriptionList;
         }
-        private void MedicineCodeAuto_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is AutoCompleteBox autoCompleteBox)
-            {
-                var innerListBox = (ListBox)autoCompleteBox.Template.FindName("Selector", autoCompleteBox);
-                innerListBox.ScrollIntoView(innerListBox.SelectedItem);
-            }
-        }
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
             var medicineAuto = sender as AutoCompleteBox;
@@ -210,49 +198,22 @@ namespace His_Pos.PrescriptionDec
             medicineAuto.ItemsSource = MedicineList;
             medicineAuto.PopulateComplete();
         }
-
-        private void MedicineCodeAuto_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            var medicineAuto = sender as AutoCompleteBox;
-            _selectedIindex = PrescriptionMedicines.SelectedIndex;
-            if (e.Key != Key.Enter) return;
-            _isDropDownClosed = false;
-            AddPrescriptionMedicine(medicineAuto);
-        }
         private void MedicineCodeAuto_DropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
-            var medicineAuto = sender as AutoCompleteBox;
-            Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
-            if (medicineAuto.Text.Length == 10 && _isDropDownClosed)
-                _isDropDownClosed = false;
+            AddPrescriptionMedicine(sender as AutoCompleteBox);
         }
-        private void AddPrescriptionMedicine(AutoCompleteBox MedicineAuto)
+        private void AddPrescriptionMedicine(AutoCompleteBox medicineAuto)
         {
-            Debug.Assert(MedicineAuto != null, nameof(MedicineAuto) + " != null");
-            _selectedMedicine = new Medicine();
-            foreach (var med in MedicineList)
-            {
-                if (med.Id.Contains(MedicineAuto.Text))
-                {
-                    _selectedMedicine = med;
-                    if (!MedicineDays.Text.Equals(string.Empty)) _selectedMedicine.MedicalCategory.Days = int.Parse(MedicineDays.Text);
-                }
-            }
+            Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
+            if (medicineAuto.SelectedItem is null) return;
             if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex)
-                PrescriptionList.Add(_selectedMedicine);
+                PrescriptionList.Add((Medicine)medicineAuto.SelectedItem);
             else
             {
-                PrescriptionList[PrescriptionMedicines.SelectedIndex] = _selectedMedicine;
+                PrescriptionList[PrescriptionMedicines.SelectedIndex] = (Medicine)medicineAuto.SelectedItem;
                 return;
             }
-            MedicineAuto.Text = "";
-        }
-        private void MedicineCodeAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
-        {
-            List<AutoCompleteBox> medicineCodeList = new List<AutoCompleteBox>();
-            _function.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref medicineCodeList);
-            medicineCodeList[_selectedIindex].Text = PrescriptionList[_selectedIindex].Id;
-            _isDropDownClosed = true;
+            medicineAuto.Text = "";
         }
     }
 }

@@ -9,7 +9,8 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
-             xmlns:Class="clr-namespace:His_Pos.Class" x:Class="His_Pos.PrescriptionDec.PrescriptionDecView"
+             xmlns:classes="clr-namespace:His_Pos.Class" 
+             x:Class="His_Pos.PrescriptionDec.PrescriptionDecView"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="992">
     <UserControl.Resources>
@@ -243,10 +244,10 @@
                             <TextBox x:Name="ChronicTotal" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
                         </DockPanel>
                     </Grid>
-                    <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"
-                          AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" SelectionChanged="MedicineCodeAuto_SelectionChanged">
+                    <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"  SelectionUnit="FullRow"
+                          AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" >
                         <DataGrid.DataContext>
-                            <Class:Medicine/>
+                            <classes:Medicine/>
                         </DataGrid.DataContext>
                         <DataGrid.HorizontalGridLinesBrush>
                             <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
@@ -264,41 +265,37 @@
                                         <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
                                                                   VerticalContentAlignment="Stretch" ValueMemberPath="Id" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
                                                                   MaxHeight="50" MinimumPrefixLength="2" ItemFilter="{Binding MedicineFilter}" BorderBrush="DimGray" Populating="MedicineCodeAuto_Populating"
-                                                                  PreviewKeyDown="MedicineCodeAuto_PreviewKeyDown" DropDownClosing="MedicineCodeAuto_DropDownClosing" DropDownClosed="MedicineCodeAuto_DropDownClosed"
-                                                                  FilterMode="Contains" IsTextCompletionEnabled="False">
+                                                                  DropDownClosing="MedicineCodeAuto_DropDownClosing" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}">
                                             <controls:AutoCompleteBox.ItemContainerStyle>
-                                                <Style TargetType="{x:Type ListBoxItem}">
-                                                    <Setter Property="Template">
-                                                        <Setter.Value>
-                                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                                <Border x:Name="ContentBorder"
+                                                <Style TargetType="ListBoxItem">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="ListBoxItem">
+                                                                    <Border x:Name="ContentBorder"
                                                                     Background="GhostWhite" Padding="4">
-                                                                    <ContentPresenter />
-                                                                </Border>
-                                                                <ControlTemplate.Triggers>
-                                                                    <Trigger Property="IsMouseOver"
+                                                                        <ContentPresenter />
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver"
                                                                          Value="True">
-                                                                        <Setter Property="Background"
+                                                                            <Setter Property="Background"
                                                                             TargetName="ContentBorder"
                                                                             Value="#FFB8BEC3" />
-                                                                        <Setter Property="IsSelected"
+                                                                            <Setter Property="IsSelected"
                                                                             Value="True" />
-                                                                    </Trigger>
-                                                                    <Trigger Property="IsSelected"
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsSelected"
                                                                          Value="True">
-                                                                        <Setter Property="Background"
+                                                                            <Setter Property="Background"
                                                                             TargetName="ContentBorder"
                                                                             Value="#FFB8BEC3"/>
-                                                                    </Trigger>
-                                                                </ControlTemplate.Triggers>
-                                                            </ControlTemplate>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Style>
-                                            </controls:AutoCompleteBox.ItemContainerStyle>
-                                            <controls:AutoCompleteBox.DataContext>
-                                                <Class:Medicine/>
-                                            </controls:AutoCompleteBox.DataContext>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </controls:AutoCompleteBox.ItemContainerStyle>
                                         </controls:AutoCompleteBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
