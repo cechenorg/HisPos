@@ -222,6 +222,7 @@
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="PrescriptionDec\PrescriptionDec.cs" />
+    <Compile Include="PrescriptionDec\PrescriptionDecView.cs" />
     <Compile Include="PrescriptionDec\PrescriptionDecView.xaml.cs">
       <DependentUpon>PrescriptionDecView.xaml</DependentUpon>
     </Compile>
