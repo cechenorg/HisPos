@@ -10,7 +10,6 @@ namespace His_Pos.Class
     public class Customer : Person
     {
         public string Qname { get; set; }
-        public string Birthday { get; set; }
         public bool Gender { get; set; }
         public ContactInfo ContactInfo { get; set; }
         /*

@@ -22,7 +22,7 @@ namespace His_Pos.Class
 
         public string Dosage { get; set; }
         public string Usage { get; set; }
-        public string Days { get; set; }
+        public int Days { get; set; }
         public string Position { get; set; }
         public string Form { get; set; }
     }
