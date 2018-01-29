@@ -13,9 +13,15 @@ namespace His_Pos.Class
         {
             Id = id;
             Name = name;
-            Price = price;
+            Price = double.Parse(price);
             Inventory = inventory;
         }
 
+        public Otc()
+        {
+        }
+
+        public int Total { get; set; }//商品數量
+        public double TotalPrice { get; set; }//商品總價
     }
 }

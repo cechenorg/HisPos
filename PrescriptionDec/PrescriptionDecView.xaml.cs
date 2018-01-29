@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -16,6 +17,9 @@ using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.HisApi;
 using His_Pos.PrescriptionInquire;
+using His_Pos.Properties;
+using His_Pos.Service;
+using MaterialDesignThemes.Wpf;
 
 namespace His_Pos.PrescriptionDec
 {
@@ -32,14 +36,13 @@ namespace His_Pos.PrescriptionDec
         private readonly Function _function = new Function();
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
-        public ObservableCollection<Medicine> PrescriptionList { get; set; }
-        
+        private ObservableCollection<Medicine> PrescriptionList { get; set; }
+        public ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
         public PrescriptionDecView()
         {
             InitializeComponent();
             DataContext = this;
-            SetPrescriptionMedicines();
-            LoadPatentDataFromIcCard();
+            InitializeLists();
             InitializeUiElementData();
         }
         
@@ -145,6 +148,48 @@ namespace His_Pos.PrescriptionDec
         }
         private void GetPatientDataButtonClick(object sender, RoutedEventArgs e)
         {
+            TraverseVisualTree(this);
+            Button button = sender as Button;
+            Debug.Assert(button != null, nameof(button) + " != null");
+            LoadPatentDataFromIcCard();
+
+            LoadingWindow loadingWindow = new LoadingWindow("Loading Customer Data...");
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            var sqlParameter = new SqlParameter("CUS_ID", "1");
+            parameters.Add(sqlParameter);
+            Prescription.ItemsSource = null;
+            CustomerHistoryList.Clear();
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORY]", parameters);
+            foreach (DataRow d in table.Rows)
+            {
+                CustomerHistoryList.Add(new CustomerHistory((int)d["TYPE"], d["DATE"].ToString(), d["HISTORY_ID"].ToString(), d["HISTORY_TITLE"].ToString()));
+            }
+
+            Prescription.ItemsSource = CustomerHistoryList;
+            Prescription.SelectedItem = CustomerHistoryList[0];
+
+            loadingWindow.backgroundWorker.CancelAsync();
+
+            //List<SqlParameter> customerId = new List<SqlParameter>();
+            //customerId.Add(new SqlParameter("IDNUM", "S88824769A"));
+            //table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CHRONICINGDATA]", customerId);
+            //if (table.Rows.Count > 0)
+            //{
+            //    ChronicList.ItemsSource = null;
+            //    ChronicPrescriptionList.Clear();
+            //    button.Command = DialogHost.OpenDialogCommand;
+            //    foreach (DataRow d in table.Rows)
+            //    {
+            //        ChronicPrescription c = new ChronicPrescription(d["CHRONICING_ID"].ToString(), d["HISDECMAS_ID"].ToString(), d["USER_IDNUM"].ToString(), d["HISDIV_ID"].ToString(), d["PRESCRIPTION_DATE"].ToString(), Parse(d["COUNT"].ToString()), d["INS_NAME"].ToString(), d["HISDIV_NAME"].ToString());
+            //        ChronicPrescriptionList.Add(c);
+            //    }
+            //    ChronicList.ItemsSource = ChronicPrescriptionList;
+            //    ChronicDialog.DataContext = this;
+            //}
+            //else
+            //    button.Command = null;
             LoadPatentDataFromIcCard();
         }
         private void Combo_DropDownOpened(object sender, EventArgs e)
@@ -162,32 +207,23 @@ namespace His_Pos.PrescriptionDec
             comboBox.Text = comboBox.SelectedItem?.ToString() ?? "";
             comboBox.IsReadOnly = true;
         }
-        private void SetPrescriptionMedicines()
+        /*
+         *初始化所有List
+         */
+        private void InitializeLists()
         {
             PrescriptionList = new ObservableCollection<Medicine>();
             MedicineList = new ObservableCollection<Medicine>();
+            CustomerHistoryList = new ObservableCollection<CustomerHistory>();
             PrescriptionMedicines.ItemsSource = PrescriptionList;
-        }
-        private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
-        {
-            var medicineAuto = sender as AutoCompleteBox;
-            Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
-            var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + medicineAuto.Text + "%' OR PRO_NAME Like '" + medicineAuto.Text + "%'");
-            MedicineList.Clear();
-
-            foreach (var d in tmp.Take(50))
-            {
-                var medicine = new Medicine();
-                medicine.GetData(d);
-                MedicineList.Add(medicine);
-            }
-            medicineAuto.ItemsSource = MedicineList;
-            medicineAuto.PopulateComplete();
         }
         private void MedicineCodeAuto_DropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
             AddPrescriptionMedicine(sender as AutoCompleteBox);
         }
+        /*
+         * 新增處方藥品
+         */
         private void AddPrescriptionMedicine(AutoCompleteBox medicineAuto)
         {
             Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
@@ -200,6 +236,54 @@ namespace His_Pos.PrescriptionDec
                 return;
             }
             medicineAuto.Text = "";
+        }
+        /*
+         * 藥品自費狀態
+         */
+        private void PaySelf_CheckedEvent(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is CheckBox selfPay)) return;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex || PrescriptionList[PrescriptionMedicines.SelectedIndex].Total.ToString().Equals(string.Empty)) return;
+            var medicine = PrescriptionList[PrescriptionMedicines.SelectedIndex];
+            var selfCost = medicine.Price * medicine.Total;
+            if (selfPay.IsChecked == true)
+            {
+                medicine.PaySelf = true;
+                medicine.TotalPrice = medicine.Price * medicine.Total;
+                SelfCost.Text = (int.Parse(SelfCost.Text) + PriceConvert(selfCost)).ToString();
+            }
+            else
+            {
+                medicine.PaySelf = false;
+                medicine.TotalPrice = medicine.HcPrice * medicine.Total;
+                SelfCost.Text = (int.Parse(SelfCost.Text) - PriceConvert(selfCost)).ToString();
+            }
+            CountMedicinesCost();
+        }
+        /*
+         * 應付金額改變
+         */
+        private void MedicineTotal_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (PrescriptionMedicines.SelectedIndex >= PrescriptionList.Count || !(sender is TextBox medicineTotal)) return;
+            if (medicineTotal.Text.Equals(string.Empty)) return;
+            var medicine = PrescriptionList[PrescriptionMedicines.SelectedIndex];
+            medicine.Total = double.Parse(medicineTotal.Text);
+            CountMedicineTotalPrice(medicine);
+            CountMedicinesCost();
+        }
+        /*
+         * 輸入顧客付款金額
+         */
+        private void CustomPay_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (Change == null || !(sender is TextBox customPay)) return;
+            Change.Content = !customPay.Text.Equals(string.Empty) ? (int.Parse(customPay.Text) - int.Parse(TotalPrice.Text)).ToString() : "0";
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            TraverseVisualTree(this);
         }
     }
 }

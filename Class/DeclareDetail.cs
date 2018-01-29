@@ -22,7 +22,7 @@ namespace His_Pos.Class
 
         public DeclareDetail(Medicine medicine,string adjustCase,int sequence, string start, string end,string id)
         {
-            if(medicine.PaySelf == "0" || adjustCase == "3")//p1
+            if(!medicine.PaySelf || adjustCase == "3")//p1
                 MedicalOrder = "1";
             else
                 MedicalOrder = "4";
@@ -59,8 +59,8 @@ namespace His_Pos.Class
         private void SetMedicine(Medicine medicine)
         {
             MedicalId = medicine.Id;//p2
-            Total = double.Parse(medicine.Total);//p7
-            Price = double.Parse(medicine.HcPrice);//p8
+            Total = medicine.Total;//p7
+            Price = medicine.HcPrice;//p8
         }
         private void SetDate(string start,string end)
         {

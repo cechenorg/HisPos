@@ -178,6 +178,7 @@
     <Compile Include="Class\Copayment.cs" />
     <Compile Include="Class\Copayments.cs" />
     <Compile Include="Class\Customer.cs" />
+    <Compile Include="Class\CustomerHistory.cs" />
     <Compile Include="Class\DeclareData.cs" />
     <Compile Include="Class\DeclareDetail.cs" />
     <Compile Include="Class\Department.cs" />

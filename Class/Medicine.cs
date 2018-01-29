@@ -16,7 +16,7 @@ namespace His_Pos.Class
         {
         }
 
-        public Medicine(string id, string name, string price, string inventory, string total, string paySelf, string hcPrice, Medicate medicalCategory)
+        public Medicine(string id, string name, double price, string inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)
         {
             Id = id;
             Name = name;
@@ -28,10 +28,11 @@ namespace His_Pos.Class
             MedicalCategory = medicalCategory;
         }
 
-        public string Total { get; set; }
-        public string PaySelf { get; set; }
-        public string HcPrice { get; set; }
-        public Medicate MedicalCategory { get; set;}
+        public double Total { get; set; }
+        public double TotalPrice { get; set; }
+        public bool PaySelf { get; set; }
+        public double HcPrice { get; set; }
+        public Medicate MedicalCategory { get; set;}= new Medicate();
 
         public AutoCompleteFilterPredicate<object> MedicineFilter
         {
@@ -52,10 +53,10 @@ namespace His_Pos.Class
                 Dosage = d["HISMED_UNIT"].ToString(),
                 Form = d["HISMED_FORM"].ToString()
             };
-            Cost = d["HISMED_COST"].ToString();
-            Price = d["HISMED_SELLPRICE"].ToString();
-            PaySelf = "0";
-            HcPrice = d["HISMED_PRICE"].ToString();
+            Cost = double.Parse(d["HISMED_COST"].ToString());
+            Price = double.Parse(d["HISMED_SELLPRICE"].ToString());
+            PaySelf = false;
+            HcPrice = double.Parse(d["HISMED_PRICE"].ToString());
         }
     }
 }
