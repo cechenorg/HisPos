@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using His_Pos.Class;
+using His_Pos.Class.Person;
 using His_Pos.Service;
 
 namespace His_Pos

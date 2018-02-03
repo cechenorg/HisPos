@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.AbstractClass;
-
-namespace His_Pos.Class
+﻿namespace His_Pos.Class.Product
 {
-    public class Otc : Product
+    public class Otc : AbstractClass.Product
     {
         public Otc(string id, string name, string price, string inventory)
         {

@@ -10,6 +10,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using His_Pos.Class;
+using His_Pos.Class.AdjustCase;
+using His_Pos.Class.Copayment;
+using His_Pos.Class.Division;
+using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Product;
+using His_Pos.Class.TreatmentCase;
 
 namespace His_Pos.PrescriptionDec
 {

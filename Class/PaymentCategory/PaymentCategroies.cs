@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
+﻿using System.Collections.Generic;
 using His_Pos.Interface;
 
-namespace His_Pos.Class
+namespace His_Pos.Class.PaymentCategory
 {
     public class PaymentCategroies : ISelection
     {

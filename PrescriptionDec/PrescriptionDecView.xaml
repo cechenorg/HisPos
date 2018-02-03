@@ -9,7 +9,8 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
-             xmlns:classes="clr-namespace:His_Pos.Class" 
+             xmlns:classes="clr-namespace:His_Pos.Class"
+             xmlns:product="clr-namespace:His_Pos.Class.Product"
              x:Class="His_Pos.PrescriptionDec.PrescriptionDecView"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
@@ -231,7 +232,7 @@
                     <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"  SelectionUnit="FullRow"
                           AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
                         <DataGrid.DataContext>
-                            <classes:Medicine/>
+                            <product:Medicine/>
                         </DataGrid.DataContext>
                         <DataGrid.HorizontalGridLinesBrush>
                             <SolidColorBrush Color="#FF858585" Opacity="0.7"/>

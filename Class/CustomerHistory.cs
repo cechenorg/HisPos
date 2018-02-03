@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using His_Pos.AbstractClass;
+using His_Pos.Class.Product;
 using His_Pos.Properties;
 using His_Pos.Service;
 
