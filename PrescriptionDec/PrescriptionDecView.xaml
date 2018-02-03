@@ -12,7 +12,7 @@
              xmlns:classes="clr-namespace:His_Pos.Class" 
              x:Class="His_Pos.PrescriptionDec.PrescriptionDecView"
              mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="992">
+             d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
         <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -35,12 +35,12 @@
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
-    <Viewbox>
-        <Grid>
+    <Viewbox Stretch="Fill">
+        <Grid Width="1365">
             <materialDesign:DialogHost VerticalContentAlignment="Center" Margin="0,0,0,0.2" >
                 <materialDesign:DialogHost.DialogContent >
                     <Viewbox>
-                        <Grid x:Name="ChronicDialog" Height="Auto" Width="700" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid x:Name="ChronicDialog" Height="Auto" Width="1365" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
@@ -103,7 +103,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
-                        <RowDefinition Height="290"/>
+                        <RowDefinition Height="320"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0">
@@ -120,20 +120,20 @@
                     </DockPanel>
                     <Grid Background="#7FEEEEEE" Grid.Row="1" Margin="10,10,10,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
                             <RowDefinition/>
-                            <RowDefinition/>
                         </Grid.RowDefinitions>
                         <DockPanel LastChildFill="False"  Margin="10,0,0,0">
-                            <Label Content="釋出院所" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
+                            <Label Content="釋出院所" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
                            BorderThickness="0,0,0,1"/>
-                            <controls:AutoCompleteBox x:Name="ReleasePalace" Background="{x:Null}" Width="387" Height="30" FontSize="14" FontStretch="ExtraExpanded" 
+                            <controls:AutoCompleteBox x:Name="ReleasePalace" Background="{x:Null}" Width="400" Height="30" FontSize="14" FontStretch="ExtraExpanded" 
                                                       BorderThickness="0,0,0,1" FontWeight="Bold" VerticalContentAlignment="Stretch" Padding="0,8,0,0" Margin="0" 
                                                       MinimumPrefixLength="4" MaxHeight="50" BorderBrush="DimGray">
                                 <controls:AutoCompleteBox.ItemContainerStyle>
@@ -169,70 +169,67 @@
                             </controls:AutoCompleteBox>
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0">
-                            <Label Content="就醫科別" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
+                            <Label Content="就醫科別" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
                                    HorizontalContentAlignment="Stretch" />
-                            <ComboBox x:Name="DivisionCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                            <ComboBox x:Name="DivisionCombo" Width="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False" Margin="10,0,0,0">
-                            <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="DoctorName" Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold"/>
+                            <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <TextBox x:Name="DoctorName" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="0" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
+                            <Label Content="就醫序號" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <TextBox x:Name="TreatmentNumber" MinWidth="150" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
+                                     BorderThickness="0,0,0,1" HorizontalContentAlignment="Stretch"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="1" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
+                            <Label Content="處方案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <ComboBox x:Name="TreatmentCaseCombo" Width="150" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                         </DockPanel>
                         <DockPanel Grid.Row="1" Grid.Column="0"  Margin="10,0,0,0">
-                            <Label Content="就醫日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <Label Content="就醫日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                             <Viewbox Width="auto" MinWidth="147" Height="30">
-                                <DatePicker x:Name="PrescriptionPicker" Width="auto" Height="30" MinWidth="147" FontSize="14" FontWeight="Bold" Padding="0" 
+                                <DatePicker x:Name="PrescriptionPicker" Width="auto" Height="30" MinWidth="150" FontSize="14" FontWeight="Bold" Padding="0" 
                                             FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch"/>
                             </Viewbox>
-                            <Label Content="調劑日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <Label Content="調劑日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                             <Viewbox Width="auto" Height="30" MinWidth="147">
-                                <DatePicker x:Name="AdjustPicker" Width="auto" Height="30" MinWidth="143" FontSize="14" FontWeight="Bold" Padding="0" FontStretch="ExtraExpanded" 
+                                <DatePicker x:Name="AdjustPicker" Width="auto" Height="30" MinWidth="150" FontSize="14" FontWeight="Bold" Padding="0" FontStretch="ExtraExpanded" 
                                             HorizontalContentAlignment="Stretch"/>
                             </Viewbox>
                         </DockPanel>
                         <DockPanel Grid.Row="1" Grid.Column="1"  Margin="10,0,0,0">
-                            <Label Content="主要診斷" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <TextBox x:Name="MainDiagnosis" Width="auto" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded"/>
+                            <Label Content="主要診斷" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <TextBox x:Name="MainDiagnosis" Width="auto" MinWidth="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded"/>
                         </DockPanel>
                         <DockPanel Grid.Row="1" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
-                            <Label Width="auto" Content="次要診斷" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <TextBox x:Name="SeconDiagnosis" Width="auto" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded"/>
+                            <Label Width="auto" Content="次要診斷" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <TextBox x:Name="SeconDiagnosis" Width="auto" MinWidth="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded"/>
                         </DockPanel>
                         <DockPanel Grid.Row="2" Grid.Column="0"  Margin="10,0,0,0">
-                            <Label Content="就醫序號" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="TreatmentNumber" MinWidth="147" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
-                                     BorderThickness="0,0,0,1" HorizontalContentAlignment="Stretch"/>
-                            <Label Content="特定治療" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="SpecialCode" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch"/>
+                            <Label Content="給付類別" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <ComboBox x:Name="PaymentCategoryCombo" Width="150" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                            <Label Content="部分負擔" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <ComboBox x:Name="CopaymentCombo" Width="150" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                         </DockPanel>
                         <DockPanel Grid.Row="2" Grid.Column="1"  Margin="10,0,0,0">
-                            <Label Content="給付類別" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <ComboBox x:Name="PaymentCategoryCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                            <Label Content="調劑案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <ComboBox x:Name="AdjustCaseCombo" Width="150" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                         </DockPanel>
                         <DockPanel Grid.Row="2" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
-                            <Label Content="部分負擔" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <ComboBox x:Name="CopaymentCombo" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
-                        </DockPanel>
-                        <DockPanel Grid.Row="3" Grid.Column="0"  Margin="10,0,0,0">
-                            <Label Content="處方案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <ComboBox x:Name="TreatmentCaseCombo" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
-                            <Label Content="給藥日份" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="MedicineDays" MinWidth="60" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
-                                     BorderThickness="0,0,0,1" HorizontalContentAlignment="Left"/>
-                        </DockPanel>
-                        <DockPanel Grid.Row="3" Grid.Column="1"  Margin="10,0,0,0">
-                            <Label Content="調劑案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <ComboBox x:Name="AdjustCaseCombo" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
-                        </DockPanel>
-                        <DockPanel Grid.Row="3" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
-                            <Label Content="領藥次數" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <Label Content="領藥次數" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                             <TextBox x:Name="ChronicSequence" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" 
                                      Margin="10,0,0,0" HorizontalContentAlignment="Center"/>
                             <Label Content="/" FontSize="16" Width="auto" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" HorizontalContentAlignment="Stretch"/>
                             <TextBox x:Name="ChronicTotal" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
                         </DockPanel>
+                        <DockPanel Grid.Row="2" Grid.Column="3"  Margin="10,0,0,0">
+                            <Label Content="特定治療" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <TextBox x:Name="SpecialCode" MinWidth="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch"/>
+                        </DockPanel>
                     </Grid>
                     <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"  SelectionUnit="FullRow"
-                          AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" >
+                          AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
                         <DataGrid.DataContext>
                             <classes:Medicine/>
                         </DataGrid.DataContext>
@@ -287,7 +284,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn MinWidth="320" Header="藥品名稱" Binding="{Binding Name}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                            <DataGridTextColumn MinWidth="400" Header="藥品名稱" Binding="{Binding Name}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
                             <DataGridTemplateColumn MinWidth="60" Header="用量" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineAmountDataTemplate">
@@ -323,7 +320,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn MinWidth="40" Header="途徑" >
+                            <DataGridTemplateColumn MinWidth="40" Header="途徑">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineWaysDataTemplate">
                                         <controls:AutoCompleteBox x:Name="MedicineWaysAuto" MinWidth="40" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
@@ -362,8 +359,20 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn MinWidth="60" Header="健保價格" Binding="{Binding HcPrice}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <DataGridTextColumn MinWidth="60" Header="自費價格" Binding="{Binding Price}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <DataGridTextColumn MinWidth="60" Header="健保價格" Binding="{Binding HcPrice}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="60" Header="自費價格" Binding="{Binding Price}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Margin="10,0,10,10" Width="Auto" Height="auto" Grid.Row="3">

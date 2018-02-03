@@ -27,7 +27,6 @@ namespace His_Pos
             WindowState = WindowState.Normal;
             Width = SystemParameters.PrimaryScreenWidth * 0.833;
             Height = Width * 0.5625;
-            InitializePaymentBlock();
             CurrentUser = userLogin;
             InitializePosMenu();
             InitializeHisMenu();
@@ -81,11 +80,6 @@ namespace His_Pos
                 var newItem = new MenuItem();
                 features.NewMenuItem(t,newItem, FeaturesItemMouseDown);
             }
-        }
-        
-        private void InitializePaymentBlock()
-        {
-            InputMethod.SetIsInputMethodEnabled(Barcode, false);
         }
 
         private void FeatureMouseDown(object sender, MouseButtonEventArgs e)

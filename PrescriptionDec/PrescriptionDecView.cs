@@ -36,6 +36,12 @@ namespace His_Pos.PrescriptionDec
             PatientName.SetIconSource(new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative)));
             PatientId.SetIconSource(new BitmapImage(new Uri(@"..\Images\ID_Card.png", UriKind.Relative)));
             PatientBirthday.SetIconSource(new BitmapImage(new Uri(@"..\Images\birthday.png", UriKind.Relative)));
+            Deposit.Text = "0";
+            SelfCost.Text = "0";
+            Copayment.Text = "0";
+            TotalPrice.Text = "0";
+            CustomPay.Text = "0";
+            Change.Content = "0";
         }
         /*
          *載入醫療院所資料
@@ -182,7 +188,10 @@ namespace His_Pos.PrescriptionDec
         private void CostTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox costTextBox && costTextBox.Text.Length > 0 && TotalPrice != null)
-                TotalPrice.Text = (PriceConvert(double.Parse(Copayment.Text)) + double.Parse(SelfCost.Text) + double.Parse(Deposit.Text)).ToString();
+            {
+                if(Copayment.Text.Equals(string.Empty) || SelfCost.Text.Equals(string.Empty) || Deposit.Text.Equals(string.Empty)) return;
+                TotalPrice.Text = (PriceConvert(double.Parse(Copayment.Text) + double.Parse(SelfCost.Text) + double.Parse(Deposit.Text))).ToString();
+            }
         }
 
         private void TraverseVisualTree(Visual myMainWindow)
@@ -199,6 +208,7 @@ namespace His_Pos.PrescriptionDec
                 TraverseVisualTree(visualChild);
             }
             PrescriptionList.Clear();
+            InitializeUiElementResource();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)

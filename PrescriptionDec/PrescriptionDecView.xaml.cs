@@ -148,7 +148,7 @@ namespace His_Pos.PrescriptionDec
         }
         private void GetPatientDataButtonClick(object sender, RoutedEventArgs e)
         {
-            TraverseVisualTree(this);
+            
             Button button = sender as Button;
             Debug.Assert(button != null, nameof(button) + " != null");
             LoadPatentDataFromIcCard();
@@ -278,7 +278,12 @@ namespace His_Pos.PrescriptionDec
         private void CustomPay_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (Change == null || !(sender is TextBox customPay)) return;
-            Change.Content = !customPay.Text.Equals(string.Empty) ? (int.Parse(customPay.Text) - int.Parse(TotalPrice.Text)).ToString() : "0";
+            if (CustomPay.Text.Equals(string.Empty))
+                Change.Content = (0 - int.Parse(TotalPrice.Text)).ToString();
+            else
+            {
+                Change.Content = (int.Parse(CustomPay.Text) - int.Parse(TotalPrice.Text)).ToString();
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
