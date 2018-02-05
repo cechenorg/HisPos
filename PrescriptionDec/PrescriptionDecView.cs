@@ -25,6 +25,7 @@ namespace His_Pos.PrescriptionDec
     public partial class PrescriptionDecView
     {
         private int _historyFilterCondition = -1;
+        private ProductDb _productDb = new ProductDb();
         /*
          *初始化UI元件資料
          */
@@ -64,9 +65,8 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadDivisionsData()
         {
-            var divisions = new Divisions();
-            divisions.GetData();
-            foreach (var division in divisions.DivisionsList)
+            DivisionDb.GetData();
+            foreach (var division in DivisionDb.DivisionsList)
             {
                 DivisionCombo.Items.Add(division.Id + ". " + division.Name);
             }
@@ -76,9 +76,8 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadPaymentCategories()
         {
-            var paymentCategroies = new PaymentCategroies();
-            paymentCategroies.GetData();
-            foreach (var paymentCategory in paymentCategroies.PaymentCategoryList)
+            PaymentCategroyDb.GetData();
+            foreach (var paymentCategory in PaymentCategroyDb.PaymentCategoryList)
             {
                 PaymentCategoryCombo.Items.Add(paymentCategory.Id + ". " + paymentCategory.Name);
             }
@@ -88,9 +87,8 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadCopayments()
         {
-            var copayments = new Copayments();
-            copayments.GetData();
-            foreach (var copayment in copayments.CopaymentList)
+            CopaymentDb.GetData();
+            foreach (var copayment in CopaymentDb.CopaymentList)
             {
                 CopaymentCombo.Items.Add(copayment.Id + ". " + copayment.Name);
             }
@@ -100,7 +98,7 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadTreatmentCases()
         {
-            var treatmentCases = new TreatmentCases();
+            var treatmentCases = new TreatmentCaseDb();
             treatmentCases.GetData();
             foreach (var treatmentCase in treatmentCases.TreatmentCaseLsit)
             {
@@ -112,9 +110,8 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadAdjustCases()
         {
-            var adjustCases = new AdjustCases();
-            adjustCases.GetData();
-            foreach (var adjustCase in adjustCases.AdjustCaseList)
+            AdjustCaseDb.GetData();
+            foreach (var adjustCase in AdjustCaseDb.AdjustCaseList)
             {
                 AdjustCaseCombo.Items.Add(adjustCase.Id + ". " + adjustCase.Name);
             }
@@ -128,11 +125,9 @@ namespace His_Pos.PrescriptionDec
             Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
             var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + medicineAuto.Text + "%' OR PRO_NAME Like '" + medicineAuto.Text + "%'");
             MedicineList.Clear();
-
             foreach (var d in tmp.Take(50))
             {
-                var medicine = new Medicine();
-                medicine.GetData(d);
+                var medicine = ProductDb.GetMedicineData(d);
                 MedicineList.Add(medicine);
             }
             medicineAuto.ItemsSource = MedicineList;

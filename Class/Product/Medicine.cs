@@ -36,20 +36,5 @@ namespace His_Pos.Class.Product
                     || (obj as Medicine).Name.Contains(searchText);
             }
         }
-
-        public void GetData(DataRow d)
-        {
-            Id = d["HISMED_ID"].ToString();
-            Name = d["PRO_NAME"].ToString();
-            MedicalCategory = new Medicate
-            {
-                Dosage = d["HISMED_UNIT"].ToString(),
-                Form = d["HISMED_FORM"].ToString()
-            };
-            Cost = double.Parse(d["HISMED_COST"].ToString());
-            Price = double.Parse(d["HISMED_SELLPRICE"].ToString());
-            PaySelf = false;
-            HcPrice = double.Parse(d["HISMED_PRICE"].ToString());
-        }
     }
 }

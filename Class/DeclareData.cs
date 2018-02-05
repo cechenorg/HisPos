@@ -18,7 +18,6 @@ namespace His_Pos.Class
             ChronicPrescription = new ChronicPrescription();
             ChronicPrescription = chronicPrescription;
         }
-
         public Prescription Prescription {get;set;}
         public ChronicPrescription ChronicPrescription {get; set;}
     }

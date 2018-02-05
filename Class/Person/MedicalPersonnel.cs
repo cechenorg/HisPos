@@ -2,7 +2,11 @@
 {
     public class MedicalPersonnel : AbstractClass.Person
     {
-        protected MedicalPersonnel(string id,string name,string icNumber)
+        public MedicalPersonnel()
+        {
+        }
+
+        public MedicalPersonnel(string id,string name,string icNumber)
         {
             Id = id;
             Name = name;
