@@ -12,5 +12,11 @@ namespace His_Pos.AbstractClass
         public string Name { get; set; }
         public string IcNumber { get; set; }
         public string Birthday { get; set; }
+        public struct Age
+        {
+            public int Years;
+            public int Months;
+            public int Days;
+        }
     }
 }

@@ -21,12 +21,12 @@ namespace His_Pos.Class.Declare
             dData += "<d2></d2>";
             dData += "<d3>" + declareData.Prescription.Treatment.Customer.IcNumber + "</d3>";
             //D4 : 補報原因 非補報免填
-            if (declareData.D4 != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d4>" + declareData.D4 + "</d4>";
+            if (declareData.DeclareMakeUp != DBNull.Value.ToString(CultureInfo.CurrentCulture))
+                dData += "<d4>" + declareData.DeclareMakeUp + "</d4>";
             if (declareData.Prescription.Treatment.AdjustCase.Id != DBNull.Value.ToString(CultureInfo.CurrentCulture) && (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") || declareData.Prescription.Treatment.AdjustCase.Id.Equals("D")))
                 dData += "<d5>" + declareData.Prescription.Treatment.PaymentCategory.Id + "</d5>";
             dData += "<d6>" + declareData.Prescription.Treatment.Customer.Birthday + "</d6>";
-            dData += "<d7>" + declareData.Prescription.IcCard.LastMedicalNumber + "</d7>";
+            dData += "<d7>" + declareData.Prescription.IcCard.MedicalNumber + "</d7>";
             /*
              D8 ~ D12 國際疾病代碼
              */
@@ -41,11 +41,11 @@ namespace His_Pos.Class.Declare
             if (declareData.Prescription.Treatment.TreatmentDate != DBNull.Value.ToString(CultureInfo.CurrentCulture))
                 dData += "<d14>" + declareData.Prescription.Treatment.TreatmentDate + "</d14>";
             dData += "<d15>" + declareData.Prescription.Treatment.Copayment.Id + "</d15>";
-            dData += "<d16>" + declareData.D16 + "</d16>";
+            dData += "<d16>" + declareData.DeclarePoint + "</d16>";
             dData += "<d17>" + declareData.Prescription.Treatment.Copayment.Point + "</d17>";
-            dData += "<d18>" + declareData.D18 + "</d18>";
-            if (declareData.D19.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d19>" + declareData.D19 + "</d19>";
+            dData += "<d18>" + declareData.TotalPoint + "</d18>";
+            if (declareData.AssistProjectCopaymentPoint.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
+                dData += "<d19>" + declareData.AssistProjectCopaymentPoint + "</d19>";
             dData += "<d20>" + declareData.Prescription.Treatment.Customer.Name + "</d20>";
             dData += "<d21>" + declareData.Prescription.Treatment.MedicalInfo.Hospital.Id + "</d21>";
             dData += "<d22>" + declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id + "</d22>";
@@ -57,23 +57,23 @@ namespace His_Pos.Class.Declare
             
             if (declareData.Prescription.Treatment.MedicineDays.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
                 dData += "<d30>" + declareData.Prescription.Treatment.MedicineDays.ToString() + "</d30>";
-            if (declareData.D31.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d31>" + declareData.D31 + "</d31>";
-            if (declareData.D32.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d32>" + declareData.D32 + "</d32>";
-            if (declareData.D33.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d33>" + declareData.D33 + "</d33>";
+            if (declareData.SpecailMaterialPoint.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
+                dData += "<d31>" + declareData.SpecailMaterialPoint + "</d31>";
+            if (declareData.DiagnosisPoint.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
+                dData += "<d32>" + declareData.DiagnosisPoint + "</d32>";
+            if (declareData.DrugsPoint.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
+                dData += "<d33>" + declareData.DrugsPoint + "</d33>";
             //免填 dData += "<d34>" + "" + "</d34>";
             if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2"))
             {
-                dData += "<d35>" + declareData.D35 + "</d35>";
-                dData += "<d36>" + declareData.D36 + "</d36>";
+                dData += "<d35>" + declareData.ChronicSequence + "</d35>";
+                dData += "<d36>" + declareData.ChronicTotal + "</d36>";
             }
             //待確認
             /*if (d37.ToString() != DBNull.Value.ToString())*/
-            dData += "<d37>" + declareData.D37 + "</d37>";
+            dData += "<d37>" + declareData.MedicalServiceCode + "</d37>";
             /*if (d38.ToString() != DBNull.Value.ToString())*/
-            dData += "<d38>" + declareData.D38 + "</d38>";
+            dData += "<d38>" + declareData.MedicalServicePoint + "</d38>";
             //D39~D42免填
             //dData += "<d39>" + "" + "</d39>";      
             //dData += "<d40>" + "" + "</d40>";         
@@ -81,8 +81,8 @@ namespace His_Pos.Class.Declare
             //dData += "<d41>" + "" + "</d41>";
             //dData += "<d42>" + "" + "</d42>";
             /*if (d44.ToString() != DBNull.Value.ToString())*/
-            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToDecimal(declareData.D35) >= 2)
-                dData += "<d43>" + declareData.ChronicPrescription.OriginalMedicalNumber + "</d43>";
+            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToDecimal(declareData.ChronicSequence) >= 2)
+                dData += "<d43>" + declareData.Prescription.OriginalMedicalNumber + "</d43>";
             //待確認 新生兒註記就醫
             dData += "<d44>" + "" + "</d44>";
             //待確認 矯正機關代號

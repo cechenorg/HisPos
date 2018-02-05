@@ -14,7 +14,7 @@ using ImeLib;
 namespace His_Pos
 {
     
-    class Function
+    public class Function
     {
 
         //用途:將中文字轉成注音符號再轉成英文字母
@@ -88,7 +88,7 @@ namespace His_Pos
         public string BirthdayFormatConverter(string birthday)
         {
             var year = birthday.Substring(0, 3).StartsWith("0") ? birthday.Substring(1, 2) : birthday.Substring(0, 3);
-            return year + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
+            return year +"/"+ birthday.Substring(4, 2) +"/"+ birthday.Substring(7, 2);
         }
 
         public void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject

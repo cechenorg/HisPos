@@ -173,7 +173,6 @@
     <Compile Include="Class\AdjustCase\AdjustCase.cs" />
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority.cs" />
-    <Compile Include="Class\ChronicPrescription.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
     <Compile Include="Class\Copayment\Copayment.cs" />
@@ -248,6 +247,7 @@
     <Compile Include="PrescriptionRevise\PrescriptionReviseView.xaml.cs">
       <DependentUpon>PrescriptionReviseView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
