@@ -23,7 +23,7 @@ namespace His_Pos.Class
 
         public Prescription Prescription {get;set;}
         public ChronicPrescription ChronicPrescription {get; set;}
-        public List<DeclareDetail> DeclareDetail { get; set; }
+        public List<DeclareDetail> DeclareDetails { get; set; }
         public string D4 { get; set; } //補報註記
         public int D16 { get; set; } //申請點數
         public int D17 { get; set; }//部分負擔點數

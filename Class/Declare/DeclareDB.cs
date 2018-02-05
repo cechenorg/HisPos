@@ -1,5 +1,11 @@
-﻿using System;
+﻿using His_Pos.Class.Product;
+using His_Pos.Properties;
+using His_Pos.Service;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -10,7 +16,155 @@ namespace His_Pos.Class.Declare
 {
     class DeclareDB
     {
-       
+        public void InsertDb(DeclareData declareData, string type = null, string id = null)
+        {
+            var conn = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("D1", declareData.Prescription.Treatment.AdjustCase.Id));
+            parameters.Add(new SqlParameter("D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id));
+            // parameters.Add(new SqlParameter("D2", DBNull.Value));
+            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id.Equals(string.Empty) ? new SqlParameter("D22", DBNull.Value) : new SqlParameter("D22", declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id));
+            parameters.Add(new SqlParameter("D23", declareData.Prescription.Treatment.AdjustDate));
+            parameters.Add(new SqlParameter("CUS_ID", declareData.Prescription.Treatment.Customer.Id));
+            parameters.Add(new SqlParameter("D7", declareData.Prescription.IcCard.LastMedicalNumber));
+            parameters.Add(new SqlParameter("D15", declareData.Prescription.Treatment.Copayment.Id));
+            parameters.Add(new SqlParameter("D25", declareData.Prescription.Treatment.MedicalPersonId));
+            parameters.Add(new SqlParameter("D16", declareData.D16));
+            parameters.Add(new SqlParameter("D17", declareData.D17));
+            parameters.Add(new SqlParameter("D18", declareData.D18));
+            parameters.Add(declareData.D19 == 0 ? new SqlParameter("D19", DBNull.Value) : new SqlParameter("D19", declareData.D19));
+            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id.Equals(string.Empty) ? new SqlParameter("D26", DBNull.Value) : new SqlParameter("D26", declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id));
+            parameters.Add(new SqlParameter("D27", DBNull.Value));
+            parameters.Add(new SqlParameter("D28", DBNull.Value));
+            parameters.Add(new SqlParameter("D29", DBNull.Value));
+            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id.Equals(string.Empty) ? new SqlParameter("D13", DBNull.Value) : new SqlParameter("D13", declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id));
+            parameters.Add(declareData.Prescription.Treatment.TreatmentDate.Equals(string.Empty) ? new SqlParameter("D14", DBNull.Value) : new SqlParameter("D14", declareData.Prescription.Treatment.TreatmentDate));
+            parameters.Add(declareData.Prescription.Treatment.PaymentCategory.Id.Equals(string.Empty) ? new SqlParameter("D5", DBNull.Value) : new SqlParameter("D5", declareData.Prescription.Treatment.PaymentCategory.Id));
+            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes[0].Id.Equals(string.Empty) ? new SqlParameter("D8", DBNull.Value) : new SqlParameter("D8", declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes[0].Id));
+            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes[1].Id.Equals(string.Empty) ? new SqlParameter("D9", DBNull.Value) : new SqlParameter("D9", declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes[1].Id));
+            parameters.Add(new SqlParameter("D10", DBNull.Value));
+            parameters.Add(new SqlParameter("D11", DBNull.Value));
+            parameters.Add(new SqlParameter("D12", DBNull.Value));
+            parameters.Add(new SqlParameter("D4", DBNull.Value));
+            parameters.Add(new SqlParameter("D30", declareData.Prescription.Treatment.MedicineDays.ToString()));
+            parameters.Add(new SqlParameter("D31", DBNull.Value));
+            parameters.Add(new SqlParameter("D32", DBNull.Value));
+            parameters.Add(new SqlParameter("D33", DBNull.Value));
+            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id.Equals(string.Empty) ? new SqlParameter("D24", DBNull.Value) : new SqlParameter("D24", declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id));
+            if (!declareData.Prescription.Treatment.AdjustCase.Id.Equals("2"))
+            {
+                parameters.Add(new SqlParameter("D35", DBNull.Value));
+                parameters.Add(new SqlParameter("D36", DBNull.Value));
+
+            }
+            else
+            {
+                parameters.Add(new SqlParameter("D35", declareData.D35));
+                parameters.Add(new SqlParameter("D36", declareData.D36));
+            }
+            parameters.Add(new SqlParameter("D38", declareData.D38));
+            //parameters.Add(new SqlParameter("D40", DBNull.Value));
+            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToInt32(declareData.D35) > 1)
+                parameters.Add(new SqlParameter("D43", declareData.ChronicPrescription.OriginalMedicalNumber));
+            else
+            {
+                parameters.Add(new SqlParameter("D43", DBNull.Value));
+            }
+            var dtable = new DataTable();
+            dtable.Columns.Add("P10", typeof(short));
+            dtable.Columns.Add("P1", typeof(string));
+            dtable.Columns.Add("P2", typeof(string));
+            dtable.Columns.Add("P7", typeof(float));
+            dtable.Columns.Add("P8", typeof(decimal));
+            dtable.Columns.Add("P9", typeof(int));
+            dtable.Columns.Add("P3", typeof(double));
+            dtable.Columns.Add("P4", typeof(string));
+            dtable.Columns.Add("P5", typeof(string));
+            dtable.Columns.Add("P6", typeof(string));
+            dtable.Columns.Add("P11", typeof(string));
+            dtable.Columns.Add("P12", typeof(string));
+            dtable.Columns.Add("P13", typeof(string));
+            dtable.Columns.Add("PAY_BY_YOURSELF", typeof(string));
+            DataRow row;
+            for (var i = 0; i < declareData.DeclareDetails.Count; i++)
+            {
+                row = dtable.NewRow();
+                row["P10"] = Convert.ToInt16(declareData.DeclareDetails[i].Sequence);
+                if (declareData.DeclareDetails[i].MedicalOrder != null) row["P1"] = declareData.DeclareDetails[i].MedicalOrder;
+                if (declareData.DeclareDetails[i].MedicalId != null) row["P2"] = declareData.DeclareDetails[i].MedicalId;
+                if (declareData.DeclareDetails[i].Dosage.ToString() != null) row["P3"] = declareData.DeclareDetails[i].Dosage.ToString();
+                if (declareData.DeclareDetails[i].Usage != null) row["P4"] = declareData.DeclareDetails[i].Usage;
+                if (declareData.DeclareDetails[i].Position != null) row["P5"] = declareData.DeclareDetails[i].Position;
+                if (declareData.DeclareDetails[i].Percent.ToString() != null) row["P6"] = declareData.DeclareDetails[i].Percent.ToString();
+                if (declareData.DeclareDetails[i].Total.ToString() != null) row["P7"] = declareData.DeclareDetails[i].Total.ToString();
+                if (declareData.DeclareDetails[i].Price.ToString() != null) row["P8"] = declareData.DeclareDetails[i].Price.ToString();
+                if (declareData.DeclareDetails[i].Point.ToString() != null) row["P9"] = declareData.DeclareDetails[i].Point.ToString();
+                if (declareData.DeclareDetails[i].Days.ToString() != null) row["P11"] = declareData.DeclareDetails[i].Days.ToString();
+                row["PAY_BY_YOURSELF"] = declareData.Prescription.Medicines[i].PaySelf;
+                dtable.Rows.Add(row);
+            }
+            var num = string.Empty;
+            var num2 = string.Empty;
+            var num3 = string.Empty;
+            var persent = string.Empty;
+
+            var year = int.Parse(declareData.Prescription.Treatment.Customer.Birthday.Substring(0, 3)) + 1911;
+            var cusBirth = year + "/" + declareData.Prescription.Treatment.Customer.Birthday.Substring(3, 2) + "/" +
+                              declareData.Prescription.Treatment.Customer.Birthday.Substring(5, 2);
+            var currentDate = (int.Parse(DateTime.Now.Date.ToString().Substring(0, 3)) + 1911) + "/" + DateTime.Now.Date.ToString().Substring(4, 2) + "/" +
+                                 DateTime.Now.Date.ToString().Substring(7, 2);
+            var month = GetTimeDiff(cusBirth, currentDate);
+
+            row = dtable.NewRow();
+            row["P3"] = 0;
+            row["P1"] = "9";
+            row["P2"] = declareData.D37;
+            row["P7"] = "00001.0";
+            if (Convert.ToInt32(declareData.D38) % 100 == 0) num = "00000";
+            if (Convert.ToInt32(declareData.D38) % 100 > 0) num = "0000";
+            row["P8"] = num + declareData.D38.ToString() + ".00";
+            if (month < 6) persent = "160";
+            if (month > 6 && month <= 24) persent = "130";
+            if (month > 24 && month <= 72) persent = "120";
+            row["P6"] = persent;
+            if (declareData.D38 * Convert.ToInt32(persent) / 10 % 100 == 0) num2 = "00000";
+            if (declareData.D38 * Convert.ToInt32(persent) / 10 % 100 > 0) num2 = "0000";
+            row["P9"] = num2 + (declareData.D38 * Convert.ToInt32(persent) / 10);
+            if (declareData.DeclareDetails.Count + 1 % 10 == 0) num3 = "00";
+            if (declareData.DeclareDetails.Count + 1 % 10 > 0 && declareData.DeclareDetails.Count + 1 % 10 < 10) num3 = "0";
+            if (declareData.DeclareDetails.Count + 1 % 10 >= 10) num3 = "";
+            row["P10"] = Convert.ToInt16(num3 + (declareData.DeclareDetails.Count + 1).ToString());
+            row["P12"] = declareData.DeclareDetails + "0000";
+            row["P13"] = declareData.DeclareDetails + "0000";
+            var sdetail = new DeclareDetail(row["P2"].ToString(),Convert.ToDouble(row["P6"].ToString()), Convert.ToDouble(row["P8"].ToString()),Convert.ToInt32(row["P10"].ToString()),row["P12"].ToString(),row["P13"].ToString());
+
+            declareData.DeclareDetails.Add(sdetail);
+            dtable.Rows.Add(row);
+            //new row
+            parameters.Add(new SqlParameter("DETAIL", dtable));
+            parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader(CreateToXml(declareData).InnerXml, XmlNodeType.Document, null))
+            });
+
+            if (type == "Update")
+            {
+                parameters.Add(new SqlParameter("ID", id));
+                conn.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEDECLAREDATA]", parameters);
+            }
+            else
+            {
+                conn.ExecuteProc("[HIS_POS_DB].[SET].[DECLAREDATA]", parameters);
+            }
+        }
+        public static int GetTimeDiff(string strFrom, string strTo)
+        {
+            var dtStart = DateTime.Parse(strFrom);
+            var dtEnd = DateTime.Parse(strTo);
+            var iMonths = dtEnd.Year * 12 + dtEnd.Month - (dtStart.Year * 12 + dtStart.Month) + 1;
+            return iMonths;
+        }
         public XmlDocument CreateToXml(DeclareData declareData)
         {
             string pData, dData;
@@ -90,7 +244,7 @@ namespace His_Pos.Class.Declare
             //特定地區醫療服務 免填
             //dData += "<d46>" + "" + "</d46>";
             dData += "</dhead>";
-            foreach (var detail in declareData.DeclareDetail)
+            foreach (var detail in declareData.DeclareDetails)
             {
                 pData = "<pdata>";
                 pData += "<p1>" + detail.MedicalOrder + "</p1>";
