@@ -155,7 +155,7 @@ namespace His_Pos.Class
             //申請點數
             _d16 = _d18 - _d17;
         }
-        public XmlDocument CreateToXml()
+        public XmlDocument CreateToXml(List<DeclareDetail> de)
         {
             string pData, dData;
             var xml = new XmlDocument();
