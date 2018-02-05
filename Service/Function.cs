@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Media;
+using System.Xml;
 using His_Pos.Class;
 using ImeLib;
 
@@ -128,6 +132,56 @@ namespace His_Pos
                     FindChildGroup(child, childName, ref list);
                 }
             }
+        }
+
+        public void ExportXml(XmlDocument xml,string FileTypeName,int count) {
+            var twc = new TaiwanCalendar();
+            var year = twc.GetYear(DateTime.Now).ToString();
+            var month = twc.GetMonth(DateTime.Now).ToString();
+            var day = twc.GetDayOfMonth(DateTime.Now).ToString();
+            if (twc.GetMonth(DateTime.Now) < 10) month = "0" + month;
+            if (twc.GetDayOfMonth(DateTime.Now) < 10) day = "0" + day;
+            var pathsplit = System.Environment.CurrentDirectory.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
+            var path = pathsplit[0];
+            for (var i = 1; i < pathsplit.Length; i++)
+            {
+                path += "\\" + pathsplit[i];
+                if (pathsplit[i] == "System") break;
+            }
+            path += "\\" + FileTypeName; // "匯出健保資料XML檔案"
+            if (!Directory.Exists(path + "\\" + year + month)) Directory.CreateDirectory(path + "\\" + year + month);
+            if (!Directory.Exists(path + "\\" + year + month + "\\" + day)) Directory.CreateDirectory(path + "\\" + year + month + "\\" + day);
+            var settings = new XmlWriterSettings();
+            settings.Indent = true;
+            settings.Encoding = Encoding.GetEncoding("big5");
+            var writer = XmlWriter.Create(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml", settings);
+            xml.Save(writer);
+            writer.Close();
+            //壓縮XML
+            if (File.Exists(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".zip")) File.Delete(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".zip");
+            var psi = new System.Diagnostics.Process();
+            psi.StartInfo.FileName = "makecab.exe";
+            psi.StartInfo.Arguments = path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml " + path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".zip";
+            psi.Start();
+
+            psi.WaitForInputIdle();
+            //設定要等待相關的處理序結束的時間 
+            psi.WaitForExit();
+
+            //StringBuilder pUploadFileName = new StringBuilder();
+            //pUploadFileName.Append(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml");
+            //StringBuilder fFileSize = new StringBuilder();
+            //long length = new System.IO.FileInfo(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml").Length;
+            //fFileSize.Append(length);
+            //StringBuilder pNumber = new StringBuilder();
+            //fFileSize.Append(count);
+            //StringBuilder pBuffer = new StringBuilder();
+            //int iBufferLen = xml.InnerText.Length;
+            //int port = 5; ;
+            //HisApi.HisApiBase.csOpenCom(0);
+            //HisApi.HisApiBase.csUploadData(pUploadFileName, fFileSize, pNumber, pBuffer, ref iBufferLen);
+            //HisApi.HisApiBase.csCloseCom();
+
         }
     }
 }

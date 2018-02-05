@@ -1,8 +1,11 @@
-﻿using System;
+﻿using His_Pos.Class.Person;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace His_Pos.Class
 {
@@ -16,5 +19,9 @@ namespace His_Pos.Class
         public string TreatmentDate { get; set; }//d14 就醫(處方)日期
         public string AdjustDate { get; set; }//d23 調劑日期
         public string MedicineDays { get; set; }//d30  給藥日份
+        public string MedicalPersonId { get; set; }//d25 醫事人員代號
+        public Customer Customer { get; set; } //病患資料
+       
+
     }
 }

@@ -49,7 +49,7 @@ namespace His_Pos.Class
         public string StartDate { get; set; }//p12
         public string EndDate { get; set; }//p13
         public string MedicalPersonnelId { get; set; }//p14
-
+        
         private void SetMedicate(Medicine medicine)
         {
             Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
