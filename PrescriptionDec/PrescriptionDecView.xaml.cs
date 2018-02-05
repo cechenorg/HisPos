@@ -4,22 +4,18 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.Class.Person;
+using His_Pos.Class.Product;
 using His_Pos.HisApi;
 using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
 using His_Pos.Service;
-using MaterialDesignThemes.Wpf;
 
 namespace His_Pos.PrescriptionDec
 {

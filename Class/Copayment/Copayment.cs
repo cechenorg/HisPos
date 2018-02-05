@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.AbstractClass;
-
-namespace His_Pos.Class
+﻿namespace His_Pos.Class.Copayment
 {
     public class Copayment : Selection
     {

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using His_Pos.Class;
+using His_Pos.Class.Person;
 using His_Pos.ViewModel;
 using MenuUserControl;
 using Label = System.Windows.Controls.Label;

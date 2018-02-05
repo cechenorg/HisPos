@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.AbstractClass;
+﻿using His_Pos.AbstractClass;
+using His_Pos.Class.Person;
 
 namespace His_Pos.Class
 {
@@ -15,7 +11,7 @@ namespace His_Pos.Class
             Name = name;
         }
         public MedicalPersonnel Doctor { get; set; }
-        public Division Division { get; set; }
+        public Division.Division Division { get; set; }
         
     }
 }

@@ -20,6 +20,6 @@ namespace His_Pos.Class
         }
 
         public Prescription Prescription {get;set;}
-        public ChronicPrescription ChronicPrescription { get; set; }
+        public ChronicPrescription ChronicPrescription {get; set;}
     }
 }

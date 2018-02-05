@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using His_Pos.Class.Product;
 
 namespace His_Pos.Class
 {

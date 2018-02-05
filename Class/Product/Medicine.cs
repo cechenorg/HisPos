@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using System.Windows.Controls;
-using His_Pos.AbstractClass;
-using His_Pos.Interface;
 
-namespace His_Pos.Class
+namespace His_Pos.Class.Product
 {
-    public class Medicine : Product
+    public class Medicine : AbstractClass.Product
     {
         public Medicine()
         {

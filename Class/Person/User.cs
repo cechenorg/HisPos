@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using His_Pos.AbstractClass;
-
-namespace His_Pos.Class
+﻿namespace His_Pos.Class.Person
 {
-    public class User : Person
+    public class User : AbstractClass.Person
 	{
 	    public string Password { get; set; }
 	    public Department Department { get; set; }

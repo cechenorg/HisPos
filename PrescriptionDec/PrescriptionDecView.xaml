@@ -9,7 +9,8 @@
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
-             xmlns:classes="clr-namespace:His_Pos.Class" 
+             xmlns:classes="clr-namespace:His_Pos.Class"
+             xmlns:product="clr-namespace:His_Pos.Class.Product"
              x:Class="His_Pos.PrescriptionDec.PrescriptionDecView"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
@@ -231,7 +232,7 @@
                     <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"  SelectionUnit="FullRow"
                           AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
                         <DataGrid.DataContext>
-                            <classes:Medicine/>
+                            <product:Medicine/>
                         </DataGrid.DataContext>
                         <DataGrid.HorizontalGridLinesBrush>
                             <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
@@ -375,15 +376,17 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Orientation="Horizontal" Margin="10,0,10,10" Width="Auto" Height="auto" Grid.Row="3">
-                        <Border BorderThickness="1,1,0,2" BorderBrush="DimGray">
-                            <StackPanel Orientation="Vertical" Background="#99EEEEEE" Width="250">
-                                <StackPanel Orientation="Horizontal" Background="#99EEEEEE" Height="40" Width="auto">
-                                    <CheckBox Tag="0" Content="交易" Margin="35,0,5,0" FontSize="15" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                    <Image Width="12" Source="/Images/PosDot.png"/>
-                                    <CheckBox Tag="1" Content="調劑" Margin="40,0,5,0" FontSize="15" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                    <Image Source="/Images/HisDot.png" Width="12" Margin="0,0,15,0"/>
-                                </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10,0,10,10" Width="Auto" Height="auto" Grid.Row="3" Background="#99EEEEEE">
+                        <Border BorderThickness="1,1,0,2" BorderBrush="#99EEEEEE" Background="#99EEEEEE">
+                            <StackPanel Orientation="Vertical" Background="#99EEEEEE" Width="425">
+                                <Canvas Background="#99EEEEEE" Height="40" Width="425" HorizontalAlignment="Right">
+                                    <StackPanel Orientation="Horizontal" Background="#99EEEEEE" Height="40" Width="auto" Canvas.Right="0">
+                                        <CheckBox Tag="0" Content="交易" Margin="35,0,5,0" FontSize="15" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                        <Image Width="12" Source="/Images/PosDot.png"/>
+                                        <CheckBox Tag="1" Content="調劑" Margin="40,0,5,0" FontSize="15" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                        <Image Source="/Images/HisDot.png" Width="12" Margin="0,0,15,0"/>
+                                    </StackPanel>
+                                </Canvas>
                                 <DataGrid x:Name="Prescription" Width="auto" Height="230" Padding="0" Background="#99EEEEEE" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" VerticalContentAlignment="Stretch" AutoGenerateColumns="False" SelectionChanged="Prescription_SelectionChanged" MouseEnter="Prescription_MouseEnter" HeadersVisibility="None" ItemsSource="{Binding customerHistoryList}" VerticalScrollBarVisibility="Auto">
                                     <DataGrid.Columns>
                                         <DataGridTemplateColumn Width="Auto" MinWidth="15">
@@ -394,14 +397,14 @@
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                         <DataGridTextColumn Header="date" MinWidth="80" Binding="{Binding Date}" IsReadOnly="True"/>
-                                        <DataGridTextColumn Header="title" Width="120" Binding="{Binding HistoryTitle}"/>
+                                        <DataGridTextColumn Header="title" Width="200" Binding="{Binding HistoryTitle}"/>
                                         <DataGridTextColumn Header="type" Binding="{Binding Type}" Visibility="Collapsed"/>
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>
                         </Border>
-                        <Border x:Name="GrayArea" MinWidth="425" Background="#99BFBFBF" BorderThickness="0,1,2,2" BorderBrush="#FF484848"/>
-                        <DataGrid x:Name="PrescriptionDetail" Visibility="Collapsed" MinWidth="425" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
+                        <Border x:Name="GrayArea" MinWidth="555" Background="#99BFBFBF" BorderThickness="0,1,2,2" BorderBrush="#FF484848"/>
+                        <DataGrid x:Name="PrescriptionDetail" Visibility="Collapsed" MinWidth="505" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="160" MinWidth="160" Header="藥品" Binding="{Binding Name}"/>
                                 <DataGridTextColumn MinWidth="90" Header="用法" Binding="{Binding Dosage}"/>

@@ -21,7 +21,6 @@ namespace His_Pos.ViewModel
         public ObservableCollection<TabBase> ItemCollection { get; set; }
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
         private TabBase _selectedTab;
-        private readonly Dictionary<string, TabBase> TabDictionary = new Dictionary<string, TabBase>();
 
         public TabBase SelectedTab
         {
@@ -57,15 +56,6 @@ namespace His_Pos.ViewModel
             this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
-            TabFactory();
-        }
-
-        private void TabFactory()
-        {
-            var functionNames = His_Pos.MainWindow.HisFeatures[0].Functions;
-            TabDictionary[functionNames[0]] = new PrescriptionDec.PrescriptionDec() {TabName = functionNames[0] };
-            TabDictionary[functionNames[1]] = new PrescriptionInquire.PrescriptionInquire() { TabName = functionNames[1] };
-            TabDictionary[functionNames[2]] = new PrescriptionRevise.PrescriptionRevise() { TabName = functionNames[2] };
         }
 
         protected virtual void ReorderTabsCommandAction(TabReorder reorder)
@@ -129,7 +119,25 @@ namespace His_Pos.ViewModel
         //Adds a random tab
         public void AddTabCommandAction(object tab)
         {
-            TabBase newTab = TabDictionary[tab.ToString()];
+            var functionNames = MainWindow.HisFeatures[0].Functions;
+            TabBase newTab;
+
+            if (tab.ToString().Equals(functionNames[0]))
+            {
+                newTab = new PrescriptionDec.PrescriptionDec() { TabName = functionNames[0] };
+            }
+            else if (tab.ToString().Equals(functionNames[1]))
+            {
+                newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = functionNames[1] };
+            }
+            else if (tab.ToString().Equals(functionNames[2]))
+            {
+                newTab = new PrescriptionRevise.PrescriptionRevise() { TabName = functionNames[2] };
+            }
+            else
+            {
+                return;
+            }
 
             this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
