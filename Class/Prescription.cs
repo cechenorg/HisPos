@@ -22,8 +22,6 @@ namespace His_Pos.Class
         public Pharmacy Pharmacy { get; set; }
         public Treatment Treatment { get; set; }
         public List<Medicine> Medicines { get; set; }
-        public int ChronicSequence { get; set; }
-        public int ChronicTotal { get; set; }
         public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
     }
 }

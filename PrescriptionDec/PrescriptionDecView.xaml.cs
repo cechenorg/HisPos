@@ -26,7 +26,6 @@ namespace His_Pos.PrescriptionDec
     public partial class PrescriptionDecView
     {
         private int _res = -1;
-        private int _selectedIindex = -1;
         private IcCard _icCard = new IcCard();
         private Customer _currentCustomer = new Customer();
         private StringBuilder _pBuffer = new StringBuilder(100);
