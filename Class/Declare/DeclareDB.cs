@@ -18,7 +18,7 @@ using MahApps.Metro.Controls;
 
 namespace His_Pos.Class.Declare
 {
-    class DeclareDB
+    public class DeclareDB
     {
         public void InsertDb(DeclareData declareData, string type = null, string id = null)
         {
@@ -120,16 +120,15 @@ namespace His_Pos.Class.Declare
             if (month < 6) persent = "160";
             if (month > 6 && month <= 24) persent = "130";
             if (month > 24 && month <= 72) persent = "120";
-            DeclareDetail detail = new DeclareDetail(declareData.D37,Convert.ToDouble(persent), declareData.D38, declareData.DeclareDetails.Count + 1, currentDate, currentDate);
+            DeclareDetail detail = new DeclareDetail(declareData.MedicalServiceCode, Convert.ToDouble(persent), declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate, currentDate);
             row = dtable.NewRow();
             row["P3"] = 0;
             row["P1"] = "9";
             row["P2"] = declareData.MedicalServiceCode;
             row["P7"] = "00001.0";
-            if (Convert.ToInt32(declareData.D38) % 100 == 0) num = "00000";
-            if (Convert.ToInt32(declareData.D38) % 100 > 0) num = "0000";
-            row["P8"] = num + declareData.D38.ToString() + ".00";
-            
+            if (Convert.ToInt32(declareData.MedicalServicePoint) % 100 == 0) num = "00000";
+            if (Convert.ToInt32(declareData.MedicalServicePoint) % 100 > 0) num = "0000";
+            row["P8"] = num + declareData.MedicalServicePoint + ".00";
             row["P6"] = persent;
             if (declareData.MedicalServicePoint * Convert.ToInt32(persent) / 10 % 100 == 0) num2 = "00000";
             if (declareData.MedicalServicePoint * Convert.ToInt32(persent) / 10 % 100 > 0) num2 = "0000";

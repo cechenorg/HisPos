@@ -5,7 +5,7 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.Declare
 {
-    internal class DeclareData
+    public class DeclareData
     {
         public DeclareData(Prescription prescription)
         {
