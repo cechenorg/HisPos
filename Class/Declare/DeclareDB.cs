@@ -108,7 +108,7 @@ namespace His_Pos.Class.Declare
                 dtable.Rows.Add(row);
             }
             var num = string.Empty;
-            var num2 = string.Empty;
+            var declarecount = declareData.DeclareDetails.Count + 1; //藥事服務醫令序
             var num3 = string.Empty;
             var persent = string.Empty;
 
@@ -120,26 +120,23 @@ namespace His_Pos.Class.Declare
             if (month < 6) persent = "160";
             if (month > 6 && month <= 24) persent = "130";
             if (month > 24 && month <= 72) persent = "120";
-            DeclareDetail detail = new DeclareDetail(declareData.D37,Convert.ToDouble(persent), declareData.D38, declareData.DeclareDetails.Count + 1, currentDate, currentDate);
+            DeclareDetail detail = new DeclareDetail(declareData.MedicalServiceCode,Convert.ToDouble(persent), declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate, currentDate);
             row = dtable.NewRow();
-            row["P3"] = 0;
-            row["P1"] = "9";
-            row["P2"] = declareData.MedicalServiceCode;
-            row["P7"] = "00001.0";
-            if (Convert.ToInt32(declareData.D38) % 100 == 0) num = "00000";
-            if (Convert.ToInt32(declareData.D38) % 100 > 0) num = "0000";
-            row["P8"] = num + declareData.D38.ToString() + ".00";
-            
-            row["P6"] = persent;
-            if (declareData.MedicalServicePoint * Convert.ToInt32(persent) / 10 % 100 == 0) num2 = "00000";
-            if (declareData.MedicalServicePoint * Convert.ToInt32(persent) / 10 % 100 > 0) num2 = "0000";
-            row["P9"] = num2 + (declareData.MedicalServicePoint * Convert.ToInt32(persent) / 10);
-            if (declareData.DeclareDetails.Count + 1 % 10 == 0) num3 = "00";
-            if (declareData.DeclareDetails.Count + 1 % 10 > 0 && declareData.DeclareDetails.Count + 1 % 10 < 10) num3 = "0";
-            if (declareData.DeclareDetails.Count + 1 % 10 >= 10) num3 = "";
-            row["P10"] = Convert.ToInt16(num3 + (declareData.DeclareDetails.Count + 1));
-            row["P12"] = declareData.DeclareDetails + "0000";
-            row["P13"] = declareData.DeclareDetails + "0000";
+            row["P1"] = detail.MedicalOrder;
+            row["P2"] = detail.MedicalId;
+            row["P3"] = detail.Dosage;
+            row["P6"] = detail.Percent;
+            row["P7"] = detail.Total;
+            if (Convert.ToInt32(detail.Price) % 100 == 0) num = "00000";
+            if (Convert.ToInt32(detail.Price) % 100 > 0) num = "0000";
+            row["P8"] = num + detail.Price.ToString() + ".00";
+            if (detail.Point >= 100) row["P9"] = "00000" + detail.Point.ToString();
+            if (detail.Point < 100) row["P9"] = "000000" + detail.Point.ToString();
+            if (declarecount < 10) row["P10"] = "00" + declarecount.ToString();
+            if (declarecount >= 10 && declarecount < 100) row["P10"] = "0" + declarecount.ToString();
+            if (declarecount >= 100 && declarecount < 1000) row["P10"] = declarecount.ToString();
+            row["P12"] = detail.StartDate;
+            row["P13"] = detail.EndDate;
             var sdetail = new DeclareDetail(row["P2"].ToString(),Convert.ToDouble(row["P6"].ToString()), Convert.ToDouble(row["P8"].ToString()),Convert.ToInt32(row["P10"].ToString()),row["P12"].ToString(),row["P13"].ToString());
 
             declareData.DeclareDetails.Add(sdetail);

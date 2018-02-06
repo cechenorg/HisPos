@@ -13,6 +13,7 @@ namespace His_Pos.Class
         {
             MedicalOrder = "9";
             MedicalId = medicalId;
+            Dosage = 0;
             Total = 00001.0;
             Price = price;
             Percent = percent;
@@ -21,7 +22,7 @@ namespace His_Pos.Class
             SetDate(start,end);
         }
 
-        public DeclareDetail(Medicine medicine,string adjustCase,int sequence, string start, string end,string id)
+        public DeclareDetail(Medicine medicine,string adjustCase,int sequence)
         {
             if(!medicine.PaySelf || adjustCase == "3")//p1
                 MedicalOrder = "1";
@@ -31,8 +32,6 @@ namespace His_Pos.Class
             SetMedicate(medicine);
             Sequence = sequence;
             CountPoint();
-            SetDate(start, end);
-            SetMedicalPersonnelId(id);
         }
 
         public string MedicalOrder { get; set; }//p1
