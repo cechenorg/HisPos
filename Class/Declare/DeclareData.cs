@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Service;
 
 namespace His_Pos.Class
 {
@@ -15,179 +16,153 @@ namespace His_Pos.Class
             Prescription = new Prescription();
             Prescription = prescription;
         }
-        public DeclareData(ChronicPrescription chronicPrescription)
-        {
-            ChronicPrescription = new ChronicPrescription();
-            ChronicPrescription = chronicPrescription;
-        }
 
         public Prescription Prescription {get;set;}
-        public ChronicPrescription ChronicPrescription {get; set;}
         public List<DeclareDetail> DeclareDetails { get; set; }
-        public string D4 { get; set; } //補報註記
-        public int D16 { get; set; } //申請點數
-        public int D17 { get; set; }//部分負擔點數
-        public int D18 { get; set; }//合計點數
-        public int D19 { get; set; }//行政協助項目部分負擔點數
-        public int D31 { get; set; }//特殊材料明細點數小計
-        public int D32 { get; set; }//診療明細點數小計
-        public int D33 { get; set; }//用藥明細點數小計
-        public string D35 { get; set; }//連續處方箋調劑序號
-        public string D36 { get; set; }//連續處方可調劑次數
-        public string D37 { get; set; }//藥事服務費項目代號
-        public int D38 { get; set; }//藥事服務費點數
+        public string DeclareMakeUp { get; set; }//D4補報註記
+        public double DeclarePoint { get; set; }//D16申請點數
+        public double CopaymentPoint { get; set; }//D17部分負擔點數
+        public double TotalPoint { get; set; }//D18合計點數
+        public double AssistProjectCopaymentPoint { get; set; }//D19行政協助項目部分負擔點數
+        public int SpecailMaterialPoint { get; set; }//D31特殊材料明細點數小計
+        public int DiagnosisPoint { get; set; }//D32診療明細點數小計
+        public int DrugsPoint { get; set; }//D33用藥明細點數小計
+        public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
+        public string ChronicTotal { get; set; }//D36連續處方可調劑次數
+        public string MedicalServiceCode { get; set; }//D37藥事服務費項目代號
+        public int MedicalServicePoint { get; set; }//D38藥事服務費點數
 
-        public void CountDeclareDeatailPoint() {
-            int medFormCount = 0;
-            short copaymentPoint = 0;
-            var dayPay = 22; //日劑藥費最低費用
-            var twc = new TaiwanCalendar();
-            var year = twc.GetYear(DateTime.Now).ToString();
-            var cusAge = Convert.ToInt32(year) - Convert.ToInt32(Prescription.Treatment.Customer.Birthday.Substring(0, 3));
+        private void SetCopaymentPoint()
+        {
+            double copaymentPoint = 0;
+            var copaymentId = Prescription.Treatment.Copayment.Id;
+            if (CheckCopaymentFreeProject())//免收部分負擔
+                copaymentPoint = 0;
+            if(copaymentId.Equals("I20") || copaymentId.Equals("Z00"))//I20:藥費大於100須收部分負擔 Z00:戒菸服務補助計畫加收部分負擔
+                copaymentPoint = Prescription.Treatment.Copayment.Point;
+            SetAssistProjectCopaymentPoint(copaymentPoint);
+        }
+
+        public void CountDeclareDeatailPoint()
+        {
+            var dateTimeExtensions = new DateTimeExtensions();
+            var cusAge = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(Prescription.Treatment.Customer.Birthday));
+            var medFormCount = CountOralLiquidAgent();
+            var dayPay = CountDayPayAmount(cusAge,medFormCount);
+            SetMedicalServiceCode(dayPay);//判斷藥事服務費項目代碼
+            SetCopaymentPoint();//計算部分負擔點數
+            TotalPoint = SpecailMaterialPoint + DiagnosisPoint + DrugsPoint + MedicalServicePoint;//計算總申報點數
+            DeclarePoint = TotalPoint - CopaymentPoint;//申請點數 = 總申報點數 - 部分負擔點數
+        }
+        private int CountDayPayAmount(double cusAge, int medFormCount)
+        {
+            const int ma1 = 22, ma2 = 31, ma3 = 37, ma4 = 41;
+            if (cusAge <= 12 && medFormCount == 1) return ma2;
+            if (cusAge <= 12 && medFormCount == 2) return ma3;
+            if (cusAge <= 12 && medFormCount == 3) return ma4;
+            return ma1;
+        }
+
+        private int CountOralLiquidAgent()
+        {
+            var medFormCount = 0;
+            const string oralLiquidAgent = "內服液劑";
             foreach (var med in Prescription.Medicines)
             {
-                if (med.MedicalCategory.Form == "內服液劑")
+                if (med.MedicalCategory.Form.Equals(oralLiquidAgent))
                     medFormCount++;
             }
-            if (cusAge <= 12 && medFormCount == 1) dayPay = 31;
-            if (cusAge <= 12 && medFormCount == 2) dayPay = 37;
-            if (cusAge <= 12 && medFormCount == 3) dayPay = 41;
+            return medFormCount;
+        }
 
-            switch (Prescription.Treatment.AdjustCase.Id)
+        private void CheckDayPay(int dayPay)
+        {
+            DrugsPoint = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
+            Prescription.Treatment.AdjustCase.Id = "3";//將調劑案件轉換為日劑藥費
+            switch (dayPay)
             {
-                case "3" when Prescription.Treatment.MedicalInfo.TreatmentCase.Id == "01" && Convert.ToInt32(Prescription.Treatment.MedicineDays) > 3:
+                case 22:
+                    MedicalServiceCode = "MA1";
+                    break;
+                case 31:
+                    MedicalServiceCode = "MA2";
+                    break;
+                case 37:
+                    MedicalServiceCode = "MA3";
+                    break;
+                case 41:
+                    MedicalServiceCode = "MA4";
+                    break;
+            }
+        }
+
+        private void SetMedicalServiceCode(int dayPay)
+        {
+            var adjustCaseId = Prescription.Treatment.AdjustCase.Id;
+            var treatmentCaseId = Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
+            const string westMedNormal = "01"; //原處方案件:西醫一般
+            var medicineDays = Convert.ToInt32(Prescription.Treatment.MedicineDays);
+            const int daysLimit = 3; //日劑藥費天數限制
+            switch (adjustCaseId)
+            {
+                case "3" when treatmentCaseId == westMedNormal && medicineDays > daysLimit:
                     throw new ArgumentException(Resources.MedicineDaysOutOfRange, "original");
-                case "1" when Prescription.Treatment.MedicalInfo.TreatmentCase.Id == "01" && Convert.ToInt32(Prescription.Treatment.MedicineDays) <= 3 && D33 <= dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays):
-                    D33 = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
-                    Prescription.Treatment.AdjustCase.Id = "3";
-                    switch (dayPay)
-                    {
-                        case 22:
-                            D37 = "MA1";
-                            break;
-                        case 31:
-                            D37 = "MA2";
-                            break;
-                        case 37:
-                            D37 = "MA3";
-                            break;
-                        case 41:
-                            D37 = "MA4";
-                            break;
-                    }
+                case "1" when treatmentCaseId == westMedNormal && medicineDays <= daysLimit && DrugsPoint <= dayPay * medicineDays:
+                    CheckDayPay(dayPay);
                     break;
             }
+        }
 
-            D18 = D31 + D32 + D33 + D38;
-            D16 = D18 - D17;
+        private bool CheckCopaymentFreeProject()
+        {
+            var copaymentId = Prescription.Treatment.Copayment.Id;
+            #region 代碼對照
+            /*
+             * 001:重大傷病
+             * 002:分娩
+             * 007:山地離島地區之就醫（88.7增訂）、山地原住民暨離島地區接受醫療院所戒菸治療服務免除戒菸藥品部分負擔
+             * 008:經離島醫院診所轉診至台灣本島門診及急診就醫者
+             * 009:本署其他規定免部分負擔者，如產檢時，同一主治醫師併同開給一般處方，百歲人瑞免部分負擔，921震災，行政協助性病或藥癮病患全面篩檢愛滋計畫、行政協助孕婦全面篩檢愛滋計畫等
+             * 801:HMO巡迴醫療
+             * 802:蘭綠計畫
+             * 905:三氯氰胺污染奶製品案
+             * I21:藥費小於100免收
+             * I22:符合本保險藥費免部分負擔範圍規定者，包括慢性病連續處方箋案件、牙醫案件、門診論病例計酬案件
+             */
+            #endregion
+            var freeList = new List<string>() { "001", "002", "007", "008", "009", "801", "802", "905", "I21", "I22" };
+            foreach (var id in freeList)
+            {
+                if (copaymentId.Equals(id))
+                    return true;
+            }
+            return false;
+        }
 
-            switch (Prescription.Treatment.Copayment.ToString())
+        private void SetAssistProjectCopaymentPoint(double copaymentPoint)//部分負擔點數(個人/行政)
+        {
+            var copaymentId = Prescription.Treatment.Copayment.Id;
+            #region 代碼對照
+            /* 003:合於社會救助法規定之低收入戶之保險對象
+             * 004:榮民、榮民遺眷之家戶代表
+             * 005:經登記列管結核病患至衛生福利部疾病管制署公告指定之醫療院所就醫者
+             * 006:勞工保險被保險人因職業傷害或職業病門診者
+             * 901:多氯聯苯中毒之油症患者
+             * 902:三歲以下兒童醫療補助計畫
+             * 903:新生兒依附註記方式就醫者
+             * 904:行政協助愛滋病案件、愛滋防治替代治療計畫
+             * 906:內政部役政署補助替代役役男全民健康保險自行負擔醫療費用
+             */
+            #endregion
+            var assistProjectCopaymentList = new List<string>() { "003", "004", "005", "006", "901", "902", "903", "904", "906" };
+            foreach (var id in assistProjectCopaymentList)
             {
-                case "001":
-                    copaymentPoint = 0;
-                    break;
-                case "002":
-                    copaymentPoint = 0;
-                    break;
-                case "007":
-                    copaymentPoint = 0;
-                    break;
-                case "008":
-                    copaymentPoint = 0;
-                    break;
-                case "009":
-                    copaymentPoint = 0;
-                    break;
-                case "801":
-                    copaymentPoint = 0;
-                    break;
-                case "802":
-                    copaymentPoint = 0;
-                    break;
-                case "905":
-                    copaymentPoint = 0;
-                    break;
-                case "I20": //藥費大於100須收部分負擔
-                    if (D33 > 100 && D33 <= 200)
-                        copaymentPoint = 20;
-                    else if (D33 > 201 && D33 <= 300)
-                        copaymentPoint = 40;
-                    else if (D33 > 301 && D33 <= 400)
-                        copaymentPoint = 60;
-                    else if (D33 > 401 && D33 <= 500)
-                        copaymentPoint = 80;
-                    else if (D33 > 501 && D33 <= 600)
-                        copaymentPoint = 100;
-                    else if (D33 > 601 && D33 <= 700)
-                        copaymentPoint = 120;
-                    else if (D33 > 701 && D33 <= 800)
-                        copaymentPoint = 140;
-                    else if (D33 > 801 && D33 <= 900)
-                        copaymentPoint = 160;
-                    else if (D33 > 901 && D33 <= 1000)
-                        copaymentPoint = 180;
-                    else if (D33 > 1001)
-                        copaymentPoint = 200;
-                    break;
-                case "I21"://藥費小於100免收
-                    copaymentPoint = 0;
-                    break;
-                /*慢性病連續處方箋案件、牙醫案件、門診論病例計酬案件免收*/
-                case "I22":
-                    if (Prescription.Treatment.MedicalInfo.TreatmentCase.Equals("08") 
-                        || Prescription.Treatment.MedicalInfo.TreatmentCase.Equals("11") 
-                        || Prescription.Treatment.MedicalInfo.TreatmentCase.Equals("12") 
-                        || Prescription.Treatment.MedicalInfo.TreatmentCase.Equals("13") 
-                        || Prescription.Treatment.MedicalInfo.TreatmentCase.Equals("14") 
-                        || Prescription.Treatment.MedicalInfo.TreatmentCase.Equals("15") 
-                        || Prescription.Treatment.MedicalInfo.TreatmentCase.Equals("16") 
-                        || Prescription.Treatment.MedicalInfo.TreatmentCase.Equals("19"))
-                        copaymentPoint = 0;
-                    break;
-                case "Z00":
-                    if (D33 > 100 && D33 <= 200)
-                        copaymentPoint = 20;
-                    else if (D33 > 201 && D33 <= 300)
-                        copaymentPoint = 40;
-                    else if (D33 > 301 && D33 <= 400)
-                        copaymentPoint = 60;
-                    else if (D33 > 401 && D33 <= 500)
-                        copaymentPoint = 80;
-                    else if (D33 > 501 && D33 <= 600)
-                        copaymentPoint = 100;
-                    else if (D33 > 601 && D33 <= 700)
-                        copaymentPoint = 120;
-                    else if (D33 > 701 && D33 <= 800)
-                        copaymentPoint = 140;
-                    else if (D33 > 801 && D33 <= 900)
-                        copaymentPoint = 160;
-                    else if (D33 > 901 && D33 <= 1000)
-                        copaymentPoint = 180;
-                    else if (D33 > 1001)
-                        copaymentPoint = 200;
-                    break;
+                if (copaymentId.Equals(id))
+                    CopaymentPoint = 0;
+                AssistProjectCopaymentPoint = copaymentPoint;
             }
-            //部分負擔點數(個人/行政)
-            if (Prescription.Treatment.Copayment.Equals("003") 
-                || Prescription.Treatment.Copayment.Equals("004") 
-                || Prescription.Treatment.Copayment.Equals("005") 
-                || Prescription.Treatment.Copayment.Equals("006") 
-                || Prescription.Treatment.Copayment.Equals("901") 
-                || Prescription.Treatment.Copayment.Equals("902") 
-                || Prescription.Treatment.Copayment.Equals("903") 
-                || Prescription.Treatment.Copayment.Equals("904") 
-                || Prescription.Treatment.Copayment.Equals("906"))
-            {
-                D17 = 0;
-                D19 = copaymentPoint;
-            }
-            else
-            {
-                D17 = copaymentPoint;
-                D19 = 0;
-            }
-            //申請點數
-            D16 = D18 - D17;
+            CopaymentPoint = copaymentPoint;
+            AssistProjectCopaymentPoint = 0;
         }
     }
 }

@@ -6,7 +6,7 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.TreatmentCase
 {
-    public class TreatmentCases : ISelection
+    public class TreatmentCaseDb : ISelection
     {
         public List<TreatmentCase> TreatmentCaseLsit { get; } = new List<TreatmentCase>();
 

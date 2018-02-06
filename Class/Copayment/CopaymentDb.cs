@@ -5,11 +5,11 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.Copayment
 {
-    public class Copayments
+    public static class CopaymentDb
     {
-        public List<Copayment> CopaymentList { get;} = new List<Copayment>();
+        public static List<Copayment> CopaymentList { get;} = new List<Copayment>();
 
-        public void GetData()
+        public static void GetData()
         {
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             var divisionTable = dbConnection.SetProcName("[HIS_POS_DB].[GET].[COPAYMENT]", dbConnection);

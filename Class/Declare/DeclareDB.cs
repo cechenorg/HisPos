@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using His_Pos;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.Class.Declare
 {
@@ -21,8 +22,8 @@ namespace His_Pos.Class.Declare
     {
         public void InsertDb(DeclareData declareData, string type = null, string id = null)
         {
+            var dateTimeExtensions = new DateTimeExtensions();
             var conn = new DbConnection(Settings.Default.SQL_global);
-
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("D1", declareData.Prescription.Treatment.AdjustCase.Id));
             parameters.Add(new SqlParameter("D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id));
@@ -30,13 +31,13 @@ namespace His_Pos.Class.Declare
             parameters.Add(declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id.Equals(string.Empty) ? new SqlParameter("D22", DBNull.Value) : new SqlParameter("D22", declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id));
             parameters.Add(new SqlParameter("D23", declareData.Prescription.Treatment.AdjustDate));
             parameters.Add(new SqlParameter("CUS_ID", declareData.Prescription.Treatment.Customer.Id));
-            parameters.Add(new SqlParameter("D7", declareData.Prescription.IcCard.LastMedicalNumber));
+            parameters.Add(new SqlParameter("D7", declareData.Prescription.IcCard.MedicalNumber));
             parameters.Add(new SqlParameter("D15", declareData.Prescription.Treatment.Copayment.Id));
             parameters.Add(new SqlParameter("D25", declareData.Prescription.Treatment.MedicalPersonId));
-            parameters.Add(new SqlParameter("D16", declareData.D16));
-            parameters.Add(new SqlParameter("D17", declareData.D17));
-            parameters.Add(new SqlParameter("D18", declareData.D18));
-            parameters.Add(declareData.D19 == 0 ? new SqlParameter("D19", DBNull.Value) : new SqlParameter("D19", declareData.D19));
+            parameters.Add(new SqlParameter("D16", declareData.DeclarePoint));
+            parameters.Add(new SqlParameter("D17", declareData.CopaymentPoint));
+            parameters.Add(new SqlParameter("D18", declareData.TotalPoint));
+            parameters.Add(declareData.AssistProjectCopaymentPoint.IsZero() ? new SqlParameter("D19", DBNull.Value) : new SqlParameter("D19", declareData.AssistProjectCopaymentPoint));
             parameters.Add(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id.Equals(string.Empty) ? new SqlParameter("D26", DBNull.Value) : new SqlParameter("D26", declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id));
             parameters.Add(new SqlParameter("D27", DBNull.Value));
             parameters.Add(new SqlParameter("D28", DBNull.Value));
@@ -59,17 +60,16 @@ namespace His_Pos.Class.Declare
             {
                 parameters.Add(new SqlParameter("D35", DBNull.Value));
                 parameters.Add(new SqlParameter("D36", DBNull.Value));
-
             }
             else
             {
-                parameters.Add(new SqlParameter("D35", declareData.D35));
-                parameters.Add(new SqlParameter("D36", declareData.D36));
+                parameters.Add(new SqlParameter("D35", declareData.ChronicSequence));
+                parameters.Add(new SqlParameter("D36", declareData.ChronicTotal));
             }
-            parameters.Add(new SqlParameter("D38", declareData.D38));
+            parameters.Add(new SqlParameter("D38", declareData.MedicalServicePoint));
             //parameters.Add(new SqlParameter("D40", DBNull.Value));
-            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToInt32(declareData.D35) > 1)
-                parameters.Add(new SqlParameter("D43", declareData.ChronicPrescription.OriginalMedicalNumber));
+            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToInt32(declareData.ChronicSequence) > 1)
+                parameters.Add(new SqlParameter("D43", declareData.Prescription.OriginalMedicalNumber));
             else
             {
                 parameters.Add(new SqlParameter("D43", DBNull.Value));
@@ -94,16 +94,16 @@ namespace His_Pos.Class.Declare
             {
                 row = dtable.NewRow();
                 row["P10"] = Convert.ToInt16(declareData.DeclareDetails[i].Sequence);
-                if (declareData.DeclareDetails[i].MedicalOrder != null) row["P1"] = declareData.DeclareDetails[i].MedicalOrder;
-                if (declareData.DeclareDetails[i].MedicalId != null) row["P2"] = declareData.DeclareDetails[i].MedicalId;
-                if (declareData.DeclareDetails[i].Dosage.ToString() != null) row["P3"] = declareData.DeclareDetails[i].Dosage.ToString();
-                if (declareData.DeclareDetails[i].Usage != null) row["P4"] = declareData.DeclareDetails[i].Usage;
-                if (declareData.DeclareDetails[i].Position != null) row["P5"] = declareData.DeclareDetails[i].Position;
-                if (declareData.DeclareDetails[i].Percent.ToString() != null) row["P6"] = declareData.DeclareDetails[i].Percent.ToString();
-                if (declareData.DeclareDetails[i].Total.ToString() != null) row["P7"] = declareData.DeclareDetails[i].Total.ToString();
-                if (declareData.DeclareDetails[i].Price.ToString() != null) row["P8"] = declareData.DeclareDetails[i].Price.ToString();
-                if (declareData.DeclareDetails[i].Point.ToString() != null) row["P9"] = declareData.DeclareDetails[i].Point.ToString();
-                if (declareData.DeclareDetails[i].Days.ToString() != null) row["P11"] = declareData.DeclareDetails[i].Days.ToString();
+                if (declareData.DeclareDetails[i].MedicalOrder != string.Empty) row["P1"] = declareData.DeclareDetails[i].MedicalOrder;
+                if (declareData.DeclareDetails[i].MedicalId != string.Empty) row["P2"] = declareData.DeclareDetails[i].MedicalId;
+                if (declareData.DeclareDetails[i].Dosage.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P3"] = declareData.DeclareDetails[i].Dosage.ToString(CultureInfo.InvariantCulture);
+                if (declareData.DeclareDetails[i].Usage != string.Empty) row["P4"] = declareData.DeclareDetails[i].Usage;
+                if (declareData.DeclareDetails[i].Position != string.Empty) row["P5"] = declareData.DeclareDetails[i].Position;
+                if (declareData.DeclareDetails[i].Percent.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P6"] = declareData.DeclareDetails[i].Percent.ToString(CultureInfo.InvariantCulture);
+                if (declareData.DeclareDetails[i].Total.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P7"] = declareData.DeclareDetails[i].Total.ToString(CultureInfo.InvariantCulture);
+                if (declareData.DeclareDetails[i].Price.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P8"] = declareData.DeclareDetails[i].Price.ToString(CultureInfo.InvariantCulture);
+                if (declareData.DeclareDetails[i].Point.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P9"] = declareData.DeclareDetails[i].Point.ToString(CultureInfo.InvariantCulture);
+                if (declareData.DeclareDetails[i].Days.ToString() != string.Empty) row["P11"] = declareData.DeclareDetails[i].Days.ToString();
                 row["PAY_BY_YOURSELF"] = declareData.Prescription.Medicines[i].PaySelf;
                 dtable.Rows.Add(row);
             }
@@ -115,8 +115,7 @@ namespace His_Pos.Class.Declare
             var year = int.Parse(declareData.Prescription.Treatment.Customer.Birthday.Substring(0, 3)) + 1911;
             var cusBirth = year + "/" + declareData.Prescription.Treatment.Customer.Birthday.Substring(3, 2) + "/" +
                               declareData.Prescription.Treatment.Customer.Birthday.Substring(5, 2);
-            var currentDate = (int.Parse(DateTime.Now.Date.ToString().Substring(0, 3)) + 1911) + "/" + DateTime.Now.Date.ToString().Substring(4, 2) + "/" +
-                                 DateTime.Now.Date.ToString().Substring(7, 2);
+            var currentDate = dateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             var month = GetTimeDiff(cusBirth, currentDate);
             if (month < 6) persent = "160";
             if (month > 6 && month <= 24) persent = "130";
@@ -125,20 +124,20 @@ namespace His_Pos.Class.Declare
             row = dtable.NewRow();
             row["P3"] = 0;
             row["P1"] = "9";
-            row["P2"] = declareData.D37;
+            row["P2"] = declareData.MedicalServiceCode;
             row["P7"] = "00001.0";
             if (Convert.ToInt32(declareData.D38) % 100 == 0) num = "00000";
             if (Convert.ToInt32(declareData.D38) % 100 > 0) num = "0000";
             row["P8"] = num + declareData.D38.ToString() + ".00";
             
             row["P6"] = persent;
-            if (declareData.D38 * Convert.ToInt32(persent) / 10 % 100 == 0) num2 = "00000";
-            if (declareData.D38 * Convert.ToInt32(persent) / 10 % 100 > 0) num2 = "0000";
-            row["P9"] = num2 + (declareData.D38 * Convert.ToInt32(persent) / 10);
+            if (declareData.MedicalServicePoint * Convert.ToInt32(persent) / 10 % 100 == 0) num2 = "00000";
+            if (declareData.MedicalServicePoint * Convert.ToInt32(persent) / 10 % 100 > 0) num2 = "0000";
+            row["P9"] = num2 + (declareData.MedicalServicePoint * Convert.ToInt32(persent) / 10);
             if (declareData.DeclareDetails.Count + 1 % 10 == 0) num3 = "00";
             if (declareData.DeclareDetails.Count + 1 % 10 > 0 && declareData.DeclareDetails.Count + 1 % 10 < 10) num3 = "0";
             if (declareData.DeclareDetails.Count + 1 % 10 >= 10) num3 = "";
-            row["P10"] = Convert.ToInt16(num3 + (declareData.DeclareDetails.Count + 1).ToString());
+            row["P10"] = Convert.ToInt16(num3 + (declareData.DeclareDetails.Count + 1));
             row["P12"] = declareData.DeclareDetails + "0000";
             row["P13"] = declareData.DeclareDetails + "0000";
             var sdetail = new DeclareDetail(row["P2"].ToString(),Convert.ToDouble(row["P6"].ToString()), Convert.ToDouble(row["P8"].ToString()),Convert.ToInt32(row["P10"].ToString()),row["P12"].ToString(),row["P13"].ToString());
@@ -171,97 +170,86 @@ namespace His_Pos.Class.Declare
         }
         public XmlDocument CreateToXml(DeclareData declareData)
         {
-            string pData, dData;
             var xml = new XmlDocument();
-            int diseasecodecount = 8;
-            dData = "<ddata><dhead>";
+            var diseasecodecount = 8;
+            var dData = "<ddata><dhead>";
             dData += "<d1>" + declareData.Prescription.Treatment.AdjustCase.Id + "</d1>";
             dData += "<d2></d2>";
             dData += "<d3>" + declareData.Prescription.Treatment.Customer.IcNumber + "</d3>";
             //D4 : 補報原因 非補報免填
-            if (declareData.D4 != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d4>" + declareData.D4 + "</d4>";
-            if (declareData.Prescription.Treatment.AdjustCase.Id != DBNull.Value.ToString(CultureInfo.CurrentCulture) && (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") || declareData.Prescription.Treatment.AdjustCase.Id.Equals("D")))
+            if (declareData.DeclareMakeUp != DBNull.Value.ToString(CultureInfo.InvariantCulture))
+                dData += "<d4>" + declareData.DeclareMakeUp + "</d4>";
+            if (declareData.Prescription.Treatment.AdjustCase.Id != DBNull.Value.ToString(CultureInfo.InvariantCulture) && (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") || declareData.Prescription.Treatment.AdjustCase.Id.Equals("D")))
                 dData += "<d5>" + declareData.Prescription.Treatment.PaymentCategory.Id + "</d5>";
             dData += "<d6>" + declareData.Prescription.Treatment.Customer.Birthday + "</d6>";
-            dData += "<d7>" + declareData.Prescription.IcCard.LastMedicalNumber + "</d7>";
-            /*
-             D8 ~ D12 國際疾病代碼
-             */
-            foreach (DiseaseCode diseasecode in declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes)
+            dData += "<d7>" + declareData.Prescription.IcCard.MedicalNumber + "</d7>";
+             //D8 ~ D12 國際疾病代碼
+            foreach (var diseasecode in declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes)
             {
                 dData += "<d" + diseasecodecount + ">" + diseasecode.Id + "</d" + diseasecodecount + ">";
                 diseasecodecount++;
-
             }
-            if (declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id != DBNull.Value.ToString(CultureInfo.CurrentCulture))
+            if (declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id != DBNull.Value.ToString(CultureInfo.InvariantCulture))
                 dData += "<d13>" + declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id + "</d13>";
-            if (declareData.Prescription.Treatment.TreatmentDate != DBNull.Value.ToString(CultureInfo.CurrentCulture))
+            if (declareData.Prescription.Treatment.TreatmentDate != DBNull.Value.ToString(CultureInfo.InvariantCulture))
                 dData += "<d14>" + declareData.Prescription.Treatment.TreatmentDate + "</d14>";
             dData += "<d15>" + declareData.Prescription.Treatment.Copayment.Id + "</d15>";
-            dData += "<d16>" + declareData.D16 + "</d16>";
+            dData += "<d16>" + declareData.DeclarePoint + "</d16>";
             dData += "<d17>" + declareData.Prescription.Treatment.Copayment.Point + "</d17>";
-            dData += "<d18>" + declareData.D18 + "</d18>";
-            if (declareData.D19.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d19>" + declareData.D19 + "</d19>";
+            dData += "<d18>" + declareData.TotalPoint + "</d18>";
+            if (declareData.AssistProjectCopaymentPoint.ToString(CultureInfo.InvariantCulture) != DBNull.Value.ToString(CultureInfo.InvariantCulture))
+                dData += "<d19>" + declareData.AssistProjectCopaymentPoint + "</d19>";
             dData += "<d20>" + declareData.Prescription.Treatment.Customer.Name + "</d20>";
             dData += "<d21>" + declareData.Prescription.Treatment.MedicalInfo.Hospital.Id + "</d21>";
             dData += "<d22>" + declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id + "</d22>";
             dData += "<d23>" + declareData.Prescription.Treatment.AdjustDate + "</d23>";
             dData += "<d24>" + declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id + "</d24>";
             dData += "<d25>" + declareData.Prescription.Treatment.MedicalPersonId + "</d25>";
-            if (declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d26>" + declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id + "</d26>";
-            
-            if (declareData.Prescription.Treatment.MedicineDays.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d30>" + declareData.Prescription.Treatment.MedicineDays.ToString() + "</d30>";
-            if (declareData.D31.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d31>" + declareData.D31 + "</d31>";
-            if (declareData.D32.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d32>" + declareData.D32 + "</d32>";
-            if (declareData.D33.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
-                dData += "<d33>" + declareData.D33 + "</d33>";
+            if (declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id != DBNull.Value.ToString(CultureInfo.InvariantCulture))
+                dData += "<d26>" + declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id + "</d26>";           
+            if (declareData.Prescription.Treatment.MedicineDays != DBNull.Value.ToString(CultureInfo.InvariantCulture))
+                dData += "<d30>" + declareData.Prescription.Treatment.MedicineDays + "</d30>";
+            if (declareData.SpecailMaterialPoint.ToString() != DBNull.Value.ToString(CultureInfo.InvariantCulture))
+                dData += "<d31>" + declareData.SpecailMaterialPoint + "</d31>";
+            if (declareData.DiagnosisPoint.ToString() != DBNull.Value.ToString(CultureInfo.InvariantCulture))
+                dData += "<d32>" + declareData.DiagnosisPoint + "</d32>";
+            if (declareData.DrugsPoint.ToString() != DBNull.Value.ToString(CultureInfo.InvariantCulture))
+                dData += "<d33>" + declareData.DrugsPoint + "</d33>";
             //免填 dData += "<d34>" + "" + "</d34>";
             if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2"))
             {
-                dData += "<d35>" + declareData.D35 + "</d35>";
-                dData += "<d36>" + declareData.D36 + "</d36>";
+                dData += "<d35>" + declareData.ChronicSequence + "</d35>";
+                dData += "<d36>" + declareData.ChronicTotal + "</d36>";
             }
             //待確認
             /*if (d37.ToString() != DBNull.Value.ToString())*/
-            dData += "<d37>" + declareData.D37 + "</d37>";
+            dData += "<d37>" + declareData.MedicalServiceCode + "</d37>";
             /*if (d38.ToString() != DBNull.Value.ToString())*/
-            dData += "<d38>" + declareData.D38 + "</d38>";
+            dData += "<d38>" + declareData.MedicalServicePoint + "</d38>";
             //D39~D42免填
-            //dData += "<d39>" + "" + "</d39>";      
-            //dData += "<d40>" + "" + "</d40>";         
-            //dData += "<d43>" + "" + "</d43>";
-            //dData += "<d41>" + "" + "</d41>";
-            //dData += "<d42>" + "" + "</d42>";
             /*if (d44.ToString() != DBNull.Value.ToString())*/
-            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToDecimal(declareData.D35) >= 2)
-                dData += "<d43>" + declareData.ChronicPrescription.OriginalMedicalNumber + "</d43>";
+            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToDecimal(declareData.ChronicSequence) >= 2)
+                dData += "<d43>" + declareData.Prescription.OriginalMedicalNumber + "</d43>";
             //待確認 新生兒註記就醫
             dData += "<d44>" + "" + "</d44>";
             //待確認 矯正機關代號
             dData += "<d45>" + "" + "</d45>";
             //特定地區醫療服務 免填
-            //dData += "<d46>" + "" + "</d46>";
             dData += "</dhead>";
             foreach (var detail in declareData.DeclareDetails)
             {
-                pData = "<pdata>";
+                var pData = "<pdata>";
                 pData += "<p1>" + detail.MedicalOrder + "</p1>";
                 pData += "<p2>" + detail.MedicalId + "</p2>";
                 pData += "<p7>" + detail.Total + "</p7>";
                 pData += "<p8>" + detail.Price + "</p8>";
                 pData += "<p9>" + detail.Point + "</p9>";
-                if (detail.Dosage.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture)) pData += "<p3>" + detail.Dosage.ToString() + "</p3>";
-                if (detail.Usage != DBNull.Value.ToString(CultureInfo.CurrentCulture)) pData += "<p4>" + detail.Usage + "</p4>";
-                if (detail.Position != DBNull.Value.ToString(CultureInfo.CurrentCulture)) pData += "<p5>" + detail.Position + "</p5>";
-                if (detail.Percent.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture)) pData += "<p6>" + detail.Percent.ToString() + "</p6>";
+                if (detail.Dosage.ToString(CultureInfo.InvariantCulture) != DBNull.Value.ToString(CultureInfo.InvariantCulture)) pData += "<p3>" + detail.Dosage + "</p3>";
+                if (detail.Usage != DBNull.Value.ToString(CultureInfo.InvariantCulture)) pData += "<p4>" + detail.Usage + "</p4>";
+                if (detail.Position != DBNull.Value.ToString(CultureInfo.InvariantCulture)) pData += "<p5>" + detail.Position + "</p5>";
+                if (detail.Percent.ToString(CultureInfo.InvariantCulture) != DBNull.Value.ToString(CultureInfo.InvariantCulture)) pData += "<p6>" + detail.Percent + "</p6>";
                 pData += "<p10>" + detail.Sequence + "</p10>";
-                if (detail.Days.ToString() != DBNull.Value.ToString(CultureInfo.CurrentCulture))
+                if (detail.Days.ToString() != DBNull.Value.ToString(CultureInfo.InvariantCulture))
                 {
                     pData += "<p11>" + detail.Days + "</p11>";
                     if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) < detail.Days)
@@ -270,7 +258,6 @@ namespace His_Pos.Class.Declare
                 pData += "</pdata>";
                 dData += pData;
             }
-
             dData += "</ddata>";
             xml.LoadXml(dData);
             return xml;

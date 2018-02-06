@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -70,7 +71,7 @@ namespace His_Pos.PrescriptionDec
             _icCard.IcMarks.InsuranceMark = "3";
             PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
             PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
-            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
+            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday.ToString());
         }
         /*
          *取得病人基本資料
