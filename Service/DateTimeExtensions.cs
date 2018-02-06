@@ -44,6 +44,12 @@ namespace His_Pos.Service
             return age;
         }
 
+        public string BirthdayFormatConverter(string birthday)
+        {
+            var year = birthday.Substring(0, 3).StartsWith("0") ? birthday.Substring(1, 2) : birthday.Substring(0, 3);
+            return year + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
+        }
+
         private string CheckDateLessTen(int date,string dateStr)
         {
             if(date < 10)
