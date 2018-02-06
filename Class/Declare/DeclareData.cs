@@ -18,9 +18,9 @@ namespace His_Pos.Class
         }
 
         public Prescription Prescription {get;set;}
-        public List<DeclareDetail> DeclareDetail { get; set; }
-        public string DeclareMakeUp { get; set; } //D4補報註記
-        public double DeclarePoint { get; set; } //D16申請點數
+        public List<DeclareDetail> DeclareDetails { get; set; }
+        public string DeclareMakeUp { get; set; }//D4補報註記
+        public double DeclarePoint { get; set; }//D16申請點數
         public double CopaymentPoint { get; set; }//D17部分負擔點數
         public double TotalPoint { get; set; }//D18合計點數
         public double AssistProjectCopaymentPoint { get; set; }//D19行政協助項目部分負擔點數
