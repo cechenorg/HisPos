@@ -160,5 +160,15 @@ namespace His_Pos.Class.Declare
             CopaymentPoint = copaymentPoint;
             AssistProjectCopaymentPoint = 0;
         }
+        public void SetDeclareDetail() {
+            int count = 1;
+            foreach (var medicine in Prescription.Medicines) {
+                DeclareDetail detail = new DeclareDetail(medicine,Prescription.Treatment.AdjustCase.Id,count);
+                DeclareDetails.Add(detail);
+                count++;
+            }
+            
+        }
+        
     }
 }
