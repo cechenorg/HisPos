@@ -26,11 +26,9 @@ namespace His_Pos.PrescriptionDec
     public partial class PrescriptionDecView
     {
         private int _res = -1;
-        private int _selectedIindex = -1;
         private IcCard _icCard = new IcCard();
         private Customer _currentCustomer = new Customer();
         private StringBuilder _pBuffer = new StringBuilder(100);
-        private readonly Function _function = new Function();
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
         private ObservableCollection<Medicine> PrescriptionList { get; set; }
@@ -100,9 +98,10 @@ namespace His_Pos.PrescriptionDec
          */
         private void SetCustomerData()
         {
+            DateTimeExtensions dateTimeExtensions = new DateTimeExtensions();
             _currentCustomer.Name = _hisApiFunction.GetIcData(_pBuffer, 12, 20);
             _currentCustomer.IcNumber = _hisApiFunction.GetIcData(_pBuffer, 32, 10);
-            _currentCustomer.Birthday = _function.BirthdayFormatConverter(_hisApiFunction.GetIcData(_pBuffer, 42, 7));
+            _currentCustomer.Birthday = dateTimeExtensions.BirthdayFormatConverter(_hisApiFunction.GetIcData(_pBuffer, 42, 7));
             if (_hisApiFunction.GetIcData(_pBuffer, 49, 1) == "M")
                 _currentCustomer.Gender = true;
             _currentCustomer.Gender = false;
