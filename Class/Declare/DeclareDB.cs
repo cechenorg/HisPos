@@ -118,7 +118,10 @@ namespace His_Pos.Class.Declare
             var currentDate = (int.Parse(DateTime.Now.Date.ToString().Substring(0, 3)) + 1911) + "/" + DateTime.Now.Date.ToString().Substring(4, 2) + "/" +
                                  DateTime.Now.Date.ToString().Substring(7, 2);
             var month = GetTimeDiff(cusBirth, currentDate);
-
+            if (month < 6) persent = "160";
+            if (month > 6 && month <= 24) persent = "130";
+            if (month > 24 && month <= 72) persent = "120";
+            DeclareDetail detail = new DeclareDetail(declareData.D37,Convert.ToDouble(persent), declareData.D38, declareData.DeclareDetails.Count + 1, currentDate, currentDate);
             row = dtable.NewRow();
             row["P3"] = 0;
             row["P1"] = "9";
@@ -127,9 +130,7 @@ namespace His_Pos.Class.Declare
             if (Convert.ToInt32(declareData.D38) % 100 == 0) num = "00000";
             if (Convert.ToInt32(declareData.D38) % 100 > 0) num = "0000";
             row["P8"] = num + declareData.D38.ToString() + ".00";
-            if (month < 6) persent = "160";
-            if (month > 6 && month <= 24) persent = "130";
-            if (month > 24 && month <= 72) persent = "120";
+            
             row["P6"] = persent;
             if (declareData.D38 * Convert.ToInt32(persent) / 10 % 100 == 0) num2 = "00000";
             if (declareData.D38 * Convert.ToInt32(persent) / 10 % 100 > 0) num2 = "0000";

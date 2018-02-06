@@ -81,5 +81,6 @@ namespace His_Pos.Class
                 Point = Price * Total * Percent;
             }
         }
-    }
+      
+    }   
 }
