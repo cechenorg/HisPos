@@ -7,7 +7,7 @@ using His_Pos.Class.Product;
 
 namespace His_Pos.Class
 {
-    internal class DeclareDetail
+    public class DeclareDetail
     {
         public DeclareDetail(string medicalId, double percent,double price,int sequence,string start,string end)
         {

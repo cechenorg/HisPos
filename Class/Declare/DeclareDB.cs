@@ -18,7 +18,7 @@ using MahApps.Metro.Controls;
 
 namespace His_Pos.Class.Declare
 {
-    class DeclareDB
+    public class DeclareDB
     {
         public void InsertDb(DeclareData declareData, string type = null, string id = null)
         {
