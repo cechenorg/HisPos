@@ -37,7 +37,7 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("D16", declareData.DeclarePoint));
             parameters.Add(new SqlParameter("D17", declareData.CopaymentPoint));
             parameters.Add(new SqlParameter("D18", declareData.TotalPoint));
-            parameters.Add(declareData.AssistProjectCopaymentPoint.IsZero() ? new SqlParameter("D19", DBNull.Value) : new SqlParameter("D19", declareData.AssistProjectCopaymentPoint));
+            parameters.Add(declareData.AssistProjectCopaymentPoint==0 ? new SqlParameter("D19", DBNull.Value) : new SqlParameter("D19", declareData.AssistProjectCopaymentPoint));
             parameters.Add(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id.Equals(string.Empty) ? new SqlParameter("D26", DBNull.Value) : new SqlParameter("D26", declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id));
             parameters.Add(new SqlParameter("D27", DBNull.Value));
             parameters.Add(new SqlParameter("D28", DBNull.Value));
