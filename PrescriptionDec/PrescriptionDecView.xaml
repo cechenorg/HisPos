@@ -378,13 +378,15 @@
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Margin="10,0,10,10" Width="Auto" Height="auto" Grid.Row="3" Background="#99EEEEEE">
                         <Border BorderThickness="1,1,0,2" BorderBrush="#99EEEEEE" Background="#99EEEEEE">
-                            <StackPanel Orientation="Vertical" Background="#99EEEEEE" Width="425">
-                                <Canvas Background="#99EEEEEE" Height="40" Width="425" HorizontalAlignment="Right">
-                                    <StackPanel Orientation="Horizontal" Background="#99EEEEEE" Height="40" Width="auto" Canvas.Right="0">
-                                        <CheckBox Tag="0" Content="交易" Margin="35,0,5,0" FontSize="15" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                        <Image Width="12" Source="/Images/PosDot.png"/>
-                                        <CheckBox Tag="1" Content="調劑" Margin="40,0,5,0" FontSize="15" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                                        <Image Source="/Images/HisDot.png" Width="12" Margin="0,0,15,0"/>
+                            <StackPanel Orientation="Vertical" Background="#99EEEEEE" Width="400">
+                                <Canvas Background="#99EEEEEE" Height="40" Width="400">
+                                    <StackPanel Orientation="Horizontal" Background="#99EEEEEE" Height="40" Width="auto">
+                                        <RadioButton Content="交易" Margin="35,0,5,0" FontSize="15" VerticalAlignment="Center"/>
+                                        <Image Source="/Images/PosDot.png" Width="12"/>
+                                        <RadioButton Content="調劑" Margin="40,0,5,0" FontSize="15" VerticalAlignment="Center"/>
+                                        <Image Source="/Images/HisDot.png" Width="12"/>
+                                        <RadioButton Content="全部顯示" Margin="40,0,5,0" FontSize="15" VerticalAlignment="Center" IsChecked="True"/>
+                                        <Image Source="/Images/PosHisDot.png" Width="20" Margin="0,0,15,0"/>
                                     </StackPanel>
                                 </Canvas>
                                 <DataGrid x:Name="Prescription" Width="auto" Height="230" Padding="0" Background="#99EEEEEE" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" VerticalContentAlignment="Stretch" AutoGenerateColumns="False" SelectionChanged="Prescription_SelectionChanged" MouseEnter="Prescription_MouseEnter" HeadersVisibility="None" ItemsSource="{Binding customerHistoryList}" VerticalScrollBarVisibility="Auto">
@@ -403,21 +405,12 @@
                                 </DataGrid>
                             </StackPanel>
                         </Border>
-                        <Border x:Name="GrayArea" MinWidth="555" Background="#99BFBFBF" BorderThickness="0,1,2,2" BorderBrush="#FF484848"/>
-                        <DataGrid x:Name="PrescriptionDetail" Visibility="Collapsed" MinWidth="505" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
+                        <DataGrid x:Name="CusHistoryDetail" MinWidth="500" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Width="160" MinWidth="160" Header="藥品" Binding="{Binding Name}"/>
-                                <DataGridTextColumn MinWidth="90" Header="用法" Binding="{Binding Dosage}"/>
-                                <DataGridTextColumn MinWidth="90" Header="途徑" Binding="{Binding Usage}"/>
-                                <DataGridTextColumn MinWidth="70" Header="天數" Binding="{Binding Days}"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <DataGrid x:Name="TransactionDetail" Visibility="Collapsed" MinWidth="425" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Width="160" MinWidth="160" Header="品名" Binding="{Binding Name}"/>
-                                <DataGridTextColumn MinWidth="90" Header="單價" Binding="{Binding Price}"/>
-                                <DataGridTextColumn MinWidth="90" Header="數量" Binding="{Binding Total}"/>
-                                <DataGridTextColumn MinWidth="70" Header="總價" Binding="{Binding TotalPrice}"/>
+                                <DataGridTextColumn Width="160" MinWidth="160" Binding="{Binding CusHisDetailCol0}"/>
+                                <DataGridTextColumn MinWidth="90" Binding="{Binding CusHisDetailCol1}"/>
+                                <DataGridTextColumn MinWidth="90" Binding="{Binding CusHisDetailCol2}"/>
+                                <DataGridTextColumn MinWidth="70" Binding="{Binding CusHisDetailCol3}"/>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Border BorderThickness="1,1,2,2" BorderBrush="DimGray">

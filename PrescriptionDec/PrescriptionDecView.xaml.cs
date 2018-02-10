@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
+using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.HisApi;

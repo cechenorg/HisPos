@@ -12,7 +12,7 @@ using His_Pos.Class.Product;
 using His_Pos.Properties;
 using His_Pos.Service;
 
-namespace His_Pos.Class
+namespace His_Pos.Class.CustomerHistory
 {
     public class CustomerHistory
     {
