@@ -7,7 +7,6 @@
             Id = id;
             Name = name;
         }
-
         public int Point { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace His_Pos.PrescriptionDec
         private int _res = -1;
         private IcCard _icCard = new IcCard();
         private Customer _currentCustomer = new Customer();
+        private Prescription prescription = new Prescription();
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
@@ -285,6 +286,11 @@ namespace His_Pos.PrescriptionDec
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             TraverseVisualTree(this);
+        }
+
+        private void DeclareButtonClick(object sender, RoutedEventArgs e)
+        {
+            CheckPrescriptionInfo();
         }
     }
 }
