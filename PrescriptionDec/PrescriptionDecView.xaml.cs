@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.HisApi;
@@ -291,6 +292,8 @@ namespace His_Pos.PrescriptionDec
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
             CheckPrescriptionInfo();
+            var declareData = new DeclareData(prescription);
+
         }
     }
 }
