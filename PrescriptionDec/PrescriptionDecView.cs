@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -169,12 +167,12 @@ namespace His_Pos.PrescriptionDec
             }
             SelfCost.Text = PriceConvert(medicinesSelfCost).ToString();//自費金額
             Copayment.Text = CountCopaymentCost(medicinesHcCost);//部分負擔
-            PrescriptionProfit.Content = (medicinesHcCost + medicinesSelfCost - purchaseCosts).ToString();//藥品毛利
+            PrescriptionProfit.Content = (medicinesHcCost + medicinesSelfCost - purchaseCosts).ToString(CultureInfo.InvariantCulture);//藥品毛利
         }
         /*
          * 藥費部分負擔
          */
-        private string CountCopaymentCost(double medicinesHcCost)
+        private static string CountCopaymentCost(double medicinesHcCost)
         {
             const string free = "0";
             const string max = "200";
@@ -188,16 +186,14 @@ namespace His_Pos.PrescriptionDec
         }
         private void CostTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (sender is TextBox costTextBox && costTextBox.Text.Length > 0 && TotalPrice != null)
-            {
-                if(Copayment.Text.Equals(string.Empty) || SelfCost.Text.Equals(string.Empty) || Deposit.Text.Equals(string.Empty)) return;
-                TotalPrice.Text = (PriceConvert(double.Parse(Copayment.Text) + double.Parse(SelfCost.Text) + double.Parse(Deposit.Text))).ToString();
-            }
+            if (!(sender is TextBox costTextBox) || costTextBox.Text.Length <= 0 || TotalPrice == null) return;
+            if(Copayment.Text.Equals(string.Empty) || SelfCost.Text.Equals(string.Empty) || Deposit.Text.Equals(string.Empty)) return;
+            TotalPrice.Text = (PriceConvert(double.Parse(Copayment.Text) + double.Parse(SelfCost.Text) + double.Parse(Deposit.Text))).ToString();
         }
 
         private void TraverseVisualTree(Visual myMainWindow)
         {
-            int childrenCount = VisualTreeHelper.GetChildrenCount(myMainWindow);
+            var childrenCount = VisualTreeHelper.GetChildrenCount(myMainWindow);
             for (int i = 0; i < childrenCount; i++)
             {
                 var visualChild = (Visual)VisualTreeHelper.GetChild(myMainWindow, i);
@@ -215,7 +211,6 @@ namespace His_Pos.PrescriptionDec
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (Prescription == null) return;
-
             var checkBox = sender as CheckBox;
             Debug.Assert(checkBox != null, nameof(checkBox) + " != null");
             if (checkBox.Tag.ToString().Equals("0") && _historyFilterCondition == 2)
@@ -234,7 +229,6 @@ namespace His_Pos.PrescriptionDec
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (Prescription == null) return;
-
             var checkBox = sender as CheckBox;
             Debug.Assert(checkBox != null, nameof(checkBox) + " != null");
             if (checkBox.Tag.ToString().Equals("0") && _historyFilterCondition == -1)
@@ -243,15 +237,12 @@ namespace His_Pos.PrescriptionDec
                 _historyFilterCondition = 0;
             else
                 _historyFilterCondition = 2;
-
             Prescription.Items.Filter = HistoryFilter;
         }
 
         private bool HistoryFilter(object item)
         {
-            if (((CustomerHistory)item).Type == _historyFilterCondition)
-                return true;
-            return false;
+            return ((CustomerHistory)item).Type == _historyFilterCondition;
         }
 
         private void Prescription_SelectionChanged(object sender, SelectionChangedEventArgs e)

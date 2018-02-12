@@ -11,6 +11,14 @@ namespace His_Pos.Class
 {
     public class Treatment
     {
+        public Treatment()
+        {
+            MedicalInfo = new MedicalInfo();
+            Copayment = new Copayment.Copayment();
+            AdjustCase = new AdjustCase.AdjustCase();
+            Customer = new Customer();
+        }
+
         //d8 d9 國際疾病分類碼 d13就醫科別  d21原處方服務機構代號 d22原處方服務機構之案件分類 d24診治醫師代號 d26原處方服務機構之特定治療項目代號
         public MedicalInfo MedicalInfo { get; set; }
         public PaymentCategory.PaymentCategory PaymentCategory { get; set; }//d5 給付類別

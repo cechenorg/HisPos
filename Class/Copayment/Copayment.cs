@@ -2,6 +2,10 @@
 {
     public class Copayment : Selection
     {
+        public Copayment()
+        {
+        }
+
         public Copayment(string id,string name)
         {
             Id = id;

@@ -144,13 +144,9 @@ namespace His_Pos.PrescriptionDec
         }
         private void GetPatientDataButtonClick(object sender, RoutedEventArgs e)
         {
-            
-            Button button = sender as Button;
-            Debug.Assert(button != null, nameof(button) + " != null");
+            Debug.Assert(sender is Button button, nameof(button) + " != null");
             LoadPatentDataFromIcCard();
-
-            LoadingWindow loadingWindow = new LoadingWindow("Loading Customer Data...");
-
+            var loadingWindow = new LoadingWindow("Loading Customer Data...");
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             var sqlParameter = new SqlParameter("CUS_ID", "1");
@@ -239,7 +235,7 @@ namespace His_Pos.PrescriptionDec
         private void PaySelf_CheckedEvent(object sender, RoutedEventArgs e)
         {
             if (!(sender is CheckBox selfPay)) return;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex || PrescriptionList[PrescriptionMedicines.SelectedIndex].Total.ToString().Equals(string.Empty)) return;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex || PrescriptionList[PrescriptionMedicines.SelectedIndex].Total.ToString(CultureInfo.InvariantCulture).Equals(string.Empty)) return;
             var medicine = PrescriptionList[PrescriptionMedicines.SelectedIndex];
             var selfCost = medicine.Price * medicine.Total;
             if (selfPay.IsChecked == true)
@@ -273,13 +269,8 @@ namespace His_Pos.PrescriptionDec
          */
         private void CustomPay_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Change == null || !(sender is TextBox customPay)) return;
-            if (CustomPay.Text.Equals(string.Empty))
-                Change.Content = (0 - int.Parse(TotalPrice.Text)).ToString();
-            else
-            {
-                Change.Content = (int.Parse(CustomPay.Text) - int.Parse(TotalPrice.Text)).ToString();
-            }
+            if (Change == null || !(sender is TextBox)) return;
+            Change.Content = CustomPay.Text.Equals(string.Empty) ? (0 - int.Parse(TotalPrice.Text)).ToString() : (int.Parse(CustomPay.Text) - int.Parse(TotalPrice.Text)).ToString();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

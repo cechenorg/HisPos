@@ -11,10 +11,18 @@ namespace His_Pos.Class
     {
         public MedicalInfo()
         {
+            Hospital = new Hospital();
+            SpecialCode = new SpecialCode();
+            DiseaseCodes = new List<DiseaseCode>();
+            TreatmentCase = new TreatmentCase.TreatmentCase();
         }
 
         public MedicalInfo(Hospital hospital, SpecialCode specialCode, TreatmentCase.TreatmentCase treatmentCase)
         {
+            Hospital = new Hospital();
+            SpecialCode = new SpecialCode();
+            DiseaseCodes = new List<DiseaseCode>();
+            TreatmentCase = new TreatmentCase.TreatmentCase();
             Hospital = hospital;
             Hospital.Division = hospital.Division;
             Hospital.Doctor = hospital.Doctor;

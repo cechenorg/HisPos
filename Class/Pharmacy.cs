@@ -9,6 +9,10 @@ namespace His_Pos.Class
 {
     public class Pharmacy : Institution
     {
+        public Pharmacy()
+        {
+        }
+
         public Pharmacy(string id, string name) : base(id, name)
         {
             Id = id;
