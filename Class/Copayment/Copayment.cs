@@ -2,12 +2,15 @@
 {
     public class Copayment : Selection
     {
+        public Copayment()
+        {
+        }
+
         public Copayment(string id,string name)
         {
             Id = id;
             Name = name;
         }
-
-        public double Point { get; set; }
+        public int Point { get; set; }
     }
 }

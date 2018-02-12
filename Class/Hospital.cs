@@ -5,11 +5,12 @@ namespace His_Pos.Class
 {
     public class Hospital : Institution
     {
-        public Hospital(string id, string name) : base(id, name)
+        public Hospital()
         {
-            Id = id;
-            Name = name;
+            Doctor = new MedicalPersonnel();
+            Division = new Division.Division();
         }
+
         public MedicalPersonnel Doctor { get; set; }
         public Division.Division Division { get; set; }
         

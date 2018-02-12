@@ -2,6 +2,10 @@
 {
     public class Division : Selection
     {
+        public Division()
+        {
+        }
+
         public Division(string id,string name)
         {
             Id = id;

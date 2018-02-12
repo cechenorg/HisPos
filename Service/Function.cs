@@ -183,7 +183,30 @@ namespace His_Pos
             //HisApi.HisApiBase.csOpenCom(0);
             //HisApi.HisApiBase.csUploadData(pUploadFileName, fFileSize, pNumber, pBuffer, ref iBufferLen);
             //HisApi.HisApiBase.csCloseCom();
-
+        }
+        /*
+         * 判斷輸入是否為數字
+         */
+        public static bool IsNumeric(string input)
+        {
+            try
+            {
+                var i = Convert.ToInt32(input);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        /*
+         * 判斷輸入空值
+         */
+        public static bool CheckEmptyInput(string input,string message)
+        {
+            if (input != string.Empty) return false;
+            MessageBox.Show(message);
+            return true;
         }
     }
 }

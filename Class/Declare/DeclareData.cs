@@ -16,10 +16,10 @@ namespace His_Pos.Class.Declare
         public Prescription Prescription {get;set;}
         public List<DeclareDetail> DeclareDetails { get; set; }
         public string DeclareMakeUp { get; set; }//D4補報註記
-        public double DeclarePoint { get; set; }//D16申請點數
-        public double CopaymentPoint { get; set; }//D17部分負擔點數
-        public double TotalPoint { get; set; }//D18合計點數
-        public double AssistProjectCopaymentPoint { get; set; }//D19行政協助項目部分負擔點數
+        public int DeclarePoint { get; set; }//D16申請點數
+        public int CopaymentPoint { get; set; }//D17部分負擔點數
+        public int TotalPoint { get; set; }//D18合計點數
+        public int AssistProjectCopaymentPoint { get; set; }//D19行政協助項目部分負擔點數
         public int SpecailMaterialPoint { get; set; }//D31特殊材料明細點數小計
         public int DiagnosisPoint { get; set; }//D32診療明細點數小計
         public int DrugsPoint { get; set; }//D33用藥明細點數小計
@@ -30,7 +30,7 @@ namespace His_Pos.Class.Declare
 
         private void SetCopaymentPoint()
         {
-            double copaymentPoint = 0;
+            int copaymentPoint = 0;
             var copaymentId = Prescription.Treatment.Copayment.Id;
             if (CheckCopaymentFreeProject())//免收部分負擔
                 copaymentPoint = 0;
@@ -38,7 +38,6 @@ namespace His_Pos.Class.Declare
                 copaymentPoint = Prescription.Treatment.Copayment.Point;
             SetAssistProjectCopaymentPoint(copaymentPoint);
         }
-
         public void CountDeclareDeatailPoint()
         {
             var dateTimeExtensions = new DateTimeExtensions();
@@ -58,7 +57,6 @@ namespace His_Pos.Class.Declare
             if (cusAge <= 12 && medFormCount == 3) return ma4;
             return ma1;
         }
-
         private int CountOralLiquidAgent()
         {
             var medFormCount = 0;
@@ -70,7 +68,6 @@ namespace His_Pos.Class.Declare
             }
             return medFormCount;
         }
-
         private void CheckDayPay(int dayPay)
         {
             DrugsPoint = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
@@ -91,7 +88,6 @@ namespace His_Pos.Class.Declare
                     break;
             }
         }
-
         private void SetMedicalServiceCode(int dayPay)
         {
             var adjustCaseId = Prescription.Treatment.AdjustCase.Id;
@@ -108,7 +104,6 @@ namespace His_Pos.Class.Declare
                     break;
             }
         }
-
         private bool CheckCopaymentFreeProject()
         {
             var copaymentId = Prescription.Treatment.Copayment.Id;
@@ -135,7 +130,7 @@ namespace His_Pos.Class.Declare
             return false;
         }
 
-        private void SetAssistProjectCopaymentPoint(double copaymentPoint)//部分負擔點數(個人/行政)
+        private void SetAssistProjectCopaymentPoint(int copaymentPoint)//部分負擔點數(個人/行政)
         {
             var copaymentId = Prescription.Treatment.Copayment.Id;
             #region 代碼對照
@@ -167,8 +162,6 @@ namespace His_Pos.Class.Declare
                 DeclareDetails.Add(detail);
                 count++;
             }
-            
         }
-        
     }
 }
