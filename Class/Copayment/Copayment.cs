@@ -11,7 +11,6 @@
             Id = id;
             Name = name;
         }
-
-        public double Point { get; set; }
+        public int Point { get; set; }
     }
 }

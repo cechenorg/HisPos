@@ -11,5 +11,10 @@
             Id = id;
             Name = name;
         }
+
+        public TreatmentCase()
+        {
+            
+        }
     }
 }

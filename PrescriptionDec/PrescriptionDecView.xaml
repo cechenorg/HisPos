@@ -134,7 +134,7 @@
                         <DockPanel LastChildFill="False"  Margin="10,0,0,0">
                             <Label Content="釋出院所" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
                            BorderThickness="0,0,0,1"/>
-                            <controls:AutoCompleteBox x:Name="ReleasePalace" Background="{x:Null}" Width="400" Height="30" FontSize="14" FontStretch="ExtraExpanded" 
+                            <controls:AutoCompleteBox x:Name="ReleaseInstitution" Background="{x:Null}" Width="400" Height="30" FontSize="14" FontStretch="ExtraExpanded" 
                                                       BorderThickness="0,0,0,1" FontWeight="Bold" VerticalContentAlignment="Stretch" Padding="0,8,0,0" Margin="0" 
                                                       MinimumPrefixLength="4" MaxHeight="50" BorderBrush="DimGray">
                                 <controls:AutoCompleteBox.ItemContainerStyle>
@@ -176,11 +176,11 @@
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="DoctorName" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold"/>
+                            <TextBox x:Name="DoctorId" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold"/>
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="就醫序號" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="TreatmentNumber" MinWidth="150" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
+                            <TextBox x:Name="MedicalNumber" MinWidth="150" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
                                      BorderThickness="0,0,0,1" HorizontalContentAlignment="Stretch"/>
                         </DockPanel>
                         <DockPanel Grid.Row="1" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
@@ -190,12 +190,12 @@
                         <DockPanel Grid.Row="1" Grid.Column="0"  Margin="10,0,0,0">
                             <Label Content="就醫日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                             <Viewbox Width="auto" MinWidth="147" Height="30">
-                                <DatePicker x:Name="PrescriptionPicker" Width="auto" Height="30" MinWidth="150" FontSize="14" FontWeight="Bold" Padding="0" 
+                                <DatePicker x:Name="TreatmentDate" Width="auto" Height="30" MinWidth="150" FontSize="14" FontWeight="Bold" Padding="0" 
                                             FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch"/>
                             </Viewbox>
                             <Label Content="調劑日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                             <Viewbox Width="auto" Height="30" MinWidth="147">
-                                <DatePicker x:Name="AdjustPicker" Width="auto" Height="30" MinWidth="150" FontSize="14" FontWeight="Bold" Padding="0" FontStretch="ExtraExpanded" 
+                                <DatePicker x:Name="AdjustDate" Width="auto" Height="30" MinWidth="150" FontSize="14" FontWeight="Bold" Padding="0" FontStretch="ExtraExpanded" 
                                             HorizontalContentAlignment="Stretch"/>
                             </Viewbox>
                         </DockPanel>
@@ -448,7 +448,7 @@
                                 </StackPanel>
                                 <WrapPanel Width="auto" Canvas.Bottom="0">
                                     <Button Content="清除" Background="#FFB0ADAD" Width="180" Height="35" VerticalAlignment="Bottom" BorderThickness="0" FontWeight="Bold" FontSize="16" Click="Button_Click"/>
-                                    <Button Content="確認" Background="#FFE45151" Width="180" Height="35" Margin="1,0,0,0" VerticalAlignment="Bottom" BorderThickness="0" FontWeight="Bold" FontSize="16"/>
+                                    <Button Content="確認" Background="#FFE45151" Width="180" Height="35" Margin="1,0,0,0" VerticalAlignment="Bottom" BorderThickness="0" FontWeight="Bold" FontSize="16" Click="DeclareButtonClick"/>
                                 </WrapPanel>
                             </Canvas>
                         </Border>

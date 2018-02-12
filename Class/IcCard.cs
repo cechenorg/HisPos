@@ -16,6 +16,6 @@ namespace His_Pos.Class
         public string SendDate { get; set; }//發卡日期
         public string ValidityPeriod { get; set; }//卡片有效期限
         public int AvailableTimes { get; set; }//就醫可用次數
-        public int MedicalNumber { get; set; }//就醫序號
+        public string MedicalNumber { get; set; }//D7就醫序號
     }
 }
