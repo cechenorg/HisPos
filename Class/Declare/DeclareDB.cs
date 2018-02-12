@@ -1,5 +1,4 @@
 ﻿using His_Pos.Class.Person;
-using His_Pos.Class.Product;
 using His_Pos.Properties;
 using His_Pos.Service;
 using System;
@@ -8,55 +7,164 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using His_Pos;
-using MahApps.Metro.Controls;
 
 namespace His_Pos.Class.Declare
 {
-    public class DeclareDB
+    public class DeclareDb
     {
         public void InsertDb(DeclareData declareData, string type = null, string id = null)
         {
-            var dateTimeExtensions = new DateTimeExtensions();
-            var conn = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
+            AddParameterDData(parameters,declareData);
+            var pDataTable = new DataTable();
+            SetPDataTable(pDataTable);
+            AddPData(declareData,pDataTable);
+            AddMedicalServiceCostPData(declareData, pDataTable);
+            parameters.Add(new SqlParameter("DETAIL", pDataTable));
+            parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader(CreateToXml(declareData).InnerXml, XmlNodeType.Document, null))
+            });
+            CheckInsertDbTypeUpdate(parameters,id, type);
+        }
+        /*
+         * 加入DData資料之parameters
+         */
+        private void AddParameterDData(ICollection<SqlParameter> parameters,DeclareData declareData)
+        {
+            AddParameterTreatment(parameters, declareData);
+            CheckDbNullValue(parameters, declareData.DeclareMakeUp,"D4");//D4補報註記
+            CheckDbNullValueInt(parameters, declareData.SpecailMaterialPoint,"D31");//特殊材料明細點數小計
+            CheckDbNullValueInt(parameters, declareData.DiagnosisPoint, "D32");//診療明細點數小計
+            CheckDbNullValueInt(parameters, declareData.DrugsPoint,"D33");//用藥明細點數小計
+            parameters.Add(new SqlParameter("D7", declareData.Prescription.IcCard.MedicalNumber));//就醫序號
+            parameters.Add(new SqlParameter("D16", declareData.DeclarePoint));//申請點數
+            parameters.Add(new SqlParameter("D17", declareData.CopaymentPoint));//部分負擔點數
+            parameters.Add(new SqlParameter("D18", declareData.TotalPoint));//合計點數
+            parameters.Add(declareData.AssistProjectCopaymentPoint == 0 ? new SqlParameter("D19", DBNull.Value) : new SqlParameter("D19", declareData.AssistProjectCopaymentPoint));
+            AddUnusedParameters(parameters);//設定免填欄位Parameters
+            CheckChronicAdjust(declareData,parameters);//判斷慢箋調劑欄位
+            parameters.Add(new SqlParameter("D38", declareData.MedicalServicePoint));//藥事服務費點數
+        }
+        /*
+         * 加入DeclareData.Treatment資料之parameters
+         */
+        private void AddParameterTreatment(ICollection<SqlParameter> parameters, DeclareData declareData)
+        {
+            AddParameterMedicalInfo(parameters, declareData);
             parameters.Add(new SqlParameter("D1", declareData.Prescription.Treatment.AdjustCase.Id));
-            parameters.Add(new SqlParameter("D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id));
-            // parameters.Add(new SqlParameter("D2", DBNull.Value));
-            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id.Equals(string.Empty) ? new SqlParameter("D22", DBNull.Value) : new SqlParameter("D22", declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id));
-            parameters.Add(new SqlParameter("D23", declareData.Prescription.Treatment.AdjustDate));
+            CheckDbNullValue(parameters, declareData.Prescription.Treatment.PaymentCategory.Id, "D5");
             parameters.Add(new SqlParameter("CUS_ID", declareData.Prescription.Treatment.Customer.Id));
-            parameters.Add(new SqlParameter("D7", declareData.Prescription.IcCard.MedicalNumber));
+            CheckDbNullValue(parameters, declareData.Prescription.Treatment.TreatmentDate, "D14");
             parameters.Add(new SqlParameter("D15", declareData.Prescription.Treatment.Copayment.Id));
+            parameters.Add(new SqlParameter("D23", declareData.Prescription.Treatment.AdjustDate));
             parameters.Add(new SqlParameter("D25", declareData.Prescription.Treatment.MedicalPersonId));
-            parameters.Add(new SqlParameter("D16", declareData.DeclarePoint));
-            parameters.Add(new SqlParameter("D17", declareData.CopaymentPoint));
-            parameters.Add(new SqlParameter("D18", declareData.TotalPoint));
-            parameters.Add(declareData.AssistProjectCopaymentPoint==0 ? new SqlParameter("D19", DBNull.Value) : new SqlParameter("D19", declareData.AssistProjectCopaymentPoint));
-            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id.Equals(string.Empty) ? new SqlParameter("D26", DBNull.Value) : new SqlParameter("D26", declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id));
-            parameters.Add(new SqlParameter("D27", DBNull.Value));
-            parameters.Add(new SqlParameter("D28", DBNull.Value));
-            parameters.Add(new SqlParameter("D29", DBNull.Value));
-            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id.Equals(string.Empty) ? new SqlParameter("D13", DBNull.Value) : new SqlParameter("D13", declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id));
-            parameters.Add(declareData.Prescription.Treatment.TreatmentDate.Equals(string.Empty) ? new SqlParameter("D14", DBNull.Value) : new SqlParameter("D14", declareData.Prescription.Treatment.TreatmentDate));
-            parameters.Add(declareData.Prescription.Treatment.PaymentCategory.Id.Equals(string.Empty) ? new SqlParameter("D5", DBNull.Value) : new SqlParameter("D5", declareData.Prescription.Treatment.PaymentCategory.Id));
-            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes[0].Id.Equals(string.Empty) ? new SqlParameter("D8", DBNull.Value) : new SqlParameter("D8", declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes[0].Id));
-            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes[1].Id.Equals(string.Empty) ? new SqlParameter("D9", DBNull.Value) : new SqlParameter("D9", declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes[1].Id));
-            parameters.Add(new SqlParameter("D10", DBNull.Value));
-            parameters.Add(new SqlParameter("D11", DBNull.Value));
-            parameters.Add(new SqlParameter("D12", DBNull.Value));
-            parameters.Add(new SqlParameter("D4", DBNull.Value));
-            parameters.Add(new SqlParameter("D30", declareData.Prescription.Treatment.MedicineDays.ToString()));
-            parameters.Add(new SqlParameter("D31", DBNull.Value));
-            parameters.Add(new SqlParameter("D32", DBNull.Value));
-            parameters.Add(new SqlParameter("D33", DBNull.Value));
-            parameters.Add(declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id.Equals(string.Empty) ? new SqlParameter("D24", DBNull.Value) : new SqlParameter("D24", declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id));
-            if (!declareData.Prescription.Treatment.AdjustCase.Id.Equals("2"))
+            parameters.Add(new SqlParameter("D30", declareData.Prescription.Treatment.MedicineDays));
+        }
+        /*
+         * 加入DeclareData.Treatment.MedicalInfo資料之parameters
+         */
+        private void AddParameterMedicalInfo(ICollection<SqlParameter> parameters, DeclareData declareData)
+        {
+            var med = declareData.Prescription.Treatment.MedicalInfo;
+            var valueList = new List<string>() { med.DiseaseCodes[0].Id, med.DiseaseCodes[1].Id, med.Hospital.Division.Id, med.TreatmentCase.Id, med.Hospital.Doctor.Id, med.SpecialCode.Id};
+            var paraNameList = new List<string>() { "D8", "D9", "D13", "D22", "D24", "D26"};
+            parameters.Add(new SqlParameter("D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id));
+            for (var i = 0; i < valueList.Count; i++)
+            {
+                CheckDbNullValue(parameters,valueList[i],paraNameList[i]);
+            }
+        }
+
+        private void SetPDataTable(DataTable pDataTable)
+        {
+            pDataTable.Columns.Add("P10", typeof(short));
+            pDataTable.Columns.Add("P1", typeof(string));
+            pDataTable.Columns.Add("P2", typeof(string));
+            pDataTable.Columns.Add("P7", typeof(float));
+            pDataTable.Columns.Add("P8", typeof(decimal));
+            pDataTable.Columns.Add("P9", typeof(int));
+            pDataTable.Columns.Add("P3", typeof(double));
+            pDataTable.Columns.Add("P4", typeof(string));
+            pDataTable.Columns.Add("P5", typeof(string));
+            pDataTable.Columns.Add("P6", typeof(string));
+            pDataTable.Columns.Add("P11", typeof(string));
+            pDataTable.Columns.Add("P12", typeof(string));
+            pDataTable.Columns.Add("P13", typeof(string));
+            pDataTable.Columns.Add("PAY_BY_YOURSELF", typeof(string));
+        }
+
+        private void AddPData(DeclareData declareData,DataTable pDataTable)
+        {
+            for (var i = 0; i < declareData.DeclareDetails.Count; i++)
+            {
+                var row = pDataTable.NewRow();
+                var detail = declareData.DeclareDetails[i];
+                var valueList = new List<string>() { detail.MedicalOrder,detail.MedicalId,ToInvCulture(detail.Dosage),detail.Usage,
+                    detail.Position, ToInvCulture(detail.Percent),ToInvCulture(detail.Total),ToInvCulture(detail.Price),ToInvCulture(detail.Point),detail.Days.ToString()
+                };
+                var rowNameList = new List<string>() { "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P11" };
+                row["P10"] = Convert.ToInt16(detail.Sequence);
+                for (var j = 0; j < valueList.Count; i++)
+                {
+                    CheckEmptyDataRow(valueList[j],row,rowNameList[j]);
+                }
+                row["PAY_BY_YOURSELF"] = declareData.Prescription.Medicines[i].PaySelf;
+                pDataTable.Rows.Add(row);
+            }
+        }
+        /*
+         * 加入藥事服務費之PData
+         */
+        private void AddMedicalServiceCostPData(DeclareData declareData,DataTable pDataTable)
+        {
+            var dateTimeExtensions = new DateTimeExtensions();
+            var percent = CountAdditionPercent(declareData);
+            var currentDate = dateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            var detail = new DeclareDetail(declareData.MedicalServiceCode, percent, declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate, currentDate);
+            var pData = pDataTable.NewRow();
+            SetMedicalServiceCostDataRow(pData, declareData,detail);
+            declareData.DeclareDetails.Add(detail);
+            pDataTable.Rows.Add(pData);
+        }
+        /*
+         * 計算支付成數
+         */
+        private double CountAdditionPercent(DeclareData declareData)
+        {
+            double percent = 0;
+            var dateTimeExtensions = new DateTimeExtensions();
+            var cusBirth = declareData.Prescription.Treatment.Customer.Birthday;
+            var month = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(cusBirth));
+            if (month < 0.5) percent = 160;
+            if (month > 0.5 && month <= 2) percent = 130;
+            if (month > 2 && month <= 6) percent = 120;
+            return percent;
+        }
+        /*
+         * 設定藥事服務費PData之DataRow
+         */
+        private void SetMedicalServiceCostDataRow(DataRow pData,DeclareData declareData,DeclareDetail detail)
+        {
+            var declarecount = declareData.DeclareDetails.Count + 1; //藥事服務醫令序
+            pData["P1"] = detail.MedicalOrder;
+            pData["P2"] = detail.MedicalId;
+            pData["P3"] = detail.Dosage;
+            pData["P6"] = detail.Percent;
+            pData["P7"] = string.Format("{0:00000.0}", detail.Total);//五位整數，一位小數
+            pData["P8"] = string.Format("{0:0000000.00}", detail.Price);//七位整數，二位小數
+            pData["P9"] = string.Format("{0:D8}", Math.Round(detail.Point, 1));//八位整數，小數點四捨五入
+            pData["P10"] = string.Format("{0:D3}", declarecount);
+            pData["P12"] = detail.StartDate;
+            pData["P13"] = detail.EndDate;
+        }
+        /*
+         * 判斷慢箋調劑
+         */
+        private void CheckChronicAdjust(DeclareData declareData,ICollection<SqlParameter> parameters)
+        {
+            if (!declareData.Prescription.Treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))//判斷是否為慢箋調劑
             {
                 parameters.Add(new SqlParameter("D35", DBNull.Value));
                 parameters.Add(new SqlParameter("D36", DBNull.Value));
@@ -66,88 +174,31 @@ namespace His_Pos.Class.Declare
                 parameters.Add(new SqlParameter("D35", declareData.ChronicSequence));
                 parameters.Add(new SqlParameter("D36", declareData.ChronicTotal));
             }
-            parameters.Add(new SqlParameter("D38", declareData.MedicalServicePoint));
-            //parameters.Add(new SqlParameter("D40", DBNull.Value));
-            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToInt32(declareData.ChronicSequence) > 1)
+            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId) && Convert.ToInt32(declareData.ChronicSequence) > 1)
                 parameters.Add(new SqlParameter("D43", declareData.Prescription.OriginalMedicalNumber));
             else
             {
                 parameters.Add(new SqlParameter("D43", DBNull.Value));
             }
-            var dtable = new DataTable();
-            dtable.Columns.Add("P10", typeof(short));
-            dtable.Columns.Add("P1", typeof(string));
-            dtable.Columns.Add("P2", typeof(string));
-            dtable.Columns.Add("P7", typeof(float));
-            dtable.Columns.Add("P8", typeof(decimal));
-            dtable.Columns.Add("P9", typeof(int));
-            dtable.Columns.Add("P3", typeof(double));
-            dtable.Columns.Add("P4", typeof(string));
-            dtable.Columns.Add("P5", typeof(string));
-            dtable.Columns.Add("P6", typeof(string));
-            dtable.Columns.Add("P11", typeof(string));
-            dtable.Columns.Add("P12", typeof(string));
-            dtable.Columns.Add("P13", typeof(string));
-            dtable.Columns.Add("PAY_BY_YOURSELF", typeof(string));
-            DataRow row;
-            for (var i = 0; i < declareData.DeclareDetails.Count; i++)
-            {
-                row = dtable.NewRow();
-                row["P10"] = Convert.ToInt16(declareData.DeclareDetails[i].Sequence);
-                if (declareData.DeclareDetails[i].MedicalOrder != string.Empty) row["P1"] = declareData.DeclareDetails[i].MedicalOrder;
-                if (declareData.DeclareDetails[i].MedicalId != string.Empty) row["P2"] = declareData.DeclareDetails[i].MedicalId;
-                if (declareData.DeclareDetails[i].Dosage.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P3"] = declareData.DeclareDetails[i].Dosage.ToString(CultureInfo.InvariantCulture);
-                if (declareData.DeclareDetails[i].Usage != string.Empty) row["P4"] = declareData.DeclareDetails[i].Usage;
-                if (declareData.DeclareDetails[i].Position != string.Empty) row["P5"] = declareData.DeclareDetails[i].Position;
-                if (declareData.DeclareDetails[i].Percent.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P6"] = declareData.DeclareDetails[i].Percent.ToString(CultureInfo.InvariantCulture);
-                if (declareData.DeclareDetails[i].Total.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P7"] = declareData.DeclareDetails[i].Total.ToString(CultureInfo.InvariantCulture);
-                if (declareData.DeclareDetails[i].Price.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P8"] = declareData.DeclareDetails[i].Price.ToString(CultureInfo.InvariantCulture);
-                if (declareData.DeclareDetails[i].Point.ToString(CultureInfo.InvariantCulture) != string.Empty) row["P9"] = declareData.DeclareDetails[i].Point.ToString(CultureInfo.InvariantCulture);
-                if (declareData.DeclareDetails[i].Days.ToString() != string.Empty) row["P11"] = declareData.DeclareDetails[i].Days.ToString();
-                row["PAY_BY_YOURSELF"] = declareData.Prescription.Medicines[i].PaySelf;
-                dtable.Rows.Add(row);
-            }
-            var num = string.Empty;
-            var declarecount = declareData.DeclareDetails.Count + 1; //藥事服務醫令序
-            var num3 = string.Empty;
-            var persent = string.Empty;
-
-            var year = int.Parse(declareData.Prescription.Treatment.Customer.Birthday.Substring(0, 3)) + 1911;
-            var cusBirth = year + "/" + declareData.Prescription.Treatment.Customer.Birthday.Substring(3, 2) + "/" +
-                              declareData.Prescription.Treatment.Customer.Birthday.Substring(5, 2);
-            var currentDate = dateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            var month = GetTimeDiff(cusBirth, currentDate);
-            if (month < 6) persent = "160";
-            if (month > 6 && month <= 24) persent = "130";
-            if (month > 24 && month <= 72) persent = "120";
-            DeclareDetail detail = new DeclareDetail(declareData.MedicalServiceCode,Convert.ToDouble(persent), declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate, currentDate);
-            row = dtable.NewRow();
-            row["P1"] = detail.MedicalOrder;
-            row["P2"] = detail.MedicalId;
-            row["P3"] = detail.Dosage;
-            row["P6"] = detail.Percent;
-            row["P7"] = detail.Total;
-            if (Convert.ToInt32(detail.Price) % 100 == 0) num = "00000";
-            if (Convert.ToInt32(detail.Price) % 100 > 0) num = "0000";
-            row["P8"] = num + detail.Price.ToString() + ".00";
-            if (detail.Point >= 100) row["P9"] = "00000" + detail.Point.ToString();
-            if (detail.Point < 100) row["P9"] = "000000" + detail.Point.ToString();
-            if (declarecount < 10) row["P10"] = "00" + declarecount.ToString();
-            if (declarecount >= 10 && declarecount < 100) row["P10"] = "0" + declarecount.ToString();
-            if (declarecount >= 100 && declarecount < 1000) row["P10"] = declarecount.ToString();
-            row["P12"] = detail.StartDate;
-            row["P13"] = detail.EndDate;
-            var sdetail = new DeclareDetail(row["P2"].ToString(),Convert.ToDouble(row["P6"].ToString()), Convert.ToDouble(row["P8"].ToString()),Convert.ToInt32(row["P10"].ToString()),row["P12"].ToString(),row["P13"].ToString());
-
-            declareData.DeclareDetails.Add(sdetail);
-            dtable.Rows.Add(row);
-            //new row
-            parameters.Add(new SqlParameter("DETAIL", dtable));
-            parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
-            {
-                Value = new SqlXml(new XmlTextReader(CreateToXml(declareData).InnerXml, XmlNodeType.Document, null))
-            });
-
+        }
+        /*
+         * 加入免填欄位Parameters
+         */
+        private void AddUnusedParameters(ICollection<SqlParameter> parameters)
+        {
+            parameters.Add(new SqlParameter("D10", DBNull.Value));
+            parameters.Add(new SqlParameter("D11", DBNull.Value));
+            parameters.Add(new SqlParameter("D12", DBNull.Value));
+            parameters.Add(new SqlParameter("D27", DBNull.Value));
+            parameters.Add(new SqlParameter("D28", DBNull.Value));
+            parameters.Add(new SqlParameter("D29", DBNull.Value));
+        }
+        /*
+         * 判斷InsertDb type為Update
+         */
+        private void CheckInsertDbTypeUpdate(List<SqlParameter> parameters, string id, string type = null)
+        {
+            var conn = new DbConnection(Settings.Default.SQL_global);
             if (type == "Update")
             {
                 parameters.Add(new SqlParameter("ID", id));
@@ -158,106 +209,97 @@ namespace His_Pos.Class.Declare
                 conn.ExecuteProc("[HIS_POS_DB].[SET].[DECLAREDATA]", parameters);
             }
         }
-        public static int GetTimeDiff(string strFrom, string strTo)
-        {
-            var dtStart = DateTime.Parse(strFrom);
-            var dtEnd = DateTime.Parse(strTo);
-            var iMonths = dtEnd.Year * 12 + dtEnd.Month - (dtStart.Year * 12 + dtStart.Month) + 1;
-            return iMonths;
-        }
-        public XmlDocument CreateToXml(DeclareData declareData)
+
+        private XmlDocument CreateToXml(DeclareData declareData)
         {
             var xml = new XmlDocument();
-            var diseasecodecount = 8;
-            var dData = "<ddata><dhead>";
-            dData += "<d1>" + declareData.Prescription.Treatment.AdjustCase.Id + "</d1>";
-            dData += "<d2></d2>";
-            dData += "<d3>" + declareData.Prescription.Treatment.Customer.IcNumber + "</d3>";
-            //D4 : 補報原因 非補報免填
-            if (declareData.DeclareMakeUp != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d4>" + declareData.DeclareMakeUp + "</d4>";
-            if (declareData.Prescription.Treatment.AdjustCase.Id != DBNull.Value.ToString(CultureInfo.InvariantCulture) && (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") || declareData.Prescription.Treatment.AdjustCase.Id.Equals("D")))
-                dData += "<d5>" + declareData.Prescription.Treatment.PaymentCategory.Id + "</d5>";
-            dData += "<d6>" + declareData.Prescription.Treatment.Customer.Birthday + "</d6>";
-            dData += "<d7>" + declareData.Prescription.IcCard.MedicalNumber + "</d7>";
-             //D8 ~ D12 國際疾病代碼
-            foreach (var diseasecode in declareData.Prescription.Treatment.MedicalInfo.DiseaseCodes)
-            {
-                dData += "<d" + diseasecodecount + ">" + diseasecode.Id + "</d" + diseasecodecount + ">";
-                diseasecodecount++;
-            }
-            if (declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d13>" + declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id + "</d13>";
-            if (declareData.Prescription.Treatment.TreatmentDate != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d14>" + declareData.Prescription.Treatment.TreatmentDate + "</d14>";
-            dData += "<d15>" + declareData.Prescription.Treatment.Copayment.Id + "</d15>";
-            dData += "<d16>" + declareData.DeclarePoint + "</d16>";
-            dData += "<d17>" + declareData.Prescription.Treatment.Copayment.Point + "</d17>";
-            dData += "<d18>" + declareData.TotalPoint + "</d18>";
-            if (declareData.AssistProjectCopaymentPoint.ToString(CultureInfo.InvariantCulture) != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d19>" + declareData.AssistProjectCopaymentPoint + "</d19>";
-            dData += "<d20>" + declareData.Prescription.Treatment.Customer.Name + "</d20>";
-            dData += "<d21>" + declareData.Prescription.Treatment.MedicalInfo.Hospital.Id + "</d21>";
-            dData += "<d22>" + declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id + "</d22>";
-            dData += "<d23>" + declareData.Prescription.Treatment.AdjustDate + "</d23>";
-            dData += "<d24>" + declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id + "</d24>";
-            dData += "<d25>" + declareData.Prescription.Treatment.MedicalPersonId + "</d25>";
-            if (declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d26>" + declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id + "</d26>";           
-            if (declareData.Prescription.Treatment.MedicineDays != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d30>" + declareData.Prescription.Treatment.MedicineDays + "</d30>";
-            if (declareData.SpecailMaterialPoint.ToString() != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d31>" + declareData.SpecailMaterialPoint + "</d31>";
-            if (declareData.DiagnosisPoint.ToString() != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d32>" + declareData.DiagnosisPoint + "</d32>";
-            if (declareData.DrugsPoint.ToString() != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                dData += "<d33>" + declareData.DrugsPoint + "</d33>";
-            //免填 dData += "<d34>" + "" + "</d34>";
-            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2"))
-            {
-                dData += "<d35>" + declareData.ChronicSequence + "</d35>";
-                dData += "<d36>" + declareData.ChronicTotal + "</d36>";
-            }
-            //待確認
-            /*if (d37.ToString() != DBNull.Value.ToString())*/
-            dData += "<d37>" + declareData.MedicalServiceCode + "</d37>";
-            /*if (d38.ToString() != DBNull.Value.ToString())*/
-            dData += "<d38>" + declareData.MedicalServicePoint + "</d38>";
-            //D39~D42免填
-            /*if (d44.ToString() != DBNull.Value.ToString())*/
-            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals("2") && Convert.ToDecimal(declareData.ChronicSequence) >= 2)
-                dData += "<d43>" + declareData.Prescription.OriginalMedicalNumber + "</d43>";
-            //待確認 新生兒註記就醫
-            dData += "<d44>" + "" + "</d44>";
-            //待確認 矯正機關代號
-            dData += "<d45>" + "" + "</d45>";
-            //特定地區醫療服務 免填
-            dData += "</dhead>";
+            var dData = SetDheadXml(declareData);
             foreach (var detail in declareData.DeclareDetails)
             {
-                var pData = "<pdata>";
-                pData += "<p1>" + detail.MedicalOrder + "</p1>";
-                pData += "<p2>" + detail.MedicalId + "</p2>";
-                pData += "<p7>" + detail.Total + "</p7>";
-                pData += "<p8>" + detail.Price + "</p8>";
-                pData += "<p9>" + detail.Point + "</p9>";
-                if (detail.Dosage.ToString(CultureInfo.InvariantCulture) != DBNull.Value.ToString(CultureInfo.InvariantCulture)) pData += "<p3>" + detail.Dosage + "</p3>";
-                if (detail.Usage != DBNull.Value.ToString(CultureInfo.InvariantCulture)) pData += "<p4>" + detail.Usage + "</p4>";
-                if (detail.Position != DBNull.Value.ToString(CultureInfo.InvariantCulture)) pData += "<p5>" + detail.Position + "</p5>";
-                if (detail.Percent.ToString(CultureInfo.InvariantCulture) != DBNull.Value.ToString(CultureInfo.InvariantCulture)) pData += "<p6>" + detail.Percent + "</p6>";
-                pData += "<p10>" + detail.Sequence + "</p10>";
-                if (detail.Days.ToString() != DBNull.Value.ToString(CultureInfo.InvariantCulture))
-                {
-                    pData += "<p11>" + detail.Days + "</p11>";
-                    if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) < detail.Days)
-                        declareData.Prescription.Treatment.MedicineDays = detail.Days.ToString();
-                }
-                pData += "</pdata>";
-                dData += pData;
+                dData += SetPDataXmlStr(detail,declareData);
             }
             dData += "</ddata>";
             xml.LoadXml(dData);
             return xml;
+        }
+
+        private string SetDheadXml(DeclareData declareData)
+        {
+            var diseaseCodeCount = 8;
+            var treatment = declareData.Prescription.Treatment;
+            var medicalInfo = treatment.MedicalInfo;
+            var dData = "<ddata><dhead>";
+            dData += "<d1>" + treatment.AdjustCase.Id + "</d1>";
+            dData += "<d2></d2>";
+            dData += "<d3>" + treatment.Customer.IcNumber + "</d3>";
+            dData += CheckXmlDbNullValue(declareData.DeclareMakeUp, "d4");
+            dData += CheckXmlDbNullValue(treatment.PaymentCategory.Id, "d5");
+            dData += "<d6>" + treatment.Customer.Birthday + "</d6>";
+            dData += "<d7>" + declareData.Prescription.IcCard.MedicalNumber + "</d7>";
+            //D8 ~ D12 國際疾病代碼
+            foreach (var diseasecode in medicalInfo.DiseaseCodes)
+            {
+                dData += "<d" + diseaseCodeCount + ">" + diseasecode.Id + "</d" + diseaseCodeCount + ">";
+                diseaseCodeCount++;
+            }
+            dData += CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id, "d13");
+            dData += CheckXmlDbNullValue(treatment.TreatmentDate, "d14");
+            dData += "<d15>" + treatment.Copayment.Id + "</d15>";
+            dData += "<d16>" + declareData.DeclarePoint + "</d16>";
+            dData += "<d17>" + treatment.Copayment.Point + "</d17>";
+            dData += "<d18>" + declareData.TotalPoint + "</d18>";
+            CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString(), "d19");
+            dData += "<d20>" + treatment.Customer.Name + "</d20>";
+            dData += "<d21>" + medicalInfo.Hospital.Id + "</d21>";
+            dData += "<d22>" + medicalInfo.TreatmentCase.Id + "</d22>";
+            dData += "<d23>" + treatment.AdjustDate + "</d23>";
+            dData += "<d24>" + medicalInfo.Hospital.Doctor.Id + "</d24>";
+            dData += "<d25>" + treatment.MedicalPersonId + "</d25>";
+            CheckXmlDbNullValue(medicalInfo.SpecialCode.Id, "d26");
+            CheckXmlDbNullValue(treatment.MedicineDays, "d30");
+            dData += "<d30>" + treatment.MedicineDays + "</d30>";
+            CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString(),"d31");
+            CheckXmlDbNullValue(declareData.DiagnosisPoint.ToString(), "d32");
+            CheckXmlDbNullValue(declareData.DrugsPoint.ToString(), "d33");
+            if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
+            {
+                dData += "<d35>" + declareData.ChronicSequence + "</d35>";
+                dData += "<d36>" + declareData.ChronicTotal + "</d36>";
+            }
+            dData += "<d37>" + declareData.MedicalServiceCode + "</d37>";
+            dData += "<d38>" + declareData.MedicalServicePoint + "</d38>";
+            if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
+            {
+                if (Convert.ToDecimal(declareData.ChronicSequence) >= 2)
+                    dData += "<d43>" + declareData.Prescription.OriginalMedicalNumber + "</d43>";
+            }
+            if (treatment.Copayment.Id == "903")
+                dData += CheckXmlDbNullValue(declareData.Prescription.IcCard.IcMarks.NewbornsData.Birthday, "d44");//新生兒註記就醫
+            dData += "</dhead>";
+            return dData;
+        }
+
+        private string SetPDataXmlStr(DeclareDetail detail,DeclareData declareData)
+        {
+            var pData = "<pdata>";
+            pData += "<p1>" + detail.MedicalOrder + "</p1>";
+            pData += "<p2>" + detail.MedicalId + "</p2>";
+            pData += "<p7>" + detail.Total + "</p7>";
+            pData += "<p8>" + detail.Price + "</p8>";
+            pData += "<p9>" + detail.Point + "</p9>";
+            if (ToInvCulture(detail.Dosage) != string.Empty) pData += "<p3>" + detail.Dosage + "</p3>";
+            if (detail.Usage != string.Empty) pData += "<p4>" + detail.Usage + "</p4>";
+            if (detail.Position != string.Empty) pData += "<p5>" + detail.Position + "</p5>";
+            if (ToInvCulture(detail.Percent) != string.Empty) pData += "<p6>" + detail.Percent + "</p6>";
+            pData += "<p10>" + detail.Sequence + "</p10>";
+            if (detail.Days.ToString() != string.Empty)
+            {
+                pData += "<p11>" + detail.Days + "</p11>";
+                if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) < detail.Days)
+                    declareData.Prescription.Treatment.MedicineDays = detail.Days.ToString();
+            }
+            pData += "</pdata>";
+            return pData;
         }
 
         public void ExportSortDeclareData(string sdate, string edate)
@@ -417,6 +459,42 @@ namespace His_Pos.Class.Declare
 
             //匯出xml檔案
             function.ExportXml(xmlsumx,"匯出申報XML檔案");
+        }
+        /*
+         * 檢查SQLparameter是否為DBNull
+         */
+        private void CheckDbNullValue(ICollection<SqlParameter> parameters,string value,string paraName)
+        {
+            parameters.Add(value.Equals(string.Empty) ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
+        }
+        /*
+         * 檢查SQLparameter是否為DBNull(int)
+         */
+        private void CheckDbNullValueInt(ICollection<SqlParameter> parameters, int value, string paraName)
+        {
+            parameters.Add(value == 0 ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
+        }
+        /*
+         * 檢查XmlTag是否為空值
+         */
+        private string CheckXmlDbNullValue(string value,string tagName)
+        {
+            if (value != string.Empty || value != "0")
+               return "<"+tagName+">" + value + "</"+ tagName+">";
+            return string.Empty;
+        }
+        /*
+         *檢查DataRow是否為空值
+         */
+        private void CheckEmptyDataRow(string value ,DataRow row,string rowName)
+        {
+            if (value != string.Empty)
+                row[rowName] = value;
+        }
+
+        private string ToInvCulture(double value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

@@ -15,6 +15,7 @@ using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
+using His_Pos.Service;
 
 namespace His_Pos.PrescriptionDec
 {
@@ -481,13 +482,27 @@ namespace His_Pos.PrescriptionDec
         {
             var copayment = CopaymentCombo.Text;
             if (Function.CheckEmptyInput(copayment, "請選擇部分負擔"))
-            {
                 return;
-            }
             prescription.Treatment.Copayment.Id = copayment.Substring(0, 3);
             prescription.Treatment.Copayment.Name = copayment.Substring(4, copayment.Length - 1);
             prescription.Treatment.Copayment.Point = Convert.ToInt32(Copayment.Text);
+            if (prescription.Treatment.Copayment.Id == "903")
+            {
+                var dateTimeExtensions = new DateTimeExtensions();
+                var newBornBirth = dateTimeExtensions.ToUsDate(prescription.IcCard.IcMarks.NewbornsData.Birthday);
+                var newBornAge = DateTime.Now - newBornBirth;
+                CheckNewBornAge(newBornAge);
+            }
         }
+        /*
+         * 確認新生兒就醫
+         */
+        private void CheckNewBornAge(TimeSpan newBornAge)
+        {
+            if (newBornAge.Days <= 60) return;
+            MessageBox.Show("新生兒依附註記方式就醫者新生兒年齡應小於60日");
+        }
+
         /*
          * 確認慢箋領藥次數D35.36
          */

@@ -11,8 +11,13 @@ namespace His_Pos.Class.Declare
         {
             Prescription = new Prescription();
             Prescription = prescription;
+            SpecailMaterialPoint = 0;
+            DiagnosisPoint = 0;
+            DrugsPoint = 0;
+            SetDeclareDetail();
+            SetCopaymentPoint();
+            CountDeclareDeatailPoint();
         }
-
         public Prescription Prescription {get;set;}
         public List<DeclareDetail> DeclareDetails { get; set; }
         public string DeclareMakeUp { get; set; }//D4補報註記
@@ -30,7 +35,7 @@ namespace His_Pos.Class.Declare
 
         private void SetCopaymentPoint()
         {
-            int copaymentPoint = 0;
+            var copaymentPoint = 0;
             var copaymentId = Prescription.Treatment.Copayment.Id;
             if (CheckCopaymentFreeProject())//免收部分負擔
                 copaymentPoint = 0;
@@ -38,7 +43,8 @@ namespace His_Pos.Class.Declare
                 copaymentPoint = Prescription.Treatment.Copayment.Point;
             SetAssistProjectCopaymentPoint(copaymentPoint);
         }
-        public void CountDeclareDeatailPoint()
+
+        private void CountDeclareDeatailPoint()
         {
             var dateTimeExtensions = new DateTimeExtensions();
             var cusAge = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(Prescription.Treatment.Customer.Birthday));
@@ -155,10 +161,10 @@ namespace His_Pos.Class.Declare
             CopaymentPoint = copaymentPoint;
             AssistProjectCopaymentPoint = 0;
         }
-        public void SetDeclareDetail() {
-            int count = 1;
+        private void SetDeclareDetail() {
+            var count = 1;
             foreach (var medicine in Prescription.Medicines) {
-                DeclareDetail detail = new DeclareDetail(medicine,Prescription.Treatment.AdjustCase.Id,count);
+                var detail = new DeclareDetail(medicine,Prescription.Treatment.AdjustCase.Id,count);
                 DeclareDetails.Add(detail);
                 count++;
             }

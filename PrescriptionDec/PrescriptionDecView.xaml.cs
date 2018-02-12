@@ -285,7 +285,8 @@ namespace His_Pos.PrescriptionDec
             CheckPrescriptionInfo();
             AddMedicine();
             var declareData = new DeclareData(prescription);
-
+            var declareDb = new DeclareDb();
+            declareDb.InsertDb(declareData);
         }
 
         private void AddMedicine()
