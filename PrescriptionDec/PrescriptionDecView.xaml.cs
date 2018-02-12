@@ -283,8 +283,17 @@ namespace His_Pos.PrescriptionDec
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
             CheckPrescriptionInfo();
+            AddMedicine();
             var declareData = new DeclareData(prescription);
 
+        }
+
+        private void AddMedicine()
+        {
+            foreach (var medicine in PrescriptionList)
+            {
+                prescription.Medicines.Add(medicine);
+            }
         }
     }
 }
