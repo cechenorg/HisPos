@@ -22,8 +22,8 @@ namespace His_Pos.Class
             //msh資料段
             msh = "<MSH>";
             msh += "<A00>" + "1" + "</A00>";
-            msh += "<A01>" + A01 + "</A01>";
-            msh += "<A02>" + A02 + "</A02>";
+           // msh += "<A01>" + A01 + "</A01>";
+           // msh += "<A02>" + A02 + "</A02>";
             msh += "</MSH>";
 
             //mb1 健保資料段
@@ -51,26 +51,26 @@ namespace His_Pos.Class
             }
 
                 
-            if (A31 != string.Empty) mb1 += "<A31>" + A31 + "</A31>";
-            if (A32 != string.Empty) mb1 += "<A32>" + A32 + "</A32>";
-            if (A33 != string.Empty) mb1 += "<A33>" + A33 + "</A33>";
-            if (A34 != string.Empty) mb1 += "<A34>" + A34 + "</A34>";
-            if (A35 != string.Empty) mb1 += "<A35>" + A35 + "</A35>";
+            if (Prescription.IcCard.IcCardPay.MedicalPay != string.Empty) mb1 += "<A31>" + Prescription.IcCard.IcCardPay.MedicalPay + "</A31>";
+            if (Prescription.IcCard.IcCardPay.MedicalCopay != string.Empty) mb1 += "<A32>" + Prescription.IcCard.IcCardPay.MedicalCopay + "</A32>";
+            if (Prescription.IcCard.IcCardPay.HospitalPay != string.Empty) mb1 += "<A33>" + Prescription.IcCard.IcCardPay.HospitalPay + "</A33>";
+            if (Prescription.IcCard.IcCardPay.HospitalCopay1 != string.Empty) mb1 += "<A34>" + Prescription.IcCard.IcCardPay.HospitalCopay1 + "</A34>";
+            if (Prescription.IcCard.IcCardPay.HospitalCopay2 != string.Empty) mb1 += "<A35>" + Prescription.IcCard.IcCardPay.HospitalCopay2 + "</A35>";
             //預防保健
-            if (A41 != string.Empty) mb1 += "<A41>" + A41 + "</A41>";
-            if (A42 != string.Empty) mb1 += "<A42>" + A42 + "</A42>";
-            if (A43 != string.Empty) mb1 += "<A43>" + A43 + "</A43>";
-            if (A44 != string.Empty) mb1 += "<A44>" + A44 + "</A44>";
+            if (Prescription.IcCard.IcCardPrediction.HisServiceMark != string.Empty) mb1 += "<A41>" + Prescription.IcCard.IcCardPrediction.HisServiceMark + "</A41>";
+            if (Prescription.IcCard.IcCardPrediction.PredictionDate != string.Empty) mb1 += "<A42>" + Prescription.IcCard.IcCardPrediction.PredictionDate + "</A42>";
+            if (Prescription.IcCard.IcCardPrediction.PredictionMedicalCode != string.Empty) mb1 += "<A43>" + Prescription.IcCard.IcCardPrediction.PredictionMedicalCode + "</A43>";
+            if (Prescription.IcCard.IcCardPrediction.PredictionCheckCode != string.Empty) mb1 += "<A44>" + Prescription.IcCard.IcCardPrediction.PredictionCheckCode + "</A44>";
             //孕婦
-            if (A51 != string.Empty) mb1 += "<A51>" + A51 + "</A51>";
-            if (A52 != string.Empty) mb1 += "<A52>" + A52 + "</A52>";
-            if (A53 != string.Empty) mb1 += "<A53>" + A53 + "</A53>";
-            if (A54 != string.Empty) mb1 += "<A54>" + A54 + "</A54>";
+            if (Prescription.IcCard.Pregnant.PregnantCheckDate != string.Empty) mb1 += "<A51>" + Prescription.IcCard.Pregnant.PregnantCheckDate + "</A51>";
+            if (Prescription.IcCard.Pregnant.PregnantMedicalCode != string.Empty) mb1 += "<A52>" + Prescription.IcCard.Pregnant.PregnantMedicalCode + "</A52>";
+            if (Prescription.IcCard.Pregnant.PregnantCheckCode != string.Empty) mb1 += "<A53>" + Prescription.IcCard.Pregnant.PregnantCheckCode + "</A53>";
+            if (Prescription.IcCard.Pregnant.PregnantActualTreatDate != string.Empty) mb1 += "<A54>" + Prescription.IcCard.Pregnant.PregnantActualTreatDate + "</A54>";
             //預防接種
-            if (A61 != string.Empty) mb1 += "<A61>" + A61 + "</A61>";
-            if (A62 != string.Empty) mb1 += "<A62>" + A62 + "</A62>";
-            if (A63 != string.Empty) mb1 += "<A63>" + A63 + "</A63>";
-            if (A64 != string.Empty) mb1 += "<A64>" + A64 + "</A64>";
+            if (Prescription.IcCard.Vaccination.VaccinationCategory != string.Empty) mb1 += "<A61>" + Prescription.IcCard.Vaccination.VaccinationCategory + "</A61>";
+            if (Prescription.IcCard.Vaccination.VaccinationDate != string.Empty) mb1 += "<A62>" + Prescription.IcCard.Vaccination.VaccinationDate + "</A62>";
+            if (Prescription.IcCard.Vaccination.VaccinationMedicalCode != string.Empty) mb1 += "<A63>" + Prescription.IcCard.Vaccination.VaccinationMedicalCode + "</A63>";
+            if (Prescription.IcCard.Vaccination.VaccinationNum != string.Empty) mb1 += "<A64>" + Prescription.IcCard.Vaccination.VaccinationNum + "</A64>";
             mb1 += "</MB1>";
 
             //醫療專區
