@@ -14,6 +14,7 @@ namespace His_Pos.Class
         public string SafeCode { get; set; } //安全模組代碼
         public string DeclareMakeUp { get; set; } //補報註記
         public string RsaNum { get; set; } //安全簽章
+        public string DataFormat { get; set; } //資料格式 1:正常上傳 2:異常上傳 3.補正上傳(正常資料) 4.補正上傳(異常資料)
         private XmlDocument CreateToXml()
         {
             string msh, mb1, mb2;
@@ -22,8 +23,8 @@ namespace His_Pos.Class
             //msh資料段
             msh = "<MSH>";
             msh += "<A00>" + "1" + "</A00>";
-           // msh += "<A01>" + A01 + "</A01>";
-           // msh += "<A02>" + A02 + "</A02>";
+            msh += "<A01>" + DataFormat + "</A01>";
+            msh += "<A02>" + "1.0" + "</A02>";
             msh += "</MSH>";
 
             //mb1 健保資料段
