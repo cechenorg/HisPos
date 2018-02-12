@@ -12,12 +12,14 @@ namespace His_Pos.Class
     {
         public Pharmacy()
         {
+            MedicalPersonnel = new MedicalPersonnel();
         }
 
         public Pharmacy(string id, string name) : base(id, name)
         {
             Id = id;
             Name = name;
+            MedicalPersonnel = new MedicalPersonnel();
         }
         public MedicalPersonnel MedicalPersonnel { get; set; }
     }
