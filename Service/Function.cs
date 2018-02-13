@@ -208,5 +208,20 @@ namespace His_Pos
             MessageBox.Show(message);
             return true;
         }
+
+        public string ToInvCulture(double value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public string SetStrFormat(double value, string format)
+        {
+            return string.Format(format, value);
+        }
+
+        public string XmlTagCreator(string tagName, string value)
+        {
+            return "<" + tagName + ">" + value + "</" + tagName + ">";
+        }
     }
 }

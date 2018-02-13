@@ -70,6 +70,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 2 的當地語系化字串。
+        /// </summary>
+        internal static string ChronicAdjustCaseId {
+            get {
+                return ResourceManager.GetString("ChronicAdjustCaseId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 慢性病連續處方箋需填寫連續處方可調劑次數 的當地語系化字串。
         /// </summary>
         internal static string ChronicDeliveryTimesNull {
