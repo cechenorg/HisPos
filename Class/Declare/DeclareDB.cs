@@ -13,6 +13,7 @@ namespace His_Pos.Class.Declare
 {
     public class DeclareDb
     {
+        private Function function = new Function();
         /*
          * 新增DeclareData至資料庫
          */
@@ -130,10 +131,10 @@ namespace His_Pos.Class.Declare
                 var tagsDictionary = new Dictionary<string, string>
                 {
                     {"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
-                    {"P3", ToInvCulture(detail.Dosage)}, {"P4", detail.Usage},
-                    {"P5", detail.Position},{"P6",ToInvCulture(detail.Percent)},
-                    {"P7",ToInvCulture(detail.Total)},{"P8",ToInvCulture(detail.Price)},
-                    {"P9",ToInvCulture(detail.Point)},{"P10",detail.Sequence.ToString()},
+                    {"P3", function.ToInvCulture(detail.Dosage)}, {"P4", detail.Usage},
+                    {"P5", detail.Position},{"P6",function.ToInvCulture(detail.Percent)},
+                    {"P7",function.ToInvCulture(detail.Total)},{"P8",function.ToInvCulture(detail.Price)},
+                    {"P9",function.ToInvCulture(detail.Point)},{"P10",detail.Sequence.ToString()},
                     {"P11",detail.Days.ToString()},{"PAY_BY_YOURSELF",paySelf}
                 };
                 foreach (var tag in tagsDictionary)
@@ -191,11 +192,11 @@ namespace His_Pos.Class.Declare
             var declarecount = declareData.DeclareDetails.Count + 1;//藥事服務醫令序
             var tagsDictionary = new Dictionary<string, object>
             {
-                {"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
-                {"P3", ToInvCulture(detail.Dosage)}, {"P6", detail.Usage},
-                {"P6",ToInvCulture(detail.Percent)},{"P7",SetStrFormat(detail.Total, "{0:00000.0}")},
-                {"P8",SetStrFormat(detail.Price, "{0:0000000.00}")},{"P9",SetStrFormat(Math.Truncate(detail.Point), "{0:D8}")},
-                {"P10",SetStrFormat(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
+                {"P1",detail.MedicalOrder},{"P2",detail.MedicalId},
+                {"P3",function.ToInvCulture(detail.Dosage)},{"P6",detail.Usage},
+                {"P6",function.ToInvCulture(detail.Percent)},{"P7",function.SetStrFormat(detail.Total,"{0:00000.0}")},
+                {"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},{"P9",function.SetStrFormat(Math.Truncate(detail.Point),"{0:D8}")},
+                {"P10",function.SetStrFormat(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
             };
             foreach (var tag in tagsDictionary)
             {
@@ -274,15 +275,16 @@ namespace His_Pos.Class.Declare
             foreach (var tag in dDataDictionary)
             {
                 if (tag.Value != string.Empty)
-                    dData += XmlTagCreator(tag.Key, tag.Value);
+                    dData += function.XmlTagCreator(tag.Key, tag.Value);
             }
+
             if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
             {
                 if (Convert.ToDecimal(declareData.ChronicSequence) >= 2)
-                    dData += XmlTagCreator("d43",declareData.Prescription.OriginalMedicalNumber);
+                    dData += function.XmlTagCreator("d43",declareData.Prescription.OriginalMedicalNumber);
             }
             if (treatment.Copayment.Id == "903")
-                dData += XmlTagCreator("d44",CheckXmlDbNullValue(declareData.Prescription.IcCard.IcMarks.NewbornsData.Birthday));//新生兒註記就醫
+                dData += function.XmlTagCreator("d44",CheckXmlDbNullValue(declareData.Prescription.IcCard.IcMarks.NewbornsData.Birthday));//新生兒註記就醫
             dData += "</dhead>";
             return dData;
         }
@@ -320,11 +322,11 @@ namespace His_Pos.Class.Declare
         private string SetPDataXmlStr(DeclareDetail detail,DeclareData declareData)
         {
             var pData = "<pdata>";
-            var pDataDictionary = SetPDataDictionary(declareData, detail);
+            var pDataDictionary = SetPDataDictionary(detail);
             foreach (var tag in pDataDictionary)
             {
                 if (tag.Value != string.Empty)
-                    pData += XmlTagCreator(tag.Key,tag.Value);
+                    pData += function.XmlTagCreator(tag.Key,tag.Value);
             }
             if (detail.Days.ToString() != string.Empty)
             {
@@ -337,12 +339,12 @@ namespace His_Pos.Class.Declare
         /*
          * 設定PData資料並以Dictionary結構回傳
          */
-        private Dictionary<string, string> SetPDataDictionary(DeclareData declareData, DeclareDetail detail)
+        private Dictionary<string, string> SetPDataDictionary(DeclareDetail detail)
         {
             return new Dictionary<string, string>
             {
-                {"p1",detail.MedicalOrder},{"p2",detail.MedicalId},{"p3",CheckXmlDbNullValue(ToInvCulture(detail.Dosage))},
-                {"p4",CheckXmlDbNullValue(detail.Usage)},{"p5",CheckXmlDbNullValue(detail.Position)},{"p6",CheckXmlDbNullValue(ToInvCulture(detail.Percent))},
+                {"p1",detail.MedicalOrder},{"p2",detail.MedicalId},{"p3",CheckXmlDbNullValue(function.ToInvCulture(detail.Dosage))},
+                {"p4",CheckXmlDbNullValue(detail.Usage)},{"p5",CheckXmlDbNullValue(detail.Position)},{"p6",CheckXmlDbNullValue(function.ToInvCulture(detail.Percent))},
                 {"p7",detail.Total.ToString()},{"p8",detail.Price.ToString()},{"p9",detail.Point.ToString()},
                 {"p10",detail.Sequence.ToString()},{"p11",CheckXmlDbNullValue(detail.Days.ToString())}
             };
@@ -405,7 +407,6 @@ namespace His_Pos.Class.Declare
                         cus.IcNumber = table.Rows[0]["CUS_IDNUM"].ToString();
                         cus.ContactInfo.Email = table.Rows[0]["CUS_EMAIL"].ToString();
                         cus.Gender = Convert.ToBoolean(table.Rows[0]["CUS_GENDER"].ToString());
-
                         xml.LoadXml(datarow["HISDECMAS_DETXML"].ToString());
                         d1 = xml.SelectSingleNode("ddata/dhead/d1").InnerText;
                         d16 = xml.SelectSingleNode("ddata/dhead/d16").InnerText;
@@ -528,21 +529,6 @@ namespace His_Pos.Class.Declare
         {
             if (value != string.Empty)
                 row[rowName] = value;
-        }
-
-        private string ToInvCulture(double value)
-        {
-            return value.ToString(CultureInfo.InvariantCulture);
-        }
-
-        private string SetStrFormat(double value,string format)
-        {
-            return string.Format(format, value); 
-        }
-        
-        private string XmlTagCreator(string tagName, string value)
-        {
-            return "<"+tagName+">"+value+"</"+tagName+">";
         }
     }
 }
