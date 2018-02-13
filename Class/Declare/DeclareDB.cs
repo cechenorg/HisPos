@@ -13,14 +13,15 @@ namespace His_Pos.Class.Declare
 {
     public class DeclareDb
     {
+        /*
+         * 新增DeclareData至資料庫
+         */
         public void InsertDb(DeclareData declareData, string type = null, string id = null)
         {
             var parameters = new List<SqlParameter>();
-            AddParameterDData(parameters,declareData);
-            var pDataTable = new DataTable();
-            SetPDataTable(pDataTable);
-            AddPData(declareData,pDataTable);
-            AddMedicalServiceCostPData(declareData, pDataTable);
+            AddParameterDData(parameters,declareData);//加入DData sqlparameters
+            var pDataTable = SetPDataTable();//設定PData datatable columns
+            AddPData(declareData,pDataTable);//加入PData sqlparameters
             parameters.Add(new SqlParameter("DETAIL", pDataTable));
             parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
             {
@@ -34,18 +35,26 @@ namespace His_Pos.Class.Declare
         private void AddParameterDData(ICollection<SqlParameter> parameters,DeclareData declareData)
         {
             AddParameterTreatment(parameters, declareData);
-            CheckDbNullValue(parameters, declareData.DeclareMakeUp,"D4");//D4補報註記
-            CheckDbNullValueInt(parameters, declareData.SpecailMaterialPoint,"D31");//特殊材料明細點數小計
-            CheckDbNullValueInt(parameters, declareData.DiagnosisPoint, "D32");//診療明細點數小計
-            CheckDbNullValueInt(parameters, declareData.DrugsPoint,"D33");//用藥明細點數小計
-            parameters.Add(new SqlParameter("D7", declareData.Prescription.IcCard.MedicalNumber));//就醫序號
-            parameters.Add(new SqlParameter("D16", declareData.DeclarePoint));//申請點數
-            parameters.Add(new SqlParameter("D17", declareData.CopaymentPoint));//部分負擔點數
-            parameters.Add(new SqlParameter("D18", declareData.TotalPoint));//合計點數
-            parameters.Add(declareData.AssistProjectCopaymentPoint == 0 ? new SqlParameter("D19", DBNull.Value) : new SqlParameter("D19", declareData.AssistProjectCopaymentPoint));
-            AddUnusedParameters(parameters);//設定免填欄位Parameters
-            CheckChronicAdjust(declareData,parameters);//判斷慢箋調劑欄位
-            parameters.Add(new SqlParameter("D38", declareData.MedicalServicePoint));//藥事服務費點數
+            //4補報註記 7就醫序號 16申請點數 17部分負擔點數 18合計點數 19行政協助部分負擔點數 31特殊材料明細點數小計 32診療明細點數小計 33用藥明細點數小計 38藥事服務費點數
+            var tagsDictionary = new Dictionary<string, string>
+            {
+                {"D4", declareData.DeclareMakeUp}, {"D7", declareData.Prescription.IcCard.MedicalNumber},
+                {"D16", declareData.DeclarePoint.ToString()}, {"D17", declareData.CopaymentPoint.ToString()},
+                {"D18", declareData.TotalPoint.ToString()},{"D19", declareData.AssistProjectCopaymentPoint.ToString()},
+                {"D31",declareData.SpecailMaterialPoint.ToString()},{"D32",declareData.DiagnosisPoint.ToString()},
+                {"D33",declareData.DrugsPoint.ToString()},{"D38",declareData.MedicalServicePoint.ToString()}
+            };
+            foreach (var tag in tagsDictionary)
+            {
+                if(tag.Key == "D4" || tag.Key == "D19" || tag.Key == "D31" || tag.Key == "D32" || tag.Key == "D33")
+                    CheckDbNullValue(parameters, tag.Value, tag.Key);
+                else
+                {
+                    parameters.Add(new SqlParameter(tag.Key,tag.Value));
+                }
+            }
+            AddUnusedParameters(parameters);//設定免填欄位Parameters D10 D11 D12 D27 D28 D29
+            CheckChronicAdjust(declareData,parameters);//判斷慢箋調劑欄位D35 D36
         }
         /*
          * 加入DeclareData.Treatment資料之parameters
@@ -53,14 +62,22 @@ namespace His_Pos.Class.Declare
         private void AddParameterTreatment(ICollection<SqlParameter> parameters, DeclareData declareData)
         {
             AddParameterMedicalInfo(parameters, declareData);
-            parameters.Add(new SqlParameter("D1", declareData.Prescription.Treatment.AdjustCase.Id));
-            CheckDbNullValue(parameters, declareData.Prescription.Treatment.PaymentCategory.Id, "D5");
-            parameters.Add(new SqlParameter("CUS_ID", declareData.Prescription.Treatment.Customer.Id));
-            CheckDbNullValue(parameters, declareData.Prescription.Treatment.TreatmentDate, "D14");
-            parameters.Add(new SqlParameter("D15", declareData.Prescription.Treatment.Copayment.Id));
-            parameters.Add(new SqlParameter("D23", declareData.Prescription.Treatment.AdjustDate));
-            parameters.Add(new SqlParameter("D25", declareData.Prescription.Treatment.MedicalPersonId));
-            parameters.Add(new SqlParameter("D30", declareData.Prescription.Treatment.MedicineDays));
+            var tagsDictionary = new Dictionary<string, string>
+            {
+                {"D1", declareData.DeclareMakeUp}, {"D5", declareData.Prescription.IcCard.MedicalNumber},
+                {"D14", declareData.DeclarePoint.ToString()}, {"D15", declareData.CopaymentPoint.ToString()},
+                {"D23", declareData.AssistProjectCopaymentPoint.ToString()},{"D25",declareData.SpecailMaterialPoint.ToString()},
+                {"D30",declareData.DiagnosisPoint.ToString()},{"CUS_ID",declareData.MedicalServicePoint.ToString()}
+            };
+            foreach (var tag in tagsDictionary)
+            {
+                if (tag.Key == "D5" || tag.Key == "D14")
+                    CheckDbNullValue(parameters, tag.Value, tag.Key);
+                else
+                {
+                    parameters.Add(new SqlParameter(tag.Key, tag.Value));
+                }
+            }
         }
         /*
          * 加入DeclareData.Treatment.MedicalInfo資料之parameters
@@ -68,31 +85,39 @@ namespace His_Pos.Class.Declare
         private void AddParameterMedicalInfo(ICollection<SqlParameter> parameters, DeclareData declareData)
         {
             var med = declareData.Prescription.Treatment.MedicalInfo;
-            var valueList = new List<string>() { med.DiseaseCodes[0].Id, med.DiseaseCodes[1].Id, med.Hospital.Division.Id, med.TreatmentCase.Id, med.Hospital.Doctor.Id, med.SpecialCode.Id};
-            var paraNameList = new List<string>() { "D8", "D9", "D13", "D22", "D24", "D26"};
-            parameters.Add(new SqlParameter("D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id));
-            for (var i = 0; i < valueList.Count; i++)
+            var tagsDictionary = new Dictionary<string, string>
             {
-                CheckDbNullValue(parameters,valueList[i],paraNameList[i]);
+                {"D8", med.DiseaseCodes[0].Id}, {"D9", med.DiseaseCodes[1].Id},
+                {"D13", med.Hospital.Division.Id}, {"D22", med.TreatmentCase.Id},
+                {"D24", med.Hospital.Doctor.Id},{"D26",med.SpecialCode.Id},{"D21",declareData.Prescription.Treatment.MedicalInfo.Hospital.Id}
+            };
+            foreach (var tag in tagsDictionary)
+            {
+                if(tag.Key == "D21")
+                    parameters.Add(new SqlParameter(tag.Key, tag.Value));
+                else
+                {
+                    CheckDbNullValue(parameters, tag.Value, tag.Key);
+                }
             }
         }
 
-        private void SetPDataTable(DataTable pDataTable)
+        private DataTable SetPDataTable()
         {
-            pDataTable.Columns.Add("P10", typeof(short));
-            pDataTable.Columns.Add("P1", typeof(string));
-            pDataTable.Columns.Add("P2", typeof(string));
-            pDataTable.Columns.Add("P7", typeof(float));
-            pDataTable.Columns.Add("P8", typeof(decimal));
-            pDataTable.Columns.Add("P9", typeof(int));
-            pDataTable.Columns.Add("P3", typeof(double));
-            pDataTable.Columns.Add("P4", typeof(string));
-            pDataTable.Columns.Add("P5", typeof(string));
-            pDataTable.Columns.Add("P6", typeof(string));
-            pDataTable.Columns.Add("P11", typeof(string));
-            pDataTable.Columns.Add("P12", typeof(string));
-            pDataTable.Columns.Add("P13", typeof(string));
-            pDataTable.Columns.Add("PAY_BY_YOURSELF", typeof(string));
+            var pDataTable = new DataTable();
+            var columnsDictionary = new Dictionary<string, Type>
+            {
+                {"P10", typeof(short)}, {"P1", typeof(string)},{"P2", typeof(string)},
+                {"P7", typeof(float)},{"P8", typeof(decimal)},{"P9",typeof(int)},
+                {"P3",typeof(double)},{"P4",typeof(string)},{"P5",typeof(string)},
+                {"P6",typeof(string)},{"P11",typeof(string)},{"P12",typeof(string)},
+                {"P13",typeof(string)},{"PAY_BY_YOURSELF",typeof(string)}
+            };
+            foreach (var col in columnsDictionary)
+            {
+                pDataTable.Columns.Add(col.Key, col.Value);
+            }
+            return pDataTable;
         }
 
         private void AddPData(DeclareData declareData,DataTable pDataTable)
@@ -101,18 +126,34 @@ namespace His_Pos.Class.Declare
             {
                 var row = pDataTable.NewRow();
                 var detail = declareData.DeclareDetails[i];
-                var valueList = new List<string>() { detail.MedicalOrder,detail.MedicalId,ToInvCulture(detail.Dosage),detail.Usage,
-                    detail.Position, ToInvCulture(detail.Percent),ToInvCulture(detail.Total),ToInvCulture(detail.Price),ToInvCulture(detail.Point),detail.Days.ToString()
-                };
-                var rowNameList = new List<string>() { "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P11" };
-                row["P10"] = Convert.ToInt16(detail.Sequence);
-                for (var j = 0; j < valueList.Count; i++)
+                var paySelf = declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
+                var tagsDictionary = new Dictionary<string, string>
                 {
-                    CheckEmptyDataRow(valueList[j],row,rowNameList[j]);
+                    {"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
+                    {"P3", ToInvCulture(detail.Dosage)}, {"P4", detail.Usage},
+                    {"P5", detail.Position},{"P6",ToInvCulture(detail.Percent)},
+                    {"P7",ToInvCulture(detail.Total)},{"P8",ToInvCulture(detail.Price)},
+                    {"P9",ToInvCulture(detail.Point)},{"P10",detail.Sequence.ToString()},
+                    {"P11",detail.Days.ToString()},{"PAY_BY_YOURSELF",paySelf}
+                };
+                foreach (var tag in tagsDictionary)
+                {
+                    switch (tag.Key)
+                    {
+                        case "P10":
+                            row[tag.Key] = Convert.ToInt16(tag.Value);
+                            break;
+                        case "PAY_BY_YOURSELF":
+                            row[tag.Key] = tag.Value;
+                            break;
+                        default:
+                            CheckEmptyDataRow(tag.Value, row, tag.Key);
+                            break;
+                    }
                 }
-                row["PAY_BY_YOURSELF"] = declareData.Prescription.Medicines[i].PaySelf;
                 pDataTable.Rows.Add(row);
             }
+            AddMedicalServiceCostPData(declareData, pDataTable);
         }
         /*
          * 加入藥事服務費之PData
@@ -147,17 +188,19 @@ namespace His_Pos.Class.Declare
          */
         private void SetMedicalServiceCostDataRow(DataRow pData,DeclareData declareData,DeclareDetail detail)
         {
-            var declarecount = declareData.DeclareDetails.Count + 1; //藥事服務醫令序
-            pData["P1"] = detail.MedicalOrder;
-            pData["P2"] = detail.MedicalId;
-            pData["P3"] = detail.Dosage;
-            pData["P6"] = detail.Percent;
-            pData["P7"] = string.Format("{0:00000.0}", detail.Total);//五位整數，一位小數
-            pData["P8"] = string.Format("{0:0000000.00}", detail.Price);//七位整數，二位小數
-            pData["P9"] = string.Format("{0:D8}", Math.Round(detail.Point, 1));//八位整數，小數點四捨五入
-            pData["P10"] = string.Format("{0:D3}", declarecount);
-            pData["P12"] = detail.StartDate;
-            pData["P13"] = detail.EndDate;
+            var declarecount = declareData.DeclareDetails.Count + 1;//藥事服務醫令序
+            var tagsDictionary = new Dictionary<string, object>
+            {
+                {"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
+                {"P3", ToInvCulture(detail.Dosage)}, {"P6", detail.Usage},
+                {"P6",ToInvCulture(detail.Percent)},{"P7",SetStrFormat(detail.Total, "{0:00000.0}")},
+                {"P8",SetStrFormat(detail.Price, "{0:0000000.00}")},{"P9",SetStrFormat(Math.Truncate(detail.Point), "{0:D8}")},
+                {"P10",SetStrFormat(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
+            };
+            foreach (var tag in tagsDictionary)
+            {
+                pData[tag.Key] = tag.Value;
+            }
         }
         /*
          * 判斷慢箋調劑
@@ -186,12 +229,11 @@ namespace His_Pos.Class.Declare
          */
         private void AddUnusedParameters(ICollection<SqlParameter> parameters)
         {
-            parameters.Add(new SqlParameter("D10", DBNull.Value));
-            parameters.Add(new SqlParameter("D11", DBNull.Value));
-            parameters.Add(new SqlParameter("D12", DBNull.Value));
-            parameters.Add(new SqlParameter("D27", DBNull.Value));
-            parameters.Add(new SqlParameter("D28", DBNull.Value));
-            parameters.Add(new SqlParameter("D29", DBNull.Value));
+            var tagList = new List<string>(){ "D10", "D11", "D12" ,"D27", "D28", "D29" };
+            foreach (var tag in tagList)
+            {
+                parameters.Add(new SqlParameter(tag, DBNull.Value));
+            }
         }
         /*
          * 判斷InsertDb type為Update
@@ -225,83 +267,86 @@ namespace His_Pos.Class.Declare
 
         private string SetDheadXml(DeclareData declareData)
         {
-            var diseaseCodeCount = 8;
+            var dData = "<ddata><dhead>";
             var treatment = declareData.Prescription.Treatment;
             var medicalInfo = treatment.MedicalInfo;
-            var dData = "<ddata><dhead>";
-            dData += "<d1>" + treatment.AdjustCase.Id + "</d1>";
-            dData += "<d2></d2>";
-            dData += "<d3>" + treatment.Customer.IcNumber + "</d3>";
-            dData += CheckXmlDbNullValue(declareData.DeclareMakeUp, "d4");
-            dData += CheckXmlDbNullValue(treatment.PaymentCategory.Id, "d5");
-            dData += "<d6>" + treatment.Customer.Birthday + "</d6>";
-            dData += "<d7>" + declareData.Prescription.IcCard.MedicalNumber + "</d7>";
-            //D8 ~ D12 國際疾病代碼
-            foreach (var diseasecode in medicalInfo.DiseaseCodes)
+            var dDataDictionary = SetDheadDictionary(declareData,treatment,medicalInfo);
+            foreach (var tag in dDataDictionary)
             {
-                dData += "<d" + diseaseCodeCount + ">" + diseasecode.Id + "</d" + diseaseCodeCount + ">";
-                diseaseCodeCount++;
+                if (tag.Value != string.Empty)
+                    dData += XmlTagCreator(tag.Key, tag.Value);
             }
-            dData += CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id, "d13");
-            dData += CheckXmlDbNullValue(treatment.TreatmentDate, "d14");
-            dData += "<d15>" + treatment.Copayment.Id + "</d15>";
-            dData += "<d16>" + declareData.DeclarePoint + "</d16>";
-            dData += "<d17>" + treatment.Copayment.Point + "</d17>";
-            dData += "<d18>" + declareData.TotalPoint + "</d18>";
-            CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString(), "d19");
-            dData += "<d20>" + treatment.Customer.Name + "</d20>";
-            dData += "<d21>" + medicalInfo.Hospital.Id + "</d21>";
-            dData += "<d22>" + medicalInfo.TreatmentCase.Id + "</d22>";
-            dData += "<d23>" + treatment.AdjustDate + "</d23>";
-            dData += "<d24>" + medicalInfo.Hospital.Doctor.Id + "</d24>";
-            dData += "<d25>" + treatment.MedicalPersonId + "</d25>";
-            CheckXmlDbNullValue(medicalInfo.SpecialCode.Id, "d26");
-            CheckXmlDbNullValue(treatment.MedicineDays, "d30");
-            dData += "<d30>" + treatment.MedicineDays + "</d30>";
-            CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString(),"d31");
-            CheckXmlDbNullValue(declareData.DiagnosisPoint.ToString(), "d32");
-            CheckXmlDbNullValue(declareData.DrugsPoint.ToString(), "d33");
-            if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
-            {
-                dData += "<d35>" + declareData.ChronicSequence + "</d35>";
-                dData += "<d36>" + declareData.ChronicTotal + "</d36>";
-            }
-            dData += "<d37>" + declareData.MedicalServiceCode + "</d37>";
-            dData += "<d38>" + declareData.MedicalServicePoint + "</d38>";
             if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
             {
                 if (Convert.ToDecimal(declareData.ChronicSequence) >= 2)
-                    dData += "<d43>" + declareData.Prescription.OriginalMedicalNumber + "</d43>";
+                    dData += XmlTagCreator("d43",declareData.Prescription.OriginalMedicalNumber);
             }
             if (treatment.Copayment.Id == "903")
-                dData += CheckXmlDbNullValue(declareData.Prescription.IcCard.IcMarks.NewbornsData.Birthday, "d44");//新生兒註記就醫
+                dData += XmlTagCreator("d44",CheckXmlDbNullValue(declareData.Prescription.IcCard.IcMarks.NewbornsData.Birthday));//新生兒註記就醫
             dData += "</dhead>";
             return dData;
+        }
+        /*
+         * 設定DData dhead資料並以Dictionary結構回傳
+         */
+        private Dictionary<string, string> SetDheadDictionary(DeclareData declareData,Treatment treatment,MedicalInfo medicalInfo)
+        {
+            string d8 = string.Empty, d9 = string.Empty, d35 = declareData.ChronicSequence, d36 = declareData.ChronicTotal;
+            if (medicalInfo.DiseaseCodes.Count > 0)
+            {
+                if (medicalInfo.DiseaseCodes.Count == 2)
+                    d9 = medicalInfo.DiseaseCodes[1].Id;
+                d8 = medicalInfo.DiseaseCodes[0].Id;
+            }
+            return new Dictionary<string, string>
+            {
+                {"d1",treatment.AdjustCase.Id},{"d2",string.Empty},{"d3",treatment.Customer.IcNumber},
+                {"d4",CheckXmlDbNullValue(declareData.DeclareMakeUp)},{"d5",CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
+                {"d6",treatment.Customer.Birthday},{"d7",declareData.Prescription.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
+                {"d13",CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},{"d14",CheckXmlDbNullValue(treatment.TreatmentDate)},
+                {"d15",treatment.Copayment.Id},{"d16",declareData.DeclarePoint.ToString()},
+                {"d17",treatment.Copayment.Point.ToString()},{"d18",declareData.TotalPoint.ToString()},
+                {"d19",CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString())},{"d20",treatment.Customer.Name},
+                {"d21",medicalInfo.Hospital.Id},{"d22",medicalInfo.TreatmentCase.Id},{"d23",treatment.AdjustDate},
+                {"d24",medicalInfo.Hospital.Doctor.Id},{"d25",treatment.MedicalPersonId},
+                {"d26",CheckXmlDbNullValue(medicalInfo.SpecialCode.Id)},{"d30",CheckXmlDbNullValue(treatment.MedicineDays)},
+                {"d31",CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString())},
+                {"d32",CheckXmlDbNullValue(declareData.DiagnosisPoint.ToString())},
+                {"d33",CheckXmlDbNullValue(declareData.DrugsPoint.ToString())},{"d35",d35},{"d36",d36},
+                {"d37",declareData.MedicalServiceCode},{"d38",declareData.MedicalServicePoint.ToString()},
+            };
         }
 
         private string SetPDataXmlStr(DeclareDetail detail,DeclareData declareData)
         {
             var pData = "<pdata>";
-            pData += "<p1>" + detail.MedicalOrder + "</p1>";
-            pData += "<p2>" + detail.MedicalId + "</p2>";
-            pData += "<p7>" + detail.Total + "</p7>";
-            pData += "<p8>" + detail.Price + "</p8>";
-            pData += "<p9>" + detail.Point + "</p9>";
-            if (ToInvCulture(detail.Dosage) != string.Empty) pData += "<p3>" + detail.Dosage + "</p3>";
-            if (detail.Usage != string.Empty) pData += "<p4>" + detail.Usage + "</p4>";
-            if (detail.Position != string.Empty) pData += "<p5>" + detail.Position + "</p5>";
-            if (ToInvCulture(detail.Percent) != string.Empty) pData += "<p6>" + detail.Percent + "</p6>";
-            pData += "<p10>" + detail.Sequence + "</p10>";
+            var pDataDictionary = SetPDataDictionary(declareData, detail);
+            foreach (var tag in pDataDictionary)
+            {
+                if (tag.Value != string.Empty)
+                    pData += XmlTagCreator(tag.Key,tag.Value);
+            }
             if (detail.Days.ToString() != string.Empty)
             {
-                pData += "<p11>" + detail.Days + "</p11>";
                 if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) < detail.Days)
                     declareData.Prescription.Treatment.MedicineDays = detail.Days.ToString();
             }
             pData += "</pdata>";
             return pData;
         }
-
+        /*
+         * 設定PData資料並以Dictionary結構回傳
+         */
+        private Dictionary<string, string> SetPDataDictionary(DeclareData declareData, DeclareDetail detail)
+        {
+            return new Dictionary<string, string>
+            {
+                {"p1",detail.MedicalOrder},{"p2",detail.MedicalId},{"p3",CheckXmlDbNullValue(ToInvCulture(detail.Dosage))},
+                {"p4",CheckXmlDbNullValue(detail.Usage)},{"p5",CheckXmlDbNullValue(detail.Position)},{"p6",CheckXmlDbNullValue(ToInvCulture(detail.Percent))},
+                {"p7",detail.Total.ToString()},{"p8",detail.Price.ToString()},{"p9",detail.Point.ToString()},
+                {"p10",detail.Sequence.ToString()},{"p11",CheckXmlDbNullValue(detail.Days.ToString())}
+            };
+        }
         public void ExportSortDeclareData(string sdate, string edate)
         {
             Function function = new Function();
@@ -465,22 +510,15 @@ namespace His_Pos.Class.Declare
          */
         private void CheckDbNullValue(ICollection<SqlParameter> parameters,string value,string paraName)
         {
-            parameters.Add(value.Equals(string.Empty) ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
-        }
-        /*
-         * 檢查SQLparameter是否為DBNull(int)
-         */
-        private void CheckDbNullValueInt(ICollection<SqlParameter> parameters, int value, string paraName)
-        {
-            parameters.Add(value == 0 ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
+            parameters.Add(value.Equals(string.Empty) || value.Equals("0") ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
         }
         /*
          * 檢查XmlTag是否為空值
          */
-        private string CheckXmlDbNullValue(string value,string tagName)
+        private string CheckXmlDbNullValue(string value)
         {
             if (value != string.Empty || value != "0")
-               return "<"+tagName+">" + value + "</"+ tagName+">";
+               return value;
             return string.Empty;
         }
         /*
@@ -495,6 +533,16 @@ namespace His_Pos.Class.Declare
         private string ToInvCulture(double value)
         {
             return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private string SetStrFormat(double value,string format)
+        {
+            return string.Format(format, value); 
+        }
+        
+        private string XmlTagCreator(string tagName, string value)
+        {
+            return "<"+tagName+">"+value+"</"+tagName+">";
         }
     }
 }

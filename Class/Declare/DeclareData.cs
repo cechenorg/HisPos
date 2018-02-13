@@ -17,6 +17,8 @@ namespace His_Pos.Class.Declare
             SetDeclareDetail();
             SetCopaymentPoint();
             CountDeclareDeatailPoint();
+            ChronicSequence = string.Empty;
+            ChronicTotal = string.Empty;
         }
         public Prescription Prescription {get;set;}
         public List<DeclareDetail> DeclareDetails { get; set; }
