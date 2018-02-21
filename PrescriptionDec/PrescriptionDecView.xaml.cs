@@ -154,15 +154,15 @@ namespace His_Pos.PrescriptionDec
             var sqlParameter = new SqlParameter("CUS_ID", "1");
             parameters.Add(sqlParameter);
             Prescription.ItemsSource = null;
-            CustomerHistoryList.Clear();
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORY]", parameters);
-            foreach (DataRow d in table.Rows)
-            {
-                CustomerHistoryList.Add(new CustomerHistory((int)d["TYPE"], d["DATE"].ToString(), d["HISTORY_ID"].ToString(), d["HISTORY_TITLE"].ToString()));
-            }
+            //CustomerHistoryList.Clear();
+            //var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORY]", parameters);
+            //foreach (DataRow d in table.Rows)
+            //{
+            //    CustomerHistoryList.Add(new CustomerHistory((int)d["TYPE"], d["DATE"].ToString(), d["HISTORY_ID"].ToString(), d["HISTORY_TITLE"].ToString()));
+            //}
 
-            Prescription.ItemsSource = CustomerHistoryList;
-            Prescription.SelectedItem = CustomerHistoryList[0];
+            //Prescription.ItemsSource = CustomerHistoryList;
+            //Prescription.SelectedItem = CustomerHistoryList[0];
 
             loadingWindow.backgroundWorker.CancelAsync();
 

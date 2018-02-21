@@ -110,7 +110,8 @@
                     <CheckBox Content="日劑藥費" Margin="20,0,0,0" IsChecked="True" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 </DockPanel>
             </WrapPanel>
-            <Button Content="查詢" Background="DeepSkyBlue" Margin="125,0,0,0" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="40"/>
+            <Button Content="查詢" Background="DeepSkyBlue" Margin="125,0,0,0" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="20"/>
+            <Button Content="匯入申報檔" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="60" Click="DeclareFileImportButtonClick"/>
         </Canvas>
         <materialDesign:DialogHost Grid.Row="1">
             <DataGrid x:Name="PrescriptionSet" MinWidth="930" Height="580" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}"

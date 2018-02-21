@@ -316,7 +316,7 @@ namespace His_Pos.PrescriptionDec
                 return;
             }
             prescription.Treatment.AdjustCase.Id = adjustCase.Substring(0, 1);
-            prescription.Treatment.AdjustCase.Name = adjustCase.Substring(2, adjustCase.Length - 1);
+            prescription.Treatment.AdjustCase.Name = adjustCase.Substring(2);
         }
         /*
          * 確認釋出院所D21
@@ -337,7 +337,7 @@ namespace His_Pos.PrescriptionDec
             else
             {
                 prescription.Treatment.MedicalInfo.Hospital.Id = ReleaseInstitution.Text.Substring(0, 10);
-                prescription.Treatment.MedicalInfo.Hospital.Name = ReleaseInstitution.Text.Substring(ReleaseInstitution.Text.IndexOf(" ") + 1, ReleaseInstitution.Text.Length - 1);
+                prescription.Treatment.MedicalInfo.Hospital.Name = ReleaseInstitution.Text.Substring(ReleaseInstitution.Text.IndexOf(" ") + 1);
             }
         }
         /*
@@ -359,7 +359,7 @@ namespace His_Pos.PrescriptionDec
             {
                 prescription.Treatment.MedicalInfo.Hospital.Division.Id = division.Substring(0, 1);
                 prescription.Treatment.MedicalInfo.Hospital.Division.Name =
-                    DivisionCombo.Text.Substring(division.IndexOf(" ") + 1, division.Length - 1);
+                    DivisionCombo.Text.Substring(division.IndexOf(" ") + 1);
             }
             else
             {
@@ -454,7 +454,7 @@ namespace His_Pos.PrescriptionDec
                 }
             }
             prescription.Treatment.MedicalInfo.TreatmentCase.Id = treatmentCaseStr.Substring(0, 2);
-            prescription.Treatment.MedicalInfo.TreatmentCase.Name = treatmentCaseStr.Substring(treatmentCaseStr.IndexOf(" ") + 1, treatmentCaseStr.Length - 1);
+            prescription.Treatment.MedicalInfo.TreatmentCase.Name = treatmentCaseStr.Substring(treatmentCaseStr.IndexOf(" ") + 1);
         }
         /*
          * 確認給付類別D5
@@ -473,7 +473,7 @@ namespace His_Pos.PrescriptionDec
                 prescription.Treatment.PaymentCategory.Name = string.Empty;
             }
             prescription.Treatment.PaymentCategory.Id = paymentCategory.Substring(0, 1);
-            prescription.Treatment.PaymentCategory.Name = paymentCategory.Substring(2, paymentCategory.Length - 1);
+            prescription.Treatment.PaymentCategory.Name = paymentCategory.Substring(2);
         }
         /*
          * 確認部分負擔代碼D15
@@ -484,7 +484,7 @@ namespace His_Pos.PrescriptionDec
             if (Function.CheckEmptyInput(copayment, "請選擇部分負擔"))
                 return;
             prescription.Treatment.Copayment.Id = copayment.Substring(0, 3);
-            prescription.Treatment.Copayment.Name = copayment.Substring(4, copayment.Length - 1);
+            prescription.Treatment.Copayment.Name = copayment.Substring(4);
             prescription.Treatment.Copayment.Point = Convert.ToInt32(Copayment.Text);
             if (prescription.Treatment.Copayment.Id == "903")
             {
@@ -531,7 +531,7 @@ namespace His_Pos.PrescriptionDec
             else
             {
                 prescription.Treatment.MedicalInfo.SpecialCode.Id = specialCode.Substring(0, 2);
-                prescription.Treatment.MedicalInfo.SpecialCode.Name = specialCode.Substring(3,specialCode.Length - 1);
+                prescription.Treatment.MedicalInfo.SpecialCode.Name = specialCode.Substring(3);
             }
         }
     }
