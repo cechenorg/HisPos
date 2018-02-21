@@ -386,8 +386,11 @@ namespace His_Pos.PrescriptionDec
             {
                 return;
             }
-            if (int.Parse(ChronicSequence.Text) > 1)
-                prescription.IcCard.MedicalNumber = "IC0" + ChronicSequence.Text;
+            if (!ChronicSequence.Text.Equals(string.Empty))
+            {
+                if (int.Parse(ChronicSequence.Text) > 1)
+                    prescription.IcCard.MedicalNumber = "IC0" + ChronicSequence.Text;
+            }
             if (CheckHomeCareAndSmokingCessation())
                 prescription.IcCard.MedicalNumber = "N";
             if (!medicalNumber.Contains("IC") && medicalNumber != "N")
@@ -472,8 +475,7 @@ namespace His_Pos.PrescriptionDec
                 prescription.Treatment.PaymentCategory.Id = string.Empty;
                 prescription.Treatment.PaymentCategory.Name = string.Empty;
             }
-            prescription.Treatment.PaymentCategory.Id = paymentCategory.Substring(0, 1);
-            prescription.Treatment.PaymentCategory.Name = paymentCategory.Substring(2);
+            prescription.Treatment.PaymentCategory = new PaymentCategory(paymentCategory.Substring(0, 1), paymentCategory.Substring(2));
         }
         /*
          * 確認部分負擔代碼D15
@@ -531,7 +533,7 @@ namespace His_Pos.PrescriptionDec
             else
             {
                 prescription.Treatment.MedicalInfo.SpecialCode.Id = specialCode.Substring(0, 2);
-                prescription.Treatment.MedicalInfo.SpecialCode.Name = specialCode.Substring(3);
+                prescription.Treatment.MedicalInfo.SpecialCode.Name = string.Empty;
             }
         }
     }
