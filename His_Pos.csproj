@@ -174,7 +174,8 @@
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
-    <Compile Include="Class\HisUploadData.cs" />
+    <Compile Include="Class\HisUpload\HisUploadData.cs" />
+    <Compile Include="Class\HisUpload\HisUploadDb.cs" />
     <Compile Include="Class\IcCardPay.cs" />
     <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />

@@ -133,7 +133,7 @@ namespace His_Pos
             return date;
         }
 
-        public void ExportXml(XmlDocument xml,string FileTypeName) {
+        public string ExportXml(XmlDocument xml,string FileTypeName) {
             Function function = new Function();
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
@@ -169,7 +169,7 @@ namespace His_Pos
             psi.WaitForInputIdle();
             //設定要等待相關的處理序結束的時間 
             psi.WaitForExit();
-
+            return path_file + ".xml";
             //StringBuilder pUploadFileName = new StringBuilder();
             //pUploadFileName.Append(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml");
             //StringBuilder fFileSize = new StringBuilder();

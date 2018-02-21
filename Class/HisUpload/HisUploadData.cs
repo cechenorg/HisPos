@@ -15,7 +15,7 @@ namespace His_Pos.Class
         public string DeclareMakeUp { get; set; } //補報註記
         public string RsaNum { get; set; } //安全簽章
         public string DataFormat { get; set; } //資料格式 1:正常上傳 2:異常上傳 3.補正上傳(正常資料) 4.補正上傳(異常資料)
-        private XmlDocument CreateToXml()
+        public XmlDocument CreateToXml()
         {
             string msh, mb1, mb2;
             XmlDocument xml = new XmlDocument();
@@ -91,5 +91,6 @@ namespace His_Pos.Class
             xml.LoadXml("<REC>" + msh + "<MB>" + mb1 + mb2 + "</MB></REC>");
             return xml;
         }
+        
     }
 }
