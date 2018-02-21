@@ -16,6 +16,10 @@ namespace His_Pos.Class
         public string SendDate { get; set; }//發卡日期
         public string ValidityPeriod { get; set; }//卡片有效期限
         public int AvailableTimes { get; set; }//就醫可用次數
+        public IcCardPay IcCardPay { get; set; } //門診醫療費用 住院醫療費用
+        public IcCardPrediction IcCardPrediction { get; set; } //預防保健項目
+        public Pregnant Pregnant { get; set; } //孕婦檢查項目
+        public Vaccination Vaccination { get; set; } //預防接種項目
         public string MedicalNumber { get; set; }//D7就醫序號
     }
 }

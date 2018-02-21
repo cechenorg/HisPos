@@ -174,7 +174,10 @@
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
-    <Compile Include="Class\HisUploadData.cs" />
+    <Compile Include="Class\HisUpload\HisUploadData.cs" />
+    <Compile Include="Class\HisUpload\HisUploadDb.cs" />
+    <Compile Include="Class\IcCardPay.cs" />
+    <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
     <Compile Include="Class\Copayment\Copayment.cs" />
     <Compile Include="Class\Copayment\CopaymentDb.cs" />
@@ -199,6 +202,7 @@
     <Compile Include="Class\PaymentCategory\PaymentCategory.cs" />
     <Compile Include="Class\PaymentCategory\PaymentCategroyDb.cs" />
     <Compile Include="Class\Pharmacy.cs" />
+    <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\SpecialCode.cs" />
@@ -213,6 +217,7 @@
     <Compile Include="Class\Medicate.cs" />
     <Compile Include="Class\Product\Medicine.cs" />
     <Compile Include="Class\Product\OTC.cs" />
+    <Compile Include="Class\Vaccination.cs" />
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
     </Compile>

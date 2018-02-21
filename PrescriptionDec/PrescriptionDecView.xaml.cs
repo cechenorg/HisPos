@@ -287,6 +287,11 @@ namespace His_Pos.PrescriptionDec
             var declareData = new DeclareData(prescription);
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
+
+          
+           
+           
+
         }
 
         private void AddMedicine()
