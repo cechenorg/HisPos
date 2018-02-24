@@ -52,6 +52,7 @@ namespace His_Pos.Class.HisUpload
            int res = HisApiBase.csUploadData(pUploadFileName, fFileSize, pNumber, pBuffer, ref iBufferLen);
             HisApiBase.csCloseCom();
 
+
             parameters.Clear();
             parameters.Add(new SqlParameter("XML", xml.ToString()));
             conn.ExecuteProc("[HIS_POS_DB].[SET].[UPLOADDATAMASTER]", parameters);
