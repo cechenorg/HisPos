@@ -176,7 +176,7 @@
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="DoctorId" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold"/>
+                            <TextBox x:Name="DoctorId" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" TextChanged="DoctorId_TextChanged"/>
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="就醫序號" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
@@ -288,22 +288,22 @@
                             <DataGridTextColumn MinWidth="400" Header="藥品名稱" Binding="{Binding Name}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
                             <DataGridTemplateColumn MinWidth="60" Header="用量" >
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate x:Name="MedicineAmountDataTemplate">
-                                        <TextBox x:Name="MedicineAmount"  MinWidth="60" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                                    <DataTemplate x:Name="DosageDataTemplate">
+                                        <TextBox x:Name="Dosage"  MinWidth="60" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" TextChanged="Dosage_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="用法">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate x:Name="MedicineUsageDataTemplate">
-                                        <TextBox x:Name="MedicineUsage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                                    <DataTemplate x:Name="UsageDataTemplate">
+                                        <TextBox x:Name="Usage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" TextChanged="Usage_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="天數">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="MedicineDaysDataTemplate">
-                                        <TextBox x:Name="MedicineDays" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                                        <TextBox x:Name="MedicineDays" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" TextChanged="MedicineDays_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -316,15 +316,15 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="自費">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate x:Name="MedicinePaysDataTemplate">
-                                        <CheckBox x:Name="ProductmPaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" Checked="PaySelf_CheckedEvent" Unchecked="PaySelf_CheckedEvent"/>
+                                    <DataTemplate x:Name="PaysDataTemplate">
+                                        <CheckBox x:Name="PaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" Checked="PaySelf_CheckedEvent" Unchecked="PaySelf_CheckedEvent"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="途徑">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate x:Name="MedicineWaysDataTemplate">
-                                        <controls:AutoCompleteBox x:Name="MedicineWaysAuto" MinWidth="40" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
+                                    <DataTemplate x:Name="PositionDataTemplate">
+                                        <controls:AutoCompleteBox x:Name="PositionAuto" MinWidth="40" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
                                                               VerticalContentAlignment="Stretch" Background="Transparent" MaxHeight="50" BorderBrush="DimGray">
                                             <controls:AutoCompleteBox.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ListBoxItem}">

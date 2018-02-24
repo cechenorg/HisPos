@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -185,6 +186,7 @@ namespace His_Pos.PrescriptionDec
             //else
             //    button.Command = null;
             LoadPatentDataFromIcCard();
+            prescription.Treatment.Customer = _currentCustomer;
         }
         private void Combo_DropDownOpened(object sender, EventArgs e)
         {
@@ -274,12 +276,16 @@ namespace His_Pos.PrescriptionDec
             if (Change == null || !(sender is TextBox)) return;
             Change.Content = CustomPay.Text.Equals(string.Empty) ? (0 - int.Parse(TotalPrice.Text)).ToString() : (int.Parse(CustomPay.Text) - int.Parse(TotalPrice.Text)).ToString();
         }
-
+        /*
+         * 清除處方資料
+         */
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             TraverseVisualTree(this);
         }
-
+        /*
+         * 處方申報
+         */
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
             CheckPrescriptionInfo();
@@ -287,19 +293,74 @@ namespace His_Pos.PrescriptionDec
             var declareData = new DeclareData(prescription);
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
-
-          
-           
-           
-
         }
-
+        /*
+         * 將藥品加入處方
+         */
         private void AddMedicine()
         {
             foreach (var medicine in PrescriptionList)
             {
                 prescription.Medicines.Add(medicine);
             }
+        }
+        /*
+         * 設定藥品用量
+         */
+        private void Dosage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var dosage = sender as TextBox;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            {
+                MessageBox.Show("請選擇藥品");
+                return;
+            }
+            if (dosage == null) return;
+            const string regexDouble = "^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$";
+            const string regexInt = "^[0-9]*[1-9][0-9]*$";
+            var matchDouble = Regex.Match(dosage.Text, regexDouble);
+            var matchInt = Regex.Match(dosage.Text, regexInt);
+            if(matchDouble.Success || matchInt.Success)
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = dosage.Text;
+        }
+        /*
+         * 設定藥品用法
+         */
+        private void Usage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var usage = sender as TextBox;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            {
+                MessageBox.Show("請選擇藥品");
+                return;
+            }
+            if (usage != null)
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = usage.Text;
+        }
+        /*
+         * 設定藥品天數
+         */
+        private void MedicineDays_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var usage = sender as TextBox;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            {
+                MessageBox.Show("請選擇藥品");
+                return;
+            }
+            if (usage == null) return;
+            const string regex = "^[0-9]*[1-9][0-9]*$";
+            var match = Regex.Match(usage.Text, regex);
+            if(match.Success)
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = usage.Text;
+        }
+        /*
+         * 設定診治醫師代號
+         */
+        private void DoctorId_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!(sender is TextBox doctorId)) return;
+            prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = doctorId.Text;
         }
     }
 }

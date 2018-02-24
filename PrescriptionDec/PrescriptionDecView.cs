@@ -318,6 +318,7 @@ namespace His_Pos.PrescriptionDec
             prescription.Treatment.AdjustCase.Id = adjustCase.Substring(0, 1);
             prescription.Treatment.AdjustCase.Name = adjustCase.Substring(2);
         }
+
         /*
          * 確認釋出院所D21
          */
@@ -374,7 +375,8 @@ namespace His_Pos.PrescriptionDec
         {
             if (DoctorId.Text != string.Empty) return;
             if(CheckHomeCareAndSmokingCessation()) return;
-            prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = prescription.Treatment.MedicalInfo.Hospital.Id;
+            if(prescription.Treatment.MedicalInfo.Hospital.Doctor.Id.Equals(string.Empty))
+                prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = prescription.Treatment.MedicalInfo.Hospital.Id;
         }
         /*
          * 確認就醫序號D7
@@ -522,11 +524,11 @@ namespace His_Pos.PrescriptionDec
             var specialCode = SpecialCode.Text;
             if (specialCode == string.Empty)
             {
-                if (CheckHomeCareAndSmokingCessation() == false)
-                {
-                    MessageBox.Show("請填寫特定治療項目代號");
-                    return;
-                }
+                //if (CheckHomeCareAndSmokingCessation() == false)
+                //{
+                //    MessageBox.Show("請填寫特定治療項目代號");
+                //    return;
+                //}
                 prescription.Treatment.MedicalInfo.SpecialCode.Id = string.Empty;
                 prescription.Treatment.MedicalInfo.SpecialCode.Name = string.Empty;
             }
