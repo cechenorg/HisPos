@@ -152,20 +152,14 @@ namespace His_Pos.PrescriptionDec
 
             LoadingWindow loadingWindow = new LoadingWindow("Loading Customer Data...");
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            var sqlParameter = new SqlParameter("CUS_ID", "1");
-            parameters.Add(sqlParameter);
-            Prescription.ItemsSource = null;
-            CustomerHistoryList.Clear();
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORY]", parameters);
-            foreach (DataRow d in table.Rows)
-            {
-                CustomerHistoryList.Add(new CustomerHistory((int)d["TYPE"], d["DATE"].ToString(), d["HISTORY_ID"].ToString(), d["HISTORY_TITLE"].ToString()));
-            }
+            CustomerHistory customerHistory = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
 
-            Prescription.ItemsSource = CustomerHistoryList;
-            Prescription.SelectedItem = CustomerHistoryList[0];
+            CusHistoryMaster.ItemsSource = customerHistory.CustomerHistoryMasterCollection;
+
+            CusHistoryMaster.SelectedIndex = 0;
+            CustomerHistoryMaster selectedItem = (CustomerHistoryMaster) CusHistoryMaster.SelectedItem;
+
+            CusHistoryDetail.ItemsSource = customerHistory.getCustomerHistoryDetails(selectedItem.Type, selectedItem.CustomerHistoryDetailId);
 
             loadingWindow.backgroundWorker.CancelAsync();
 

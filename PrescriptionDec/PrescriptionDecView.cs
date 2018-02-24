@@ -215,43 +215,17 @@ namespace His_Pos.PrescriptionDec
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            if (Prescription == null) return;
 
-            var checkBox = sender as CheckBox;
-            Debug.Assert(checkBox != null, nameof(checkBox) + " != null");
-            if (checkBox.Tag.ToString().Equals("0") && _historyFilterCondition == 2)
-                _historyFilterCondition = 0;
-            else if (checkBox.Tag.ToString().Equals("1") && _historyFilterCondition == 2)
-                _historyFilterCondition = 1;
-            else
-            {
-                _historyFilterCondition = -1;
-                Prescription.Items.Filter = null;
-                return;
-            }
-            Prescription.Items.Filter = HistoryFilter;
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (Prescription == null) return;
 
-            var checkBox = sender as CheckBox;
-            Debug.Assert(checkBox != null, nameof(checkBox) + " != null");
-            if (checkBox.Tag.ToString().Equals("0") && _historyFilterCondition == -1)
-                _historyFilterCondition = 1;
-            else if (checkBox.Tag.ToString().Equals("1") && _historyFilterCondition == -1)
-                _historyFilterCondition = 0;
-            else
-                _historyFilterCondition = 2;
-
-            Prescription.Items.Filter = HistoryFilter;
         }
 
         private bool HistoryFilter(object item)
         {
-            if (((CustomerHistory)item).Type == _historyFilterCondition)
-                return true;
+            
             return false;
         }
 

@@ -174,6 +174,8 @@
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
     <Compile Include="Class\Copayment\Copayment.cs" />

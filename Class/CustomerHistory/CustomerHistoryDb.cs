@@ -12,17 +12,19 @@ namespace His_Pos.Class.CustomerHistory
 {
     public static class CustomerHistoryDb
     {
-        public static void GetData()
+        public static CustomerHistory GetDataByCUS_ID(string CUS_ID)
         {
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("CUS_ID", "1"));
-            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORY]", parameters);
+            var masterParameters = new List<SqlParameter>();
+            masterParameters.Add(new SqlParameter("CUS_ID", CUS_ID));
 
-            foreach (DataRow d in table.Rows)
-            {
-                
-            }
+            var detailParameters = new List<SqlParameter>();
+            detailParameters.Add(new SqlParameter("CUS_ID", CUS_ID));
+
+            CustomerHistory customerHistory  = new CustomerHistory(dbConnection.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORY]", masterParameters),
+                                                                   dbConnection.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORYDETAIL]", detailParameters));
+            
+            return customerHistory;
         }
     }
 }
