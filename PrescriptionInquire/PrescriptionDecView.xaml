@@ -1,0 +1,460 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:my="clr-namespace:His_Pos"
+             xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
+             xmlns:classes="clr-namespace:His_Pos.Class"
+             xmlns:product="clr-namespace:His_Pos.Class.Product"
+             x:Class="His_Pos.PrescriptionDec.PrescriptionDecView"
+             mc:Ignorable="d" 
+             d:DesignHeight="839" d:DesignWidth="1365">
+    <UserControl.Resources>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="5,10,5,10"/>
+        </Style>
+        <Style x:Key="CenterGridHeaderStyle2" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="#99BFBFBF"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="5,10,5,10"/>
+        </Style>
+        <DataTemplate x:Key="MedcineCodeAutoComplete">
+            <StackPanel Orientation="Horizontal">
+                <Label x:Name="Promid" Width="100" Content="{Binding Id}"/>
+                <Label x:Name="PromName" Width="350" Content="{Binding Name}"/>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Viewbox Stretch="Fill">
+        <Grid Width="1365">
+            <materialDesign:DialogHost VerticalContentAlignment="Center" Margin="0,0,0,0.2" >
+                <materialDesign:DialogHost.DialogContent >
+                    <Viewbox>
+                        <Grid x:Name="ChronicDialog" Height="Auto" Width="1365" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0">
+                                <Label Content="待領慢性處方箋 : " FontSize="18" Foreground="Black"/>
+                            </StackPanel>
+                            <DataGrid x:Name ="ChronicList" Grid.Row="1" AutoGenerateColumns="False">
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="{x:Type DataGridRow}">
+                                        <EventSetter Event="FrameworkElement.Loaded" Handler="Row_Loaded"/>
+                                    </Style>
+                                </DataGrid.RowStyle>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        <i:InvokeCommandAction Command= "{Binding InsertChronicDataCommand}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <DataGrid.DataContext>
+                                    <prescriptionDec:PrescriptionDec/>
+                                </DataGrid.DataContext>
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Header="就醫日期" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label FontSize="16" Foreground="Black" FontWeight="Bold"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="釋出院所" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label FontSize="16" Foreground="Black" FontWeight="Bold"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="就醫科別" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Label FontSize="16"  Foreground="Black" FontWeight="Bold"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <Button Style="{StaticResource MaterialDesignFlatButton}"
+                            IsDefault="True"
+                            FontSize="18"
+                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                            Content="關閉" Grid.Row="2">
+                                <Button.CommandParameter>
+                                    <system:Boolean>True</system:Boolean>
+                                </Button.CommandParameter>
+                            </Button>
+                        </Grid>
+                    </Viewbox>
+                </materialDesign:DialogHost.DialogContent>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition Height="320"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0">
+                        <StackPanel Orientation="Horizontal">
+                            <my:IconLabel x:Name="PatientName" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                            <my:IconLabel x:Name="PatientId" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <my:IconLabel x:Name="PatientBirthday" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                            <Label x:Name="PrescriptionProfitText" Content="藥品毛利 : " FontSize="18" Foreground="#FF424040" VerticalAlignment="Center" Margin="0,10,0,0" />
+                            <Label x:Name="PrescriptionProfit" FontSize="16"  Foreground="#FF424040" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Margin="0,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Right" DockPanel.Dock="Right">
+                            <Button Content="取得病患資料" Background="DeepSkyBlue" Margin="10,10,0,0" Height="45" FontSize="16" MinWidth="130" BorderThickness="0" Click="GetPatientDataButtonClick"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <Grid Background="#7FEEEEEE" Grid.Row="1" Margin="10,10,10,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <DockPanel LastChildFill="False"  Margin="10,0,0,0">
+                            <Label Content="釋出院所" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
+                           BorderThickness="0,0,0,1"/>
+                            <controls:AutoCompleteBox x:Name="ReleaseInstitution" Background="{x:Null}" Width="400" Height="30" FontSize="14" FontStretch="ExtraExpanded" 
+                                                      BorderThickness="0,0,0,1" FontWeight="Bold" VerticalContentAlignment="Stretch" Padding="0,8,0,0" Margin="0" 
+                                                      MinimumPrefixLength="4" MaxHeight="50" BorderBrush="DimGray">
+                                <controls:AutoCompleteBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                    <Border x:Name="ContentBorder"
+                                                                    Background="GhostWhite" Padding="4">
+                                                        <ContentPresenter />
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                         Value="True">
+                                                            <Setter Property="Background"
+                                                                            TargetName="ContentBorder"
+                                                                            Value="#FFB8BEC3" />
+                                                            <Setter Property="IsSelected"
+                                                                            Value="True" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsSelected"
+                                                                         Value="True">
+                                                            <Setter Property="Background"
+                                                                            TargetName="ContentBorder"
+                                                                            Value="#FFB8BEC3"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </controls:AutoCompleteBox.ItemContainerStyle>
+                            </controls:AutoCompleteBox>
+                        </DockPanel>
+                        <DockPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0">
+                            <Label Content="就醫科別" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
+                                   HorizontalContentAlignment="Stretch" />
+                            <ComboBox x:Name="DivisionCombo" Width="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False" Margin="10,0,0,0">
+                            <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <TextBox x:Name="DoctorId" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" TextChanged="DoctorId_TextChanged"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="0" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
+                            <Label Content="就醫序號" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <TextBox x:Name="MedicalNumber" MinWidth="150" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
+                                     BorderThickness="0,0,0,1" HorizontalContentAlignment="Stretch"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="1" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
+                            <Label Content="處方案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <ComboBox x:Name="TreatmentCaseCombo" Width="150" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="1" Grid.Column="0"  Margin="10,0,0,0">
+                            <Label Content="就醫日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <Viewbox Width="auto" MinWidth="147" Height="30">
+                                <DatePicker x:Name="TreatmentDate" Width="auto" Height="30" MinWidth="150" FontSize="14" FontWeight="Bold" Padding="0" 
+                                            FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch"/>
+                            </Viewbox>
+                            <Label Content="調劑日期" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <Viewbox Width="auto" Height="30" MinWidth="147">
+                                <DatePicker x:Name="AdjustDate" Width="auto" Height="30" MinWidth="150" FontSize="14" FontWeight="Bold" Padding="0" FontStretch="ExtraExpanded" 
+                                            HorizontalContentAlignment="Stretch"/>
+                            </Viewbox>
+                        </DockPanel>
+                        <DockPanel Grid.Row="1" Grid.Column="1"  Margin="10,0,0,0">
+                            <Label Content="主要診斷" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <TextBox x:Name="MainDiagnosis" Width="auto" MinWidth="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="1" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
+                            <Label Width="auto" Content="次要診斷" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <TextBox x:Name="SeconDiagnosis" Width="auto" MinWidth="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="2" Grid.Column="0"  Margin="10,0,0,0">
+                            <Label Content="給付類別" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <ComboBox x:Name="PaymentCategoryCombo" Width="150" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                            <Label Content="部分負擔" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <ComboBox x:Name="CopaymentCombo" Width="150" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded"  IsEditable="True" VerticalAlignment="Top" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="2" Grid.Column="1"  Margin="10,0,0,0">
+                            <Label Content="調劑案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <ComboBox x:Name="AdjustCaseCombo" Width="150" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="2" Grid.Column="2" LastChildFill="False"  Margin="10,0,0,0">
+                            <Label Content="領藥次數" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <TextBox x:Name="ChronicSequence" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" 
+                                     Margin="10,0,0,0" HorizontalContentAlignment="Center"/>
+                            <Label Content="/" FontSize="16" Width="auto" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" HorizontalContentAlignment="Stretch"/>
+                            <TextBox x:Name="ChronicTotal" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
+                        </DockPanel>
+                        <DockPanel Grid.Row="2" Grid.Column="3"  Margin="10,0,0,0">
+                            <Label Content="特定治療" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                            <TextBox x:Name="SpecialCode" MinWidth="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch"/>
+                        </DockPanel>
+                    </Grid>
+                    <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"  SelectionUnit="FullRow"
+                          AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
+                        <DataGrid.DataContext>
+                            <product:Medicine/>
+                        </DataGrid.DataContext>
+                        <DataGrid.HorizontalGridLinesBrush>
+                            <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
+                        </DataGrid.HorizontalGridLinesBrush>
+                        <DataGrid.Background>
+                            <SolidColorBrush Color="#FFEEEEEE" Opacity="0.5"/>
+                        </DataGrid.Background>
+                        <DataGrid.BorderBrush>
+                            <SolidColorBrush Color="Black" Opacity="0.9"/>
+                        </DataGrid.BorderBrush>
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn x:Name="MedicineCode" Width="130" Header="健保代碼">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:Name="MedicineCodeDataTemplate">
+                                        <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
+                                                                  VerticalContentAlignment="Stretch" ValueMemberPath="Id" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
+                                                                  MaxHeight="50" MinimumPrefixLength="2" ItemFilter="{Binding MedicineFilter}" BorderBrush="DimGray" Populating="MedicineCodeAuto_Populating"
+                                                                  DropDownClosing="MedicineCodeAuto_DropDownClosing" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}">
+                                            <controls:AutoCompleteBox.ItemContainerStyle>
+                                                <Style TargetType="ListBoxItem">
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="ListBoxItem">
+                                                                    <Border x:Name="ContentBorder"
+                                                                    Background="GhostWhite" Padding="4">
+                                                                        <ContentPresenter />
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver"
+                                                                         Value="True">
+                                                                            <Setter Property="Background"
+                                                                            TargetName="ContentBorder"
+                                                                            Value="#FFB8BEC3" />
+                                                                            <Setter Property="IsSelected"
+                                                                            Value="True" />
+                                                                        </Trigger>
+                                                                        <Trigger Property="IsSelected"
+                                                                         Value="True">
+                                                                            <Setter Property="Background"
+                                                                            TargetName="ContentBorder"
+                                                                            Value="#FFB8BEC3"/>
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </controls:AutoCompleteBox.ItemContainerStyle>
+                                        </controls:AutoCompleteBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn MinWidth="400" Header="藥品名稱" Binding="{Binding Name}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                            <DataGridTemplateColumn MinWidth="60" Header="用量" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:Name="DosageDataTemplate">
+                                        <TextBox x:Name="Dosage"  MinWidth="60" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" TextChanged="Dosage_TextChanged"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn MinWidth="40" Header="用法">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:Name="UsageDataTemplate">
+                                        <TextBox x:Name="Usage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" TextChanged="Usage_TextChanged"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn MinWidth="40" Header="天數">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:Name="MedicineDaysDataTemplate">
+                                        <TextBox x:Name="MedicineDays" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" TextChanged="MedicineDays_TextChanged"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn MinWidth="40" Header="總數">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:Name="MedicineTotalDataTemplate">
+                                        <TextBox x:Name="MedicineTotal" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" TextChanged="MedicineTotal_TextChanged" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn MinWidth="40" Header="自費">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:Name="PaysDataTemplate">
+                                        <CheckBox x:Name="PaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" Checked="PaySelf_CheckedEvent" Unchecked="PaySelf_CheckedEvent"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn MinWidth="40" Header="途徑">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:Name="PositionDataTemplate">
+                                        <controls:AutoCompleteBox x:Name="PositionAuto" MinWidth="40" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
+                                                              VerticalContentAlignment="Stretch" Background="Transparent" MaxHeight="50" BorderBrush="DimGray">
+                                            <controls:AutoCompleteBox.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                <Border x:Name="ContentBorder"
+                                                                    Background="GhostWhite" Padding="4">
+                                                                    <ContentPresenter />
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver"
+                                                                         Value="True">
+                                                                        <Setter Property="Background"
+                                                                            TargetName="ContentBorder"
+                                                                            Value="#FFB8BEC3" />
+                                                                        <Setter Property="IsSelected"
+                                                                            Value="True" />
+                                                                    </Trigger>
+                                                                    <Trigger Property="IsSelected"
+                                                                         Value="True">
+                                                                        <Setter Property="Background"
+                                                                            TargetName="ContentBorder"
+                                                                            Value="#FFB8BEC3"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </controls:AutoCompleteBox.ItemContainerStyle>
+                                        </controls:AutoCompleteBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn MinWidth="60" Header="健保價格" Binding="{Binding HcPrice}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="60" Header="自費價格" Binding="{Binding Price}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" Margin="10,0,10,10" Width="Auto" Height="auto" Grid.Row="3" Background="#99EEEEEE">
+                        <Border BorderThickness="1,1,0,2" BorderBrush="#99EEEEEE" Background="#99EEEEEE">
+                            <StackPanel Orientation="Vertical" Background="#99EEEEEE" Width="425">
+                                <Canvas Background="#99EEEEEE" Height="40" Width="425" HorizontalAlignment="Right">
+                                    <StackPanel Orientation="Horizontal" Background="#99EEEEEE" Height="40" Width="auto" Canvas.Right="0">
+                                        <CheckBox Tag="0" Content="交易" Margin="35,0,5,0" FontSize="15" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                        <Image Width="12" Source="/Images/PosDot.png"/>
+                                        <CheckBox Tag="1" Content="調劑" Margin="40,0,5,0" FontSize="15" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                                        <Image Source="/Images/HisDot.png" Width="12" Margin="0,0,15,0"/>
+                                    </StackPanel>
+                                </Canvas>
+                                <DataGrid x:Name="Prescription" Width="auto" Height="230" Padding="0" Background="#99EEEEEE" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" VerticalContentAlignment="Stretch" AutoGenerateColumns="False" SelectionChanged="Prescription_SelectionChanged" MouseEnter="Prescription_MouseEnter" HeadersVisibility="None" ItemsSource="{Binding customerHistoryList}" VerticalScrollBarVisibility="Auto">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Width="Auto" MinWidth="15">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate x:Name="CustomHistoriesTypeIcon">
+                                                    <Image Width="15" Height="15" Source="{Binding TypeIcon}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn Header="date" MinWidth="80" Binding="{Binding Date}" IsReadOnly="True"/>
+                                        <DataGridTextColumn Header="title" Width="200" Binding="{Binding HistoryTitle}"/>
+                                        <DataGridTextColumn Header="type" Binding="{Binding Type}" Visibility="Collapsed"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                        <Border x:Name="GrayArea" MinWidth="555" Background="#99BFBFBF" BorderThickness="0,1,2,2" BorderBrush="#FF484848"/>
+                        <DataGrid x:Name="PrescriptionDetail" Visibility="Collapsed" MinWidth="505" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="160" MinWidth="160" Header="藥品" Binding="{Binding Name}"/>
+                                <DataGridTextColumn MinWidth="90" Header="用法" Binding="{Binding Dosage}"/>
+                                <DataGridTextColumn MinWidth="90" Header="途徑" Binding="{Binding Usage}"/>
+                                <DataGridTextColumn MinWidth="70" Header="天數" Binding="{Binding Days}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <DataGrid x:Name="TransactionDetail" Visibility="Collapsed" MinWidth="425" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Width="160" MinWidth="160" Header="品名" Binding="{Binding Name}"/>
+                                <DataGridTextColumn MinWidth="90" Header="單價" Binding="{Binding Price}"/>
+                                <DataGridTextColumn MinWidth="90" Header="數量" Binding="{Binding Total}"/>
+                                <DataGridTextColumn MinWidth="70" Header="總價" Binding="{Binding TotalPrice}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Border BorderThickness="1,1,2,2" BorderBrush="DimGray">
+                            <Canvas Background="#CCEEEEEE" Width="360">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Height="40">
+                                        <Label Content="押金 $" Foreground="#FF424040" Margin="10,10,0,0" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                                        <TextBox Name="Deposit" Text="0" Foreground="#FF424040" Margin="36,10,10,0" Width="120" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="1" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="CostTextBox_TextChanged"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Height="40">
+                                        <Label Content="自費 $" Foreground="#FF424040" Margin="10,10,0,0" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                                        <TextBox x:Name="SelfCost" Text="0" Foreground="#FF424040" Margin="36,10,10,0" Width="120" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="1" BorderBrush="#FF424040" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" TextChanged="CostTextBox_TextChanged"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Height="40">
+                                        <Label Content="部分負擔 $" Foreground="#FF424040" Margin="10,10,0,0" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                                        <TextBox x:Name="Copayment" Text="0" Foreground="#FF424040" Margin="0,10,0,0" Width="120" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" TextChanged="CostTextBox_TextChanged"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Height="50">
+                                        <Label Content="應收金額 $" Foreground="#FF424040" Margin="10,6,0,6" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                                        <TextBox x:Name="TotalPrice" Text="0" Foreground="#FF424040" Margin="0,6,10,6" Width="120"  FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" Height="30" BorderThickness="1" BorderBrush="#FF424040" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" TextChanged="CustomPay_TextChanged"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Height="50" Canvas.Bottom="35" Canvas.Right="0">
+                                    <Label Content="已付 $" Foreground="#FF424040" Margin="10,6,0,6" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" />
+                                    <TextBox x:Name="CustomPay" Foreground="#FF424040" Margin="0,6,10,6" Width="80" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" BorderThickness="1" BorderBrush="#FF424040" TextChanged="CustomPay_TextChanged"/>
+                                    <Label Content="找零 $" Foreground="#FF424040" Margin="10,6,0,6" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                                    <Label x:Name="Change" Foreground="#FF424040" Margin="0,6,10,6" Width="80" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" Height="30" HorizontalAlignment="Center" VerticalAlignment="Center" VerticalContentAlignment="Center" BorderThickness="1" BorderBrush="#FF424040" Padding="5,5,5,0"/>     
+                                </StackPanel>
+                                <WrapPanel Width="auto" Canvas.Bottom="0">
+                                    <Button Content="清除" Background="#FFB0ADAD" Width="180" Height="35" VerticalAlignment="Bottom" BorderThickness="0" FontWeight="Bold" FontSize="16" Click="Button_Click"/>
+                                    <Button Content="確認" Background="#FFE45151" Width="180" Height="35" Margin="1,0,0,0" VerticalAlignment="Bottom" BorderThickness="0" FontWeight="Bold" FontSize="16" Click="DeclareButtonClick"/>
+                                </WrapPanel>
+                            </Canvas>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:DialogHost>
+        </Grid>
+    </Viewbox>
+</UserControl>
