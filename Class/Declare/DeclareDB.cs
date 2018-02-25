@@ -148,7 +148,7 @@ namespace His_Pos.Class.Declare
                             row[tag.Key] = tag.Value;
                             break;
                         default:
-                            CheckEmptyDataRow(tag.Value, row, tag.Key);
+                            CheckEmptyDataRow(pDataTable, tag.Value,ref row, tag.Key);
                             break;
                     }
                 }
@@ -529,19 +529,19 @@ namespace His_Pos.Class.Declare
         /*
          *檢查DataRow是否為空值
          */
-        private void CheckEmptyDataRow(string value ,DataRow row,string rowName)
+        private void CheckEmptyDataRow(DataTable dataTable,string value ,ref DataRow row,string rowName)
         {
             if (value != string.Empty)
             {
-                switch (row.GetType().Name)
+                switch (dataTable.Columns[rowName].DataType.Name)
                 {
-                    case "string":
+                    case "String":
                         row[rowName] = value;
                         break;
-                    case "int":
+                    case "Int32":
                         row[rowName] = Convert.ToInt32(value);
                         break;
-                    case "double":
+                    case "Double":
                         row[rowName] = Convert.ToDouble(value);
                         break;
                 }
