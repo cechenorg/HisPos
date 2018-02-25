@@ -21,7 +21,7 @@ namespace His_Pos.Class.Declare
             ChronicTotal = string.Empty;
         }
         public Prescription Prescription {get;set;}
-        public List<DeclareDetail> DeclareDetails { get; set; }
+        public List<DeclareDetail> DeclareDetails { get; set; } = new List<DeclareDetail>();
         public string DeclareMakeUp { get; set; }//D4補報註記
         public int DeclarePoint { get; set; }//D16申請點數
         public int CopaymentPoint { get; set; }//D17部分負擔點數

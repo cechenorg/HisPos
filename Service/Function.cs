@@ -219,6 +219,11 @@ namespace His_Pos
             return string.Format(format, value);
         }
 
+        public string SetStrFormatInt(int value, string format)
+        {
+            return string.Format(format, value);
+        }
+
         public string XmlTagCreator(string tagName, string value)
         {
             return "<" + tagName + ">" + value + "</" + tagName + ">";

@@ -358,7 +358,7 @@ namespace His_Pos.PrescriptionDec
             var division = DivisionCombo.Text;
             if (DivisionCombo.Text != string.Empty)
             {
-                prescription.Treatment.MedicalInfo.Hospital.Division.Id = division.Substring(0, 1);
+                prescription.Treatment.MedicalInfo.Hospital.Division.Id = division.Substring(0, 2);
                 prescription.Treatment.MedicalInfo.Hospital.Division.Name =
                     DivisionCombo.Text.Substring(division.IndexOf(" ") + 1);
             }
@@ -440,6 +440,7 @@ namespace His_Pos.PrescriptionDec
             prescription.Treatment.MedicalInfo.DiseaseCodes.Add(mainDiagnosis);
             if (SeconDiagnosis.Text == string.Empty) return;
             var secondDiagnosis = new DiseaseCode();
+            secondDiagnosis.Id = SeconDiagnosis.Text;
             prescription.Treatment.MedicalInfo.DiseaseCodes.Add(secondDiagnosis);
         }
         /*

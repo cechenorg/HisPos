@@ -325,7 +325,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="PositionDataTemplate">
                                         <controls:AutoCompleteBox x:Name="PositionAuto" MinWidth="40" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
-                                                              VerticalContentAlignment="Stretch" Background="Transparent" MaxHeight="50" BorderBrush="DimGray">
+                                                              VerticalContentAlignment="Stretch" Background="Transparent" MaxHeight="50" BorderBrush="DimGray" TextChanged="PositionAuto_TextChanged">
                                             <controls:AutoCompleteBox.ItemContainerStyle>
                                                 <Style TargetType="{x:Type ListBoxItem}">
                                                     <Setter Property="Template">

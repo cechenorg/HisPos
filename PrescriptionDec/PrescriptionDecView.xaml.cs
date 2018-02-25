@@ -290,6 +290,22 @@ namespace His_Pos.PrescriptionDec
         {
             CheckPrescriptionInfo();
             AddMedicine();
+            prescription.Treatment.MedicalPersonId = "A012345678";
+            Console.WriteLine("D21 : " + prescription.Treatment.MedicalInfo.Hospital.Id);
+            Console.WriteLine("D1 : " + prescription.Treatment.AdjustCase.Id);
+            Console.WriteLine("D22 : " + prescription.Treatment.MedicalInfo.TreatmentCase.Id);
+            Console.WriteLine("D23 : " + prescription.Treatment.AdjustDate);
+            Console.WriteLine("D6 : " + prescription.Treatment.Customer.Birthday);
+            Console.WriteLine("D3 : " + prescription.Treatment.Customer.IcNumber);
+            Console.WriteLine("D7 : " + prescription.IcCard.MedicalNumber);
+            Console.WriteLine("D15 : " + prescription.Treatment.Copayment.Id);
+            Console.WriteLine("D25 : " + prescription.Treatment.MedicalPersonId);
+            Console.WriteLine("D26 : " + prescription.Treatment.MedicalInfo.SpecialCode.Id);
+            Console.WriteLine("D13 : " + prescription.Treatment.MedicalInfo.Hospital.Division.Id);
+            Console.WriteLine("D24 : " + prescription.Treatment.MedicalInfo.Hospital.Doctor.Id);
+            Console.WriteLine("D14 : " + prescription.Treatment.TreatmentDate);
+            Console.WriteLine("D8 : " + prescription.Treatment.MedicalInfo.DiseaseCodes[0].Id);
+            Console.WriteLine("D9 : " + prescription.Treatment.MedicalInfo.DiseaseCodes[1].Id);
             var declareData = new DeclareData(prescription);
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
@@ -335,24 +351,24 @@ namespace His_Pos.PrescriptionDec
                 return;
             }
             if (usage != null)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = usage.Text;
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Usage = usage.Text;
         }
         /*
          * 設定藥品天數
          */
         private void MedicineDays_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var usage = sender as TextBox;
+            var days = sender as TextBox;
             if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
             {
                 MessageBox.Show("請選擇藥品");
                 return;
             }
-            if (usage == null) return;
+            if (days == null) return;
             const string regex = "^[0-9]*[1-9][0-9]*$";
-            var match = Regex.Match(usage.Text, regex);
+            var match = Regex.Match(days.Text, regex);
             if(match.Success)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = usage.Text;
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Days = Convert.ToInt32(days.Text);
         }
         /*
          * 設定診治醫師代號
@@ -361,6 +377,20 @@ namespace His_Pos.PrescriptionDec
         {
             if (!(sender is TextBox doctorId)) return;
             prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = doctorId.Text;
+        }
+        /*
+         * 設定藥品用藥途徑
+         */
+        private void PositionAuto_TextChanged(object sender, RoutedEventArgs e)
+        {
+            var position = sender as AutoCompleteBox;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            {
+                MessageBox.Show("請選擇藥品");
+                return;
+            }
+            if (position != null)
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Position = position.Text;
         }
     }
 }

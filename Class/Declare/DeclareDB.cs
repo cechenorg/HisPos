@@ -65,7 +65,7 @@ namespace His_Pos.Class.Declare
             AddParameterMedicalInfo(parameters, declareData);
             var tagsDictionary = new Dictionary<string, string>
             {
-                {"D1", declareData.DeclareMakeUp}, {"D5", declareData.Prescription.IcCard.MedicalNumber},
+                {"D1", declareData.Prescription.Treatment.AdjustCase.Id}, {"D5", declareData.Prescription.IcCard.MedicalNumber},
                 {"D14", declareData.DeclarePoint.ToString()}, {"D15", declareData.CopaymentPoint.ToString()},
                 {"D23", declareData.AssistProjectCopaymentPoint.ToString()},{"D25",declareData.SpecailMaterialPoint.ToString()},
                 {"D30",declareData.DiagnosisPoint.ToString()},{"CUS_ID",declareData.MedicalServicePoint.ToString()}
@@ -108,8 +108,8 @@ namespace His_Pos.Class.Declare
             var pDataTable = new DataTable();
             var columnsDictionary = new Dictionary<string, Type>
             {
-                {"P10", typeof(short)}, {"P1", typeof(string)},{"P2", typeof(string)},
-                {"P7", typeof(float)},{"P8", typeof(decimal)},{"P9",typeof(int)},
+                {"P10", typeof(int)}, {"P1", typeof(string)},{"P2", typeof(string)},
+                {"P7", typeof(double)},{"P8", typeof(double)},{"P9",typeof(int)},
                 {"P3",typeof(double)},{"P4",typeof(string)},{"P5",typeof(string)},
                 {"P6",typeof(string)},{"P11",typeof(string)},{"P12",typeof(string)},
                 {"P13",typeof(string)},{"PAY_BY_YOURSELF",typeof(string)}
@@ -131,10 +131,10 @@ namespace His_Pos.Class.Declare
                 var tagsDictionary = new Dictionary<string, string>
                 {
                     {"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
-                    {"P3", function.ToInvCulture(detail.Dosage)}, {"P4", detail.Usage},
+                    {"P3", function.SetStrFormat(detail.Dosage,"{0:0000.00}")}, {"P4", detail.Usage},
                     {"P5", detail.Position},{"P6",function.ToInvCulture(detail.Percent)},
-                    {"P7",function.ToInvCulture(detail.Total)},{"P8",function.ToInvCulture(detail.Price)},
-                    {"P9",function.ToInvCulture(detail.Point)},{"P10",detail.Sequence.ToString()},
+                    {"P7",function.SetStrFormat(detail.Total,"{0:00000.0}")},{"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},
+                    {"P9",function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point,0,MidpointRounding.AwayFromZero))),"{0:D8}")},{"P10",detail.Sequence.ToString()},
                     {"P11",detail.Days.ToString()},{"PAY_BY_YOURSELF",paySelf}
                 };
                 foreach (var tag in tagsDictionary)
@@ -142,7 +142,7 @@ namespace His_Pos.Class.Declare
                     switch (tag.Key)
                     {
                         case "P10":
-                            row[tag.Key] = Convert.ToInt16(tag.Value);
+                            row[tag.Key] = Convert.ToInt32(tag.Value);
                             break;
                         case "PAY_BY_YOURSELF":
                             row[tag.Key] = tag.Value;
@@ -193,10 +193,9 @@ namespace His_Pos.Class.Declare
             var tagsDictionary = new Dictionary<string, object>
             {
                 {"P1",detail.MedicalOrder},{"P2",detail.MedicalId},
-                {"P3",function.ToInvCulture(detail.Dosage)},{"P6",detail.Usage},
                 {"P6",function.ToInvCulture(detail.Percent)},{"P7",function.SetStrFormat(detail.Total,"{0:00000.0}")},
-                {"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},{"P9",function.SetStrFormat(Math.Truncate(detail.Point),"{0:D8}")},
-                {"P10",function.SetStrFormat(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
+                {"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},{"P9",function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point,0,MidpointRounding.AwayFromZero))),"{0:D8}")},
+                {"P10",function.SetStrFormatInt(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
             };
             foreach (var tag in tagsDictionary)
             {
@@ -511,7 +510,12 @@ namespace His_Pos.Class.Declare
          */
         private void CheckDbNullValue(ICollection<SqlParameter> parameters,string value,string paraName)
         {
-            parameters.Add(value.Equals(string.Empty) || value.Equals("0") ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
+            if(value == null)
+                parameters.Add(new SqlParameter(paraName, DBNull.Value));
+            else
+            {
+                parameters.Add(value.Equals(string.Empty) || value.Equals("0") ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
+            }
         }
         /*
          * 檢查XmlTag是否為空值
@@ -528,7 +532,20 @@ namespace His_Pos.Class.Declare
         private void CheckEmptyDataRow(string value ,DataRow row,string rowName)
         {
             if (value != string.Empty)
-                row[rowName] = value;
+            {
+                switch (row.GetType().Name)
+                {
+                    case "string":
+                        row[rowName] = value;
+                        break;
+                    case "int":
+                        row[rowName] = Convert.ToInt32(value);
+                        break;
+                    case "double":
+                        row[rowName] = Convert.ToDouble(value);
+                        break;
+                }
+            }
         }
     }
 }
