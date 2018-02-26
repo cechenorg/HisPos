@@ -43,7 +43,8 @@ namespace His_Pos.Class.Declare
                 {"D16", declareData.DeclarePoint.ToString()}, {"D17", declareData.CopaymentPoint.ToString()},
                 {"D18", declareData.TotalPoint.ToString()},{"D19", declareData.AssistProjectCopaymentPoint.ToString()},
                 {"D31",declareData.SpecailMaterialPoint.ToString()},{"D32",declareData.DiagnosisPoint.ToString()},
-                {"D33",declareData.DrugsPoint.ToString()},{"D38",declareData.MedicalServicePoint.ToString()}
+                {"D33",declareData.DrugsPoint.ToString()},{"D37",declareData.MedicalServiceCode},
+                {"D38",declareData.MedicalServicePoint.ToString()}
             };
             foreach (var tag in tagsDictionary)
             {
@@ -63,12 +64,14 @@ namespace His_Pos.Class.Declare
         private void AddParameterTreatment(ICollection<SqlParameter> parameters, DeclareData declareData)
         {
             AddParameterMedicalInfo(parameters, declareData);
+            
+            DateTimeExtensions d = new DateTimeExtensions();
             var tagsDictionary = new Dictionary<string, string>
             {
-                {"D1", declareData.Prescription.Treatment.AdjustCase.Id}, {"D5", declareData.Prescription.IcCard.MedicalNumber},
-                {"D14", declareData.DeclarePoint.ToString()}, {"D15", declareData.CopaymentPoint.ToString()},
-                {"D23", declareData.AssistProjectCopaymentPoint.ToString()},{"D25",declareData.SpecailMaterialPoint.ToString()},
-                {"D30",declareData.DiagnosisPoint.ToString()},{"CUS_ID",declareData.MedicalServicePoint.ToString()}
+                {"D1", declareData.Prescription.Treatment.AdjustCase.Id},{"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
+                {"D14",d.ToSimpleTaiwanDate(Convert.ToDateTime(declareData.Prescription.Treatment.TreatmentDate))},{"D15", declareData.Prescription.Treatment.Copayment.Id},
+                {"D23",d.ToSimpleTaiwanDate(Convert.ToDateTime(declareData.Prescription.Treatment.AdjustDate)) },{"D25",declareData.Prescription.Treatment.MedicalPersonId},
+                {"D30",declareData.Prescription.Treatment.MedicineDays},{"CUS_ID",declareData.Prescription.Treatment.Customer.Id}
             };
             foreach (var tag in tagsDictionary)
             {

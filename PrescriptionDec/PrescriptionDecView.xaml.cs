@@ -70,6 +70,7 @@ namespace His_Pos.PrescriptionDec
             _icCard.SendDate = "91/07/25";
             _icCard.ValidityPeriod = "108/01/01";
             _icCard.IcMarks.InsuranceMark = "3";
+            _currentCustomer.Id = "1";
             PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
             PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
             PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday.ToString());
@@ -291,24 +292,10 @@ namespace His_Pos.PrescriptionDec
             CheckPrescriptionInfo();
             AddMedicine();
             prescription.Treatment.MedicalPersonId = "A012345678";
-            Console.WriteLine("D21 : " + prescription.Treatment.MedicalInfo.Hospital.Id);
-            Console.WriteLine("D1 : " + prescription.Treatment.AdjustCase.Id);
-            Console.WriteLine("D22 : " + prescription.Treatment.MedicalInfo.TreatmentCase.Id);
-            Console.WriteLine("D23 : " + prescription.Treatment.AdjustDate);
-            Console.WriteLine("D6 : " + prescription.Treatment.Customer.Birthday);
-            Console.WriteLine("D3 : " + prescription.Treatment.Customer.IcNumber);
-            Console.WriteLine("D7 : " + prescription.IcCard.MedicalNumber);
-            Console.WriteLine("D15 : " + prescription.Treatment.Copayment.Id);
-            Console.WriteLine("D25 : " + prescription.Treatment.MedicalPersonId);
-            Console.WriteLine("D26 : " + prescription.Treatment.MedicalInfo.SpecialCode.Id);
-            Console.WriteLine("D13 : " + prescription.Treatment.MedicalInfo.Hospital.Division.Id);
-            Console.WriteLine("D24 : " + prescription.Treatment.MedicalInfo.Hospital.Doctor.Id);
-            Console.WriteLine("D14 : " + prescription.Treatment.TreatmentDate);
-            Console.WriteLine("D8 : " + prescription.Treatment.MedicalInfo.DiseaseCodes[0].Id);
-            Console.WriteLine("D9 : " + prescription.Treatment.MedicalInfo.DiseaseCodes[1].Id);
             var declareData = new DeclareData(prescription);
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
+            MessageBox.Show("處方登錄成功");
         }
         /*
          * 將藥品加入處方
