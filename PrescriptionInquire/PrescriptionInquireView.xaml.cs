@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -135,8 +137,12 @@ namespace His_Pos.PrescriptionInquire
         {
             PrescriptionOutcome.Clear();
             var function = new Function();
-            var sDate = function.dateFormatConvert(Convert.ToDateTime(start.SelectedDate));
-            var eDate = function.dateFormatConvert(Convert.ToDateTime(end.SelectedDate));
+            var d = new DateTimeExtensions();
+            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "yyyy/mm/dd";
+            Thread.CurrentThread.CurrentCulture = ci;
+            var sDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(start.SelectedDate));
+            var eDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(end.SelectedDate));
             var cusName = PatientName.Text;
             var pharmacist = PharmacistName.Text;
             var releasePalace = string.Empty;

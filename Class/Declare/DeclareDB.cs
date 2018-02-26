@@ -69,8 +69,8 @@ namespace His_Pos.Class.Declare
             var tagsDictionary = new Dictionary<string, string>
             {
                 {"D1", declareData.Prescription.Treatment.AdjustCase.Id},{"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
-                {"D14",d.ToSimpleTaiwanDate(Convert.ToDateTime(declareData.Prescription.Treatment.TreatmentDate))},{"D15", declareData.Prescription.Treatment.Copayment.Id},
-                {"D23",d.ToSimpleTaiwanDate(Convert.ToDateTime(declareData.Prescription.Treatment.AdjustDate)) },{"D25",declareData.Prescription.Treatment.MedicalPersonId},
+                {"D14",declareData.Prescription.Treatment.TreatmentDate},{"D15", declareData.Prescription.Treatment.Copayment.Id},
+                {"D23",declareData.Prescription.Treatment.AdjustDate},{"D25",declareData.Prescription.Treatment.MedicalPersonId},
                 {"D30",declareData.Prescription.Treatment.MedicineDays},{"CUS_ID",declareData.Prescription.Treatment.Customer.Id}
             };
             foreach (var tag in tagsDictionary)

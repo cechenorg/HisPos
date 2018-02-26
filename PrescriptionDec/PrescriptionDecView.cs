@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -415,12 +416,16 @@ namespace His_Pos.PrescriptionDec
                     return;
                 }
             }
-            prescription.Treatment.TreatmentDate = TreatmentDate.Text;
+            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
+            ci.DateTimeFormat.ShortDatePattern = "yyyy/mm/dd";
+            Thread.CurrentThread.CurrentCulture = ci;
+            var d = new DateTimeExtensions();
+            prescription.Treatment.TreatmentDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(TreatmentDate.SelectedDate));
             if (Function.CheckEmptyInput(AdjustDate.Text, "請填寫調劑日期,如為藥是居家照護請填寫訪視日期"))
             {
                 return;
             }
-            prescription.Treatment.AdjustDate = AdjustDate.Text;
+            prescription.Treatment.AdjustDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(AdjustDate.SelectedDate));
         }
         /*
          * 確認國際疾病代碼D8.D9
