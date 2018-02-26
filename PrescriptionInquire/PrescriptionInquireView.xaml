@@ -11,6 +11,7 @@
     xmlns:class="clr-namespace:His_Pos.Class"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:abstractClass="clr-namespace:His_Pos.AbstractClass"
     dialog:DialogParticipation.Register="{Binding}"
     mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
@@ -23,19 +24,20 @@
         </Style>
         <DataTemplate x:Key="InstitutionAutoComplete">
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="Institutionid" Width="100" >
-                    <!--<Label.DataContext>
-                    </Label.DataContext>-->
+                <Label x:Name="Institutionid" Width="100" Content="{Binding Id}">
+                    <Label.DataContext>
+                        <abstractClass:Institution/>
+                    </Label.DataContext>
                 </Label>
-                <Label x:Name="InstitutionName" Width="350">
-                    <!--<Label.DataContext>
-                    </Label.DataContext>-->
+                <Label x:Name="InstitutionName" Width="350" Content="{Binding Name}">
+                    <Label.DataContext>
+                        <abstractClass:Institution/>
+                    </Label.DataContext>
                 </Label>
             </StackPanel>
         </DataTemplate>
-        <!--<local:DeclareDataList x:Key="PrescriptionOutcome" />
-        <CollectionViewSource x:Key="prescriptionOutcome" Source="{StaticResource PrescriptionOutcome}" 
-                              Filter="DeclareStatusFilter"/>-->
+        <local:DeclareDataList x:Key="PrescriptionOutcome" />
+        <CollectionViewSource x:Key="prescriptionOutcome" Source="{StaticResource PrescriptionOutcome}" />
     </UserControl.Resources>
     <Grid Margin="30,10">
         <Grid.RowDefinitions>
@@ -117,42 +119,27 @@
             <DataGrid x:Name="PrescriptionSet" MinWidth="930" Height="580" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}"
                   AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF727272" 
                   VerticalGridLinesBrush="#FF727272" SelectionUnit="FullRow" SelectionMode="Single" HorizontalContentAlignment="Center" 
-                  CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False">
+                  CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" ItemsSource="{Binding Source={StaticResource prescriptionOutcome}}">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <EventSetter Event="Loaded" Handler="Row_Loaded"/>
                     </Style>
                 </DataGrid.RowStyle>
-                <!--<i:Interaction.Triggers>
+                <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding showCustomDialogCommand}" />
                     </i:EventTrigger>
-                </i:Interaction.Triggers>-->
+                </i:Interaction.Triggers>
                 <DataGrid.DataContext>
                     <local:PrescriptionInquire/>
                 </DataGrid.DataContext>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn MinWidth="130">
-                        <DataGridTemplateColumn.Header>
-                            <ComboBox Name="StatusColumn" SelectedIndex="0">
-                                <Label Content="所有處方"/>
-                                <Label Content="申報完成"/>
-                                <Label Content="尚未申報"/>
-                                <Label Content="資料異常"/>
-                            </ComboBox>
-                        </DataGridTemplateColumn.Header>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="CustomHistoriesTypeIcon">
-                                <Image Name="StatusFlagIcon" Width="30" Height="30"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="50" Header="點數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D20}"/>
+                    <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D23}"/>
+                    <DataGridTextColumn MinWidth="50" Header="點數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D16}"/>
+                    <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D25}"/>
+                    <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D21}"/>
+                    <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D13}"/>
                     <DataGridTextColumn MinWidth="50" Header="慢箋狀態" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>

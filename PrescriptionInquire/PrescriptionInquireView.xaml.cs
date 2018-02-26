@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
@@ -15,6 +16,7 @@ using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Properties;
 using His_Pos.Service;
+using Label = System.Reflection.Emit.Label;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.PrescriptionInquire
