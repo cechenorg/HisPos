@@ -429,7 +429,9 @@ namespace His_Pos.Class.Declare
                             xml.SelectSingleNode("ddata/dhead/d16").InnerText = (Convert.ToInt32(d16) - Convert.ToInt32(d38) + 18).ToString();
                             gcount++;
                             gpoint += Convert.ToInt32(d38) - 18;
+                            xml.SelectSingleNode("ddata/dhead/d37").InnerText = "05234D";
                             xml.SelectSingleNode("ddata/dhead/d38").InnerText = "18";
+                            
                         }
                         if (totalcasid > 100)
                         {
