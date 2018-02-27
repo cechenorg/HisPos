@@ -59,7 +59,7 @@ namespace His_Pos.PrescriptionDec
             //    _currentCustomer.InsertCustomerData(_currentCustomer);
             //}
             //HisApiBase.csCloseCom();
-            _currentCustomer.Name = "林連義進";
+            _currentCustomer.Name = "許文章";
             _currentCustomer.Birthday = "37/10/01";
             _currentCustomer.IcNumber = "S88824769A";
             _currentCustomer.Gender = true;
@@ -70,10 +70,9 @@ namespace His_Pos.PrescriptionDec
             _icCard.SendDate = "91/07/25";
             _icCard.ValidityPeriod = "108/01/01";
             _icCard.IcMarks.InsuranceMark = "3";
-            _currentCustomer.Id = "1";
             PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
             PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
-            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
+            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday.ToString());
         }
         /*
          *取得病人基本資料
@@ -291,11 +290,9 @@ namespace His_Pos.PrescriptionDec
         {
             CheckPrescriptionInfo();
             AddMedicine();
-            prescription.Treatment.MedicalPersonId = "A012345678";
             var declareData = new DeclareData(prescription);
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
-            MessageBox.Show("處方登錄成功");
         }
         /*
          * 將藥品加入處方
@@ -338,24 +335,24 @@ namespace His_Pos.PrescriptionDec
                 return;
             }
             if (usage != null)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Usage = usage.Text;
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = usage.Text;
         }
         /*
          * 設定藥品天數
          */
         private void MedicineDays_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var days = sender as TextBox;
+            var usage = sender as TextBox;
             if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
             {
                 MessageBox.Show("請選擇藥品");
                 return;
             }
-            if (days == null) return;
+            if (usage == null) return;
             const string regex = "^[0-9]*[1-9][0-9]*$";
-            var match = Regex.Match(days.Text, regex);
+            var match = Regex.Match(usage.Text, regex);
             if(match.Success)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Days = Convert.ToInt32(days.Text);
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = usage.Text;
         }
         /*
          * 設定診治醫師代號
@@ -364,20 +361,6 @@ namespace His_Pos.PrescriptionDec
         {
             if (!(sender is TextBox doctorId)) return;
             prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = doctorId.Text;
-        }
-        /*
-         * 設定藥品用藥途徑
-         */
-        private void PositionAuto_TextChanged(object sender, RoutedEventArgs e)
-        {
-            var position = sender as AutoCompleteBox;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
-            {
-                MessageBox.Show("請選擇藥品");
-                return;
-            }
-            if (position != null)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Position = position.Text;
         }
     }
 }

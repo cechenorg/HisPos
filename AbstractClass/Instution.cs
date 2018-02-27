@@ -17,7 +17,7 @@ namespace His_Pos.AbstractClass
             Name = name;
         }
 
-        protected Institution()
+        public Institution()
         {
             
         }

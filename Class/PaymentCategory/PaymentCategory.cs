@@ -2,6 +2,10 @@
 {
     public class PaymentCategory : Selection
     {
+        public PaymentCategory()
+        {
+        }
+
         public PaymentCategory(string id,string name)
         {
             Id = id;

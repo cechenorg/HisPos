@@ -9,6 +9,7 @@
         xmlns:prescriptionRevise="clr-namespace:His_Pos.PrescriptionRevise"
         xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
+        xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"  Height="900" Width="1600"
@@ -34,6 +35,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type prescriptionRevise:PrescriptionRevise}">
             <prescriptionRevise:PrescriptionReviseView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type inventoryManagement:InventoryManagement}">
+            <inventoryManagement:InventoryManagementView/>
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">

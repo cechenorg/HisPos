@@ -43,7 +43,8 @@ namespace His_Pos.Class.Declare
                 {"D16", declareData.DeclarePoint.ToString()}, {"D17", declareData.CopaymentPoint.ToString()},
                 {"D18", declareData.TotalPoint.ToString()},{"D19", declareData.AssistProjectCopaymentPoint.ToString()},
                 {"D31",declareData.SpecailMaterialPoint.ToString()},{"D32",declareData.DiagnosisPoint.ToString()},
-                {"D33",declareData.DrugsPoint.ToString()},{"D38",declareData.MedicalServicePoint.ToString()}
+                {"D33",declareData.DrugsPoint.ToString()},{"D37",declareData.MedicalServiceCode},
+                {"D38",declareData.MedicalServicePoint.ToString()}
             };
             foreach (var tag in tagsDictionary)
             {
@@ -63,12 +64,14 @@ namespace His_Pos.Class.Declare
         private void AddParameterTreatment(ICollection<SqlParameter> parameters, DeclareData declareData)
         {
             AddParameterMedicalInfo(parameters, declareData);
+            
+            DateTimeExtensions d = new DateTimeExtensions();
             var tagsDictionary = new Dictionary<string, string>
             {
-                {"D1", declareData.DeclareMakeUp}, {"D5", declareData.Prescription.IcCard.MedicalNumber},
-                {"D14", declareData.DeclarePoint.ToString()}, {"D15", declareData.CopaymentPoint.ToString()},
-                {"D23", declareData.AssistProjectCopaymentPoint.ToString()},{"D25",declareData.SpecailMaterialPoint.ToString()},
-                {"D30",declareData.DiagnosisPoint.ToString()},{"CUS_ID",declareData.MedicalServicePoint.ToString()}
+                {"D1", declareData.Prescription.Treatment.AdjustCase.Id},{"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
+                {"D14",declareData.Prescription.Treatment.TreatmentDate},{"D15", declareData.Prescription.Treatment.Copayment.Id},
+                {"D23",declareData.Prescription.Treatment.AdjustDate},{"D25",declareData.Prescription.Treatment.MedicalPersonId},
+                {"D30",declareData.Prescription.Treatment.MedicineDays},{"CUS_ID",declareData.Prescription.Treatment.Customer.Id}
             };
             foreach (var tag in tagsDictionary)
             {
@@ -108,8 +111,8 @@ namespace His_Pos.Class.Declare
             var pDataTable = new DataTable();
             var columnsDictionary = new Dictionary<string, Type>
             {
-                {"P10", typeof(short)}, {"P1", typeof(string)},{"P2", typeof(string)},
-                {"P7", typeof(float)},{"P8", typeof(decimal)},{"P9",typeof(int)},
+                {"P10", typeof(int)}, {"P1", typeof(string)},{"P2", typeof(string)},
+                {"P7", typeof(double)},{"P8", typeof(double)},{"P9",typeof(int)},
                 {"P3",typeof(double)},{"P4",typeof(string)},{"P5",typeof(string)},
                 {"P6",typeof(string)},{"P11",typeof(string)},{"P12",typeof(string)},
                 {"P13",typeof(string)},{"PAY_BY_YOURSELF",typeof(string)}
@@ -131,10 +134,10 @@ namespace His_Pos.Class.Declare
                 var tagsDictionary = new Dictionary<string, string>
                 {
                     {"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
-                    {"P3", function.ToInvCulture(detail.Dosage)}, {"P4", detail.Usage},
+                    {"P3", function.SetStrFormat(detail.Dosage,"{0:0000.00}")}, {"P4", detail.Usage},
                     {"P5", detail.Position},{"P6",function.ToInvCulture(detail.Percent)},
-                    {"P7",function.ToInvCulture(detail.Total)},{"P8",function.ToInvCulture(detail.Price)},
-                    {"P9",function.ToInvCulture(detail.Point)},{"P10",detail.Sequence.ToString()},
+                    {"P7",function.SetStrFormat(detail.Total,"{0:00000.0}")},{"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},
+                    {"P9",function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point,0,MidpointRounding.AwayFromZero))),"{0:D8}")},{"P10",detail.Sequence.ToString()},
                     {"P11",detail.Days.ToString()},{"PAY_BY_YOURSELF",paySelf}
                 };
                 foreach (var tag in tagsDictionary)
@@ -142,13 +145,13 @@ namespace His_Pos.Class.Declare
                     switch (tag.Key)
                     {
                         case "P10":
-                            row[tag.Key] = Convert.ToInt16(tag.Value);
+                            row[tag.Key] = Convert.ToInt32(tag.Value);
                             break;
                         case "PAY_BY_YOURSELF":
                             row[tag.Key] = tag.Value;
                             break;
                         default:
-                            CheckEmptyDataRow(tag.Value, row, tag.Key);
+                            CheckEmptyDataRow(pDataTable, tag.Value,ref row, tag.Key);
                             break;
                     }
                 }
@@ -193,10 +196,9 @@ namespace His_Pos.Class.Declare
             var tagsDictionary = new Dictionary<string, object>
             {
                 {"P1",detail.MedicalOrder},{"P2",detail.MedicalId},
-                {"P3",function.ToInvCulture(detail.Dosage)},{"P6",detail.Usage},
                 {"P6",function.ToInvCulture(detail.Percent)},{"P7",function.SetStrFormat(detail.Total,"{0:00000.0}")},
-                {"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},{"P9",function.SetStrFormat(Math.Truncate(detail.Point),"{0:D8}")},
-                {"P10",function.SetStrFormat(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
+                {"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},{"P9",function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point,0,MidpointRounding.AwayFromZero))),"{0:D8}")},
+                {"P10",function.SetStrFormatInt(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
             };
             foreach (var tag in tagsDictionary)
             {
@@ -430,7 +432,9 @@ namespace His_Pos.Class.Declare
                             xml.SelectSingleNode("ddata/dhead/d16").InnerText = (Convert.ToInt32(d16) - Convert.ToInt32(d38) + 18).ToString();
                             gcount++;
                             gpoint += Convert.ToInt32(d38) - 18;
+                            xml.SelectSingleNode("ddata/dhead/d37").InnerText = "05234D";
                             xml.SelectSingleNode("ddata/dhead/d38").InnerText = "18";
+                            
                         }
                         if (totalcasid > 100)
                         {
@@ -511,7 +515,12 @@ namespace His_Pos.Class.Declare
          */
         private void CheckDbNullValue(ICollection<SqlParameter> parameters,string value,string paraName)
         {
-            parameters.Add(value.Equals(string.Empty) || value.Equals("0") ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
+            if(value == null)
+                parameters.Add(new SqlParameter(paraName, DBNull.Value));
+            else
+            {
+                parameters.Add(value.Equals(string.Empty) || value.Equals("0") ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
+            }
         }
         /*
          * 檢查XmlTag是否為空值
@@ -525,10 +534,23 @@ namespace His_Pos.Class.Declare
         /*
          *檢查DataRow是否為空值
          */
-        private void CheckEmptyDataRow(string value ,DataRow row,string rowName)
+        private void CheckEmptyDataRow(DataTable dataTable,string value ,ref DataRow row,string rowName)
         {
             if (value != string.Empty)
-                row[rowName] = value;
+            {
+                switch (dataTable.Columns[rowName].DataType.Name)
+                {
+                    case "String":
+                        row[rowName] = value;
+                        break;
+                    case "Int32":
+                        row[rowName] = Convert.ToInt32(value);
+                        break;
+                    case "Double":
+                        row[rowName] = Convert.ToDouble(value);
+                        break;
+                }
+            }
         }
     }
 }
