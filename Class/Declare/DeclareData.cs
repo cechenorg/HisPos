@@ -41,7 +41,7 @@ namespace His_Pos.Class.Declare
         public string MedicalServiceCode { get; set; }//D37藥事服務費項目代號
         public int MedicalServicePoint { get; set; }//D38藥事服務費點數
         public string StatusFlag { get; set; }
-        public XmlDocument Xml { get; set; }
+        public XmlDocument Xml { get; set; } = new XmlDocument();
         public string Id { get; set; }
         private int medFormCount = 0;
         private void SetCopaymentPoint()

@@ -59,7 +59,7 @@ namespace His_Pos.PrescriptionDec
             //    _currentCustomer.InsertCustomerData(_currentCustomer);
             //}
             //HisApiBase.csCloseCom();
-            _currentCustomer.Name = "許文章";
+            _currentCustomer.Name = "林連義進";
             _currentCustomer.Birthday = "37/10/01";
             _currentCustomer.IcNumber = "S88824769A";
             _currentCustomer.Gender = true;
@@ -73,7 +73,7 @@ namespace His_Pos.PrescriptionDec
             _currentCustomer.Id = "1";
             PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
             PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
-            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday.ToString());
+            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
         }
         /*
          *取得病人基本資料

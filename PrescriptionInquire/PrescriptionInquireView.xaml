@@ -134,12 +134,12 @@
                     <local:PrescriptionInquire/>
                 </DataGrid.DataContext>
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D20}"/>
-                    <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D23}"/>
-                    <DataGridTextColumn MinWidth="50" Header="點數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D16}"/>
-                    <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D25}"/>
-                    <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D21}"/>
-                    <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding D13}"/>
+                    <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.Customer.Name}"/>
+                    <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.AdjustDate}"/>
+                    <DataGridTextColumn MinWidth="50" Header="點數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding TotalPoint}"/>
+                    <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalPersonId}"/>
+                    <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalInfo.Hospital.Name}"/>
+                    <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalInfo.Hospital.Division.Name}"/>
                     <DataGridTextColumn MinWidth="50" Header="慢箋狀態" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
