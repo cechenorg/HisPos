@@ -102,7 +102,7 @@ namespace His_Pos.PrescriptionDec
         {
             var treatmentCases = new TreatmentCaseDb();
             treatmentCases.GetData();
-            foreach (var treatmentCase in treatmentCases.TreatmentCaseLsit)
+            foreach (var treatmentCase in treatmentCases.TreatmentCaseList)
             {
                 TreatmentCaseCombo.Items.Add(treatmentCase.Id + ". " + treatmentCase.Name);
             }

@@ -26,5 +26,11 @@ namespace His_Pos
         {
             Label.Content = content;
         }
+        public void SetLabelSize(double labelWidth, double labelHeight)
+        {
+            Width = labelWidth;
+            Height = labelHeight;
+            UpdateLayout();
+        }
     }
 }

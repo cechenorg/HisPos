@@ -8,7 +8,6 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
@@ -18,7 +17,6 @@ using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Properties;
 using His_Pos.Service;
-using Label = System.Reflection.Emit.Label;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.PrescriptionInquire
@@ -36,13 +34,13 @@ namespace His_Pos.PrescriptionInquire
     {
         public DeclareDataList PrescriptionOutcome = new DeclareDataList();
         private readonly ObservableCollection<Institution> _institutionsList;
-        private readonly ObservableCollection<DeclareDetail> _declareDetailList;
-
+        private Function f = new Function();
+        private List<bool> AdjustCase = new List<bool>();
         public PrescriptionInquireView()
         {
             InitializeComponent();
             _institutionsList = new ObservableCollection<Institution>();
-            _declareDetailList = new ObservableCollection<DeclareDetail>();
+            new ObservableCollection<DeclareDetail>();
             PrescriptionOutcome = (DeclareDataList) this.Resources["PrescriptionOutcome"];
             DataContext = this;
             DataInitialize();
@@ -84,7 +82,9 @@ namespace His_Pos.PrescriptionInquire
 
         private void RunCustomFromVm()
         {
-
+            var selected = (PrescriptionSet.SelectedItem as DeclareData);
+            PrescriptionInquireOutcome prescriptionInquireOutcome = new PrescriptionInquireOutcome(selected);
+            prescriptionInquireOutcome.Show();
         }
 
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -126,169 +126,118 @@ namespace His_Pos.PrescriptionInquire
                         }
                     }
                 }
-                else
-                {
-                    return;
-                }
             }
         }
 
         private void SearchButtonClick(object sender, RoutedEventArgs e)
         {
             PrescriptionOutcome.Clear();
-            var function = new Function();
             var d = new DateTimeExtensions();
             CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
             ci.DateTimeFormat.ShortDatePattern = "yyyy/mm/dd";
             Thread.CurrentThread.CurrentCulture = ci;
             var sDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(start.SelectedDate));
             var eDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(end.SelectedDate));
-            var cusName = PatientName.Text;
-            var pharmacist = PharmacistName.Text;
-            var releasePalace = string.Empty;
+            var institution = string.Empty;
             if (ReleasePalace.SelectedItem != null)
-                releasePalace = ReleasePalace.SelectedItem.ToString().Substring(0, 10);
-            var parameters = new List<SqlParameter>
+                institution = ReleasePalace.SelectedItem.ToString().Substring(0, 10);
+            var parameters = SetInquireSqlParameters(sDate,eDate, PatientName.Text, PharmacistName.Text, institution);
+            GetDataFromXml(parameters);
+        }
+        /*
+         * 設定處方查詢條件Parameters
+         */
+        private List<SqlParameter> SetInquireSqlParameters(string sDate,string eDate,string cusName,string medicalPerson,string institution)
+        {
+            return new List<SqlParameter>
             {
                 sDate.Equals(string.Empty) ? new SqlParameter("SDATE", DBNull.Value) : new SqlParameter("SDATE", sDate),
                 eDate.Equals(string.Empty) ? new SqlParameter("EDATE", DBNull.Value) : new SqlParameter("EDATE", eDate),
                 cusName.Equals(string.Empty)
                     ? new SqlParameter("CUSNAME", DBNull.Value)
                     : new SqlParameter("CUSNAME", cusName),
-                pharmacist.Equals(string.Empty)
+                medicalPerson.Equals(string.Empty)
                     ? new SqlParameter("DOCTOR", DBNull.Value)
-                    : new SqlParameter("DOCTOR", pharmacist),
-                releasePalace.Equals(string.Empty)
+                    : new SqlParameter("DOCTOR", medicalPerson),
+                institution.Equals(string.Empty)
                     ? new SqlParameter("REALEASEPLACE", DBNull.Value)
-                    : new SqlParameter("REALEASEPLACE", releasePalace)
+                    : new SqlParameter("REALEASEPLACE", institution)
             };
-            GetDataFromXml(parameters);
         }
 
-        public void GetDataFromXml(List<SqlParameter> param = null) //將data的XML還原成Declaredata
+        private void GetDataFromXml(List<SqlParameter> param = null) //將data的XML還原成Declaredata
         {
             var listData = new ObservableCollection<DeclareData>();
-            var conn = new DbConnection(Settings.Default.SQL_local);
-            var paramfordata = new List<SqlParameter>();
             var table = new DataTable();
             if (param != null)
-                table = conn.ExecuteProc("[HIS_POS_DB].[GET].[DECLAREDATA]", param);
+                table = f.GetDataFromProc("[HIS_POS_DB].[GET].[DECLAREDATA]",param);
             if (param == null)
-                table = conn.ExecuteProc("[HIS_POS_DB].[GET].[DECLAREDDATATOXML]");
+                table = f.GetDataFromProc("[HIS_POS_DB].[GET].[DECLAREDDATATOXML]");
             var parameters = new List<SqlParameter>();
             var xml = new XmlDocument();
-            string _p12, _p13, _p14;
             foreach (DataRow row in table.Rows)
             {
                 parameters.Clear();
                 parameters.Add(new SqlParameter("ID", row["CUS_ID"].ToString()));
-                var table1 = conn.ExecuteProc("[HIS_POS_DB].[GET].[CUSDATA]", parameters);
-                var cus = GetCustomer(table1);
+                var table1 = f.GetDataFromProc("[HIS_POS_DB].[GET].[CUSDATA]", parameters);
                 xml.LoadXml(row["HISDECMAS_DETXML"].ToString());
-                var elemList = xml.GetElementsByTagName("dhead");
-                var d5 = !elemList[0].InnerXml.Contains("d5") ? "" : xml.SelectSingleNode("ddata/dhead/d5")?.InnerText;
-                var d35 = !elemList[0].InnerXml.Contains("d35")? "0": xml.SelectSingleNode("ddata/dhead/d35")?.InnerText;
-                var d36 = !elemList[0].InnerXml.Contains("d36")? "0": xml.SelectSingleNode("ddata/dhead/d36").InnerText;
-                var mainDiseaseCode = new DiseaseCode();
-                var secontDiseaseCode = new DiseaseCode();
-
                 var prescription = new Prescription();
-                prescription.Treatment.AdjustCase.Id = xml.SelectSingleNode("ddata/dhead/d1").InnerText; //調劑案件分類
-                prescription.Treatment.PaymentCategory.Id = d5; //給付類別
-                prescription.Treatment.MedicalInfo.Hospital.Id =
-                    xml.SelectSingleNode("ddata/dhead/d21").InnerText; //釋出院所
-                prescription.Treatment.MedicalInfo.TreatmentCase.Id =
-                    xml.SelectSingleNode("ddata/dhead/d22").InnerText; //處方案件分類
-                prescription.Treatment.AdjustDate = xml.SelectSingleNode("ddata/dhead/d23").InnerText; //調劑日期
-                prescription.Treatment.Customer = cus;
-                prescription.IcCard.MedicalNumber = xml.SelectSingleNode("ddata/dhead/d7").InnerText; //就醫序號
-                prescription.Treatment.Copayment.Id = xml.SelectSingleNode("ddata/dhead/d15").InnerText; //部分負擔類別
-                prescription.Treatment.MedicalPersonId = xml.SelectSingleNode("ddata/dhead/d25").InnerText; //醫事人員代號
-                prescription.Treatment.MedicalInfo.Hospital.Division.Id =
-                    xml.SelectSingleNode("ddata/dhead/d13").InnerText; //就醫科別
-                prescription.Treatment.TreatmentDate = xml.SelectSingleNode("ddata/dhead/d14").InnerText; //就醫(處方)日期
-                prescription.Treatment.MedicineDays = xml.SelectSingleNode("ddata/dhead/d30").InnerText; //給藥日分
-                if (xml.SelectSingleNode("ddata/dhead/d8")?.InnerText.Equals(string.Empty) == false)
-                {
-                    mainDiseaseCode.Id = xml.SelectSingleNode("ddata/dhead/d8")?.InnerText;
-                    prescription.Treatment.MedicalInfo.DiseaseCodes.Add(mainDiseaseCode);
-                    if (xml.SelectSingleNode("ddata/dhead/d9")?.InnerText.Equals(string.Empty) == false)
-                    {
-                        secontDiseaseCode.Id = xml.SelectSingleNode("ddata/dhead/d9")?.InnerText;
-                        prescription.Treatment.MedicalInfo.DiseaseCodes.Add(secontDiseaseCode);
-                    }
-                }
-                prescription.Treatment.MedicalInfo.SpecialCode.Id = xml.SelectSingleNode("ddata/dhead/d26")?.InnerText;
-                prescription.Treatment.MedicalInfo.Hospital.Doctor.Id =
-                    xml.SelectSingleNode("ddata/dhead/d24")?.InnerText; //診治醫師代號;
-
-                var searchedDeclareData = new DeclareData(prescription);
-                searchedDeclareData.Id = row["HISDECMAS_ID"].ToString();
-                searchedDeclareData.StatusFlag = row["HISDECMAS_FLAG"].ToString();
-                searchedDeclareData.Xml.LoadXml(row["HISDECMAS_DETXML"].ToString());
-                searchedDeclareData.ChronicSequence = d35;
-                searchedDeclareData.ChronicTotal = d36;
-                var pelemList = xml.GetElementsByTagName("pdata");
-                for (var i = 0; i < pelemList.Count; i++)
-                {
-                    if (pelemList[i].InnerXml.Contains("p12")) _p12 = "";
-                    else _p12 = xml.SelectSingleNode("ddata/pdata/p12")?.InnerText;
-                    if (pelemList[i].InnerXml.Contains("p13")) _p13 = "";
-                    else _p13 = xml.SelectSingleNode("ddata/pdata/p13")?.InnerText;
-                    if (pelemList[i].InnerXml.Contains("p14")) _p14 = "";
-                    else _p14 = xml.SelectSingleNode("ddata/pdata/p14")?.InnerText;
-                    var detail = new DeclareDetail();
-                    detail.MedicalOrder = xml.SelectSingleNode("ddata/pdata/p1")?.InnerText;
-                    detail.MedicalId = xml.SelectSingleNode("ddata/pdata/p2")?.InnerText;
-                    detail.Dosage = Convert.ToDouble(xml.SelectSingleNode("ddata/pdata/p3")?.InnerText);
-                    detail.Usage = xml.SelectSingleNode("ddata/pdata/p4")?.InnerText;
-                    detail.Position = xml.SelectSingleNode("ddata/pdata/p5")?.InnerText;
-                    detail.Percent = Convert.ToDouble(xml.SelectSingleNode("ddata/pdata/p6")?.InnerText);
-                    detail.Total = Convert.ToDouble(xml.SelectSingleNode("ddata/pdata/p7")?.InnerText ??
-                                                    throw new InvalidOperationException());
-                    detail.Price = Convert.ToDouble(xml.SelectSingleNode("ddata/pdata/p8")?.InnerText ??
-                                                    throw new InvalidOperationException());
-                    detail.Point = Convert.ToDouble(xml.SelectSingleNode("ddata/pdata/p9")?.InnerText ??
-                                                    throw new InvalidOperationException());
-                    detail.Sequence = int.Parse(xml.SelectSingleNode("ddata/pdata/p10")?.InnerText ??
-                                                throw new InvalidOperationException());
-                    detail.StartDate = _p12;
-                    detail.EndDate = _p13;
-                    detail.MedicalPersonnelId = _p14;
-                    listData.Add(searchedDeclareData);
-                }
+                GetTreatmentData(ref prescription,xml, GetCustomer(table1));
+                var searchedDeclareData = SetDeclareData(prescription,xml,row);
+                listData.Add(searchedDeclareData);
                 foreach (var dec in listData)
                 {
-                    paramfordata.Clear();
-                    paramfordata.Add(new SqlParameter("ID", dec.Prescription.Treatment.MedicalInfo.Hospital.Id));
-                    table = conn.ExecuteProc("[HIS_POS_DB].[GET].[INSNAME]", paramfordata);
-                    dec.Prescription.Treatment.MedicalInfo.Hospital.Name = table.Rows[0]["INS_NAME"].ToString();
-
-                    paramfordata.Clear();
-                    paramfordata.Add(new SqlParameter("ID", dec.Prescription.Treatment.MedicalInfo.TreatmentCase.Id));
-                    table.Clear();
-                    table = conn.ExecuteProc("[HIS_POS_DB].[GET].[CASNAME]", paramfordata);
-                    dec.Prescription.Treatment.MedicalInfo.TreatmentCase.Name =
-                        table.Rows[0]["HISMEDCAS_NAME"].ToString();
-
-                    paramfordata.Clear();
-                    paramfordata.Add(new SqlParameter("ID", dec.Prescription.Treatment.Copayment.Id));
-                    table.Clear();
-                    table = conn.ExecuteProc("[HIS_POS_DB].[GET].[HISCOPNAME]", paramfordata);
-                    dec.Prescription.Treatment.Copayment.Name = table.Rows[0]["HISCOP_NAME"].ToString();
-
-                    paramfordata.Clear();
-                    paramfordata.Add(
-                        new SqlParameter("ID", dec.Prescription.Treatment.MedicalInfo.Hospital.Division.Id));
-                    table.Clear();
-                    table = conn.ExecuteProc("[HIS_POS_DB].[GET].[DIVNAME]", paramfordata);
-                    dec.Prescription.Treatment.MedicalInfo.Hospital.Division.Name =
-                        table.Rows[0]["HISDIV_NAME"].ToString();
+                    dec.Prescription.Treatment.MedicalInfo.Hospital.Name = GetInstitutionName(dec);
+                    dec.Prescription.Treatment.MedicalInfo.TreatmentCase.Name = GetTreatmentCaseName(dec);
+                    dec.Prescription.Treatment.Copayment.Name = GetCopaymentName(dec);
+                    dec.Prescription.Treatment.MedicalInfo.Hospital.Division.Name = GetDivisionName(dec);
                     PrescriptionOutcome.Add(dec);
                 }
             } //GetDataFromXml
         }
 
+        private void GetTreatmentData(ref Prescription prescription,XmlDocument xml,Customer cus)
+        {
+            prescription.Treatment.Customer = cus;
+            prescription.Treatment.AdjustCase.Id = f.GetXmlNodeData(xml, "ddata/dhead/d1");//調劑案件分類
+            prescription.Treatment.PaymentCategory.Id = f.GetXmlNodeData(xml, "ddata/dhead/d5");//給付類別
+            prescription.IcCard.MedicalNumber = f.GetXmlNodeData(xml, "ddata/dhead/d7");//就醫序號
+            prescription.Treatment.TreatmentDate = f.GetXmlNodeData(xml, "ddata/dhead/d14");//就醫(處方)日期
+            prescription.Treatment.Copayment.Id = f.GetXmlNodeData(xml, "ddata/dhead/d15");//部分負擔類別
+            prescription.Treatment.AdjustDate = f.GetXmlNodeData(xml, "ddata/dhead/d23");//調劑日期
+            prescription.Treatment.MedicalPersonId = f.GetXmlNodeData(xml, "ddata/dhead/d25");//醫事人員代號
+            prescription.Treatment.MedicineDays = f.GetXmlNodeData(xml, "ddata/dhead/d30");//給藥日分
+            SetDiseaseCode(ref prescription,xml);
+            SetMedicalInfoData(ref prescription,xml);
+        }
+        /*
+         * 設定診斷代碼
+         */
+        private void SetDiseaseCode(ref Prescription prescription,XmlDocument xml)
+        {
+            var main = new DiseaseCode();
+            var second = new DiseaseCode();
+            if (f.GetXmlNodeData(xml, "ddata/dhead/d8").Equals(string.Empty)) return;
+            main.Id = f.GetXmlNodeData(xml, "ddata/dhead/d8");
+            prescription.Treatment.MedicalInfo.DiseaseCodes.Add(main);
+            if (f.GetXmlNodeData(xml, "ddata/dhead/d9").Equals(string.Empty)) return;
+            second.Id = f.GetXmlNodeData(xml, "ddata/dhead/d9");
+            prescription.Treatment.MedicalInfo.DiseaseCodes.Add(second);
+        }
+        /*
+         * 設定MedicalInfo
+         */
+        private void SetMedicalInfoData(ref Prescription prescription,XmlDocument xml)
+        {
+            prescription.Treatment.MedicalInfo.Hospital.Division.Id = f.GetXmlNodeData(xml, "ddata/dhead/d13");//就醫科別
+            prescription.Treatment.MedicalInfo.Hospital.Id = f.GetXmlNodeData(xml, "ddata/dhead/d21");//釋出院所
+            prescription.Treatment.MedicalInfo.TreatmentCase.Id = f.GetXmlNodeData(xml, "ddata/dhead/d22");//處方案件分類
+            prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = f.GetXmlNodeData(xml, "ddata/dhead/d24"); //診治醫師代號
+            prescription.Treatment.MedicalInfo.SpecialCode.Id = f.GetXmlNodeData(xml, "ddata/dhead/d26");//特定治療代碼
+        }
+        /*
+         * 取得病人資料
+         */
         private Customer GetCustomer(DataTable table)
         {
             return new Customer
@@ -306,6 +255,91 @@ namespace His_Pos.PrescriptionInquire
                 IcNumber = table.Rows[0]["CUS_IDNUM"].ToString(),
                 Gender = Convert.ToBoolean(table.Rows[0]["CUS_GENDER"].ToString())
             };
+        }
+
+        private DeclareData SetDeclareData(Prescription prescription,XmlDocument xml,DataRow row)
+        {
+            var d35 = f.GetXmlNodeData(xml, "ddata/dhead/d35");
+            var d36 = f.GetXmlNodeData(xml, "ddata/dhead/d36");
+            var searchedDeclareData = new DeclareData(prescription);
+            var pelemList = xml.GetElementsByTagName("pdata");
+            searchedDeclareData.Id = row["HISDECMAS_ID"].ToString();
+            searchedDeclareData.StatusFlag = row["HISDECMAS_FLAG"].ToString();
+            searchedDeclareData.Xml.LoadXml(row["HISDECMAS_DETXML"].ToString());
+            searchedDeclareData.ChronicSequence = d35;
+            searchedDeclareData.ChronicTotal = d36;
+            for (var i = 0; i < pelemList.Count; i++)
+            {
+                var detail = GetDeclareDetail(xml);
+                searchedDeclareData.DeclareDetails.Add(detail);
+            }
+            return searchedDeclareData;
+        }
+
+        /*
+         * 從XmlDocument取得DeclareData資料並初始化
+         */
+        private DeclareDetail GetDeclareDetail(XmlDocument xml)
+        {
+            var sDate = f.GetXmlNodeData(xml, "ddata/pdata/p12");
+            var eDate = f.GetXmlNodeData(xml, "ddata/pdata/p13");
+            var medicalPersonId = f.GetXmlNodeData(xml, "ddata/pdata/p14");
+            return new DeclareDetail
+            {
+                MedicalOrder = f.GetXmlNodeData(xml, "ddata/pdata/p1"),
+                MedicalId = f.GetXmlNodeData(xml, "ddata/pdata/p2"),
+                Dosage = Convert.ToDouble(xml.SelectSingleNode("ddata/pdata/p3")?.InnerText),
+                Usage = f.GetXmlNodeData(xml, "ddata/pdata/p4"),
+                Position = f.GetXmlNodeData(xml, "ddata/pdata/p5"),
+                Percent = Convert.ToDouble(f.GetXmlNodeData(xml, "ddata/pdata/p6")),
+                Total = Convert.ToDouble(f.GetXmlNodeData(xml, "ddata/pdata/p7") ?? throw new InvalidOperationException()),
+                Price = Convert.ToDouble(f.GetXmlNodeData(xml, "ddata/pdata/p8") ?? throw new InvalidOperationException()),
+                Point = Convert.ToDouble(f.GetXmlNodeData(xml, "ddata/pdata/p9") ?? throw new InvalidOperationException()),
+                Sequence = int.Parse(f.GetXmlNodeData(xml, "ddata/pdata/p10") ?? throw new InvalidOperationException()),
+                StartDate = sDate,
+                EndDate = eDate,
+                MedicalPersonnelId = medicalPersonId
+            };
+        }
+        /*
+         * 取得院所名稱
+         */
+        private string GetInstitutionName(DeclareData dec)
+        {
+            var paramfordata = new List<SqlParameter>();
+            paramfordata.Add(new SqlParameter("ID", dec.Prescription.Treatment.MedicalInfo.Hospital.Id));
+            var table = f.GetDataFromProc("[HIS_POS_DB].[GET].[INSNAME]", paramfordata);
+            return table.Rows[0]["INS_NAME"].ToString();
+        }
+        /*
+         * 取得原處方案件名稱
+         */
+        private string GetTreatmentCaseName(DeclareData dec)
+        {
+            var paramfordata = new List<SqlParameter>();
+            paramfordata.Add(new SqlParameter("ID", dec.Prescription.Treatment.MedicalInfo.TreatmentCase.Id));
+            var table = f.GetDataFromProc("[HIS_POS_DB].[GET].[CASNAME]", paramfordata);
+            return table.Rows[0]["HISMEDCAS_NAME"].ToString();
+        }
+        /*
+         * 取得部分負擔代碼對應名稱
+         */
+        private string GetCopaymentName(DeclareData dec)
+        {
+            var paramfordata = new List<SqlParameter>();
+            paramfordata.Add(new SqlParameter("ID", dec.Prescription.Treatment.Copayment.Id));
+            var table = f.GetDataFromProc("[HIS_POS_DB].[GET].[HISCOPNAME]", paramfordata);
+            return table.Rows[0]["HISCOP_NAME"].ToString();
+        }
+        /*
+         * 取得就醫科別名稱
+         */
+        private string GetDivisionName(DeclareData dec)
+        {
+            var paramfordata = new List<SqlParameter>();
+            paramfordata.Add(new SqlParameter("ID", dec.Prescription.Treatment.MedicalInfo.Hospital.Division.Id));
+            var table = f.GetDataFromProc("[HIS_POS_DB].[GET].[DIVNAME]", paramfordata);
+            return table.Rows[0]["HISDIV_NAME"].ToString();
         }
     }
 }

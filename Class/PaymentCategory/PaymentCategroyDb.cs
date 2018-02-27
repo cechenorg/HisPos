@@ -23,5 +23,20 @@ namespace His_Pos.Class.PaymentCategory
                 PaymentCategoryList.Add(p);
             }
         }
+        /*
+         *回傳對應給付類別之id + name string
+         */
+        public static string GetPaymentCategory(string tag)
+        {
+            var result = string.Empty;
+            foreach (var payment in PaymentCategoryDictionary)
+            {
+                if (payment.Key == tag)
+                {
+                    result = payment.Key + ". " + payment.Value;
+                }
+            }
+            return result;
+        }
     }
 }

@@ -207,30 +207,6 @@ namespace His_Pos.Class.Declare
             MedicalServicePoint = Convert.ToInt32(Math.Round(service, 0, MidpointRounding.AwayFromZero));
         }
 
-        public void AddDetail(DeclareDetail detail)
-        {
-            detail.Sequence = DeclareDetails.Count + 1;
-
-            if (Prescription.Treatment.MedicineDays == "0" || int.Parse(Prescription.Treatment.MedicineDays) < detail.Days) Prescription.Treatment.MedicineDays = detail.Days.ToString();
-
-            switch (detail.MedicalOrder)
-            {
-                case "1":
-                    DrugsPoint += Convert.ToInt32(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero));
-                    break;
-                case "2":
-                    DiagnosisPoint += Convert.ToInt32(Math.Round(detail.Point,0,MidpointRounding.AwayFromZero));
-                    break;
-                case "3":
-                    SpecailMaterialPoint += Convert.ToInt32(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero));
-                    break;
-            }
-
-            if (detail.Form == "內服液劑") medFormCount++;
-
-            DeclareDetails.Add(detail);
-        }
-
         private void SetChronicMedicalServiceCode()
         {
             const int daysLimit1 = 13;

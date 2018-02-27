@@ -35,7 +35,7 @@ namespace His_Pos.PrescriptionDec
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
         private ObservableCollection<Medicine> PrescriptionList { get; set; }
-        public ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
+        private ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
         public PrescriptionDecView()
         {
             InitializeComponent();

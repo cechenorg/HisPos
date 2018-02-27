@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -9,6 +11,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 using His_Pos.Class;
+using His_Pos.Properties;
+using His_Pos.Service;
 using ImeLib;
 
 namespace His_Pos
@@ -227,6 +231,21 @@ namespace His_Pos
         public string XmlTagCreator(string tagName, string value)
         {
             return "<" + tagName + ">" + value + "</" + tagName + ">";
+        }
+        /*
+         * 取得xml node資料
+         */
+        public string GetXmlNodeData(XmlDocument xml,string node)
+        {
+            return xml.SelectSingleNode(node)?.InnerText;
+        }
+        /*
+         * 取得Procedure資料並以DataTable回傳
+         */
+        public DataTable GetDataFromProc(string procName,List<SqlParameter> param = null)
+        {
+            var conn = new DbConnection(Settings.Default.SQL_local);
+            return conn.ExecuteProc(procName, param);
         }
     }
 }

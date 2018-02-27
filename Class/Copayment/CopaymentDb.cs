@@ -19,5 +19,21 @@ namespace His_Pos.Class.Copayment
                 CopaymentList.Add(c);
             }
         }
+        /*
+         *回傳對應部分負擔之id + name string
+         */
+        public static string GetCopayment(string tag)
+        {
+            string result = string.Empty;
+            GetData();
+            foreach (var copayment in CopaymentList)
+            {
+                if (copayment.Id == tag)
+                {
+                    result = copayment.Id + ". " + copayment.Name;
+                }
+            }
+            return result;
+        }
     }
 }

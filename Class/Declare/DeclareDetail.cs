@@ -48,6 +48,7 @@ namespace His_Pos.Class.Declare
         public string EndDate { get; set; }//p13
         public string MedicalPersonnelId { get; set; }//p14
         public string Form { get; set; }
+        public string Name { get; set; }
 
         private void SetMedicate(Medicine medicine)
         {
