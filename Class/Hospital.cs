@@ -13,6 +13,15 @@ namespace His_Pos.Class
 
         public MedicalPersonnel Doctor { get; set; }
         public Division.Division Division { get; set; }
-        
+
+        public string GetFullHospitalData()
+        {
+            return Id + " " + Name;
+        }
+
+        public string GetFullDivisonData()
+        {
+            return Division.Id + ". " + Division.Name;
+        }
     }
 }

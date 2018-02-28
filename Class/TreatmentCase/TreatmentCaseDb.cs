@@ -8,7 +8,7 @@ namespace His_Pos.Class.TreatmentCase
 {
     public class TreatmentCaseDb : ISelection
     {
-        public List<TreatmentCase> TreatmentCaseLsit { get; } = new List<TreatmentCase>();
+        public List<TreatmentCase> TreatmentCaseList { get;} = new List<TreatmentCase>();
 
         public void GetData()
         {
@@ -17,8 +17,24 @@ namespace His_Pos.Class.TreatmentCase
             foreach (DataRow treatmentCase in prescriptionCaseTable.Rows)
             {
                 var t = new TreatmentCase(treatmentCase["HISMEDCAS_ID"].ToString(), treatmentCase["HISMEDCAS_NAME"].ToString());
-                TreatmentCaseLsit.Add(t);
+                TreatmentCaseList.Add(t);
             }
+        }
+        /*
+         *回傳對應處方案件之id + name string
+         */
+        public string GetTreatmentCase(string tag)
+        {
+            GetData();
+            var result = string.Empty;
+            foreach (var treatment in TreatmentCaseList)
+            {
+                if (treatment.Id == tag)
+                {
+                    result = treatment.Id + ". " + treatment.Name;
+                }
+            }
+            return result;
         }
     }
 }

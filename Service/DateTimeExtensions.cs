@@ -26,6 +26,8 @@ namespace His_Pos.Service
 
         public DateTime ToUsDate(string datetime)
         {
+            if (datetime.Length >= 10)
+                return Convert.ToDateTime(datetime.Substring(0, 10));
             if (datetime.Substring(0,3).Contains("/"))
                 datetime = "0" + datetime;
             var dt = DateTime.ParseExact(datetime, "yyy/MM/dd", CultureInfo.InvariantCulture).AddYears(1911);

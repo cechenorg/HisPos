@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -102,7 +101,7 @@ namespace His_Pos.PrescriptionDec
         {
             var treatmentCases = new TreatmentCaseDb();
             treatmentCases.GetData();
-            foreach (var treatmentCase in treatmentCases.TreatmentCaseList)
+            foreach (var treatmentCase in treatmentCases.TreatmentCaseLsit)
             {
                 TreatmentCaseCombo.Items.Add(treatmentCase.Id + ". " + treatmentCase.Name);
             }
@@ -359,7 +358,7 @@ namespace His_Pos.PrescriptionDec
             var division = DivisionCombo.Text;
             if (DivisionCombo.Text != string.Empty)
             {
-                prescription.Treatment.MedicalInfo.Hospital.Division.Id = division.Substring(0, 2);
+                prescription.Treatment.MedicalInfo.Hospital.Division.Id = division.Substring(0, 1);
                 prescription.Treatment.MedicalInfo.Hospital.Division.Name =
                     DivisionCombo.Text.Substring(division.IndexOf(" ") + 1);
             }
@@ -416,16 +415,12 @@ namespace His_Pos.PrescriptionDec
                     return;
                 }
             }
-            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
-            ci.DateTimeFormat.ShortDatePattern = "yyyy/mm/dd";
-            Thread.CurrentThread.CurrentCulture = ci;
-            var d = new DateTimeExtensions();
-            prescription.Treatment.TreatmentDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(TreatmentDate.SelectedDate));
+            prescription.Treatment.TreatmentDate = TreatmentDate.Text;
             if (Function.CheckEmptyInput(AdjustDate.Text, "請填寫調劑日期,如為藥是居家照護請填寫訪視日期"))
             {
                 return;
             }
-            prescription.Treatment.AdjustDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(AdjustDate.SelectedDate));
+            prescription.Treatment.AdjustDate = AdjustDate.Text;
         }
         /*
          * 確認國際疾病代碼D8.D9
@@ -445,7 +440,6 @@ namespace His_Pos.PrescriptionDec
             prescription.Treatment.MedicalInfo.DiseaseCodes.Add(mainDiagnosis);
             if (SeconDiagnosis.Text == string.Empty) return;
             var secondDiagnosis = new DiseaseCode();
-            secondDiagnosis.Id = SeconDiagnosis.Text;
             prescription.Treatment.MedicalInfo.DiseaseCodes.Add(secondDiagnosis);
         }
         /*

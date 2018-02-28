@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Class.Product;
+﻿using His_Pos.Class.Product;
 
-namespace His_Pos.Class
+namespace His_Pos.Class.Declare
 {
     public class DeclareDetail
     {
@@ -34,6 +29,10 @@ namespace His_Pos.Class
             CountPoint();
         }
 
+        public DeclareDetail()
+        {
+        }
+
         public string MedicalOrder { get; set; }//p1
         public string MedicalId { get; set; }//p2
         public double Dosage { get; set; }//p3
@@ -48,7 +47,9 @@ namespace His_Pos.Class
         public string StartDate { get; set; }//p12
         public string EndDate { get; set; }//p13
         public string MedicalPersonnelId { get; set; }//p14
-        
+        public string Form { get; set; }
+        public string Name { get; set; }
+
         private void SetMedicate(Medicine medicine)
         {
             Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3

@@ -192,4 +192,7 @@
   <data name="ChronicAdjustCaseId" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="InventoryManagement" xml:space="preserve">
+    <value>庫存管理</value>
+  </data>
 </root>

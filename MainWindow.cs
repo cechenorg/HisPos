@@ -11,6 +11,7 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+
         public static List<Feature> HisFeatures = new List<Feature>();
         public static List<Feature> PosFeatures = new List<Feature>();
 
