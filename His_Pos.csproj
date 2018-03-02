@@ -175,6 +175,9 @@
     <Compile Include="Class\AdjustCase\AdjustCase.cs" />
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\HisUpload\HisUploadData.cs" />
     <Compile Include="Class\HisUpload\HisUploadDb.cs" />
@@ -184,7 +187,7 @@
     <Compile Include="Class\Copayment\Copayment.cs" />
     <Compile Include="Class\Copayment\CopaymentDb.cs" />
     <Compile Include="Class\Person\Customer.cs" />
-    <Compile Include="Class\CustomerHistory.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistory.cs" />
     <Compile Include="Class\Declare\DeclareData.cs" />
     <Compile Include="Class\Declare\DeclareDetail.cs" />
     <Compile Include="Class\Department.cs" />
@@ -409,6 +412,7 @@
     <Resource Include="Images\SystemBackgroundWhite.jpg" />
     <Resource Include="Images\Truck_50px.png" />
     <Resource Include="Images\Settings.png" />
+    <Resource Include="Images\PosHisDot.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
