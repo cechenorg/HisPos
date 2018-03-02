@@ -15,9 +15,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.Class.Product;
 
 namespace His_Pos.InventoryManagement
 {
@@ -26,7 +29,7 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class InventoryManagementView : UserControl
     {
-        private readonly ObservableCollection<Inventory> _inventoryList = new ObservableCollection<Inventory>();
+        private readonly ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
         public InventoryManagementView()
         {
             InitializeComponent();
@@ -34,47 +37,45 @@ namespace His_Pos.InventoryManagement
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {
-            DataBinding(start.Text,end.Text, Name.Text,ID.Text);
-        }
-
-        private void DataBinding(string start,string end,string name,string id) {
-            var conn = new DbConnection(Settings.Default.SQL_global);
-            DateTimeExtensions dateTimeExtensions = new DateTimeExtensions();
-            var parameters = new List<SqlParameter>();
-            if (start != string.Empty)
-                    parameters.Add(new SqlParameter("SDATE", dateTimeExtensions.UsToTaiwan(start)));
-            else
-                parameters.Add(new SqlParameter("SDATE", DBNull.Value));
-            if (end != string.Empty)
-                parameters.Add(new SqlParameter("EDATE", dateTimeExtensions.UsToTaiwan(end)));
-            else
-                parameters.Add(new SqlParameter("EDATE", DBNull.Value));
-            if (name != string.Empty)
-                parameters.Add(new SqlParameter("NAME", name));
-            else
-                parameters.Add(new SqlParameter("NAME", DBNull.Value));
-            if (id != string.Empty)
-                parameters.Add(new SqlParameter("ID", id));
-            else
-                parameters.Add(new SqlParameter("ID", DBNull.Value));
-
-            var table = conn.ExecuteProc("[HIS_POS_DB].[GET].[INVENTORYDATA]", parameters);
-            foreach (DataRow row in table.Rows)
-            {
-                var inventory = new Inventory();
-                SetValue(ref inventory, row);
-                _inventoryList.Add(inventory);
+            foreach (Otc otc in OTCDb.GetOTC(start.Text, end.Text, Name.Text, ID.Text)) {
+                _dataList.Add(otc);
             }
-            DataGrid.ItemsSource = _inventoryList;
+           
+            DataGrid.ItemsSource = _dataList;
         }
-        private void SetValue(ref Inventory inventory,DataRow row)
+        
+
+        private void Row_Loaded(object sender, RoutedEventArgs e)
         {
-            inventory.ProductId = row["PRO_ID"].ToString();
-            inventory.ProductName = row["PRO_NAME"].ToString();
-            inventory.ProductSafeAmount = row["PRO_SAFEQTY"].ToString();
-            inventory.ProductTotalAmount = row["PRO_INVENTORY"].ToString();
-            inventory.ProductCurrentTime = row["PURCHASE_DATE"].ToString();
+            var row = sender as DataGridRow;
+            row.InputBindings.Add(new MouseBinding(ShowCustomDialogCommand,
+                new MouseGesture() { MouseAction = MouseAction.LeftDoubleClick }));
         }
 
+        private ICommand _showCustomDialogCommand;
+
+        private ICommand ShowCustomDialogCommand
+        {
+            get
+            {
+                return _showCustomDialogCommand ?? (_showCustomDialogCommand = new SimpleCommand
+                {
+                    CanExecuteDelegate = x => true,
+                    ExecuteDelegate = x => RunCustomFromVm()
+                });
+            }
+        }
+
+        private void RunCustomFromVm()
+        {
+            var selected = (Otc)DataGrid.SelectedItem;
+            ProductDetail productDetail = new ProductDetail();
+            productDetail.ProductName.Content = selected.Name;
+            productDetail.ProductId.Content = selected.Id;
+            productDetail.ProductAmount.Content = selected.Inventory;
+            productDetail.ProductSafeAmount.Content = selected.SafeAmount;
+            productDetail.ProductManufacturers.Content = selected.ManufactoryName;
+            productDetail.Show();
+        }
     }
 }

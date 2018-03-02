@@ -41,12 +41,26 @@
 
         </Canvas>
         <DataGrid Name="DataGrid" Background="Transparent" HorizontalAlignment="Left" Height="677" Margin="10,113,0,0" VerticalAlignment="Top" Width="1285" AutoGenerateColumns="False">
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                   Color="#FF424040"/>
+            </DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <EventSetter Event="Loaded" Handler="Row_Loaded"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding showCustomDialogCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Header="商品編號" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"  Binding="{Binding ProductId}"/>
-                <DataGridTextColumn Width="150" Header="商品名稱" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ProductName}"/>
-                <DataGridTextColumn Width="100" Header="庫存總量" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ProductTotalAmount}"/>
-                <DataGridTextColumn Width="200" Header="商品安全量" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ProductSafeAmount}"/>
-                <DataGridTextColumn Width="150" Header="商品最近一次進貨時間" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ProductCurrentTime}"/>
+                <DataGridTextColumn Width="150" Header="商品編號" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"  Binding="{Binding Id}"/>
+                <DataGridTextColumn Width="200" Header="商品名稱" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}"/>
+                <DataGridTextColumn Width="100" Header="庫存總量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Inventory}"/>
+                <DataGridTextColumn Width="200" Header="商品安全量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding SafeAmount}"/>
+                <DataGridTextColumn Width="150" Header="商品最近一次進貨時間" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding CurrentImportTime}"/>
             </DataGrid.Columns>
         </DataGrid>
 

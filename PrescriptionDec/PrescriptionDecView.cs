@@ -27,7 +27,7 @@ namespace His_Pos.PrescriptionDec
     {
         private int _historyFilterCondition = -1;
         private readonly Function _function = new Function();
-        private ProductDb _productDb = new ProductDb();
+        private MedcineDb _productDb = new MedcineDb();
         /*
          *初始化UI元件資料
          */
@@ -129,7 +129,7 @@ namespace His_Pos.PrescriptionDec
             MedicineList.Clear();
             foreach (var d in tmp.Take(50))
             {
-                var medicine = ProductDb.GetMedicineData(d);
+                var medicine = MedcineDb.GetMedicineData(d);
                 MedicineList.Add(medicine);
             }
             medicineAuto.ItemsSource = MedicineList;
