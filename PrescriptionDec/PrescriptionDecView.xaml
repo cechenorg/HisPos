@@ -250,7 +250,7 @@
                                         <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
                                                                   VerticalContentAlignment="Stretch" ValueMemberPath="Id" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
                                                                   MaxHeight="50" MinimumPrefixLength="2" ItemFilter="{Binding MedicineFilter}" BorderBrush="DimGray" Populating="MedicineCodeAuto_Populating"
-                                                                  DropDownClosing="MedicineCodeAuto_DropDownClosing" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}">
+                                                                  DropDownClosing="MedicineCodeAuto_DropDownClosing" FilterMode="Contains"  IsTextCompletionEnabled="False" Text="{Binding Id}">
                                             <controls:AutoCompleteBox.ItemContainerStyle>
                                                 <Style TargetType="ListBoxItem">
                                                         <Setter Property="Template">
@@ -378,14 +378,14 @@
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Margin="10,0,10,10" Width="Auto" Height="auto" Grid.Row="3" Background="#99EEEEEE">
                         <Border BorderThickness="1,1,0,2" BorderBrush="#99EEEEEE" Background="#99EEEEEE">
-                            <StackPanel Orientation="Vertical" Background="#99EEEEEE" Width="400">
-                                <Canvas Background="#99EEEEEE" Height="40" Width="400">
+                            <StackPanel Orientation="Vertical" Background="#99EEEEEE" Width="330">
+                                <Canvas Background="#99EEEEEE" Height="40" Width="330">
                                     <StackPanel Orientation="Horizontal" Background="#99EEEEEE" Height="40" Width="auto">
-                                        <RadioButton Content="交易" Margin="35,0,5,0" FontSize="15" VerticalAlignment="Center"/>
+                                        <RadioButton Content="交易" Tag="1" Margin="20,0,5,0" FontSize="15" VerticalAlignment="Center" Checked="RadioButton_Checked"/>
                                         <Image Source="/Images/PosDot.png" Width="12"/>
-                                        <RadioButton Content="調劑" Margin="40,0,5,0" FontSize="15" VerticalAlignment="Center"/>
+                                        <RadioButton Content="調劑" Tag="0" Margin="25,0,5,0" FontSize="15" VerticalAlignment="Center" Checked="RadioButton_Checked"/>
                                         <Image Source="/Images/HisDot.png" Width="12"/>
-                                        <RadioButton Content="全部顯示" Margin="40,0,5,0" FontSize="15" VerticalAlignment="Center" IsChecked="True"/>
+                                        <RadioButton Content="全部顯示" Tag="2" Margin="25,0,5,0" FontSize="15" VerticalAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
                                         <Image Source="/Images/PosHisDot.png" Width="20" Margin="0,0,15,0"/>
                                     </StackPanel>
                                 </Canvas>

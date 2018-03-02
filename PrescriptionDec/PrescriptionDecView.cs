@@ -25,7 +25,7 @@ namespace His_Pos.PrescriptionDec
      */
     public partial class PrescriptionDecView
     {
-        private int _historyFilterCondition = -1;
+        
         private ProductDb _productDb = new ProductDb();
         /*
          *初始化UI元件資料
@@ -124,7 +124,7 @@ namespace His_Pos.PrescriptionDec
         {
             var medicineAuto = sender as AutoCompleteBox;
             Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
-            var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + medicineAuto.Text + "%' OR PRO_NAME Like '" + medicineAuto.Text + "%'");
+            var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '%" + medicineAuto.Text + "%' OR PRO_NAME Like '%" + medicineAuto.Text + "%'");
             MedicineList.Clear();
             foreach (var d in tmp.Take(50))
             {
@@ -228,16 +228,6 @@ namespace His_Pos.PrescriptionDec
             
             return false;
         }
-
-        private void Prescription_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
-        private void Prescription_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var dataGrid = sender as DataGrid;
-            Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
-            dataGrid.Focus();
-        }
+        
     }
 }

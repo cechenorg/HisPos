@@ -31,7 +31,7 @@ namespace His_Pos.Class.CustomerHistory
         public SystemType Type { get; }
         public string Date { get; }
         public string CustomerHistoryDetailId { get; }
-        public string CustomerHistoryData { get; set; }
+        public string CustomerHistoryData { get; }
 
     }
 }
