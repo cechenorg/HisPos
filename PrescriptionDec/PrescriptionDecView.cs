@@ -227,45 +227,7 @@ namespace His_Pos.PrescriptionDec
             
             return false;
         }
-
-        private void Prescription_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (((DataGrid)e.Source).SelectedIndex == -1)
-            {
-                TransactionDetail.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.Visibility = Visibility.Collapsed;
-
-                GrayArea.Visibility = Visibility.Visible;
-                return;
-            }
-            if (((DataGrid)e.Source).CurrentItem == null) return;
-            Console.WriteLine(CustomerHistoryList.IndexOf((CustomerHistory)((DataGrid)e.Source).CurrentItem).ToString());
-
-            var current = CustomerHistoryList.IndexOf((CustomerHistory)((DataGrid)e.Source).CurrentItem);
-
-            if (CustomerHistoryList[current].Type == 0)
-            {
-                PrescriptionDetail.Visibility = Visibility.Collapsed;
-                TransactionDetail.Visibility = Visibility.Visible;
-
-                GrayArea.Visibility = Visibility.Collapsed;
-                TransactionDetail.ItemsSource = CustomerHistoryList[current].CustomHistories;
-            }
-            else
-            {
-                TransactionDetail.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.Visibility = Visibility.Visible;
-
-                GrayArea.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.ItemsSource = CustomerHistoryList[current].CustomHistories;
-            }
-        }
-        private void Prescription_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var dataGrid = sender as DataGrid;
-            Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
-            dataGrid.Focus();
-        }
+        
         /*
          *確認輸入
          */
