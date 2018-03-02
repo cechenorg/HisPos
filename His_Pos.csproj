@@ -190,7 +190,6 @@
     <Compile Include="Class\CustomerHistory\CustomerHistory.cs" />
     <Compile Include="Class\Declare\DeclareData.cs" />
     <Compile Include="Class\Declare\DeclareDetail.cs" />
-    <Compile Include="Class\Department.cs" />
     <Compile Include="Class\DiseaseCode.cs" />
     <Compile Include="Class\Division\Division.cs" />
     <Compile Include="Class\Division\DivisionDb.cs" />

@@ -21,6 +21,14 @@ namespace His_Pos.Class
             Medicines = new List<Medicine>();
         }
 
+        public Prescription(IcCard icCard, Pharmacy pharmacy, Treatment treatment, List<Medicine> medicines)
+        {
+            IcCard = icCard;
+            Pharmacy = pharmacy;
+            Treatment = treatment;
+            Medicines = medicines;
+        }
+
         public IcCard IcCard { get; set; }
         public Pharmacy Pharmacy { get; set; }
         public Treatment Treatment { get; set; }

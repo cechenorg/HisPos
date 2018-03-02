@@ -206,11 +206,9 @@ namespace His_Pos
         /*
          * 判斷輸入空值
          */
-        public static bool CheckEmptyInput(string input,string message)
+        public static string CheckEmptyInput(string input,string message)
         {
-            if (input != string.Empty) return false;
-            MessageBox.Show(message);
-            return true;
+            return input == string.Empty ? message : string.Empty;
         }
 
         public string ToInvCulture(double value)

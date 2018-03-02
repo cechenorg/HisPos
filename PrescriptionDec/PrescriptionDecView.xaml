@@ -176,7 +176,7 @@
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="DoctorId" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" TextChanged="DoctorId_TextChanged"/>
+                            <TextBox x:Name="DoctorId" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold"/>
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="就醫序號" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>

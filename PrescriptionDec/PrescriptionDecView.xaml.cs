@@ -32,7 +32,7 @@ namespace His_Pos.PrescriptionDec
         private IcCard _icCard = new IcCard();
         private SystemType cusHhistoryFilterCondition = SystemType.ALL;
         private Customer _currentCustomer = new Customer();
-        private Prescription prescription = new Prescription();
+        //private Prescription prescription = new Prescription();
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
@@ -40,6 +40,7 @@ namespace His_Pos.PrescriptionDec
         public ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
 
         private CustomerHistory customerHistory;
+        private List<string> ErrorList = new List<string>();
 
         public PrescriptionDecView()
         {
@@ -308,24 +309,12 @@ namespace His_Pos.PrescriptionDec
          */
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
-            CheckPrescriptionInfo();
-            AddMedicine();
-            prescription.Treatment.MedicalPersonId = "A012345678";
-            var declareData = new DeclareData(prescription);
+            var declareData = new DeclareData(CheckPrescriptionInfo());
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
             MessageBox.Show("處方登錄成功");
         }
-        /*
-         * 將藥品加入處方
-         */
-        private void AddMedicine()
-        {
-            foreach (var medicine in PrescriptionList)
-            {
-                prescription.Medicines.Add(medicine);
-            }
-        }
+        
         /*
          * 設定藥品用量
          */
@@ -375,14 +364,6 @@ namespace His_Pos.PrescriptionDec
             var match = Regex.Match(days.Text, regex);
             if(match.Success)
                 PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Days = Convert.ToInt32(days.Text);
-        }
-        /*
-         * 設定診治醫師代號
-         */
-        private void DoctorId_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!(sender is TextBox doctorId)) return;
-            prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = doctorId.Text;
         }
         /*
          * 設定藥品用藥途徑

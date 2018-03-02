@@ -17,6 +17,7 @@ namespace His_Pos
 
         public static DataTable MedicineDataTable = new DataTable();
         public static User CurrentUser;
+
         private List<DockingWindow> _openWindows;
         public static DataView View;
     }
