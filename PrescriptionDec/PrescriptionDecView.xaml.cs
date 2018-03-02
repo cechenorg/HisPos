@@ -6,11 +6,14 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
+using His_Pos.Class.CustomerHistory;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.HisApi;
@@ -27,6 +30,7 @@ namespace His_Pos.PrescriptionDec
     {
         private int _res = -1;
         private IcCard _icCard = new IcCard();
+        private SystemType cusHhistoryFilterCondition = SystemType.ALL;
         private Customer _currentCustomer = new Customer();
         private Prescription prescription = new Prescription();
         private StringBuilder _pBuffer = new StringBuilder(100);
@@ -34,6 +38,9 @@ namespace His_Pos.PrescriptionDec
         private ObservableCollection<Medicine> MedicineList { get; set; }
         private ObservableCollection<Medicine> PrescriptionList { get; set; }
         public ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
+
+        private CustomerHistory customerHistory;
+
         public PrescriptionDecView()
         {
             InitializeComponent();
@@ -57,7 +64,7 @@ namespace His_Pos.PrescriptionDec
             //    _currentCustomer.InsertCustomerData(_currentCustomer);
             //}
             //HisApiBase.csCloseCom();
-            _currentCustomer.Name = "許文章";
+            _currentCustomer.Name = "林連義進";
             _currentCustomer.Birthday = "37/10/01";
             _currentCustomer.IcNumber = "S88824769A";
             _currentCustomer.Gender = true;
@@ -68,9 +75,10 @@ namespace His_Pos.PrescriptionDec
             _icCard.SendDate = "91/07/25";
             _icCard.ValidityPeriod = "108/01/01";
             _icCard.IcMarks.InsuranceMark = "3";
+            _currentCustomer.Id = "1";
             PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
             PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
-            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday.ToString());
+            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
         }
         /*
          *取得病人基本資料
@@ -145,27 +153,16 @@ namespace His_Pos.PrescriptionDec
         }
         private void GetPatientDataButtonClick(object sender, RoutedEventArgs e)
         {
-            
-            Button button = sender as Button;
-            Debug.Assert(button != null, nameof(button) + " != null");
+            Debug.Assert(sender is Button button, nameof(button) + " != null");
             LoadPatentDataFromIcCard();
 
             LoadingWindow loadingWindow = new LoadingWindow("Loading Customer Data...");
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            var sqlParameter = new SqlParameter("CUS_ID", "1");
-            parameters.Add(sqlParameter);
-            Prescription.ItemsSource = null;
-            CustomerHistoryList.Clear();
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORY]", parameters);
-            foreach (DataRow d in table.Rows)
-            {
-                CustomerHistoryList.Add(new CustomerHistory((int)d["TYPE"], d["DATE"].ToString(), d["HISTORY_ID"].ToString(), d["HISTORY_TITLE"].ToString()));
-            }
+            customerHistory = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
 
-            Prescription.ItemsSource = CustomerHistoryList;
-            Prescription.SelectedItem = CustomerHistoryList[0];
+            CusHistoryMaster.ItemsSource = customerHistory.CustomerHistoryMasterCollection;
+            
+            CusHistoryMaster.SelectedIndex = 0;
 
             loadingWindow.backgroundWorker.CancelAsync();
 
@@ -189,6 +186,28 @@ namespace His_Pos.PrescriptionDec
             //    button.Command = null;
             LoadPatentDataFromIcCard();
         }
+
+        private void SetCusHistoryDetail(SystemType type, string customerHistoryDetailId)
+        {
+            switch (type)
+            {
+                case SystemType.HIS:
+                    CusHistoryDetail.Columns[0].Header = "藥名";
+                    CusHistoryDetail.Columns[1].Header = "用法";
+                    CusHistoryDetail.Columns[2].Header = "用途";
+                    CusHistoryDetail.Columns[3].Header = "天數";
+                    break;
+                case SystemType.POS:
+                    CusHistoryDetail.Columns[0].Header = "商品";
+                    CusHistoryDetail.Columns[1].Header = "單價";
+                    CusHistoryDetail.Columns[2].Header = "數量";
+                    CusHistoryDetail.Columns[3].Header = "價格";
+                    break;
+            }
+
+            CusHistoryDetail.ItemsSource = customerHistory.getCustomerHistoryDetails(type, customerHistoryDetailId);
+        }
+
         private void Combo_DropDownOpened(object sender, EventArgs e)
         {
             var comboBox = sender as ComboBox;
@@ -240,7 +259,7 @@ namespace His_Pos.PrescriptionDec
         private void PaySelf_CheckedEvent(object sender, RoutedEventArgs e)
         {
             if (!(sender is CheckBox selfPay)) return;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex || PrescriptionList[PrescriptionMedicines.SelectedIndex].Total.ToString().Equals(string.Empty)) return;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex || PrescriptionList[PrescriptionMedicines.SelectedIndex].Total.ToString(CultureInfo.InvariantCulture).Equals(string.Empty)) return;
             var medicine = PrescriptionList[PrescriptionMedicines.SelectedIndex];
             var selfCost = medicine.Price * medicine.Total;
             if (selfPay.IsChecked == true)
@@ -274,23 +293,149 @@ namespace His_Pos.PrescriptionDec
          */
         private void CustomPay_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Change == null || !(sender is TextBox customPay)) return;
-            if (CustomPay.Text.Equals(string.Empty))
-                Change.Content = (0 - int.Parse(TotalPrice.Text)).ToString();
-            else
-            {
-                Change.Content = (int.Parse(CustomPay.Text) - int.Parse(TotalPrice.Text)).ToString();
-            }
+            if (Change == null || !(sender is TextBox)) return;
+            Change.Content = CustomPay.Text.Equals(string.Empty) ? (0 - int.Parse(TotalPrice.Text)).ToString() : (int.Parse(CustomPay.Text) - int.Parse(TotalPrice.Text)).ToString();
         }
-
+        /*
+         * 清除處方資料
+         */
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             TraverseVisualTree(this);
         }
-
+        /*
+         * 處方申報
+         */
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
             CheckPrescriptionInfo();
+            AddMedicine();
+            prescription.Treatment.MedicalPersonId = "A012345678";
+            var declareData = new DeclareData(prescription);
+            var declareDb = new DeclareDb();
+            declareDb.InsertDb(declareData);
+            MessageBox.Show("處方登錄成功");
+        }
+        /*
+         * 將藥品加入處方
+         */
+        private void AddMedicine()
+        {
+            foreach (var medicine in PrescriptionList)
+            {
+                prescription.Medicines.Add(medicine);
+            }
+        }
+        /*
+         * 設定藥品用量
+         */
+        private void Dosage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var dosage = sender as TextBox;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            {
+                MessageBox.Show("請選擇藥品");
+                return;
+            }
+            if (dosage == null) return;
+            const string regexDouble = "^(([0-9]+\\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\\.[0-9]+)|([0-9]*[1-9][0-9]*))$";
+            const string regexInt = "^[0-9]*[1-9][0-9]*$";
+            var matchDouble = Regex.Match(dosage.Text, regexDouble);
+            var matchInt = Regex.Match(dosage.Text, regexInt);
+            if(matchDouble.Success || matchInt.Success)
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = dosage.Text;
+        }
+        /*
+         * 設定藥品用法
+         */
+        private void Usage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var usage = sender as TextBox;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            {
+                MessageBox.Show("請選擇藥品");
+                return;
+            }
+            if (usage != null)
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Usage = usage.Text;
+        }
+        /*
+         * 設定藥品天數
+         */
+        private void MedicineDays_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var days = sender as TextBox;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            {
+                MessageBox.Show("請選擇藥品");
+                return;
+            }
+            if (days == null) return;
+            const string regex = "^[0-9]*[1-9][0-9]*$";
+            var match = Regex.Match(days.Text, regex);
+            if(match.Success)
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Days = Convert.ToInt32(days.Text);
+        }
+        /*
+         * 設定診治醫師代號
+         */
+        private void DoctorId_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!(sender is TextBox doctorId)) return;
+            prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = doctorId.Text;
+        }
+        /*
+         * 設定藥品用藥途徑
+         */
+        private void PositionAuto_TextChanged(object sender, RoutedEventArgs e)
+        {
+            var position = sender as AutoCompleteBox;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            {
+                MessageBox.Show("請選擇藥品");
+                return;
+            }
+            if (position != null)
+                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Position = position.Text;
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            
+            cusHhistoryFilterCondition = (SystemType)Int16.Parse(radioButton.Tag.ToString());
+
+            if (CusHistoryMaster is null) return;
+            CusHistoryMaster.Items.Filter = CusHistoryFilter;
+        }
+        private bool CusHistoryFilter(object item)
+        {
+            if (cusHhistoryFilterCondition == SystemType.ALL) return true;
+
+            if (((CustomerHistoryMaster)item).Type == cusHhistoryFilterCondition)
+                return true;
+            return false;
+        }
+        /*
+         * 使用者歷史紀錄選擇事件
+         */
+        private void Prescription_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CusHistoryMaster.SelectedItem is null)
+            {
+                CusHistoryMaster.SelectedIndex = 0;
+                return;
+            }
+            
+            CustomerHistoryMaster selectedItem = (CustomerHistoryMaster)CusHistoryMaster.SelectedItem;
+
+            SetCusHistoryDetail(selectedItem.Type, selectedItem.CustomerHistoryDetailId);
+        }
+        private void Prescription_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var dataGrid = sender as DataGrid;
+            Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
+            dataGrid.Focus();
         }
     }
 }

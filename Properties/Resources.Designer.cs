@@ -70,6 +70,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 2 的當地語系化字串。
+        /// </summary>
+        internal static string ChronicAdjustCaseId {
+            get {
+                return ResourceManager.GetString("ChronicAdjustCaseId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 慢性病連續處方箋需填寫連續處方可調劑次數 的當地語系化字串。
         /// </summary>
         internal static string ChronicDeliveryTimesNull {
@@ -174,6 +183,15 @@ namespace His_Pos.Properties {
         internal static string InstitutionIdError {
             get {
                 return ResourceManager.GetString("InstitutionIdError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 庫存管理 的當地語系化字串。
+        /// </summary>
+        internal static string InventoryManagement {
+            get {
+                return ResourceManager.GetString("InventoryManagement", resourceCulture);
             }
         }
         

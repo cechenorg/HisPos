@@ -11,6 +11,7 @@
     xmlns:class="clr-namespace:His_Pos.Class"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
+    xmlns:abstractClass="clr-namespace:His_Pos.AbstractClass"
     dialog:DialogParticipation.Register="{Binding}"
     mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
@@ -23,19 +24,20 @@
         </Style>
         <DataTemplate x:Key="InstitutionAutoComplete">
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="Institutionid" Width="100" >
-                    <!--<Label.DataContext>
-                    </Label.DataContext>-->
+                <Label x:Name="Institutionid" Width="100" Content="{Binding Id}">
+                    <Label.DataContext>
+                        <abstractClass:Institution/>
+                    </Label.DataContext>
                 </Label>
-                <Label x:Name="InstitutionName" Width="350">
-                    <!--<Label.DataContext>
-                    </Label.DataContext>-->
+                <Label x:Name="InstitutionName" Width="350" Content="{Binding Name}">
+                    <Label.DataContext>
+                        <abstractClass:Institution/>
+                    </Label.DataContext>
                 </Label>
             </StackPanel>
         </DataTemplate>
-        <!--<local:DeclareDataList x:Key="PrescriptionOutcome" />
-        <CollectionViewSource x:Key="prescriptionOutcome" Source="{StaticResource PrescriptionOutcome}" 
-                              Filter="DeclareStatusFilter"/>-->
+        <local:DeclareDataList x:Key="PrescriptionOutcome" />
+        <CollectionViewSource x:Key="prescriptionOutcome" Source="{StaticResource PrescriptionOutcome}" />
     </UserControl.Resources>
     <Grid Margin="30,10">
         <Grid.RowDefinitions>
@@ -110,157 +112,37 @@
                     <CheckBox Content="日劑藥費" Margin="20,0,0,0" IsChecked="True" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 </DockPanel>
             </WrapPanel>
-            <Button Content="查詢" Background="DeepSkyBlue" Margin="125,0,0,0" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="40"/>
+            <Button Content="查詢" Background="DeepSkyBlue" Margin="125,0,0,0" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="20" Click="SearchButtonClick"/>
+            <Button Content="匯入申報檔" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="60" Click="DeclareFileImportButtonClick"/>
         </Canvas>
-        <materialDesign:DialogHost Grid.Row="1">
-            <DataGrid x:Name="PrescriptionSet" MinWidth="930" Height="580" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}"
+        <DataGrid Grid.Row="1" x:Name="PrescriptionSet" MinWidth="930" Height="580" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}"
                   AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF727272" 
                   VerticalGridLinesBrush="#FF727272" SelectionUnit="FullRow" SelectionMode="Single" HorizontalContentAlignment="Center" 
-                  CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False">
+                  CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" ItemsSource="{Binding Source={StaticResource prescriptionOutcome}}" CanUserAddRows="False">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <EventSetter Event="Loaded" Handler="Row_Loaded"/>
                     </Style>
                 </DataGrid.RowStyle>
-                <!--<i:Interaction.Triggers>
+                <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{Binding showCustomDialogCommand}" />
                     </i:EventTrigger>
-                </i:Interaction.Triggers>-->
+                </i:Interaction.Triggers>
                 <DataGrid.DataContext>
                     <local:PrescriptionInquire/>
                 </DataGrid.DataContext>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn MinWidth="130">
-                        <DataGridTemplateColumn.Header>
-                            <ComboBox Name="StatusColumn" SelectedIndex="0">
-                                <Label Content="所有處方"/>
-                                <Label Content="申報完成"/>
-                                <Label Content="尚未申報"/>
-                                <Label Content="資料異常"/>
-                            </ComboBox>
-                        </DataGridTemplateColumn.Header>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="CustomHistoriesTypeIcon">
-                                <Image Name="StatusFlagIcon" Width="30" Height="30"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="50" Header="點數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.Customer.Name}"/>
+                    <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.AdjustDate}"/>
+                    <DataGridTextColumn MinWidth="50" Header="點數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding TotalPoint}"/>
+                    <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalPersonId}"/>
+                    <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalInfo.Hospital.Name}"/>
+                    <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalInfo.Hospital.Division.Name}"/>
                     <DataGridTextColumn MinWidth="50" Header="慢箋狀態" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <materialDesign:DialogHost.DialogContent>
-                <Grid Name="PrescriptionDialog" Height="500" Width="700">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <WrapPanel Width="Auto" Grid.Row="0">
-                        <Label Content="處方編號 : "/>
-                        <TextBox Name="D2" />
-                        <Label Content="姓名: "/>
-                        <TextBox Name="D20" />
-                        <Label Content="性別/生日: "/>
-                        <TextBox Name="PatientGender"/>
-                        <TextBox Name="D6" />
-                        <Label Content="身分證號 : "/>
-                        <TextBox Name="D3" />
-                        <Label Content="就醫序號 : "/>
-                        <TextBox Name="D7" />
-                        <Label Content="給藥日份 : "/>
-                        <TextBox Name="D30" />
-                        <Label Content="補報原因 : "/>
-                        <TextBox Name="D4"/>
-                        <Label Content="藥事服務費項目代號 : "/>
-                        <TextBox Name="D37"/>
-                        <Label Content="原處方就醫序號 : "/>
-                        <TextBox Name="D43" Text="{Binding D43, Mode=OneWay}"/>
-                    </WrapPanel>
-                    <WrapPanel Width="Auto" Height="Auto" Grid.Row="1">
-                        <Label Content="調劑藥師 : "/>
-                        <TextBox Name="D25" />
-                        <Label Content="醫療院所 : "/>
-                        <TextBox Name="D21" />
-                        <Label Content="就醫科別 : "/>
-                        <TextBox Name="D13" />
-                        <Label Content="診治醫師 : "/>
-                        <TextBox Name="D24" />
-                        <Label Content="就醫日期 : "/>
-                        <TextBox Name="D14"/>
-                        <Label Content="調劑日期 : "/>
-                        <TextBox Name="D23" />
-                        <Label Content="案件類別 : "/>
-                        <TextBox Name="D1" />
-                        <Label Content="原處方案件分類 : "/>
-                        <TextBox Name="D22" />
-                        <Label Content="連續處方箋調劑序號 : "/>
-                        <TextBox Name="D35" />
-                        <Label Content="連續處方可調劑次數 : "/>
-                        <TextBox Name="D36" />
-                        <Label Content="部分負擔 : "/>
-                        <TextBox Name="D15" />
-                        <Label Content="國際疾病分類碼(一): "/>
-                        <TextBox Name="D8" />
-                        <Label Content="國際疾病分類碼(二): "/>
-                        <TextBox Name="D9" />
-                        <Label Content="特定治療 : "/>
-                        <TextBox Name="D26" />
-                        <Label Content="醫令類別 : "/>
-                        <TextBox Name="P1" />
-                    </WrapPanel>
-                    <ListView x:Name ="PrescriptionMedicineList" Grid.Row="2">
-                        <ListView.View>
-                            <GridView >
-                                <GridViewColumn Header="藥品代號" Width="Auto"/>
-                                <GridViewColumn Header="藥品名稱" Width="Auto"/>
-                                <GridViewColumn Header="用量" />
-                                <GridViewColumn Header="用法" />
-                                <GridViewColumn Header="途徑" />
-                                <GridViewColumn Header="總量" />
-                                <GridViewColumn Header="單價" />
-                                <GridViewColumn Header="點數" />
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <WrapPanel Width="Auto" Grid.Row="3">
-                        <Label Content="特殊材料明細點數小計 : "/>
-                        <TextBox Name="D31"/>
-                        <Label Content="診療明細點數小計 : "/>
-                        <TextBox Name="D32"/>
-                        <Label Content="用藥明細點數小計 : "/>
-                        <TextBox Name="D33" />
-                        <Label Content="行政協助項目部分負擔點數 : "/>
-                        <TextBox Name="D19" />
-                        <Label Content="部分負擔點數 : "/>
-                        <TextBox Name="D17" />
-                        <Label Content="藥事服務費點數 : "/>
-                        <TextBox Name="D38" />
-                        <Label Content="合計點數 : "/>
-                        <TextBox Name="D18" />
-                        <Label Content="申請點數 : "/>
-                        <TextBox Name="D16" />
-                    </WrapPanel>
-                    <Button Style="{StaticResource MaterialDesignFlatButton}"
-                            IsDefault="True"
-                            Command="materialDesign:DialogHost.CloseDialogCommand"
-                            Content="關閉" Grid.Row="4">
-                        <Button.CommandParameter>
-                            <system:Boolean>True</system:Boolean>
-                        </Button.CommandParameter>
-                    </Button>
-                </Grid>
-            </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>
-        <DockPanel Margin="0" Height="70" Background="#7FEEEEEE" VerticalAlignment="Center" Grid.Row="2">
+            <DockPanel Margin="0" Height="70" Background="#7FEEEEEE" VerticalAlignment="Center" Grid.Row="2">
             <Label x:Name="DeclareStatus" Content="已選擇" VerticalContentAlignment="Center" FontSize="18" Margin="50,0,0,0" FontWeight="Bold"/>
             <Button Background="Red" Width="150" Margin="20" Content="匯出申報檔案" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right"/>
         </DockPanel>

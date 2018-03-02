@@ -15,6 +15,10 @@ namespace His_Pos.Class
     {
         public Prescription()
         {
+            IcCard = new IcCard();
+            Pharmacy = new Pharmacy();
+            Treatment = new Treatment();
+            Medicines = new List<Medicine>();
         }
 
         public IcCard IcCard { get; set; }

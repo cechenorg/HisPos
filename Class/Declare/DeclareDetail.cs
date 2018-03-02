@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Class.Product;
+﻿using His_Pos.Class.Product;
 
-namespace His_Pos.Class
+namespace His_Pos.Class.Declare
 {
-    internal class DeclareDetail
+    public class DeclareDetail
     {
         public DeclareDetail(string medicalId, double percent,double price,int sequence,string start,string end)
         {
             MedicalOrder = "9";
             MedicalId = medicalId;
+            Dosage = 0;
             Total = 00001.0;
             Price = price;
             Percent = percent;
@@ -21,7 +17,7 @@ namespace His_Pos.Class
             SetDate(start,end);
         }
 
-        public DeclareDetail(Medicine medicine,string adjustCase,int sequence, string start, string end,string id)
+        public DeclareDetail(Medicine medicine,string adjustCase,int sequence)
         {
             if(!medicine.PaySelf || adjustCase == "3")//p1
                 MedicalOrder = "1";
@@ -31,8 +27,10 @@ namespace His_Pos.Class
             SetMedicate(medicine);
             Sequence = sequence;
             CountPoint();
-            SetDate(start, end);
-            SetMedicalPersonnelId(id);
+        }
+
+        public DeclareDetail()
+        {
         }
 
         public string MedicalOrder { get; set; }//p1
@@ -49,7 +47,9 @@ namespace His_Pos.Class
         public string StartDate { get; set; }//p12
         public string EndDate { get; set; }//p13
         public string MedicalPersonnelId { get; set; }//p14
-        
+        public string Form { get; set; }
+        public string Name { get; set; }
+
         private void SetMedicate(Medicine medicine)
         {
             Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
@@ -81,5 +81,6 @@ namespace His_Pos.Class
                 Point = Price * Total * Percent;
             }
         }
-    }
+      
+    }   
 }

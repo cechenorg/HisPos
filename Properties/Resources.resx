@@ -189,4 +189,10 @@
   <data name="CaseCategoryNull" xml:space="preserve">
     <value>請選擇調劑案件(案件分類)</value>
   </data>
+  <data name="ChronicAdjustCaseId" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="InventoryManagement" xml:space="preserve">
+    <value>庫存管理</value>
+  </data>
 </root>

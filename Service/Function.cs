@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -9,6 +11,8 @@ using System.Windows;
 using System.Windows.Media;
 using System.Xml;
 using His_Pos.Class;
+using His_Pos.Properties;
+using His_Pos.Service;
 using ImeLib;
 
 namespace His_Pos
@@ -133,7 +137,7 @@ namespace His_Pos
             return date;
         }
 
-        public void ExportXml(XmlDocument xml,string FileTypeName) {
+        public string ExportXml(XmlDocument xml,string FileTypeName) {
             Function function = new Function();
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
@@ -169,7 +173,7 @@ namespace His_Pos
             psi.WaitForInputIdle();
             //設定要等待相關的處理序結束的時間 
             psi.WaitForExit();
-
+            return path_file + ".xml";
             //StringBuilder pUploadFileName = new StringBuilder();
             //pUploadFileName.Append(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml");
             //StringBuilder fFileSize = new StringBuilder();
@@ -207,6 +211,41 @@ namespace His_Pos
             if (input != string.Empty) return false;
             MessageBox.Show(message);
             return true;
+        }
+
+        public string ToInvCulture(double value)
+        {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public string SetStrFormat(double value, string format)
+        {
+            return string.Format(format, value);
+        }
+
+        public string SetStrFormatInt(int value, string format)
+        {
+            return string.Format(format, value);
+        }
+
+        public string XmlTagCreator(string tagName, string value)
+        {
+            return "<" + tagName + ">" + value + "</" + tagName + ">";
+        }
+        /*
+         * 取得xml node資料
+         */
+        public string GetXmlNodeData(XmlDocument xml,string node)
+        {
+            return xml.SelectSingleNode(node)?.InnerText;
+        }
+        /*
+         * 取得Procedure資料並以DataTable回傳
+         */
+        public DataTable GetDataFromProc(string procName,List<SqlParameter> param = null)
+        {
+            var conn = new DbConnection(Settings.Default.SQL_local);
+            return conn.ExecuteProc(procName, param);
         }
     }
 }

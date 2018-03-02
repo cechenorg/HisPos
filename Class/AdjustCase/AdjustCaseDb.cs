@@ -19,5 +19,20 @@ namespace His_Pos.Class.AdjustCase
                 AdjustCaseList.Add(a);
             }
         }
+        /*
+         *回傳對應調劑案件之id + name string
+         */
+        public static string GetAdjustCase(string tag)
+        {
+            string result = string.Empty;
+            foreach (var adjust in AdjustCaseDictionary)
+            {
+                if (adjust.Key == tag)
+                {
+                    result = adjust.Key + ". " + adjust.Value;
+                }
+            }
+            return result;
+        }
     }
 }

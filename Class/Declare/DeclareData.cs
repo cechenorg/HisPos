@@ -1,20 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml;
 using His_Pos.Properties;
 using His_Pos.Service;
 
 namespace His_Pos.Class.Declare
 {
-    internal class DeclareData
+    public class DeclareData
     {
         public DeclareData(Prescription prescription)
         {
             Prescription = new Prescription();
             Prescription = prescription;
+            SpecailMaterialPoint = 0;
+            DiagnosisPoint = 0;
+            DrugsPoint = 0;
+            SetDeclareDetail();
+            SetCopaymentPoint();
+            CountDeclareDeatailPoint();
+            ChronicSequence = string.Empty;
+            ChronicTotal = string.Empty;
+        }
+
+        public DeclareData()
+        {
         }
 
         public Prescription Prescription {get;set;}
-        public List<DeclareDetail> DeclareDetails { get; set; }
+        public List<DeclareDetail> DeclareDetails { get; set; } = new List<DeclareDetail>();
         public string DeclareMakeUp { get; set; }//D4補報註記
         public int DeclarePoint { get; set; }//D16申請點數
         public int CopaymentPoint { get; set; }//D17部分負擔點數
@@ -27,10 +40,13 @@ namespace His_Pos.Class.Declare
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
         public string MedicalServiceCode { get; set; }//D37藥事服務費項目代號
         public int MedicalServicePoint { get; set; }//D38藥事服務費點數
-
+        public string StatusFlag { get; set; }
+        public XmlDocument Xml { get; set; } = new XmlDocument();
+        public string Id { get; set; }
+        private int medFormCount = 0;
         private void SetCopaymentPoint()
         {
-            int copaymentPoint = 0;
+            var copaymentPoint = 0;
             var copaymentId = Prescription.Treatment.Copayment.Id;
             if (CheckCopaymentFreeProject())//免收部分負擔
                 copaymentPoint = 0;
@@ -39,7 +55,7 @@ namespace His_Pos.Class.Declare
             SetAssistProjectCopaymentPoint(copaymentPoint);
         }
 
-        public void CountDeclareDeatailPoint()
+        private void CountDeclareDeatailPoint()
         {
             var dateTimeExtensions = new DateTimeExtensions();
             var cusAge = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(Prescription.Treatment.Customer.Birthday));
@@ -58,7 +74,6 @@ namespace His_Pos.Class.Declare
             if (cusAge <= 12 && medFormCount == 3) return ma4;
             return ma1;
         }
-
         private int CountOralLiquidAgent()
         {
             var medFormCount = 0;
@@ -70,7 +85,6 @@ namespace His_Pos.Class.Declare
             }
             return medFormCount;
         }
-
         private void CheckDayPay(int dayPay)
         {
             DrugsPoint = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
@@ -91,14 +105,15 @@ namespace His_Pos.Class.Declare
                     break;
             }
         }
-
         private void SetMedicalServiceCode(int dayPay)
         {
             var adjustCaseId = Prescription.Treatment.AdjustCase.Id;
             var treatmentCaseId = Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
             const string westMedNormal = "01"; //原處方案件:西醫一般
+            const string chronic = "02"; //原處方案件:西醫一般
             var medicineDays = Convert.ToInt32(Prescription.Treatment.MedicineDays);
             const int daysLimit = 3; //日劑藥費天數限制
+            const int normalDaysLimit = 7; //西醫一般案件天數限制
             switch (adjustCaseId)
             {
                 case "3" when treatmentCaseId == westMedNormal && medicineDays > daysLimit:
@@ -106,9 +121,14 @@ namespace His_Pos.Class.Declare
                 case "1" when treatmentCaseId == westMedNormal && medicineDays <= daysLimit && DrugsPoint <= dayPay * medicineDays:
                     CheckDayPay(dayPay);
                     break;
+                case "1" when treatmentCaseId == westMedNormal && medicineDays <= normalDaysLimit && DrugsPoint > dayPay * medicineDays:
+                    MedicalServiceCode = "05203C";
+                    break;
+                case "2" when treatmentCaseId == chronic:
+                    SetChronicMedicalServiceCode();
+                    break;
             }
         }
-
         private bool CheckCopaymentFreeProject()
         {
             var copaymentId = Prescription.Treatment.Copayment.Id;
@@ -159,6 +179,47 @@ namespace His_Pos.Class.Declare
             }
             CopaymentPoint = copaymentPoint;
             AssistProjectCopaymentPoint = 0;
+        }
+        private void SetDeclareDetail() {
+            var count = 1;
+            foreach (var medicine in Prescription.Medicines) {
+                var detail = new DeclareDetail(medicine,Prescription.Treatment.AdjustCase.Id,count);
+                CountDeclarePoint(detail);
+                DeclareDetails.Add(detail);
+                count++;
+            }
+        }
+
+        private void CountDeclarePoint(DeclareDetail detail)
+        {
+            double drugs = 0,diagnose = 0,special = 0,service = 0;
+            if (detail.MedicalOrder.Equals("1"))
+                drugs += detail.Point;
+            else if (detail.MedicalOrder.Equals("2"))
+                diagnose += detail.Point;
+            else if (detail.MedicalOrder.Equals("3"))
+                special += detail.Point;
+            else if (detail.MedicalOrder.Equals("9"))
+                service += detail.Point;
+            DrugsPoint = Convert.ToInt32(Math.Round(drugs, 0, MidpointRounding.AwayFromZero));
+            DiagnosisPoint = Convert.ToInt32(Math.Round(diagnose, 0, MidpointRounding.AwayFromZero));
+            SpecailMaterialPoint = Convert.ToInt32(Math.Round(special, 0, MidpointRounding.AwayFromZero));
+            MedicalServicePoint = Convert.ToInt32(Math.Round(service, 0, MidpointRounding.AwayFromZero));
+        }
+
+        private void SetChronicMedicalServiceCode()
+        {
+            const int daysLimit1 = 13;
+            const int daysLimit2 = 27;
+            int days = int.Parse(Prescription.Treatment.MedicineDays);
+            if (days <= daysLimit1)
+                MedicalServiceCode = "05224C";
+            else if(days > daysLimit1 && days <= daysLimit2)
+                MedicalServiceCode = "05207C";
+            else
+            {
+                MedicalServiceCode = "05211C";
+            }
         }
     }
 }

@@ -2,6 +2,10 @@
 {
     public class AdjustCase : Selection
     {
+        public AdjustCase()
+        {
+        }
+
         public AdjustCase(string id, string name)
         {
             Id = id;
