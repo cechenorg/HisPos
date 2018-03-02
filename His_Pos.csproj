@@ -40,6 +40,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -170,41 +172,68 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Class\AdjustCase.cs" />
+    <Compile Include="Class\AdjustCase\AdjustCase.cs" />
+    <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority.cs" />
-    <Compile Include="Class\ChronicPrescription.cs" />
-    <Compile Include="Class\ContactInfo.cs" />
-    <Compile Include="Class\Copayment.cs" />
-    <Compile Include="Class\Customer.cs" />
-    <Compile Include="Class\DeclareData.cs" />
-    <Compile Include="Class\DeclareDetail.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
+    <Compile Include="Class\Declare\DeclareDB.cs" />
+    <Compile Include="Class\HisUpload\HisUploadData.cs" />
+    <Compile Include="Class\HisUpload\HisUploadDb.cs" />
+    <Compile Include="Class\IcCardPay.cs" />
+    <Compile Include="Class\IcCardPrediction.cs" />
+    <Compile Include="Class\Person\ContactInfo.cs" />
+    <Compile Include="Class\Copayment\Copayment.cs" />
+    <Compile Include="Class\Copayment\CopaymentDb.cs" />
+    <Compile Include="Class\Person\Customer.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistory.cs" />
+    <Compile Include="Class\Declare\DeclareData.cs" />
+    <Compile Include="Class\Declare\DeclareDetail.cs" />
     <Compile Include="Class\Department.cs" />
     <Compile Include="Class\DiseaseCode.cs" />
-    <Compile Include="Class\Division.cs" />
+    <Compile Include="Class\Division\Division.cs" />
+    <Compile Include="Class\Division\DivisionDb.cs" />
     <Compile Include="Class\Enum.cs" />
+    <Compile Include="Class\Feature.cs" />
     <Compile Include="Class\Hospital.cs" />
+    <Compile Include="Class\IcCard.cs" />
+    <Compile Include="Class\IcMarks.cs" />
+    <Compile Include="Class\Institutions.cs" />
     <Compile Include="Class\MedicalInfo.cs" />
-    <Compile Include="Class\MedicalPersonnel.cs" />
-    <Compile Include="Class\PaymentCategory.cs" />
+    <Compile Include="Class\Person\CustomerDb.cs" />
+    <Compile Include="Class\Person\MedicalPersonnel.cs" />
+    <Compile Include="Class\NewbornsData.cs" />
+    <Compile Include="Class\PaymentCategory\PaymentCategory.cs" />
+    <Compile Include="Class\PaymentCategory\PaymentCategroyDb.cs" />
     <Compile Include="Class\Pharmacy.cs" />
+    <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
+    <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\SpecialCode.cs" />
+    <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />
+    <Compile Include="Class\TreatmentCase\TreatmentCaseDb.cs" />
     <Compile Include="Class\Treatment.cs" />
-    <Compile Include="Class\TreatmentCase.cs" />
-    <Compile Include="Interface\IInstution.cs" />
-    <Compile Include="Interface\IPerson.cs" />
-    <Compile Include="Interface\IProduct.cs" />
-    <Compile Include="Interface\ISelection.cs" />
+    <Compile Include="AbstractClass\Instution.cs" />
+    <Compile Include="AbstractClass\Person.cs" />
+    <Compile Include="AbstractClass\Product.cs" />
+    <Compile Include="Class\Selection.cs" />
     <Compile Include="Class\Leave.cs" />
     <Compile Include="Class\Medicate.cs" />
-    <Compile Include="Class\Medicine.cs" />
-    <Compile Include="Class\OTC.cs" />
+    <Compile Include="Class\Product\Medicine.cs" />
+    <Compile Include="Class\Product\OTC.cs" />
+    <Compile Include="Class\Vaccination.cs" />
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="HisApi\HisApiFunction.cs" />
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Interface\ISelection.cs" />
+    <Compile Include="InventoryManagement\InventoryManagement.cs" />
+    <Compile Include="InventoryManagement\InventoryManagementView.xaml.cs">
+      <DependentUpon>InventoryManagementView.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
@@ -213,6 +242,7 @@
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="PrescriptionDec\PrescriptionDec.cs" />
+    <Compile Include="PrescriptionDec\PrescriptionDecView.cs" />
     <Compile Include="PrescriptionDec\PrescriptionDecView.xaml.cs">
       <DependentUpon>PrescriptionDecView.xaml</DependentUpon>
     </Compile>
@@ -232,10 +262,9 @@
     <Compile Include="PrescriptionRevise\PrescriptionReviseView.xaml.cs">
       <DependentUpon>PrescriptionReviseView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
-    <Compile Include="Service\globalservice.cs" />
-    <Compile Include="Service\localservice.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\TabBase.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -247,6 +276,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="IconLabel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InventoryManagement\InventoryManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -266,7 +299,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class\User.cs" />
+    <Compile Include="Class\Person\User.cs" />
     <Compile Include="HisApi\HisApiBase.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -370,6 +403,8 @@
     <Resource Include="Images\SystemBackground2.jpg" />
     <Resource Include="Images\SystemBackgroundWhite.jpg" />
     <Resource Include="Images\Truck_50px.png" />
+    <Resource Include="Images\Settings.png" />
+    <Resource Include="Images\PosHisDot.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
