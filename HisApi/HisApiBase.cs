@@ -3,7 +3,7 @@ using System.Text;
 
 namespace His_Pos.HisApi
 {
-    class HisApiBase
+    public class HisApiBase
     {
         // 1.1 讀取不需個人PIN碼資料
         [DllImport("csHis.dll")]

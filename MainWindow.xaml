@@ -38,12 +38,16 @@
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid>
-            <Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230"/>
+                <ColumnDefinition Width="1365"/>
+            </Grid.ColumnDefinitions>
+                    <Grid.Background>
                 <ImageBrush ImageSource="Images/SystemBackground2.jpg"/>
             </Grid.Background>
-            <StackPanel Name="MenuStack"  Background="#FF363535" Width="230" HorizontalAlignment="Left" Orientation="Vertical">
+            <StackPanel Name="MenuStack"  Background="#FF363535" Orientation="Vertical" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Name="SystemIcon" Source="Images/His.png" Height="60" Width="60" Margin="0,0,0,5" />
+                    <Image Name="SystemIcon" Source="Images/His.png" Height="60" Width="60" Margin="0,-1,0,5" />
                     <Label Name="HisSwitch" FontFamily="Arial" Foreground="LightSkyBlue" Content="H I S" Margin="25,10,0,0" FontWeight="Medium" FontSize="16" TextOptions.TextFormattingMode="Display" FontStretch="SemiExpanded" MouseDown="MenuSwitchMouseDown"/>
                     <Label Name="PosSwitch" FontFamily="Arial" Foreground="DarkGray" Content="P O S" Margin="25,10,0,0" FontWeight="Medium" FontSize="16" TextOptions.TextFormattingMode="Display" FontStretch="SemiExpanded" MouseDown="MenuSwitchMouseDown"/>
                 </StackPanel>
@@ -59,14 +63,25 @@
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>
-            <DockPanel Name="FeatureDock" Height="Auto" Width="Auto" Margin="230,0,355,0">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Background="#FF494949" Grid.Column="0">
+                <StackPanel Orientation="Horizontal">
+                    <Label Name="UserName" FontFamily="Arial" Foreground="White" Margin="10,10,0,0" FontSize="18" FontWeight="Bold"/>
+                    <Label FontFamily="Arial" Foreground="White" Margin="0,10,0,0" FontSize="15" Content="處方張數: " VerticalAlignment="Center"/>
+                    <Label Name="PrescriptionCount" FontFamily="Arial" Foreground="White" Margin="0,10,10,0" FontSize="15"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"> 
+                    <Image Margin="10,5,0,10" Height="20" Source="Images/Settings.png"/>
+                    <TextBlock Name="SystemTime" FontSize="15" TextWrapping="Wrap" Margin="10,5,10,10" Foreground="DarkGray" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+            <DockPanel Name="FeatureDock" Height="Auto" Width="Auto" Grid.Column="1">
                 <DockPanel.Background>
                     <ImageBrush ImageSource="Images/SystemBackgroundWhite.jpg"/>
                 </DockPanel.Background>
-                <chromeTabs:ChromeTabControl x:Name="MyChromeTabControl" Width="1015" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
+                <chromeTabs:ChromeTabControl x:Name="MyChromeTabControl" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="WhiteSmoke"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
-                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" TabTearTriggerDistance="10">
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" TabTearTriggerDistance="10" Height="900">
                     <!--We override the control template here to show how you can modify the properties of tab panel and content presenter-->
                     <chromeTabs:ChromeTabControl.Template>
                         <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
@@ -107,19 +122,6 @@
                     </chromeTabs:ChromeTabControl.ItemTemplate>
                 </chromeTabs:ChromeTabControl>
             </DockPanel>
-            <StackPanel Name="PaymentBlock" Orientation="Vertical" Width="350" HorizontalAlignment="Right" >
-                <TextBox Name="Barcode" Height="0" TextWrapping="Wrap" Width="240"/>
-                <!--<Image Name="PaymentSwitchButton" Source="Icons/PaymentSwitchIcon.png" Height="30" Width="30" HorizontalAlignment="Left" MouseDown="PaymentSwitch"/>-->
-                <DataGrid Name="BarcodeDataGrid" Height="800" Width="350">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="品名" />
-                        <DataGridTextColumn Header="單價" />
-                        <DataGridTextColumn Header="條碼" />
-                        <DataGridTextColumn Header="描述" />
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Button Content="Button" Width="75" VerticalContentAlignment="Bottom" Command="{Binding AddTabCommand}" CommandParameter="Hi"/>
-            </StackPanel>
         </Grid>
     </Viewbox>
 </Window>

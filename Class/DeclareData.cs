@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class
 {
-    public class DeclareData
+    internal class DeclareData
     {
         public DeclareData(Prescription prescription)
         {
@@ -18,8 +18,7 @@ namespace His_Pos.Class
             ChronicPrescription = new ChronicPrescription();
             ChronicPrescription = chronicPrescription;
         }
-
         public Prescription Prescription {get;set;}
-        public ChronicPrescription ChronicPrescription { get; set; }
+        public ChronicPrescription ChronicPrescription {get; set;}
     }
 }

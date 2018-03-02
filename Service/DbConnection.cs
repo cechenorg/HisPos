@@ -1,15 +1,20 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using System.Data;
+using System.Data.SqlClient;
 using System.Globalization;
 
-namespace His_Pos
+namespace His_Pos.Service
 {
     class DbConnection
     {
-        private string _connectionString;
-       public DbConnection(string connection) { _connectionString = connection; }
+        private SqlConnection _connection;
+
+        public DbConnection()
+        {
+        }
+
+        public DbConnection(string connection) { _connection = new SqlConnection(connection); }
 
         ///<summary>
         ///ChangeNameToEnglish()
@@ -21,27 +26,23 @@ namespace His_Pos
         ///</remarks>
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
-
             var table = new DataTable();
             try
             {
-                var myConn = new SqlConnection(_connectionString);
-                myConn.Open();
-                var myCommand = new SqlCommand(procName, myConn);
+                _connection.Open();
+                var myCommand = new SqlCommand(procName, _connection);
                 myCommand.CommandType = CommandType.StoredProcedure;
 
                 if (parameterList != null)
-                {
                     foreach (var param in parameterList)
                     {
                         myCommand.Parameters.Add(param);
                     }
-                }
 
                 var sqlDapter = new SqlDataAdapter(myCommand);
-                var commandBuilder = new SqlCommandBuilder(sqlDapter);
                 table.Locale = CultureInfo.InvariantCulture;
                 sqlDapter.Fill(table);
+                _connection.Close();
             }
             catch (Exception ex)
             {
@@ -62,9 +63,9 @@ namespace His_Pos
         {
             string sql = @"Insert into TestDB.dbo.WebLog (COMNAME,SYSTEM,USER_ID,FUNCTION_NAME,SYSTIME,DESCRIPTION) 
                                                    Values(@comname,@system,@userId,@functionName,@systime,@description)";
-                SqlConnection myConn = new SqlConnection(_connectionString);
-                myConn.Open();
-                SqlCommand myCommand = new SqlCommand(sql, myConn);
+
+                _connection.Open();
+                SqlCommand myCommand = new SqlCommand(sql, _connection);
                 myCommand.Parameters.AddWithValue("@comname", Environment.MachineName);
                 myCommand.Parameters.AddWithValue("@system", system);
                if (MainWindow.CurrentUser.Id == null) MainWindow.CurrentUser.Id = "";
@@ -73,10 +74,13 @@ namespace His_Pos
                 myCommand.Parameters.AddWithValue("@systime", Convert.ToDateTime(DateTime.Now));
                 myCommand.Parameters.AddWithValue("@description", description);
                 myCommand.ExecuteNonQuery();
-                myConn.Close();
+                _connection.Close();
         }//Log()
 
-
-
+        public DataTable SetProcName(string procName,DbConnection connection)
+        {
+            var table = connection.ExecuteProc(procName);
+            return table;
+        }
     }
 }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Class.Product;
 
 namespace His_Pos.Class
 {
-    public class DeclareDetail
+    internal class DeclareDetail
     {
         public DeclareDetail(string medicalId, double percent,double price,int sequence,string start,string end)
         {
@@ -48,13 +49,13 @@ namespace His_Pos.Class
         public string StartDate { get; set; }//p12
         public string EndDate { get; set; }//p13
         public string MedicalPersonnelId { get; set; }//p14
-
+        
         private void SetMedicate(Medicine medicine)
         {
-            Dosage = medicine.Medicate.Dosage;//p3
-            Usage = medicine.Medicate.Usage;//p4
-            Position = medicine.Medicate.Position;//p5
-            Days = medicine.Medicate.Days;//p11
+            Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
+            Usage = medicine.MedicalCategory.Usage;//p4
+            Position = medicine.MedicalCategory.Position;//p5
+            Days = medicine.MedicalCategory.Days;//p11
         }
         private void SetMedicine(Medicine medicine)
         {

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class
 {
-    public class ChronicPrescription : Prescription
+    public abstract class Selection
     {
-        public int ChronicSequence { get; set; }
-        public int ChronicTotal { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

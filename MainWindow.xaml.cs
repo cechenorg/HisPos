@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using His_Pos.Class;
+using His_Pos.Class.Person;
 using His_Pos.ViewModel;
 using MenuUserControl;
 using Label = System.Windows.Controls.Label;
@@ -18,43 +21,56 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
-        public static DataTable MedicineDataTable = new DataTable();
-        public static User CurrentUser = new User();
-        private List<DockingWindow> _openWindows;
-        public static DataView View;
         public MainWindow(User userLogin)
         {
+            FeatureFactory();
             InitializeComponent();
             WindowState = WindowState.Normal;
             Width = SystemParameters.PrimaryScreenWidth * 0.833;
             Height = Width * 0.5625;
-            InitializePaymentBlock();
             CurrentUser = userLogin;
-            InitializeMenu(HisHided);
+            InitializePosMenu();
+            InitializeHisMenu();
+            InitialUserBlock();
+            StratClock();
             _openWindows = new List<DockingWindow>();
         }
 
-        private void InitializeMenu(bool hisHided)
+        private void InitialUserBlock()
         {
-            if (hisHided)
-                InitializePosMenu();
-            else
-                InitializeHisMenu();
+            UserName.Content = CurrentUser.Name;
         }
 
+        private void FeatureFactory()
+        {
+            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription, new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire, Properties.Resources.hisPrescriptionRevise }));
+
+        }
+        
         private void InitializePosMenu()
         {
-            HisMenu.Visibility = Visibility.Collapsed;
-            PosMenu.Visibility = Visibility.Visible;
-            _posFeaturesItemsList = new List<string[]> { _posFeatures1Item};
-            _posFeaturesList = new List<UserControl1> { PosFeature1};
-            for (int i = 0; i < 1; i++) {
-                _posFeaturesList[i].SetLabelText(_posFeatures[i]);
-                _posFeaturesList[i].SetLabelImage(_posFeaturesIcon[i]);
-                SetFeaturesItem(_posFeaturesList[i], _posFeaturesItemsList[i]);
+            for (int i = 0; i < PosFeatures.Count; i++)
+            {
+                PosFeature1.SetLabelText(PosFeatures[i].Title);
+                PosFeature1.SetLabelImage(PosFeatures[i].Icon);
+                SetFeaturesItem(PosFeature1, PosFeatures[i].Functions);
             }
-            UpdateLayout();
         }
+        private void InitializeHisMenu()
+        {
+            for (int i = 0; i < HisFeatures.Count; i++)
+            {
+                HisFeature1.SetLabelText(HisFeatures[i].Title);
+                HisFeature1.SetLabelImage(HisFeatures[i].Icon);
+                SetFeaturesItem(HisFeature1, HisFeatures[i].Functions);
+            }
+        }
+        private void MenuChange()
+        {
+            PosMenu.Visibility = (PosMenu.Visibility == Visibility.Visible)? Visibility.Collapsed : Visibility.Visible;
+            HisMenu.Visibility = (HisMenu.Visibility == Visibility.Visible) ? Visibility.Collapsed : Visibility.Visible;
+        }
+
         private void SetFeaturesItem(UserControl1 features, string [] itemsName)
         {
             if (features == null || itemsName == null)
@@ -65,24 +81,6 @@ namespace His_Pos
                 var newItem = new MenuItem();
                 features.NewMenuItem(t,newItem, FeaturesItemMouseDown);
             }
-        }
-        private void InitializeHisMenu()
-        {
-            PosMenu.Visibility = Visibility.Collapsed;
-            HisMenu.Visibility = Visibility.Visible;
-            HisFeaturesItemsList = new List<string[]> { HisFeatures1Item };
-            HisFeaturesList = new List<UserControl1> { HisFeature1 };
-            for (int i = 0; i < 1; i++)
-            {
-                HisFeaturesList[i].SetLabelText(HisFeatures[i]);
-                HisFeaturesList[i].SetLabelImage(HisFeaturesIcon[i]);
-                SetFeaturesItem(HisFeaturesList[i], HisFeaturesItemsList[i]);
-            }
-            UpdateLayout();
-        }
-        private void InitializePaymentBlock()
-        {
-            InputMethod.SetIsInputMethodEnabled(Barcode, false);
         }
 
         private void FeatureMouseDown(object sender, MouseButtonEventArgs e)
@@ -101,20 +99,35 @@ namespace His_Pos
         private void MenuSwitchMouseDown(object sender, MouseButtonEventArgs e)
         {
             var menuLabel = sender as Label;
-            if (menuLabel != null && menuLabel.Content.Equals("P O S"))
+
+            if (menuLabel is null) return;
+
+            switch (menuLabel.Content)
             {
-                menuLabel.Foreground = Brushes.Orange;
-                HisSwitch.Foreground = Brushes.DimGray;
-                InitializeMenu(true);
+                case "P O S":
+                    menuLabel.Foreground = Brushes.Orange;
+                    HisSwitch.Foreground = Brushes.DimGray;
+                    MenuChange();
+                    break;
+                case "H I S":
+                    menuLabel.Foreground = Brushes.LightSkyBlue;
+                    PosSwitch.Foreground = Brushes.DimGray;
+                    MenuChange();
+                    break;
             }
-            else if(menuLabel != null && menuLabel.Content.Equals("H I S"))
-            {
-                menuLabel.Foreground = Brushes.LightSkyBlue;
-                PosSwitch.Foreground = Brushes.DimGray;
-                InitializeMenu(false);
-            }
-            InitializeComponent();
-            UpdateLayout();
+        }
+        private void TickEvent(Object sender, EventArgs e)
+        {
+            SystemTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture);
+        }
+        /*
+         *啟動處方登錄時間Timer
+         */
+        private void StratClock()
+        {
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            timer.Tick += TickEvent;
+            timer.Start();
         }
     }
 }

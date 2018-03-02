@@ -40,7 +40,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -50,7 +49,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -175,19 +173,12 @@
     <Compile Include="Class\AdjustCase\AdjustCase.cs" />
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
-    <Compile Include="Class\HisUpload\HisUploadData.cs" />
-    <Compile Include="Class\HisUpload\HisUploadDb.cs" />
-    <Compile Include="Class\IcCardPay.cs" />
-    <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
     <Compile Include="Class\Copayment\Copayment.cs" />
     <Compile Include="Class\Copayment\CopaymentDb.cs" />
     <Compile Include="Class\Person\Customer.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistory.cs" />
+    <Compile Include="Class\CustomerHistory.cs" />
     <Compile Include="Class\Declare\DeclareData.cs" />
     <Compile Include="Class\Declare\DeclareDetail.cs" />
     <Compile Include="Class\Department.cs" />
@@ -207,7 +198,6 @@
     <Compile Include="Class\PaymentCategory\PaymentCategory.cs" />
     <Compile Include="Class\PaymentCategory\PaymentCategroyDb.cs" />
     <Compile Include="Class\Pharmacy.cs" />
-    <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\SpecialCode.cs" />
@@ -222,7 +212,6 @@
     <Compile Include="Class\Medicate.cs" />
     <Compile Include="Class\Product\Medicine.cs" />
     <Compile Include="Class\Product\OTC.cs" />
-    <Compile Include="Class\Vaccination.cs" />
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
     </Compile>
@@ -231,10 +220,6 @@
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\ISelection.cs" />
-    <Compile Include="InventoryManagement\InventoryManagement.cs" />
-    <Compile Include="InventoryManagement\InventoryManagementView.xaml.cs">
-      <DependentUpon>InventoryManagementView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
@@ -276,10 +261,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="IconLabel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="InventoryManagement\InventoryManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -404,7 +385,6 @@
     <Resource Include="Images\SystemBackgroundWhite.jpg" />
     <Resource Include="Images\Truck_50px.png" />
     <Resource Include="Images\Settings.png" />
-    <Resource Include="Images\PosHisDot.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

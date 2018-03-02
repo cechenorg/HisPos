@@ -8,7 +8,6 @@ namespace His_Pos.Interface
 {
     public interface ISelection
     {
-        string Id { get; set; }
-        string Name { get; set; }
+        void GetData();
     }
 }

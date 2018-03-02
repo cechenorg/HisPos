@@ -2,24 +2,15 @@
 
 namespace His_Pos.Class
 {
-    public struct Leave
+    public class Leave
 	{
-	    public int[] Leaves { get; set; }
-
-	    public Leave(int sick, int funeral, int maternity, int annual, int adjust, int marriage)
-        {
-            Leaves = new int[6]{0,0,0,0,0,0};
-            Leaves[0] += sick;
-            Leaves[1] += funeral;
-            Leaves[2] += maternity;
-            Leaves[3] += annual;
-            Leaves[4] += adjust;
-            Leaves[5] += marriage;
-        }
-
-	    public void SetLeave(int type,int date)
+        //0 : 病假 , 1:喪假 , 2:產假, 3:特休, 4:調假, 5:婚假
+        public Dictionary<string, int> LeaveDictionary = new Dictionary<string, int>
 	    {
-	        Leaves[type] += date;
-        }
-	}
+	        {"Sick", 0}, {"Funeral", 1},
+	        {"Maternity", 2}, {"Annual", 3},
+	        {"Adjust", 4},{"Marriage", 5}
+        };
+        public int[] Leaves = {0,0,0,0,0,0};
+    }
 }

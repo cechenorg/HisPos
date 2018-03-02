@@ -2,7 +2,9 @@
 using System.ComponentModel;
 using System.Data;
 using His_Pos.Class;
+using His_Pos.Class.Person;
 using His_Pos.Properties;
+using His_Pos.Service;
 
 namespace His_Pos
 {

@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using His_Pos.Interface;
+using His_Pos.AbstractClass;
+using His_Pos.Class.Person;
 
 namespace His_Pos.Class
 {
-    public class Pharmacy : IInstitution
+    public class Pharmacy : Institution
     {
-        #region --IInstitution--
-        public string Id { get; set; }
-        public string Name { get; set; }
-        #endregion
-
+        public Pharmacy(string id, string name) : base(id, name)
+        {
+            Id = id;
+            Name = name;
+        }
+        public MedicalPersonnel MedicalPersonnel { get; set; }
     }
 }
