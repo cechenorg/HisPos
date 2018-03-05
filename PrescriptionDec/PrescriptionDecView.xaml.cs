@@ -40,6 +40,9 @@ namespace His_Pos.PrescriptionDec
         {
             InitializeComponent();
             DataContext = this;
+            var twCulture = new CultureInfo("zh-TW", true);
+            System.Threading.Thread.CurrentThread.CurrentCulture = twCulture;
+            System.Threading.Thread.CurrentThread.CurrentUICulture = twCulture;
             InitializeLists();
             InitializeUiElementData();
         }

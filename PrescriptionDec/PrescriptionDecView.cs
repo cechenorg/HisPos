@@ -416,8 +416,8 @@ namespace His_Pos.PrescriptionDec
                     return;
                 }
             }
-            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
-            ci.DateTimeFormat.ShortDatePattern = "yyyy/mm/dd";
+            CultureInfo ci = CultureInfo.CreateSpecificCulture("zh-TW");
+            ci.DateTimeFormat.ShortDatePattern = "yyy/mm/dd";
             Thread.CurrentThread.CurrentCulture = ci;
             var d = new DateTimeExtensions();
             prescription.Treatment.TreatmentDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(TreatmentDate.SelectedDate));
