@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
+using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Product;
@@ -212,79 +213,20 @@ namespace His_Pos.PrescriptionDec
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            if (Prescription == null) return;
-            var checkBox = sender as CheckBox;
-            Debug.Assert(checkBox != null, nameof(checkBox) + " != null");
-            if (checkBox.Tag.ToString().Equals("0") && _historyFilterCondition == 2)
-                _historyFilterCondition = 0;
-            else if (checkBox.Tag.ToString().Equals("1") && _historyFilterCondition == 2)
-                _historyFilterCondition = 1;
-            else
-            {
-                _historyFilterCondition = -1;
-                Prescription.Items.Filter = null;
-                return;
-            }
-            Prescription.Items.Filter = HistoryFilter;
+
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            if (Prescription == null) return;
-            var checkBox = sender as CheckBox;
-            Debug.Assert(checkBox != null, nameof(checkBox) + " != null");
-            if (checkBox.Tag.ToString().Equals("0") && _historyFilterCondition == -1)
-                _historyFilterCondition = 1;
-            else if (checkBox.Tag.ToString().Equals("1") && _historyFilterCondition == -1)
-                _historyFilterCondition = 0;
-            else
-                _historyFilterCondition = 2;
-            Prescription.Items.Filter = HistoryFilter;
+
         }
 
         private bool HistoryFilter(object item)
         {
-            return ((CustomerHistory)item).Type == _historyFilterCondition;
+            
+            return false;
         }
-
-        private void Prescription_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (((DataGrid)e.Source).SelectedIndex == -1)
-            {
-                TransactionDetail.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.Visibility = Visibility.Collapsed;
-
-                GrayArea.Visibility = Visibility.Visible;
-                return;
-            }
-            if (((DataGrid)e.Source).CurrentItem == null) return;
-            Console.WriteLine(CustomerHistoryList.IndexOf((CustomerHistory)((DataGrid)e.Source).CurrentItem).ToString());
-
-            var current = CustomerHistoryList.IndexOf((CustomerHistory)((DataGrid)e.Source).CurrentItem);
-
-            if (CustomerHistoryList[current].Type == 0)
-            {
-                PrescriptionDetail.Visibility = Visibility.Collapsed;
-                TransactionDetail.Visibility = Visibility.Visible;
-
-                GrayArea.Visibility = Visibility.Collapsed;
-                TransactionDetail.ItemsSource = CustomerHistoryList[current].CustomHistories;
-            }
-            else
-            {
-                TransactionDetail.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.Visibility = Visibility.Visible;
-
-                GrayArea.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.ItemsSource = CustomerHistoryList[current].CustomHistories;
-            }
-        }
-        private void Prescription_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var dataGrid = sender as DataGrid;
-            Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
-            dataGrid.Focus();
-        }
+        
         /*
          *確認輸入
          */

@@ -4,6 +4,13 @@ using System.ComponentModel;
 namespace His_Pos.Class
 {
 
+    public enum SystemType
+    {
+        HIS = 0,
+        POS = 1,
+        ALL = 2
+    }
+
     [Flags]
     public enum LoginAuth
     {

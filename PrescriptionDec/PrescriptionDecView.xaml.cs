@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
+using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
@@ -28,13 +29,17 @@ namespace His_Pos.PrescriptionDec
     {
         private int _res = -1;
         private IcCard _icCard = new IcCard();
+        private SystemType cusHhistoryFilterCondition = SystemType.ALL;
         private Customer _currentCustomer = new Customer();
         private Prescription prescription = new Prescription();
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
         private ObservableCollection<Medicine> PrescriptionList { get; set; }
-        private ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
+        public ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
+
+        private CustomerHistory customerHistory;
+
         public PrescriptionDecView()
         {
             InitializeComponent();
@@ -149,21 +154,14 @@ namespace His_Pos.PrescriptionDec
         {
             Debug.Assert(sender is Button button, nameof(button) + " != null");
             LoadPatentDataFromIcCard();
-            var loadingWindow = new LoadingWindow("Loading Customer Data...");
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            var sqlParameter = new SqlParameter("CUS_ID", "1");
-            parameters.Add(sqlParameter);
-            Prescription.ItemsSource = null;
-            //CustomerHistoryList.Clear();
-            //var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CUSHISTORY]", parameters);
-            //foreach (DataRow d in table.Rows)
-            //{
-            //    CustomerHistoryList.Add(new CustomerHistory((int)d["TYPE"], d["DATE"].ToString(), d["HISTORY_ID"].ToString(), d["HISTORY_TITLE"].ToString()));
-            //}
 
-            //Prescription.ItemsSource = CustomerHistoryList;
-            //Prescription.SelectedItem = CustomerHistoryList[0];
+            LoadingWindow loadingWindow = new LoadingWindow("Loading Customer Data...");
+
+            customerHistory = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
+
+            CusHistoryMaster.ItemsSource = customerHistory.CustomerHistoryMasterCollection;
+            
+            CusHistoryMaster.SelectedIndex = 0;
 
             loadingWindow.backgroundWorker.CancelAsync();
 
@@ -186,8 +184,29 @@ namespace His_Pos.PrescriptionDec
             //else
             //    button.Command = null;
             LoadPatentDataFromIcCard();
-            prescription.Treatment.Customer = _currentCustomer;
         }
+
+        private void SetCusHistoryDetail(SystemType type, string customerHistoryDetailId)
+        {
+            switch (type)
+            {
+                case SystemType.HIS:
+                    CusHistoryDetail.Columns[0].Header = "藥名";
+                    CusHistoryDetail.Columns[1].Header = "用法";
+                    CusHistoryDetail.Columns[2].Header = "用途";
+                    CusHistoryDetail.Columns[3].Header = "天數";
+                    break;
+                case SystemType.POS:
+                    CusHistoryDetail.Columns[0].Header = "商品";
+                    CusHistoryDetail.Columns[1].Header = "單價";
+                    CusHistoryDetail.Columns[2].Header = "數量";
+                    CusHistoryDetail.Columns[3].Header = "價格";
+                    break;
+            }
+
+            CusHistoryDetail.ItemsSource = customerHistory.getCustomerHistoryDetails(type, customerHistoryDetailId);
+        }
+
         private void Combo_DropDownOpened(object sender, EventArgs e)
         {
             var comboBox = sender as ComboBox;
@@ -377,6 +396,45 @@ namespace His_Pos.PrescriptionDec
             }
             if (position != null)
                 PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Position = position.Text;
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            
+            cusHhistoryFilterCondition = (SystemType)Int16.Parse(radioButton.Tag.ToString());
+
+            if (CusHistoryMaster is null) return;
+            CusHistoryMaster.Items.Filter = CusHistoryFilter;
+        }
+        private bool CusHistoryFilter(object item)
+        {
+            if (cusHhistoryFilterCondition == SystemType.ALL) return true;
+
+            if (((CustomerHistoryMaster)item).Type == cusHhistoryFilterCondition)
+                return true;
+            return false;
+        }
+        /*
+         * 使用者歷史紀錄選擇事件
+         */
+        private void Prescription_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CusHistoryMaster.SelectedItem is null)
+            {
+                CusHistoryMaster.SelectedIndex = 0;
+                return;
+            }
+            
+            CustomerHistoryMaster selectedItem = (CustomerHistoryMaster)CusHistoryMaster.SelectedItem;
+
+            SetCusHistoryDetail(selectedItem.Type, selectedItem.CustomerHistoryDetailId);
+        }
+        private void Prescription_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var dataGrid = sender as DataGrid;
+            Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
+            dataGrid.Focus();
         }
     }
 }
