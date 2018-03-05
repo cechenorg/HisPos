@@ -445,15 +445,6 @@ namespace His_Pos.PrescriptionDec
                     return;
                 }
             }
-            CultureInfo ci = CultureInfo.CreateSpecificCulture("zh-TW");
-            ci.DateTimeFormat.ShortDatePattern = "yyy/mm/dd";
-            Thread.CurrentThread.CurrentCulture = ci;
-            var d = new DateTimeExtensions();
-            prescription.Treatment.TreatmentDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(TreatmentDate.SelectedDate));
-            if (Function.CheckEmptyInput(AdjustDate.Text, "請填寫調劑日期,如為藥是居家照護請填寫訪視日期"))
-            {
-                return;
-            }
             
         }
         /*
