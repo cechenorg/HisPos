@@ -134,7 +134,7 @@ namespace His_Pos.PrescriptionDec
             MedicineList.Clear();
             foreach (var d in tmp.Take(50))
             {
-                var medicine = ProductDb.GetMedicineData(d);
+                var medicine = MedcineDb.GetMedicineData(d);
                 MedicineList.Add(medicine);
             }
             medicineAuto.ItemsSource = MedicineList;

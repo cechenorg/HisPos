@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.Product
 {
-    public class ProductDb : Medicine
+    public class MedcineDb 
     {
         public static Medicine GetMedicineData(DataRow d)
         {

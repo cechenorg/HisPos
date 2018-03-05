@@ -28,6 +28,9 @@ namespace His_Pos.Class.HisUpload
             DataTable table = conn.ExecuteProc("[HIS_POS_DB].[GET].[UNUPLOADDATA]", parameters);
             foreach (DataRow row in table.Rows) {
                 sxml += row["UPLOADDATA_CONTENT"].ToString();
+                parameters.Clear();
+                parameters.Add(new SqlParameter("ID",row["UPLOADDATA_ID"].ToString()));
+                conn.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEUPLOADDATABYID]",parameters);
             }
             sxml += "</RECS>";
             xml.LoadXml(sxml);
@@ -48,6 +51,11 @@ namespace His_Pos.Class.HisUpload
             HisApiBase.csOpenCom(0);
            int res = HisApiBase.csUploadData(pUploadFileName, fFileSize, pNumber, pBuffer, ref iBufferLen);
             HisApiBase.csCloseCom();
+
+
+            parameters.Clear();
+            parameters.Add(new SqlParameter("XML", xml.ToString()));
+            conn.ExecuteProc("[HIS_POS_DB].[SET].[UPLOADDATAMASTER]", parameters);
         }
 
     }
