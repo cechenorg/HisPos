@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace His_Pos.Class.Product
 {

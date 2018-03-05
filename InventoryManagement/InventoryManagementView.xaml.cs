@@ -1,25 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.AbstractClass;
-using His_Pos.Class;
 using His_Pos.PrescriptionInquire;
-using His_Pos.Properties;
-using His_Pos.Service;
 using His_Pos.Class.Product;
 
 namespace His_Pos.InventoryManagement
@@ -27,7 +11,7 @@ namespace His_Pos.InventoryManagement
     /// <summary>
     /// InventoryManagementView.xaml 的互動邏輯
     /// </summary>
-    public partial class InventoryManagementView : UserControl
+    public partial class InventoryManagementView
     {
         private readonly ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
         public InventoryManagementView()
@@ -48,8 +32,8 @@ namespace His_Pos.InventoryManagement
         private void Row_Loaded(object sender, RoutedEventArgs e)
         {
             var row = sender as DataGridRow;
-            row.InputBindings.Add(new MouseBinding(ShowCustomDialogCommand,
-                new MouseGesture() { MouseAction = MouseAction.LeftDoubleClick }));
+            row?.InputBindings.Add(new MouseBinding(ShowCustomDialogCommand,
+                new MouseGesture() {MouseAction = MouseAction.LeftDoubleClick}));
         }
 
         private ICommand _showCustomDialogCommand;
@@ -69,13 +53,15 @@ namespace His_Pos.InventoryManagement
         private void RunCustomFromVm()
         {
             var selected = (Otc)DataGrid.SelectedItem;
-            ProductDetail productDetail = new ProductDetail();
-            productDetail.ProductName.Content = selected.Name;
-            productDetail.ProductId.Content = selected.Id;
-            productDetail.ProductAmount.Content = selected.Inventory;
-            productDetail.ProductSafeAmount.Content = selected.SafeAmount;
-            productDetail.ProductManufacturers.Content = selected.ManufactoryName;
-            productDetail.Show();
+            var detail = new ProductDetail
+            {
+                ProductName = {Content = selected.Name},
+                ProductId = {Content = selected.Id},
+                ProductAmount = {Content = selected.Inventory},
+                ProductSafeAmount = {Content = selected.SafeAmount},
+                ProductManufacturers = {Content = selected.ManufactoryName}
+            };
+            detail.Show();
         }
     }
 }

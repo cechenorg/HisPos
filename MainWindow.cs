@@ -1,5 +1,4 @@
-﻿using MenuUserControl;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using His_Pos.Class;
 using His_Pos.Class.Person;

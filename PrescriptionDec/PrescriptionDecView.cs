@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
@@ -26,8 +25,7 @@ namespace His_Pos.PrescriptionDec
     public partial class PrescriptionDecView
     {
         private int _historyFilterCondition = -1;
-        private readonly Function _function = new Function();
-        private MedcineDb _productDb = new MedcineDb();
+
         /*
          *初始化UI元件資料
          */
