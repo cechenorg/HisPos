@@ -309,12 +309,33 @@ namespace His_Pos.PrescriptionDec
          */
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
-            var declareData = new DeclareData(CheckPrescriptionInfo());
+            var prescription = CheckPrescriptionInfo();
+            
+            if (ErrorList.Count != 0)
+            {
+                showError();
+                return;
+            }
+
+            var declareData = new DeclareData(prescription);
+
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
             MessageBox.Show("處方登錄成功");
         }
-        
+
+        private void showError()
+        {
+            string errors = String.Empty;
+            foreach (var error in ErrorList)
+            {
+                errors += error + "\n";
+            }
+
+            MessageBox.Show(errors);
+            ErrorList.Clear();
+        }
+
         /*
          * 設定藥品用量
          */

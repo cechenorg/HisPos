@@ -340,6 +340,7 @@ namespace His_Pos.PrescriptionDec
             if(releaseInstitution == string.Empty)
             {
                 AddError("請選擇釋出院所");
+                return hospital;
             }
             if (ReleaseInstitution.Text.StartsWith("N"))
             {
@@ -362,7 +363,11 @@ namespace His_Pos.PrescriptionDec
         private bool CheckHomeCareAndSmokingCessation()
         {
             if (AdjustCaseCombo.Text == string.Empty)
-                MessageBox.Show("請選擇調劑案件");
+            {
+                AddError("請選擇調劑案件");
+                return false;
+            }
+            
             return AdjustCaseCombo.Text.StartsWith("D") || AdjustCaseCombo.Text.StartsWith("5");
         }
         /*
@@ -474,6 +479,7 @@ namespace His_Pos.PrescriptionDec
             {
                 if (CheckHomeCareAndSmokingCessation() == false)
                     AddError("請選擇處方案件");
+                return treatmentCase;
             }
             treatmentCase.Id = treatmentCaseStr.Substring(0, 2);
             treatmentCase.Name = treatmentCaseStr.Substring(treatmentCaseStr.IndexOf(" ") + 1);
@@ -506,7 +512,11 @@ namespace His_Pos.PrescriptionDec
             Copayment copayment = new Copayment();
             var copaymentStr = CopaymentCombo.Text;
             if (copaymentStr == string.Empty)
+            {
                 AddError("請選擇部分負擔");
+                return copayment;
+            }
+            
             copayment.Id = copaymentStr.Substring(0, 3);
             copayment.Name = copaymentStr.Substring(4);
             copayment.Point = Convert.ToInt32(Copayment.Text);
