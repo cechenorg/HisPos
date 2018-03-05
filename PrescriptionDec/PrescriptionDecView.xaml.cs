@@ -330,16 +330,9 @@ namespace His_Pos.PrescriptionDec
         private void ShowError()
         {
             var errors = ErrorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
-            MessageBox.Show(errors);
-            string errors = String.Empty;
-            foreach (var error in ErrorList)
-            {
-                errors += error + "\n";
-            }
 
             MessageWindow messageWindow = new MessageWindow(errors,MessageType.ERROR);
             messageWindow.Show();
-            //MessageBox.Show(errors);
             ErrorList.Clear();
         }
 
