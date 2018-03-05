@@ -36,11 +36,12 @@ namespace His_Pos.PrescriptionInquire
         private readonly ObservableCollection<Institution> _institutionsList;
         private Function f = new Function();
         private List<bool> AdjustCase = new List<bool>();
+        //private readonly ObservableCollection<DeclareDetail> _declareDetailList;
         public PrescriptionInquireView()
         {
             InitializeComponent();
             _institutionsList = new ObservableCollection<Institution>();
-            new ObservableCollection<DeclareDetail>();
+            //_declareDetailList = new ObservableCollection<DeclareDetail>();
             PrescriptionOutcome = (DeclareDataList) this.Resources["PrescriptionOutcome"];
             DataContext = this;
             DataInitialize();
@@ -133,9 +134,6 @@ namespace His_Pos.PrescriptionInquire
         {
             PrescriptionOutcome.Clear();
             var d = new DateTimeExtensions();
-            CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
-            ci.DateTimeFormat.ShortDatePattern = "yyyy/mm/dd";
-            Thread.CurrentThread.CurrentCulture = ci;
             var sDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(start.SelectedDate));
             var eDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(end.SelectedDate));
             var institution = string.Empty;
@@ -202,9 +200,9 @@ namespace His_Pos.PrescriptionInquire
             prescription.Treatment.AdjustCase.Id = f.GetXmlNodeData(xml, "ddata/dhead/d1");//調劑案件分類
             prescription.Treatment.PaymentCategory.Id = f.GetXmlNodeData(xml, "ddata/dhead/d5");//給付類別
             prescription.IcCard.MedicalNumber = f.GetXmlNodeData(xml, "ddata/dhead/d7");//就醫序號
-            prescription.Treatment.TreatmentDate = f.GetXmlNodeData(xml, "ddata/dhead/d14");//就醫(處方)日期
+            prescription.Treatment.TreatmentDate = Convert.ToDateTime(f.GetXmlNodeData(xml, "ddata/dhead/d14"));//就醫(處方)日期
             prescription.Treatment.Copayment.Id = f.GetXmlNodeData(xml, "ddata/dhead/d15");//部分負擔類別
-            prescription.Treatment.AdjustDate = f.GetXmlNodeData(xml, "ddata/dhead/d23");//調劑日期
+            prescription.Treatment.AdjustDate = Convert.ToDateTime(f.GetXmlNodeData(xml, "ddata/dhead/d23"));//調劑日期
             prescription.Treatment.MedicalPersonId = f.GetXmlNodeData(xml, "ddata/dhead/d25");//醫事人員代號
             prescription.Treatment.MedicineDays = f.GetXmlNodeData(xml, "ddata/dhead/d30");//給藥日分
             SetDiseaseCode(ref prescription,xml);

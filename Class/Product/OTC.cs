@@ -2,7 +2,7 @@
 {
     public class Otc : AbstractClass.Product
     {
-        public Otc(string id, string name, string price, string inventory)
+        public Otc(string id, string name, string price, double inventory)
         {
             Id = id;
             Name = name;

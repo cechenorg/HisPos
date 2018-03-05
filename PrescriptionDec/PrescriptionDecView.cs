@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -28,13 +29,14 @@ namespace His_Pos.PrescriptionDec
      */
     public partial class PrescriptionDecView
     {
-        
+        private ObservableCollection<BitmapImage> _genderIcons = new ObservableCollection<BitmapImage>();
         private ProductDb _productDb = new ProductDb();
         /*
          *初始化UI元件資料
          */
         private void InitializeUiElementData()
         {
+            DataContext = this;
             LoadCopayments();
             LoadAdjustCases();
             LoadHospitalData();
@@ -44,9 +46,10 @@ namespace His_Pos.PrescriptionDec
         }
         private void InitializeUiElementResource()
         {
-            PatientName.SetIconSource(new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative)));
-            PatientId.SetIconSource(new BitmapImage(new Uri(@"..\Images\ID_Card.png", UriKind.Relative)));
-            PatientBirthday.SetIconSource(new BitmapImage(new Uri(@"..\Images\birthday.png", UriKind.Relative)));
+            _genderIcons.Add(new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative)));
+            _genderIcons.Add(new BitmapImage(new Uri(@"..\Images\Female.png", UriKind.Relative)));
+            IcPatientId.Source = new BitmapImage(new Uri(@"..\Images\ID_Card.png", UriKind.Relative));
+            IcPatientBirthday.Source = new BitmapImage(new Uri(@"..\Images\birthday.png", UriKind.Relative));
             Deposit.Text = "0";
             SelfCost.Text = "0";
             Copayment.Text = "0";
@@ -268,11 +271,10 @@ namespace His_Pos.PrescriptionDec
         private Treatment GetTreatment()
         {
             return new Treatment(GetMedicalInfo(), CheckPaymentCategory(), CheckCopayment(), CheckAdjustCase(),GetTreatDate(),GetAdjustDate(), GetMedicineDays(), MainWindow.CurrentUser.IcNumber,_currentCustomer);
-
+            
+            
             //;
             //CheckMedicalNumber();
-            CheckDatePicker();
-            
             //;
             //;
             //CheckChronicTimes();
@@ -291,27 +293,16 @@ namespace His_Pos.PrescriptionDec
         /*
          * 設定調劑日期
          */
-        private string GetAdjustDate()
+        private DateTime GetAdjustDate()
         {
-            if (AdjustDate.Text == string.Empty)
-            {
-                AddError("請填寫調劑日期,如為藥是居家照護請填寫訪視日期");
-            }
-            return AdjustDate.Text;
+            return CheckAdjustDate();
         }
         /*
          * 設定就醫日期
          */
-        private string GetTreatDate()
+        private DateTime GetTreatDate()
         {
-            if (TreatmentDate.Text == string.Empty)
-            {
-                if (!AdjustCaseCombo.Text.StartsWith("D"))
-                {
-                    AddError("請選擇就醫日期");
-                }
-            }
-            return TreatmentDate.Text;
+            return CheckTreatDate();
         }
 
         private MedicalInfo GetMedicalInfo()
@@ -436,19 +427,35 @@ namespace His_Pos.PrescriptionDec
             _icCard.MedicalNumber = medicalNumber;
         }
         /*
-         * 確認就醫.調劑日期D14.D23
+         * 確認就醫日期D14
          */
-        private void CheckDatePicker()
+        private DateTime CheckTreatDate()
         {
+            var treatDate = new DateTime();
             if (TreatmentDate.Text == string.Empty)
             {
                 if (!AdjustCaseCombo.Text.StartsWith("D"))
                 {
-                    MessageBox.Show("請選擇就醫日期");
-                    return;
+                    AddError("請選擇就醫日期");
+                    return treatDate;
                 }
             }
-            
+            treatDate = Convert.ToDateTime(TreatmentDate.SelectedDate);
+            return treatDate;
+        }
+        /*
+         * 確認調劑日期D23
+         */
+        private DateTime CheckAdjustDate()
+        {
+            var adjustDate = new DateTime();
+            if (AdjustDate.Text == string.Empty)
+            {
+                AddError("請填寫調劑日期,如為藥事居家照護請填寫訪視日期");
+                return adjustDate;
+            }
+            adjustDate = Convert.ToDateTime(AdjustDate.SelectedDate);
+            return adjustDate;
         }
         /*
          * 確認國際疾病代碼D8.D9

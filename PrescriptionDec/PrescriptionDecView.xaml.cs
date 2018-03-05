@@ -5,12 +5,14 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using His_Pos.Class;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
@@ -20,6 +22,7 @@ using His_Pos.HisApi;
 using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
 using His_Pos.Service;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.PrescriptionDec
 {
@@ -48,6 +51,9 @@ namespace His_Pos.PrescriptionDec
             DataContext = this;
             InitializeLists();
             InitializeUiElementData();
+            CultureInfo cag = new CultureInfo("zh-TW");
+            cag.DateTimeFormat.Calendar = new TaiwanCalendar();
+            System.Threading.Thread.CurrentThread.CurrentCulture = cag;
         }
         
         /*
@@ -77,9 +83,9 @@ namespace His_Pos.PrescriptionDec
             _icCard.ValidityPeriod = "108/01/01";
             _icCard.IcMarks.InsuranceMark = "3";
             _currentCustomer.Id = "1";
-            PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
-            PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
-            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
+            PatientName.Text = _icCard.Customer.Name;
+            PatientId.Text = _icCard.Customer.IcNumber;
+            PatientBirthday.Text = _icCard.Customer.Birthday;
         }
         /*
          *取得病人基本資料
@@ -310,22 +316,21 @@ namespace His_Pos.PrescriptionDec
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
             var prescription = CheckPrescriptionInfo();
-            
             if (ErrorList.Count != 0)
             {
-                showError();
+                ShowError();
                 return;
             }
-
             var declareData = new DeclareData(prescription);
-
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
             MessageBox.Show("處方登錄成功");
         }
 
-        private void showError()
+        private void ShowError()
         {
+            var errors = ErrorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
+            MessageBox.Show(errors);
             string errors = String.Empty;
             foreach (var error in ErrorList)
             {
@@ -440,6 +445,19 @@ namespace His_Pos.PrescriptionDec
             var dataGrid = sender as DataGrid;
             Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
             dataGrid.Focus();
+        }
+
+        private void PatientGender_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var combo = sender as ComboBox;
+            if (combo == null) return;
+            var seleced = combo.SelectedItem as ListBoxItem;
+            if (seleced != null && seleced.Content.ToString() == "男")
+                IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative));
+            else
+            {
+                IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Female.png", UriKind.Relative));
+            }
         }
     }
 }
