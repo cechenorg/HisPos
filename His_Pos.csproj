@@ -240,6 +240,9 @@
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PrescriptionDec\PrescriptionDec.cs" />
     <Compile Include="PrescriptionDec\PrescriptionDecView.cs" />
     <Compile Include="PrescriptionDec\PrescriptionDecView.xaml.cs">
@@ -304,6 +307,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PrescriptionDec\PrescriptionDecView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -332,7 +332,9 @@ namespace His_Pos.PrescriptionDec
                 errors += error + "\n";
             }
 
-            MessageBox.Show(errors);
+            MessageWindow messageWindow = new MessageWindow(errors,MessageType.ERROR);
+            messageWindow.Show();
+            //MessageBox.Show(errors);
             ErrorList.Clear();
         }
 

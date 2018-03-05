@@ -228,6 +228,12 @@ namespace His_Pos.PrescriptionDec
         {
             List<Medicine> medicines = new List<Medicine>();
 
+            if (PrescriptionList.Count == 0)
+            {
+                AddError("請填寫藥品");
+                return medicines;
+            }
+
             foreach (var med in PrescriptionList)
             {
                 if (CheckMedicine(med))

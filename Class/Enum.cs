@@ -3,6 +3,10 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum MessageType
+    {
+        ERROR = 0
+    }
 
     public enum SystemType
     {
