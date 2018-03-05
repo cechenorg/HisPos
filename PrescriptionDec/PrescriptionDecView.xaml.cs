@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using His_Pos.Class;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
@@ -79,9 +80,9 @@ namespace His_Pos.PrescriptionDec
             _icCard.ValidityPeriod = "108/01/01";
             _icCard.IcMarks.InsuranceMark = "3";
             _currentCustomer.Id = "1";
-            PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
-            PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
-            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
+            PatientName.Text = _icCard.Customer.Name;
+            PatientId.Text = _icCard.Customer.IcNumber;
+            PatientBirthday.Text = _icCard.Customer.Birthday;
         }
         /*
          *取得病人基本資料
@@ -439,6 +440,19 @@ namespace His_Pos.PrescriptionDec
             var dataGrid = sender as DataGrid;
             Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
             dataGrid.Focus();
+        }
+
+        private void PatientGender_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var combo = sender as ComboBox;
+            if (combo == null) return;
+            var seleced = combo.SelectedItem as ListBoxItem;
+            if (seleced != null && seleced.Content.ToString() == "男")
+                IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative));
+            else
+            {
+                IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Female.png", UriKind.Relative));
+            }
         }
     }
 }

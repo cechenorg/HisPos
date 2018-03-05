@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -26,13 +27,14 @@ namespace His_Pos.PrescriptionDec
      */
     public partial class PrescriptionDecView
     {
-        
+        private ObservableCollection<BitmapImage> _genderIcons = new ObservableCollection<BitmapImage>();
         private ProductDb _productDb = new ProductDb();
         /*
          *初始化UI元件資料
          */
         private void InitializeUiElementData()
         {
+            DataContext = this;
             LoadCopayments();
             LoadAdjustCases();
             LoadHospitalData();
@@ -42,9 +44,10 @@ namespace His_Pos.PrescriptionDec
         }
         private void InitializeUiElementResource()
         {
-            PatientName.SetIconSource(new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative)));
-            PatientId.SetIconSource(new BitmapImage(new Uri(@"..\Images\ID_Card.png", UriKind.Relative)));
-            PatientBirthday.SetIconSource(new BitmapImage(new Uri(@"..\Images\birthday.png", UriKind.Relative)));
+            _genderIcons.Add(new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative)));
+            _genderIcons.Add(new BitmapImage(new Uri(@"..\Images\Female.png", UriKind.Relative)));
+            IcPatientId.Source = new BitmapImage(new Uri(@"..\Images\ID_Card.png", UriKind.Relative));
+            IcPatientBirthday.Source = new BitmapImage(new Uri(@"..\Images\birthday.png", UriKind.Relative));
             Deposit.Text = "0";
             SelfCost.Text = "0";
             Copayment.Text = "0";
@@ -228,44 +231,6 @@ namespace His_Pos.PrescriptionDec
             return false;
         }
 
-        private void Prescription_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (((DataGrid)e.Source).SelectedIndex == -1)
-            {
-                TransactionDetail.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.Visibility = Visibility.Collapsed;
-
-                GrayArea.Visibility = Visibility.Visible;
-                return;
-            }
-            if (((DataGrid)e.Source).CurrentItem == null) return;
-            Console.WriteLine(CustomerHistoryList.IndexOf((CustomerHistory)((DataGrid)e.Source).CurrentItem).ToString());
-
-            var current = CustomerHistoryList.IndexOf((CustomerHistory)((DataGrid)e.Source).CurrentItem);
-
-            if (CustomerHistoryList[current].Type == 0)
-            {
-                PrescriptionDetail.Visibility = Visibility.Collapsed;
-                TransactionDetail.Visibility = Visibility.Visible;
-
-                GrayArea.Visibility = Visibility.Collapsed;
-                TransactionDetail.ItemsSource = CustomerHistoryList[current].CustomHistories;
-            }
-            else
-            {
-                TransactionDetail.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.Visibility = Visibility.Visible;
-
-                GrayArea.Visibility = Visibility.Collapsed;
-                PrescriptionDetail.ItemsSource = CustomerHistoryList[current].CustomHistories;
-            }
-        }
-        private void Prescription_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var dataGrid = sender as DataGrid;
-            Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
-            dataGrid.Focus();
-        }
         /*
          *確認輸入
          */
