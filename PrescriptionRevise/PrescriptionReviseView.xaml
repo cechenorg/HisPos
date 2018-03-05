@@ -11,7 +11,7 @@
              xmlns:hisPos="clr-namespace:His_Pos"
              x:Class="His_Pos.PrescriptionRevise.PrescriptionReviseView"
              mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365">
+             d:DesignHeight="839" d:DesignWidth="992">
     <UserControl.Resources>
         <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -27,41 +27,55 @@
             <Setter Property="BorderThickness" Value="5"/>
             <Setter Property="DisplayMode" Value="Month"/>
         </Style>
+        <prescriptionInquire:DeclareDataList x:Key="PrescriptionOutcome" />
     </UserControl.Resources>
     <StackPanel Orientation="Vertical" Margin="30,10">
-        <Canvas Margin="0" Height="110" Background="#7FEEEEEE" VerticalAlignment="Center" >
-            <WrapPanel x:Name="CaseDock" Width="650" Margin="15,0,0,0"  VerticalAlignment="Center">
-                <Label Content="申報日期" Width="Auto" Foreground="#FF424040" Margin="20,10,10,10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+        <WrapPanel Margin="0" Height="110" Background="#7FEEEEEE" VerticalAlignment="Center" >
+            <WrapPanel x:Name="CaseDock" Width="580" Margin="15,10,0,0"  VerticalAlignment="Center">
+                <Label Content="申報日期" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                 <DatePicker Height="25" HorizontalAlignment="Left" x:Name="sdatePicker1" Width="115" FontWeight="Bold"/>
-                <Label Content="~" Width="Auto" Foreground="#FF424040" Margin="20,10,20,10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+                <Label Content="~" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                 <DatePicker Height="25" HorizontalAlignment="Left" x:Name="edatePicker1" Width="115" FontWeight="Bold"/>
-                <Label Content="申報檔案" Width="Auto" Foreground="#FF424040" Margin="20,10,10,10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
-                <ComboBox x:Name="DeclareFile" Width="90" FontSize="14" FontStretch="ExtraExpanded" BorderThickness="0,0,0,1" FontWeight="Bold" VerticalContentAlignment="Stretch"/>
-                <Label Content="案件類別" Width="Auto" Foreground="#FF424040" Margin="20,10,10,10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+                <Label Content="申報檔案" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+                <ComboBox x:Name="DeclareFile" Width="90" FontSize="14" FontStretch="ExtraExpanded" BorderThickness="0,0,0,1" FontWeight="Bold" VerticalContentAlignment="Stretch" DropDownOpened="DeclareFile_DropDownOpened" SelectionChanged="DeclareFile_SelectionChanged"/>
+                <Label Content="案件類別" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                 <ComboBox x:Name="CaseCateCombo" Width="160" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True"
                            HorizontalContentAlignment="Stretch"/>
-                <Label Content="流水編號" Width="Auto" Foreground="#FF424040" Margin="20,10,10,10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+                <Label Content="流水編號" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                 <TextBox Name="OrderIdTextBox" Width="50" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"/>
             </WrapPanel>
-            <Button Content="查詢" Background="DeepSkyBlue" Margin="125,0,0,0" Height="40" FontSize="18" FontWeight="Bold" MinWidth="100" Canvas.Right="100" Canvas.Top="35"/>
-        </Canvas>
-        <DataGrid x:Name="PrescriptionSet" MinWidth="930" Height="600" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}"
+            <Button Content="查詢" Background="DeepSkyBlue" Margin="125,0,0,0" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" Click="LoadDeclaredPrescriptions"/>
+        </WrapPanel>
+        <DataGrid x:Name="PrescriptionSet" MinWidth="930" Height="580" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}"
                   AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF727272" 
                   VerticalGridLinesBrush="#FF727272" SelectionUnit="FullRow" SelectionMode="Single" HorizontalContentAlignment="Center" 
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" Foreground="#DD292727" >
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <EventSetter Event="FrameworkElement.Loaded" Handler="Row_Loaded"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.DataContext>
+                <local:PrescriptionRevise/>
+            </DataGrid.DataContext>
             <DataGrid.Columns>
-                <DataGridTextColumn MinWidth="50" Header="案件類別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" />
-                <DataGridTextColumn MinWidth="100" Header="流水編號" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" />
-                <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" />
-                <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" />
-                <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" />
-                <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" />
+                <DataGridTextColumn MinWidth="50" Header="案件類別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding CasCatId}"/>
+                <DataGridTextColumn MinWidth="100" Header="流水編號" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding OrderId}"/>
+                <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding CusName}"/>
+                <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding InsName}"/>
+                <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding DivName}"/>
+                <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding EmpName}"/>
+                <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding DecMasTreatDate}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <DockPanel Margin="0" Height="90" Background="#7FEEEEEE" VerticalAlignment="Center">
+        <DockPanel Margin="0" Height="70" Background="#7FEEEEEE" VerticalAlignment="Center" Grid.Row="2">
             <Label x:Name="DeclareStatus" Content=""/>
-            <Button Background="Red" Width="150" Margin="20" Content="修改完成" FontWeight="Bold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Height="50" />
+            <Button Background="Red" Width="150" Margin="20" Content="修改完成" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
         </DockPanel>
     </StackPanel>
 </UserControl>
