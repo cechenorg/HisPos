@@ -23,7 +23,7 @@ namespace His_Pos.Class
             MedicineDays = "0";
         }
 
-        public Treatment(MedicalInfo medicalInfo, PaymentCategory.PaymentCategory paymentCategory, Copayment.Copayment copayment, AdjustCase.AdjustCase adjustCase, string treatmentDate, string adjustDate, string medicineDays, string medicalPersonId, Customer customer)
+        public Treatment(MedicalInfo medicalInfo, PaymentCategory.PaymentCategory paymentCategory, Copayment.Copayment copayment, AdjustCase.AdjustCase adjustCase, DateTime treatmentDate, DateTime adjustDate, string medicineDays, string medicalPersonId, Customer customer)
         {
             MedicalInfo = medicalInfo;
             PaymentCategory = paymentCategory;
@@ -41,8 +41,8 @@ namespace His_Pos.Class
         public PaymentCategory.PaymentCategory PaymentCategory { get; set; } = new PaymentCategory.PaymentCategory();//d5 給付類別
         public Copayment.Copayment Copayment { get; set; } = new Copayment.Copayment();//d15 部分負擔代碼
         public AdjustCase.AdjustCase AdjustCase { get; set; } = new AdjustCase.AdjustCase();//d1 案件分類
-        public string TreatmentDate { get; set; }//d14 就醫(處方)日期
-        public string AdjustDate { get; set; }//d23 調劑日期
+        public DateTime TreatmentDate { get; set; }//d14 就醫(處方)日期
+        public DateTime AdjustDate { get; set; }//d23 調劑日期
         public string MedicineDays { get; set; }//d30  給藥日份
         public string MedicalPersonId { get; set; }//d25 醫事人員代號
         public Customer Customer { get; set; } //病患資料

@@ -69,8 +69,8 @@ namespace His_Pos.Class.Declare
             var tagsDictionary = new Dictionary<string, string>
             {
                 {"D1", declareData.Prescription.Treatment.AdjustCase.Id},{"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
-                {"D14",declareData.Prescription.Treatment.TreatmentDate},{"D15", declareData.Prescription.Treatment.Copayment.Id},
-                {"D23",declareData.Prescription.Treatment.AdjustDate},{"D25",declareData.Prescription.Treatment.MedicalPersonId},
+                {"D14",declareData.Prescription.Treatment.TreatmentDate.ToShortDateString()},{"D15", declareData.Prescription.Treatment.Copayment.Id},
+                {"D23",declareData.Prescription.Treatment.AdjustDate.ToShortDateString()},{"D25",declareData.Prescription.Treatment.MedicalPersonId},
                 {"D30",declareData.Prescription.Treatment.MedicineDays},{"CUS_ID",declareData.Prescription.Treatment.Customer.Id}
             };
             foreach (var tag in tagsDictionary)
@@ -307,11 +307,11 @@ namespace His_Pos.Class.Declare
                 {"d1",treatment.AdjustCase.Id},{"d2",string.Empty},{"d3",treatment.Customer.IcNumber},
                 {"d4",CheckXmlDbNullValue(declareData.DeclareMakeUp)},{"d5",CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
                 {"d6",treatment.Customer.Birthday},{"d7",declareData.Prescription.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
-                {"d13",CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},{"d14",CheckXmlDbNullValue(treatment.TreatmentDate)},
+                {"d13",CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},{"d14",CheckXmlDbNullValue(treatment.TreatmentDate.ToShortDateString())},
                 {"d15",treatment.Copayment.Id},{"d16",declareData.DeclarePoint.ToString()},
                 {"d17",treatment.Copayment.Point.ToString()},{"d18",declareData.TotalPoint.ToString()},
                 {"d19",CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString())},{"d20",treatment.Customer.Name},
-                {"d21",medicalInfo.Hospital.Id},{"d22",medicalInfo.TreatmentCase.Id},{"d23",treatment.AdjustDate},
+                {"d21",medicalInfo.Hospital.Id},{"d22",medicalInfo.TreatmentCase.Id},{"d23",treatment.AdjustDate.ToString(CultureInfo.InvariantCulture)},
                 {"d24",medicalInfo.Hospital.Doctor.Id},{"d25",treatment.MedicalPersonId},
                 {"d26",CheckXmlDbNullValue(medicalInfo.SpecialCode.Id)},{"d30",CheckXmlDbNullValue(treatment.MedicineDays)},
                 {"d31",CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString())},

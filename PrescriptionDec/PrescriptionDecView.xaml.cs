@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -21,6 +22,7 @@ using His_Pos.HisApi;
 using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
 using His_Pos.Service;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.PrescriptionDec
 {
@@ -47,11 +49,11 @@ namespace His_Pos.PrescriptionDec
         {
             InitializeComponent();
             DataContext = this;
-            var twCulture = new CultureInfo("zh-TW", true);
-            System.Threading.Thread.CurrentThread.CurrentCulture = twCulture;
-            System.Threading.Thread.CurrentThread.CurrentUICulture = twCulture;
             InitializeLists();
             InitializeUiElementData();
+            CultureInfo cag = new CultureInfo("zh-TW");
+            cag.DateTimeFormat.Calendar = new TaiwanCalendar();
+            System.Threading.Thread.CurrentThread.CurrentCulture = cag;
         }
         
         /*
@@ -314,28 +316,20 @@ namespace His_Pos.PrescriptionDec
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
             var prescription = CheckPrescriptionInfo();
-            
             if (ErrorList.Count != 0)
             {
-                showError();
+                ShowError();
                 return;
             }
-
             var declareData = new DeclareData(prescription);
-
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
             MessageBox.Show("處方登錄成功");
         }
 
-        private void showError()
+        private void ShowError()
         {
-            string errors = String.Empty;
-            foreach (var error in ErrorList)
-            {
-                errors += error + "\n";
-            }
-
+            var errors = ErrorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
             MessageBox.Show(errors);
             ErrorList.Clear();
         }
