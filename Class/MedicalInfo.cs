@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.AbstractClass;
+using His_Pos.Class.TreatmentCase;
 
 namespace His_Pos.Class
 {
@@ -15,6 +16,14 @@ namespace His_Pos.Class
             SpecialCode = new SpecialCode();
             DiseaseCodes = new List<DiseaseCode>();
             TreatmentCase = new TreatmentCase.TreatmentCase();
+        }
+
+        public MedicalInfo(Hospital hospital, SpecialCode specialCode, List<DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)
+        {
+            Hospital = hospital;
+            SpecialCode = specialCode;
+            DiseaseCodes = diseaseCodes;
+            TreatmentCase = treatmentCase;
         }
 
         public Hospital Hospital { get; set; }//d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別

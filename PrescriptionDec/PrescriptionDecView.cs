@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -16,6 +17,7 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Service;
@@ -214,77 +216,149 @@ namespace His_Pos.PrescriptionDec
             PrescriptionList.Clear();
             InitializeUiElementResource();
         }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private bool HistoryFilter(object item)
-        {
-            
-            return false;
-        }
-
         /*
          *確認輸入
          */
-        private void CheckPrescriptionInfo()
+        private Prescription CheckPrescriptionInfo()
         {
-            CheckAdjustCase();
-            CheckReleaseInstitution();
-            CheckDivision();
-            CheckDoctor();
             CheckMedicalNumber();
+            return new Prescription(_icCard, MainWindow.CurrentUser.Pharmacy, GetTreatment(), GetMedcines());
+        }
+        /*
+         * 將藥品加入處方
+         */
+        private List<Medicine> GetMedcines()
+        {
+            List<Medicine> medicines = new List<Medicine>();
+
+            foreach (var med in PrescriptionList)
+            {
+                if (CheckMedicine(med))
+                    medicines.Add(med);
+            }
+
+            return medicines;
+        }
+
+        private void AddError(string error)
+        {
+            ErrorList.Add(error);
+        }
+
+        /*
+        * 檢查藥品規則
+        */
+        private bool CheckMedicine(Medicine med)
+        {
+            //*********************************************
+            //add check med rule
+            //*********************************************
+
+            AddError("errrrrrrorrrrrr");
+
+            return true;
+        }
+
+        /*
+        *確認輸入
+        */
+        private Treatment GetTreatment()
+        {
+            return new Treatment(GetMedicalInfo(), CheckPaymentCategory(), CheckCopayment(), CheckAdjustCase(),GetTreatDate(),GetAdjustDate(), GetMedicineDays(), MainWindow.CurrentUser.IcNumber,_currentCustomer);
+
+            //;
+            //CheckMedicalNumber();
             CheckDatePicker();
-            CheckDiseaseCodes();
-            CheckTreatmentCase();
-            CheckPaymentCategory();
-            CheckCopayment();
-            CheckChronicTimes();
-            CheckSpecialCode();
+            
+            //;
+            //;
+            //CheckChronicTimes();
+        }
+
+        private string GetMedicineDays()
+        {
+            int days = 0;
+            foreach (var med in PrescriptionList)
+            {
+                if (med.MedicalCategory.Days > days)
+                    days = med.MedicalCategory.Days;
+            }
+            return days.ToString();
+        }
+        /*
+         * 設定調劑日期
+         */
+        private string GetAdjustDate()
+        {
+            if (AdjustDate.Text == string.Empty)
+            {
+                AddError("請填寫調劑日期,如為藥是居家照護請填寫訪視日期");
+            }
+            return AdjustDate.Text;
+        }
+        /*
+         * 設定就醫日期
+         */
+        private string GetTreatDate()
+        {
+            if (TreatmentDate.Text == string.Empty)
+            {
+                if (!AdjustCaseCombo.Text.StartsWith("D"))
+                {
+                    AddError("請選擇就醫日期");
+                }
+            }
+            return TreatmentDate.Text;
+        }
+
+        private MedicalInfo GetMedicalInfo()
+        {
+            return new MedicalInfo(GetReleaseInstitution(), CheckSpecialCode(), CheckDiseaseCodes(), CheckTreatmentCase());
         }
 
         /*
          *確認調劑案件D1
          */
-        private void CheckAdjustCase()
+        private AdjustCase CheckAdjustCase()
         {
-            var adjustCase = AdjustCaseCombo.Text;
-            if (Function.CheckEmptyInput(adjustCase, "請選擇調劑案件"))
+            AdjustCase adjustCase = new AdjustCase();
+            var adjustCaseStr = AdjustCaseCombo.Text;
+            if (adjustCaseStr == string.Empty)
             {
-                return;
+                AddError("請選擇調劑案件");
+                return adjustCase;
             }
-            prescription.Treatment.AdjustCase.Id = adjustCase.Substring(0, 1);
-            prescription.Treatment.AdjustCase.Name = adjustCase.Substring(2);
+            adjustCase.Id = adjustCaseStr.Substring(0, 1);
+            adjustCase.Name = adjustCaseStr.Substring(2);
+            return adjustCase;
         }
 
         /*
          * 確認釋出院所D21
          */
-        private void CheckReleaseInstitution()
+        private Hospital GetReleaseInstitution()
         {
+            Hospital hospital = new Hospital();
             var releaseInstitution = ReleaseInstitution.Text;
-            if(Function.CheckEmptyInput(releaseInstitution, "請選擇釋出院所"))
+            if(releaseInstitution == string.Empty)
             {
-                return;
+                AddError("請選擇釋出院所");
+                return hospital;
             }
             if (ReleaseInstitution.Text.StartsWith("N"))
             {
                 if (CheckHomeCareAndSmokingCessation() == false)
-                    MessageBox.Show("非藥事居家照護(調劑案件:D).協助辦理門診戒菸計畫(調劑案件:5)者，釋出院所不可為\"N\"");
-                prescription.Treatment.MedicalInfo.Hospital.Id = ReleaseInstitution.Text.Substring(0, 1);
+                    AddError("非藥事居家照護(調劑案件:D).協助辦理門診戒菸計畫(調劑案件:5)者，釋出院所不可為\"N\"");
+                hospital.Id = ReleaseInstitution.Text.Substring(0, 1);
             }
             else
             {
-                prescription.Treatment.MedicalInfo.Hospital.Id = ReleaseInstitution.Text.Substring(0, 10);
-                prescription.Treatment.MedicalInfo.Hospital.Name = ReleaseInstitution.Text.Substring(ReleaseInstitution.Text.IndexOf(" ") + 1);
+                hospital.Id = ReleaseInstitution.Text.Substring(0, 10);
+                hospital.Name = ReleaseInstitution.Text.Substring(ReleaseInstitution.Text.IndexOf(" ") + 1);
+                hospital.Division = CheckDivision();
+                hospital.Doctor = CheckDoctor();
             }
+            return hospital;
         }
         /*
          * 判斷調劑案件為藥是居家照護及協助戒菸計畫
@@ -292,36 +366,46 @@ namespace His_Pos.PrescriptionDec
         private bool CheckHomeCareAndSmokingCessation()
         {
             if (AdjustCaseCombo.Text == string.Empty)
-                MessageBox.Show("請選擇調劑案件");
+            {
+                AddError("請選擇調劑案件");
+                return false;
+            }
+            
             return AdjustCaseCombo.Text.StartsWith("D") || AdjustCaseCombo.Text.StartsWith("5");
         }
         /*
          * 確認就醫科別D13
          */
-        private void CheckDivision()
+        private Division CheckDivision()
         {
-            var division = DivisionCombo.Text;
+            Division division = new Division();
+            var divisionStr = DivisionCombo.Text;
             if (DivisionCombo.Text != string.Empty)
             {
-                prescription.Treatment.MedicalInfo.Hospital.Division.Id = division.Substring(0, 2);
-                prescription.Treatment.MedicalInfo.Hospital.Division.Name =
-                    DivisionCombo.Text.Substring(division.IndexOf(" ") + 1);
+                division.Id = divisionStr.Substring(0, 2);
+                division.Name = divisionStr.Substring(divisionStr.IndexOf(" ") + 1);
             }
             else
             {
                 if (CheckHomeCareAndSmokingCessation() == false)
-                    MessageBox.Show("請選擇就醫科別");
+                    AddError("請選擇就醫科別");
             }
+            return division;
         }
         /*
          * 確認診治醫生D24
          */
-        private void CheckDoctor()
+        private MedicalPersonnel CheckDoctor()
         {
-            if (DoctorId.Text != string.Empty) return;
-            if(CheckHomeCareAndSmokingCessation()) return;
-            if(prescription.Treatment.MedicalInfo.Hospital.Doctor.Id.Equals(string.Empty))
-                prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = prescription.Treatment.MedicalInfo.Hospital.Id;
+            MedicalPersonnel doctor = new MedicalPersonnel();
+            if (DoctorId.Text == string.Empty)
+            {
+                if (CheckHomeCareAndSmokingCessation())
+                    return doctor;
+                doctor.Id = ReleaseInstitution.Text.Substring(0, 10);
+            }
+            doctor.Id = DoctorId.Text;
+            return doctor;
         }
         /*
          * 確認就醫序號D7
@@ -329,23 +413,24 @@ namespace His_Pos.PrescriptionDec
         private void CheckMedicalNumber()
         {
             var medicalNumber = MedicalNumber.Text;
-            if (Function.CheckEmptyInput(medicalNumber, "請填寫就醫序號"))
+            if (medicalNumber == string.Empty)
             {
+                AddError("請填寫就醫序號");
                 return;
             }
             if (!ChronicSequence.Text.Equals(string.Empty))
             {
                 if (int.Parse(ChronicSequence.Text) > 1)
-                    prescription.IcCard.MedicalNumber = "IC0" + ChronicSequence.Text;
+                    _icCard.MedicalNumber = "IC0" + ChronicSequence.Text;
             }
             if (CheckHomeCareAndSmokingCessation())
-                prescription.IcCard.MedicalNumber = "N";
+                _icCard.MedicalNumber = "N";
             if (!medicalNumber.Contains("IC") && medicalNumber != "N")
             {
                 if (Function.IsNumeric(medicalNumber) == false)
-                    MessageBox.Show("就醫序號輸入格式錯誤");
+                    AddError("就醫序號輸入格式錯誤");
             }
-            prescription.IcCard.MedicalNumber = medicalNumber;
+            _icCard.MedicalNumber = medicalNumber;
         }
         /*
          * 確認就醫.調劑日期D14.D23
@@ -369,84 +454,92 @@ namespace His_Pos.PrescriptionDec
             {
                 return;
             }
-            prescription.Treatment.AdjustDate = d.ToSimpleTaiwanDate(Convert.ToDateTime(AdjustDate.SelectedDate));
+            
         }
         /*
          * 確認國際疾病代碼D8.D9
          */
-        private void CheckDiseaseCodes()
+        private List<DiseaseCode> CheckDiseaseCodes()
         {
+            List<DiseaseCode> diseaseCodes = new List<DiseaseCode>();
             var mainDiagnosis = new DiseaseCode();
             if (MainDiagnosis.Text == string.Empty)
             {
                 if (!AdjustCaseCombo.Text.StartsWith("D"))
                 {
-                    MessageBox.Show("請填寫主要診斷代碼");
-                    return;
+                    AddError("請填寫主要診斷代碼");
+                    return diseaseCodes;
                 }
             }
             mainDiagnosis.Id = MainDiagnosis.Text;
-            prescription.Treatment.MedicalInfo.DiseaseCodes.Add(mainDiagnosis);
-            if (SeconDiagnosis.Text == string.Empty) return;
+            diseaseCodes.Add(mainDiagnosis);
+            if (SeconDiagnosis.Text == string.Empty)
+                return diseaseCodes;
             var secondDiagnosis = new DiseaseCode();
             secondDiagnosis.Id = SeconDiagnosis.Text;
-            prescription.Treatment.MedicalInfo.DiseaseCodes.Add(secondDiagnosis);
+            diseaseCodes.Add(secondDiagnosis);
+            return diseaseCodes;
         }
         /*
          *確認處方案件D22
          */
-        private void CheckTreatmentCase()
+        private TreatmentCase CheckTreatmentCase()
         {
+            TreatmentCase treatmentCase = new TreatmentCase();
             var treatmentCaseStr = TreatmentCaseCombo.Text;
             if (TreatmentCaseCombo.Text == string.Empty)
             {
                 if (CheckHomeCareAndSmokingCessation() == false)
-                    MessageBox.Show("請選擇處方案件");
-                else
-                {
-                    prescription.Treatment.MedicalInfo.TreatmentCase.Id = string.Empty;
-                    prescription.Treatment.MedicalInfo.TreatmentCase.Name = string.Empty;
-                }
+                    AddError("請選擇處方案件");
+                return treatmentCase;
             }
-            prescription.Treatment.MedicalInfo.TreatmentCase.Id = treatmentCaseStr.Substring(0, 2);
-            prescription.Treatment.MedicalInfo.TreatmentCase.Name = treatmentCaseStr.Substring(treatmentCaseStr.IndexOf(" ") + 1);
+            treatmentCase.Id = treatmentCaseStr.Substring(0, 2);
+            treatmentCase.Name = treatmentCaseStr.Substring(treatmentCaseStr.IndexOf(" ") + 1);
+            return treatmentCase;
         }
         /*
          * 確認給付類別D5
          */
-        private void CheckPaymentCategory()
+        private PaymentCategory CheckPaymentCategory()
         {
+            PaymentCategory payment = new PaymentCategory();
             var paymentCategory = PaymentCategoryCombo.Text;
             if (paymentCategory == string.Empty)
             {
                 if (!AdjustCaseCombo.Text.StartsWith("D"))
                 {
-                    MessageBox.Show("請選擇給付類別");
-                    return;
+                    AddError("請選擇給付類別");
                 }
-                prescription.Treatment.PaymentCategory.Id = string.Empty;
-                prescription.Treatment.PaymentCategory.Name = string.Empty;
+                return payment;
             }
-            prescription.Treatment.PaymentCategory = new PaymentCategory(paymentCategory.Substring(0, 1), paymentCategory.Substring(2));
+            payment.Id = paymentCategory.Substring(0, 1);
+            payment.Name = paymentCategory.Substring(2);
+            return payment;
         }
         /*
          * 確認部分負擔代碼D15
          */
-        private void CheckCopayment()
+        private Copayment CheckCopayment()
         {
-            var copayment = CopaymentCombo.Text;
-            if (Function.CheckEmptyInput(copayment, "請選擇部分負擔"))
-                return;
-            prescription.Treatment.Copayment.Id = copayment.Substring(0, 3);
-            prescription.Treatment.Copayment.Name = copayment.Substring(4);
-            prescription.Treatment.Copayment.Point = Convert.ToInt32(Copayment.Text);
-            if (prescription.Treatment.Copayment.Id == "903")
+            Copayment copayment = new Copayment();
+            var copaymentStr = CopaymentCombo.Text;
+            if (copaymentStr == string.Empty)
+            {
+                AddError("請選擇部分負擔");
+                return copayment;
+            }
+            
+            copayment.Id = copaymentStr.Substring(0, 3);
+            copayment.Name = copaymentStr.Substring(4);
+            copayment.Point = Convert.ToInt32(Copayment.Text);
+            if (copayment.Id == "903")
             {
                 var dateTimeExtensions = new DateTimeExtensions();
-                var newBornBirth = dateTimeExtensions.ToUsDate(prescription.IcCard.IcMarks.NewbornsData.Birthday);
+                var newBornBirth = dateTimeExtensions.ToUsDate(_icCard.IcMarks.NewbornsData.Birthday);
                 var newBornAge = DateTime.Now - newBornBirth;
                 CheckNewBornAge(newBornAge);
             }
+            return copayment;
         }
         /*
          * 確認新生兒就醫
@@ -454,7 +547,7 @@ namespace His_Pos.PrescriptionDec
         private void CheckNewBornAge(TimeSpan newBornAge)
         {
             if (newBornAge.Days <= 60) return;
-            MessageBox.Show("新生兒依附註記方式就醫者新生兒年齡應小於60日");
+            AddError("新生兒依附註記方式就醫者新生兒年齡應小於60日");
         }
 
         /*
@@ -469,24 +562,16 @@ namespace His_Pos.PrescriptionDec
         /*
          * 確認原處方服務機構之特定治療項目代號D26
          */
-        private void CheckSpecialCode()
+        private SpecialCode CheckSpecialCode()
         {
+            SpecialCode special = new SpecialCode();
             var specialCode = SpecialCode.Text;
-            if (specialCode == string.Empty)
+            if (specialCode != string.Empty)
             {
-                //if (CheckHomeCareAndSmokingCessation() == false)
-                //{
-                //    MessageBox.Show("請填寫特定治療項目代號");
-                //    return;
-                //}
-                prescription.Treatment.MedicalInfo.SpecialCode.Id = string.Empty;
-                prescription.Treatment.MedicalInfo.SpecialCode.Name = string.Empty;
+                special.Id = specialCode.Substring(0, 2);
+                special.Name = string.Empty;
             }
-            else
-            {
-                prescription.Treatment.MedicalInfo.SpecialCode.Id = specialCode.Substring(0, 2);
-                prescription.Treatment.MedicalInfo.SpecialCode.Name = string.Empty;
-            }
+            return special;
         }
     }
 }
