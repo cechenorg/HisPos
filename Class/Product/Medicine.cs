@@ -5,6 +5,10 @@ namespace His_Pos.Class.Product
 {
     public class Medicine : AbstractClass.Product
     {
+        public Medicine()
+        {
+        }
+
         public Medicine(DataRow dataRow)
         {
             Id = dataRow["HISMED_ID"].ToString();

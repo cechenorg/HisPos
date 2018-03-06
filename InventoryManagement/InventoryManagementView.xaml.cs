@@ -22,6 +22,8 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.Class.Product;
 using System.Collections;
+using GalaSoft.MvvmLight.Command;
+using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace His_Pos.InventoryManagement
 {
@@ -57,33 +59,11 @@ namespace His_Pos.InventoryManagement
 
             DataGrid.ItemsSource = _dataList;
         }
-        
 
-        private void Row_Loaded(object sender, RoutedEventArgs e)
+        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
-            row.InputBindings.Add(new MouseBinding(ShowCustomDialogCommand,
-                new MouseGesture() { MouseAction = MouseAction.LeftDoubleClick }));
-        }
-
-        private ICommand _showCustomDialogCommand;
-
-
-        private ICommand ShowCustomDialogCommand
-        {
-            get
-            {
-                return _showCustomDialogCommand ?? (_showCustomDialogCommand = new SimpleCommand
-                {
-                    CanExecuteDelegate = x => true,
-                    ExecuteDelegate = x => RunCustomFromVm()
-                });
-            }
-        }
-
-        private void RunCustomFromVm()
-        {
-            var selected = (Otc)DataGrid.SelectedItem;
+            var selected = (Otc)row.Item;
             ProductDetail productDetail = new ProductDetail(selected);
             productDetail.Show();
         }
