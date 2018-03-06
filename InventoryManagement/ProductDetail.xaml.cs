@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Class.Product;
 
 namespace His_Pos.InventoryManagement
 {
@@ -19,9 +20,21 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class ProductDetail : Window
     {
-        public ProductDetail()
+        private Otc otc;
+        public ProductDetail(Otc o)
         {
             InitializeComponent();
+
+            otc = o;
+            UpdateUi();
+        }
+
+        private void UpdateUi()
+        {
+            if (otc is null) return;
+
+            ProductName.Content = otc.Name;
+            ProductId.Content = otc.Id;
         }
     }
 }

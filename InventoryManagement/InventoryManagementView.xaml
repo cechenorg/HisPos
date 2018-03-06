@@ -17,23 +17,14 @@
         <Canvas Background="#7FEEEEEE" HorizontalAlignment="Left" Height="70" Margin="10,10,0,0" VerticalAlignment="Top" Width="1285">
             <WrapPanel Width="auto" HorizontalAlignment="Left" Canvas.Top="10">
                 <DockPanel x:Name="AdjustDateDock" Width="auto" Margin="20,0,0,0" LastChildFill="True">
-                    <Label Width="auto" Content="進貨日期" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                    <Viewbox Width="auto" Height="30">
-                        <DatePicker Width="100" Name="start" SelectedDateFormat="Short" />
-                    </Viewbox>
-                    <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                    <Viewbox Width="auto" Height="30" >
-                        <DatePicker Width="100" Name="end" SelectedDateFormat="Short" />
-                    </Viewbox>
-                    <DockPanel x:Name="ProductNameDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True" Height="50" VerticalAlignment="Top">
-                        <Label Content="商品名稱" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
-                        <TextBox Name="Name" Width="150"/>
-                    </DockPanel>
                     <DockPanel x:Name="ProductIDDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True" Height="50" VerticalAlignment="Top">
                         <Label Content="商品編號" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                         <TextBox Name="ID" Width="150"/>
                     </DockPanel>
-
+                    <DockPanel x:Name="ProductNameDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True" Height="50" VerticalAlignment="Top">
+                        <Label Content="商品名稱" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+                        <TextBox Name="Name" Width="150"/>
+                    </DockPanel>
                 </DockPanel>
 
             </WrapPanel>
@@ -56,11 +47,12 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="150" Header="商品編號" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"  Binding="{Binding Id}"/>
-                <DataGridTextColumn Width="200" Header="商品名稱" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}"/>
-                <DataGridTextColumn Width="100" Header="庫存總量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Inventory}"/>
-                <DataGridTextColumn Width="200" Header="商品安全量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding SafeAmount}"/>
-                <DataGridTextColumn Width="150" Header="商品最近一次進貨時間" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding CurrentImportTime}"/>
+                <DataGridTextColumn Header="商品編號" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"  Binding="{Binding Id}"/>
+                <DataGridTextColumn Header="商品名稱" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="成本價" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Cost}"/>
+                <DataGridTextColumn Header="庫存總量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Inventory}"/>
+                <DataGridTextColumn Header="安全量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding SafeAmount}"/>
+                <DataGridTextColumn Header="製造商" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ManufactoryName}"/>
             </DataGrid.Columns>
         </DataGrid>
 

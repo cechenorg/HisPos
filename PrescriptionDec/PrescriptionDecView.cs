@@ -30,7 +30,6 @@ namespace His_Pos.PrescriptionDec
     public partial class PrescriptionDecView
     {
         private ObservableCollection<BitmapImage> _genderIcons = new ObservableCollection<BitmapImage>();
-        private ProductDb _productDb = new ProductDb();
         /*
          *初始化UI元件資料
          */
@@ -134,8 +133,7 @@ namespace His_Pos.PrescriptionDec
             MedicineList.Clear();
             foreach (var d in tmp.Take(50))
             {
-                var medicine = MedcineDb.GetMedicineData(d);
-                MedicineList.Add(medicine);
+                MedicineList.Add(new Medicine(d));
             }
             medicineAuto.ItemsSource = MedicineList;
             medicineAuto.PopulateComplete();

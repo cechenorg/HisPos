@@ -35,7 +35,7 @@ namespace His_Pos
                 userLogin.Authority.HisFeatures = auth.ToList();
                 var loadingWindow = new LoadingWindow();
                 loadingWindow.Show();
-                loadingWindow.GetMedicineData(userLogin);
+                loadingWindow.GetNecessaryData(userLogin);
                 Close();
             }
             else

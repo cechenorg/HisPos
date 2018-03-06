@@ -208,8 +208,9 @@
     <Compile Include="Class\Pharmacy.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
-    <Compile Include="Class\Product\MedcineDb.cs" />
+    <Compile Include="Class\Product\MedicineDb.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
+    <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\SpecialCode.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCaseDb.cs" />

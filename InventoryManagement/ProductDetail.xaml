@@ -5,59 +5,90 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.InventoryManagement"
         mc:Ignorable="d"
-        Title="ProductDetail" Height="389.327" Width="671.337">
+        Title="ProductDetail" Height="600" Width="1000">
+    <Window.Resources>
+        <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="5,10,5,10"/>
+        </Style>
+    </Window.Resources>
     <Window.Background>
         <ImageBrush ImageSource="/Images/SystemBackgroundWhite.jpg"/>
     </Window.Background>
-    <Grid Margin="0,0,-0.2,-3">
+    <Viewbox Stretch="Fill">
+        <Grid Width="1000">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="130"/>
+                <RowDefinition Height="400"/>
+            </Grid.RowDefinitions>
 
-        <Canvas HorizontalAlignment="Left" Height="136" Margin="10,10,0,0" VerticalAlignment="Top" Width="645">
-            <DockPanel Margin="10,0,0,0">
-                <Label Content="商品編號:" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch" />
-                <Label Name="ProductId" Content="編號" Width="auto" Foreground="#FF424040" Margin="0,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch"/>
-            </DockPanel>
-            <DockPanel Canvas.Left="222" >
-                <Label  Content="商品名稱:" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch" />
-                <Label  Name="ProductName" Content="名稱" Width="auto" Foreground="#FF424040" Margin="0,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch"/>
-            </DockPanel>
-            <DockPanel Canvas.Left="446" >
-                <Label  Name="ProductPrice" Content="商品售價:" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch" />
-                <Label Content="售價" Width="auto" Foreground="#FF424040" Margin="0,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch"/>
-            </DockPanel>
-            <DockPanel Canvas.Left="10" Canvas.Top="52" >
-                <Label Content="商品總量:" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch" />
-                <Label Name="ProductAmount" Content="總量" Width="auto" Foreground="#FF424040" Margin="0,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch"/>
-            </DockPanel>
-            <DockPanel Canvas.Left="222" Canvas.Top="52" >
-                <Label   Content="進貨廠商:" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch" />
-                <Label  Name="ProductManufacturers" Content="廠商" Width="auto" Foreground="#FF424040" Margin="0,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch"/>
-            </DockPanel>
-            <DockPanel Canvas.Left="446" Canvas.Top="52" >
-                <Label Content="安全量:" Width="auto" Foreground="#FF424040" Margin="10,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch" />
-                <Label Name="ProductSafeAmount" Content="安全量" Width="auto" Foreground="#FF424040" Margin="0,10,10,10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" 
-                                   HorizontalContentAlignment="Stretch"/>
-            </DockPanel>
-        </Canvas>
-        <DataGrid Name="DataGrid" Background="Transparent" HorizontalAlignment="Left" Height="221" Margin="19,118,0,0" VerticalAlignment="Top" Width="636" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Width="100" Header="進貨日" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"  Binding="{Binding ProductId}"/>
-                <DataGridTextColumn Width="100" Header="到期日" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ProductName}"/>
-                <DataGridTextColumn Width="100" Header="庫存數量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ProductTotalAmount}"/>
-                <DataGridTextColumn Width="100" Header="進貨價" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ProductSafeAmount}"/>
-                <DataGridTextColumn Width="150" Header="商品狀態" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ProductCurrentTime}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>
-
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Label Name="ProductName" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,20,0" Padding="0"/>
+                <Label Name="ProductId" Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semi" Margin="0,20,0,10" Padding="0"/>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Margin="10,5,10,5" Background="#7FEEEEEE">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Content="售價" Grid.Column="0" Grid.Row="0"></Label>
+                    <Label Content="售價" Grid.Column="1" Grid.Row="0"></Label>
+                    <Label Content="售價" Grid.Column="2" Grid.Row="0"></Label>
+                    <Label Content="售價" Grid.Column="3" Grid.Row="1"></Label>
+                </Grid>
+            </StackPanel>
+            <StackPanel Grid.Row="2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Vertical" Grid.Column="0" Margin="10,10,5,10" Background="#7FEEEEEE" Height="380">
+                        <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                        <DataGrid Name="DataGrid" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="訂貨日期" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="訂貨人" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="到貨期日" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="進貨單價" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="1" Margin="5,10,5,10" Background="#7FEEEEEE" Height="380">
+                        <Label Content="交易紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                        <DataGrid Name="DataGrid1" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="交易日期" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="交易數量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="購買價格" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Grid.Column="2" Margin="5,10,10,10" Background="#7FEEEEEE" Height="380">
+                        <Label Content="盤點紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                        <DataGrid Name="DataGrid2" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="盤點時間" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="盤點數量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="盤點人" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                </Grid>
+                
+            </StackPanel>
+        </Grid>
+    </Viewbox>
 </Window>

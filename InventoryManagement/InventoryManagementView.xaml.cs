@@ -21,6 +21,7 @@ using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.Class.Product;
+using System.Collections;
 
 namespace His_Pos.InventoryManagement
 {
@@ -29,7 +30,8 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class InventoryManagementView : UserControl
     {
-        private readonly ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
+        private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
+
         public InventoryManagementView()
         {
             InitializeComponent();
@@ -37,10 +39,22 @@ namespace His_Pos.InventoryManagement
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Otc otc in OTCDb.GetOTC(start.Text, end.Text, Name.Text, ID.Text)) {
-                _dataList.Add(otc);
+            _dataList.Clear();
+
+            var otc = MainWindow.OtcDataTable.Select("PRO_ID Like '" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+
+            foreach (var o in otc)
+            {
+                _dataList.Add(new Otc(o));
             }
-           
+
+            var medicine = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+
+            foreach (var m in medicine)
+            {
+                _dataList.Add(new Medicine(m));
+            }
+
             DataGrid.ItemsSource = _dataList;
         }
         
@@ -53,6 +67,7 @@ namespace His_Pos.InventoryManagement
         }
 
         private ICommand _showCustomDialogCommand;
+
 
         private ICommand ShowCustomDialogCommand
         {
@@ -69,12 +84,7 @@ namespace His_Pos.InventoryManagement
         private void RunCustomFromVm()
         {
             var selected = (Otc)DataGrid.SelectedItem;
-            ProductDetail productDetail = new ProductDetail();
-            productDetail.ProductName.Content = selected.Name;
-            productDetail.ProductId.Content = selected.Id;
-            productDetail.ProductAmount.Content = selected.Inventory;
-            productDetail.ProductSafeAmount.Content = selected.SafeAmount;
-            productDetail.ProductManufacturers.Content = selected.ManufactoryName;
+            ProductDetail productDetail = new ProductDetail(selected);
             productDetail.Show();
         }
     }
