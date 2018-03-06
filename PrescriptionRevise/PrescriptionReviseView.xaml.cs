@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
@@ -82,6 +84,9 @@ namespace His_Pos.PrescriptionRevise
             InitializeComponent();
             InitialReviseUiElement();
             DataContext = this;
+            CultureInfo cag = new CultureInfo("zh-TW");
+            cag.DateTimeFormat.Calendar = new TaiwanCalendar();
+            Thread.CurrentThread.CurrentCulture = cag;
         }
 
         private void InitialReviseUiElement()
@@ -211,58 +216,59 @@ namespace His_Pos.PrescriptionRevise
             var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[DECLAREDATABYMASID]", list);
             var xml = new XmlDocument();
             xml.LoadXml(table.Rows[0]["HISDECMAS_DETXML"].ToString());
-            var cus = new Customer();
-            var medicalCase = xml.SelectSingleNode("ddata/dhead/d22")?.InnerText;
-            var copayment = xml.SelectSingleNode("ddata/dhead/d15")?.InnerText;
-            var medicalPersonnel = xml.SelectSingleNode("ddata/dhead/d25")?.InnerText;
-            var division = xml.SelectSingleNode("ddata/dhead/d13")?.InnerText;
-            var treatDate = xml.SelectSingleNode("ddata/dhead/d23")?.InnerText;
-            var medicineDays = short.Parse(xml.SelectSingleNode("ddata/dhead/d30")?.InnerText);
-            var treatmentCode1 = xml.SelectSingleNode("ddata/dhead/d8")?.InnerText;
-            var treatmentCode2 = xml.SelectSingleNode("ddata/dhead/d9")?.InnerText;
-            var doctorName = xml.SelectSingleNode("ddata/dhead/d24")?.InnerText;
+            
             int chronicSequence = 0;
             if (xml.SelectSingleNode("ddata/dhead/d35") != null)
                 chronicSequence = int.Parse(xml.SelectSingleNode("ddata/dhead/d35").InnerText);
             int chronicDeliveryTimes = 0;
             if (xml.SelectSingleNode("ddata/dhead/d36") != null)
                 chronicDeliveryTimes = int.Parse(xml.SelectSingleNode("ddata/dhead/d36")?.InnerText);
-            cus.Birthday = xml.SelectSingleNode("ddata/dhead/d6")?.InnerText;
-            cus.IcNumber = xml.SelectSingleNode("ddata/dhead/d3")?.InnerText;
-            cus.Name = xml.SelectSingleNode("ddata/dhead/d20")?.InnerText;
-            _declare = new DeclareData();
-            //_declare.Details.Clear();
-            //var pelemList = xml.GetElementsByTagName("pdata");
-            //for (var i = 0; i < pelemList.Count; i++)
-            //{
-            //    var p12 = pelemList[i].InnerXml.Contains("p12") ? "" : xml.SelectSingleNode("ddata/pdata/p12")?.InnerText;
-            //    var p13 = pelemList[i].InnerXml.Contains("p13") ? "" : xml.SelectSingleNode("ddata/pdata/p13")?.InnerText;
-            //    _declare.AddDetail(new DeclareDetail(
-            //        xml.SelectSingleNode("ddata/pdata/p1")?.InnerText,
-            //        xml.SelectSingleNode("ddata/pdata/p2")?.InnerText,
-            //        xml.SelectSingleNode("ddata/pdata/p3")?.InnerText,
-            //        xml.SelectSingleNode("ddata/pdata/p4")?.InnerText,
-            //        xml.SelectSingleNode("ddata/pdata/p5")?.InnerText,
-            //        xml.SelectSingleNode("ddata/pdata/p6")?.InnerText,
-            //        double.Parse(xml.SelectSingleNode("ddata/pdata/p7")?.InnerText ?? throw new InvalidOperationException()),
-            //        double.Parse(xml.SelectSingleNode("ddata/pdata/p8")?.InnerText ?? throw new InvalidOperationException()),
-            //        int.Parse(xml.SelectSingleNode("ddata/pdata/p9")?.InnerText ?? throw new InvalidOperationException()),
-            //        int.Parse(xml.SelectSingleNode("ddata/pdata/p10")?.InnerText ?? throw new InvalidOperationException()),
-            //        p12,
-            //        p13));
-            //}
-            //_declare.ID = masId;
-            PrescriptionReviseOutcome prescriptionReviseOutcome /*= new PrescriptionReviseOutcome(_declare)*/;
+            
+            _declare = new DeclareData(GetPrescriptionData(xml));
+            _declare.DeclareDetails.Clear();
+            
+            _declare.Id = masId;
+            PrescriptionReviseOutcome prescriptionReviseOutcome = new PrescriptionReviseOutcome(_declare);
             prescriptionReviseOutcome.Show();
         }
         private Prescription GetPrescriptionData(XmlDocument xml)
         {
-            return new Prescription(GetIcCard(xml), GetPharmacy(xml), GetTreatment(xml), GetMedicines());
+            return new Prescription(GetIcCard(xml), GetPharmacy(xml), GetTreatment(xml), GetMedicines(xml));
         }
 
-        private List<Medicine> GetMedicines()
+        private List<Medicine> GetMedicines(XmlDocument xml)
         {
-            throw new NotImplementedException();
+            var medicines = new List<Medicine>();
+            var pelemList = xml.GetElementsByTagName("pdata");
+            for (var i = 0; i < pelemList.Count-1; i++)
+            {
+                medicines.Add(GetMedicine(xml));
+                //DeclareDetail detail = new DeclareDetail(GetMedicine(xml),GetAdjustCase(xml),i);
+                //detail.StartDate = pelemList[i].InnerXml.Contains("p12") ? "" : xml.SelectSingleNode("ddata/pdata/p12")?.InnerText;
+                //detail.EndDate = pelemList[i].InnerXml.Contains("p13") ? "" : xml.SelectSingleNode("ddata/pdata/p13")?.InnerText;
+                //_declare.DeclareDetails.Add(detail);
+            }
+            return medicines;
+        }
+
+        private Medicine GetMedicine(XmlDocument xml)
+        {
+            var medicine = new Medicine();
+            var medicate = new Medicate();
+            medicine.Id = xml.SelectSingleNode("ddata/pdata/p2")?.InnerText;
+            var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID = '" + medicine.Id + "'");
+            medicine.Name = tmp[0]["PRO_NAME"].ToString();
+            // ReSharper disable once AssignNullToNotNullAttribute
+            //medicine.Price = ;
+            medicine.Total = double.Parse(xml.SelectSingleNode("ddata/pdata/p7")?.InnerText);
+            //medicine.PaySelf = paySelf;
+            medicine.HcPrice = double.Parse(xml.SelectSingleNode("ddata/pdata/p8")?.InnerText);
+            medicate.Dosage = xml.SelectSingleNode("ddata/pdata/p3")?.InnerText;
+            medicate.Usage = xml.SelectSingleNode("ddata/pdata/p4")?.InnerText;
+            medicate.Position = xml.SelectSingleNode("ddata/pdata/p5")?.InnerText;
+            medicate.Days = int.Parse(xml.SelectSingleNode("ddata/pdata/p11")?.InnerText ?? throw new InvalidOperationException());
+            medicine.MedicalCategory = medicate;
+            return medicine;
         }
 
         private Treatment GetTreatment(XmlDocument xml)
@@ -272,22 +278,27 @@ namespace His_Pos.PrescriptionRevise
 
         private Customer GetCustomer(XmlDocument xml)
         {
-            throw new NotImplementedException();
+            return new Customer
+            {
+                Birthday = xml.SelectSingleNode("ddata/dhead/d6")?.InnerText,
+                IcNumber = xml.SelectSingleNode("ddata/dhead/d3")?.InnerText,
+                Name = xml.SelectSingleNode("ddata/dhead/d20")?.InnerText
+            };
         }
 
         private string GetMedicalPersonId(XmlDocument xml)
         {
-            throw new NotImplementedException();
+            return xml.SelectSingleNode("ddata/dhead/d25")?.InnerText;
         }
 
         private string GetMedicineDays(XmlDocument xml)
         {
-            throw new NotImplementedException();
+            return xml.SelectSingleNode("ddata/dhead/d30")?.InnerText;
         }
 
         private DateTime GetAdjustDate(XmlDocument xml)
         {
-            throw new NotImplementedException();
+            return Convert.ToDateTime(xml.SelectSingleNode("ddata/dhead/d23")?.InnerText);
         }
 
         private DateTime GetTreatmentDate(XmlDocument xml)
@@ -305,7 +316,7 @@ namespace His_Pos.PrescriptionRevise
 
         private Copayment GetCopayment(XmlDocument xml)
         {
-            throw new NotImplementedException();
+            return new Copayment(xml.SelectSingleNode("ddata/dhead/d15")?.InnerText,CopaymentDb.GetCopayment(xml.SelectSingleNode("ddata/dhead/d15")?.InnerText));
         }
 
         private PaymentCategory GetPaymentCategory(XmlDocument xml)
@@ -333,7 +344,16 @@ namespace His_Pos.PrescriptionRevise
 
         private List<DiseaseCode> GetDiseaseCode(XmlDocument xml)
         {
-            throw new NotImplementedException();
+            var disease = new List<DiseaseCode>();
+            var mainDisease = xml.SelectSingleNode("ddata/dhead/d8")?.InnerText;
+            var secondDisease = xml.SelectSingleNode("ddata/dhead/d9")?.InnerText;
+            if (mainDisease == string.Empty) return disease;
+            var main = new DiseaseCode {Id = mainDisease};
+            disease.Add(main);
+            if (secondDisease == string.Empty) return disease;
+            var second = new DiseaseCode { Id = mainDisease };
+            disease.Add(second);
+            return disease;
         }
 
         private SpecialCode GetSpecialCode(XmlDocument xml)
@@ -348,12 +368,20 @@ namespace His_Pos.PrescriptionRevise
         private Hospital GetHospital(XmlDocument xml)
         {
             var hospital = new Hospital {Id = xml.SelectSingleNode("ddata/dhead/d21")?.InnerText};
+            DivisionDb.GetData();
+            var division = new Division{Id = xml.SelectSingleNode("ddata/dhead/d13")?.InnerText};
+            foreach (var d in DivisionDb.DivisionsList)
+            {
+                if (division.Id == d.Id)
+                    division.Name = d.Name;
+            }
+            hospital.Doctor.Id = xml.SelectSingleNode("ddata/dhead/d24")?.InnerText;
             return hospital;
         }
 
         private Pharmacy GetPharmacy(XmlDocument xml)
         {
-            throw new NotImplementedException();
+            return MainWindow.CurrentUser.Pharmacy;
         }
 
         private IcCard GetIcCard(XmlDocument xml)

@@ -9,12 +9,11 @@ namespace His_Pos.Class.Product
         {
         }
 
-        public Medicine(string id, string name, double price, double inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)
+        public Medicine(string id, string name, double price,  double total, bool paySelf, double hcPrice, Medicate medicalCategory)
         {
             Id = id;
             Name = name;
             Price = price;
-            Inventory = inventory;
             Total = total;
             PaySelf = paySelf;
             HcPrice = hcPrice;

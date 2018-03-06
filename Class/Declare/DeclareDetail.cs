@@ -17,9 +17,9 @@ namespace His_Pos.Class.Declare
             SetDate(start,end);
         }
 
-        public DeclareDetail(Medicine medicine,string adjustCase,int sequence)
+        public DeclareDetail(Medicine medicine,AdjustCase.AdjustCase adjustCase,int sequence)
         {
-            if(!medicine.PaySelf || adjustCase == "3")//p1
+            if(!medicine.PaySelf || adjustCase.Id == "3")//p1
                 MedicalOrder = "1";
             else
                 MedicalOrder = "4";
