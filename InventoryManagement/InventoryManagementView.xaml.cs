@@ -41,51 +41,50 @@ namespace His_Pos.InventoryManagement
         {
             _dataList.Clear();
 
-            var otc = MainWindow.OtcDataTable.Select("PRO_ID Like '" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+            CompareWithOtc();
+            CompareWithMedicine();
 
-            foreach (var o in otc)
-            {
-                _dataList.Add(new Otc(o));
-            }
+            ProductList.ItemsSource = _dataList;
+        }
 
-            var medicine = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+        private void CompareWithMedicine()
+        {
+            var medicine = MainWindow.MedicineDataTable.Select("HISMED_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
 
             foreach (var m in medicine)
             {
                 _dataList.Add(new Medicine(m));
             }
-
-            DataGrid.ItemsSource = _dataList;
-        }
-        
-
-        private void Row_Loaded(object sender, RoutedEventArgs e)
-        {
-            var row = sender as DataGridRow;
-            row.InputBindings.Add(new MouseBinding(ShowCustomDialogCommand,
-                new MouseGesture() { MouseAction = MouseAction.LeftDoubleClick }));
         }
 
-        private ICommand _showCustomDialogCommand;
-
-
-        private ICommand ShowCustomDialogCommand
+        private void CompareWithOtc()
         {
-            get
+            var otc = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+
+            foreach (var o in otc)
             {
-                return _showCustomDialogCommand ?? (_showCustomDialogCommand = new SimpleCommand
-                {
-                    CanExecuteDelegate = x => true,
-                    ExecuteDelegate = x => RunCustomFromVm()
-                });
+                _dataList.Add(new Otc(o));
             }
         }
 
-        private void RunCustomFromVm()
+        private void showProductDetail(object sender, MouseButtonEventArgs e)
         {
-            var selected = (Otc)DataGrid.SelectedItem;
-            ProductDetail productDetail = new ProductDetail(selected);
-            productDetail.Show();
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is Otc )
+            {
+                OtcDetail productDetail = new OtcDetail((Otc)selectedItem);
+                productDetail.Show();
+            }
+            else if (selectedItem is Medicine )
+            {
+
+            }
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ProductList.SelectedItem = (sender as DataGridRow).Item;
         }
     }
 }

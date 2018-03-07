@@ -16,12 +16,12 @@ using His_Pos.Class.Product;
 namespace His_Pos.InventoryManagement
 {
     /// <summary>
-    /// ProductDetail.xaml 的互動邏輯
+    /// OtcDetail.xaml 的互動邏輯
     /// </summary>
-    public partial class ProductDetail : Window
+    public partial class OtcDetail : Window
     {
         private Otc otc;
-        public ProductDetail(Otc o)
+        public OtcDetail(Otc o)
         {
             InitializeComponent();
 

@@ -127,7 +127,7 @@
                             <Button Content="取得病患資料" Background="DeepSkyBlue" Margin="10,10,0,0" Height="45" FontSize="16" MinWidth="130" BorderThickness="0" Click="GetPatientDataButtonClick"/>
                         </StackPanel>
                     </DockPanel>
-                    <Grid Background="#7FEEEEEE" Grid.Row="1" Margin="10,10,10,0">
+                    <Grid Background="#B2EEEEEE" Grid.Row="1" Margin="10,10,10,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>

@@ -13,48 +13,101 @@
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     dialog:DialogParticipation.Register="{Binding}"
     mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
-    <Grid Margin="30,10">
-        <Canvas Background="#7FEEEEEE" HorizontalAlignment="Left" Height="70" Margin="10,10,0,0" VerticalAlignment="Top" Width="1285">
-            <WrapPanel Width="auto" HorizontalAlignment="Left" Canvas.Top="10">
-                <DockPanel x:Name="AdjustDateDock" Width="auto" Margin="20,0,0,0" LastChildFill="True">
-                    <DockPanel x:Name="ProductIDDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True" Height="50" VerticalAlignment="Top">
-                        <Label Content="商品編號" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
-                        <TextBox Name="ID" Width="150"/>
-                    </DockPanel>
-                    <DockPanel x:Name="ProductNameDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True" Height="50" VerticalAlignment="Top">
-                        <Label Content="商品名稱" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
-                        <TextBox Name="Name" Width="150"/>
-                    </DockPanel>
-                </DockPanel>
+    <Viewbox Stretch="Fill">
+        <Grid Width="1365">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="790"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <Label Content="商品編號" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="ID" Margin="0,10,10,10" Width="150" FontSize="16"/>
+                <Label Content="商品名稱" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="Name" Margin="0,10,10,10" Width="150" FontSize="16"/>
+                <Button Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100"/>
+            </StackPanel>
+            <DataGrid Name="ProductList" Background="#B2EEEEEE" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="#33009DF7"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <EventSetter Event="MouseDoubleClick" Handler="showProductDetail"/>
+                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="Height" Value="40"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.CellStyle>
+                    <Style TargetType="{x:Type DataGridCell}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#FF424040"/>
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="{x:Type DataGridColumnHeader }">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Margin" Value="5,10,5,10"/>
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="120" Header="商品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn MinWidth="250" Header="商品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Name}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="成本價" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="庫存總量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="安全量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SafeAmount}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="製造商" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ManufactoryName}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
 
-            </WrapPanel>
-            <Button Content="查詢" Name="Search" Click="Search_Click"  Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="20"/>
-
-        </Canvas>
-        <DataGrid Name="DataGrid" Background="Transparent" HorizontalAlignment="Left" Height="677" Margin="10,113,0,0" VerticalAlignment="Top" Width="1285" AutoGenerateColumns="False">
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
-                   Color="#FF424040"/>
-            </DataGrid.Resources>
-            <DataGrid.RowStyle>
-                <Style TargetType="{x:Type DataGridRow}">
-                    <EventSetter Event="Loaded" Handler="Row_Loaded"/>
-                </Style>
-            </DataGrid.RowStyle>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding showCustomDialogCommand}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="商品編號" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"  Binding="{Binding Id}"/>
-                <DataGridTextColumn Header="商品名稱" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="成本價" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Cost}"/>
-                <DataGridTextColumn Header="庫存總量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Inventory}"/>
-                <DataGridTextColumn Header="安全量" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding SafeAmount}"/>
-                <DataGridTextColumn Header="製造商" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding ManufactoryName}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-
-    </Grid>
+        </Grid>
+    </Viewbox>
 </UserControl>
