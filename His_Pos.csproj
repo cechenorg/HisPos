@@ -214,6 +214,7 @@
     <Compile Include="Class\Pharmacy.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
+    <Compile Include="Class\Product\CusOrderOverview.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
