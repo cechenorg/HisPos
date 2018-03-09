@@ -17,7 +17,7 @@
                         Executed="SaveCommandHandler"/>
     </Window.CommandBindings>
     <Window.Background>
-        <ImageBrush ImageSource="/Images/SystemBackgroundWhite2.jpg"/>
+        <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
     <Viewbox>
         <Grid Name="PrescriptionDialog">

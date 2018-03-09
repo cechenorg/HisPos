@@ -64,7 +64,7 @@ namespace His_Pos.InventoryManagement
             return new LineSeries
             {
                 Title = "庫存",
-                Values = new ChartValues<double> { 4, 5, 5, 5, 4 },
+                Values = new ChartValues<double> { 4, 1, 2, 5, 5, 4 },
                 PointGeometrySize = 10,
                 LineSmoothness = 0,
                 DataLabels = true

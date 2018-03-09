@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:His_Pos.InventoryManagement"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d" 
-        Title="ProductDetail" Height="600" Width="1000" WindowStartupLocation="CenterScreen">
+        Title="ProductDetail" Height="800" Width="1300" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -17,13 +17,13 @@
         </Style>
     </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="/Images/SystemBackgroundWhite2.jpg"/>
+        <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
     <Viewbox Stretch="Fill">
-        <Grid Width="1000">
+        <Grid Width="1300">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"/>
-                <RowDefinition Height="530"/>
+                <RowDefinition Height="730"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
                 <StackPanel Orientation="Horizontal" Width="700">
@@ -36,40 +36,13 @@
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="700"/>
-                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="600"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="1" Margin="5,5,10,10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="265"/>
-                        <RowDefinition Height="265"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical" Background="#B2EEEEEE" Grid.Row="0" Margin="0,0,0,5">
-                        <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                        <DataGrid Name="DataGrid" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="訂貨日期" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="訂貨人" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="到貨期日" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="進貨單價" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical" Background="#B2EEEEEE" Grid.Row="1" Margin="0,5,0,0">
-                        <Label Content="交易紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                        <DataGrid Name="OtcCusOrder" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" AutoGenerateColumns="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="交易日期" Binding="{Binding Date}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="數量" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="獲利" Binding="{Binding Profit}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                </Grid>
                 <Grid Margin="10,5,5,10" Grid.Column="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="230"/>
-                        <RowDefinition Height="150"/>
-                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="280"/>
+                        <RowDefinition Height="220"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0" Background="#B2EEEEEE">
                         <Grid.RowDefinitions>
@@ -105,24 +78,111 @@
                         </StackPanel>
                         <Button Grid.Column="2" Grid.Row="3" Width="150" Content="確認修改" FontFamily="Segoe UI Semibold" FontSize="16" HorizontalAlignment="Right" Margin="10"/>
                     </Grid>
-                    <lvc:CartesianChart Series="{Binding InventoryCollection}" Grid.Row="1">
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="450"/>
+                            <ColumnDefinition Width="250"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Background="#B2EEEEEE" Margin="0,10,0,0" Grid.Column="0">
+                            <!--<lvc:PieChart LegendLocation="Right" Hoverable="False" DataTooltip="{x:Null}" Width="320" Margin="10,10,20,10">
+                                <lvc:PieChart.Series>
+                                    <lvc:PieSeries Title="Maria" Values="3" DataLabels="True"
+                                                   LabelPoint="{Binding PointLabel}"/>
+                                    <lvc:PieSeries Title="Charles" Values="4" DataLabels="True" 
+                                                   LabelPoint="{Binding PointLabel}"/>
+                                    <lvc:PieSeries Title="Frida" Values="6" DataLabels="True" 
+                                                   LabelPoint="{Binding PointLabel}"/>
+                                    <lvc:PieSeries Title="Frederic" Values="2" DataLabels="True" 
+                                                   LabelPoint="{Binding PointLabel}"/>
+                                </lvc:PieChart.Series>
+                            </lvc:PieChart>-->
+
+
+                        </StackPanel>
+                        <!--<lvc:CartesianChart Series="{Binding InventoryCollection}" Grid.Column="1">
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis LabelFormatter="{Binding DataFormatter}" ShowLabels="False"/>
+                            </lvc:CartesianChart.AxisY>
+                            <lvc:CartesianChart.AxisX>
+                                <lvc:Axis Labels="{Binding Days}" IsMerged="True" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="12">
+                                    <lvc:Axis.Separator>
+                                        <lvc:Separator IsEnabled="False" Step="5"></lvc:Separator>
+                                    </lvc:Axis.Separator>
+                                </lvc:Axis>
+                            </lvc:CartesianChart.AxisX>
+                        </lvc:CartesianChart>-->
+                    </Grid>
+                    <lvc:CartesianChart Series="{Binding InventoryCollection}" Grid.Row="2">
                         <lvc:CartesianChart.AxisY>
                             <lvc:Axis LabelFormatter="{Binding DataFormatter}" ShowLabels="False"/>
                         </lvc:CartesianChart.AxisY>
                         <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding Days}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="12">
+                            <lvc:Axis Labels="{Binding Days}" IsMerged="True" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="12">
                                 <lvc:Axis.Separator>
                                     <lvc:Separator IsEnabled="False" Step="5"></lvc:Separator>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisX>
                     </lvc:CartesianChart>
-                    <Grid Grid.Row="2">
+                </Grid>
+                <Grid Grid.Column="1" Margin="5,5,10,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="300"/>
+                        <RowDefinition Height="330"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical" Background="#B2EEEEEE" Grid.Row="0" Margin="0,0,0,5">
+                        <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                        <DataGrid Name="DataGrid" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="訂貨日期" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="訂貨人" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="到貨期日" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="進貨單價" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Margin="0,5,0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Vertical" Background="#B2EEEEEE" Margin="0,0,5,0" Grid.Column="0">
+                            <Label Content="交易紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <DataGrid Name="OtcCusOrder" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="交易日期" Binding="{Binding Date}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="數量" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="獲利" Binding="{Binding Profit}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Background="#B2EEEEEE" Margin="5,0,0,0" Grid.Column="1">
+                            <Label Content="交易紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <DataGrid Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" AutoGenerateColumns="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="交易日期" Binding="{Binding Date}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="數量" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="獲利" Binding="{Binding Profit}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="2" Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
+                        <StackPanel  Background="#B2EEEEEE" Margin="0,0,5,0" Grid.Column="0">
+                            
+                        </StackPanel>
+                        <StackPanel  Background="#B2EEEEEE" Margin="5,0,5,0" Grid.Column="1">
+
+                        </StackPanel>
+                        <StackPanel  Background="#B2EEEEEE" Margin="5,0,0,0" Grid.Column="2">
+
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </Grid>

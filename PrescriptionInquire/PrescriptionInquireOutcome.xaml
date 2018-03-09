@@ -16,7 +16,7 @@
         </Style>
     </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="/Images/SystemBackgroundWhite2.jpg"/>
+        <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
     <Viewbox  VerticalAlignment="Top">
         <Grid>
