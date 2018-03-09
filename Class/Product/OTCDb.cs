@@ -19,5 +19,24 @@ namespace His_Pos.Class.Product
             var dd = new DbConnection(Settings.Default.SQL_global);
             return dd.ExecuteProc("[HIS_POS_DB].[GET].[OTC]");
         }
+
+        public static ObservableCollection<CusOrderOverview> GetOtcCusOrderOverviewByID(string OtcID)
+        {
+            ObservableCollection<CusOrderOverview> collection = new ObservableCollection<CusOrderOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("OTCID", OtcID));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[OTCCUSORDBYID]", parameters);
+
+            foreach(DataRow row in table.Rows)
+            {
+                collection.Add(new CusOrderOverview(row["DATE"].ToString(), row["CUSORDDET_QTY"].ToString(), row["CUSORDDET_PROFITTOTAL"].ToString()));
+            }
+
+            return collection;
+        }
     }
 }

@@ -22,8 +22,6 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.Class.Product;
 using System.Collections;
-using GalaSoft.MvvmLight.Command;
-using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace His_Pos.InventoryManagement
 {
@@ -43,29 +41,50 @@ namespace His_Pos.InventoryManagement
         {
             _dataList.Clear();
 
-            var otc = MainWindow.OtcDataTable.Select("PRO_ID Like '" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+            CompareWithOtc();
+            CompareWithMedicine();
 
-            foreach (var o in otc)
-            {
-                _dataList.Add(new Otc(o));
-            }
+            ProductList.ItemsSource = _dataList;
+        }
 
-            var medicine = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+        private void CompareWithMedicine()
+        {
+            var medicine = MainWindow.MedicineDataTable.Select("HISMED_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
 
             foreach (var m in medicine)
             {
                 _dataList.Add(new Medicine(m));
             }
-
-            DataGrid.ItemsSource = _dataList;
         }
 
-        private void DataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void CompareWithOtc()
         {
-            var row = sender as DataGridRow;
-            var selected = (Otc)row.Item;
-            ProductDetail productDetail = new ProductDetail(selected);
-            productDetail.Show();
+            var otc = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+
+            foreach (var o in otc)
+            {
+                _dataList.Add(new Otc(o));
+            }
+        }
+
+        private void showProductDetail(object sender, MouseButtonEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is Otc )
+            {
+                OtcDetail productDetail = new OtcDetail((Otc)selectedItem);
+                productDetail.Show();
+            }
+            else if (selectedItem is Medicine )
+            {
+
+            }
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ProductList.SelectedItem = (sender as DataGridRow).Item;
         }
     }
 }

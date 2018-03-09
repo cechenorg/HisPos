@@ -113,6 +113,12 @@
     <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro">
       <HintPath>packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -208,6 +214,7 @@
     <Compile Include="Class\Pharmacy.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
+    <Compile Include="Class\Product\CusOrderOverview.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
@@ -236,8 +243,8 @@
     <Compile Include="InventoryManagement\InventoryManagementView.xaml.cs">
       <DependentUpon>InventoryManagementView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InventoryManagement\ProductDetail.xaml.cs">
-      <DependentUpon>ProductDetail.xaml</DependentUpon>
+    <Compile Include="InventoryManagement\OtcDetail.xaml.cs">
+      <DependentUpon>OtcDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
@@ -290,7 +297,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InventoryManagement\ProductDetail.xaml">
+    <Page Include="InventoryManagement\OtcDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -420,6 +427,9 @@
     <Resource Include="Images\Truck_50px.png" />
     <Resource Include="Images\Settings.png" />
     <Resource Include="Images\PosHisDot.png" />
+    <Resource Include="Images\SystemBackgroundWhite2.jpg" />
+    <Resource Include="Images\SystemBackgroundWhite6.jpg" />
+    <Resource Include="Images\SystemBackgroundWhite7.jpg" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

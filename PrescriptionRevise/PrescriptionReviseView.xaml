@@ -29,7 +29,7 @@
         </Style>
     </UserControl.Resources>
     <StackPanel Orientation="Vertical" Margin="30,10">
-        <Canvas Margin="0" Height="110" Background="#7FEEEEEE" VerticalAlignment="Center" >
+        <Canvas Margin="0" Height="110" Background="#B2EEEEEE" VerticalAlignment="Center" >
             <WrapPanel x:Name="CaseDock" Width="650" Margin="15,0,0,0"  VerticalAlignment="Center">
                 <Label Content="申報日期" Width="Auto" Foreground="#FF424040" Margin="20,10,10,10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                 <DatePicker Height="25" HorizontalAlignment="Left" x:Name="sdatePicker1" Width="115" FontWeight="Bold"/>
@@ -59,7 +59,7 @@
                 <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
-        <DockPanel Margin="0" Height="90" Background="#7FEEEEEE" VerticalAlignment="Center">
+        <DockPanel Margin="0" Height="90" Background="#B2EEEEEE" VerticalAlignment="Center">
             <Label x:Name="DeclareStatus" Content=""/>
             <Button Background="Red" Width="150" Margin="20" Content="修改完成" FontWeight="Bold" FontSize="20" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right" Height="50" />
         </DockPanel>

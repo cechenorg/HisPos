@@ -17,7 +17,7 @@
                         Executed="SaveCommandHandler"/>
     </Window.CommandBindings>
     <Window.Background>
-        <ImageBrush ImageSource="/Images/SystemBackgroundWhite.jpg"/>
+        <ImageBrush ImageSource="/Images/SystemBackgroundWhite2.jpg"/>
     </Window.Background>
     <Viewbox>
         <Grid Name="PrescriptionDialog">
@@ -39,7 +39,7 @@
                     </StackPanel>
                 </StackPanel>
             </DockPanel>
-            <Grid Background="#7FEEEEEE" Grid.Row="1" Margin="10,10,10,0">
+            <Grid Background="#B2EEEEEE" Grid.Row="1" Margin="10,10,10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
