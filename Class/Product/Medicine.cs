@@ -29,7 +29,6 @@ namespace His_Pos.Class.Product
             Id = id;
             Name = name;
             Price = price;
-            Inventory = inventory;
             Total = total;
             PaySelf = paySelf;
             HcPrice = hcPrice;

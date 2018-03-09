@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.PrescriptionRevise
 {
@@ -8,7 +9,7 @@ namespace His_Pos.PrescriptionRevise
     /// </summary>
     public partial class PrescriptionReviseOutcome : Window
     {
-        public PrescriptionReviseOutcome()
+        public PrescriptionReviseOutcome(DeclareData revised)
         {
             InitializeComponent();
         }
