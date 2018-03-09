@@ -108,8 +108,7 @@ namespace His_Pos.InventoryManagement
 
             OtcPrice.Text = otc.Price.ToString();
             OtcInventory.Text = otc.Inventory.ToString();
-            OtcCost.Text = otc.Cost.ToString();
-            OtcSaveAmount.Text = otc.SafeAmount.ToString();
+            OtcSaveAmount.Text = otc.SafeAmount;
             OtcManufactory.Text = otc.ManufactoryName;
 
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);

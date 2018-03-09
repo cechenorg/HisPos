@@ -61,33 +61,17 @@ namespace His_Pos.PrescriptionRevise
             };
             Thread.CurrentThread.CurrentCulture = cui;
         }
-
-        private void Row_Loaded(object sender, RoutedEventArgs e)
-        {
-            var row = sender as DataGridRow;
-            Debug.Assert(row != null, nameof(row) + " != null");
-            row.InputBindings.Add(new MouseBinding(ShowCustomDialogCommand,
-                new MouseGesture() { MouseAction = MouseAction.LeftDoubleClick }));
-        }
-
-        private ICommand _showCustomDialogCommand;
-
-        private ICommand ShowCustomDialogCommand
-        {
-            get
-            {
-                return _showCustomDialogCommand ?? (_showCustomDialogCommand = new SimpleCommand
-                {
-                    CanExecuteDelegate = x => true,
-                    ExecuteDelegate = x => RunCustomFromVm()
-                });
-            }
-        }
-
-        private void RunCustomFromVm()
-        {
-
-        }
         
+        
+        private void showPrescriptionReviseOutcome(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            PrescriptionSet.SelectedItem = (sender as DataGridRow).Item;
+        }
+
     }
 }
