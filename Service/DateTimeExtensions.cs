@@ -17,11 +17,10 @@ namespace His_Pos.Service
         public string ToSimpleTaiwanDate(DateTime datetime)
         {
             var taiwanCalendar = new TaiwanCalendar();
-            var month = datetime.Month.ToString();
-            var day = datetime.Day.ToString();
-            month = CheckDateLessTen(datetime.Month,month);
-            day = CheckDateLessTen(datetime.Day,day);
-            return $"{taiwanCalendar.GetYear(datetime)}/{month}/{day}";
+            var year = taiwanCalendar.GetYear(datetime).ToString().PadLeft(3,'0');
+            var month = CheckDateLessTen(datetime.Month.ToString());
+            var day = CheckDateLessTen(datetime.Day.ToString());
+            return $"{year}/{month}/{day}";
         }
 
         public DateTime ToUsDate(string datetime)
@@ -38,8 +37,8 @@ namespace His_Pos.Service
         {
             var month = birthDate.Month.ToString();
             var day = birthDate.Day.ToString();
-            month = CheckDateLessTen(birthDate.Month, month);
-            day = CheckDateLessTen(birthDate.Day, day);
+            month = CheckDateLessTen(month);
+            day = CheckDateLessTen(day);
             birthDate = DateTime.ParseExact(birthDate.Year+"/"+month+"/"+day, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
             var ts = DateTime.Now - birthDate;
             var age = ts.TotalDays / 365.2422;
@@ -57,12 +56,9 @@ namespace His_Pos.Service
             if (split[2].Length == 1) split[2] = "0" + split[2];
             return (Convert.ToInt32(split[0]) - 1911).ToString() + split[1] + split[2];
         }
-        private string CheckDateLessTen(int date,string dateStr)
+        private string CheckDateLessTen(string dateStr)
         {
-            if(date < 10)
-                dateStr = "0" + dateStr;
-            return dateStr;
+            return dateStr.PadLeft(2,'0');
         }
-        
     }
 }

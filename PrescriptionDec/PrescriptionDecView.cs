@@ -129,7 +129,7 @@ namespace His_Pos.PrescriptionDec
         {
             var medicineAuto = sender as AutoCompleteBox;
             Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
-            var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '" + medicineAuto.Text + "%' OR PRO_NAME Like '" + medicineAuto.Text + "%'");
+            var tmp = MainWindow.MedicineDataTable.Select("HISMED_ID Like '%" + medicineAuto.Text + "%' OR PRO_NAME Like '%" + medicineAuto.Text + "%'");
             MedicineList.Clear();
             foreach (var d in tmp.Take(50))
             {
@@ -258,7 +258,7 @@ namespace His_Pos.PrescriptionDec
             //add check med rule
             //*********************************************
 
-            AddError("errrrrrrorrrrrr");
+            //AddError("errrrrrrorrrrrr");
 
             return true;
         }
