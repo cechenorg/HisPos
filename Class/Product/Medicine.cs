@@ -8,12 +8,26 @@ namespace His_Pos.Class.Product
         {
         }
 
-        public Medicine(string id, string name, double price, string inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)
+        public Medicine(DataRow dataRow)
+        {
+            Id = dataRow["HISMED_ID"].ToString();
+            Name = dataRow["PRO_NAME"].ToString();
+            MedicalCategory = new Medicate
+            {
+                Dosage = dataRow["HISMED_UNIT"].ToString(),
+                Form = dataRow["HISMED_FORM"].ToString()
+            };
+            Cost = double.Parse(dataRow["HISMED_COST"].ToString());
+            Price = double.Parse(dataRow["HISMED_SELLPRICE"].ToString());
+            PaySelf = false;
+            HcPrice = double.Parse(dataRow["HISMED_PRICE"].ToString());
+        }
+
+        public Medicine(string id, string name, double price, double inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)
         {
             Id = id;
             Name = name;
             Price = price;
-            Inventory = inventory;
             Total = total;
             PaySelf = paySelf;
             HcPrice = hcPrice;

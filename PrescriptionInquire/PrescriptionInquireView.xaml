@@ -45,7 +45,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Canvas Margin="0" Height="110" Background="#7FEEEEEE" VerticalAlignment="Center" Grid.Row="0">
+        <Canvas Margin="0" Height="110" Background="#B2EEEEEE" VerticalAlignment="Center" Grid.Row="0">
             <WrapPanel Width="850" HorizontalAlignment="Left">
                 <DockPanel x:Name="AdjustDateDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True">
                     <Label Width="auto" Content="調劑日期" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
@@ -142,7 +142,7 @@
                     <DataGridTextColumn MinWidth="50" Header="慢箋狀態" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <DockPanel Margin="0" Height="70" Background="#7FEEEEEE" VerticalAlignment="Center" Grid.Row="2">
+            <DockPanel Margin="0" Height="70" Background="#B2EEEEEE" VerticalAlignment="Center" Grid.Row="2">
             <Label x:Name="DeclareStatus" Content="已選擇" VerticalContentAlignment="Center" FontSize="18" Margin="50,0,0,0" FontWeight="Bold"/>
             <Button Background="Red" Width="150" Margin="20" Content="匯出申報檔案" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right"/>
         </DockPanel>

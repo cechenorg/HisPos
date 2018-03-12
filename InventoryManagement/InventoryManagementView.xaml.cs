@@ -1,19 +1,37 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using His_Pos.AbstractClass;
+using His_Pos.Class;
 using His_Pos.PrescriptionInquire;
+using His_Pos.Properties;
+using His_Pos.Service;
 using His_Pos.Class.Product;
+using System.Collections;
 
 namespace His_Pos.InventoryManagement
 {
     /// <summary>
     /// InventoryManagementView.xaml 的互動邏輯
     /// </summary>
-    public partial class InventoryManagementView
+    public partial class InventoryManagementView : UserControl
     {
-        private readonly ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
+        private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
+
         public InventoryManagementView()
         {
             InitializeComponent();
@@ -21,47 +39,52 @@ namespace His_Pos.InventoryManagement
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Otc otc in OTCDb.GetOTC(start.Text, end.Text, Name.Text, ID.Text)) {
-                _dataList.Add(otc);
-            }
-           
-            DataGrid.ItemsSource = _dataList;
-        }
-        
+            _dataList.Clear();
 
-        private void Row_Loaded(object sender, RoutedEventArgs e)
-        {
-            var row = sender as DataGridRow;
-            row?.InputBindings.Add(new MouseBinding(ShowCustomDialogCommand,
-                new MouseGesture() {MouseAction = MouseAction.LeftDoubleClick}));
+            CompareWithOtc();
+            CompareWithMedicine();
+
+            ProductList.ItemsSource = _dataList;
         }
 
-        private ICommand _showCustomDialogCommand;
-
-        private ICommand ShowCustomDialogCommand
+        private void CompareWithMedicine()
         {
-            get
+            var medicine = MainWindow.MedicineDataTable.Select("HISMED_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+
+            foreach (var m in medicine)
             {
-                return _showCustomDialogCommand ?? (_showCustomDialogCommand = new SimpleCommand
-                {
-                    CanExecuteDelegate = x => true,
-                    ExecuteDelegate = x => RunCustomFromVm()
-                });
+                _dataList.Add(new Medicine(m));
             }
         }
 
-        private void RunCustomFromVm()
+        private void CompareWithOtc()
         {
-            var selected = (Otc)DataGrid.SelectedItem;
-            var detail = new ProductDetail
+            var otc = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+
+            foreach (var o in otc)
             {
-                ProductName = {Content = selected.Name},
-                ProductId = {Content = selected.Id},
-                ProductAmount = {Content = selected.Inventory},
-                ProductSafeAmount = {Content = selected.SafeAmount},
-                ProductManufacturers = {Content = selected.ManufactoryName}
-            };
-            detail.Show();
+                _dataList.Add(new Otc(o));
+            }
+        }
+
+        private void showProductDetail(object sender, MouseButtonEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is Otc )
+            {
+                OtcDetail productDetail = new OtcDetail((Otc)selectedItem);
+                productDetail.Show();
+            }
+            else if (selectedItem is Medicine )
+            {
+
+            }
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            ProductList.SelectedItem = (sender as DataGridRow).Item;
         }
     }
 }

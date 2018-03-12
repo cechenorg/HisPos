@@ -109,17 +109,25 @@
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0">
                         <StackPanel Orientation="Horizontal">
-                            <my:IconLabel x:Name="PatientName" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0"/>
-                            <my:IconLabel x:Name="PatientId" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <my:IconLabel x:Name="PatientBirthday" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                            <Label x:Name="PrescriptionProfitText" Content="藥品毛利 : " FontSize="18" Foreground="#FF424040" VerticalAlignment="Center" Margin="0,10,0,0" />
+                            <Image Width="30" Height="30" Name="IcPatientGender" Margin="20,10,15,0"/>
+                            <ComboBox Name="PatientGender" Width="40" Height="40" HorizontalContentAlignment="Right" FontSize="18" Margin="0,10,15,0" SelectionChanged="PatientGender_SelectionChanged">
+                                <ListBoxItem Content="男"/>
+                                <ListBoxItem Content="女"/>
+                            </ComboBox>
+                            <TextBox Name="PatientName" Width="150"  Foreground="#FF424040" VerticalContentAlignment="Center" FontSize="18" Margin="0,10,20,0"/>
+                            <Image Name="IcPatientId" Width="30" Height="30" HorizontalAlignment="Left" Margin="0,10,15,0"/>
+                            <TextBox Name="PatientId" Width="150"  Foreground="#FF424040" VerticalContentAlignment="Center" FontSize="18" Margin="10,10,20,0"/>
+                            <Image Name="IcPatientBirthday" Width="30" Height="30" HorizontalAlignment="Left" Margin="0,10,15,0"/>                                                                                                                                                    
+                            <TextBox Name="PatientBirthday" Width="150"  Foreground="#FF424040" VerticalContentAlignment="Center" FontSize="18" Margin="0,10,20,0"/>
+                            <Label Content="藥品毛利 : " FontSize="18" Foreground="#FF424040" VerticalAlignment="Center" Margin="0,10,0,0" />
                             <Label x:Name="PrescriptionProfit" FontSize="16"  Foreground="#FF424040" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                            <my:IconLabel Width="100"/>
                         </StackPanel>
                         <StackPanel Orientation="Vertical" Margin="0,0,20,0" VerticalAlignment="Center" HorizontalAlignment="Right" DockPanel.Dock="Right">
                             <Button Content="取得病患資料" Background="DeepSkyBlue" Margin="10,10,0,0" Height="45" FontSize="16" MinWidth="130" BorderThickness="0" Click="GetPatientDataButtonClick"/>
                         </StackPanel>
                     </DockPanel>
-                    <Grid Background="#7FEEEEEE" Grid.Row="1" Margin="10,10,10,0">
+                    <Grid Background="#B2EEEEEE" Grid.Row="1" Margin="10,10,10,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
@@ -176,7 +184,7 @@
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="診治醫生" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                            <TextBox x:Name="DoctorId" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" TextChanged="DoctorId_TextChanged"/>
+                            <TextBox x:Name="DoctorId" Width="auto" MinWidth="150" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold"/>
                         </DockPanel>
                         <DockPanel Grid.Row="0" Grid.Column="3" LastChildFill="False" Margin="10,0,0,0">
                             <Label Content="就醫序號" Width="auto" Foreground="#FF424040" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
@@ -404,7 +412,7 @@
                                 </DataGrid>
                             </StackPanel>
                         </Border>
-                        <DataGrid x:Name="CusHistoryDetail" MinWidth="500" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
+                        <DataGrid x:Name="CusHistoryDetail" Width="650" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="160" MinWidth="160" Binding="{Binding CustomerHistoryDetailCol0}"/>
                                 <DataGridTextColumn MinWidth="90" Binding="{Binding CustomerHistoryDetailCol1}"/>

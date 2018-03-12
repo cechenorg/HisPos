@@ -47,7 +47,7 @@
                 <ColumnDefinition Width="1365"/>
             </Grid.ColumnDefinitions>
                     <Grid.Background>
-                <ImageBrush ImageSource="Images/SystemBackground2.jpg"/>
+                <ImageBrush ImageSource="Images/onlyoneeeeeee.jpg"/>
             </Grid.Background>
             <StackPanel Name="MenuStack"  Background="#FF363535" Orientation="Vertical" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
@@ -80,7 +80,7 @@
             </StackPanel>
             <DockPanel Name="FeatureDock" Height="Auto" Width="Auto" Grid.Column="1">
                 <DockPanel.Background>
-                    <ImageBrush ImageSource="Images/SystemBackgroundWhite.jpg"/>
+                    <ImageBrush ImageSource="Images/onlyoneeeeeee.jpg"/>
                 </DockPanel.Background>
                 <chromeTabs:ChromeTabControl x:Name="MyChromeTabControl" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="WhiteSmoke"

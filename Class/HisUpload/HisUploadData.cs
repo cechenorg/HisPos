@@ -33,7 +33,7 @@ namespace His_Pos.Class
             mb1 += "<A14>" + "30" + "</A14>";
             mb1 += "<A15>" + Prescription.Treatment.MedicalPersonId + "</A15>";
             mb1 += "<A16>" + SafeCode + "</A16>";
-            mb1 += "<A17>" + Prescription.Treatment.TreatmentDate + "</A17>";
+            mb1 += "<A17>" + Prescription.Treatment.TreatmentDate.ToShortDateString() + "</A17>";
             mb1 += "<A18>" + Prescription.OriginalMedicalNumber + "</A18>";
             if (DeclareMakeUp != string.Empty) mb1 += "<A19>" + DeclareMakeUp + "</A19>";
             if (Prescription.IcCard.IcMarks.NewbornsData.Birthday != string.Empty) mb1 += "<A20>" + Prescription.IcCard.IcMarks.NewbornsData.Birthday + "</A20>";
@@ -76,7 +76,7 @@ namespace His_Pos.Class
             foreach (DeclareDetail data in DeclareDetails)
             {
                 mb2 += "<MB2>";
-                mb2 += "<A71>" + Prescription.Treatment.TreatmentDate + "</A71>";
+                mb2 += "<A71>" + Prescription.Treatment.TreatmentDate.ToShortDateString() + "</A71>";
                 mb2 += "<A72>" + data.MedicalOrder + "</A72>";
                 mb2 += "<A73>" + data.MedicalId + "</A73>";
                 mb2 += "<A74>" + data.Position + "</A74>";

@@ -16,7 +16,7 @@
         </Style>
     </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="/Images/SystemBackgroundWhite.jpg"/>
+        <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
     <Viewbox  VerticalAlignment="Top">
         <Grid>
@@ -42,7 +42,7 @@
                     </StackPanel>
                 </StackPanel>
             </DockPanel>
-            <Grid Background="#7FEEEEEE" Grid.Row="1" Margin="10,10,10,0" Grid.ColumnSpan="2">
+            <Grid Background="#B2EEEEEE" Grid.Row="1" Margin="10,10,10,0" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using His_Pos.Class.Person;
+using His_Pos.Class.Product;
 using His_Pos.Properties;
 using His_Pos.Service;
 
@@ -39,16 +40,26 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void GetMedicineData(User userLogin)
+        public void GetNecessaryData(User userLogin)
         {
-            LoadingMessage.Content = "Loading Medicine Data...";
-
             MainWindow mainWindow = new MainWindow(userLogin);
             
-            backgroundWorker.DoWork += (s, o) => {
-                var dd = new DbConnection(Settings.Default.SQL_global);
-                MainWindow.MedicineDataTable = dd.ExecuteProc("[HIS_POS_DB].[GET].[MEDICINE]");
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    LoadingMessage.Content = "Loading Medicine Data...";
+                }));
+
+                MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
                 MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "HISMED_ID" };
+
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    LoadingMessage.Content = "Loading Product Data...";
+                }));
+
+                MainWindow.OtcDataTable = OTCDb.GetOtcData();
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

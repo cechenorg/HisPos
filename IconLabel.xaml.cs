@@ -15,7 +15,7 @@ namespace His_Pos
         {
             Width = labelWidth;
             Height = labelHeight;
-            Label.Content = labelContent;
+            Label.Text = labelContent;
             UpdateLayout();
         }
         public void SetIconSource(BitmapImage iconsource)
@@ -24,7 +24,7 @@ namespace His_Pos
         }
         public void SetLabelContent(string content)
         {
-            Label.Content = content;
+            Label.Text = content;
         }
         public void SetLabelSize(double labelWidth, double labelHeight)
         {

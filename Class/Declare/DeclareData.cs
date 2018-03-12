@@ -183,7 +183,7 @@ namespace His_Pos.Class.Declare
         private void SetDeclareDetail() {
             var count = 1;
             foreach (var medicine in Prescription.Medicines) {
-                var detail = new DeclareDetail(medicine,Prescription.Treatment.AdjustCase.Id,count);
+                var detail = new DeclareDetail(medicine,Prescription.Treatment.AdjustCase,count);
                 CountDeclarePoint(detail);
                 DeclareDetails.Add(detail);
                 count++;

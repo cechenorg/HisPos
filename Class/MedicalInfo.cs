@@ -12,6 +12,14 @@ namespace His_Pos.Class
             TreatmentCase = new TreatmentCase.TreatmentCase();
         }
 
+        public MedicalInfo(Hospital hospital, SpecialCode specialCode, List<DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)
+        {
+            Hospital = hospital;
+            SpecialCode = specialCode;
+            DiseaseCodes = diseaseCodes;
+            TreatmentCase = treatmentCase;
+        }
+
         public Hospital Hospital { get; set; }//d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
         public SpecialCode SpecialCode { get; set ; }//d26 原處方服務機構之特定治療項目代號
         public List<DiseaseCode> DiseaseCodes { get; set; } //d8 d9 國際疾病分類碼

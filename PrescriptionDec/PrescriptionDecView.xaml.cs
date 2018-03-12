@@ -4,12 +4,14 @@ using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using His_Pos.Class;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
@@ -19,6 +21,7 @@ using His_Pos.HisApi;
 using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
 using His_Pos.Service;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.PrescriptionDec
 {
@@ -31,7 +34,7 @@ namespace His_Pos.PrescriptionDec
         private IcCard _icCard = new IcCard();
         private SystemType cusHhistoryFilterCondition = SystemType.ALL;
         private Customer _currentCustomer = new Customer();
-        private Prescription prescription = new Prescription();
+        //private Prescription prescription = new Prescription();
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
@@ -39,6 +42,7 @@ namespace His_Pos.PrescriptionDec
         public ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
 
         private CustomerHistory customerHistory;
+        private List<string> ErrorList = new List<string>();
 
         public PrescriptionDecView()
         {
@@ -46,6 +50,9 @@ namespace His_Pos.PrescriptionDec
             DataContext = this;
             InitializeLists();
             InitializeUiElementData();
+            CultureInfo cag = new CultureInfo("zh-TW");
+            cag.DateTimeFormat.Calendar = new TaiwanCalendar();
+            System.Threading.Thread.CurrentThread.CurrentCulture = cag;
         }
         
         /*
@@ -75,9 +82,9 @@ namespace His_Pos.PrescriptionDec
             _icCard.ValidityPeriod = "108/01/01";
             _icCard.IcMarks.InsuranceMark = "3";
             _currentCustomer.Id = "1";
-            PatientName.SetIconLabel(200, 50, _icCard.Customer.Name);
-            PatientId.SetIconLabel(200, 50, _icCard.Customer.IcNumber);
-            PatientBirthday.SetIconLabel(200, 50, _icCard.Customer.Birthday);
+            PatientName.Text = _icCard.Customer.Name;
+            PatientId.Text = _icCard.Customer.IcNumber;
+            PatientBirthday.Text = _icCard.Customer.Birthday;
         }
         /*
          *取得病人基本資料
@@ -307,24 +314,27 @@ namespace His_Pos.PrescriptionDec
          */
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
-            CheckPrescriptionInfo();
-            AddMedicine();
-            prescription.Treatment.MedicalPersonId = "A012345678";
+            var prescription = CheckPrescriptionInfo();
+            if (ErrorList.Count != 0)
+            {
+                ShowError();
+                return;
+            }
             var declareData = new DeclareData(prescription);
             var declareDb = new DeclareDb();
             declareDb.InsertDb(declareData);
             MessageBox.Show("處方登錄成功");
         }
-        /*
-         * 將藥品加入處方
-         */
-        private void AddMedicine()
+
+        private void ShowError()
         {
-            foreach (var medicine in PrescriptionList)
-            {
-                prescription.Medicines.Add(medicine);
-            }
+            var errors = ErrorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
+
+            MessageWindow messageWindow = new MessageWindow(errors,MessageType.ERROR);
+            messageWindow.Show();
+            ErrorList.Clear();
         }
+
         /*
          * 設定藥品用量
          */
@@ -374,14 +384,6 @@ namespace His_Pos.PrescriptionDec
             var match = Regex.Match(days.Text, regex);
             if(match.Success)
                 PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Days = Convert.ToInt32(days.Text);
-        }
-        /*
-         * 設定診治醫師代號
-         */
-        private void DoctorId_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!(sender is TextBox doctorId)) return;
-            prescription.Treatment.MedicalInfo.Hospital.Doctor.Id = doctorId.Text;
         }
         /*
          * 設定藥品用藥途徑
@@ -435,6 +437,19 @@ namespace His_Pos.PrescriptionDec
             var dataGrid = sender as DataGrid;
             Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
             dataGrid.Focus();
+        }
+
+        private void PatientGender_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var combo = sender as ComboBox;
+            if (combo == null) return;
+            var seleced = combo.SelectedItem as ListBoxItem;
+            if (seleced != null && seleced.Content.ToString() == "男")
+                IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative));
+            else
+            {
+                IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Female.png", UriKind.Relative));
+            }
         }
     }
 }
