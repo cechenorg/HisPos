@@ -237,8 +237,21 @@
                             <TextBox x:Name="SpecialCode" MinWidth="150" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch"/>
                         </DockPanel>
                     </Grid>
-                    <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" CanUserAddRows="True"  SelectionUnit="FullRow"
+                    <DataGrid x:Name="PrescriptionMedicines" Grid.Row="2" Margin="10" Width="auto" Height="auto" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="True"  SelectionUnit="FullRow"
                           AutoGenerateColumns="False" CanUserResizeRows="False"  GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" >
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#33009DF7"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                                <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Height" Value="40"/>
+                            </Style>
+                        </DataGrid.RowStyle>
                         <DataGrid.DataContext>
                             <product:Medicine/>
                         </DataGrid.DataContext>

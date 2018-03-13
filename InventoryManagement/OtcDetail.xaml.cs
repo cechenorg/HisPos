@@ -51,40 +51,24 @@ namespace His_Pos.InventoryManagement
         private void UpdateChart()
         {
             InventoryCollection = new SeriesCollection();
-            InventoryCollection.Add(GetInventoryLineSeries());
-            InventoryCollection.Add(GetSaveAmountLineSeries());
+            InventoryCollection.Add(GetSalesLineSeries());
             
             DataFormatter = value => value.ToString();
 
             AddDays();
         }
-
-        private LineSeries GetInventoryLineSeries()
+        
+        private LineSeries GetSalesLineSeries()
         {
+            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(otc.Id);
+
             return new LineSeries
             {
-                Title = "庫存",
-                Values = new ChartValues<double> { 4, 1, 2, 5, 5, 4 },
+                Title = "銷售量",
+                Values = chartValues,
                 PointGeometrySize = 10,
                 LineSmoothness = 0,
                 DataLabels = true
-            };
-        }
-
-        private LineSeries GetSaveAmountLineSeries()
-        {
-            ChartValues<double> chartValues = new ChartValues<double>();
-
-            for (int x = 0; x < 30; x++)
-            {
-                chartValues.Add( double.Parse(otc.SafeAmount) );
-            }
-            
-            return new LineSeries
-            {
-                Title = "安全量",
-                Values = chartValues,
-                PointGeometry = null
             };
         }
 
@@ -115,6 +99,17 @@ namespace His_Pos.InventoryManagement
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
             UpdateChart();
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if ( selectedItem is CusOrderOverview )
+                OtcCusOrder.SelectedItem = selectedItem;
+            else
+                OtcManOrder.SelectedItem = selectedItem;
+            
         }
     }
 }
