@@ -43,7 +43,7 @@ namespace His_Pos
 
         private void FeatureFactory()
         {
-            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription, new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire, Properties.Resources.hisPrescriptionRevise, Properties.Resources.InventoryManagement}));
+            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription, new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire, Properties.Resources.InventoryManagement}));
         }
         
         private void InitializePosMenu()

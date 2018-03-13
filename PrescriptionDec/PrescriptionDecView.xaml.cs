@@ -40,10 +40,10 @@ namespace His_Pos.PrescriptionDec
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
         private ObservableCollection<Medicine> PrescriptionList { get; set; }
-        public ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
+        private ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
 
         private CustomerHistory customerHistory;
-        private List<string> ErrorList = new List<string>();
+        private List<string> _errorList = new List<string>();
 
         public PrescriptionDecView()
         {
@@ -316,7 +316,7 @@ namespace His_Pos.PrescriptionDec
         private void DeclareButtonClick(object sender, RoutedEventArgs e)
         {
             var prescription = CheckPrescriptionInfo();
-            if (ErrorList.Count != 0)
+            if (_errorList.Count != 0)
             {
                 ShowError();
                 return;
@@ -329,11 +329,11 @@ namespace His_Pos.PrescriptionDec
 
         private void ShowError()
         {
-            var errors = ErrorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
+            var errors = _errorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
 
             MessageWindow messageWindow = new MessageWindow(errors,MessageType.ERROR);
             messageWindow.Show();
-            ErrorList.Clear();
+            _errorList.Clear();
         }
 
         /*

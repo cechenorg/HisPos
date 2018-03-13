@@ -246,7 +246,7 @@ namespace His_Pos.PrescriptionDec
 
         private void AddError(string error)
         {
-            ErrorList.Add(error);
+            _errorList.Add(error);
         }
 
         /*

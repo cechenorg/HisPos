@@ -6,7 +6,6 @@
         xmlns:menuusercontrol="clr-namespace:MenuUserControl;assembly=MenuUserControl"
         xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
         xmlns:prescriptionInquire="clr-namespace:His_Pos.PrescriptionInquire"
-        xmlns:prescriptionRevise="clr-namespace:His_Pos.PrescriptionRevise"
         xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
         xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
@@ -32,9 +31,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type prescriptionInquire:PrescriptionInquire}">
             <prescriptionInquire:PrescriptionInquireView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type prescriptionRevise:PrescriptionRevise}">
-            <prescriptionRevise:PrescriptionReviseView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type inventoryManagement:InventoryManagement}">
             <inventoryManagement:InventoryManagementView/>

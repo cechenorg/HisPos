@@ -143,7 +143,7 @@ namespace His_Pos
             var year = twc.GetYear(DateTime.Now).ToString();
             var month = function.GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
             var day = function.GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
-            var pathsplit = System.Environment.CurrentDirectory.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
+            var pathsplit = Environment.CurrentDirectory.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
             var path = pathsplit[0];
             for (var i = 1; i < pathsplit.Length; i++)
             {

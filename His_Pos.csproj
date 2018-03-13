@@ -269,13 +269,6 @@
       <DependentUpon>PrescriptionInquireView.xaml</DependentUpon>
     </Compile>
     <Compile Include="PrescriptionInquire\SimpleCommand.cs" />
-    <Compile Include="PrescriptionRevise\PrescriptionRevise.cs" />
-    <Compile Include="PrescriptionRevise\PrescriptionReviseOutcome.xaml.cs">
-      <DependentUpon>PrescriptionReviseOutcome.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PrescriptionRevise\PrescriptionReviseView.xaml.cs">
-      <DependentUpon>PrescriptionReviseView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
@@ -336,14 +329,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PrescriptionInquire\PrescriptionInquireView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PrescriptionRevise\PrescriptionReviseOutcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PrescriptionRevise\PrescriptionReviseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -14,6 +14,10 @@ namespace His_Pos.Service
         /// </summary>
         /// <param name="datetime">The datetime.</param>
         /// <returns></returns>
+
+       /*
+        * 將Datetime轉為民國日期string
+        */
         public string ToSimpleTaiwanDate(DateTime datetime)
         {
             var taiwanCalendar = new TaiwanCalendar();
@@ -22,7 +26,9 @@ namespace His_Pos.Service
             var day = CheckDateLessTen(datetime.Day.ToString());
             return $"{year}/{month}/{day}";
         }
-
+        /*
+        * 將Datetime string轉為西元Datetime
+        */
         public DateTime ToUsDate(string datetime)
         {
             if (datetime.Length >= 10)
@@ -32,14 +38,16 @@ namespace His_Pos.Service
             var dt = DateTime.ParseExact(datetime, "yyy/MM/dd", CultureInfo.InvariantCulture).AddYears(1911);
             return dt;
         }
-
+        /*
+         * 計算年齡
+         */
         public double CalculateAge(DateTime birthDate)
         {
             var month = birthDate.Month.ToString();
             var day = birthDate.Day.ToString();
             month = CheckDateLessTen(month);
             day = CheckDateLessTen(day);
-            birthDate = DateTime.ParseExact(birthDate.Year+"/"+month+"/"+day, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
+            birthDate = DateTime.ParseExact(birthDate.Year+"/"+month+"/"+day, "yyyy/MM/dd", CultureInfo.InvariantCulture);
             var ts = DateTime.Now - birthDate;
             var age = ts.TotalDays / 365.2422;
             return age;

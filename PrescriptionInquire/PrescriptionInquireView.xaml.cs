@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -10,13 +11,16 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Properties;
 using His_Pos.Service;
+using ComboBox = System.Windows.Controls.ComboBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.PrescriptionInquire
@@ -35,29 +39,37 @@ namespace His_Pos.PrescriptionInquire
         public DeclareDataList PrescriptionOutcome = new DeclareDataList();
         private readonly ObservableCollection<Institution> _institutionsList;
         private Function f = new Function();
-        private List<bool> AdjustCase = new List<bool>();
         //private readonly ObservableCollection<DeclareDetail> _declareDetailList;
         public PrescriptionInquireView()
         {
             InitializeComponent();
+            DataContext = this;
+            LoadAdjustCases();
+            LoadHospitalData();
             _institutionsList = new ObservableCollection<Institution>();
             //_declareDetailList = new ObservableCollection<DeclareDetail>();
             PrescriptionOutcome = (DeclareDataList) this.Resources["PrescriptionOutcome"];
-            DataContext = this;
-            DataInitialize();
+            
+        }
+        /*
+         *載入原處方案件類別
+         */
+        private void LoadAdjustCases()
+        {
+            foreach (var adjustCase in AdjustCaseDb.AdjustCaseList)
+            {
+                AdjustCaseCombo.Items.Add(adjustCase.Id + ". " + adjustCase.Name);
+            }
         }
 
-        private void DataInitialize()
+        /*
+         *載入醫療院所資料
+         */
+        private void LoadHospitalData()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
-
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[INSTITUTION]");
-            foreach (DataRow d in table.Rows)
-            {
-                var institution = new Institution(d["INS_ID"].ToString(), d["INS_NAME"].ToString());
-                _institutionsList.Add(institution);
-            }
-            ReleasePalace.ItemsSource = _institutionsList;
+            var institutions = new Institutions();
+            institutions.GetData();
+            ReleasePalace.ItemsSource = institutions.InstitutionsCollection;
         }
 
         private void Row_Loaded(object sender, RoutedEventArgs e)
@@ -101,32 +113,6 @@ namespace His_Pos.PrescriptionInquire
             else
             {
                 DeclareStatus.Content = "已選擇 " + start.Text + " ~ " + end.Text + " 之處方。";
-            }
-        }
-
-        private void DeclareFileImportButtonClick(object sender, RoutedEventArgs e)
-        {
-            using (var fbd = new FolderBrowserDialog())
-            {
-                var result = fbd.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    var folderPath = fbd.SelectedPath;
-                    foreach (var file in Directory.EnumerateFiles(folderPath, "*.xml"))
-                    {
-                        var xmlReader = new XmlTextReader(file);
-                        while (xmlReader.Read())
-                        {
-                            xmlReader.WhitespaceHandling = WhitespaceHandling.None;
-                            if (xmlReader.NodeType == XmlNodeType.EndElement && xmlReader.Name.Equals("pharmacy"))
-                                break;
-                            if (xmlReader.NodeType == XmlNodeType.Element)
-                            {
-
-                            }
-                        }
-                    }
-                }
             }
         }
 
@@ -338,6 +324,22 @@ namespace His_Pos.PrescriptionInquire
             paramfordata.Add(new SqlParameter("ID", dec.Prescription.Treatment.MedicalInfo.Hospital.Division.Id));
             var table = f.GetDataFromProc("[HIS_POS_DB].[GET].[DIVNAME]", paramfordata);
             return table.Rows[0]["HISDIV_NAME"].ToString();
+        }
+
+        private void Combo_DropDownOpened(object sender, EventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            Debug.Assert(comboBox != null, nameof(comboBox) + " != null");
+            comboBox.Background = Brushes.WhiteSmoke;
+            comboBox.IsReadOnly = false;
+        }
+        private void Combo_DropDownClosed(object sender, EventArgs e)
+        {
+            var comboBox = sender as ComboBox;
+            Debug.Assert(comboBox != null, nameof(comboBox) + " != null");
+            comboBox.Background = Brushes.Transparent;
+            comboBox.Text = comboBox.SelectedItem?.ToString() ?? "";
+            comboBox.IsReadOnly = true;
         }
     }
 }
