@@ -71,7 +71,6 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadDivisionsData()
         {
-            DivisionDb.GetData();
             foreach (var division in DivisionDb.DivisionsList)
             {
                 DivisionCombo.Items.Add(division.Id + ". " + division.Name);
@@ -116,7 +115,6 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadAdjustCases()
         {
-            AdjustCaseDb.GetData();
             foreach (var adjustCase in AdjustCaseDb.AdjustCaseList)
             {
                 AdjustCaseCombo.Items.Add(adjustCase.Id + ". " + adjustCase.Name);

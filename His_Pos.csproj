@@ -185,6 +185,7 @@
     <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
+    <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\HisUpload\HisUploadData.cs" />
     <Compile Include="Class\HisUpload\HisUploadDb.cs" />
     <Compile Include="Class\IcCardPay.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="PrescriptionInquire\PrescriptionInquireView.xaml.cs">
       <DependentUpon>PrescriptionInquireView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="PrescriptionInquire\SimpleCommand.cs" />
     <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />

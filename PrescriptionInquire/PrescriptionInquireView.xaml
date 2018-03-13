@@ -11,41 +11,16 @@
     xmlns:abstractClass="clr-namespace:His_Pos.AbstractClass"
     dialog:DialogParticipation.Register="{Binding}"
     mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
-    <UserControl.Resources>
-        <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="10,10,0,10"/>
-        </Style>
-        <!--<DataTemplate x:Key="InstitutionAutoComplete">
-            <StackPanel Orientation="Horizontal">
-                <Label x:Name="Institutionid" Width="100" Content="{Binding Id}">
-                    <Label.DataContext>
-                        <abstractClass:Institution/>
-                    </Label.DataContext>
-                </Label>
-                <Label x:Name="InstitutionName" Width="350" Content="{Binding Name}">
-                    <Label.DataContext>
-                        <abstractClass:Institution/>
-                    </Label.DataContext>
-                </Label>
-            </StackPanel>
-        </DataTemplate>-->
-        <local:DeclareDataList x:Key="PrescriptionOutcome" />
-        <CollectionViewSource x:Key="prescriptionOutcome" Source="{StaticResource PrescriptionOutcome}" />
-    </UserControl.Resources>
     <Grid Margin="30,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Canvas Margin="0" Height="110" Background="#B2EEEEEE" VerticalAlignment="Center" Grid.Row="0">
+        <Canvas Margin="0" Height="110" Background="{StaticResource GridBackGround}" VerticalAlignment="Center" Grid.Row="0">
             <WrapPanel Width="850" HorizontalAlignment="Left">
                 <DockPanel x:Name="AdjustDateDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True">
-                    <Label Width="auto" Content="調劑日期" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label Width="auto" Content="調劑日期" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <Viewbox Width="auto" Height="30" MinWidth="100">
                         <DatePicker Width="100" Name="start" SelectedDateFormat="Short" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
                     </Viewbox>
@@ -54,20 +29,20 @@
                         <DatePicker Width="100" Name="end" SelectedDateFormat="Short" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
                     </Viewbox>
                     <DockPanel x:Name="PatientDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True" Height="50" VerticalAlignment="Top">
-                        <Label Content="病患姓名" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+                        <Label Content="病患姓名" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                         <controls:AutoCompleteBox Background="Transparent" x:Name="PatientName" Width="auto" MinWidth="120" Height="30"  FontSize="14" FontStretch="ExtraExpanded" 
                                                   BorderThickness="0,0,0,1" FontWeight="Bold" VerticalContentAlignment="Stretch" Padding="0,8,0,0" Margin="0" 
                                                   MinimumPrefixLength="4" MaxHeight="50"/>
                     </DockPanel>
                     <DockPanel x:Name="PharmacistDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True">
-                        <Label Content="調劑藥師" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+                        <Label Content="調劑藥師" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                         <controls:AutoCompleteBox Background="Transparent" x:Name="PharmacistName" Width="auto" MinWidth="120" Height="30"  FontSize="14" FontStretch="ExtraExpanded" 
                                                   BorderThickness="0,0,0,1" FontWeight="Bold" VerticalContentAlignment="Stretch" Padding="0,8,0,0" Margin="0" 
                                                   MinimumPrefixLength="4" MaxHeight="50"/>
                     </DockPanel>
                 </DockPanel>
                 <DockPanel x:Name="ReleasePlaceDock" Width="480" Margin="20,0,0,0" LastChildFill="True">
-                    <Label Content="釋出院所" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
+                    <Label Content="釋出院所" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
                     <controls:AutoCompleteBox x:Name="ReleasePalace" Background="{x:Null}" Width="auto" MinWidth="380" Height="30" FontSize="14" FontStretch="ExtraExpanded" 
                                                       BorderThickness="0,0,0,1" FontWeight="Bold" VerticalContentAlignment="Stretch" Padding="0,8,0,0" Margin="0" 
                                                       MinimumPrefixLength="4" MaxHeight="50" BorderBrush="DimGray">
@@ -104,27 +79,31 @@
                     </controls:AutoCompleteBox>
                 </DockPanel>
                 <DockPanel  Margin="10,0,0,0">
-                    <Label Content="調劑案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                    <Label Content="調劑案件" Foreground="{StaticResource ForeGround}" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                     <ComboBox x:Name="AdjustCaseCombo" Width="150" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
                 </DockPanel>
             </WrapPanel>
             <Button Content="查詢" Background="DeepSkyBlue" Margin="125,0,0,0" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="40" Click="SearchButtonClick"/>
         </Canvas>
-        <DataGrid Grid.Row="1" x:Name="PrescriptionSet" MinWidth="930" Height="580" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}"
+        <DataGrid Grid.Row="1" x:Name="PrescriptionSet" MinWidth="930" Height="580" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                   AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF727272" 
                   VerticalGridLinesBrush="#FF727272" SelectionUnit="FullRow" SelectionMode="Single" HorizontalContentAlignment="Center" 
                   CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserSortColumns="False" ItemsSource="{Binding Source={StaticResource prescriptionOutcome}}" CanUserAddRows="False">
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <EventSetter Event="Loaded" Handler="Row_Loaded"/>
-                    </Style>
-                </DataGrid.RowStyle>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseDoubleClick">
-                        <i:InvokeCommandAction Command="{Binding showCustomDialogCommand}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <DataGrid.DataContext>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    <EventSetter Event="MouseDoubleClick" Handler="showInquireOutcome"/>
+                    <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="Height" Value="40"/>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.DataContext>
                     <local:PrescriptionInquire/>
                 </DataGrid.DataContext>
                 <DataGrid.Columns>
@@ -137,7 +116,7 @@
                     <DataGridTextColumn MinWidth="50" Header="慢箋狀態" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <DockPanel Margin="0" Height="70" Background="#B2EEEEEE" VerticalAlignment="Center" Grid.Row="2">
+        <DockPanel Margin="0" Height="70" Background="{StaticResource GridBackGround}" VerticalAlignment="Center" Grid.Row="2">
             <Label x:Name="DeclareStatus" Content="已選擇" VerticalContentAlignment="Center" FontSize="18" Margin="50,0,0,0" FontWeight="Bold"/>
             <Button Background="Red" Width="150" Margin="20" Content="匯出申報檔案" VerticalAlignment="Center" HorizontalContentAlignment="Center" HorizontalAlignment="Right"/>
         </DockPanel>
