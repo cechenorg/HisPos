@@ -7,15 +7,7 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d" 
         Title="ProductDetail" Height="800" Width="1300" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
-        <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="5,10,5,10"/>
-        </Style>
-    </Window.Resources>
+
     <Window.Background>
         <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
@@ -30,7 +22,7 @@
                     <Label Name="OtcName" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,20,10" Padding="0"/>
                     <Label Name="OtcId" Foreground="DimGray" FontSize="25" FontFamily="Segoe UI Semi" Margin="0,25,0,10" Padding="0"/>
                 </StackPanel>
-                <Label Content="最後盤點時間: " Foreground="#FF004C8B" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
+                <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
                 <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,10,20,10" Padding="0" VerticalContentAlignment="Bottom"/>
             </StackPanel>
             <Grid Grid.Row="1">
@@ -44,7 +36,7 @@
                         <RowDefinition Height="280"/>
                         <RowDefinition Height="220"/>
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0" Background="#B2EEEEEE">
+                    <Grid Grid.Row="0" Background="{StaticResource GridBackGround}">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -73,16 +65,14 @@
                             <Label Content="製造商" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                             <TextBox Name="OtcManufactory" Width="100" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
                         </StackPanel>
-                        <RichTextBox Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="2" Margin="5" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible">
-                        </RichTextBox>
-                        <Button Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Width="150" Content="確認修改" FontFamily="Segoe UI Semibold" FontSize="16" HorizontalAlignment="Right" Margin="10"/>
+                        <Button Grid.Column="3" Grid.Row="3" Width="150" Content="確認修改" FontFamily="Segoe UI Semibold" FontSize="16" HorizontalAlignment="Right" Margin="10"/>
                     </Grid>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="450"/>
                             <ColumnDefinition Width="250"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal" Background="#B2EEEEEE" Margin="0,10,0,0" Grid.Column="0">
+                        <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="0,10,0,0" Grid.Column="0">
                             <!--<lvc:PieChart LegendLocation="Right" Hoverable="False" DataTooltip="{x:Null}" Width="320" Margin="10,10,20,10">
                                 <lvc:PieChart.Series>
                                     <lvc:PieSeries Title="Maria" Values="3" DataLabels="True"
@@ -113,12 +103,12 @@
                     </Grid>
                     <lvc:CartesianChart Series="{Binding InventoryCollection}" Grid.Row="2">
                         <lvc:CartesianChart.AxisY>
-                            <lvc:Axis LabelFormatter="{Binding DataFormatter}" ShowLabels="False"/>
+                            <lvc:Axis LabelFormatter="{Binding DataFormatter}" ShowLabels="True" IsMerged="False" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="12" />
                         </lvc:CartesianChart.AxisY>
                         <lvc:CartesianChart.AxisX>
                             <lvc:Axis Labels="{Binding Days}" IsMerged="True" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="12">
                                 <lvc:Axis.Separator>
-                                    <lvc:Separator IsEnabled="False" Step="5"></lvc:Separator>
+                                    <lvc:Separator IsEnabled="False" Step="3"></lvc:Separator>
                                 </lvc:Axis.Separator>
                             </lvc:Axis>
                         </lvc:CartesianChart.AxisX>
@@ -126,39 +116,35 @@
                 </Grid>
                 <Grid Grid.Column="1" Margin="5,5,10,10">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="300"/>
                         <RowDefinition Height="330"/>
+                        <RowDefinition Height="300"/>
                         <RowDefinition Height="100"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical" Background="#B2EEEEEE" Grid.Row="0" Margin="0,0,0,5">
-                        <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                        <DataGrid Name="DataGrid" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="訂貨日期" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="訂貨人" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="到貨期日" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                                <DataGridTextColumn Header="進貨單價" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                    <Grid Grid.Row="1" Margin="0,5,0,5">
+                    <Grid Grid.Row="0" Margin="0,0,0,5">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="350"/>
+                            <ColumnDefinition Width="250"/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Vertical" Background="#B2EEEEEE" Margin="0,0,5,0" Grid.Column="0">
-                            <Label Content="交易紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <DataGrid Name="OtcCusOrder" Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" AutoGenerateColumns="False">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn Header="交易日期" Binding="{Binding Date}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="數量" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
-                                    <DataGridTextColumn Header="獲利" Binding="{Binding Profit}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
-                                </DataGrid.Columns>
-                            </DataGrid>
+                        <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Margin="0,0,5,0" Grid.Column="0">
+                            <Label Content="備註" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                            <RichTextBox Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible" Height="265"/>
                         </StackPanel>
-                        <StackPanel Orientation="Vertical" Background="#B2EEEEEE" Margin="5,0,0,0" Grid.Column="1">
+                        <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Margin="5,0,0,0" Grid.Column="1">
                             <Label Content="交易紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                            <DataGrid Background="Transparent" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" AutoGenerateColumns="False">
+                            <DataGrid Name="OtcCusOrder" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False">
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="{x:Type DataGridRow}">
+                                        <Style.Triggers>
+                                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                        <Setter Property="Height" Value="40"/>
+                                    </Style>
+                                </DataGrid.RowStyle>
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Header="交易日期" Binding="{Binding Date}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
                                     <DataGridTextColumn Header="數量" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True"/>
@@ -167,19 +153,43 @@
                             </DataGrid>
                         </StackPanel>
                     </Grid>
+                    <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Row="1" Margin="0,5,0,5">
+                        <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                        <DataGrid Name="OtcManOrder" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}">
+                            <DataGrid.RowStyle>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <Style.Triggers>
+                                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                    <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="FontSize" Value="14"/>
+                                    <Setter Property="Height" Value="40"/>
+                                </Style>
+                            </DataGrid.RowStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="訂貨日期" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="訂貨人" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="到貨期日" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="進貨單價" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                     <Grid Grid.Row="2" Margin="0,5,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel  Background="#B2EEEEEE" Margin="0,0,5,0" Grid.Column="0">
+                        <StackPanel  Background="{StaticResource GridBackGround}" Margin="0,0,5,0" Grid.Column="0">
                             
                         </StackPanel>
-                        <StackPanel  Background="#B2EEEEEE" Margin="5,0,5,0" Grid.Column="1">
+                        <StackPanel  Background="{StaticResource GridBackGround}" Margin="5,0,5,0" Grid.Column="1">
 
                         </StackPanel>
-                        <StackPanel  Background="#B2EEEEEE" Margin="5,0,0,0" Grid.Column="2">
+                        <StackPanel  Background="{StaticResource GridBackGround}" Margin="5,0,0,0" Grid.Column="2">
 
                         </StackPanel>
                     </Grid>

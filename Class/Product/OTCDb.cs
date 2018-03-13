@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LiveCharts;
 
 
 namespace His_Pos.Class.Product
@@ -37,6 +38,25 @@ namespace His_Pos.Class.Product
             }
 
             return collection;
+        }
+
+        public static ChartValues<double> GetOtcSalesByID(string OtcID)
+        {
+            ChartValues<double> chartValues = new ChartValues<double>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("OTCID", OtcID));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[OTCSALESBYID]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                chartValues.Add(Convert.ToDouble(row["CUSORDDET_QTY"].ToString()));
+            }
+
+            return chartValues;
         }
     }
 }

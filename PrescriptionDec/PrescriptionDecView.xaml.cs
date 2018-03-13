@@ -452,5 +452,10 @@ namespace His_Pos.PrescriptionDec
                 IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Female.png", UriKind.Relative));
             }
         }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            PrescriptionMedicines.SelectedItem = (sender as DataGridRow).Item;
+        }
     }
 }
