@@ -185,6 +185,7 @@
     <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
+    <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\HisUpload\HisUploadData.cs" />
     <Compile Include="Class\HisUpload\HisUploadDb.cs" />
     <Compile Include="Class\IcCardPay.cs" />
@@ -268,14 +269,8 @@
     <Compile Include="PrescriptionInquire\PrescriptionInquireView.xaml.cs">
       <DependentUpon>PrescriptionInquireView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="PrescriptionInquire\SimpleCommand.cs" />
-    <Compile Include="PrescriptionRevise\PrescriptionRevise.cs" />
-    <Compile Include="PrescriptionRevise\PrescriptionReviseOutcome.xaml.cs">
-      <DependentUpon>PrescriptionReviseOutcome.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PrescriptionRevise\PrescriptionReviseView.xaml.cs">
-      <DependentUpon>PrescriptionReviseView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
@@ -336,14 +331,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PrescriptionInquire\PrescriptionInquireView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PrescriptionRevise\PrescriptionReviseOutcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PrescriptionRevise\PrescriptionReviseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

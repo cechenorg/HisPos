@@ -69,8 +69,8 @@ namespace His_Pos.Class.Declare
             var tagsDictionary = new Dictionary<string, string>
             {
                 {"D1", declareData.Prescription.Treatment.AdjustCase.Id},{"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
-                {"D14",declareData.Prescription.Treatment.TreatmentDate.ToShortDateString()},{"D15", declareData.Prescription.Treatment.Copayment.Id},
-                {"D23",declareData.Prescription.Treatment.AdjustDate.ToShortDateString()},{"D25",declareData.Prescription.Treatment.MedicalPersonId},
+                {"D14",d.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate)},{"D15", declareData.Prescription.Treatment.Copayment.Id},
+                {"D23",d.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate)},{"D25",declareData.Prescription.Treatment.MedicalPersonId},
                 {"D30",declareData.Prescription.Treatment.MedicineDays},{"CUS_ID",declareData.Prescription.Treatment.Customer.Id}
             };
             foreach (var tag in tagsDictionary)
@@ -296,6 +296,7 @@ namespace His_Pos.Class.Declare
         private Dictionary<string, string> SetDheadDictionary(DeclareData declareData,Treatment treatment,MedicalInfo medicalInfo)
         {
             string d8 = string.Empty, d9 = string.Empty, d35 = declareData.ChronicSequence, d36 = declareData.ChronicTotal;
+            DateTimeExtensions d = new DateTimeExtensions();
             if (medicalInfo.DiseaseCodes.Count > 0)
             {
                 if (medicalInfo.DiseaseCodes.Count == 2)
@@ -306,12 +307,12 @@ namespace His_Pos.Class.Declare
             {
                 {"d1",treatment.AdjustCase.Id},{"d2",string.Empty},{"d3",treatment.Customer.IcNumber},
                 {"d4",CheckXmlDbNullValue(declareData.DeclareMakeUp)},{"d5",CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
-                {"d6",treatment.Customer.Birthday},{"d7",declareData.Prescription.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
-                {"d13",CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},{"d14",CheckXmlDbNullValue(treatment.TreatmentDate.ToShortDateString())},
+                {"d6",d.ToSimpleTaiwanDate(Convert.ToDateTime(treatment.Customer.Birthday))},{"d7",declareData.Prescription.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
+                {"d13",CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},{"d14",CheckXmlDbNullValue(d.ToSimpleTaiwanDate(treatment.TreatmentDate))},
                 {"d15",treatment.Copayment.Id},{"d16",declareData.DeclarePoint.ToString()},
                 {"d17",treatment.Copayment.Point.ToString()},{"d18",declareData.TotalPoint.ToString()},
                 {"d19",CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString())},{"d20",treatment.Customer.Name},
-                {"d21",medicalInfo.Hospital.Id},{"d22",medicalInfo.TreatmentCase.Id},{"d23",treatment.AdjustDate.ToString(CultureInfo.InvariantCulture)},
+                {"d21",medicalInfo.Hospital.Id},{"d22",medicalInfo.TreatmentCase.Id},{"d23",d.ToSimpleTaiwanDate(treatment.AdjustDate)},
                 {"d24",medicalInfo.Hospital.Doctor.Id},{"d25",treatment.MedicalPersonId},
                 {"d26",CheckXmlDbNullValue(medicalInfo.SpecialCode.Id)},{"d30",CheckXmlDbNullValue(treatment.MedicineDays)},
                 {"d31",CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString())},
@@ -476,7 +477,7 @@ namespace His_Pos.Class.Declare
                 if (i > 0 && table.Rows[i]["HISCASCAT_ID"].ToString() == table.Rows[i - 1]["HISCASCAT_ID"].ToString()) catcount++;
                 if (i > 0 && table.Rows[i]["HISCASCAT_ID"].ToString() != table.Rows[i - 1]["HISCASCAT_ID"].ToString()) catcount = 1;
                 xml.SelectSingleNode("ddata/dhead/d2").InnerText = catcount.ToString();
-                xmlddata += xml.InnerXml.ToString();
+                xmlddata += xml.InnerXml;
                 param.Clear();
                 param.Add(new SqlParameter("MASID", table.Rows[i]["HISDECMAS_ID"].ToString()));
                 param.Add(new SqlParameter("ORDERID", catcount));
@@ -498,8 +499,8 @@ namespace His_Pos.Class.Declare
             xmlsum += "<t8>" + npoint + "</t8>";  //一般案件申請點數
             xmlsum += "<t9>" + scount + "</t9>"; //慢性病連續處方調劑案件申請件數
             xmlsum += "<t10>" + spoint + "</t10>"; //慢性病連續處方調劑案件申請點數
-            xmlsum += "<t11>" + ((int)ncount + (int)scount).ToString() + "</t11>"; //申請件數總計
-            xmlsum += "<t12>" + ((int)npoint + (int)spoint).ToString() + "</t12>"; //申請點數總計
+            xmlsum += "<t11>" + ((int)ncount + (int)scount) + "</t11>"; //申請件數總計
+            xmlsum += "<t12>" + ((int)npoint + (int)spoint) + "</t12>"; //申請點數總計
             var table1 = conn.ExecuteProc("[HIS_POS_DB].[GET].[DECLARESDDATE]");
             xmlsum += "<t13>" + table1.Rows[0]["SDATE"] + "</t13>"; //此次連線申報起日期
             xmlsum += "<t14>" + table1.Rows[0]["EDATE"] + "</t14>"; //此次連線申報迄日期
@@ -552,5 +553,7 @@ namespace His_Pos.Class.Declare
                 }
             }
         }
+
+        
     }
 }
