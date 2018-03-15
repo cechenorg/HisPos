@@ -25,7 +25,7 @@ namespace His_Pos.InventoryManagement
     public partial class OtcDetail : Window
     {
         public SeriesCollection InventoryCollection { get; set; }
-        public string[] Days { get; set; }
+        public string[] Months { get; set; }
         public Func<double, string> DataFormatter { get; set; }
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
 
@@ -55,7 +55,7 @@ namespace His_Pos.InventoryManagement
             
             DataFormatter = value => value.ToString();
 
-            AddDays();
+            AddMonths();
         }
         
         private LineSeries GetSalesLineSeries()
@@ -72,14 +72,14 @@ namespace His_Pos.InventoryManagement
             };
         }
 
-        private void AddDays()
+        private void AddMonths()
         {
             DateTime today = DateTime.Today.Date;
 
-            Days = new string[30];
-            for (int x = 0; x < 30; x++)
+            Months = new string[12];
+            for (int x = 0; x < 12; x++)
             {
-                Days[x] = today.AddDays(x - 29).Date.ToString("dd/MM");
+                Months[x] = today.AddMonths(-11 + x).Date.ToString("yyyy/MM");
             }
         }
 
