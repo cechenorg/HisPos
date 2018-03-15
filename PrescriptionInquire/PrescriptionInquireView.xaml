@@ -22,11 +22,11 @@
                 <DockPanel x:Name="AdjustDateDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True">
                     <Label Width="auto" Content="調劑日期" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <Viewbox Width="auto" Height="30" MinWidth="100">
-                        <DatePicker Width="100" Name="start" SelectedDateFormat="Short" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                        <DatePicker Width="100" Name="start" SelectedDateFormat="Short"/>
                     </Viewbox>
                     <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
                     <Viewbox Width="auto" Height="30" MinWidth="100">
-                        <DatePicker Width="100" Name="end" SelectedDateFormat="Short" SelectedDateChanged="DatePicker_SelectedDateChanged"/>
+                        <DatePicker Width="100" Name="end" SelectedDateFormat="Short"/>
                     </Viewbox>
                     <DockPanel x:Name="PatientDock" Width="Auto" Margin="20,0,0,0" LastChildFill="True" Height="50" VerticalAlignment="Top">
                         <Label Content="病患姓名" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"/>
@@ -80,7 +80,7 @@
                 </DockPanel>
                 <DockPanel  Margin="10,0,0,0">
                     <Label Content="調劑案件" Foreground="{StaticResource ForeGround}" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                    <ComboBox x:Name="AdjustCaseCombo" Width="150" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                    <ComboBox x:Name="AdjustCaseCombo" Width="150" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch"/>
                 </DockPanel>
             </WrapPanel>
             <Button Content="查詢" Background="DeepSkyBlue" Margin="125,0,0,0" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100" HorizontalAlignment="Center" Canvas.Right="100" Canvas.Top="40" Click="SearchButtonClick"/>

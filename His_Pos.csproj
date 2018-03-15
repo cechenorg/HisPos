@@ -218,6 +218,7 @@
     <Compile Include="Class\Product\CusOrderOverview.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
+    <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\SpecialCode.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />

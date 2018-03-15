@@ -58,5 +58,24 @@ namespace His_Pos.Class.Product
 
             return chartValues;
         }
+
+        public static ObservableCollection<OTCStoreOrderOverview> GetOtcStoOrderByID(string OtcID)
+        {
+            ObservableCollection<OTCStoreOrderOverview> collection = new ObservableCollection<OTCStoreOrderOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("OTCID", OtcID));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[OTCSTOORDBYID]", parameters);
+
+            foreach( DataRow row in table.Rows )
+            {
+                collection.Add(new OTCStoreOrderOverview(row["STOORD_DATE"].ToString(), row["EMP_NAME"].ToString(), row["STOORD_RECDATE"].ToString(), row["STOORDDET_PRICE"].ToString()));
+            }
+
+            return collection;
+        }
     }
 }

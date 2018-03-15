@@ -28,6 +28,7 @@ namespace His_Pos.InventoryManagement
         public string[] Months { get; set; }
         public Func<double, string> DataFormatter { get; set; }
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
+        public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
 
         private Otc otc;
 
@@ -98,6 +99,9 @@ namespace His_Pos.InventoryManagement
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
+            StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(otc.Id);
+            OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;
+
             UpdateChart();
         }
 
@@ -108,7 +112,7 @@ namespace His_Pos.InventoryManagement
             if ( selectedItem is CusOrderOverview )
                 OtcCusOrder.SelectedItem = selectedItem;
             else
-                OtcManOrder.SelectedItem = selectedItem;
+                OtcStoOrder.SelectedItem = selectedItem;
             
         }
     }

@@ -131,7 +131,7 @@ namespace His_Pos.ViewModel
             }
             else if (tab.ToString().Equals(functionNames[2]))
             {
-                newTab = new InventoryManagement.InventoryManagement(){TabName = functionNames[3]};
+                newTab = new InventoryManagement.InventoryManagement(){TabName = functionNames[2]};
             }
             else
             {
