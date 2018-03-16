@@ -218,6 +218,7 @@
     <Compile Include="Class\Product\CusOrderOverview.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
+    <Compile Include="Class\Product\OTCStockOverview.cs" />
     <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\SpecialCode.cs" />
@@ -416,6 +417,12 @@
     <Resource Include="Images\SystemBackgroundWhite2.jpg" />
     <Resource Include="Images\onlyoneeeeeee.jpg" />
     <Resource Include="Images\onlytwoooo.jpg" />
+    <Resource Include="Images\showDetail.png" />
+    <Resource Include="Images\balance.png" />
+    <Resource Include="Images\down.png" />
+    <Resource Include="Images\money.png" />
+    <Resource Include="Images\stock.png" />
+    <Resource Include="Images\up.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

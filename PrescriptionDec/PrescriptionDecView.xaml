@@ -425,7 +425,7 @@
                                 </DataGrid>
                             </StackPanel>
                         </Border>
-                        <DataGrid x:Name="CusHistoryDetail" Width="650" Background="#99BFBFBF" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
+                        <DataGrid x:Name="CusHistoryDetail" Width="650" Background="{StaticResource GridDarkerBackGround}" HorizontalContentAlignment="Center" ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle2}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Auto">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Width="160" MinWidth="160" Binding="{Binding CustomerHistoryDetailCol0}"/>
                                 <DataGridTextColumn MinWidth="90" Binding="{Binding CustomerHistoryDetailCol1}"/>

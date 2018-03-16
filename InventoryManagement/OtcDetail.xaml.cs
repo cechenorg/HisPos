@@ -24,11 +24,12 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class OtcDetail : Window
     {
-        public SeriesCollection InventoryCollection { get; set; }
+        public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
-        public Func<double, string> DataFormatter { get; set; }
+
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
+        public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
 
         private Otc otc;
 
@@ -51,14 +52,11 @@ namespace His_Pos.InventoryManagement
 
         private void UpdateChart()
         {
-            InventoryCollection = new SeriesCollection();
-            InventoryCollection.Add(GetSalesLineSeries());
-            
-            DataFormatter = value => value.ToString();
-
+            SalesCollection = new SeriesCollection();
+            SalesCollection.Add(GetSalesLineSeries());
             AddMonths();
         }
-        
+
         private LineSeries GetSalesLineSeries()
         {
             ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(otc.Id);
@@ -80,7 +78,7 @@ namespace His_Pos.InventoryManagement
             Months = new string[12];
             for (int x = 0; x < 12; x++)
             {
-                Months[x] = today.AddMonths(-11 + x).Date.ToString("yyyy/MM");
+                Months[x] = today.AddMonths(-11 + x).Date.ToString("yyyy/MM"); 
             }
         }
 
@@ -102,7 +100,27 @@ namespace His_Pos.InventoryManagement
             StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(otc.Id);
             OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;
 
+            OTCStockOverviewCollection = OTCDb.GetOtcStockOverviewById(otc.Id);
+            OtcStock.ItemsSource = OTCStockOverviewCollection;
+            UpdateStockOverviewInfo();
+
             UpdateChart();
+        }
+
+        private void UpdateStockOverviewInfo()
+        {
+            int totalStock = 0;
+            double totalPrice = 0;
+
+            foreach (var Otc in OTCStockOverviewCollection)
+            {
+                totalStock += Int32.Parse(Otc.Amount);
+                totalPrice += Double.Parse(Otc.Price) * Int32.Parse(Otc.Amount);
+            }
+
+            TotalStock.Content = totalStock.ToString();
+            StockTotalPrice.Content = "$" + totalPrice.ToString("0.00");
+
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -114,6 +132,16 @@ namespace His_Pos.InventoryManagement
             else
                 OtcStoOrder.SelectedItem = selectedItem;
             
+        }
+
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var leaveItem = (sender as DataGridRow).Item;
+
+            if (leaveItem is CusOrderOverview)
+                OtcCusOrder.SelectedItem = null;
+            else
+                OtcStoOrder.SelectedItem = null;
         }
     }
 }
