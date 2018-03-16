@@ -96,5 +96,24 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
+
+        internal static ObservableCollection<OTCUnit> GetOtcUnitById(string OtcID)
+        {
+            ObservableCollection<OTCUnit> collection = new ObservableCollection<OTCUnit>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", OtcID));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PRODUCTUNIT]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new OTCUnit(row["PROUNI_TYPE"].ToString(), row["PROUNI_QTY"].ToString(), row["PRO_SELL_PRICE"].ToString(), row["PRO_VIP_PRICE"].ToString(), row["PRO_EMP_PRICE"].ToString()));
+            }
+
+            return collection;
+        }
     }
 }

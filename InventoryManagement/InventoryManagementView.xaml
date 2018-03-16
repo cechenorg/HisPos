@@ -73,7 +73,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="成本價" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
+                    <DataGridTextColumn Width="100" Header="售價" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center" />

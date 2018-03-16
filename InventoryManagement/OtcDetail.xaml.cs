@@ -30,6 +30,7 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
+        public ObservableCollection<OTCUnit> OTCUnitCollection;
 
         private Otc otc;
 
@@ -103,6 +104,9 @@ namespace His_Pos.InventoryManagement
             OTCStockOverviewCollection = OTCDb.GetOtcStockOverviewById(otc.Id);
             OtcStock.ItemsSource = OTCStockOverviewCollection;
             UpdateStockOverviewInfo();
+
+            OTCUnitCollection = OTCDb.GetOtcUnitById(otc.Id);
+            OtcUnit.ItemsSource = OTCUnitCollection;
 
             UpdateChart();
         }
