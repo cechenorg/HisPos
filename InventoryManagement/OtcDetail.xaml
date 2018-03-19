@@ -32,7 +32,7 @@
                 <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
                 <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,10,20,10" Padding="0" VerticalContentAlignment="Bottom"/>
             </StackPanel>
-            <Grid Grid.Row="1" Grid.Column="0" Margin="10,0,5,5" Background="{StaticResource GridBackGround}">
+            <Grid Grid.Row="1" Grid.Column="0" Margin="10,0,30,5" Background="{StaticResource GridBackGround}">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -59,8 +59,8 @@
                     <ColumnDefinition Width="360"/>
                     <ColumnDefinition Width="240"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Margin="5,0,5,5" Grid.Column="0">
-                    <Label Content="單位" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <DockPanel Background="{StaticResource GridBackGround}" Margin="-20,0,5,5" Grid.Column="0">
+                    <Label Content="單位" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" DockPanel.Dock="Top"/>
                     <DataGrid Name="OtcUnit" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                                       AutoGenerateColumns="False" CanUserAddRows="True">
                         <DataGrid.RowStyle>
@@ -84,50 +84,55 @@
                             <DataGridTemplateColumn Width="90" Header="單位">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Unit}" Width="80" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                        <TextBox Text="{Binding Unit}" Width="80" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="50" Header="數量">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Amount}" Width="40" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                        <TextBox Text="{Binding Amount}" Width="40" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="70" Header="售價">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Price}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                        <TextBox Text="{Binding Price}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="70" Header="會員價">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding VIPPrice}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                        <TextBox Text="{Binding VIPPrice}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="70" Header="員工價">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding EmpPrice}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                        <TextBox Text="{Binding EmpPrice}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
+                </DockPanel>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Column="1" Margin="5,0,10,5">
-                    <Label Content="備註" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label Content="備註" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <RichTextBox Height="168" Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible" />
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="10,5,10,5">
                 <Rectangle Width="880"/>
-                <Label Name="IsChangedLabel" Content="未修改" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0,0,5,0"/>
-                <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="Gray"/>
+                <Label Name="IsChangedLabel" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0,0,5,0"/>
+                <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="Gray" Click="ChangedCancelButton_Click" />
                 <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="Red"/>
             </StackPanel>
             <Grid Grid.Column="0" Grid.Row="3">
@@ -184,19 +189,19 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridDarkestBackGround}" Grid.Row="0" Grid.Column="1" Margin="0,5,5,5">
-                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Margin="0,25,0,0" HorizontalAlignment="Center">
                         <Image Source="/Images/stock.png" Width="35"/>
                         <Label Content="庫存總量" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20"/>
                     </StackPanel>
-                    <Label Name="TotalStock"  Margin="0,0,0,25" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,25,0,0" HorizontalAlignment="Center">
+                    <Label Name="TotalStock" Content="100" Margin="0,0,0,20" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
                         <Image Source="/Images/money.png" Width="35"/>
                         <Label Content="庫存現值" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20"/>
                     </StackPanel>
-                    <Label Name="StockTotalPrice" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center"/>
+                    <Label Name="StockTotalPrice" Content="100" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Margin="5,5,5,5" Grid.Row="0" Grid.Column="2">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <DockPanel Background="{StaticResource GridBackGround}" Margin="5,5,5,5" Grid.Row="0" Grid.Column="2">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Top">
                         <Label Content="交易紀錄" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="0,0,40,0"/>
                         <Image Source="/Images/showDetail.png" Width="25" Margin="0,0,5,0"/>
                     </StackPanel>
@@ -243,7 +248,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
+                </DockPanel>
                 <lvc:CartesianChart Series="{Binding SalesCollection}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource GridBackGround}" Margin="10,5,5,10">
                     <lvc:CartesianChart.AxisY>
                         <lvc:Axis ShowLabels="False"/>
@@ -276,8 +281,8 @@
                 <StackPanel  Background="{StaticResource GridBackGround}" Margin="5,5,10,5" Grid.Row="0" Grid.Column="2">
 
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="5,5,10,10">
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <DockPanel Background="{StaticResource GridBackGround}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="5,5,10,10">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Top">
                         <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="0,0,220,0"/>
                         <Image Source="/Images/showDetail.png" Width="25" Margin="0,0,5,0"/>
                     </StackPanel>
@@ -339,7 +344,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
+                </DockPanel>
             </Grid>
         </Grid>
     </Viewbox>

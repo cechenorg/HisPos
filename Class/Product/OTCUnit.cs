@@ -10,7 +10,6 @@ namespace His_Pos.Class.Product
     {
         public OTCUnit()
         {
-            
         }
 
         public OTCUnit(string unit, string amount, string price, string vIPPrice, string empPrice)

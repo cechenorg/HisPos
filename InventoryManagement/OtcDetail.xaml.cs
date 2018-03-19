@@ -33,6 +33,8 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<OTCUnit> OTCUnitCollection;
 
         private Otc otc;
+        private bool IsChanged = false;
+        private OTCUnit newOTCUnit = new OTCUnit();
 
         public OtcDetail(Otc o)
         {
@@ -44,6 +46,14 @@ namespace His_Pos.InventoryManagement
             CheckAuth();
 
             DataContext = this;
+        }
+
+        private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeComponent();
+
+            UpdateUi();
+            CheckAuth();
         }
 
         private void CheckAuth()
@@ -92,6 +102,9 @@ namespace His_Pos.InventoryManagement
             
             OtcSaveAmount.Text = otc.SafeAmount;
             OtcManufactory.Text = otc.ManufactoryName;
+
+            IsChangedLabel.Content = "未修改";
+            IsChangedLabel.Foreground = (Brush) FindResource("ForeGround");
 
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
@@ -151,6 +164,26 @@ namespace His_Pos.InventoryManagement
                 OtcStock.SelectedItem = null;
             else if (leaveItem is OTCUnit)
                 OtcUnit.SelectedItem = null;
+        }
+        
+        private void setChangedFlag()
+        {
+            IsChanged = true;
+            IsChangedLabel.Content = "已修改";
+            IsChangedLabel.Foreground = Brushes.Red;
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox.Text != string.Empty && OTCUnitCollection.Count == OtcUnit.SelectedIndex)
+            {
+                setChangedFlag();
+
+                //OTCUnitCollection.Add();
+                textBox.Text = "";
+            }
         }
     }
 }
