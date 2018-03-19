@@ -47,11 +47,11 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
                     <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Name="OtcSaveAmount" Width="100" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBox Name="OtcSaveAmount" Width="90" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3">
                     <Label Content="製造商" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Name="OtcManufactory" Width="100" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBox Name="OtcManufactory" Width="420" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="1" Grid.Row="1">
@@ -84,40 +84,40 @@
                             <DataGridTemplateColumn Width="90" Header="單位">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Unit}" Width="80" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                                        <TextBox Tag="Unit" Text="{Binding Unit}" Width="80" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" GotFocus="OtcUnitGotFocus" LostFocus="OtcUnitOnLostFocus" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="50" Header="數量">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Amount}" Width="40" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                                        <TextBox Tag="Amount" Text="{Binding Amount}" Width="40" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" GotFocus="OtcUnitGotFocus" LostFocus="OtcUnitOnLostFocus" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="70" Header="售價">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Price}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                                        <TextBox Tag="Price" Text="{Binding Price}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" GotFocus="OtcUnitGotFocus" LostFocus="OtcUnitOnLostFocus" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="70" Header="會員價">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding VIPPrice}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                                        <TextBox Tag="VIPPrice" Text="{Binding VIPPrice}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" GotFocus="OtcUnitGotFocus" LostFocus="OtcUnitOnLostFocus" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="70" Header="員工價">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding EmpPrice}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                                        <TextBox Tag="EmpPrice" Text="{Binding EmpPrice}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center" HorizontalContentAlignment="Center" GotFocus="OtcUnitGotFocus" LostFocus="OtcUnitOnLostFocus" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
