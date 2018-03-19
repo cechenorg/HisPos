@@ -135,9 +135,6 @@
   <data name="hisPrescriptionInquire" xml:space="preserve">
     <value>處方查詢</value>
   </data>
-  <data name="hisPrescriptionRevise" xml:space="preserve">
-    <value>處方修改</value>
-  </data>
   <data name="noDoctorMsg" xml:space="preserve">
     <value>診治醫生未填寫</value>
   </data>

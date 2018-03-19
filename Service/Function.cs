@@ -142,7 +142,8 @@ namespace His_Pos
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
             var month = function.GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
-            var pathsplit = System.Environment.CurrentDirectory.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
+            var day = function.GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
+            var pathsplit = Environment.CurrentDirectory.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
             var path = pathsplit[0];
             for (var i = 1; i < pathsplit.Length; i++)
             {
@@ -151,28 +152,28 @@ namespace His_Pos
             }
             
             path += "\\" + FileTypeName; // "匯出健保資料XML檔案"  "匯出申報XML檔案"
-            var pathYm = path + "\\" + year + month;
-            var pathYmd = path + "\\" + year + month ;
-            var pathFile = pathYm  + "\\" + year + month ;
-            if (!Directory.Exists(pathYm)) Directory.CreateDirectory(pathYm);
-            if (!Directory.Exists(pathYmd)) Directory.CreateDirectory(pathYmd);
+            var path_ym = path + "\\" + year + month;
+            var path_ymd = path + "\\" + year + month + "\\" + day;
+            var path_file = path_ym + "\\" + day + "\\" + year + month + day;
+            if (!Directory.Exists(path_ym)) Directory.CreateDirectory(path_ym);
+            if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
             var settings = new XmlWriterSettings();
             settings.Indent = true;
             settings.Encoding = Encoding.GetEncoding("big5");
-            var writer = XmlWriter.Create(pathFile + ".xml", settings);
+            var writer = XmlWriter.Create(path_file + ".xml", settings);
             xml.Save(writer);
             writer.Close();
             //壓縮XML
-            if (File.Exists(pathFile + ".zip")) File.Delete(pathFile + ".zip");
+            if (File.Exists(path_file + ".zip")) File.Delete(path_file + ".zip");
             var psi = new System.Diagnostics.Process();
             psi.StartInfo.FileName = "makecab.exe";
-            psi.StartInfo.Arguments = pathFile + ".xml " + pathFile + ".zip";
+            psi.StartInfo.Arguments = path_file + ".xml " + path_file + ".zip";
             psi.Start();
 
             psi.WaitForInputIdle();
             //設定要等待相關的處理序結束的時間 
             psi.WaitForExit();
-            return pathFile + ".xml";
+            return path_file + ".xml";
             //StringBuilder pUploadFileName = new StringBuilder();
             //pUploadFileName.Append(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml");
             //StringBuilder fFileSize = new StringBuilder();

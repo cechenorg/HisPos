@@ -169,15 +169,6 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 處方修改 的當地語系化字串。
-        /// </summary>
-        internal static string hisPrescriptionRevise {
-            get {
-                return ResourceManager.GetString("hisPrescriptionRevise", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 非藥事居家照護或協助辦理門診戒菸計畫且直接交付指示用藥、提供「戒菸個案追蹤」或「戒菸衛教暨個案管理」者，原處方機構代號不可為&quot;N&quot; 的當地語系化字串。
         /// </summary>
         internal static string InstitutionIdError {

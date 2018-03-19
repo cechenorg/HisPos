@@ -8,10 +8,32 @@
         </ResourceDictionary>
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml">
         </ResourceDictionary>
-        <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml">
-          <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:His_Pos.ViewModel" />
-        </ResourceDictionary>
-      </ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml">
+                    <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:His_Pos.ViewModel" />
+                </ResourceDictionary>
+                <ResourceDictionary>
+                    <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="#FF424040"/>
+                    </Style>
+                </ResourceDictionary>
+                <ResourceDictionary>
+                    <Style x:Key="DataGridColumnHeaderStyle" TargetType="{x:Type DataGridColumnHeader }">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+                        <Setter Property="FontSize" Value="16"/>
+                        <Setter Property="Margin" Value="5,10,5,10"/>
+                    </Style>
+                </ResourceDictionary>
+          <ResourceDictionary>
+                    <Brush x:Key="GridBackGround">#B2EEEEEE</Brush>
+                    <Brush x:Key="GridDarkerBackGround">#99BFBFBF</Brush>
+                    <Brush x:Key="ForeGround">#FF424040</Brush>
+                    <Brush x:Key="GridSelected">#33009DF7</Brush>
+          </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>
 </Application>

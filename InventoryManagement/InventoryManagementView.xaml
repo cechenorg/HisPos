@@ -20,18 +20,18 @@
                 <RowDefinition Height="790"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <Label Content="商品編號" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Name="ID" Margin="0,10,10,10" Width="150" FontSize="16"/>
-                <Label Content="商品名稱" Width="Auto" Foreground="#FF424040" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Name="Name" Margin="0,10,10,10" Width="150" FontSize="16"/>
                 <Button Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100"/>
             </StackPanel>
-            <DataGrid Name="ProductList" Background="#B2EEEEEE" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
+            <DataGrid Name="ProductList" Background="{StaticResource GridBackGround}" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="#33009DF7"/>
+                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
                         </Style.Triggers>
                         <EventSetter Event="MouseDoubleClick" Handler="showProductDetail"/>
@@ -45,7 +45,7 @@
                     <Style TargetType="{x:Type DataGridCell}">
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="#FF424040"/>
+                        <Setter Property="Foreground" Value="{StaticResource ForeGround}"/>
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.ColumnHeaderStyle>
@@ -73,7 +73,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="成本價" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
+                    <DataGridTextColumn Width="100" Header="售價" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Cost}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -100,7 +100,7 @@
                     <DataGridTextColumn Width="100" Header="製造商" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ManufactoryName}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>

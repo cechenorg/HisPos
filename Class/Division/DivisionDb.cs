@@ -7,9 +7,9 @@ namespace His_Pos.Class.Division
 {
     public static class DivisionDb
     {
-        public static List<Division> DivisionsList { get; } = new List<Division>();
+        public static readonly List<Division> DivisionsList = new List<Division>();
 
-        public static void GetData()
+        static DivisionDb()
         {
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             var divisionTable = dbConnection.SetProcName("[HIS_POS_DB].[GET].[DIVISION]", dbConnection);

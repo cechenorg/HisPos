@@ -114,11 +114,9 @@
       <HintPath>packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro">
@@ -187,6 +185,7 @@
     <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
+    <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\HisUpload\HisUploadData.cs" />
     <Compile Include="Class\HisUpload\HisUploadDb.cs" />
     <Compile Include="Class\IcCardPay.cs" />
@@ -219,7 +218,9 @@
     <Compile Include="Class\Product\CusOrderOverview.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
-    <Compile Include="Class\Product\ProductDb.cs" />
+    <Compile Include="Class\Product\OTCStockOverview.cs" />
+    <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
+    <Compile Include="Class\Product\OTCUnit.cs" />
     <Compile Include="Class\SpecialCode.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCaseDb.cs" />
@@ -270,14 +271,8 @@
     <Compile Include="PrescriptionInquire\PrescriptionInquireView.xaml.cs">
       <DependentUpon>PrescriptionInquireView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="PrescriptionInquire\SimpleCommand.cs" />
-    <Compile Include="PrescriptionRevise\PrescriptionRevise.cs" />
-    <Compile Include="PrescriptionRevise\PrescriptionReviseOutcome.xaml.cs">
-      <DependentUpon>PrescriptionReviseOutcome.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PrescriptionRevise\PrescriptionReviseView.xaml.cs">
-      <DependentUpon>PrescriptionReviseView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
@@ -338,14 +333,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PrescriptionInquire\PrescriptionInquireView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PrescriptionRevise\PrescriptionReviseOutcome.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PrescriptionRevise\PrescriptionReviseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -430,6 +417,12 @@
     <Resource Include="Images\SystemBackgroundWhite2.jpg" />
     <Resource Include="Images\onlyoneeeeeee.jpg" />
     <Resource Include="Images\onlytwoooo.jpg" />
+    <Resource Include="Images\showDetail.png" />
+    <Resource Include="Images\balance.png" />
+    <Resource Include="Images\down.png" />
+    <Resource Include="Images\money.png" />
+    <Resource Include="Images\stock.png" />
+    <Resource Include="Images\up.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

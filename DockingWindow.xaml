@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:His_Pos"
         xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
         xmlns:prescriptionInquire="clr-namespace:His_Pos.PrescriptionInquire"
-        xmlns:prescriptionRevise="clr-namespace:His_Pos.PrescriptionRevise"
         xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         mc:Ignorable="d"
         Title="DockingWindow" Height="300" Width="300">
@@ -16,9 +15,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type prescriptionInquire:PrescriptionInquire}">
             <prescriptionInquire:PrescriptionInquireView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type prescriptionRevise:PrescriptionRevise}">
-            <prescriptionRevise:PrescriptionReviseView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type inventoryManagement:InventoryManagement}">
             <inventoryManagement:InventoryManagementView/>

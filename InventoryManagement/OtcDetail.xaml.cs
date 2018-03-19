@@ -24,10 +24,13 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class OtcDetail : Window
     {
-        public SeriesCollection InventoryCollection { get; set; }
-        public string[] Days { get; set; }
-        public Func<double, string> DataFormatter { get; set; }
+        public SeriesCollection SalesCollection { get; set; }
+        public string[] Months { get; set; }
+
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
+        public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
+        public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
+        public ObservableCollection<OTCUnit> OTCUnitCollection;
 
         private Otc otc;
 
@@ -50,52 +53,33 @@ namespace His_Pos.InventoryManagement
 
         private void UpdateChart()
         {
-            InventoryCollection = new SeriesCollection();
-            InventoryCollection.Add(GetInventoryLineSeries());
-            InventoryCollection.Add(GetSaveAmountLineSeries());
-            
-            DataFormatter = value => value.ToString();
-
-            AddDays();
+            SalesCollection = new SeriesCollection();
+            SalesCollection.Add(GetSalesLineSeries());
+            AddMonths();
         }
 
-        private LineSeries GetInventoryLineSeries()
+        private LineSeries GetSalesLineSeries()
         {
+            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(otc.Id);
+
             return new LineSeries
             {
-                Title = "庫存",
-                Values = new ChartValues<double> { 4, 1, 2, 5, 5, 4 },
+                Title = "銷售量",
+                Values = chartValues,
                 PointGeometrySize = 10,
                 LineSmoothness = 0,
                 DataLabels = true
             };
         }
 
-        private LineSeries GetSaveAmountLineSeries()
-        {
-            ChartValues<double> chartValues = new ChartValues<double>();
-
-            for (int x = 0; x < 30; x++)
-            {
-                chartValues.Add( double.Parse(otc.SafeAmount) );
-            }
-            
-            return new LineSeries
-            {
-                Title = "安全量",
-                Values = chartValues,
-                PointGeometry = null
-            };
-        }
-
-        private void AddDays()
+        private void AddMonths()
         {
             DateTime today = DateTime.Today.Date;
 
-            Days = new string[30];
-            for (int x = 0; x < 30; x++)
+            Months = new string[12];
+            for (int x = 0; x < 12; x++)
             {
-                Days[x] = today.AddDays(x - 29).Date.ToString("dd/MM");
+                Months[x] = today.AddMonths(-11 + x).Date.ToString("yyyy/MM"); 
             }
         }
 
@@ -114,7 +98,54 @@ namespace His_Pos.InventoryManagement
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
+            StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(otc.Id);
+            OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;
+
+            OTCStockOverviewCollection = OTCDb.GetOtcStockOverviewById(otc.Id);
+            OtcStock.ItemsSource = OTCStockOverviewCollection;
+            UpdateStockOverviewInfo();
+
+            OTCUnitCollection = OTCDb.GetOtcUnitById(otc.Id);
+            OtcUnit.ItemsSource = OTCUnitCollection;
+
             UpdateChart();
+        }
+
+        private void UpdateStockOverviewInfo()
+        {
+            int totalStock = 0;
+            double totalPrice = 0;
+
+            foreach (var Otc in OTCStockOverviewCollection)
+            {
+                totalStock += Int32.Parse(Otc.Amount);
+                totalPrice += Double.Parse(Otc.Price) * Int32.Parse(Otc.Amount);
+            }
+
+            TotalStock.Content = totalStock.ToString();
+            StockTotalPrice.Content = "$" + totalPrice.ToString("0.00");
+
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if ( selectedItem is CusOrderOverview )
+                OtcCusOrder.SelectedItem = selectedItem;
+            else
+                OtcStoOrder.SelectedItem = selectedItem;
+            
+        }
+
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var leaveItem = (sender as DataGridRow).Item;
+
+            if (leaveItem is CusOrderOverview)
+                OtcCusOrder.SelectedItem = null;
+            else
+                OtcStoOrder.SelectedItem = null;
         }
     }
 }
