@@ -33,6 +33,8 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<OTCUnit> OTCUnitCollection;
 
         private Otc otc;
+        private bool IsChanged = false;
+        private OTCUnit newOTCUnit = new OTCUnit();
 
         public OtcDetail(Otc o)
         {
@@ -44,6 +46,14 @@ namespace His_Pos.InventoryManagement
             CheckAuth();
 
             DataContext = this;
+        }
+
+        private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            InitializeComponent();
+
+            UpdateUi();
+            CheckAuth();
         }
 
         private void CheckAuth()
@@ -89,11 +99,12 @@ namespace His_Pos.InventoryManagement
 
             OtcName.Content = otc.Name;
             OtcId.Content = otc.Id;
-
-            OtcPrice.Text = otc.Price.ToString();
-            OtcInventory.Text = otc.Inventory.ToString();
+            
             OtcSaveAmount.Text = otc.SafeAmount;
             OtcManufactory.Text = otc.ManufactoryName;
+
+            IsChangedLabel.Content = "未修改";
+            IsChangedLabel.Foreground = (Brush) FindResource("ForeGround");
 
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
@@ -133,9 +144,12 @@ namespace His_Pos.InventoryManagement
 
             if ( selectedItem is CusOrderOverview )
                 OtcCusOrder.SelectedItem = selectedItem;
-            else
+            else if( selectedItem is OTCStoreOrderOverview)
                 OtcStoOrder.SelectedItem = selectedItem;
-            
+            else if (selectedItem is OTCStockOverview)
+                OtcStock.SelectedItem = selectedItem;
+            else if (selectedItem is OTCUnit)
+                OtcUnit.SelectedItem = selectedItem;
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -144,8 +158,32 @@ namespace His_Pos.InventoryManagement
 
             if (leaveItem is CusOrderOverview)
                 OtcCusOrder.SelectedItem = null;
-            else
+            else if (leaveItem is OTCStoreOrderOverview)
                 OtcStoOrder.SelectedItem = null;
+            else if (leaveItem is OTCStockOverview)
+                OtcStock.SelectedItem = null;
+            else if (leaveItem is OTCUnit)
+                OtcUnit.SelectedItem = null;
+        }
+        
+        private void setChangedFlag()
+        {
+            IsChanged = true;
+            IsChangedLabel.Content = "已修改";
+            IsChangedLabel.Foreground = Brushes.Red;
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox.Text != string.Empty && OTCUnitCollection.Count == OtcUnit.SelectedIndex)
+            {
+                setChangedFlag();
+
+                //OTCUnitCollection.Add();
+                textBox.Text = "";
+            }
         }
     }
 }

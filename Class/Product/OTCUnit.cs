@@ -10,7 +10,6 @@ namespace His_Pos.Class.Product
     {
         public OTCUnit()
         {
-            
         }
 
         public OTCUnit(string unit, string amount, string price, string vIPPrice, string empPrice)
@@ -23,9 +22,9 @@ namespace His_Pos.Class.Product
         }
 
         public string Unit { get; set; }
-        public string Amount { get; }
-        public string Price { get; }
-        public string VIPPrice { get; }
-        public string EmpPrice { get; }
+        public string Amount { get; set; }
+        public string Price { get; set; }
+        public string VIPPrice { get; set; }
+        public string EmpPrice { get; set; }
     }
 }
