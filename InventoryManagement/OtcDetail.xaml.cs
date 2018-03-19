@@ -89,9 +89,7 @@ namespace His_Pos.InventoryManagement
 
             OtcName.Content = otc.Name;
             OtcId.Content = otc.Id;
-
-            OtcPrice.Text = otc.Price.ToString();
-            OtcInventory.Text = otc.Inventory.ToString();
+            
             OtcSaveAmount.Text = otc.SafeAmount;
             OtcManufactory.Text = otc.ManufactoryName;
 
@@ -133,9 +131,12 @@ namespace His_Pos.InventoryManagement
 
             if ( selectedItem is CusOrderOverview )
                 OtcCusOrder.SelectedItem = selectedItem;
-            else
+            else if( selectedItem is OTCStoreOrderOverview)
                 OtcStoOrder.SelectedItem = selectedItem;
-            
+            else if (selectedItem is OTCStockOverview)
+                OtcStock.SelectedItem = selectedItem;
+            else if (selectedItem is OTCUnit)
+                OtcUnit.SelectedItem = selectedItem;
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -144,8 +145,12 @@ namespace His_Pos.InventoryManagement
 
             if (leaveItem is CusOrderOverview)
                 OtcCusOrder.SelectedItem = null;
-            else
+            else if (leaveItem is OTCStoreOrderOverview)
                 OtcStoOrder.SelectedItem = null;
+            else if (leaveItem is OTCStockOverview)
+                OtcStock.SelectedItem = null;
+            else if (leaveItem is OTCUnit)
+                OtcUnit.SelectedItem = null;
         }
     }
 }
