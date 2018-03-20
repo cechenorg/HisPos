@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using His_Pos.Interface;
 
 namespace His_Pos.Class.PaymentCategory
 {

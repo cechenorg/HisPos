@@ -1,5 +1,4 @@
-﻿using MenuUserControl;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using His_Pos.Class;
 using His_Pos.Class.Person;
@@ -17,6 +16,7 @@ namespace His_Pos
 
         public static DataTable MedicineDataTable = new DataTable();
         public static DataTable OtcDataTable = new DataTable();
+        public static DataTable ManufactoryTable = new DataTable();
         public static User CurrentUser;
 
         private List<DockingWindow> _openWindows;

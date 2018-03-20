@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
-using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
+using His_Pos.Class.Manufactory;
 using His_Pos.Properties;
 using His_Pos.Service;
 
@@ -53,8 +53,11 @@ namespace His_Pos
                 MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "HISMED_ID" };
                 
                 ChangeLoadingMessage("Loading Product Data...");
-
                 MainWindow.OtcDataTable = OTCDb.GetOtcData();
+
+                ChangeLoadingMessage("Loading Manufactory Data...");
+                MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
+
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

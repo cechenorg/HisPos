@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.AbstractClass;
-using His_Pos.Class.TreatmentCase;
+﻿using System.Collections.Generic;
 
 namespace His_Pos.Class
 {
