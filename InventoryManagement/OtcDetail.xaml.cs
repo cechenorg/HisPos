@@ -277,11 +277,6 @@ namespace His_Pos.InventoryManagement
             OTCUnitCollection.Add(otcUnit);
         }
 
-        private void OTCUnit_KeyDown(object sender, KeyEventArgs e)
-        {
-            setChangedFlag();
-        }
-
         private void OtcUnitGotFocus(object sender, RoutedEventArgs e)
         {
             textBox_oldValue = (sender as TextBox).Text;

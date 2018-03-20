@@ -21,44 +21,38 @@ namespace His_Pos
             InitializeComponent();
         }
 
-        public LoadingWindow(string message)
-        {
-            InitializeComponent();
+        //public LoadingWindow(string message)
+        //{
+        //    InitializeComponent();
 
-            LoadingMessage.Content = message;
+        //    LoadingMessage.Content = message;
 
-            backgroundWorker.WorkerSupportsCancellation = true;
+        //    backgroundWorker.WorkerSupportsCancellation = true;
 
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Close();
-                }));
-            };
+        //    backgroundWorker.RunWorkerCompleted += (s, args) =>
+        //    {
+        //        Dispatcher.BeginInvoke(new Action(() =>
+        //        {
+        //            Close();
+        //        }));
+        //    };
 
-            Show();
-            backgroundWorker.RunWorkerAsync();
-        }
+        //    Show();
+        //    backgroundWorker.RunWorkerAsync();
+        //}
 
         public void GetNecessaryData(User userLogin)
         {
             MainWindow mainWindow = new MainWindow(userLogin);
-            
+
             backgroundWorker.DoWork += (s, o) =>
             {
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    LoadingMessage.Content = "Loading Medicine Data...";
-                }));
+                ChangeLoadingMessage("Loading Medicine Data...");
 
                 MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
                 MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "HISMED_ID" };
-
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    LoadingMessage.Content = "Loading Product Data...";
-                }));
+                
+                ChangeLoadingMessage("Loading Product Data...");
 
                 MainWindow.OtcDataTable = OTCDb.GetOtcData();
             };
@@ -73,6 +67,13 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-        
+
+        private void ChangeLoadingMessage(string message)
+        {
+            Dispatcher.Invoke((Action)(() =>
+            {
+                LoadingMessage.Content = message;
+            }));
+        }
     }
 }

@@ -162,16 +162,12 @@ namespace His_Pos.PrescriptionDec
         {
             Debug.Assert(sender is Button button, nameof(button) + " != null");
             LoadPatentDataFromIcCard();
-
-            LoadingWindow loadingWindow = new LoadingWindow("Loading Customer Data...");
-
+            
             customerHistory = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
 
             CusHistoryMaster.ItemsSource = customerHistory.CustomerHistoryMasterCollection;
             
             CusHistoryMaster.SelectedIndex = 0;
-
-            loadingWindow.backgroundWorker.CancelAsync();
 
             //List<SqlParameter> customerId = new List<SqlParameter>();
             //customerId.Add(new SqlParameter("IDNUM", "S88824769A"));
