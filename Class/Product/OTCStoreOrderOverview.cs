@@ -14,12 +14,13 @@ namespace His_Pos.Class.Product
         public string Price { get; }
         public string Amount { get; }
 
-        public OTCStoreOrderOverview(string storeOrderDate, string orderEmployee, string storeReceiveDate, string price)
+        public OTCStoreOrderOverview(string storeOrderDate, string orderEmployee, string storeReceiveDate, string price, string amount)
         {
             StoreOrderDate = storeOrderDate;
             OrderEmployee = orderEmployee;
             StoreReceiveDate = storeReceiveDate;
             Price = price;
+            Amount = amount;
         }
     }
 }

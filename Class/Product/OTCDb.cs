@@ -72,7 +72,7 @@ namespace His_Pos.Class.Product
 
             foreach( DataRow row in table.Rows )
             {
-                collection.Add(new OTCStoreOrderOverview(row["STOORD_DATE"].ToString(), row["EMP_NAME"].ToString(), row["STOORD_RECDATE"].ToString(), row["STOORDDET_PRICE"].ToString()));
+                collection.Add(new OTCStoreOrderOverview(row["STOORD_DATE"].ToString(), row["EMP_NAME"].ToString(), row["STOORD_RECDATE"].ToString(), row["STOORDDET_PRICE"].ToString(), row["STOORDDET_QTY"].ToString()));
             }
 
             return collection;

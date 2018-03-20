@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace His_Pos.InventoryManagement
 
         private Otc otc;
         private bool IsChanged = false;
-        private OTCUnit newOTCUnit = new OTCUnit();
+        private string textBox_oldValue = "NotInit";
 
         public OtcDetail(Otc o)
         {
@@ -102,10 +103,7 @@ namespace His_Pos.InventoryManagement
             
             OtcSaveAmount.Text = otc.SafeAmount;
             OtcManufactory.Text = otc.ManufactoryName;
-
-            IsChangedLabel.Content = "未修改";
-            IsChangedLabel.Foreground = (Brush) FindResource("ForeGround");
-
+            
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
@@ -120,6 +118,12 @@ namespace His_Pos.InventoryManagement
             OtcUnit.ItemsSource = OTCUnitCollection;
 
             UpdateChart();
+
+            IsChangedLabel.Content = "未修改";
+            IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
+
+            textBox_oldValue = "NotInit";
+            IsChanged = false;
         }
 
         private void UpdateStockOverviewInfo()
@@ -173,17 +177,109 @@ namespace His_Pos.InventoryManagement
             IsChangedLabel.Foreground = Brushes.Red;
         }
 
+        private bool ChangedFlagNotChanged()
+        {
+            return !IsChanged;
+        }
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if ( textBox_oldValue == "NotInit") return;
+
+            TextBox textBox = sender as TextBox;
+
+            if (ChangedFlagNotChanged() && textBox.Text != textBox_oldValue)
+                setChangedFlag();
+        }
+
+        public static void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
+        {
+            //List<TextBox> textBoxList = new List<TextBox>();
+            //FindChildGroup(PrescriptionSet, "MedicineDays", ref textBoxList);
+
+            // Checks should be made, but preferably one time before calling.
+            // And here it is assumed that the programmer has taken into
+            // account all of these conditions and checks are not needed.
+            //if ((parent == null) || (childName == null) || (<Type T is not inheritable from FrameworkElement>))
+            //{
+            //    return;
+            //}
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+
+            for (int i = 0; i < childrenCount; i++)
+            {
+                // Get the child
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                // Compare on conformity the type
+
+                // Not compare - go next
+                if (!(child is T childTest))
+                {
+                    // Go the deep
+                    FindChildGroup(child, childName, ref list);
+                }
+                else
+                {
+                    // If match, then check the name of the item
+                    FrameworkElement childElement = childTest as FrameworkElement;
+
+                    Debug.Assert(childElement != null, nameof(childElement) + " != null");
+                    if (childElement.Name == childName)
+                    {
+                        // Found
+                        list.Add(childTest);
+                    }
+
+                    // We are looking for further, perhaps there are
+                    // children with the same name
+                    FindChildGroup(child, childName, ref list);
+                }
+            }
+        }
+
+        private void OtcUnitOnLostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
 
             if (textBox.Text != string.Empty && OTCUnitCollection.Count == OtcUnit.SelectedIndex)
             {
-                setChangedFlag();
-
-                //OTCUnitCollection.Add();
+                AddNewOTCUnit(textBox.Tag, textBox.Text);
                 textBox.Text = "";
             }
+        }
+
+        private void AddNewOTCUnit(object tag, string text)
+        {
+            OTCUnit otcUnit = new OTCUnit();
+
+            switch (tag)
+            {
+                case "Unit":
+                    otcUnit.Unit = text;
+                    break;
+                case "Amount":
+                    otcUnit.Amount = text;
+                    break;
+                case "Price":
+                    otcUnit.Price = text;
+                    break;
+                case "VIPPrice":
+                    otcUnit.VIPPrice = text;
+                    break;
+                case "EmpPrice":
+                    otcUnit.EmpPrice = text;
+                    break;
+                default:
+                    return;
+            }
+
+            OTCUnitCollection.Add(otcUnit);
+        }
+
+        private void OtcUnitGotFocus(object sender, RoutedEventArgs e)
+        {
+            textBox_oldValue = (sender as TextBox).Text;
         }
     }
 }
