@@ -51,8 +51,6 @@ namespace His_Pos.InventoryManagement
 
         private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
-
             UpdateUi();
             CheckAuth();
         }
@@ -100,10 +98,10 @@ namespace His_Pos.InventoryManagement
 
             OtcName.Content = otc.Name;
             OtcId.Content = otc.Id;
-            
+
             OtcSaveAmount.Text = otc.SafeAmount;
             OtcManufactory.Text = otc.ManufactoryName;
-            
+
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
@@ -118,7 +116,11 @@ namespace His_Pos.InventoryManagement
             OtcUnit.ItemsSource = OTCUnitCollection;
 
             UpdateChart();
+            InitVariables();
+        }
 
+        private void InitVariables()
+        {
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
 
@@ -280,6 +282,22 @@ namespace His_Pos.InventoryManagement
         private void OtcUnitGotFocus(object sender, RoutedEventArgs e)
         {
             textBox_oldValue = (sender as TextBox).Text;
+        }
+
+        private void OtcUnit_OnLoaded(object sender, EventArgs e)
+        {
+            ChangeFirstAmountToReadOnly();
+        }
+
+        private void ChangeFirstAmountToReadOnly()
+        {
+            List<TextBox> textBoxs = new List<TextBox>();
+            FindChildGroup(OtcUnit, "AmountCell", ref textBoxs);
+
+            if( textBoxs.Count == 0 ) return;
+
+            textBoxs[0].IsReadOnly = true;
+            textBoxs[0].BorderBrush = Brushes.Transparent;
         }
     }
 }

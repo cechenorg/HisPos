@@ -1,4 +1,6 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
+using System.Windows.Media.Imaging;
 
 namespace His_Pos.Class.Product
 {
@@ -14,6 +16,7 @@ namespace His_Pos.Class.Product
 
         public Otc(DataRow dataRow)
         {
+            TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
             Id = dataRow["PRO_ID"].ToString();
             Name = dataRow["PRO_NAME"].ToString();
             Price = double.Parse(dataRow["PRO_PRICE"].ToString());

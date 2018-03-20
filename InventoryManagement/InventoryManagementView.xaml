@@ -26,7 +26,8 @@
                 <TextBox Name="Name" Margin="0,10,10,10" Width="150" FontSize="16"/>
                 <Button Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100"/>
             </StackPanel>
-            <DataGrid Name="ProductList" Background="{StaticResource GridBackGround}" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
+            <DataGrid Name="ProductList" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                      CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -41,23 +42,14 @@
                         <Setter Property="Height" Value="40"/>
                     </Style>
                 </DataGrid.RowStyle>
-                <DataGrid.CellStyle>
-                    <Style TargetType="{x:Type DataGridCell}">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="{StaticResource ForeGround}"/>
-                    </Style>
-                </DataGrid.CellStyle>
-                <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="{x:Type DataGridColumnHeader }">
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="FontSize" Value="16"/>
-                        <Setter Property="Margin" Value="5,10,5,10"/>
-                    </Style>
-                </DataGrid.ColumnHeaderStyle>
                 <DataGrid.Columns>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Width="18" Height="18" Source="{Binding TypeIcon}" Margin="10,0,0,0"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn Width="120" Header="商品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -66,7 +58,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="250" Header="商品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Name}">
+                    <DataGridTextColumn MinWidth="250" MaxWidth="400" Header="商品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -97,7 +89,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="製造商" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ManufactoryName}">
+                    <DataGridTextColumn Width="100" Header="供應商" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ManufactoryName}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>

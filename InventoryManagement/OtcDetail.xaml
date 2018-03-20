@@ -51,7 +51,8 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3">
                     <Label Content="製造商" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                    <TextBox Name="OtcManufactory" Width="420" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <TextBox Name="OtcManufactory" Width="390" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <Image Source="/Images/showDetail.png" Width="25" Margin="5,0,5,0"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Column="1" Grid.Row="1">
@@ -61,8 +62,8 @@
                 </Grid.ColumnDefinitions>
                 <DockPanel Background="{StaticResource GridBackGround}" Margin="-20,0,5,5" Grid.Column="0">
                     <Label Content="單位" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" DockPanel.Dock="Top"/>
-                    <DataGrid Name="OtcUnit" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                                      AutoGenerateColumns="False" CanUserAddRows="True">
+                    <DataGrid x:Name="OtcUnit" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                                      AutoGenerateColumns="False" CanUserAddRows="True" Loaded="OtcUnit_OnLoaded">
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <Style.Triggers>
@@ -91,8 +92,8 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Width="50" Header="數量">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Tag="Amount" Text="{Binding Amount}" Width="40" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
+                                    <DataTemplate x:Name="AmountTemplate">
+                                        <TextBox x:Name="AmountCell" Tag="Amount" Text="{Binding Amount}" Width="40" FontSize="14" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"
                                                  VerticalAlignment="Center" HorizontalContentAlignment="Center" GotFocus="OtcUnitGotFocus" LostFocus="OtcUnitOnLostFocus" TextChanged="TextBox_TextChanged"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
