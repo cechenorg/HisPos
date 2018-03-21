@@ -1,27 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.AbstractClass;
-using His_Pos.Class;
-using His_Pos.PrescriptionInquire;
-using His_Pos.Properties;
-using His_Pos.Service;
 using His_Pos.Class.Product;
-using System.Collections;
+using His_Pos.Class;
+using System;
 
 namespace His_Pos.InventoryManagement
 {
@@ -31,6 +15,7 @@ namespace His_Pos.InventoryManagement
     public partial class InventoryManagementView : UserControl
     {
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
+        SearchType searchType = SearchType.ALL;
 
         public InventoryManagementView()
         {
@@ -41,13 +26,24 @@ namespace His_Pos.InventoryManagement
         {
             _dataList.Clear();
 
-            CompareWithOtc();
-            CompareWithMedicine();
+            switch (searchType)
+            {
+                case SearchType.OTC:
+                    AddOtcResult();
+                    break;
+                case SearchType.MED:
+                    AddMedicineResult();
+                    break;
+                case SearchType.ALL:
+                    AddOtcResult();
+                    AddMedicineResult();
+                    break;
+            }
 
             ProductList.ItemsSource = _dataList;
         }
 
-        private void CompareWithMedicine()
+        private void AddMedicineResult()
         {
             var medicine = MainWindow.MedicineDataTable.Select("HISMED_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
 
@@ -57,7 +53,7 @@ namespace His_Pos.InventoryManagement
             }
         }
 
-        private void CompareWithOtc()
+        private void AddOtcResult()
         {
             var otc = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
 
@@ -78,13 +74,41 @@ namespace His_Pos.InventoryManagement
             }
             else if (selectedItem is Medicine )
             {
-
+                MedicineDetail medcineDetail = new MedicineDetail((Medicine)selectedItem);
+                medcineDetail.Show();
             }
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             ProductList.SelectedItem = (sender as DataGridRow).Item;
+        }
+
+        private void SearchConditionChanged(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+
+            switch((SearchType)Int16.Parse(radioButton.Tag.ToString()))
+            {
+                case SearchType.OTC:
+                    searchType = SearchType.OTC;
+                    InventoryGrid.RowDefinitions[1].Height = new GridLength(50);
+                    InventoryGrid.RowDefinitions[2].Height = new GridLength(0);
+                    InventoryGrid.RowDefinitions[3].Height = new GridLength(740);
+                    break;
+                case SearchType.MED:
+                    searchType = SearchType.MED;
+                    InventoryGrid.RowDefinitions[1].Height = new GridLength(0);
+                    InventoryGrid.RowDefinitions[2].Height = new GridLength(50);
+                    InventoryGrid.RowDefinitions[3].Height = new GridLength(740);
+                    break;
+                case SearchType.ALL:
+                    searchType = SearchType.ALL;
+                    InventoryGrid.RowDefinitions[1].Height = new GridLength(0);
+                    InventoryGrid.RowDefinitions[2].Height = new GridLength(0);
+                    InventoryGrid.RowDefinitions[3].Height = new GridLength(790);
+                    break;
+            }
         }
     }
 }

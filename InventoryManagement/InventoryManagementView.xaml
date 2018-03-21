@@ -14,20 +14,42 @@
     dialog:DialogParticipation.Register="{Binding}"
     mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
     <Viewbox Stretch="Fill">
-        <Grid Width="1365">
+        <Grid Name="InventoryGrid" Width="1365">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="790"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="740"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="ID" Margin="0,10,10,10" Width="150" FontSize="16"/>
-                <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="Name" Margin="0,10,10,10" Width="150" FontSize="16"/>
-                <Button Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" MinWidth="100"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="9">
+                <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="ID" Margin="0,0,10,0" Width="150" FontSize="16"/>
+                <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="Name" Margin="0,0,10,0" Width="150" FontSize="16"/>
+                <Rectangle Width="250"/>
+                <Label Content="搜尋範圍" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <RadioButton Content="OTC" Tag="0" Margin="0,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Checked="SearchConditionChanged"/>
+                <Image Source="/Images/PosDot.png" Width="15"/>
+                <RadioButton Content="調劑藥品" Tag="1" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Checked="SearchConditionChanged"/>
+                <Image Source="/Images/HisDot.png" Width="15"/>
+                <RadioButton Content="全部" Tag="2" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" IsChecked="True" Checked="SearchConditionChanged"/>
+                <Image Source="/Images/PosHisDot.png" Width="25" Margin="0,0,30,0"/>
+                <Button Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkestBackGround}">
+                <Label Content="進階搜尋" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="19,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="成分" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="Ingredien" Margin="0,9,10,9" Width="150" FontSize="16"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}">
+                <Label Content="進階搜尋" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="19,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="批號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="BatchNumber" Margin="0,9,10,9" Width="150" FontSize="16"/>
+                <Label Content="成分" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="Ingredient" Margin="0,9,10,9" Width="150" FontSize="16"/>
             </StackPanel>
             <DataGrid Name="ProductList" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
+                      CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" Margin="10" Grid.Row="3">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -89,7 +111,15 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="供應商" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ManufactoryName}">
+                    <DataGridTextColumn Width="200" Header="供應商" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ManufactoryName}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="120" Header="上次盤點日期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ManufactoryName}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>

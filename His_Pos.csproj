@@ -222,7 +222,8 @@
     <Compile Include="Class\Product\OTCDb.cs" />
     <Compile Include="Class\Product\OTCStockOverview.cs" />
     <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
-    <Compile Include="Class\Product\OTCUnit.cs" />
+    <Compile Include="Class\Product\ProductDb.cs" />
+    <Compile Include="Class\Product\ProductUnit.cs" />
     <Compile Include="Class\SpecialCode.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCaseDb.cs" />
@@ -247,6 +248,9 @@
     <Compile Include="InventoryManagement\InventoryManagement.cs" />
     <Compile Include="InventoryManagement\InventoryManagementView.xaml.cs">
       <DependentUpon>InventoryManagementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="InventoryManagement\MedicineDetail.xaml.cs">
+      <DependentUpon>MedicineDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="InventoryManagement\OtcDetail.xaml.cs">
       <DependentUpon>OtcDetail.xaml</DependentUpon>
@@ -293,6 +297,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="InventoryManagement\InventoryManagementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InventoryManagement\MedicineDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using His_Pos.Class.Product;
+using LiveCharts;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -13,149 +15,66 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using His_Pos.Class.Product;
-using LiveCharts;
-using LiveCharts.Definitions.Series;
-using LiveCharts.Wpf;
 
 namespace His_Pos.InventoryManagement
 {
     /// <summary>
-    /// OtcDetail.xaml 的互動邏輯
+    /// MedicineDetail.xaml 的互動邏輯
     /// </summary>
-    public partial class OtcDetail : Window
+    public partial class MedicineDetail : Window
     {
+        private Medicine medicine;
         public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
 
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
-        public ObservableCollection<ProductUnit> OTCUnitCollection;
-
-        private Otc otc;
+        public ObservableCollection<ProductUnit> MedUnitCollection;
+        
         private bool IsChanged = false;
         private string textBox_oldValue = "NotInit";
 
-        public OtcDetail(Otc o)
+        public MedicineDetail(Medicine med)
         {
             InitializeComponent();
 
-            otc = o;
-            
+            medicine = med;
+
             UpdateUi();
-            CheckAuth();
 
-            DataContext = this;
-        }
-
-        private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateUi();
-            CheckAuth();
-        }
-
-        private void CheckAuth()
-        {
-            
-        }
-
-        private void UpdateChart()
-        {
-            SalesCollection = new SeriesCollection();
-            SalesCollection.Add(GetSalesLineSeries());
-            AddMonths();
-        }
-
-        private LineSeries GetSalesLineSeries()
-        {
-            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(otc.Id);
-
-            return new LineSeries
-            {
-                Title = "銷售量",
-                Values = chartValues,
-                PointGeometrySize = 10,
-                LineSmoothness = 0,
-                DataLabels = true
-            };
-        }
-
-        private void AddMonths()
-        {
-            DateTime today = DateTime.Today.Date;
-
-            Months = new string[12];
-            for (int x = 0; x < 12; x++)
-            {
-                Months[x] = today.AddMonths(-11 + x).Date.ToString("yyyy/MM"); 
-            }
         }
 
         private void UpdateUi()
         {
-            if (otc is null) return;
+            MedName.Content = medicine.Name;
+            MedId.Content = medicine.Id;
+            MedSaveAmount.Text = medicine.SafeAmount;
+            MedManufactory.Text = medicine.ManufactoryName;
 
-            OtcName.Content = otc.Name;
-            OtcId.Content = otc.Id;
-
-            OtcSaveAmount.Text = otc.SafeAmount;
-            OtcManufactory.Text = otc.ManufactoryName;
-
-            CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
-            OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
-
-            StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(otc.Id);
-            OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;
-
-            OTCStockOverviewCollection = OTCDb.GetOtcStockOverviewById(otc.Id);
-            OtcStock.ItemsSource = OTCStockOverviewCollection;
-            UpdateStockOverviewInfo();
-
-            OTCUnitCollection = ProductDb.GetProductUnitById(otc.Id);
-            OtcUnit.ItemsSource = OTCUnitCollection;
-
-            UpdateChart();
-            InitVariables();
-        }
-
-        private void InitVariables()
-        {
             IsChangedLabel.Content = "未修改";
-            IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
 
-            textBox_oldValue = "NotInit";
-            IsChanged = false;
+            MedUnitCollection = ProductDb.GetProductUnitById(medicine.Id);
+            MedUnit.ItemsSource = MedUnitCollection;
         }
 
-        private void UpdateStockOverviewInfo()
+        private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
         {
-            int totalStock = 0;
-            double totalPrice = 0;
-
-            foreach (var Otc in OTCStockOverviewCollection)
-            {
-                totalStock += Int32.Parse(Otc.Amount);
-                totalPrice += Double.Parse(Otc.Price) * Int32.Parse(Otc.Amount);
-            }
-
-            TotalStock.Content = totalStock.ToString();
-            StockTotalPrice.Content = "$" + totalPrice.ToString("0.00");
-
+            
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
 
-            if ( selectedItem is CusOrderOverview )
+            if (selectedItem is CusOrderOverview)
                 OtcCusOrder.SelectedItem = selectedItem;
-            else if( selectedItem is OTCStoreOrderOverview)
+            else if (selectedItem is OTCStoreOrderOverview)
                 OtcStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 OtcStock.SelectedItem = selectedItem;
             else if (selectedItem is ProductUnit)
-                OtcUnit.SelectedItem = selectedItem;
+                MedUnit.SelectedItem = selectedItem;
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -169,9 +88,19 @@ namespace His_Pos.InventoryManagement
             else if (leaveItem is OTCStockOverview)
                 OtcStock.SelectedItem = null;
             else if (leaveItem is ProductUnit)
-                OtcUnit.SelectedItem = null;
+                MedUnit.SelectedItem = null;
         }
-        
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (textBox_oldValue == "NotInit") return;
+
+            TextBox textBox = sender as TextBox;
+
+            if (ChangedFlagNotChanged() && textBox.Text != textBox_oldValue)
+                setChangedFlag();
+        }
+
         private void setChangedFlag()
         {
             IsChanged = true;
@@ -182,16 +111,6 @@ namespace His_Pos.InventoryManagement
         private bool ChangedFlagNotChanged()
         {
             return !IsChanged;
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if ( textBox_oldValue == "NotInit") return;
-
-            TextBox textBox = sender as TextBox;
-
-            if (ChangedFlagNotChanged() && textBox.Text != textBox_oldValue)
-                setChangedFlag();
         }
 
         public static void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
@@ -244,14 +163,14 @@ namespace His_Pos.InventoryManagement
         {
             TextBox textBox = sender as TextBox;
 
-            if (textBox.Text != string.Empty && OTCUnitCollection.Count == OtcUnit.SelectedIndex)
+            if (textBox.Text != string.Empty && MedUnitCollection.Count == MedUnit.SelectedIndex)
             {
-                AddNewOTCUnit(textBox.Tag, textBox.Text);
+                AddNewMedUnit(textBox.Tag, textBox.Text);
                 textBox.Text = "";
             }
         }
 
-        private void AddNewOTCUnit(object tag, string text)
+        private void AddNewMedUnit(object tag, string text)
         {
             ProductUnit otcUnit = new ProductUnit();
 
@@ -276,15 +195,15 @@ namespace His_Pos.InventoryManagement
                     return;
             }
 
-            OTCUnitCollection.Add(otcUnit);
+            MedUnitCollection.Add(otcUnit);
         }
 
-        private void OtcUnitGotFocus(object sender, RoutedEventArgs e)
+        private void OtcMedGotFocus(object sender, RoutedEventArgs e)
         {
             textBox_oldValue = (sender as TextBox).Text;
         }
 
-        private void OtcUnit_OnLoaded(object sender, EventArgs e)
+        private void MedUnit_OnLoaded(object sender, EventArgs e)
         {
             ChangeFirstAmountToReadOnly();
         }
@@ -292,9 +211,9 @@ namespace His_Pos.InventoryManagement
         private void ChangeFirstAmountToReadOnly()
         {
             List<TextBox> textBoxs = new List<TextBox>();
-            FindChildGroup(OtcUnit, "AmountCell", ref textBoxs);
+            FindChildGroup(MedUnit, "AmountCell", ref textBoxs);
 
-            if( textBoxs.Count == 0 ) return;
+            if (textBoxs.Count == 0) return;
 
             textBoxs[0].IsReadOnly = true;
             textBoxs[0].BorderBrush = Brushes.Transparent;
