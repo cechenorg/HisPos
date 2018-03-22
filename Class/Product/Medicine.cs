@@ -27,6 +27,7 @@ namespace His_Pos.Class.Product
             HcPrice = double.Parse(dataRow["HISMED_PRICE"].ToString());
             Note = dataRow["PRO_DESCRIPTION"].ToString();
             BatchNumber = "1111";
+            Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
         }
 
         public Medicine(string id, string name, double price, double inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)
@@ -47,5 +48,7 @@ namespace His_Pos.Class.Product
         public Medicate MedicalCategory { get; set;}
 
         public string BatchNumber { get; set; }
+
+        public string Ingredient { get; set; }
     }
 }
