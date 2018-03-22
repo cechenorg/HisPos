@@ -21,6 +21,7 @@ namespace His_Pos.Class.Product
             Cost = double.Parse(dataRow["PRO_PROFIT"].ToString());
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             ManufactoryName = dataRow["MAN_NAME"].ToString();
+            Description = dataRow["PRO_DESCRIPTION"].ToString();
         }
 
         public int Total { get; set; }//商品數量

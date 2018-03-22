@@ -104,6 +104,8 @@ namespace His_Pos.InventoryManagement
             
             OtcSaveAmount.Text = otc.SafeAmount;
             OtcManufactory.Text = otc.ManufactoryName;
+            Description.AppendText(otc.Description);
+           
             
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
@@ -306,28 +308,10 @@ namespace His_Pos.InventoryManagement
         {
             textBox_oldValue = (sender as TextBox).Text;
         }
-       private string GetDescriptionValue()
-        {
-            string dscTxt = string.Empty;
-            foreach (Block block in Description.Document.Blocks)
-            {
-                if (block is Paragraph)
-                {
-                    Paragraph paragraph = (Paragraph)block;
-                    foreach (Inline inline in paragraph.Inlines)
-                    {
-                        if (inline is InlineUIContainer)
-                        {
-                            dscTxt += inline;
-                        }
-                    }
-                }
-            }
-            return dscTxt;
-        }
+       
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            OTCDb.UpdateOtcDataDetail(OtcId.Content.ToString(),OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, GetDescriptionValue());
+            OTCDb.UpdateOtcDataDetail(OtcId.Content.ToString(),OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(Description.Document.ContentStart, Description.Document.ContentEnd).Text);
             OTCDb.DeleteOtcUnitWithoutBasic(OtcId.Content.ToString());
             foreach (OTCUnit otcunit in OTCUnitCollection) {
                 if (otcunit.Unit == "基本單位") continue;

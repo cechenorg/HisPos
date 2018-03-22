@@ -10,5 +10,6 @@
         public string SafeAmount { get; set; } 
         public string ManufactoryName { get; set; }
         public string LastImportTime { get; set; }
+        public string Description { get; set; }
     }
 }
