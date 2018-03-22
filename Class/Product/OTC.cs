@@ -16,9 +16,7 @@ namespace His_Pos.Class.Product
         {
             Id = dataRow["PRO_ID"].ToString();
             Name = dataRow["PRO_NAME"].ToString();
-            Price = double.Parse(dataRow["PRO_PRICE"].ToString());
             Inventory = double.Parse(dataRow["PRO_INVENTORY"].ToString());
-            Cost = double.Parse(dataRow["PRO_PROFIT"].ToString());
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             ManufactoryName = dataRow["MAN_NAME"].ToString();
             Description = dataRow["PRO_DESCRIPTION"].ToString();
