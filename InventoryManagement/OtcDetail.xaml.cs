@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -247,8 +248,33 @@ namespace His_Pos.InventoryManagement
                 AddNewOTCUnit(textBox.Tag, textBox.Text);
                 textBox.Text = "";
             }
+            if (textBox.Text != string.Empty && OTCUnitCollection.Count != OtcUnit.SelectedIndex && OtcUnit.SelectedIndex != -1) {
+                AddOTCUnitValue(textBox.Tag,textBox.Text,OtcUnit.SelectedIndex);
+            }
         }
-
+        
+        private void AddOTCUnitValue(object tag, string text,int index) {
+            switch (tag)
+            {
+                case "Unit":
+                    OTCUnitCollection[index].Unit = text;
+                    break;
+                case "Amount":
+                    OTCUnitCollection[index].Amount = text;
+                    break;
+                case "Price":
+                    OTCUnitCollection[index].Price = text;
+                    break;
+                case "VIPPrice":
+                    OTCUnitCollection[index].VIPPrice = text;
+                    break;
+                case "EmpPrice":
+                    OTCUnitCollection[index].EmpPrice = text;
+                    break;
+                default:
+                    return;
+            }
+        }
         private void AddNewOTCUnit(object tag, string text)
         {
             OTCUnit otcUnit = new OTCUnit();
@@ -273,13 +299,40 @@ namespace His_Pos.InventoryManagement
                 default:
                     return;
             }
-
             OTCUnitCollection.Add(otcUnit);
         }
 
         private void OtcUnitGotFocus(object sender, RoutedEventArgs e)
         {
             textBox_oldValue = (sender as TextBox).Text;
+        }
+       private string GetDescriptionValue()
+        {
+            string dscTxt = string.Empty;
+            foreach (Block block in Description.Document.Blocks)
+            {
+                if (block is Paragraph)
+                {
+                    Paragraph paragraph = (Paragraph)block;
+                    foreach (Inline inline in paragraph.Inlines)
+                    {
+                        if (inline is InlineUIContainer)
+                        {
+                            dscTxt += inline;
+                        }
+                    }
+                }
+            }
+            return dscTxt;
+        }
+        private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
+        {
+            OTCDb.UpdateOtcDataDetail(OtcId.Content.ToString(),OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, GetDescriptionValue());
+            OTCDb.DeleteOtcUnitWithoutBasic(OtcId.Content.ToString());
+            foreach (OTCUnit otcunit in OTCUnitCollection) {
+                if (otcunit.Unit == "基本單位") continue;
+                OTCDb.UpdateOtcDataUnit(OtcId.Content.ToString(),otcunit.Unit, otcunit.Amount,otcunit.Price, otcunit.VIPPrice, otcunit.EmpPrice);
+            }
         }
     }
 }
