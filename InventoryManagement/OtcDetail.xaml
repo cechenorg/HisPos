@@ -130,7 +130,7 @@
                 </DockPanel>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Column="1" Margin="5,0,10,5">
                     <Label Content="備註" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                    <RichTextBox Height="168" Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible" />
+                    <RichTextBox Name="OTCNotes" Height="168" Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible" />
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="10,5,10,5">

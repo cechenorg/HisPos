@@ -45,7 +45,19 @@ namespace His_Pos.InventoryManagement
 
         private void AddMedicineResult()
         {
-            var medicine = MainWindow.MedicineDataTable.Select("HISMED_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+            string searchCondition = "HISMED_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'";
+
+            if (ControlMed.IsChecked == true )
+            {
+                searchCondition += "AND HISMED_CONTROL = " + ControlMed.IsChecked;
+            }
+
+            if(FreezeMed.IsChecked == true)
+            {
+                searchCondition += " AND HISMED_FROZ = " + FreezeMed.IsChecked;
+            }
+
+            var medicine = MainWindow.MedicineDataTable.Select(searchCondition);
 
             foreach (var m in medicine)
             {

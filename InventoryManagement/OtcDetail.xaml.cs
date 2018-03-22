@@ -102,6 +102,9 @@ namespace His_Pos.InventoryManagement
             OtcSaveAmount.Text = otc.SafeAmount;
             OtcManufactory.Text = otc.ManufactoryName;
 
+            OTCNotes.Document.Blocks.Clear();
+            OTCNotes.Document.Blocks.Add(new Paragraph(new Run(otc.Note)));
+
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 

@@ -52,6 +52,9 @@ namespace His_Pos.InventoryManagement
             MedSaveAmount.Text = medicine.SafeAmount;
             MedManufactory.Text = medicine.ManufactoryName;
 
+            MedNotes.Document.Blocks.Clear();
+            MedNotes.Document.Blocks.Add(new Paragraph(new Run(medicine.Note)));
+
             IsChangedLabel.Content = "未修改";
 
             MedUnitCollection = ProductDb.GetProductUnitById(medicine.Id);

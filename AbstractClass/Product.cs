@@ -12,6 +12,7 @@ namespace His_Pos.AbstractClass
         public double Inventory { get; set; }
         public string SafeAmount { get; set; } 
         public string ManufactoryName { get; set; }
-        public string LastImportTime { get; set; }
+        public string LastCheckDate { get; set; }
+        public string Note { get; set; }
     }
 }
