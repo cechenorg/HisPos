@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Class;
 using His_Pos.Class.Product;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
@@ -330,11 +331,14 @@ namespace His_Pos.InventoryManagement
        
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
+            if (!IsChanged) return;
             OTCDb.UpdateOtcDataDetail(OtcId.Content.ToString(),OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
-            OTCDb.DeleteOtcUnitWithoutBasic(OtcId.Content.ToString());
+            OTCDb.DeleteOtcUnitWithoutBasic(otc.Id);
+            int count = 0;
             foreach (ProductUnit otcunit in OTCUnitCollection) {
-                if (otcunit.Unit == "基本單位") continue;
+                if (count == 0) continue;
                 OTCDb.UpdateOtcDataUnit(OtcId.Content.ToString(),otcunit.Unit, otcunit.Amount,otcunit.Price, otcunit.VIPPrice, otcunit.EmpPrice);
+                count++;
             }
         }
     }
