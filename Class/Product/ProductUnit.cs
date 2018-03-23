@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.Product
 {
-    public class OTCUnit
+    public class ProductUnit
     {
-        public OTCUnit()
+        public ProductUnit()
         {
         }
 
-        public OTCUnit(string unit, string amount, string price, string vIPPrice, string empPrice)
+        public ProductUnit(string unit, string amount, string price, string vIPPrice, string empPrice)
         {
             Unit = unit;
             Amount = amount;

@@ -15,6 +15,13 @@ namespace His_Pos.Class
         ALL = 2
     }
 
+    public enum SearchType
+    {
+        OTC = 0,
+        MED = 1,
+        ALL = 2
+    }
+
     [Flags]
     public enum LoginAuth
     {

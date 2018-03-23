@@ -1,5 +1,7 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace His_Pos.Class.Product
 {
@@ -11,6 +13,7 @@ namespace His_Pos.Class.Product
 
         public Medicine(DataRow dataRow)
         {
+            TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
             Id = dataRow["HISMED_ID"].ToString();
             Name = dataRow["PRO_NAME"].ToString();
             MedicalCategory = new Medicate
@@ -22,6 +25,9 @@ namespace His_Pos.Class.Product
             Price = double.Parse(dataRow["HISMED_SELLPRICE"].ToString());
             PaySelf = false;
             HcPrice = double.Parse(dataRow["HISMED_PRICE"].ToString());
+            Note = dataRow["PRO_DESCRIPTION"].ToString();
+            BatchNumber = "1111";
+            Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
         }
 
         public Medicine(string id, string name, double price, double inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)
@@ -39,16 +45,10 @@ namespace His_Pos.Class.Product
         public double TotalPrice { get; set; }
         public bool PaySelf { get; set; }
         public double HcPrice { get; set; }
-        public Medicate MedicalCategory { get; set;}= new Medicate();
+        public Medicate MedicalCategory { get; set;}
 
-        public AutoCompleteFilterPredicate<object> MedicineFilter
-        {
-            get
-            {
-                return (searchText, obj) =>
-                    (obj as Medicine).Id.Contains(searchText)
-                    || (obj as Medicine).Name.Contains(searchText);
-            }
-        }
+        public string BatchNumber { get; set; }
+
+        public string Ingredient { get; set; }
     }
 }
