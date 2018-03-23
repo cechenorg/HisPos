@@ -23,6 +23,7 @@ namespace His_Pos.Class.Product
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             ManufactoryName = dataRow["MAN_NAME"].ToString();
             Note = dataRow["PRO_DESCRIPTION"].ToString();
+            TotalStock = dataRow["TOTALSTOCK"].ToString();
         }
 
         public int Total { get; set; }//商品數量

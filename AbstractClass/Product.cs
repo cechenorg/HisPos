@@ -14,5 +14,6 @@ namespace His_Pos.AbstractClass
         public string ManufactoryName { get; set; }
         public string LastCheckDate { get; set; }
         public string Note { get; set; }
+        public string TotalStock { get; set; }
     }
 }
