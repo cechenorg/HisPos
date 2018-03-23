@@ -330,11 +330,11 @@ namespace His_Pos.InventoryManagement
        
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            OTCDb.UpdateOtcDataDetail(OtcId.Content.ToString(),OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
-            OTCDb.DeleteOtcUnitWithoutBasic(OtcId.Content.ToString());
+            OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
+            OTCDb.DeleteOtcUnitWithoutBasic(otc.Id);
             foreach (ProductUnit otcunit in OTCUnitCollection) {
                 if (otcunit.Unit == "基本單位") continue;
-                OTCDb.UpdateOtcDataUnit(OtcId.Content.ToString(),otcunit.Unit, otcunit.Amount,otcunit.Price, otcunit.VIPPrice, otcunit.EmpPrice);
+                OTCDb.UpdateOtcDataUnit(otc.Id, otcunit);
             }
         }
     }

@@ -36,16 +36,16 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_ID", ProId));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[DELETEOTCUNITWITHOUTBASIC]", parameters);
         }
-        public static void UpdateOtcDataUnit(string ProId,string PROUNI_TYPE,string PROUNI_QTY,string PRO_SELL_PRICE, string PRO_VIP_PRICE,string PRO_EMP_PRICE)
+        public static void UpdateOtcDataUnit(string ProId, ProductUnit productUnit)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", ProId));
-            parameters.Add(new SqlParameter("PROUNI_TYPE", PROUNI_TYPE));
-            parameters.Add(new SqlParameter("PROUNI_QTY", PROUNI_QTY));
-            parameters.Add(new SqlParameter("PRO_SELL_PRICE", PRO_SELL_PRICE));
-            parameters.Add(new SqlParameter("PRO_VIP_PRICE", PRO_VIP_PRICE));
-            parameters.Add(new SqlParameter("PRO_EMP_PRICE", PRO_EMP_PRICE));
+            parameters.Add(new SqlParameter("PROUNI_TYPE", productUnit.Unit));
+            parameters.Add(new SqlParameter("PROUNI_QTY", productUnit.Amount));
+            parameters.Add(new SqlParameter("PRO_SELL_PRICE", productUnit.Price));
+            parameters.Add(new SqlParameter("PRO_VIP_PRICE", productUnit.VIPPrice));
+            parameters.Add(new SqlParameter("PRO_EMP_PRICE", productUnit.EmpPrice));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCUNIT]", parameters);
         }
 
