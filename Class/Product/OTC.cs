@@ -21,7 +21,6 @@ namespace His_Pos.Class.Product
             Name = dataRow["PRO_NAME"].ToString();
             Inventory = double.Parse(dataRow["PRO_INVENTORY"].ToString());
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
-            ManufactoryName = dataRow["MAN_NAME"].ToString();
             Note = dataRow["PRO_DESCRIPTION"].ToString();
             StockValue = dataRow["TOTAL"].ToString();
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
