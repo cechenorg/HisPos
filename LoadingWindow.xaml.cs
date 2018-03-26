@@ -50,7 +50,7 @@ namespace His_Pos
                 ChangeLoadingMessage("Loading Medicine Data...");
 
                 MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
-                MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "HISMED_ID" };
+                MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "PRO_ID" };
                 
                 ChangeLoadingMessage("Loading Product Data...");
                 MainWindow.OtcDataTable = OTCDb.GetOtcData();

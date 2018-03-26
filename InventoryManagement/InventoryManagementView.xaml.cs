@@ -15,7 +15,8 @@ namespace His_Pos.InventoryManagement
     public partial class InventoryManagementView : UserControl
     {
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
-        SearchType searchType = SearchType.ALL;
+        private SearchType searchType = SearchType.ALL;
+        private double selectStockValue = 0;
 
         public InventoryManagementView()
         {
@@ -25,6 +26,7 @@ namespace His_Pos.InventoryManagement
         private void Search_Click(object sender, RoutedEventArgs e)
         {
             _dataList.Clear();
+            selectStockValue = 0;
 
             switch (searchType)
             {
@@ -40,12 +42,14 @@ namespace His_Pos.InventoryManagement
                     break;
             }
 
+            SearchCount.Content = _dataList.Count.ToString();
+            SelectStockValue.Content = selectStockValue.ToString("##.#");
             ProductList.ItemsSource = _dataList;
         }
 
         private void AddMedicineResult()
         {
-            string searchCondition = "HISMED_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'";
+            string searchCondition = "PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'";
 
             if (ControlMed.IsChecked == true )
             {
@@ -57,21 +61,29 @@ namespace His_Pos.InventoryManagement
                 searchCondition += " AND HISMED_FROZ = " + FreezeMed.IsChecked;
             }
 
-            var medicine = MainWindow.MedicineDataTable.Select(searchCondition);
+            var medicines = MainWindow.MedicineDataTable.Select(searchCondition);
 
-            foreach (var m in medicine)
+            foreach (var m in medicines)
             {
-                _dataList.Add(new Medicine(m));
+                Medicine medicine = new Medicine(m);
+
+                _dataList.Add(medicine);
+
+                selectStockValue += Double.Parse(medicine.StockValue);
             }
         }
 
         private void AddOtcResult()
         {
-            var otc = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+            var otcs = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
 
-            foreach (var o in otc)
+            foreach (var o in otcs)
             {
-                _dataList.Add(new Otc(o));
+                Otc otc = new Otc(o);
+
+                _dataList.Add(otc);
+
+                selectStockValue += Double.Parse(otc.StockValue);
             }
         }
 
@@ -106,21 +118,26 @@ namespace His_Pos.InventoryManagement
                     searchType = SearchType.OTC;
                     InventoryGrid.RowDefinitions[1].Height = new GridLength(50);
                     InventoryGrid.RowDefinitions[2].Height = new GridLength(0);
-                    InventoryGrid.RowDefinitions[3].Height = new GridLength(740);
+                    InventoryGrid.RowDefinitions[3].Height = new GridLength(690);
                     break;
                 case SearchType.MED:
                     searchType = SearchType.MED;
                     InventoryGrid.RowDefinitions[1].Height = new GridLength(0);
                     InventoryGrid.RowDefinitions[2].Height = new GridLength(50);
-                    InventoryGrid.RowDefinitions[3].Height = new GridLength(740);
+                    InventoryGrid.RowDefinitions[3].Height = new GridLength(690);
                     break;
                 case SearchType.ALL:
                     searchType = SearchType.ALL;
                     InventoryGrid.RowDefinitions[1].Height = new GridLength(0);
                     InventoryGrid.RowDefinitions[2].Height = new GridLength(0);
-                    InventoryGrid.RowDefinitions[3].Height = new GridLength(790);
+                    InventoryGrid.RowDefinitions[3].Height = new GridLength(740);
                     break;
             }
+        }
+
+        private void UserControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
