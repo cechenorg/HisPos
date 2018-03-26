@@ -270,38 +270,8 @@
                                     <DataTemplate x:Name="MedicineCodeDataTemplate">
                                         <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"  
                                                                   VerticalContentAlignment="Stretch" ValueMemberPath="Id" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
-                                                                  MaxHeight="50" MinimumPrefixLength="2" ItemFilter="{Binding MedicineFilter}" BorderBrush="DimGray" Populating="MedicineCodeAuto_Populating"
+                                                                  MaxHeight="50" MinimumPrefixLength="2" BorderBrush="DimGray" Populating="MedicineCodeAuto_Populating" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                                   DropDownClosing="MedicineCodeAuto_DropDownClosing" FilterMode="Contains"  IsTextCompletionEnabled="False" Text="{Binding Id}">
-                                            <controls:AutoCompleteBox.ItemContainerStyle>
-                                                <Style TargetType="ListBoxItem">
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="ListBoxItem">
-                                                                    <Border x:Name="ContentBorder"
-                                                                    Background="GhostWhite" Padding="4">
-                                                                        <ContentPresenter />
-                                                                    </Border>
-                                                                    <ControlTemplate.Triggers>
-                                                                        <Trigger Property="IsMouseOver"
-                                                                         Value="True">
-                                                                            <Setter Property="Background"
-                                                                            TargetName="ContentBorder"
-                                                                            Value="#FFB8BEC3" />
-                                                                            <Setter Property="IsSelected"
-                                                                            Value="True" />
-                                                                        </Trigger>
-                                                                        <Trigger Property="IsSelected"
-                                                                         Value="True">
-                                                                            <Setter Property="Background"
-                                                                            TargetName="ContentBorder"
-                                                                            Value="#FFB8BEC3"/>
-                                                                        </Trigger>
-                                                                    </ControlTemplate.Triggers>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Style>
-                                                </controls:AutoCompleteBox.ItemContainerStyle>
                                         </controls:AutoCompleteBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

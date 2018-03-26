@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System.Security.Permissions;
+using System.Windows.Media.Imaging;
 
 namespace His_Pos.AbstractClass
 {
@@ -15,5 +16,8 @@ namespace His_Pos.AbstractClass
         public string StockValue { get; set; }
         public string Note { get; set; }
         public string BasicAmount { get; set; }
+        public string Type { get; set; }
+        public bool Status { get; set; }
+        public string Location { get; set; }
     }
 }
