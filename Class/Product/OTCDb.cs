@@ -30,25 +30,20 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_DESCRIPTION", Description));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
         }
-        public static void DeleteOtcUnitWithoutBasic(string ProId) {
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", ProId));
-            dd.ExecuteProc("[HIS_POS_DB].[SET].[DELETEOTCUNITWITHOUTBASIC]", parameters);
-        }
-        public static void UpdateOtcDataUnit(string ProId, ProductUnit productUnit)
+        public static void UpdateOtcUnit(ProductUnit productunit,string proid)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", ProId));
-            parameters.Add(new SqlParameter("PROUNI_TYPE", productUnit.Unit));
-            parameters.Add(new SqlParameter("PROUNI_QTY", productUnit.Amount));
-            parameters.Add(new SqlParameter("PRO_SELL_PRICE", productUnit.Price));
-            parameters.Add(new SqlParameter("PRO_VIP_PRICE", productUnit.VIPPrice));
-            parameters.Add(new SqlParameter("PRO_EMP_PRICE", productUnit.EmpPrice));
-            dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCUNIT]", parameters);
+            parameters.Add(new SqlParameter("PRO_ID",proid));
+            parameters.Add(new SqlParameter("PROUNI_TYPE", productunit.Unit));
+            parameters.Add(new SqlParameter("PROUNI_QTY", productunit.Amount));
+            parameters.Add(new SqlParameter("PRO_SELL_PRICE", productunit.Price));
+            parameters.Add(new SqlParameter("PRO_VIP_PRICE", productunit.VIPPrice));
+            parameters.Add(new SqlParameter("PRO_EMP_PRICE", productunit.EmpPrice));
+            parameters.Add(new SqlParameter("PRO_BASETYPE_STATUS", productunit.Id));
+            dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEUNIT]", parameters);
         }
-
+       
         public static ObservableCollection<CusOrderOverview> GetOtcCusOrderOverviewByID(string OtcID)
         {
             ObservableCollection<CusOrderOverview> collection = new ObservableCollection<CusOrderOverview>();

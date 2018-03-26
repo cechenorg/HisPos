@@ -33,9 +33,11 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
         public ObservableCollection<ProductUnit> OTCUnitCollection;
+        public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
 
         private Otc otc;
         private bool IsChanged = false;
+        private bool IsFirst = true;
 
         public OtcDetail(Otc o)
         {
@@ -45,7 +47,7 @@ namespace His_Pos.InventoryManagement
             
             UpdateUi();
             CheckAuth();
-
+            IsFirst = false;
             DataContext = this;
         }
 
@@ -54,7 +56,13 @@ namespace His_Pos.InventoryManagement
             UpdateUi();
             CheckAuth();
         }
-
+        private void InitObservableCollection() {
+            CusOrderOverviewCollection.Clear();
+            StoreOrderOverviewCollection.Clear();
+            OTCStockOverviewCollection.Clear();
+            OTCUnitCollection.Clear();
+            OTCUnitChangdedCollection.Clear();
+        }
         private void CheckAuth()
         {
             
@@ -118,6 +126,7 @@ namespace His_Pos.InventoryManagement
 
             UpdateChart();
             InitVariables();
+            SetUnitValue();
         }
 
         private void InitVariables()
@@ -225,15 +234,43 @@ namespace His_Pos.InventoryManagement
                 }
             }
         }
-
+        private void SetUnitValue() {
+            int count = 0;
+            string index = "";
+            foreach (var row in OTCUnitCollection) {
+                index = count.ToString();
+                ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text = row.Unit;
+                ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text = row.Amount;
+                ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text = row.Price;
+                ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text = row.VIPPrice;
+                ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text = row.EmpPrice;
+                count++;
+            }
+        }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
             //OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
-            //OTCDb.DeleteOtcUnitWithoutBasic(otc.Id);
-            //foreach (ProductUnit otcunit in OTCUnitCollection) {
-            //    if (otcunit.Unit == "基本單位") continue;
-            //    OTCDb.UpdateOtcDataUnit(otc.Id, otcunit);
-            //}
+            foreach (string index in OTCUnitChangdedCollection) {
+                ProductUnit prounit = new ProductUnit (Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
+                                         ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text,
+                                          ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text);
+                OTCDb.UpdateOtcUnit(prounit,otc.Id);
+            }
+            InitVariables();
+        }
+        private void SetOTCUnitChangedCollection(string name) {
+            if (ChangedFlagNotChanged())
+                setChangedFlag();
+            string index = name.Substring(name.Length-1,1);
+            if (!OTCUnitChangdedCollection.Contains(index))
+                OTCUnitChangdedCollection.Add(index);
+        }
+        private void OtcData_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsChangedLabel is null || IsFirst)
+                return;
+            TextBox txt = sender as TextBox;
+            SetOTCUnitChangedCollection(txt.Name);
         }
     }
 }

@@ -95,7 +95,7 @@
                     <ColumnDefinition Width="360"/>
                     <ColumnDefinition Width="240"/>
                 </Grid.ColumnDefinitions>
-                <DockPanel Background="{StaticResource GridBackGround}" Margin="-20,0,5,5" Grid.Column="0">
+                <DockPanel Name="DockUnit" Background="{StaticResource GridBackGround}" Margin="-20,0,5,5" Grid.Column="0">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
@@ -116,26 +116,26 @@
                         <Label Content="售價" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                         <Label Content="會員價" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                         <Label Content="員工價" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Name="OtcUnitName" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Width="90" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitAmount" Text="1" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="40" Height="30" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" BorderBrush="Transparent"/>
-                        <TextBox Name="OtcUnitPrice" Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitVipPrice" Grid.Column="3" Grid.Row="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitEmpPrice" Grid.Column="4" Grid.Row="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitName1" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Width="90" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitAmount1" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="40" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitPrice1" Grid.Column="2" Grid.Row="2" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitVipPrice1" Grid.Column="3" Grid.Row="2" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitEmpPrice1" Grid.Column="4" Grid.Row="2" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitName2" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Width="90" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitAmount2" Grid.Column="1" Grid.Row="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="40" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitPrice2" Grid.Column="2" Grid.Row="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitVipPrice2" Grid.Column="3" Grid.Row="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitEmpPrice2" Grid.Column="4" Grid.Row="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitName3" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Width="90" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitAmount3" Grid.Column="1" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="40" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitPrice3" Grid.Column="2" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitVipPrice3" Grid.Column="3" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
-                        <TextBox Name="OtcUnitEmpPrice3" Grid.Column="4" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"/>
+                        <TextBox Name="OtcUnitName0" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Width="90" Height="30" FontSize="16" FontFamily="Segoe UI Semi" TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitAmount0" Text="1" Grid.Column="1" Grid.Row="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="40" Height="30" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" BorderBrush="Transparent"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitPrice0" Grid.Column="2" Grid.Row="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitVipPrice0" Grid.Column="3" Grid.Row="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitEmpPrice0" Grid.Column="4" Grid.Row="1" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitName1" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" Width="90" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitAmount1" Grid.Column="1" Grid.Row="2" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="40" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitPrice1" Grid.Column="2" Grid.Row="2" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitVipPrice1" Grid.Column="3" Grid.Row="2" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitEmpPrice1" Grid.Column="4" Grid.Row="2" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitName2" Grid.Column="0" Grid.Row="3" HorizontalAlignment="Center" Width="90" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitAmount2" Grid.Column="1" Grid.Row="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="40" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitPrice2" Grid.Column="2" Grid.Row="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitVipPrice2" Grid.Column="3" Grid.Row="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitEmpPrice2" Grid.Column="4" Grid.Row="3" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitName3" Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" Width="90" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitAmount3" Grid.Column="1" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="40" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitPrice3" Grid.Column="2" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitVipPrice3" Grid.Column="3" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
+                        <TextBox Name="OtcUnitEmpPrice3" Grid.Column="4" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="OtcData_TextChanged"/>
                     </Grid>
                 </DockPanel>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Column="1" Margin="5,0,10,5">
