@@ -9,6 +9,10 @@ namespace His_Pos.Class.Manufactory
 {
     public class Manufactory
     {
+        public Manufactory()
+        {
+        }
+
         public Manufactory(DataRow row)
         {
             Id = row["MAN_ID"].ToString();
