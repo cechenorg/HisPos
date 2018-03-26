@@ -21,6 +21,8 @@ namespace His_Pos.InventoryManagement
         public InventoryManagementView()
         {
             InitializeComponent();
+
+            TotalStockValue.Content = ProductDb.GetTotalWorth();
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)

@@ -16,28 +16,45 @@
     <Viewbox Stretch="Fill">
         <Grid Name="InventoryGrid" Width="1365">
             <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="690"/>
+                <RowDefinition Height="640"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="9">
-                <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="ID" Margin="0,0,10,0" Width="120" FontSize="16"/>
-                <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="Name" Margin="0,0,10,0" Width="120" FontSize="16"/>
-                <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="Manufactory" Margin="0,0,10,0" Width="230" FontSize="16"/>
-                <Label Content="搜尋範圍" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <RadioButton Content="OTC" Tag="0" Margin="0,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Checked="SearchConditionChanged"/>
-                <Image Source="/Images/PosDot.png" Width="15"/>
-                <RadioButton Content="調劑藥品" Tag="1" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Checked="SearchConditionChanged"/>
-                <Image Source="/Images/HisDot.png" Width="15"/>
-                <RadioButton Content="全部" Tag="2" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" IsChecked="True" Checked="SearchConditionChanged"/>
-                <Image Source="/Images/PosHisDot.png" Width="25" Margin="0,0,30,0"/>
-                <Button Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
-            </StackPanel>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1250"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="9">
+                    <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="ID" Margin="0,0,10,0" Width="120" FontSize="16"/>
+                    <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="Name" Margin="0,0,10,0" Width="120" FontSize="16"/>
+                    <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="Manufactory" Margin="0,0,10,0" Width="270" FontSize="16"/>
+                    <CheckBox Name="IsStop" Content="已停用" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <CheckBox Name="BelowSafeAmount" Content="低於安全量" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <CheckBox Name="NearValidDate" Content="於" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="ValidDates" Width="50" FontSize="16"/>
+                    <Label Content="日內過期" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="0,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Margin="9">
+                    <Label Content="搜尋範圍" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <RadioButton Content="OTC" Tag="0" Margin="0,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Checked="SearchConditionChanged"/>
+                    <Image Source="/Images/PosDot.png" Width="15"/>
+                    <RadioButton Content="調劑藥品" Tag="1" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Checked="SearchConditionChanged"/>
+                    <Image Source="/Images/HisDot.png" Width="15"/>
+                    <RadioButton Content="全部" Tag="2" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" IsChecked="True" Checked="SearchConditionChanged"/>
+                    <Image Source="/Images/PosHisDot.png" Width="25" Margin="0,0,30,0"/>
+                </StackPanel>
+                <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+            </Grid>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkestBackGround}">
                 <Label Content="進階搜尋" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="19,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <Label Content="類別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>

@@ -267,29 +267,7 @@
                 </lvc:CartesianChart>
             </Grid>
             <Grid Grid.Row="3" Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="330"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="5" Grid.Row="0" Grid.Column="0">
-
-                </StackPanel>
-                <StackPanel  Background="{StaticResource GridBackGround}" Margin="5" Grid.Row="0" Grid.Column="1">
-
-                </StackPanel>
-                <StackPanel  Background="{StaticResource GridBackGround}" Margin="5" Grid.Row="0" Grid.Column="2">
-
-                </StackPanel>
-                <StackPanel  Background="{StaticResource GridBackGround}" Margin="5,5,10,5" Grid.Row="0" Grid.Column="3">
-
-                </StackPanel>
-                <DockPanel Background="{StaticResource GridBackGround}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="5,5,10,10">
+                <DockPanel Background="{StaticResource GridBackGround}" Margin="5,5,10,10">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Top">
                         <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="0,0,310,0"/>
                         <Image Source="/Images/showDetail.png" Width="25" Margin="0,0,5,0"/>
@@ -327,14 +305,6 @@
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn Width="80" Header="訂貨人" Binding="{Binding OrderEmployee}" FontFamily="Segoe UI Semi" IsReadOnly="True">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                        <Setter Property="VerticalAlignment" Value="Center"/>
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-                            <DataGridTextColumn Width="120" Header="到貨期日" Binding="{Binding StoreReceiveDate}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
