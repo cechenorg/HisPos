@@ -12,8 +12,9 @@ namespace His_Pos.Class.Product
         {
         }
 
-        public ProductUnit(string unit, string amount, string price, string vIPPrice, string empPrice)
+        public ProductUnit(int id, string unit, string amount, string price, string vIPPrice, string empPrice)
         {
+            Id = id;
             Unit = unit;
             Amount = amount;
             Price = price;
@@ -21,6 +22,7 @@ namespace His_Pos.Class.Product
             EmpPrice = empPrice;
         }
 
+        public int Id { get; set; }
         public string Unit { get; set; }
         public string Amount { get; set; }
         public string Price { get; set; }

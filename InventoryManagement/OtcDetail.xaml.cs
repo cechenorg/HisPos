@@ -36,7 +36,6 @@ namespace His_Pos.InventoryManagement
 
         private Otc otc;
         private bool IsChanged = false;
-        private string textBox_oldValue = "NotInit";
 
         public OtcDetail(Otc o)
         {
@@ -101,7 +100,6 @@ namespace His_Pos.InventoryManagement
             OtcId.Content = otc.Id;
 
             OtcSaveAmount.Text = otc.SafeAmount;
-            OtcManufactory.Text = otc.ManufactoryName;
 
             OTCNotes.Document.Blocks.Clear();
             OTCNotes.AppendText(otc.Note);
@@ -117,7 +115,6 @@ namespace His_Pos.InventoryManagement
             UpdateStockOverviewInfo();
 
             OTCUnitCollection = ProductDb.GetProductUnitById(otc.Id);
-            OtcUnit.ItemsSource = OTCUnitCollection;
 
             UpdateChart();
             InitVariables();
@@ -127,8 +124,7 @@ namespace His_Pos.InventoryManagement
         {
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
-
-            textBox_oldValue = "NotInit";
+            
             IsChanged = false;
         }
 
@@ -158,8 +154,6 @@ namespace His_Pos.InventoryManagement
                 OtcStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 OtcStock.SelectedItem = selectedItem;
-            else if (selectedItem is ProductUnit)
-                OtcUnit.SelectedItem = selectedItem;
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -172,8 +166,6 @@ namespace His_Pos.InventoryManagement
                 OtcStoOrder.SelectedItem = null;
             else if (leaveItem is OTCStockOverview)
                 OtcStock.SelectedItem = null;
-            else if (leaveItem is ProductUnit)
-                OtcUnit.SelectedItem = null;
         }
         
         private void setChangedFlag()
@@ -186,16 +178,6 @@ namespace His_Pos.InventoryManagement
         private bool ChangedFlagNotChanged()
         {
             return !IsChanged;
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if ( textBox_oldValue == "NotInit") return;
-
-            TextBox textBox = sender as TextBox;
-
-            if (ChangedFlagNotChanged() && textBox.Text != textBox_oldValue)
-                setChangedFlag();
         }
 
         public static void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
@@ -244,100 +226,14 @@ namespace His_Pos.InventoryManagement
             }
         }
 
-        private void OtcUnitOnLostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-
-            if (textBox.Text != string.Empty && OTCUnitCollection.Count == OtcUnit.SelectedIndex)
-            {
-                AddNewOTCUnit(textBox.Tag, textBox.Text);
-                textBox.Text = "";
-            }
-            if (textBox.Text != string.Empty && OTCUnitCollection.Count != OtcUnit.SelectedIndex && OtcUnit.SelectedIndex != -1) {
-                AddOTCUnitValue(textBox.Tag,textBox.Text,OtcUnit.SelectedIndex);
-            }
-        }
-        
-        private void AddOTCUnitValue(object tag, string text,int index) {
-            switch (tag)
-            {
-                case "Unit":
-                    OTCUnitCollection[index].Unit = text;
-                    break;
-                case "Amount":
-                    OTCUnitCollection[index].Amount = text;
-                    break;
-                case "Price":
-                    OTCUnitCollection[index].Price = text;
-                    break;
-                case "VIPPrice":
-                    OTCUnitCollection[index].VIPPrice = text;
-                    break;
-                case "EmpPrice":
-                    OTCUnitCollection[index].EmpPrice = text;
-                    break;
-                default:
-                    return;
-            }
-        }
-        private void AddNewOTCUnit(object tag, string text)
-        {
-            ProductUnit otcUnit = new ProductUnit();
-
-            switch (tag)
-            {
-                case "Unit":
-                    otcUnit.Unit = text;
-                    break;
-                case "Amount":
-                    otcUnit.Amount = text;
-                    break;
-                case "Price":
-                    otcUnit.Price = text;
-                    break;
-                case "VIPPrice":
-                    otcUnit.VIPPrice = text;
-                    break;
-                case "EmpPrice":
-                    otcUnit.EmpPrice = text;
-                    break;
-                default:
-                    return;
-            }
-            OTCUnitCollection.Add(otcUnit);
-        }
-
-        private void OtcUnitGotFocus(object sender, RoutedEventArgs e)
-        {
-            textBox_oldValue = (sender as TextBox).Text;
-        }
-
-        private void OtcUnit_OnLoaded(object sender, EventArgs e)
-        {
-            ChangeFirstAmountToReadOnly();
-        }
-
-        private void ChangeFirstAmountToReadOnly()
-        {
-            List<TextBox> textBoxs = new List<TextBox>();
-            FindChildGroup(OtcUnit, "AmountCell", ref textBoxs);
-
-            if( textBoxs.Count == 0 ) return;
-
-            textBoxs[0].IsReadOnly = true;
-            textBoxs[0].BorderBrush = Brushes.Transparent;
-        }
-       
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsChanged) return;
-            OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
-            OTCDb.DeleteOtcUnitWithoutBasic(otc.Id);
-
-            foreach (ProductUnit otcunit in OTCUnitCollection) {
-                if (otcunit.Unit == "基本單位") continue;
-                OTCDb.UpdateOtcDataUnit(otc.Id, otcunit);
-            }
+            //OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
+            //OTCDb.DeleteOtcUnitWithoutBasic(otc.Id);
+            //foreach (ProductUnit otcunit in OTCUnitCollection) {
+            //    if (otcunit.Unit == "基本單位") continue;
+            //    OTCDb.UpdateOtcDataUnit(otc.Id, otcunit);
+            //}
         }
     }
 }
