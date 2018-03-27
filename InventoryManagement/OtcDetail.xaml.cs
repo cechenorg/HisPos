@@ -219,15 +219,7 @@ namespace His_Pos.InventoryManagement
             return !IsChanged;
         }
         
-        private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
-        {
-            //OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
-            //OTCDb.DeleteOtcUnitWithoutBasic(otc.Id);
-            //foreach (ProductUnit otcunit in OTCUnitCollection) {
-            //    if (otcunit.Unit == "基本單位") continue;
-            //    OTCDb.UpdateOtcDataUnit(otc.Id, otcunit);
-            //}
-        }
+       
         private void OtcManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
             var ManufactoryAuto = sender as AutoCompleteBox;
@@ -249,11 +241,16 @@ namespace His_Pos.InventoryManagement
         {
             var ManufactoryAuto = sender as AutoCompleteBox;
 
-                    // We are looking for further, perhaps there are
-                    // children with the same name
-                    FindChildGroup(child, childName, ref list);
-                }
+            if (ManufactoryAuto is null) return;
+
+            var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");
+            ManufactoryAutoCompleteCollection.Clear();
+            foreach (var row in tmp)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
             }
+            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
+            ManufactoryAuto.PopulateComplete();
         }
         private void SetUnitValue() {
             int count = 0;
