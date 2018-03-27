@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -125,6 +126,11 @@ namespace His_Pos.InventoryManagement
 
             OTCManufactoryCollection = GetManufactoryCollection();
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
+            
+            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            }
 
             UpdateChart();
             InitVariables();
@@ -213,23 +219,6 @@ namespace His_Pos.InventoryManagement
             //    OTCDb.UpdateOtcDataUnit(otc.Id, otcunit);
             //}
         }
-
-        private void OtcManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-
-            if( ManufactoryAuto is null ) return;
-
-            var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");
-            ManufactoryAutoCompleteCollection.Clear();
-            foreach (var row in tmp)
-            {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
-            }
-            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
-            ManufactoryAuto.PopulateComplete();
-        }
-
         private void OtcManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
             var ManufactoryAuto = sender as AutoCompleteBox;
@@ -245,6 +234,22 @@ namespace His_Pos.InventoryManagement
                 return;
             }
             ManufactoryAuto.Text = "";
+        }
+
+        private void OtcManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
+
+            if (ManufactoryAuto is null) return;
+
+            var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");
+            ManufactoryAutoCompleteCollection.Clear();
+            foreach (var row in tmp)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            }
+            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
+            ManufactoryAuto.PopulateComplete();
         }
     }
 }
