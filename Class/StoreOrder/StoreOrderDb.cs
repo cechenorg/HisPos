@@ -22,11 +22,12 @@ namespace His_Pos.Class.StoreOrder
 
             var dd = new DbConnection(Settings.Default.SQL_global);
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[STOORDDATA]");
 
             foreach (DataRow row in table.Rows)
             {
-                //StoreOrderOverviewCollection.Add(new StoreOrderOverview());
+                StoreOrderOverviewCollection.Add(new StoreOrderOverview(row["STOORD_FLAG"].ToString(), row["STOORD_ID"].ToString(),
+                                                 row["ORD_EMP"].ToString(), Double.Parse(row["TOTAL"].ToString()), row["REC_EMP"].ToString(), row["MAN_ID"].ToString()));
             }
 
             return StoreOrderOverviewCollection;

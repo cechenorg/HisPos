@@ -27,9 +27,31 @@ namespace His_Pos.ProductPurchase
         public ProductPurchaseView()
         {
             InitializeComponent();
+            UpdateUi();
+        }
 
-            //storeOrderOverviewCollection = ;
+        private void UpdateUi()
+        {
+
+            storeOrderOverviewCollection = StoreOrderDb.GetStoreOrderOverview();
             StoOrderOverview.ItemsSource = storeOrderOverviewCollection;
+
+            StoOrderOverview.SelectedItem = 0;
+        }
+
+        private void ShowOrderDetail(object sender, RoutedEventArgs e)
+        {
+            UpdateOrderDetailUi((StoreOrderOverview)(sender as DataGridCell).DataContext);
+        }
+
+        private void UpdateOrderDetailUi(StoreOrderOverview storeOrderOverview)
+        {
+            ID.Content = storeOrderOverview.Id;
+            PurchaseEmp.Text = storeOrderOverview.OrdEmp;
+            Total.Content = storeOrderOverview.TotalPrice;
+            Name.Content = storeOrderOverview.Manufactory.Name;
+            Phone.Content = storeOrderOverview.Manufactory.Telphone;
+
         }
     }
 }
