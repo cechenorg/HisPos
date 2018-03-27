@@ -45,7 +45,7 @@ namespace His_Pos.Class.StoreOrder
 
             foreach (DataRow row in table.Rows)
             {
-                switch (row[""].ToString())
+                switch (row["PRO_TYPE"].ToString())
                 {
                     case "M":
                         StoreOrderCollection.Add(new Medicine(row));
