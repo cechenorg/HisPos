@@ -14,8 +14,6 @@ namespace His_Pos.Class.StoreOrder
 {
     public static class StoreOrderDb
     {
-
-
         public static ObservableCollection<StoreOrderOverview> GetStoreOrderOverview()
         {
             ObservableCollection<StoreOrderOverview> StoreOrderOverviewCollection = new ObservableCollection<StoreOrderOverview>();
@@ -33,6 +31,32 @@ namespace His_Pos.Class.StoreOrder
             return StoreOrderOverviewCollection;
         }
 
+        public static ObservableCollection<AbstractClass.Product> GetStoreOrderCollectionById(string StoOrdId)
+        {
+            ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
 
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", StoOrdId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[STOORDLIST]", parameters);
+
+
+            foreach (DataRow row in table.Rows)
+            {
+                switch (row[""].ToString())
+                {
+                    case "M":
+                        StoreOrderCollection.Add(new Medicine(row));
+                        break;
+                    case "O":
+                        StoreOrderCollection.Add(new Otc(row));
+                        break;
+                }
+            }
+
+            return StoreOrderCollection;
+        }
     }
 }

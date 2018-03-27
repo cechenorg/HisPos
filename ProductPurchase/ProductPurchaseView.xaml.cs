@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
 using His_Pos.Class.StoreOrder;
 
 namespace His_Pos.ProductPurchase
@@ -23,6 +24,7 @@ namespace His_Pos.ProductPurchase
     public partial class ProductPurchaseView : UserControl
     {
         private ObservableCollection<StoreOrderOverview> storeOrderOverviewCollection;
+        private ObservableCollection<Product> StoreOrderCollection;
 
         public ProductPurchaseView()
         {
@@ -36,7 +38,7 @@ namespace His_Pos.ProductPurchase
             storeOrderOverviewCollection = StoreOrderDb.GetStoreOrderOverview();
             StoOrderOverview.ItemsSource = storeOrderOverviewCollection;
 
-            StoOrderOverview.SelectedItem = 0;
+            StoOrderOverview.SelectedIndex = 0;
         }
 
         private void ShowOrderDetail(object sender, RoutedEventArgs e)
@@ -52,6 +54,12 @@ namespace His_Pos.ProductPurchase
             Name.Content = storeOrderOverview.Manufactory.Name;
             Phone.Content = storeOrderOverview.Manufactory.Telphone;
 
+            StoreOrderCollection = StoreOrderDb.GetStoreOrderCollectionById(storeOrderOverview.Id);
+        }
+
+        private void AddNewOrder(object sender, MouseButtonEventArgs e)
+        {
+            
         }
     }
 }
