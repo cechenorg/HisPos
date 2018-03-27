@@ -28,7 +28,7 @@ namespace His_Pos.Class.Manufactory
             Id = id;
             Name = name;
         }
-
+        
         public string Id { get; set; }
         public string Name{ get; set; }
         public string Address{ get; set; }
