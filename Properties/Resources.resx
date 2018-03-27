@@ -192,4 +192,7 @@
   <data name="InventoryManagement" xml:space="preserve">
     <value>庫存管理</value>
   </data>
+  <data name="ProductPurchase" xml:space="preserve">
+    <value>商品進出貨</value>
+  </data>
 </root>

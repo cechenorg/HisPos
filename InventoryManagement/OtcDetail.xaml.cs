@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
@@ -32,8 +34,10 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
+        public ObservableCollection<Manufactory> OTCManufactoryCollection;
         public ObservableCollection<ProductUnit> OTCUnitCollection;
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
+        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
 
         private Otc otc;
         private bool IsChanged = false;
@@ -106,8 +110,12 @@ namespace His_Pos.InventoryManagement
 
             OtcName.Content = otc.Name;
             OtcId.Content = otc.Id;
-
+            
+            OtcType.Text = otc.Type;
+            OtcStatus.Text = (otc.Status)? "啟用":"已停用";
             OtcSaveAmount.Text = otc.SafeAmount;
+            OtcBasicAmount.Text = otc.BasicAmount;
+            OtcLocation.Text = otc.Location;
 
             OTCNotes.Document.Blocks.Clear();
             OTCNotes.AppendText(otc.Note);
@@ -124,9 +132,31 @@ namespace His_Pos.InventoryManagement
 
             OTCUnitCollection = ProductDb.GetProductUnitById(otc.Id);
 
+            OTCManufactoryCollection = GetManufactoryCollection();
+            OtcManufactory.ItemsSource = OTCManufactoryCollection;
+            
+            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            }
+
             UpdateChart();
             InitVariables();
             SetUnitValue();
+        }
+
+        private ObservableCollection<Manufactory> GetManufactoryCollection()
+        {
+            ObservableCollection<Manufactory> manufactories = new ObservableCollection<Manufactory>();
+
+            var man = MainWindow.ProManTable.Select("PRO_ID = '" + otc.Id + "'");
+
+            foreach (var m in man)
+            {
+                manufactories.Add(new Manufactory(m["MAN_ID"].ToString(), m["MAN_NAME"].ToString()));
+            }
+
+            return manufactories;
         }
 
         private void InitVariables()
@@ -188,45 +218,36 @@ namespace His_Pos.InventoryManagement
         {
             return !IsChanged;
         }
-
-        public static void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
+        
+        private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            //List<TextBox> textBoxList = new List<TextBox>();
-            //FindChildGroup(PrescriptionSet, "MedicineDays", ref textBoxList);
-
-            // Checks should be made, but preferably one time before calling.
-            // And here it is assumed that the programmer has taken into
-            // account all of these conditions and checks are not needed.
-            //if ((parent == null) || (childName == null) || (<Type T is not inheritable from FrameworkElement>))
-            //{
-            //    return;
+            //OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
+            //OTCDb.DeleteOtcUnitWithoutBasic(otc.Id);
+            //foreach (ProductUnit otcunit in OTCUnitCollection) {
+            //    if (otcunit.Unit == "基本單位") continue;
+            //    OTCDb.UpdateOtcDataUnit(otc.Id, otcunit);
             //}
-            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+        }
+        private void OtcManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
 
-            for (int i = 0; i < childrenCount; i++)
+            if (ManufactoryAuto is null) return;
+            if (ManufactoryAuto.SelectedItem is null) return;
+
+            if (OTCManufactoryCollection.Count <= OtcManufactory.SelectedIndex)
+                OTCManufactoryCollection.Add((Manufactory)ManufactoryAuto.SelectedItem);
+            else
             {
-                // Get the child
-                var child = VisualTreeHelper.GetChild(parent, i);
+                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
+                return;
+            }
+            ManufactoryAuto.Text = "";
+        }
 
-                // Compare on conformity the type
-
-                // Not compare - go next
-                if (!(child is T childTest))
-                {
-                    // Go the deep
-                    FindChildGroup(child, childName, ref list);
-                }
-                else
-                {
-                    // If match, then check the name of the item
-                    FrameworkElement childElement = childTest as FrameworkElement;
-
-                    Debug.Assert(childElement != null, nameof(childElement) + " != null");
-                    if (childElement.Name == childName)
-                    {
-                        // Found
-                        list.Add(childTest);
-                    }
+        private void OtcManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
 
                     // We are looking for further, perhaps there are
                     // children with the same name

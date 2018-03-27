@@ -133,6 +133,10 @@ namespace His_Pos.ViewModel
             {
                 newTab = new InventoryManagement.InventoryManagement(){TabName = functionNames[2]};
             }
+            else if (tab.ToString().Equals(functionNames[3]))
+            {
+                newTab = new ProductPurchase.ProductPurchase() { TabName = functionNames[3] };
+            }
             else
             {
                 return;

@@ -279,6 +279,10 @@
     </Compile>
     <Compile Include="PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="PrescriptionInquire\SimpleCommand.cs" />
+    <Compile Include="ProductPurchase\ProductPurchase.cs" />
+    <Compile Include="ProductPurchase\ProductPurchaseView.xaml.cs">
+      <DependentUpon>ProductPurchaseView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
@@ -343,6 +347,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PrescriptionInquire\PrescriptionInquireView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProductPurchase\ProductPurchaseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -433,6 +441,8 @@
     <Resource Include="Images\money.png" />
     <Resource Include="Images\stock.png" />
     <Resource Include="Images\up.png" />
+    <Resource Include="Images\Delete.png" />
+    <Resource Include="Images\Plus.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
