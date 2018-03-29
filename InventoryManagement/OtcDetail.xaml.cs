@@ -261,7 +261,7 @@ namespace His_Pos.InventoryManagement
         }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text, OtcLocation.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
+            OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcBasicAmount.Text ,OtcLocation.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
            
             foreach (var row in ManufactoryAutoCompleteCollection) {
             //    ProductDb.UpdateProductManufactory(otc.Id,row.Name,row.OrderId);

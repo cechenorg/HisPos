@@ -20,11 +20,12 @@ namespace His_Pos.Class.Product
             var dd = new DbConnection(Settings.Default.SQL_global);
             return dd.ExecuteProc("[HIS_POS_DB].[GET].[OTC]");
         }
-        public static void UpdateOtcDataDetail(string ProId,string OtcSaveAmount,string Location,string Description) {
+        public static void UpdateOtcDataDetail(string ProId,string OtcSaveAmount,string BasicAmount,string Location,string Description) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", ProId));
             parameters.Add(new SqlParameter("SAFEQTY", OtcSaveAmount));
+            parameters.Add(new SqlParameter("BASICQTY", BasicAmount));
             parameters.Add(new SqlParameter("LOCATION", Location));
             parameters.Add(new SqlParameter("PRO_DESCRIPTION", Description));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);

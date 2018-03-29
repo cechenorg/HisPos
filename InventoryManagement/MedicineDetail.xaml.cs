@@ -58,7 +58,8 @@ namespace His_Pos.InventoryManagement
             MedName.Content = medicine.Name;
             MedId.Content = medicine.Id;
             MedSaveAmount.Text = medicine.SafeAmount;
-
+            MedLocation.Text = medicine.Location;
+            MedBasicAmount.Text = medicine.BasicAmount;
             MedNotes.Document.Blocks.Clear();
             MedNotes.AppendText(medicine.Note);
 
@@ -318,9 +319,8 @@ namespace His_Pos.InventoryManagement
         }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            OTCDb.UpdateOtcDataDetail(medicine.Id, MedSaveAmount.Text, MedLocation.Text, new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text);
-            foreach (string index in MEDUnitChangdedCollection)
-            {
+            OTCDb.UpdateOtcDataDetail(medicine.Id, MedSaveAmount.Text,MedBasicAmount.Text, MedLocation.Text, new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text);
+            foreach (string index in MEDUnitChangdedCollection){
                 ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
                                          ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
                                           ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);

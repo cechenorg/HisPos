@@ -31,6 +31,7 @@ namespace His_Pos.Class.Product
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             Note = dataRow["PRO_DESCRIPTION"].ToString();
+            Location = dataRow["PRO_LOCATION"].ToString();
         }
 
         public Medicine(string id, string name, double price, double inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)
