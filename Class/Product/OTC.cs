@@ -24,6 +24,7 @@ namespace His_Pos.Class.Product
             Note = dataRow["PRO_DESCRIPTION"].ToString();
             StockValue = dataRow["TOTAL"].ToString();
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
+            Location = dataRow["PRO_LOCATION"].ToString();
         }
 
         public int Total { get; set; }//商品數量

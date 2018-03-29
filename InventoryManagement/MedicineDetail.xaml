@@ -9,7 +9,7 @@
          xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d"
         Title="MedicineDetail" Height="800" Width="1500" WindowStartupLocation="CenterScreen">
-    
+
     <Window.Background>
         <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
@@ -166,7 +166,7 @@
                 <Rectangle Width="1080"/>
                 <Label Name="IsChangedLabel" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0,0,5,0"/>
                 <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="Gray" Click="ChangedCancelButton_Click" />
-                <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="Red" Name="ButtonUpdateSubmmit" Click="ButtonUpdateSubmmit_Click"/>
+                <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,14,0,0" Background="Red" Name="ButtonUpdateSubmmit" Click="ButtonUpdateSubmmit_Click" VerticalAlignment="Top"/>
             </StackPanel>
             <Grid Grid.Column="0" Grid.Row="3">
                 <Grid.RowDefinitions>
@@ -263,7 +263,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="數量" Width="50" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Header="數量" Width="50" Binding="{Binding CUSORDDET_QTY}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -271,7 +271,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="病患" Width="70" Binding="{Binding Customer}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Header="病患" Width="70" Binding="{Binding CUS_NAME}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>

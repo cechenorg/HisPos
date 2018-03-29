@@ -41,5 +41,34 @@ namespace His_Pos.Class.Product
             
             return table.Rows[0]["TOTAL"].ToString();
         }
+        
+        internal static ObservableCollection<OTCStockOverview> GetProductStockOverviewById(string productID)
+        {
+            ObservableCollection<OTCStockOverview> collection = new ObservableCollection<OTCStockOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", productID));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PRODUCTDETAILSTOCK]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new OTCStockOverview(row["VALIDDATE"].ToString(), row["PRICE"].ToString(), row["STOCK"].ToString()));
+            }
+
+            return collection;
+        }
+        internal static void UpdateProductManufactory(string productId,string mannName,string orderId) {
+            
+        var dd = new DbConnection(Settings.Default.SQL_global);
+
+        var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", productId));
+            parameters.Add(new SqlParameter("MAN_NAME", mannName));
+            parameters.Add(new SqlParameter("ORDER_ID", orderId));
+            dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
+        }
     }
 }

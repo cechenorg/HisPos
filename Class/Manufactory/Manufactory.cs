@@ -22,11 +22,17 @@ namespace His_Pos.Class.Manufactory
             Telphone = row["MAN_TEL"].ToString();
             Fax = row["MAN_FAX"].ToString();
         }
-
-        public Manufactory(string id, string name)
+        public Manufactory(DataRow row,string type)
+        {
+            Id = row["MAN_ID"].ToString();
+            Name = row["MAN_NAME"].ToString();
+            OrderId = row["ORDER_ID"].ToString();
+        }
+        public Manufactory(string id, string name,string orderId)
         {
             Id = id;
             Name = name;
+            OrderId = orderId;
         }
         
         public string Id { get; set; }
@@ -34,6 +40,7 @@ namespace His_Pos.Class.Manufactory
         public string Address{ get; set; }
         public string Telphone{ get; set; }
         public string Fax { get; set; }
+        public string OrderId { get; set; }
 
         public AutoCompleteFilterPredicate<object> ManufactoryFilter
         {

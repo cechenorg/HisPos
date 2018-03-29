@@ -60,13 +60,6 @@ namespace His_Pos.InventoryManagement
             UpdateUi();
             CheckAuth();
         }
-        private void InitObservableCollection() {
-            CusOrderOverviewCollection.Clear();
-            StoreOrderOverviewCollection.Clear();
-            OTCStockOverviewCollection.Clear();
-            OTCUnitCollection.Clear();
-            OTCUnitChangdedCollection.Clear();
-        }
         private void CheckAuth()
         {
             
@@ -126,7 +119,7 @@ namespace His_Pos.InventoryManagement
             StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(otc.Id);
             OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;
 
-            OTCStockOverviewCollection = OTCDb.GetOtcStockOverviewById(otc.Id);
+            OTCStockOverviewCollection = ProductDb.GetProductStockOverviewById(otc.Id);
             OtcStock.ItemsSource = OTCStockOverviewCollection;
             UpdateStockOverviewInfo();
 
@@ -134,10 +127,11 @@ namespace His_Pos.InventoryManagement
 
             OTCManufactoryCollection = GetManufactoryCollection();
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
-            
-            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+
+           
+            foreach (DataRow row in MainWindow.ProManTable.Rows)
             {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row,"pro"));
             }
 
             UpdateChart();
@@ -153,7 +147,7 @@ namespace His_Pos.InventoryManagement
 
             foreach (var m in man)
             {
-                manufactories.Add(new Manufactory(m["MAN_ID"].ToString(), m["MAN_NAME"].ToString()));
+                manufactories.Add(new Manufactory(m["MAN_ID"].ToString(), m["MAN_NAME"].ToString(), m["ORDER_ID"].ToString()));
             }
 
             return manufactories;
@@ -267,7 +261,11 @@ namespace His_Pos.InventoryManagement
         }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            //OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcManufactory.Text,Location.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
+            OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text, OtcLocation.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
+           
+            foreach (var row in ManufactoryAutoCompleteCollection) {
+            //    ProductDb.UpdateProductManufactory(otc.Id,row.Name,row.OrderId);
+            }
             foreach (string index in OTCUnitChangdedCollection) {
                 ProductUnit prounit = new ProductUnit (Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
                                          ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text,

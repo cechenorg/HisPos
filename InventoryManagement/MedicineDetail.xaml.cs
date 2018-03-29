@@ -5,6 +5,7 @@ using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -57,29 +58,28 @@ namespace His_Pos.InventoryManagement
             MedName.Content = medicine.Name;
             MedId.Content = medicine.Id;
             MedSaveAmount.Text = medicine.SafeAmount;
-          
 
             MedNotes.Document.Blocks.Clear();
-            MedNotes.Document.Blocks.Add(new Paragraph(new Run(medicine.Note)));
+            MedNotes.AppendText(medicine.Note);
 
             IsChangedLabel.Content = "未修改";
             
-                CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(medicine.Id);
-                MedCusOrder.ItemsSource = CusOrderOverviewCollection;
+             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(medicine.Id);
+             MedCusOrder.ItemsSource = CusOrderOverviewCollection;
 
                 StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(medicine.Id);
                 MedStoOrder.ItemsSource = StoreOrderOverviewCollection;
 
-            MEDStockOverviewCollection = OTCDb.GetOtcStockOverviewById(medicine.Id);
+            MEDStockOverviewCollection = ProductDb.GetProductStockOverviewById(medicine.Id);
                 MedStock.ItemsSource = MEDStockOverviewCollection;
                 UpdateStockOverviewInfo();
             MedUnitCollection = ProductDb.GetProductUnitById(medicine.Id);
             MEDManufactoryCollection = GetManufactoryCollection();
             MedManufactory.ItemsSource = MEDManufactoryCollection;
-            //foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
-            //{
-            //    ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
-            //}
+            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            }
 
             UpdateChart();
                 InitVariables();
@@ -94,7 +94,7 @@ namespace His_Pos.InventoryManagement
 
             foreach (var m in man)
             {
-                manufactories.Add(new Manufactory(m["MAN_ID"].ToString(), m["MAN_NAME"].ToString()));
+                manufactories.Add(new Manufactory(m["MAN_ID"].ToString(), m["MAN_NAME"].ToString(),m["ORDER_ID"].ToString()));
             }
 
             return manufactories;
@@ -318,6 +318,7 @@ namespace His_Pos.InventoryManagement
         }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
+            OTCDb.UpdateOtcDataDetail(medicine.Id, MedSaveAmount.Text, MedLocation.Text, new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text);
             foreach (string index in MEDUnitChangdedCollection)
             {
                 ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
