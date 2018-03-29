@@ -8,15 +8,15 @@ namespace His_Pos.Class.Product
 {
     public class CusOrderOverview
     {
-        public CusOrderOverview(string date, string amount, string profit)
+        public CusOrderOverview(string date, string amount, string customer)
         {
             Date = date;
             Amount = amount;
-            Profit = profit;
+            Customer = customer;
         }
 
         public string Date { get; }
         public string Amount { get; }
-        public string Profit { get; }
+        public string Customer { get; }
     }
 }

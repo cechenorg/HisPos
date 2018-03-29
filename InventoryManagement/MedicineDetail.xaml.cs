@@ -1,5 +1,7 @@
-﻿using His_Pos.Class.Product;
+﻿using His_Pos.Class.Manufactory;
+using His_Pos.Class.Product;
 using LiveCharts;
+using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -29,10 +31,14 @@ namespace His_Pos.InventoryManagement
 
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
-        public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
+        public ObservableCollection<OTCStockOverview> MEDStockOverviewCollection;
+        public ObservableCollection<string> MEDUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<ProductUnit> MedUnitCollection;
-        
+        public ObservableCollection<Manufactory> MEDManufactoryCollection;
+        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
+
         private bool IsChanged = false;
+        private bool IsFirst = true;
         private string textBox_oldValue = "NotInit";
 
         public MedicineDetail(Medicine med)
@@ -42,25 +48,122 @@ namespace His_Pos.InventoryManagement
             medicine = med;
 
             UpdateUi();
-
+            IsFirst = false;
         }
 
         private void UpdateUi()
         {
+                if (medicine is null) return;
             MedName.Content = medicine.Name;
             MedId.Content = medicine.Id;
             MedSaveAmount.Text = medicine.SafeAmount;
-            MedManufactory.Text = medicine.ManufactoryName;
+          
 
             MedNotes.Document.Blocks.Clear();
             MedNotes.Document.Blocks.Add(new Paragraph(new Run(medicine.Note)));
 
             IsChangedLabel.Content = "未修改";
+            
+                CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(medicine.Id);
+                MedCusOrder.ItemsSource = CusOrderOverviewCollection;
 
+                StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(medicine.Id);
+                MedStoOrder.ItemsSource = StoreOrderOverviewCollection;
+
+            MEDStockOverviewCollection = OTCDb.GetOtcStockOverviewById(medicine.Id);
+                MedStock.ItemsSource = MEDStockOverviewCollection;
+                UpdateStockOverviewInfo();
             MedUnitCollection = ProductDb.GetProductUnitById(medicine.Id);
-            MedUnit.ItemsSource = MedUnitCollection;
-        }
+            MEDManufactoryCollection = GetManufactoryCollection();
+            MedManufactory.ItemsSource = MEDManufactoryCollection;
+            //foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            //{
+            //    ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            //}
 
+            UpdateChart();
+                InitVariables();
+                SetUnitValue();
+            
+        }
+        private ObservableCollection<Manufactory> GetManufactoryCollection()
+        {
+            ObservableCollection<Manufactory> manufactories = new ObservableCollection<Manufactory>();
+
+            var man = MainWindow.ProManTable.Select("PRO_ID = '" + medicine.Id + "'");
+
+            foreach (var m in man)
+            {
+                manufactories.Add(new Manufactory(m["MAN_ID"].ToString(), m["MAN_NAME"].ToString()));
+            }
+
+            return manufactories;
+        }
+        private void InitVariables()
+        {
+            IsChangedLabel.Content = "未修改";
+            IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
+
+            IsChanged = false;
+        }
+        private void SetUnitValue()
+        {
+            int count = 0;
+            string index = "";
+            foreach (var row in MedUnitCollection)
+            {
+                index = count.ToString();
+                ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text = row.Unit;
+                ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text = row.Amount;
+                ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text = row.Price;
+                ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text = row.VIPPrice;
+                ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text = row.EmpPrice;
+                count++;
+            }
+        }
+        private void UpdateChart()
+        {
+            SalesCollection = new SeriesCollection();
+            SalesCollection.Add(GetSalesLineSeries());
+            AddMonths();
+        }
+        private void AddMonths()
+        {
+            DateTime today = DateTime.Today.Date;
+
+            Months = new string[12];
+            for (int x = 0; x < 12; x++)
+            {
+                Months[x] = today.AddMonths(-11 + x).Date.ToString("yyyy/MM");
+            }
+        }
+        private LineSeries GetSalesLineSeries()
+        {
+            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(medicine.Id);
+
+            return new LineSeries
+            {
+                Title = "銷售量",
+                Values = chartValues,
+                PointGeometrySize = 10,
+                LineSmoothness = 0,
+                DataLabels = true
+            };
+        }
+        private void UpdateStockOverviewInfo()
+        {
+            int totalStock = 0;
+            double totalPrice = 0;
+
+            foreach (var Otc in MEDStockOverviewCollection)
+            {
+                totalStock += Int32.Parse(Otc.Amount);
+                totalPrice += Double.Parse(Otc.Price) * Int32.Parse(Otc.Amount);
+            }
+
+            TotalStock.Content = totalStock.ToString();
+            StockTotalPrice.Content = "$" + totalPrice.ToString("0.00");
+        }
         private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
         {
             
@@ -71,13 +174,11 @@ namespace His_Pos.InventoryManagement
             var selectedItem = (sender as DataGridRow).Item;
 
             if (selectedItem is CusOrderOverview)
-                OtcCusOrder.SelectedItem = selectedItem;
+                MedCusOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStoreOrderOverview)
-                OtcStoOrder.SelectedItem = selectedItem;
+                MedCusOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
-                OtcStock.SelectedItem = selectedItem;
-            else if (selectedItem is ProductUnit)
-                MedUnit.SelectedItem = selectedItem;
+                MedStock.SelectedItem = selectedItem;
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -85,24 +186,14 @@ namespace His_Pos.InventoryManagement
             var leaveItem = (sender as DataGridRow).Item;
 
             if (leaveItem is CusOrderOverview)
-                OtcCusOrder.SelectedItem = null;
+                MedCusOrder.SelectedItem = null;
             else if (leaveItem is OTCStoreOrderOverview)
-                OtcStoOrder.SelectedItem = null;
+                MedCusOrder.SelectedItem = null;
             else if (leaveItem is OTCStockOverview)
-                OtcStock.SelectedItem = null;
-            else if (leaveItem is ProductUnit)
-                MedUnit.SelectedItem = null;
+                MedStock.SelectedItem = null;
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (textBox_oldValue == "NotInit") return;
-
-            TextBox textBox = sender as TextBox;
-
-            if (ChangedFlagNotChanged() && textBox.Text != textBox_oldValue)
-                setChangedFlag();
-        }
+     
 
         private void setChangedFlag()
         {
@@ -166,11 +257,7 @@ namespace His_Pos.InventoryManagement
         {
             TextBox textBox = sender as TextBox;
 
-            if (textBox.Text != string.Empty && MedUnitCollection.Count == MedUnit.SelectedIndex)
-            {
-                AddNewMedUnit(textBox.Tag, textBox.Text);
-                textBox.Text = "";
-            }
+           
         }
 
         private void AddNewMedUnit(object tag, string text)
@@ -213,13 +300,65 @@ namespace His_Pos.InventoryManagement
 
         private void ChangeFirstAmountToReadOnly()
         {
-            List<TextBox> textBoxs = new List<TextBox>();
-            FindChildGroup(MedUnit, "AmountCell", ref textBoxs);
+        }
+        private void SetOTCUnitChangedCollection(string name)
+        {
+            if (ChangedFlagNotChanged())
+                setChangedFlag();
+            string index = name.Substring(name.Length - 1, 1);
+            if (!MEDUnitChangdedCollection.Contains(index))
+                MEDUnitChangdedCollection.Add(index);
+        }
+        private void MedData_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsChangedLabel is null || IsFirst)
+                return;
+            TextBox txt = sender as TextBox;
+            SetOTCUnitChangedCollection(txt.Name);
+        }
+        private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (string index in MEDUnitChangdedCollection)
+            {
+                ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
+                                         ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
+                                          ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
+                OTCDb.UpdateOtcUnit(prounit,medicine.Id);
+            }
+            InitVariables();
+        }
 
-            if (textBoxs.Count == 0) return;
+        private void MedManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
 
-            textBoxs[0].IsReadOnly = true;
-            textBoxs[0].BorderBrush = Brushes.Transparent;
+            if (ManufactoryAuto is null) return;
+
+            var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");
+            ManufactoryAutoCompleteCollection.Clear();
+            foreach (var row in tmp)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            }
+            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
+            ManufactoryAuto.PopulateComplete();
+        }
+
+        private void MedManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
+
+            if (ManufactoryAuto is null) return;
+            if (ManufactoryAuto.SelectedItem is null) return;
+
+            if (MEDManufactoryCollection.Count <= MedManufactory.SelectedIndex)
+                MEDManufactoryCollection.Add((Manufactory)ManufactoryAuto.SelectedItem);
+            else
+            {
+                MEDManufactoryCollection[MedManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
+                return;
+            }
+            ManufactoryAuto.Text = "";
         }
     }
 }

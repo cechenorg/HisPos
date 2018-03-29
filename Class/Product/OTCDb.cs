@@ -57,7 +57,7 @@ namespace His_Pos.Class.Product
 
             foreach(DataRow row in table.Rows)
             {
-                collection.Add(new CusOrderOverview(row["DATE"].ToString(), row["CUSORDDET_QTY"].ToString(), row["CUSORDDET_PROFITTOTAL"].ToString()));
+                collection.Add(new CusOrderOverview(row["DATE"].ToString(), row["CUSORDDET_QTY"].ToString(), row["CUS_NAME"].ToString()));
             }
 
             return collection;
