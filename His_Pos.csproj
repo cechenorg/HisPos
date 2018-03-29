@@ -226,7 +226,7 @@
     <Compile Include="Class\Product\ProductUnit.cs" />
     <Compile Include="Class\SpecialCode.cs" />
     <Compile Include="Class\StoreOrder\StoreOrderDb.cs" />
-    <Compile Include="Class\StoreOrder\StoreOrderOverview.cs" />
+    <Compile Include="Class\StoreOrder\StoreOrder.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCaseDb.cs" />
     <Compile Include="Class\Treatment.cs" />
@@ -281,6 +281,9 @@
     </Compile>
     <Compile Include="PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="PrescriptionInquire\SimpleCommand.cs" />
+    <Compile Include="ProductPurchase\AddNewOrderDialog.xaml.cs">
+      <DependentUpon>AddNewOrderDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProductPurchase\ProductPurchase.cs" />
     <Compile Include="ProductPurchase\ProductPurchaseView.xaml.cs">
       <DependentUpon>ProductPurchaseView.xaml</DependentUpon>
@@ -349,6 +352,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="PrescriptionInquire\PrescriptionInquireView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProductPurchase\AddNewOrderDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

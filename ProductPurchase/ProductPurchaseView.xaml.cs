@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.AbstractClass;
+using His_Pos.Class;
+using His_Pos.Class.Manufactory;
+using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 
 namespace His_Pos.ProductPurchase
@@ -23,8 +27,10 @@ namespace His_Pos.ProductPurchase
     /// </summary>
     public partial class ProductPurchaseView : UserControl
     {
-        private ObservableCollection<StoreOrderOverview> storeOrderOverviewCollection;
-        private ObservableCollection<Product> StoreOrderCollection;
+        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
+        public ObservableCollection<Product> ProductAutoCompleteCollection = new ObservableCollection<Product>();
+        private ObservableCollection<StoreOrder> storeOrderCollection;
+        private OrderType OrderTypeFilterCondition = OrderType.ALL;
 
         public ProductPurchaseView()
         {
@@ -34,32 +40,125 @@ namespace His_Pos.ProductPurchase
 
         private void UpdateUi()
         {
+            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            }
+            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
 
-            storeOrderOverviewCollection = StoreOrderDb.GetStoreOrderOverview();
-            StoOrderOverview.ItemsSource = storeOrderOverviewCollection;
+            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
+            StoOrderOverview.ItemsSource = storeOrderCollection;
 
             StoOrderOverview.SelectedIndex = 0;
         }
 
         private void ShowOrderDetail(object sender, RoutedEventArgs e)
         {
-            UpdateOrderDetailUi((StoreOrderOverview)(sender as DataGridCell).DataContext);
+            UpdateOrderDetailUi((StoreOrder)(sender as DataGridCell).DataContext);
         }
 
-        private void UpdateOrderDetailUi(StoreOrderOverview storeOrderOverview)
+        private void UpdateOrderDetailUi(StoreOrder storeOrder)
         {
-            ID.Content = storeOrderOverview.Id;
-            PurchaseEmp.Text = storeOrderOverview.OrdEmp;
-            Total.Content = storeOrderOverview.TotalPrice;
-            Name.Content = storeOrderOverview.Manufactory.Name;
-            Phone.Content = storeOrderOverview.Manufactory.Telphone;
+            ID.Content = storeOrder.Id;
+            PurchaseEmp.Text = storeOrder.OrdEmp;
+            
+            Total.Content = storeOrder.TotalPrice;
+            ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null)? "": storeOrder.Manufactory.Name;
+            Phone.Content = (storeOrder.Manufactory.Telphone is null)? "": storeOrder.Manufactory.Telphone;
 
-            StoreOrderCollection = StoreOrderDb.GetStoreOrderCollectionById(storeOrderOverview.Id);
+            if(storeOrder.Products is null)
+                storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
+
+            StoreOrderDetail.ItemsSource = storeOrder.Products;
+
+            IsChangedLabel.Content = "未修改";
+            IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
         {
-            
+            AddNewOrderDialog addNewOrderDialog = new AddNewOrderDialog(ManufactoryAutoCompleteCollection);
+
+            addNewOrderDialog.ShowDialog();
+
+            if (addNewOrderDialog.ConfirmButtonClicked)
+            {
+                switch(addNewOrderDialog.addOrderType)
+                {
+                    case AddOrderType.ADDBYUSER:
+                        AddNewOrderByUser();
+                        break;
+                    case AddOrderType.ADDBYSAFEAMOUNT:
+                        AddNewOrderBySafeAmount();
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORY:
+                        break;
+                }
+            }
+        }
+
+        private void AddNewOrderBySafeAmount()
+        {
+            //var table = StoreOrderDb.Get
+
+
+
+            //storeOrderCollection.Add();
+        }
+
+        private void AddNewOrderByUser()
+        {
+            storeOrderCollection.Insert(0,new StoreOrder(MainWindow.CurrentUser));
+            StoOrderOverview.SelectedIndex = 0;
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+
+            OrderTypeFilterCondition = (OrderType)Int16.Parse(radioButton.Tag.ToString());
+
+            if (StoOrderOverview is null) return;
+            StoOrderOverview.Items.Filter = OrderTypeFilter;
+        }
+        private bool OrderTypeFilter(object item)
+        {
+            if (OrderTypeFilterCondition == OrderType.ALL) return true;
+
+            if (((StoreOrder)item).Type == OrderTypeFilterCondition)
+                return true;
+            return false;
+        }
+
+        private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
+        {
+            var productAuto = sender as AutoCompleteBox;
+            ProductAutoCompleteCollection.Clear();
+
+            var tmp = MainWindow.MedicineDataTable.Select("PRO_ID Like '%" + productAuto.Text + "%' OR PRO_NAME Like '%" + productAuto.Text + "%'");
+            foreach (var d in tmp.Take(50))
+            {
+                ProductAutoCompleteCollection.Add(new Medicine(d, DataSource.MEDICINE));
+            }
+
+            var tmp1 = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + productAuto.Text + "%' OR PRO_NAME Like '%" + productAuto.Text + "%'");
+            foreach (var d in tmp1.Take(50))
+            {
+                ProductAutoCompleteCollection.Add(new Otc(d, DataSource.OTC));
+            }
+
+            productAuto.ItemsSource = ProductAutoCompleteCollection;
+            productAuto.PopulateComplete();
         }
     }
 }

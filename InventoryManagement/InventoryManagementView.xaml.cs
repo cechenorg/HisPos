@@ -67,7 +67,7 @@ namespace His_Pos.InventoryManagement
 
             foreach (var m in medicines)
             {
-                Medicine medicine = new Medicine(m);
+                Medicine medicine = new Medicine(m, DataSource.MEDICINE);
 
                 _dataList.Add(medicine);
 
@@ -81,7 +81,7 @@ namespace His_Pos.InventoryManagement
 
             foreach (var o in otcs)
             {
-                Otc otc = new Otc(o);
+                Otc otc = new Otc(o, DataSource.OTC);
 
                 _dataList.Add(otc);
 
