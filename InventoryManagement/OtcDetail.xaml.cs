@@ -126,6 +126,7 @@ namespace His_Pos.InventoryManagement
             OTCUnitCollection = ProductDb.GetProductUnitById(otc.Id);
 
             OTCManufactoryCollection = GetManufactoryCollection();
+            OTCManufactoryCollection.Add(new Manufactory());
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
 
            
@@ -221,20 +222,22 @@ namespace His_Pos.InventoryManagement
             if (ManufactoryAuto is null) return;
             if (ManufactoryAuto.SelectedItem is null) return;
 
-            if (OTCManufactoryCollection.Count <= OtcManufactory.SelectedIndex)
-                OTCManufactoryCollection.Add((Manufactory)ManufactoryAuto.SelectedItem);
+            if (OTCManufactoryCollection.Count == OtcManufactory.SelectedIndex + 1)
+            {
+                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = (Manufactory) ManufactoryAuto.SelectedItem;
+                OTCManufactoryCollection.Add(new Manufactory());
+            }
             else
             {
                 OTCManufactoryCollection[OtcManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
                 return;
             }
-            ManufactoryAuto.Text = "";
         }
 
         private void OtcManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
         {
             var ManufactoryAuto = sender as AutoCompleteBox;
-
+            
             if (ManufactoryAuto is null) return;
 
             var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");

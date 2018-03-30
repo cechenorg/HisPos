@@ -130,6 +130,8 @@ namespace His_Pos.ProductPurchase
 
             if (StoOrderOverview is null) return;
             StoOrderOverview.Items.Filter = OrderTypeFilter;
+
+            StoOrderOverview.SelectedIndex = 0;
         }
         private bool OrderTypeFilter(object item)
         {

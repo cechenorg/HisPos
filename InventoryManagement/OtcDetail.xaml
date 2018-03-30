@@ -9,7 +9,6 @@
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d" 
         Title="ProductDetail" Height="800" Width="1300" WindowStartupLocation="CenterScreen">
-
     <Window.Background>
         <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
@@ -71,7 +70,7 @@
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="OtcManufactory" Grid.Column="1" Margin="10,0,0,0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="True">
+                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False" VerticalScrollBarVisibility="Hidden">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -90,7 +89,7 @@
                         <DataGridTemplateColumn Width="250" Header="供應商">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <controls:AutoCompleteBox x:Name="OtcManufactoryAuto" Width="250" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
+                                    <controls:AutoCompleteBox x:Name="OtcManufactoryAuto" Width="230" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}"
                                                               ItemFilter="{Binding ManufactoryFilter}" Populating="OtcManufactoryAuto_OnPopulating" DropDownClosing="OtcManufactoryAuto_OnDropDownClosing">
