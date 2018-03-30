@@ -34,6 +34,7 @@ namespace His_Pos.Class.Product
                     StockValue = dataRow["TOTAL"].ToString();
                     IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "")? "False": dataRow["HISMED_CONTROL"].ToString());
                     IsFrozMed = Boolean.Parse((dataRow["HISMED_FROZ"].ToString() == "") ? "False" : dataRow["HISMED_FROZ"].ToString());
+                    Location = dataRow["PRO_LOCATION"].ToString();
                     break;
             }
 
@@ -44,8 +45,8 @@ namespace His_Pos.Class.Product
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "") ? "0" : dataRow["PRO_INVENTORY"].ToString());
-            Note = dataRow["PRO_DESCRIPTION"].ToString();
-            Location = dataRow["PRO_LOCATION"].ToString();
+
+            
         }
 
         public Medicine(string id, string name, double price, double inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)

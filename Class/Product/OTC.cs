@@ -21,6 +21,7 @@ namespace His_Pos.Class.Product
                 case DataSource.OTC:
                     TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
                     StockValue = dataRow["TOTAL"].ToString();
+                    Location = dataRow["PRO_LOCATION"].ToString();
                     break;
                 case DataSource.STOORDLIST:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
@@ -36,7 +37,7 @@ namespace His_Pos.Class.Product
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             Note = dataRow["PRO_DESCRIPTION"].ToString();
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
-            Location = dataRow["PRO_LOCATION"].ToString();
+            
         }
 
         public int Total { get; set; }//商品數量
