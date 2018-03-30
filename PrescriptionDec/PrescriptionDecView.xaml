@@ -372,11 +372,11 @@
                             <StackPanel Orientation="Vertical" Background="#99EEEEEE" Width="330">
                                 <Canvas Background="#99EEEEEE" Height="40" Width="330">
                                     <StackPanel Orientation="Horizontal" Background="#99EEEEEE" Height="40" Width="auto">
-                                        <RadioButton Content="交易" Tag="1" Margin="20,0,5,0" FontSize="15" VerticalAlignment="Center" Checked="RadioButton_Checked"/>
+                                        <RadioButton Content="交易" Tag="1" Margin="20,0,5,0" FontSize="15" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
                                         <Image Source="/Images/PosDot.png" Width="12"/>
-                                        <RadioButton Content="調劑" Tag="0" Margin="25,0,5,0" FontSize="15" VerticalAlignment="Center" Checked="RadioButton_Checked"/>
+                                        <RadioButton Content="調劑" Tag="0" Margin="25,0,5,0" FontSize="15" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
                                         <Image Source="/Images/HisDot.png" Width="12"/>
-                                        <RadioButton Content="全部顯示" Tag="2" Margin="25,0,5,0" FontSize="15" VerticalAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
+                                        <RadioButton Content="全部顯示" Tag="2" Margin="25,0,5,0" FontSize="15" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
                                         <Image Source="/Images/PosHisDot.png" Width="20" Margin="0,0,15,0"/>
                                     </StackPanel>
                                 </Canvas>

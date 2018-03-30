@@ -3,6 +3,24 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum OrderType
+    {
+        PURCHASE = 0,
+        GET = 1,
+        ALL = 2
+    }
+    public enum AddOrderType
+    {
+        ADDBYUSER = 0,
+        ADDBYSAFEAMOUNT = 1,
+        ADDBYMANUFACTORY = 2
+    }
+    public enum DataSource
+    {
+        OTC = 0,
+        STOORDLIST = 1,
+        MEDICINE = 2
+    }
     public enum MessageType
     {
         ERROR = 0

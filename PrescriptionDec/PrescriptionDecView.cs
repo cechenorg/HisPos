@@ -131,7 +131,7 @@ namespace His_Pos.PrescriptionDec
             MedicineList.Clear();
             foreach (var d in tmp.Take(50))
             {
-                MedicineList.Add(new Medicine(d));
+                MedicineList.Add(new Medicine(d, DataSource.MEDICINE));
             }
             medicineAuto.ItemsSource = MedicineList;
             medicineAuto.PopulateComplete();
