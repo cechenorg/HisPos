@@ -341,7 +341,7 @@ namespace His_Pos.InventoryManagement
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
             if (ChangedFlagNotChanged()) return;
-            UpdateMed();
+           
             ProductDb.UpdateOtcDataDetail(medicine);
 
             foreach (var changedIndex in MEDManufactoryChangedCollection)
@@ -389,7 +389,7 @@ namespace His_Pos.InventoryManagement
         private void ButtonUpdateSubmmit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (ChangedFlagNotChanged()) return;
-            
+            UpdateMed();
             MouseButtonEventHandler handler = mouseButtonEventHandler;
             handler(this, e);
         }

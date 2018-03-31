@@ -115,9 +115,21 @@ namespace His_Pos.InventoryManagement
 
         private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            Product product = (sender is OtcDetail)? (Product)(sender as OtcDetail).otc : (sender as MedicineDetail).medicine;
 
-            var rows = MainWindow.OtcDataTable.Select("PRO_ID = '" + product.Id + "'");
+
+            Product product;
+            DataRow[] rows;
+
+            if (sender is OtcDetail)
+            {
+                product = (sender as OtcDetail).otc;
+                rows = MainWindow.OtcDataTable.Select("PRO_ID = '" + product.Id + "'");
+            }
+            else
+            {
+                product = (sender as MedicineDetail).medicine;
+                rows = MainWindow.MedicineDataTable.Select("PRO_ID = '" + product.Id + "'");
+            }
 
             rows[0]["PRO_SAFEQTY"] = product.SafeAmount;
             rows[0]["PRO_BASICQTY"] = product.BasicAmount;
