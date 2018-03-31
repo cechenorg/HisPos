@@ -49,7 +49,7 @@ namespace His_Pos.Class.StoreOrder
             {
                 var data = MainWindow.ManufactoryTable.Select("MAN_ID = '" + ManId + "'");
 
-                Manufactory = new Manufactory.Manufactory(data[0]);
+                Manufactory = new Manufactory.Manufactory(data[0], DataSource.MANUFACTORY);
             }
         }
 

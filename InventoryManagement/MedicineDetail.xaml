@@ -69,6 +69,10 @@
                         <Label Content="櫃位" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Name="MedLocation" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
+                        <CheckBox Content="管制藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
+                        <CheckBox Content="冷藏藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
+                    </StackPanel>
                 </Grid>
                 <DataGrid Name="MedManufactory" Grid.Column="1" Margin="10,0,0,0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="True">
@@ -93,7 +97,7 @@
                                     <controls:AutoCompleteBox x:Name="MedManufactoryAuto" Width="250" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}"
-                                                              ItemFilter="{Binding ManufactoryFilter}" Populating="MedManufactoryAuto_OnPopulating" DropDownClosing="MedManufactoryAuto_OnDropDownClosing">
+                                                              ItemFilter="{Binding ManufactoryFilter}" DropDownClosing="MedManufactoryAuto_OnDropDownClosing">
                                         <controls:AutoCompleteBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">

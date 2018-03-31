@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using LiveCharts;
@@ -132,7 +133,7 @@ namespace His_Pos.InventoryManagement
            
             foreach (DataRow row in MainWindow.ProManTable.Rows)
             {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row,"pro"));
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
             }
 
             UpdateChart();
@@ -148,7 +149,7 @@ namespace His_Pos.InventoryManagement
 
             foreach (var m in man)
             {
-                manufactories.Add(new Manufactory(m["MAN_ID"].ToString(), m["MAN_NAME"].ToString(), m["ORDER_ID"].ToString()));
+                manufactories.Add(new Manufactory(m,DataSource.PROMAN));
             }
 
             return manufactories;
@@ -214,7 +215,6 @@ namespace His_Pos.InventoryManagement
             return !IsChanged;
         }
         
-       
         private void OtcManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
             var ManufactoryAuto = sender as AutoCompleteBox;
@@ -230,25 +230,9 @@ namespace His_Pos.InventoryManagement
             else
             {
                 OTCManufactoryCollection[OtcManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
-                return;
             }
         }
 
-        private void OtcManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-            
-            if (ManufactoryAuto is null) return;
-
-            var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");
-            ManufactoryAutoCompleteCollection.Clear();
-            foreach (var row in tmp)
-            {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
-            }
-            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
-            ManufactoryAuto.PopulateComplete();
-        }
         private void SetUnitValue() {
             int count = 0;
             string index = "";

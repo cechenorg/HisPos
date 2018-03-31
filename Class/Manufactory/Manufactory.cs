@@ -14,25 +14,22 @@ namespace His_Pos.Class.Manufactory
         {
         }
 
-        public Manufactory(DataRow row)
+        public Manufactory(DataRow row, DataSource dataSource)
         {
+            switch (dataSource)
+            {
+                case DataSource.MANUFACTORY:
+                    Address = row["MAN_ADDR"].ToString();
+                    Telphone = row["MAN_TEL"].ToString();
+                    Fax = row["MAN_FAX"].ToString();
+                    break;
+                case DataSource.PROMAN:
+                    OrderId = row["ORDER_ID"].ToString();
+                    break;
+            }
+            
             Id = row["MAN_ID"].ToString();
             Name = row["MAN_NAME"].ToString();
-            Address = row["MAN_ADDR"].ToString();
-            Telphone = row["MAN_TEL"].ToString();
-            Fax = row["MAN_FAX"].ToString();
-        }
-        public Manufactory(DataRow row,string type)
-        {
-            Id = row["MAN_ID"].ToString();
-            Name = row["MAN_NAME"].ToString();
-            OrderId = row["ORDER_ID"].ToString();
-        }
-        public Manufactory(string id, string name,string orderId)
-        {
-            Id = id;
-            Name = name;
-            OrderId = orderId;
         }
         
         public string Id { get; set; }
