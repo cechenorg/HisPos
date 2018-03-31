@@ -42,11 +42,11 @@ namespace His_Pos.InventoryManagement
         private bool IsFirst = true;
         private string textBox_oldValue = "NotInit";
 
-        public MedicineDetail(Medicine med)
+        public MedicineDetail(string proId)
         {
             InitializeComponent();
 
-            medicine = med;
+            medicine = MedicineDb.GetMedDetail(proId);
 
             UpdateUi();
             IsFirst = false;

@@ -95,12 +95,12 @@ namespace His_Pos.InventoryManagement
 
             if (selectedItem is Otc )
             {
-                OtcDetail productDetail = new OtcDetail((Otc)selectedItem);
+                OtcDetail productDetail = new OtcDetail(((Otc)selectedItem).Id);
                 productDetail.Show();
             }
             else if (selectedItem is Medicine )
             {
-                MedicineDetail medcineDetail = new MedicineDetail((Medicine)selectedItem);
+                MedicineDetail medcineDetail = new MedicineDetail(((Medicine)selectedItem).Id);
                 medcineDetail.Show();
             }
         }

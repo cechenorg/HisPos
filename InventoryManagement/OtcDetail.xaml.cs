@@ -43,11 +43,11 @@ namespace His_Pos.InventoryManagement
         private bool IsChanged = false;
         private bool IsFirst = true;
 
-        public OtcDetail(Otc o)
+        public OtcDetail(string proId)
         {
             InitializeComponent();
 
-            otc = o;
+            otc = OTCDb.GetOtcDetail(proId);
             
             UpdateUi();
             CheckAuth();
