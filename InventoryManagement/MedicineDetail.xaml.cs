@@ -385,5 +385,13 @@ namespace His_Pos.InventoryManagement
             if (ChangedFlagNotChanged())
                 setChangedFlag();
         }
+
+        private void ButtonUpdateSubmmit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (ChangedFlagNotChanged()) return;
+            
+            MouseButtonEventHandler handler = mouseButtonEventHandler;
+            handler(this, e);
+        }
     }
 }
