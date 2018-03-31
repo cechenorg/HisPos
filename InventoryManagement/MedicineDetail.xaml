@@ -96,7 +96,7 @@
                                 <DataTemplate>
                                     <controls:AutoCompleteBox x:Name="MedManufactoryAuto" Width="250" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}"
+                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" 
                                                               ItemFilter="{Binding ManufactoryFilter}" DropDownClosing="MedManufactoryAuto_OnDropDownClosing">
                                         <controls:AutoCompleteBox.ItemTemplate>
                                             <DataTemplate>
