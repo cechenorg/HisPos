@@ -59,9 +59,9 @@ namespace His_Pos.InventoryManagement
             CheckAuth();
 
             OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
-            
-            IsFirst = false;
+
             DataContext = this;
+            IsFirst = false;
         }
 
         private void OtcManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -317,6 +317,14 @@ namespace His_Pos.InventoryManagement
             MouseButtonEventHandler handler = mouseButtonEventHandler;
 
             handler(this, e);
+        }
+
+        private void OTCNotes_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsChangedLabel is null || IsFirst)
+                return;
+            if (ChangedFlagNotChanged())
+                setChangedFlag();
         }
     }
 }

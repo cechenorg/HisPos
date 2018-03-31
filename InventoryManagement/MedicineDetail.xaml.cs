@@ -170,7 +170,7 @@ namespace His_Pos.InventoryManagement
         }
         private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            UpdateUi();
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -305,20 +305,23 @@ namespace His_Pos.InventoryManagement
         private void ChangeFirstAmountToReadOnly()
         {
         }
-        private void SetOTCUnitChangedCollection(string name)
+        private void SetMedTextBoxChangedCollection(string name)
         {
             if (ChangedFlagNotChanged())
                 setChangedFlag();
-            string index = name.Substring(name.Length - 1, 1);
-            if (!MEDUnitChangdedCollection.Contains(index))
-                MEDUnitChangdedCollection.Add(index);
+            if (name.Contains("MedUnit"))
+            {
+                string index = name.Substring(name.Length - 1, 1);
+                if (!MEDUnitChangdedCollection.Contains(index))
+                    MEDUnitChangdedCollection.Add(index);
+            }
         }
         private void MedData_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (IsChangedLabel is null || IsFirst)
                 return;
             TextBox txt = sender as TextBox;
-            SetOTCUnitChangedCollection(txt.Name);
+            SetMedTextBoxChangedCollection(txt.Name);
         }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
@@ -350,6 +353,14 @@ namespace His_Pos.InventoryManagement
                 return;
             }
             ManufactoryAuto.Text = "";
+        }
+
+        private void MedNotes_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsChangedLabel is null || IsFirst)
+                return;
+            if (ChangedFlagNotChanged())
+                setChangedFlag();
         }
     }
 }
