@@ -59,7 +59,7 @@ namespace His_Pos.InventoryManagement
             CheckAuth();
 
             OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
-
+            
             IsFirst = false;
             DataContext = this;
         }
@@ -67,8 +67,8 @@ namespace His_Pos.InventoryManagement
         private void OtcManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if( e.Action == NotifyCollectionChangedAction.Add ) return;
-
             OTCManufactoryChangedCollection.Add(e.NewStartingIndex);
+           
         }
 
         private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
@@ -300,7 +300,7 @@ namespace His_Pos.InventoryManagement
             if (IsChangedLabel is null || IsFirst)
                 return;
             TextBox txt = sender as TextBox;
-            SetOTCUnitChangedCollection(txt.Name);
+           SetOTCUnitChangedCollection(txt.Name);
         }
 
         private void ButtonUpdateSubmmit_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
