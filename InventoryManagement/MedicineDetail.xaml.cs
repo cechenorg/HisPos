@@ -27,7 +27,7 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class MedicineDetail : Window
     {
-        private Medicine medicine;
+        public Medicine medicine;
         public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
 
@@ -38,6 +38,8 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<ProductUnit> MedUnitCollection;
         public ObservableCollection<Manufactory> MEDManufactoryCollection;
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
+
+        public event MouseButtonEventHandler mouseButtonEventHandler;
 
         private bool IsChanged = false;
         private bool IsFirst = true;
@@ -320,14 +322,14 @@ namespace His_Pos.InventoryManagement
         }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            OTCDb.UpdateOtcDataDetail(medicine.Id, MedSaveAmount.Text,MedBasicAmount.Text, MedLocation.Text, new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text);
-            foreach (string index in MEDUnitChangdedCollection){
-                ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
-                                         ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
-                                          ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
-                OTCDb.UpdateOtcUnit(prounit,medicine.Id);
-            }
-            InitVariables();
+            //OTCDb.UpdateOtcDataDetail(medicine.Id, MedSaveAmount.Text,MedBasicAmount.Text, MedLocation.Text, new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text);
+            //foreach (string index in MEDUnitChangdedCollection){
+            //    ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
+            //                             ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
+            //                              ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
+            //    OTCDb.UpdateOtcUnit(prounit,medicine.Id);
+            //}
+            //InitVariables();
         }
 
         private void MedManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)

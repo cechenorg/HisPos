@@ -108,13 +108,14 @@ namespace His_Pos.InventoryManagement
             else if (selectedItem is Medicine )
             {
                 MedicineDetail medcineDetail = new MedicineDetail(((Medicine)selectedItem).Id);
+                medcineDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
                 medcineDetail.Show();
             }
         }
 
         private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            Product product = (sender as OtcDetail).otc;
+            Product product = (sender is OtcDetail)? (Product)(sender as OtcDetail).otc : (sender as MedicineDetail).medicine;
 
             var rows = MainWindow.OtcDataTable.Select("PRO_ID = '" + product.Id + "'");
 
