@@ -272,8 +272,9 @@ namespace His_Pos.InventoryManagement
         }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsChanged) return;
-            OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcBasicAmount.Text ,OtcLocation.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
+            if(ChangedFlagNotChanged()) return;
+           
+            OTCDb.UpdateOtcDataDetail(otc);
            
             foreach (var changedIndex in OTCManufactoryChangedCollection)
             {
@@ -306,6 +307,13 @@ namespace His_Pos.InventoryManagement
 
         private void ButtonUpdateSubmmit_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (ChangedFlagNotChanged()) return;
+
+            otc.Location = OtcLocation.Text;
+            otc.BasicAmount = OtcBasicAmount.Text;
+            otc.SafeAmount = OtcSaveAmount.Text;
+            otc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
+
             MouseButtonEventHandler handler = mouseButtonEventHandler;
 
             handler(this, e);
