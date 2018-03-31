@@ -50,23 +50,23 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
                         <Label Content="類別" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="OtcType" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBox Name="OtcType" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OtcData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
                         <Label Content="狀態" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="OtcStatus" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBox Name="OtcStatus" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OtcData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="OtcSaveAmount" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBox Name="OtcSaveAmount" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OtcData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" >
                         <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="OtcBasicAmount" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBox Name="OtcBasicAmount" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OtcData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" >
                         <Label Content="櫃位" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="OtcLocation" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBox Name="OtcLocation" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OtcData_TextChanged"/>
                     </StackPanel>
                     
                 </Grid>
