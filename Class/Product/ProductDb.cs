@@ -70,5 +70,16 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("ORDER_ID", orderId));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
         }
+        public static void UpdateOtcDataDetail(AbstractClass.Product product)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", product.Id));
+            parameters.Add(new SqlParameter("SAFEQTY", product.SafeAmount));
+            parameters.Add(new SqlParameter("BASICQTY", product.BasicAmount));
+            parameters.Add(new SqlParameter("LOCATION", product.Location));
+            parameters.Add(new SqlParameter("PRO_DESCRIPTION", product.Note));
+            dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
+        }
     }
 }

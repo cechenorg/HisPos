@@ -30,16 +30,7 @@ namespace His_Pos.Class.Product
             }
             return otc;
         }
-        public static void UpdateOtcDataDetail(Otc otc) {
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", otc.Id));
-            parameters.Add(new SqlParameter("SAFEQTY", otc.SafeAmount));
-            parameters.Add(new SqlParameter("BASICQTY", otc.BasicAmount));
-            parameters.Add(new SqlParameter("LOCATION", otc.Location));
-            parameters.Add(new SqlParameter("PRO_DESCRIPTION", otc.Note));
-            dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
-        }
+       
         
         public static void UpdateOtcUnit(ProductUnit productunit,string proid)
         {

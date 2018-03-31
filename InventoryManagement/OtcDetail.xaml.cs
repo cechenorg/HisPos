@@ -68,7 +68,6 @@ namespace His_Pos.InventoryManagement
         {
             if( e.Action == NotifyCollectionChangedAction.Add ) return;
             OTCManufactoryChangedCollection.Add(e.NewStartingIndex);
-           
         }
 
         private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
@@ -112,7 +111,12 @@ namespace His_Pos.InventoryManagement
                 Months[x] = today.AddMonths(-11 + x).Date.ToString("yyyy/MM"); 
             }
         }
-
+        private void UpdateOtc() {
+            otc.Location = OtcLocation.Text;
+            otc.BasicAmount = OtcBasicAmount.Text;
+            otc.SafeAmount = OtcSaveAmount.Text;
+            otc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
+        }
         private void UpdateUi()
         {
             if (otc is null) return;
@@ -273,8 +277,8 @@ namespace His_Pos.InventoryManagement
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
             if(ChangedFlagNotChanged()) return;
-           
-            OTCDb.UpdateOtcDataDetail(otc);
+            UpdateOtc();
+            ProductDb.UpdateOtcDataDetail(otc);
            
             foreach (var changedIndex in OTCManufactoryChangedCollection)
             {
@@ -309,10 +313,7 @@ namespace His_Pos.InventoryManagement
         {
             if (ChangedFlagNotChanged()) return;
 
-            otc.Location = OtcLocation.Text;
-            otc.BasicAmount = OtcBasicAmount.Text;
-            otc.SafeAmount = OtcSaveAmount.Text;
-            otc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
+           
 
             MouseButtonEventHandler handler = mouseButtonEventHandler;
 

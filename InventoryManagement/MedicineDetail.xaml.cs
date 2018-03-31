@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.Class;
+using System.Collections.Specialized;
 
 namespace His_Pos.InventoryManagement
 {
@@ -38,7 +39,7 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<ProductUnit> MedUnitCollection;
         public ObservableCollection<Manufactory> MEDManufactoryCollection;
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
-
+        public HashSet<int> MEDManufactoryChangedCollection = new HashSet<int>();
         public event MouseButtonEventHandler mouseButtonEventHandler;
 
         private bool IsChanged = false;
@@ -52,9 +53,18 @@ namespace His_Pos.InventoryManagement
             medicine = MedicineDb.GetMedDetail(proId);
 
             UpdateUi();
+            MEDManufactoryCollection.CollectionChanged += MedManufactoryCollectionOnCollectionChanged;
             IsFirst = false;
         }
-
+        private void UpdateMed() {
+             medicine.Name = MedName.Content.ToString();
+            medicine.Id = MedId.Content.ToString();
+            medicine.SafeAmount = MedSaveAmount.Text;
+            medicine.Location = MedLocation.Text ;
+            medicine.BasicAmount = MedBasicAmount.Text;
+            TextRange textRange = new TextRange( MedNotes.Document.ContentStart,MedNotes.Document.ContentEnd);
+            medicine.Note = textRange.Text;
+        }
         private void UpdateUi()
         {
                 if (medicine is null) return;
@@ -323,16 +333,29 @@ namespace His_Pos.InventoryManagement
             TextBox txt = sender as TextBox;
             SetMedTextBoxChangedCollection(txt.Name);
         }
+        private void MedManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add) return;
+            MEDManufactoryChangedCollection.Add(e.NewStartingIndex);
+        }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
-            //OTCDb.UpdateOtcDataDetail(medicine.Id, MedSaveAmount.Text,MedBasicAmount.Text, MedLocation.Text, new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text);
-            //foreach (string index in MEDUnitChangdedCollection){
-            //    ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
-            //                             ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
-            //                              ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
-            //    OTCDb.UpdateOtcUnit(prounit,medicine.Id);
-            //}
-            //InitVariables();
+            if (ChangedFlagNotChanged()) return;
+            UpdateMed();
+            ProductDb.UpdateOtcDataDetail(medicine);
+
+            foreach (var changedIndex in MEDManufactoryChangedCollection)
+            {
+                ProductDb.UpdateProductManufactory(medicine.Id, MEDManufactoryCollection[changedIndex].Id, changedIndex);
+            }
+            foreach (string index in MEDUnitChangdedCollection)
+            {
+                ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
+                                         ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
+                                          ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
+                OTCDb.UpdateOtcUnit(prounit, medicine.Id);
+            }
+            InitVariables();
         }
 
         private void MedManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
