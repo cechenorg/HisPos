@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -36,11 +37,15 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
         public ObservableCollection<Manufactory> OTCManufactoryCollection;
+        public HashSet<int> OTCManufactoryChangedCollection = new HashSet<int>();
         public ObservableCollection<ProductUnit> OTCUnitCollection;
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
 
-        private Otc otc;
+        public event MouseButtonEventHandler mouseButtonEventHandler;
+
+
+        public Otc otc;
         private bool IsChanged = false;
         private bool IsFirst = true;
 
@@ -52,8 +57,18 @@ namespace His_Pos.InventoryManagement
             
             UpdateUi();
             CheckAuth();
+
+            OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
+
             IsFirst = false;
             DataContext = this;
+        }
+
+        private void OtcManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if( e.Action == NotifyCollectionChangedAction.Add ) return;
+
+            OTCManufactoryChangedCollection.Add(e.NewStartingIndex);
         }
 
         private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
@@ -129,13 +144,7 @@ namespace His_Pos.InventoryManagement
             OTCManufactoryCollection = GetManufactoryCollection();
             OTCManufactoryCollection.Add(new Manufactory());
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
-
-           
-            foreach (DataRow row in MainWindow.ProManTable.Rows)
-            {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
-            }
-
+            
             UpdateChart();
             InitVariables();
             SetUnitValue();
@@ -214,7 +223,22 @@ namespace His_Pos.InventoryManagement
         {
             return !IsChanged;
         }
-        
+        private void OtcManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
+
+            if (ManufactoryAuto is null) return;
+
+            var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");
+            ManufactoryAutoCompleteCollection.Clear();
+            foreach (var row in tmp)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
+            }
+            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
+            ManufactoryAuto.PopulateComplete();
+        }
+
         private void OtcManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
             var ManufactoryAuto = sender as AutoCompleteBox;
@@ -250,8 +274,9 @@ namespace His_Pos.InventoryManagement
         {
             OTCDb.UpdateOtcDataDetail(otc.Id,OtcSaveAmount.Text,OtcBasicAmount.Text ,OtcLocation.Text, new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text);
            
-            foreach (var row in ManufactoryAutoCompleteCollection) {
-            //    ProductDb.UpdateProductManufactory(otc.Id,row.Name,row.OrderId);
+            foreach (var changedIndex in OTCManufactoryChangedCollection)
+            {
+                ProductDb.UpdateProductManufactory(otc.Id, OTCManufactoryCollection[changedIndex].Id, changedIndex);
             }
             foreach (string index in OTCUnitChangdedCollection) {
                 ProductUnit prounit = new ProductUnit (Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
@@ -274,6 +299,13 @@ namespace His_Pos.InventoryManagement
                 return;
             TextBox txt = sender as TextBox;
             SetOTCUnitChangedCollection(txt.Name);
+        }
+
+        private void ButtonUpdateSubmmit_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MouseButtonEventHandler handler = mouseButtonEventHandler;
+
+            handler(this, e);
         }
     }
 }

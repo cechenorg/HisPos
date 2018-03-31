@@ -12,7 +12,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     dialog:DialogParticipation.Register="{Binding}"
-    mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365" GotFocus="UserControl_GotFocus">
+    mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
     <Viewbox Stretch="Fill">
         <Grid Name="InventoryGrid" Width="1365">
             <Grid.RowDefinitions>

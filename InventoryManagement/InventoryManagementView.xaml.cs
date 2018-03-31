@@ -6,6 +6,7 @@ using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
 using His_Pos.Class;
 using System;
+using System.Data;
 
 namespace His_Pos.InventoryManagement
 {
@@ -26,6 +27,11 @@ namespace His_Pos.InventoryManagement
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
+        {
+            SearchData();
+        }
+
+        private void SearchData()
         {
             _dataList.Clear();
             selectStockValue = 0;
@@ -96,6 +102,7 @@ namespace His_Pos.InventoryManagement
             if (selectedItem is Otc )
             {
                 OtcDetail productDetail = new OtcDetail(((Otc)selectedItem).Id);
+                productDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
                 productDetail.Show();
             }
             else if (selectedItem is Medicine )
@@ -103,6 +110,18 @@ namespace His_Pos.InventoryManagement
                 MedicineDetail medcineDetail = new MedicineDetail(((Medicine)selectedItem).Id);
                 medcineDetail.Show();
             }
+        }
+
+        private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            Product product = (sender as OtcDetail).otc;
+
+            var rows = MainWindow.OtcDataTable.Select("PRO_ID = '" + product.Id + "'");
+
+            rows[0]["PRO_SAFEQTY"] = product.SafeAmount;
+            rows[0]["PRO_BASICQTY"] = product.BasicAmount;
+
+            SearchData();
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -135,11 +154,6 @@ namespace His_Pos.InventoryManagement
                     InventoryGrid.RowDefinitions[3].Height = new GridLength(740);
                     break;
             }
-        }
-
-        private void UserControl_GotFocus(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
