@@ -58,8 +58,7 @@
                                         <Image Source="{Binding TypeIcon}" Width="20" Margin="10,0,5,0" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
                                         <Label Content="{Binding Id}" Grid.Column="1" Grid.Row="0" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                                            <Label Content="訂貨人" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
-                                            <Label Content="{Binding OrdEmp}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                            <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="130" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                             <Label Content="$" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="25,0,0,0"/>
                                             <Label Content="{Binding TotalPrice}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>

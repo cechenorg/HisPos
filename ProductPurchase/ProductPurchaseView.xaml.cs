@@ -42,7 +42,7 @@ namespace His_Pos.ProductPurchase
         {
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
             }
             ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
 
@@ -130,6 +130,8 @@ namespace His_Pos.ProductPurchase
 
             if (StoOrderOverview is null) return;
             StoOrderOverview.Items.Filter = OrderTypeFilter;
+
+            StoOrderOverview.SelectedIndex = 0;
         }
         private bool OrderTypeFilter(object item)
         {

@@ -19,7 +19,9 @@ namespace His_Pos.Class
     {
         OTC = 0,
         STOORDLIST = 1,
-        MEDICINE = 2
+        MEDICINE = 2,
+        MANUFACTORY = 3,
+        PROMAN = 4
     }
     public enum MessageType
     {

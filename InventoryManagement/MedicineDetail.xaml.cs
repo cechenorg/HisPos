@@ -18,6 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Class;
 
 namespace His_Pos.InventoryManagement
 {
@@ -79,7 +80,7 @@ namespace His_Pos.InventoryManagement
             MedManufactory.ItemsSource = MEDManufactoryCollection;
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
             }
 
             UpdateChart();
@@ -95,7 +96,7 @@ namespace His_Pos.InventoryManagement
 
             foreach (var m in man)
             {
-                manufactories.Add(new Manufactory(m["MAN_ID"].ToString(), m["MAN_NAME"].ToString(),m["ORDER_ID"].ToString()));
+                manufactories.Add(new Manufactory(m,DataSource.PROMAN));
             }
 
             return manufactories;
@@ -329,22 +330,6 @@ namespace His_Pos.InventoryManagement
             InitVariables();
         }
 
-        private void MedManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-
-            if (ManufactoryAuto is null) return;
-
-            var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");
-            ManufactoryAutoCompleteCollection.Clear();
-            foreach (var row in tmp)
-            {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
-            }
-            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
-            ManufactoryAuto.PopulateComplete();
-        }
-
         private void MedManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
             var ManufactoryAuto = sender as AutoCompleteBox;
@@ -353,7 +338,10 @@ namespace His_Pos.InventoryManagement
             if (ManufactoryAuto.SelectedItem is null) return;
 
             if (MEDManufactoryCollection.Count <= MedManufactory.SelectedIndex)
-                MEDManufactoryCollection.Add((Manufactory)ManufactoryAuto.SelectedItem);
+            {
+                MEDManufactoryCollection[MedManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
+                MEDManufactoryCollection.Add(new Manufactory());
+            }
             else
             {
                 MEDManufactoryCollection[MedManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;

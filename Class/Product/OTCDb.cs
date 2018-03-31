@@ -40,6 +40,7 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_DESCRIPTION", Description));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
         }
+        
         public static void UpdateOtcUnit(ProductUnit productunit,string proid)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
