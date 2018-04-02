@@ -56,7 +56,12 @@
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
                                         <Image Source="{Binding TypeIcon}" Width="20" Margin="10,0,5,0" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
-                                        <Label Content="{Binding Id}" Grid.Column="1" Grid.Row="0" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
+                                            <Label Content="{Binding Id}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                            <Border BorderBrush="Red" BorderThickness="1" CornerRadius="6" Margin="25,8,1,5">
+                                                <TextBlock Text="進貨" Foreground="Red" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                            </Border>
+                                        </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                                             <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="130" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                             <Label Content="$" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="25,0,0,0"/>
