@@ -288,19 +288,21 @@ namespace His_Pos.InventoryManagement
             }
             InitVariables();
         }
-        private void SetOTCUnitChangedCollection(string name) {
+        private void SetOtcTextBoxChangedCollection(string name) {
             if (ChangedFlagNotChanged())
                 setChangedFlag();
-            string index = name.Substring(name.Length-1,1);
-            if (!OTCUnitChangdedCollection.Contains(index))
-                OTCUnitChangdedCollection.Add(index);
+            if (name.Contains("OtcUnit")) {
+                string index = name.Substring(name.Length - 1, 1);
+                if (!OTCUnitChangdedCollection.Contains(index))
+                    OTCUnitChangdedCollection.Add(index);
+            }
         }
         private void OtcData_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (IsChangedLabel is null || IsFirst)
                 return;
             TextBox txt = sender as TextBox;
-           SetOTCUnitChangedCollection(txt.Name);
+            SetOtcTextBoxChangedCollection(txt.Name);
         }
 
         private void ButtonUpdateSubmmit_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
