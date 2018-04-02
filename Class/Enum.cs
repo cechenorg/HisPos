@@ -3,6 +3,12 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum ProcedureProcessType
+    {
+        INSERT = 0,
+        UPDATE = 1,
+        DELETE = 2
+    }
     public enum OrderType
     {
         PURCHASE = 0,

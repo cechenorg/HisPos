@@ -60,15 +60,5 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
-        internal static void UpdateProductManufactory(string productId,string manId,int orderId) {
-            
-        var dd = new DbConnection(Settings.Default.SQL_global);
-
-        var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", productId));
-            parameters.Add(new SqlParameter("MAN_ID", manId));
-            parameters.Add(new SqlParameter("ORDER_ID", orderId));
-            dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
-        }
     }
 }

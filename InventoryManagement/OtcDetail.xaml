@@ -93,7 +93,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <controls:AutoCompleteBox x:Name="OtcManufactoryAuto" Width="200" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                                                   ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                                  BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="10,0,0,0"
+                                                                  BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="10,0,0,0" IsEnabled="False"
                                                                   ItemFilter="{Binding ManufactoryFilter}" Populating="OtcManufactoryAuto_OnPopulating" DropDownClosing="OtcManufactoryAuto_OnDropDownClosing">
                                             <controls:AutoCompleteBox.ItemTemplate>
                                                 <DataTemplate>
@@ -104,7 +104,7 @@
                                                 </DataTemplate>
                                             </controls:AutoCompleteBox.ItemTemplate>
                                         </controls:AutoCompleteBox>
-                                        <Image Name="DeleteDot" Source="/Images/DeleteDot.png" Width="18" Margin="10" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown" Visibility="{Binding vis, NotifyOnSourceUpdated=True}"/>
+                                        <Image Name="DeleteDot" Source="/Images/DeleteDot.png" Width="18" Margin="10" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown" Visibility="{Binding Vis, NotifyOnSourceUpdated=True}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

@@ -36,7 +36,7 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<OTCStockOverview> MEDStockOverviewCollection;
         public ObservableCollection<string> MEDUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<ProductUnit> MedUnitCollection;
-        public ObservableCollection<Manufactory> MEDManufactoryCollection;
+        public ObservableCollection<ProductDetailManufactory> MEDManufactoryCollection;
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
 
         public event MouseButtonEventHandler mouseButtonEventHandler;
@@ -86,19 +86,19 @@ namespace His_Pos.InventoryManagement
             }
 
             UpdateChart();
-                InitVariables();
-                SetUnitValue();
+            InitVariables();
+            SetUnitValue();
             
         }
-        private ObservableCollection<Manufactory> GetManufactoryCollection()
+        private ObservableCollection<ProductDetailManufactory> GetManufactoryCollection()
         {
-            ObservableCollection<Manufactory> manufactories = new ObservableCollection<Manufactory>();
+            ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();
 
             var man = MainWindow.ProManTable.Select("PRO_ID = '" + medicine.Id + "'");
 
             foreach (var m in man)
             {
-                manufactories.Add(new Manufactory(m,DataSource.PROMAN));
+                manufactories.Add(new ProductDetailManufactory(m,DataSource.PROMAN));
             }
 
             return manufactories;
@@ -341,12 +341,12 @@ namespace His_Pos.InventoryManagement
 
             if (MEDManufactoryCollection.Count <= MedManufactory.SelectedIndex)
             {
-                MEDManufactoryCollection[MedManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
-                MEDManufactoryCollection.Add(new Manufactory());
+                MEDManufactoryCollection[MedManufactory.SelectedIndex] = (ProductDetailManufactory)ManufactoryAuto.SelectedItem;
+                MEDManufactoryCollection.Add(new ProductDetailManufactory());
             }
             else
             {
-                MEDManufactoryCollection[MedManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
+                MEDManufactoryCollection[MedManufactory.SelectedIndex] = (ProductDetailManufactory)ManufactoryAuto.SelectedItem;
                 return;
             }
             ManufactoryAuto.Text = "";
