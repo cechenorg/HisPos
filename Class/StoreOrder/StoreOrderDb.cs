@@ -24,13 +24,29 @@ namespace His_Pos.Class.StoreOrder
 
             foreach (DataRow row in table.Rows)
             {
-                StoreOrderOverviewCollection.Add(new StoreOrder(row["STOORD_FLAG"].ToString(), row["STOORD_ID"].ToString(),
+                StoreOrderOverviewCollection.Add(new StoreOrder(row["STOORD_FLAG"].ToString(), row["STOORD_TYPE"].ToString(), row["STOORD_ID"].ToString(), 
                                                  row["ORD_EMP"].ToString(), Double.Parse(row["TOTAL"].ToString()), row["REC_EMP"].ToString(), row["MAN_ID"].ToString()));
             }
 
             return StoreOrderOverviewCollection;
         }
+        internal static void SaveOrderDetail(StoreOrder storeOrder) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+         parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
+         parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
+         parameters.Add(new SqlParameter("STOORD_TYPE", storeOrder.Category.Substring(0, 1)));
+            if (storeOrder.Manufactory.Id == null)
+                parameters.Add(new SqlParameter("MAN_ID", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("MAN_ID", storeOrder.Manufactory.Id));
+            if (storeOrder.RecEmp == "無")
+                parameters.Add(new SqlParameter("REC_EMP",DBNull.Value ));
+            else
+                parameters.Add(new SqlParameter("REC_EMP", storeOrder.RecEmp));
+            dd.ExecuteProc("[HIS_POS_DB].[SET].[SAVEORDERDETAIL]",parameters);
 
+        }
         internal static string GetNewOrderId(string OrdEmpId)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);

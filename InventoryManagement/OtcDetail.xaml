@@ -104,7 +104,7 @@
                                                 </DataTemplate>
                                             </controls:AutoCompleteBox.ItemTemplate>
                                         </controls:AutoCompleteBox>
-                                        <Image Name="DeleteDot" Source="/Images/DeleteDot.png" Width="18" Margin="10" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown" Visibility="{Binding vis, NotifyOnSourceUpdated=True}"/>
+                                        <Image Name="DeleteDot" Source="/Images/DeleteDot.png" Width="18" Margin="10" Visibility="{Binding vis, NotifyOnSourceUpdated=True}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

@@ -31,7 +31,7 @@ namespace His_Pos.ProductPurchase
         public ObservableCollection<Product> ProductAutoCompleteCollection = new ObservableCollection<Product>();
         private ObservableCollection<StoreOrder> storeOrderCollection;
         private OrderType OrderTypeFilterCondition = OrderType.ALL;
-
+        public StoreOrder storeOrderData;
         public ProductPurchaseView()
         {
             InitializeComponent();
@@ -56,12 +56,26 @@ namespace His_Pos.ProductPurchase
         {
             UpdateOrderDetailUi((StoreOrder)(sender as DataGridCell).DataContext);
         }
+        private void UpdateOrderDetailStoreOrder() {
+            storeOrderData.Id = ID.Content.ToString();
+            storeOrderData.OrdEmp = PurchaseEmp.Text;
+            storeOrderData.TotalPrice = Total.Content.ToString();
+          var temp =  MainWindow.ManufactoryTable.Select("MAN_NAME='" + ManufactoryAuto.Text + "'");
+            if (temp.Length != 0) {
+                storeOrderData.Manufactory.Name = temp[0]["MAN_NAME"].ToString();
+                storeOrderData.Manufactory.Id = temp[0]["MAN_ID"].ToString();
+            }
+      
+            storeOrderData.Manufactory.Telphone = Phone.Content.ToString();
+            storeOrderData.Category = OrderCategory.Text;
 
+        }
         private void UpdateOrderDetailUi(StoreOrder storeOrder)
         {
+            storeOrderData = storeOrder;
             ID.Content = storeOrder.Id;
             PurchaseEmp.Text = storeOrder.OrdEmp;
-            
+            OrderCategory.Text = storeOrder.Category;
             Total.Content = storeOrder.TotalPrice;
             ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null)? "": storeOrder.Manufactory.Name;
             Phone.Content = (storeOrder.Manufactory.Telphone is null)? "": storeOrder.Manufactory.Telphone;
@@ -156,9 +170,26 @@ namespace His_Pos.ProductPurchase
             {
                 ProductAutoCompleteCollection.Add(new Medicine(d, DataSource.MEDICINE));
             }
-            
             productAuto.ItemsSource = ProductAutoCompleteCollection;
             productAuto.PopulateComplete();
+        }
+
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateOrderDetailStoreOrder();
+            StoreOrderDb.SaveOrderDetail(storeOrderData);
+            
+            //ProductAutoCompleteCollection
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void AutoCompleteBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

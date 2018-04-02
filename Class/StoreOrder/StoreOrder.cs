@@ -13,7 +13,8 @@ namespace His_Pos.Class.StoreOrder
     {
         public StoreOrder(User ordEmp)
         {
-            Type = OrderType.PURCHASE;
+            
+            Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
 
             Id = StoreOrderDb.GetNewOrderId(ordEmp.Id);
@@ -25,20 +26,33 @@ namespace His_Pos.Class.StoreOrder
             Products = new ObservableCollection<AbstractClass.Product>();
         }
 
-        public StoreOrder(string type, string id, string ordEmp,double total, string recEmp, string ManId)
+        public StoreOrder(string type,string category, string id, string ordEmp,double total, string recEmp, string ManId)
         {
             switch (type)
             {
                 case "P":
-                    Type = OrderType.PURCHASE;
+                    Type = OrderType.UNPROCESSING;
                     TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
                     break;
                 case "G":
-                    Type = OrderType.GET;
+                    Type = OrderType.PROCESSING;
                     TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
                     break;
             }
-            Id = id;
+            switch (category)
+            {
+                case "進":
+                    CategoryColor = "Green";
+                    break;
+                case "退":
+                    CategoryColor = "Red";
+                    break;
+                case "調":
+                    CategoryColor = "Blue";
+                    break;
+            }
+            Category = category + "貨"; 
+             Id = id;
             OrdEmp = ordEmp;
             TotalPrice = total.ToString("0.##");
             RecEmp = recEmp;
@@ -55,6 +69,8 @@ namespace His_Pos.Class.StoreOrder
 
         public BitmapImage TypeIcon { get; set; }
         public OrderType Type { get; set; }
+        public string Category { get; set; }
+        public string CategoryColor { get; set; }
         public string Id { get; set; }
         public string OrdEmp { get; set; }
         public string TotalPrice { get; set; }

@@ -5,10 +5,12 @@ namespace His_Pos.Class
 {
     public enum OrderType
     {
-        PURCHASE = 0,
-        GET = 1,
+
+        UNPROCESSING= 0,
+        PROCESSING = 1,
         ALL = 2
     }
+   
     public enum AddOrderType
     {
         ADDBYUSER = 0,
