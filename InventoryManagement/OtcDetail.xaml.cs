@@ -202,6 +202,13 @@ namespace His_Pos.InventoryManagement
                 OtcStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 OtcStock.SelectedItem = selectedItem;
+            else if (selectedItem is Manufactory)
+            {
+                if (selectedItem != OTCManufactoryCollection.Last())
+                    (selectedItem as Manufactory).vis = Visibility.Visible;
+                OtcManufactory.SelectedItem = selectedItem;
+            }
+            
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -214,6 +221,11 @@ namespace His_Pos.InventoryManagement
                 OtcStoOrder.SelectedItem = null;
             else if (leaveItem is OTCStockOverview)
                 OtcStock.SelectedItem = null;
+            else if (leaveItem is Manufactory)
+            {
+                (leaveItem as Manufactory).vis = Visibility.Hidden;
+                OtcManufactory.SelectedItem = null;
+            }
         }
         
         private void setChangedFlag()
@@ -252,7 +264,7 @@ namespace His_Pos.InventoryManagement
 
             if (OTCManufactoryCollection.Count == OtcManufactory.SelectedIndex + 1)
             {
-                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = (Manufactory) ManufactoryAuto.SelectedItem;
+                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
                 OTCManufactoryCollection.Add(new Manufactory());
             }
             else

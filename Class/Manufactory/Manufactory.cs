@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace His_Pos.Class.Manufactory
 {
-    public class Manufactory
+    public class Manufactory : INotifyPropertyChanged
     {
         public Manufactory()
         {
+            vis = Visibility.Hidden;
         }
 
         public Manufactory(DataRow row, DataSource dataSource)
@@ -30,6 +33,7 @@ namespace His_Pos.Class.Manufactory
             
             Id = row["MAN_ID"].ToString();
             Name = row["MAN_NAME"].ToString();
+            vis = Visibility.Hidden;
         }
         
         public string Id { get; set; }
@@ -48,5 +52,27 @@ namespace His_Pos.Class.Manufactory
                     || (obj as Manufactory).Name.Contains(searchText);
             }
         }
+
+        public Visibility vis
+        {
+            get { return Vis; }
+            set
+            {
+                Vis = value;
+                NotifyPropertyChanged("Vis");
+            }
+        }
+
+        private Visibility Vis = Visibility.Hidden;
+
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
