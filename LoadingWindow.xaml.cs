@@ -58,8 +58,8 @@ namespace His_Pos
                 ChangeLoadingMessage("Loading Manufactory Data...");
                 MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
 
-                ChangeLoadingMessage("Loading ProMan Data...");
-                MainWindow.ProManTable = ManufactoryDb.GetProManData();
+                //ChangeLoadingMessage("Loading ProMan Data...");
+                //MainWindow.ProManTable = ManufactoryDb.GetProManData();
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

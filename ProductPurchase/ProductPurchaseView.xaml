@@ -154,7 +154,7 @@
                                 <DataTemplate>
                                     <controls:AutoCompleteBox Width="110" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" Height="40"
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}" VerticalContentAlignment="Bottom"
+                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id, Mode=TwoWay}" VerticalContentAlignment="Bottom"
                                                               ItemFilter="{Binding ManufactoryFilter}"  Populating="ProductAuto_Populating">
                                         <controls:AutoCompleteBox.ItemTemplate>
                                             <DataTemplate>
@@ -187,7 +187,7 @@
                         <DataGridTemplateColumn MinWidth="70" Header="單價">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Price" Text="{Binding Price}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center"/>
+                                    <TextBox x:Name="Price" TextChanged="TextBox_TextChanged" Text="{Binding Price}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -225,7 +225,7 @@
                         <DataGridTemplateColumn MinWidth="70" Header="數量">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox TextChanged="TextBox_TextChanged" x:Name="Amount" Text="{Binding Total}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center"/>
+                                    <TextBox TextChanged="TextBox_TextChanged"  x:Name="Amount" Text="{Binding Total}" Width="60" FontSize="14" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

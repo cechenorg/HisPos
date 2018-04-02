@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -61,12 +62,7 @@ namespace His_Pos.ProductPurchase
             storeOrderData.OrdEmp = PurchaseEmp.Text;
             storeOrderData.TotalPrice = Total.Content.ToString();
           var temp =  MainWindow.ManufactoryTable.Select("MAN_NAME='" + ManufactoryAuto.Text + "'");
-            if (temp.Length != 0) {
-                storeOrderData.Manufactory.Name = temp[0]["MAN_NAME"].ToString();
-                storeOrderData.Manufactory.Id = temp[0]["MAN_ID"].ToString();
-            }
-      
-            storeOrderData.Manufactory.Telphone = Phone.Content.ToString();
+            if(temp.Length !=0) storeOrderData.Manufactory = new Manufactory(temp[0], DataSource.MANUFACTORY);
             storeOrderData.Category = OrderCategory.Text;
 
         }
@@ -173,6 +169,7 @@ namespace His_Pos.ProductPurchase
             productAuto.ItemsSource = ProductAutoCompleteCollection;
             productAuto.PopulateComplete();
         }
+      
 
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
@@ -184,12 +181,18 @@ namespace His_Pos.ProductPurchase
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            TextBox txt = sender as TextBox;
+            switch (txt.Name) {
+                case "Price" :
+                    storeOrderData.Products[StoreOrderDetail.SelectedIndex-1].Price = Double.Parse(txt.Text);
+                    break;
+            }
         }
 
         private void AutoCompleteBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
+        
     }
 }
