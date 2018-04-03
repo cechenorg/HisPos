@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,9 +28,10 @@ namespace His_Pos.Class.StoreOrder
             Products = new ObservableCollection<AbstractClass.Product>();
         }
 
-        public StoreOrder(string type,string category, string id, string ordEmp,double total, string recEmp, string ManId)
+        public StoreOrder(DataRow row)
         {
-            switch (type)
+            Id = row["STOORD_ID"].ToString();
+            switch (row["STOORD_FLAG"].ToString())
             {
                 case "P":
                     Type = OrderType.UNPROCESSING;
@@ -40,7 +42,7 @@ namespace His_Pos.Class.StoreOrder
                     TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
                     break;
             }
-            switch (category)
+            switch (row["STOORD_TYPE"].ToString())
             {
                 case "進":
                     CategoryColor = "Green";
@@ -52,17 +54,16 @@ namespace His_Pos.Class.StoreOrder
                     CategoryColor = "Blue";
                     break;
             }
-            Category = category + "貨"; 
-             Id = id;
-            OrdEmp = ordEmp;
-            TotalPrice = total.ToString("0.##");
-            RecEmp = recEmp;
+            Category = row["STOORD_TYPE"].ToString() + "貨"; 
+            OrdEmp = row["ORD_EMP"].ToString();
+            TotalPrice = row["TOTAL"].ToString();
+            RecEmp = row["REC_EMP"].ToString();
 
-            if(ManId == "")
+            if(row["MAN_ID"].ToString() == "")
                 Manufactory = new Manufactory.Manufactory();
             else
             {
-                var data = MainWindow.ManufactoryTable.Select("MAN_ID = '" + ManId + "'");
+                var data = MainWindow.ManufactoryTable.Select("MAN_ID = '" + row["MAN_ID"].ToString() + "'");
 
                 Manufactory = new Manufactory.Manufactory(data[0], DataSource.MANUFACTORY);
             }

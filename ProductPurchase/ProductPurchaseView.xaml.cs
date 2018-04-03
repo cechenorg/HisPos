@@ -31,7 +31,7 @@ namespace His_Pos.ProductPurchase
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         public ObservableCollection<Product> ProductAutoCompleteCollection = new ObservableCollection<Product>();
         private ObservableCollection<StoreOrder> storeOrderCollection;
-        private OrderType OrderTypeFilterCondition = OrderType.ALL;
+        private OrderType OrderTypeFilterCondition = OrderType.ALL; 
         public StoreOrder storeOrderData;
         private int orderIndex = 0;
         public ProductPurchaseView()
@@ -50,7 +50,7 @@ namespace His_Pos.ProductPurchase
 
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
             StoOrderOverview.ItemsSource = storeOrderCollection;
-            
+          
             StoOrderOverview.SelectedIndex = 0;
         }
 
@@ -58,18 +58,19 @@ namespace His_Pos.ProductPurchase
         {
             UpdateOrderDetailUi((StoreOrder)(sender as DataGridCell).DataContext);
         }
+       
+
         private void UpdateOrderDetailStoreOrder() {
             storeOrderData.Id = ID.Content.ToString();
             storeOrderData.OrdEmp = PurchaseEmp.Text;
             storeOrderData.TotalPrice = Total.Content.ToString();
-          var temp =  MainWindow.ManufactoryTable.Select("MAN_NAME='" + ManufactoryAuto.Text + "'");
+            var temp =  MainWindow.ManufactoryTable.Select("MAN_NAME='" + ManufactoryAuto.Text + "'");
             if(temp.Length !=0) storeOrderData.Manufactory = new Manufactory(temp[0], DataSource.MANUFACTORY);
             storeOrderData.Category = OrderCategory.Text;
-
+           
         }
         private void UpdateOrderDetailUi(StoreOrder storeOrder)
         {
-            storeOrderData = storeOrder;
             ID.Content = storeOrder.Id;
             PurchaseEmp.Text = storeOrder.OrdEmp;
             OrderCategory.Text = storeOrder.Category;
@@ -79,9 +80,8 @@ namespace His_Pos.ProductPurchase
 
             if(storeOrder.Products is null)
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
-
+            storeOrderData = storeOrder;
             StoreOrderDetail.ItemsSource = storeOrder.Products;
-
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
         }
@@ -176,6 +176,7 @@ namespace His_Pos.ProductPurchase
         {
             UpdateOrderDetailStoreOrder();
             StoreOrderDb.SaveOrderDetail(storeOrderData);
+            
             orderIndex = StoOrderOverview.SelectedIndex;
             UpdateUi();
             StoOrderOverview.SelectedIndex = orderIndex;
@@ -184,19 +185,45 @@ namespace His_Pos.ProductPurchase
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            
+            if (StoreOrderDetail.SelectedIndex == -1) return;
             TextBox txt = sender as TextBox;
             switch (txt.Name) {
-                case "Price" :
-                    storeOrderData.Products[StoreOrderDetail.SelectedIndex-1].Price = Double.Parse(txt.Text);
+                case "Price":
+                    storeOrderData.Products[StoreOrderDetail.SelectedIndex].Price = Convert.ToDouble(txt.Text);
+                    break; 
+                case "Amount":
+                    storeOrderData.Products[StoreOrderDetail.SelectedIndex ].Amount = Convert.ToInt32(txt.Text);
+                    break;
+                case "Notes":
+                    storeOrderData.Products[StoreOrderDetail.SelectedIndex].Note = txt.Text;
                     break;
             }
         }
-
-        private void AutoCompleteBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
         
+        private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
+            if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
+            Phone.Content = ((Manufactory)autoCompleteBox.SelectedItem).Telphone;
+        }
+
+        private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            var productAuto = sender as AutoCompleteBox;
+
+            if (productAuto is null) return;
+            if (productAuto.SelectedItem is null) return;
+
+            if (storeOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
+            {
+                storeOrderData.Products.Add(productAuto.SelectedItem as Product);
+            }
+            else
+            {
+                storeOrderData.Products[StoreOrderDetail.SelectedIndex] = productAuto.SelectedItem as Product;
+                return;
+            }
+            productAuto.Text = "";
+        }
     }
 }

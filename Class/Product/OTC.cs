@@ -26,7 +26,6 @@ namespace His_Pos.Class.Product
                 case DataSource.STOORDLIST:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
-                    Total = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
                     break;
             }

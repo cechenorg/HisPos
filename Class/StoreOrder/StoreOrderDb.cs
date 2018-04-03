@@ -24,8 +24,7 @@ namespace His_Pos.Class.StoreOrder
 
             foreach (DataRow row in table.Rows)
             {
-                StoreOrderOverviewCollection.Add(new StoreOrder(row["STOORD_FLAG"].ToString(), row["STOORD_TYPE"].ToString(), row["STOORD_ID"].ToString(), 
-                                                 row["ORD_EMP"].ToString(), Double.Parse(row["TOTAL"].ToString()), row["REC_EMP"].ToString(), row["MAN_ID"].ToString()));
+                StoreOrderOverviewCollection.Add(new StoreOrder(row));
             }
 
             return StoreOrderOverviewCollection;
@@ -70,20 +69,22 @@ namespace His_Pos.Class.StoreOrder
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[STOORDLIST]", parameters);
 
-
+            int i = 0;
             foreach (DataRow row in table.Rows)
             {
                 switch (row["PRO_TYPE"].ToString())
                 {
                     case "M":
                         StoreOrderCollection.Add(new Medicine(row, DataSource.STOORDLIST));
+                        StoreOrderCollection[i].Amount = Int32.Parse(row["STOORDDET_QTY"].ToString());
                         break;
                     case "O":
                         StoreOrderCollection.Add(new Otc(row, DataSource.STOORDLIST));
+                        StoreOrderCollection[i].Amount = Int32.Parse(row["STOORDDET_QTY"].ToString());
                         break;
                 }
+                i++;
             }
-
             return StoreOrderCollection;
         }
     }

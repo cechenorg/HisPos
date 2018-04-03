@@ -10,7 +10,7 @@ namespace His_Pos.AbstractClass
         public string Name { get; set; }
         public double LastPrice { get; set; }
         public double Price { get; set; }
-
+        public int Amount { get; set; }
         public double Cost { get; set; }
         public double Inventory { get; set; }
         public string SafeAmount { get; set; } 
