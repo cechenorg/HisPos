@@ -36,8 +36,8 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> OTCStockOverviewCollection;
-        public ObservableCollection<Manufactory> OTCManufactoryCollection;
-        public HashSet<int> OTCManufactoryChangedCollection = new HashSet<int>();
+        public ObservableCollection<ProductDetailManufactory> OTCManufactoryCollection;
+        public HashSet<ManufactoryChanged> OTCManufactoryChangedCollection = new HashSet<ManufactoryChanged>();
         public ObservableCollection<ProductUnit> OTCUnitCollection;
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
@@ -48,6 +48,7 @@ namespace His_Pos.InventoryManagement
         public Otc otc;
         private bool IsChanged = false;
         private bool IsFirst = true;
+        private int LastSelectedIndex = -1;
 
         public OtcDetail(string proId)
         {
@@ -57,18 +58,48 @@ namespace His_Pos.InventoryManagement
             
             UpdateUi();
             CheckAuth();
-
-            OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
-
-            DataContext = this;
+            
             IsFirst = false;
+            DataContext = this;
         }
 
         private void OtcManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if( e.Action == NotifyCollectionChangedAction.Add ) return;
-            OTCManufactoryChangedCollection.Add(e.NewStartingIndex);
+            ProductDetailManufactory OldProductDetailManufactory = (e.OldItems is null)? null: e.OldItems[0] as ProductDetailManufactory;
+            ProductDetailManufactory NewProductDetailManufactory = (e.NewItems is null) ? null : e.NewItems[0] as ProductDetailManufactory;
+
+            if (ChangedFlagNotChanged())
+                setChangedFlag();
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    return;
+                case NotifyCollectionChangedAction.Replace:
+                    if (NewProductDetailManufactory.OrderId is null && OldProductDetailManufactory.Id is null)
+                        OTCManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.INSERT));
+                    else
+                    {
+                        OTCManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.UPDATE));
+                        ManufactoryAutoCompleteCollection.Add(OldProductDetailManufactory);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    OTCManufactoryChangedCollection.RemoveWhere(DeleteManufactoryChanged);
+                    if (OldProductDetailManufactory.OrderId != null)
+                        OTCManufactoryChangedCollection.Add(new ManufactoryChanged(OldProductDetailManufactory, ProcedureProcessType.DELETE));
+                    ManufactoryAutoCompleteCollection.Add(OldProductDetailManufactory);
+                    break;
+            }
+
+            bool DeleteManufactoryChanged(ManufactoryChanged manufactoryChanged)
+            {
+                if (OldProductDetailManufactory.Id == manufactoryChanged.ManufactoryId)
+                    return true;
+                return false;
+            }
         }
+        
 
         private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
         {
@@ -111,12 +142,7 @@ namespace His_Pos.InventoryManagement
                 Months[x] = today.AddMonths(-11 + x).Date.ToString("yyyy/MM"); 
             }
         }
-        private void UpdateOtc() {
-            otc.Location = OtcLocation.Text;
-            otc.BasicAmount = OtcBasicAmount.Text;
-            otc.SafeAmount = OtcSaveAmount.Text;
-            otc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
-        }
+
         private void UpdateUi()
         {
             if (otc is null) return;
@@ -144,29 +170,32 @@ namespace His_Pos.InventoryManagement
             UpdateStockOverviewInfo();
 
             OTCUnitCollection = ProductDb.GetProductUnitById(otc.Id);
-
-            OTCManufactoryCollection = GetManufactoryCollection();
-            OTCManufactoryCollection.Add(new Manufactory());
-            OtcManufactory.ItemsSource = OTCManufactoryCollection;
             
+            OTCManufactoryCollection = ManufactoryDb.GetManufactoryCollection(otc.Id);
+            OTCManufactoryCollection.Add(new ProductDetailManufactory());
+            OtcManufactory.ItemsSource = OTCManufactoryCollection;
+            OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
+
+            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            {
+                bool keep = true;
+
+                foreach (var detailManufactory in OTCManufactoryCollection)
+                {
+                    if (row["MAN_ID"].ToString() == detailManufactory.Id)
+                        keep = false;
+                }
+
+                if ( keep )
+                    ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
+            }
+
             UpdateChart();
             InitVariables();
             SetUnitValue();
         }
 
-        private ObservableCollection<Manufactory> GetManufactoryCollection()
-        {
-            ObservableCollection<Manufactory> manufactories = new ObservableCollection<Manufactory>();
-
-            var man = MainWindow.ProManTable.Select("PRO_ID = '" + otc.Id + "'");
-
-            foreach (var m in man)
-            {
-                manufactories.Add(new Manufactory(m,DataSource.PROMAN));
-            }
-
-            return manufactories;
-        }
+        
 
         private void InitVariables()
         {
@@ -202,11 +231,12 @@ namespace His_Pos.InventoryManagement
                 OtcStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 OtcStock.SelectedItem = selectedItem;
-            else if (selectedItem is Manufactory)
+            else if (selectedItem is ProductDetailManufactory)
             {
                 if (selectedItem != OTCManufactoryCollection.Last())
-                    (selectedItem as Manufactory).vis = Visibility.Visible;
+                    (selectedItem as ProductDetailManufactory).Vis = Visibility.Visible;
                 OtcManufactory.SelectedItem = selectedItem;
+                LastSelectedIndex = OtcManufactory.SelectedIndex;
             }
             
         }
@@ -221,10 +251,9 @@ namespace His_Pos.InventoryManagement
                 OtcStoOrder.SelectedItem = null;
             else if (leaveItem is OTCStockOverview)
                 OtcStock.SelectedItem = null;
-            else if (leaveItem is Manufactory)
+            else if (leaveItem is ProductDetailManufactory)
             {
-                (leaveItem as Manufactory).vis = Visibility.Hidden;
-                OtcManufactory.SelectedItem = null;
+                (leaveItem as ProductDetailManufactory).Vis = Visibility.Hidden;
             }
         }
         
@@ -245,14 +274,29 @@ namespace His_Pos.InventoryManagement
 
             if (ManufactoryAuto is null) return;
 
-            var tmp = MainWindow.ManufactoryTable.Select("MAN_ID LIKE '%" + ManufactoryAuto.Text + "%' OR MAN_NAME LIKE '%" + ManufactoryAuto.Text + "%'");
-            ManufactoryAutoCompleteCollection.Clear();
-            foreach (var row in tmp)
+            if (ManufactoryAuto.ItemsSource is null)
+                ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
+
+            foreach (Manufactory manufactory in ManufactoryAutoCompleteCollection)
             {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
+                if (manufactory.Id == OTCManufactoryCollection[OTCManufactoryCollection.Count - 2].Id)
+                {
+                    ManufactoryAutoCompleteCollection.Remove(manufactory);
+                    break;
+                }
             }
-            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
+
             ManufactoryAuto.PopulateComplete();
+        }
+        private void OtcManufactoryAuto_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
+            if (ManufactoryAuto is null) return;
+
+            if ((ManufactoryAuto.Text is null || ManufactoryAuto.Text == String.Empty) && LastSelectedIndex != OTCManufactoryCollection.Count - 1)
+            {
+                OTCManufactoryCollection.RemoveAt(LastSelectedIndex);
+            }
         }
 
         private void OtcManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
@@ -264,12 +308,12 @@ namespace His_Pos.InventoryManagement
 
             if (OTCManufactoryCollection.Count == OtcManufactory.SelectedIndex + 1)
             {
-                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
-                OTCManufactoryCollection.Add(new Manufactory());
+                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
+                OTCManufactoryCollection.Add(new ProductDetailManufactory());
             }
             else
             {
-                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = (Manufactory)ManufactoryAuto.SelectedItem;
+                OTCManufactoryCollection[LastSelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
             }
         }
 
@@ -289,12 +333,12 @@ namespace His_Pos.InventoryManagement
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
             if(ChangedFlagNotChanged()) return;
-            UpdateOtc();
-            ProductDb.UpdateOtcDataDetail(otc);
            
-            foreach (var changedIndex in OTCManufactoryChangedCollection)
+            OTCDb.UpdateOtcDataDetail(otc);
+           
+            foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
             {
-                ProductDb.UpdateProductManufactory(otc.Id, OTCManufactoryCollection[changedIndex].Id, changedIndex);
+                ManufactoryDb.UpdateProductManufactory(otc.Id, manufactoryChanged);
             }
             foreach (string index in OTCUnitChangdedCollection) {
                 ProductUnit prounit = new ProductUnit (Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
@@ -325,19 +369,20 @@ namespace His_Pos.InventoryManagement
         {
             if (ChangedFlagNotChanged()) return;
 
-           
+            otc.Location = OtcLocation.Text;
+            otc.BasicAmount = OtcBasicAmount.Text;
+            otc.SafeAmount = OtcSaveAmount.Text;
+            otc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
 
             MouseButtonEventHandler handler = mouseButtonEventHandler;
 
             handler(this, e);
         }
 
-        private void OTCNotes_TextChanged(object sender, TextChangedEventArgs e)
+        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (IsChangedLabel is null || IsFirst)
-                return;
-            if (ChangedFlagNotChanged())
-                setChangedFlag();
+            OTCManufactoryCollection.RemoveAt(OtcManufactory.SelectedIndex);
         }
+        
     }
 }

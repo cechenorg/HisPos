@@ -94,7 +94,7 @@
                                         <controls:AutoCompleteBox x:Name="OtcManufactoryAuto" Width="200" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                                                   ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                                   BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="10,0,0,0"
-                                                                  ItemFilter="{Binding ManufactoryFilter}" Populating="OtcManufactoryAuto_OnPopulating" DropDownClosing="OtcManufactoryAuto_OnDropDownClosing">
+                                                                  ItemFilter="{Binding ManufactoryFilter}" Populating="OtcManufactoryAuto_OnPopulating" DropDownClosing="OtcManufactoryAuto_OnDropDownClosing" LostFocus="OtcManufactoryAuto_OnLostFocus">
                                             <controls:AutoCompleteBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -104,7 +104,7 @@
                                                 </DataTemplate>
                                             </controls:AutoCompleteBox.ItemTemplate>
                                         </controls:AutoCompleteBox>
-                                        <Image Name="DeleteDot" Source="/Images/DeleteDot.png" Width="18" Margin="10" Visibility="{Binding vis, NotifyOnSourceUpdated=True}"/>
+                                        <Image Name="DeleteDot" Source="/Images/DeleteDot.png" Width="18" Margin="10" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown" Visibility="{Binding Vis, NotifyOnSourceUpdated=True}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -163,7 +163,7 @@
                 </DockPanel>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Column="1" Margin="5,0,10,5">
                     <Label Content="備註" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                    <RichTextBox Name="OTCNotes" Height="168" Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible" TextChanged="OTCNotes_TextChanged"/>
+                    <RichTextBox Name="OTCNotes" Height="168" Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible" />
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="10,5,10,5">
