@@ -93,8 +93,8 @@
                                     <StackPanel Orientation="Horizontal">
                                         <controls:AutoCompleteBox x:Name="OtcManufactoryAuto" Width="200" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                                                   ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                                  BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="10,0,0,0" IsEnabled="False"
-                                                                  ItemFilter="{Binding ManufactoryFilter}" Populating="OtcManufactoryAuto_OnPopulating" DropDownClosing="OtcManufactoryAuto_OnDropDownClosing">
+                                                                  BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="10,0,0,0"
+                                                                  ItemFilter="{Binding ManufactoryFilter}" Populating="OtcManufactoryAuto_OnPopulating" DropDownClosing="OtcManufactoryAuto_OnDropDownClosing" LostFocus="OtcManufactoryAuto_OnLostFocus">
                                             <controls:AutoCompleteBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">

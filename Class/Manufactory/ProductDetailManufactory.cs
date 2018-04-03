@@ -53,7 +53,7 @@ namespace His_Pos.Class.Manufactory
             get
             {
                 return (searchText, obj) =>
-                    (obj as Manufactory).Id.Contains(searchText)
+                    ((obj as Manufactory).Id is null)? true:(obj as Manufactory).Id.Contains(searchText)
                     || (obj as Manufactory).Name.Contains(searchText);
             }
         }

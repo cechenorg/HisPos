@@ -48,6 +48,7 @@ namespace His_Pos.InventoryManagement
         public Otc otc;
         private bool IsChanged = false;
         private bool IsFirst = true;
+        private int LastSelectedIndex = -1;
 
         public OtcDetail(string proId)
         {
@@ -75,7 +76,7 @@ namespace His_Pos.InventoryManagement
                 case NotifyCollectionChangedAction.Add:
                     return;
                 case NotifyCollectionChangedAction.Replace:
-                    if (NewProductDetailManufactory.OrderId is null)
+                    if (NewProductDetailManufactory.OrderId is null && OldProductDetailManufactory.Id is null)
                         OTCManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.INSERT));
                     else
                     {
@@ -170,7 +171,7 @@ namespace His_Pos.InventoryManagement
 
             OTCUnitCollection = ProductDb.GetProductUnitById(otc.Id);
             
-            OTCManufactoryCollection = GetManufactoryCollection();
+            OTCManufactoryCollection = ManufactoryDb.GetManufactoryCollection(otc.Id);
             OTCManufactoryCollection.Add(new ProductDetailManufactory());
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
             OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
@@ -194,19 +195,7 @@ namespace His_Pos.InventoryManagement
             SetUnitValue();
         }
 
-        private ObservableCollection<ProductDetailManufactory> GetManufactoryCollection()
-        {
-            ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();
-
-            var man = MainWindow.ProManTable.Select("PRO_ID = '" + otc.Id + "'");
-
-            foreach (var m in man)
-            {
-                manufactories.Add(new ProductDetailManufactory(m,DataSource.PROMAN));
-            }
-
-            return manufactories;
-        }
+        
 
         private void InitVariables()
         {
@@ -247,6 +236,7 @@ namespace His_Pos.InventoryManagement
                 if (selectedItem != OTCManufactoryCollection.Last())
                     (selectedItem as ProductDetailManufactory).Vis = Visibility.Visible;
                 OtcManufactory.SelectedItem = selectedItem;
+                LastSelectedIndex = OtcManufactory.SelectedIndex;
             }
             
         }
@@ -264,7 +254,6 @@ namespace His_Pos.InventoryManagement
             else if (leaveItem is ProductDetailManufactory)
             {
                 (leaveItem as ProductDetailManufactory).Vis = Visibility.Hidden;
-                //OtcManufactory.SelectedItem = null;
             }
         }
         
@@ -299,6 +288,16 @@ namespace His_Pos.InventoryManagement
 
             ManufactoryAuto.PopulateComplete();
         }
+        private void OtcManufactoryAuto_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
+            if (ManufactoryAuto is null) return;
+
+            if ((ManufactoryAuto.Text is null || ManufactoryAuto.Text == String.Empty) && LastSelectedIndex != OTCManufactoryCollection.Count - 1)
+            {
+                OTCManufactoryCollection.RemoveAt(LastSelectedIndex);
+            }
+        }
 
         private void OtcManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
@@ -314,7 +313,7 @@ namespace His_Pos.InventoryManagement
             }
             else
             {
-                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
+                OTCManufactoryCollection[LastSelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
             }
         }
 
@@ -384,5 +383,6 @@ namespace His_Pos.InventoryManagement
         {
             OTCManufactoryCollection.RemoveAt(OtcManufactory.SelectedIndex);
         }
+        
     }
 }

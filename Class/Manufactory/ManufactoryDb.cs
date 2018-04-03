@@ -2,6 +2,7 @@
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -18,12 +19,6 @@ namespace His_Pos.Class.Manufactory
             var dd = new DbConnection(Settings.Default.SQL_global);
             return dd.ExecuteProc("[HIS_POS_DB].[GET].[MANUFACTORY]");
         }
-        public static DataTable GetProManData()
-        {
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            return dd.ExecuteProc("[HIS_POS_DB].[GET].[PROMAN]");
-        }
-
         internal static void UpdateProductManufactory(string productId, ManufactoryChanged manufactoryChanged)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
@@ -34,6 +29,24 @@ namespace His_Pos.Class.Manufactory
             parameters.Add(new SqlParameter("ORDER_ID", manufactoryChanged.changedOrderId));
             parameters.Add(new SqlParameter("PROCESSTYPE", manufactoryChanged.ProcessType.ToString()));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
+        }
+
+        internal static ObservableCollection<ProductDetailManufactory> GetManufactoryCollection(string proId)
+        {
+            ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PROMAN]", parameters);
+            
+            foreach (DataRow m in table.Rows)
+            {
+                manufactories.Add(new ProductDetailManufactory(m, DataSource.PROMAN));
+            }
+
+            return manufactories;
         }
     }
 }
