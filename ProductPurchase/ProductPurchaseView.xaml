@@ -28,7 +28,7 @@
                     <Image Source="/Images/PosHisDot.png" Width="25" Margin="0,0,30,0"/>
                 </StackPanel>
                 <DataGrid Name="StoOrderOverview" Grid.Row="1" Background="Transparent" HeadersVisibility="None"
-                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden">
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="290">
                             <DataGridTemplateColumn.CellStyle>

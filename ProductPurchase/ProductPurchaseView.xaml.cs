@@ -33,6 +33,7 @@ namespace His_Pos.ProductPurchase
         private ObservableCollection<StoreOrder> storeOrderCollection;
         private OrderType OrderTypeFilterCondition = OrderType.ALL;
         public StoreOrder storeOrderData;
+        private int orderIndex = 0;
         public ProductPurchaseView()
         {
             InitializeComponent();
@@ -175,12 +176,15 @@ namespace His_Pos.ProductPurchase
         {
             UpdateOrderDetailStoreOrder();
             StoreOrderDb.SaveOrderDetail(storeOrderData);
-            //storeOrderCollection[StoOrderOverview.SelectedIndex] = storeOrderData ;
-            //ProductAutoCompleteCollection
+            orderIndex = StoOrderOverview.SelectedIndex;
+            UpdateUi();
+            StoOrderOverview.SelectedIndex = orderIndex;
+            
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            
             TextBox txt = sender as TextBox;
             switch (txt.Name) {
                 case "Price" :
