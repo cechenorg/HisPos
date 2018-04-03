@@ -11,7 +11,11 @@ namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder
     {
-        public StoreOrder(User ordEmp)
+        public StoreOrder( )
+        {
+
+        }
+            public StoreOrder(User ordEmp)
         {
             
             Type = OrderType.UNPROCESSING;

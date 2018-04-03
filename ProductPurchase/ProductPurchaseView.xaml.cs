@@ -49,7 +49,7 @@ namespace His_Pos.ProductPurchase
 
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
             StoOrderOverview.ItemsSource = storeOrderCollection;
-
+            
             StoOrderOverview.SelectedIndex = 0;
         }
 
@@ -175,7 +175,7 @@ namespace His_Pos.ProductPurchase
         {
             UpdateOrderDetailStoreOrder();
             StoreOrderDb.SaveOrderDetail(storeOrderData);
-            
+            //storeOrderCollection[StoOrderOverview.SelectedIndex] = storeOrderData ;
             //ProductAutoCompleteCollection
         }
 
