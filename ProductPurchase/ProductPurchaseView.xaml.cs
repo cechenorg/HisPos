@@ -50,7 +50,9 @@ namespace His_Pos.ProductPurchase
 
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
             StoOrderOverview.ItemsSource = storeOrderCollection;
-            
+
+            ManufactoryAuto.ItemFilter = ManufactoryFilter;
+
             StoOrderOverview.SelectedIndex = 0;
         }
 
@@ -62,7 +64,7 @@ namespace His_Pos.ProductPurchase
             storeOrderData.Id = ID.Content.ToString();
             storeOrderData.OrdEmp = PurchaseEmp.Text;
             storeOrderData.TotalPrice = Total.Content.ToString();
-          var temp =  MainWindow.ManufactoryTable.Select("MAN_NAME='" + ManufactoryAuto.Text + "'");
+            var temp =  MainWindow.ManufactoryTable.Select("MAN_NAME='" + ManufactoryAuto.Text + "'");
             if(temp.Length !=0) storeOrderData.Manufactory = new Manufactory(temp[0], DataSource.MANUFACTORY);
             storeOrderData.Category = OrderCategory.Text;
 
@@ -81,6 +83,7 @@ namespace His_Pos.ProductPurchase
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
             StoreOrderDetail.ItemsSource = storeOrder.Products;
+            TotalAmount.Content = storeOrder.Products.Count.ToString();
 
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
@@ -99,22 +102,28 @@ namespace His_Pos.ProductPurchase
                     case AddOrderType.ADDBYUSER:
                         AddNewOrderByUser();
                         break;
-                    case AddOrderType.ADDBYSAFEAMOUNT:
-                        AddNewOrderBySafeAmount();
+                    case AddOrderType.ADDALLBELOWSAFEAMOUNT:
+                        AddAllBelowSafeAmount();
                         break;
                     case AddOrderType.ADDBYMANUFACTORY:
+                        break;
+                    case AddOrderType.ADDALLTOBASICAMOUNT:
+                        break;
+                    case AddOrderType.ADDALLGOODSALES:
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYGOODSALES:
                         break;
                 }
             }
         }
 
-        private void AddNewOrderBySafeAmount()
+        private void AddAllBelowSafeAmount()
         {
-            //var table = StoreOrderDb.Get
-
-
-
-            //storeOrderCollection.Add();
+            
         }
 
         private void AddNewOrderByUser()
@@ -188,7 +197,7 @@ namespace His_Pos.ProductPurchase
             TextBox txt = sender as TextBox;
             switch (txt.Name) {
                 case "Price" :
-                    storeOrderData.Products[StoreOrderDetail.SelectedIndex-1].Price = Double.Parse(txt.Text);
+                    //storeOrderData.Products[StoreOrderDetail.SelectedIndex-1].Price = Double.Parse(txt.Text);
                     break;
             }
         }
@@ -197,6 +206,15 @@ namespace His_Pos.ProductPurchase
         {
 
         }
-        
+
+        public AutoCompleteFilterPredicate<object> ManufactoryFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
+                    || (obj as Manufactory).Name.Contains(searchText);
+            }
+        }
     }
 }

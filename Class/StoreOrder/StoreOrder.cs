@@ -12,9 +12,8 @@ namespace His_Pos.Class.StoreOrder
     public class StoreOrder
     {
 
-            public StoreOrder(User ordEmp)
+        public StoreOrder(User ordEmp)
         {
-            
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
 
@@ -53,7 +52,7 @@ namespace His_Pos.Class.StoreOrder
                     break;
             }
             Category = category + "貨"; 
-             Id = id;
+            Id = id;
             OrdEmp = ordEmp;
             TotalPrice = total.ToString("0.##");
             RecEmp = recEmp;

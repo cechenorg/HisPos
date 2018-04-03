@@ -20,8 +20,13 @@ namespace His_Pos.Class
     public enum AddOrderType
     {
         ADDBYUSER = 0,
-        ADDBYSAFEAMOUNT = 1,
-        ADDBYMANUFACTORY = 2
+        ADDALLBELOWSAFEAMOUNT = 4,
+        ADDBYMANUFACTORY = 5,
+        ADDALLTOBASICAMOUNT = 6,
+        ADDALLGOODSALES = 8,
+        ADDBYMANUFACTORYBELOWSAFEAMOUNT = 10,
+        ADDBYMANUFACTORYTOBASICAMOUNT = 15,
+        ADDBYMANUFACTORYGOODSALES = 20
     }
     public enum DataSource
     {
