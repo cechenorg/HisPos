@@ -23,7 +23,7 @@ namespace His_Pos.ProductPurchase
     public partial class AddNewOrderDialog : Window
     {
         public AddOrderType addOrderType;
-        public Class.Manufactory.Manufactory;
+        //public Class.Manufactory.Manufactory;
         ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
         public bool ConfirmButtonClicked = false;
         public AddNewOrderDialog( ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
