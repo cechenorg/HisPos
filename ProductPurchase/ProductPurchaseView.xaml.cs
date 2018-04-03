@@ -50,7 +50,9 @@ namespace His_Pos.ProductPurchase
 
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
             StoOrderOverview.ItemsSource = storeOrderCollection;
-          
+
+            ManufactoryAuto.ItemFilter = ManufactoryFilter;
+
             StoOrderOverview.SelectedIndex = 0;
         }
 
@@ -82,6 +84,8 @@ namespace His_Pos.ProductPurchase
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
             storeOrderData = storeOrder;
             StoreOrderDetail.ItemsSource = storeOrder.Products;
+            TotalAmount.Content = storeOrder.Products.Count.ToString();
+
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
         }
@@ -99,22 +103,28 @@ namespace His_Pos.ProductPurchase
                     case AddOrderType.ADDBYUSER:
                         AddNewOrderByUser();
                         break;
-                    case AddOrderType.ADDBYSAFEAMOUNT:
-                        AddNewOrderBySafeAmount();
+                    case AddOrderType.ADDALLBELOWSAFEAMOUNT:
+                        AddAllBelowSafeAmount();
                         break;
                     case AddOrderType.ADDBYMANUFACTORY:
+                        break;
+                    case AddOrderType.ADDALLTOBASICAMOUNT:
+                        break;
+                    case AddOrderType.ADDALLGOODSALES:
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYGOODSALES:
                         break;
                 }
             }
         }
 
-        private void AddNewOrderBySafeAmount()
+        private void AddAllBelowSafeAmount()
         {
-            //var table = StoreOrderDb.Get
-
-
-
-            //storeOrderCollection.Add();
+            
         }
 
         private void AddNewOrderByUser()
@@ -224,6 +234,16 @@ namespace His_Pos.ProductPurchase
                 return;
             }
             productAuto.Text = "";
+        }
+
+        public AutoCompleteFilterPredicate<object> ManufactoryFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
+                    || (obj as Manufactory).Name.Contains(searchText);
+            }
         }
     }
 }
