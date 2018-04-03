@@ -244,7 +244,6 @@ namespace His_Pos.InventoryManagement
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
             var leaveItem = (sender as DataGridRow).Item;
-
             if (leaveItem is CusOrderOverview)
                 OtcCusOrder.SelectedItem = null;
             else if (leaveItem is OTCStoreOrderOverview)
@@ -334,7 +333,7 @@ namespace His_Pos.InventoryManagement
         {
             if(ChangedFlagNotChanged()) return;
            
-            OTCDb.UpdateOtcDataDetail(otc);
+            ProductDb.UpdateOtcDataDetail(otc);
            
             foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
             {
