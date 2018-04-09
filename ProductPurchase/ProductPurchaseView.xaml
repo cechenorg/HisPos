@@ -89,7 +89,7 @@
                     <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="350" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" Height="40"
                                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="0,0,60,0"
-                                                              VerticalContentAlignment="Bottom">
+                                                              VerticalContentAlignment="Bottom" TextChanged="SetIsChanged">
                         <controls:AutoCompleteBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -111,7 +111,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
                         <Label Content="處理單類別" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <ComboBox Name="OrderCategory" Width="90"   FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" >
+                        <ComboBox Name="OrderCategory" Width="90"   FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="SetIsChanged">
                             <ComboBoxItem Content="進貨" Foreground="Green"/>
                             <ComboBoxItem Content="退貨" Foreground="Red"/>
                             <ComboBoxItem Content="調貨" Foreground="Blue"/>
@@ -119,15 +119,15 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
                         <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <TextBox  Name="PurchaseEmp" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBox  Name="PurchaseEmp" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="SetIsChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="0" >
                         <Label Content="收貨人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <TextBox Name="ReceiveEmp" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBox Name="ReceiveEmp" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="SetIsChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2">
                         <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <TextBox Name="Note" Width="340" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <TextBox Name="Note" Width="340" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="SetIsChanged"/>
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"

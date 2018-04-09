@@ -35,11 +35,12 @@ namespace His_Pos.ProductPurchase
         public StoreOrder storeOrderData;
         private int orderIndex = 0;
         private bool IsFirst = true;
+        private bool IsChanged = false;
         public ProductPurchaseView()
         {
             InitializeComponent();
             UpdateUi();
-            IsFirst = false;
+            
         }
 
         private void UpdateUi()
@@ -54,12 +55,17 @@ namespace His_Pos.ProductPurchase
             StoOrderOverview.ItemsSource = storeOrderCollection;
 
             ManufactoryAuto.ItemFilter = ManufactoryFilter;
-
-            StoOrderOverview.SelectedIndex = 0;
+            if(IsFirst) StoOrderOverview.SelectedIndex = 0;
         }
 
         private void ShowOrderDetail(object sender, RoutedEventArgs e)
         {
+            if(storeOrderData != null && IsChanged) {
+                UpdateOrderDetailStoreOrder();
+                StoreOrderDb.SaveOrderDetail(storeOrderData);
+                UpdateUi();
+            }
+            
             UpdateOrderDetailUi((StoreOrder)(sender as DataGridCell).DataContext);
         }
        
@@ -75,6 +81,7 @@ namespace His_Pos.ProductPurchase
         }
         private void UpdateOrderDetailUi(StoreOrder storeOrder)
         {
+            IsFirst = true;
             ID.Content = storeOrder.Id;
             PurchaseEmp.Text = storeOrder.OrdEmp;
             OrderCategory.Text = storeOrder.Category;
@@ -91,6 +98,8 @@ namespace His_Pos.ProductPurchase
 
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
+            IsChanged = false;
+            IsFirst = false;
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
@@ -215,11 +224,12 @@ namespace His_Pos.ProductPurchase
             UpdateOrderDetailStoreOrder();
             StoreOrderDb.SaveOrderDetail(storeOrderData);
         }
-
+        
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (StoreOrderDetail.SelectedIndex == -1) return;
             if (IsFirst == true) return;
+            SetChanged();
             int index = StoreOrderDetail.SelectedIndex;
             TextBox txt = sender as TextBox;
             if (index - 1 < 0) index ++;
@@ -234,6 +244,7 @@ namespace His_Pos.ProductPurchase
                     storeOrderData.Products[index -1].Note = txt.Text;
                     break;
             }
+          
         }
         
         private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -270,6 +281,14 @@ namespace His_Pos.ProductPurchase
                     ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
                     || (obj as Manufactory).Name.Contains(searchText);
             }
+        }
+        private void SetChanged() {
+            if (IsFirst == true) return;
+            IsChanged = true;
+        }
+        private void SetIsChanged(object sender, EventArgs e)
+        {
+            SetChanged();
         }
     }
 }
