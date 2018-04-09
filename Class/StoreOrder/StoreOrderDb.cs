@@ -60,7 +60,8 @@ namespace His_Pos.Class.StoreOrder
             if (String.IsNullOrEmpty(storeOrder.Category))
                 parameters.Add(new SqlParameter("STOORD_TYPE",DBNull.Value));
             else
-            parameters.Add(new SqlParameter("STOORD_TYPE", storeOrder.Category.Substring(0, 1)));
+                parameters.Add(new SqlParameter("STOORD_TYPE", storeOrder.Category.Substring(0, 1)));
+
             if (storeOrder.Manufactory.Id == null)
                 parameters.Add(new SqlParameter("MAN_ID", DBNull.Value));
             else
