@@ -57,7 +57,7 @@ namespace His_Pos.Class.StoreOrder
             var parameters = new List<SqlParameter>();
          parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
          parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
-            if (storeOrder.Category == null)
+            if (String.IsNullOrEmpty(storeOrder.Category))
                 parameters.Add(new SqlParameter("STOORD_TYPE",DBNull.Value));
             else
             parameters.Add(new SqlParameter("STOORD_TYPE", storeOrder.Category.Substring(0, 1)));

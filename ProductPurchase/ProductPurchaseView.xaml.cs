@@ -227,7 +227,6 @@ namespace His_Pos.ProductPurchase
             }
             storeOrderData.Products[index - 1].TotalPrice = storeOrderData.Products[index - 1].Amount * storeOrderData.Products[index - 1].Price;
           
-           // ((Product)(Product)StoreOrderDetail.SelectedItem).TotalPrice = storeOrderData.Products[index - 1].TotalPrice;
         }
         
         private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
