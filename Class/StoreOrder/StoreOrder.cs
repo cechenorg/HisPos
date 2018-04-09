@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -75,16 +76,42 @@ namespace His_Pos.Class.StoreOrder
                 Manufactory = new Manufactory.Manufactory(data[0], DataSource.MANUFACTORY);
             }
         }
-
+        public string category;
+        public string categoryColor;
         public BitmapImage TypeIcon { get; set; }
         public OrderType Type { get; set; }
-        public string Category { get; set; }
-        public string CategoryColor { get; set; }
+        public string Category
+        {
+            get { return category; }
+            set
+            {
+                category = value;
+                NotifyPropertyChanged("Category");
+            }
+        }
+        public string CategoryColor
+        {
+            get { return categoryColor; }
+            set
+            {
+                categoryColor = value;
+                NotifyPropertyChanged("CategoryColor");
+            }
+        }
         public string Id { get; set; }
         public string OrdEmp { get; set; }
         public string TotalPrice { get; set; }
         public string RecEmp { get; set; }
         public Manufactory.Manufactory Manufactory{ get; set; }
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 }

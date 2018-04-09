@@ -42,10 +42,7 @@ namespace His_Pos.ProductPurchase
             InitializeComponent();
             InitManufactory();
             UpdateUi();
-
             StoOrderOverview.SelectedIndex = 0;
-
-           
         }
 
         private void InitManufactory()
@@ -74,6 +71,7 @@ namespace His_Pos.ProductPurchase
             }
             
             UpdateOrderDetailUi((StoreOrder)(sender as DataGridCell).DataContext);
+           
         }
        
 
@@ -191,6 +189,7 @@ namespace His_Pos.ProductPurchase
             }
             productAuto.ItemsSource = ProductAutoCompleteCollection;
             productAuto.PopulateComplete();
+            
         }
         
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -204,6 +203,14 @@ namespace His_Pos.ProductPurchase
 
             int index = StoreOrderDetail.SelectedIndex;
             storeOrderData.Products[index].TotalPrice = storeOrderData.Products[index].Amount * storeOrderData.Products[index].Price;
+            double count = 0;
+            foreach (var product in storeOrderData.Products) {
+                count += product.TotalPrice;
+            }
+            storeOrderData.TotalPrice = count.ToString();
+            Total.Content = storeOrderData.TotalPrice;
+            TotalAmount.Content = storeOrderData.Products.Count.ToString();
+
         }
         
         private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -249,6 +256,11 @@ namespace His_Pos.ProductPurchase
         private void SetIsChanged(object sender, EventArgs e)
         {
             SetChanged();
+        }
+
+        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

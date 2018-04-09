@@ -15,7 +15,7 @@ namespace His_Pos.AbstractClass
         public string SafeAmount { get; set; } 
         public string ManufactoryName { get; set; }
         public string StockValue { get; set; }
-        public string Note { get; set; }
+       
         public string BasicAmount { get; set; }
         public string Type { get; set; }
         public bool Status { get; set; }
@@ -24,7 +24,16 @@ namespace His_Pos.AbstractClass
         private double totalPrice;
         public double amount;
         public double price;
-
+        public string note;
+        public string Note
+         {
+            get { return note; }
+            set
+            {
+                note = value;
+                NotifyPropertyChanged("Note");
+            }
+        }
         public double Price
         {
             get { return price; }
