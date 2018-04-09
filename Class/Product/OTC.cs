@@ -28,6 +28,9 @@ namespace His_Pos.Class.Product
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
                     break;
+                case DataSource.PRODUCTBELOWSAFEAMOUNT:
+                    LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
+                    break;
             }
             
             Id = dataRow["PRO_ID"].ToString();

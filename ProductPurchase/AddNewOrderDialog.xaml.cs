@@ -22,8 +22,8 @@ namespace His_Pos.ProductPurchase
     /// </summary>
     public partial class AddNewOrderDialog : Window
     {
-        public AddOrderType addOrderType;
-        //public Class.Manufactory.Manufactory;
+        public AddOrderType AddOrderType;
+        public Manufactory Manufactory;
         ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
         public bool ConfirmButtonClicked = false;
         public AddNewOrderDialog( ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
@@ -39,10 +39,17 @@ namespace His_Pos.ProductPurchase
             List<RadioButton> radioButtons = TargetGrid.Children.OfType<RadioButton>().ToList();
             int taget = Int16.Parse(radioButtons.Single(r => r.GroupName == "target" && r.IsChecked == true).Tag.ToString());
 
+            if (taget == 5 && Manufactory is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
+
             radioButtons = ConditionGrid.Children.OfType<RadioButton>().ToList();
             int condition = Int16.Parse(radioButtons.Single(r => r.GroupName == "condition" && r.IsChecked == true).Tag.ToString());
 
-            addOrderType = (AddOrderType) (taget * condition);
+            AddOrderType = (AddOrderType) (taget * condition);
 
             ConfirmButtonClicked = true;
             this.Close();
@@ -87,6 +94,15 @@ namespace His_Pos.ProductPurchase
                     Con4.IsEnabled = true;
                     break;
             }
+        }
+
+        private void ManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
+        {
+            AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
+
+            if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
+
+            Manufactory = autoCompleteBox.SelectedItem as Manufactory;
         }
     }
 }

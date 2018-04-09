@@ -13,7 +13,7 @@ namespace His_Pos.Class.StoreOrder
     public class StoreOrder
     {
 
-            public StoreOrder(User ordEmp)
+        public StoreOrder(User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
             
             Type = OrderType.UNPROCESSING;
@@ -23,9 +23,10 @@ namespace His_Pos.Class.StoreOrder
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
-            Manufactory = new Manufactory.Manufactory();
+            
+            Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 
-            Products = new ObservableCollection<AbstractClass.Product>();
+            Products = (products is null)? new ObservableCollection<AbstractClass.Product>() : products;
         }
 
         public StoreOrder(DataRow row)

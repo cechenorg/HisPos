@@ -98,38 +98,63 @@ namespace His_Pos.ProductPurchase
 
             if (addNewOrderDialog.ConfirmButtonClicked)
             {
-                switch(addNewOrderDialog.addOrderType)
+                switch(addNewOrderDialog.AddOrderType)
                 {
                     case AddOrderType.ADDBYUSER:
-                        AddNewOrderByUser();
+                        AddNewOrderByUm();
                         break;
                     case AddOrderType.ADDALLBELOWSAFEAMOUNT:
-                        AddAllBelowSafeAmount();
+                        AddBelowSafeAmount();
                         break;
                     case AddOrderType.ADDBYMANUFACTORY:
+                        AddNewOrderByUm(addNewOrderDialog.Manufactory);
                         break;
                     case AddOrderType.ADDALLTOBASICAMOUNT:
+                        AddToBasicAmount();
                         break;
                     case AddOrderType.ADDALLGOODSALES:
+                        AddGoodSales();
                         break;
                     case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
+                        AddBelowSafeAmount(addNewOrderDialog.Manufactory);
                         break;
                     case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
+                        AddToBasicAmount(addNewOrderDialog.Manufactory);
                         break;
                     case AddOrderType.ADDBYMANUFACTORYGOODSALES:
+                        AddGoodSales(addNewOrderDialog.Manufactory);
                         break;
                 }
             }
         }
 
-        private void AddAllBelowSafeAmount()
+        private void AddToBasicAmount(Manufactory manufactory = null)
         {
-            
+            throw new NotImplementedException();
         }
 
-        private void AddNewOrderByUser()
+        private void AddGoodSales(Manufactory manufactory = null)
         {
-            storeOrderCollection.Insert(0,new StoreOrder(MainWindow.CurrentUser));
+            throw new NotImplementedException();
+        }
+
+        private void AddBelowSafeAmount(Manufactory manufactory = null)
+        {
+            ObservableCollection<Manufactory> manufactories = (manufactory is null)
+                ? ManufactoryDb.GetManufactoriesBelowSafeAmount()
+                : new ObservableCollection<Manufactory>(){manufactory};
+
+            foreach (Manufactory man in manufactories)
+            {
+                storeOrderCollection.Insert(0, new StoreOrder(MainWindow.CurrentUser, manufactory, ProductDb.GetBelowSafeAmount(man)));
+            }
+            
+            StoOrderOverview.SelectedIndex = 0;
+        }
+
+        private void AddNewOrderByUm(Manufactory manufactory = null)
+        {
+            storeOrderCollection.Insert(0,new StoreOrder(MainWindow.CurrentUser, manufactory));
             StoOrderOverview.SelectedIndex = 0;
         }
 

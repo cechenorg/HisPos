@@ -15,6 +15,9 @@ namespace His_Pos.Class.Product
         {
             switch(dataSource)
             {
+                case DataSource.PRODUCTBELOWSAFEAMOUNT:
+                    LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
+                    break;
                 case DataSource.STOORDLIST:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
