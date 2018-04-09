@@ -89,8 +89,8 @@
                     <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="350" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" Height="40"
                                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="0,0,60,0"
-                                                              VerticalContentAlignment="Bottom" TextChanged="SetIsChanged">
-                                                               DropDownClosed="ManufactoryAuto_DropDownClosed">
+                                                              VerticalContentAlignment="Bottom"   DropDownClosed="ManufactoryAuto_DropDownClosed" TextChanged="SetIsChanged">
+                                                             
                         <controls:AutoCompleteBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
