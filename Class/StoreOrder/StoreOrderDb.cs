@@ -29,6 +29,27 @@ namespace His_Pos.Class.StoreOrder
 
             return StoreOrderOverviewCollection;
         }
+
+        internal static void DeleteOrderProduct(string Id) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID",Id));
+            dd.ExecuteProc("[HIS_POS_DB].[SET].[DELETEORDERPRODUCT]",parameters);
+        }
+        internal static void InsertOrderProduct(StoreOrder storeOrder)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            foreach (var row in storeOrder.Products)
+            {
+                parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
+                parameters.Add(new SqlParameter("PRO_ID", row.Id));
+                parameters.Add(new SqlParameter("QTY", row.Amount));
+                parameters.Add(new SqlParameter("PRICE", row.Price));
+                parameters.Add(new SqlParameter("DESCRIPTION", row.Note));
+                dd.ExecuteProc("[HIS_POS_DB].[SET].[INSERTORDERPRODUCT]",parameters);
+            }
+        }
         internal static void SaveOrderDetail(StoreOrder storeOrder) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
@@ -44,7 +65,8 @@ namespace His_Pos.Class.StoreOrder
             else
                 parameters.Add(new SqlParameter("REC_EMP", storeOrder.RecEmp));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[SAVEORDERDETAIL]",parameters);
-
+            DeleteOrderProduct(storeOrder.Id);
+            InsertOrderProduct(storeOrder);
         }
         internal static string GetNewOrderId(string OrdEmpId)
         {

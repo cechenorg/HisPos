@@ -34,10 +34,12 @@ namespace His_Pos.ProductPurchase
         private OrderType OrderTypeFilterCondition = OrderType.ALL; 
         public StoreOrder storeOrderData;
         private int orderIndex = 0;
+        private bool IsFirst = true;
         public ProductPurchaseView()
         {
             InitializeComponent();
             UpdateUi();
+            IsFirst = false;
         }
 
         private void UpdateUi()
@@ -221,16 +223,19 @@ namespace His_Pos.ProductPurchase
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (StoreOrderDetail.SelectedIndex == -1) return;
+            if (IsFirst == true) return;
+            int index = StoreOrderDetail.SelectedIndex;
             TextBox txt = sender as TextBox;
+            if (index - 1 < 0) index ++;
             switch (txt.Name) {
                 case "Price":
-                    storeOrderData.Products[StoreOrderDetail.SelectedIndex].Price = Convert.ToDouble(txt.Text);
+                    storeOrderData.Products[index -1].Price = Convert.ToDouble(txt.Text);
                     break; 
                 case "Amount":
-                    storeOrderData.Products[StoreOrderDetail.SelectedIndex ].Amount = Convert.ToInt32(txt.Text);
+                       storeOrderData.Products[index -1 ].Amount = Convert.ToInt32(txt.Text);
                     break;
                 case "Notes":
-                    storeOrderData.Products[StoreOrderDetail.SelectedIndex].Note = txt.Text;
+                    storeOrderData.Products[index -1].Note = txt.Text;
                     break;
             }
         }
