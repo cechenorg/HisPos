@@ -42,13 +42,14 @@ namespace His_Pos.Class.StoreOrder
             var parameters = new List<SqlParameter>();
             foreach (var row in storeOrder.Products)
             {
-                parameters.Clear();
                 parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
                 parameters.Add(new SqlParameter("PRO_ID", row.Id));
                 parameters.Add(new SqlParameter("QTY", row.Amount));
                 parameters.Add(new SqlParameter("PRICE", row.Price));
                 parameters.Add(new SqlParameter("DESCRIPTION", row.Note));
                 dd.ExecuteProc("[HIS_POS_DB].[SET].[INSERTORDERPRODUCT]",parameters);
+
+                parameters.Clear();
             }
         }
         internal static void SaveOrderDetail(StoreOrder storeOrder) {

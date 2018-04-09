@@ -11,7 +11,7 @@ namespace His_Pos.AbstractClass
         public double LastPrice { get; set; }
         public double TotalPrice { get; set; }
         public double Price { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
         public double Cost { get; set; }
         public double Inventory { get; set; }
         public string SafeAmount { get; set; } 

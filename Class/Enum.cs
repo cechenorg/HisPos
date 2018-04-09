@@ -3,6 +3,11 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum StoreOrderProductType
+    {
+        BASIC = 0,
+        SAFE = 1
+    }
     public enum ProcedureProcessType
     {
         INSERT = 0,
@@ -35,7 +40,7 @@ namespace His_Pos.Class
         MEDICINE = 2,
         MANUFACTORY = 3,
         PROMAN = 4,
-        PRODUCTBELOWSAFEAMOUNT = 5
+        PRODUCTBASICORSAFE = 5
     }
     public enum MessageType
     {

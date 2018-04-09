@@ -60,7 +60,7 @@ namespace His_Pos.Class.Declare
         private void SetMedicine(Medicine medicine)
         {
             MedicalId = medicine.Id;//p2
-            Total = medicine.Total;//p7
+            Total = medicine.Amount;//p7
             Price = medicine.HcPrice;//p8
         }
         private void SetDate(string start,string end)

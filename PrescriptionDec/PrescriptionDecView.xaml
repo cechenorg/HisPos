@@ -300,7 +300,7 @@
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn MinWidth="40" Header="總數">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate x:Name="MedicineTotalDataTemplate">
+                                    <DataTemplate x:Name="MedicineAmountDataTemplate">
                                         <TextBox x:Name="MedicineTotal" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderBrush="DimGray" BorderThickness="0,0,0,1" TextChanged="MedicineTotal_TextChanged" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

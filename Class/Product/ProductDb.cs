@@ -1,4 +1,5 @@
 ﻿using His_Pos.AbstractClass;
+using His_Pos.Class.Manufactory;
 using His_Pos.Properties;
 using His_Pos.Service;
 using System;
@@ -83,7 +84,7 @@ namespace His_Pos.Class.Product
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
         }
 
-        internal static ObservableCollection<AbstractClass.Product> GetBelowSafeAmount(Manufactory.Manufactory manufactory)
+        internal static ObservableCollection<AbstractClass.Product> GetBasicOrSafe(Manufactory.Manufactory manufactory, StoreOrderProductType type)
         {
             ObservableCollection<AbstractClass.Product> products = new ObservableCollection<AbstractClass.Product>();
 
@@ -91,18 +92,19 @@ namespace His_Pos.Class.Product
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", manufactory.Id));
+            parameters.Add(new SqlParameter("TYPE",(type == StoreOrderProductType.BASIC)? "BASIC" : "SAFE"));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PRODUCTBELOWSAFEAMOUNT]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PRODUCTBASICORSAFE]", parameters);
 
             foreach (DataRow row in table.Rows)
             {
                 switch ((SearchType)Int16.Parse(row["TYPE"].ToString()))
                 {
                     case SearchType.MED:
-                        products.Add(new Medicine(row, DataSource.PRODUCTBELOWSAFEAMOUNT));
+                        products.Add(new Medicine(row, DataSource.PRODUCTBASICORSAFE));
                         break;
                     case SearchType.OTC:
-                        products.Add(new Otc(row, DataSource.PRODUCTBELOWSAFEAMOUNT));
+                        products.Add(new Otc(row, DataSource.PRODUCTBASICORSAFE));
                         break;
                 }
             }

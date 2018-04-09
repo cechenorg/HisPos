@@ -149,8 +149,8 @@ namespace His_Pos.PrescriptionDec
         private void CountMedicineTotalPrice(Medicine medicine)
         {
             if (medicine.PaySelf)
-                medicine.TotalPrice = medicine.Price * medicine.Total;
-            medicine.TotalPrice = medicine.HcPrice * medicine.Total;
+                medicine.TotalPrice = medicine.Price * medicine.Amount;
+            medicine.TotalPrice = medicine.HcPrice * medicine.Amount;
         }
         /*
          * 計算處方總藥價
@@ -168,7 +168,7 @@ namespace His_Pos.PrescriptionDec
                 {
                     medicinesSelfCost += medicine.TotalPrice;
                 }
-                purchaseCosts += medicine.Cost*medicine.Total;
+                purchaseCosts += medicine.Cost*medicine.Amount;
             }
             SelfCost.Text = PriceConvert(medicinesSelfCost).ToString();//自費金額
             Copayment.Text = CountCopaymentCost(medicinesHcCost);//部分負擔
