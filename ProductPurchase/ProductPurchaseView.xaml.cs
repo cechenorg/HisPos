@@ -42,10 +42,7 @@ namespace His_Pos.ProductPurchase
             InitializeComponent();
             InitManufactory();
             UpdateUi();
-
             StoOrderOverview.SelectedIndex = 0;
-
-           
         }
 
         private void InitManufactory()
@@ -231,6 +228,14 @@ namespace His_Pos.ProductPurchase
 
             int index = StoreOrderDetail.SelectedIndex;
             storeOrderData.Products[index].TotalPrice = storeOrderData.Products[index].Amount * storeOrderData.Products[index].Price;
+            double count = 0;
+            foreach (var product in storeOrderData.Products) {
+                count += product.TotalPrice;
+            }
+            storeOrderData.TotalPrice = count.ToString();
+            Total.Content = storeOrderData.TotalPrice;
+            TotalAmount.Content = storeOrderData.Products.Count.ToString();
+
         }
         
         private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -292,6 +297,11 @@ namespace His_Pos.ProductPurchase
                     StoOrderOverview.ScrollIntoView(storeOrderCollection[x]);
                 }
             }
+        }
+
+        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

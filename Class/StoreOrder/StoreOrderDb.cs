@@ -29,7 +29,13 @@ namespace His_Pos.Class.StoreOrder
 
             return StoreOrderOverviewCollection;
         }
-
+        internal static void DeleteOrder(string Id)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", Id));
+            dd.ExecuteProc("[HIS_POS_DB].[SET].[DELETEORDERPRODUCT]", parameters);
+        }
         internal static void DeleteOrderProduct(string Id) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
