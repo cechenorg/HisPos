@@ -102,9 +102,7 @@ namespace His_Pos.ProductPurchase
             storeOrderData = storeOrder;
             StoreOrderDetail.ItemsSource = storeOrderData.Products;
             TotalAmount.Content = storeOrder.Products.Count.ToString();
-
-            IsChangedLabel.Content = "未修改";
-            IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
+            
             IsChanged = false;
             IsFirst = false;
         }
@@ -193,16 +191,6 @@ namespace His_Pos.ProductPurchase
             }
             productAuto.ItemsSource = ProductAutoCompleteCollection;
             productAuto.PopulateComplete();
-        }
-      
-        private void ButtonSave_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateOrderDetailStoreOrder();
-            StoreOrderDb.SaveOrderDetail(storeOrderData);
-
-            orderIndex = StoOrderOverview.SelectedIndex;
-            UpdateUi();
-            StoOrderOverview.SelectedIndex = orderIndex;
         }
         
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
