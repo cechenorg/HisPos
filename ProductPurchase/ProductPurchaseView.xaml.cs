@@ -84,6 +84,7 @@ namespace His_Pos.ProductPurchase
 
             if(storeOrder.Products is null)
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
+
             storeOrderData = storeOrder;
             StoreOrderDetail.ItemsSource = storeOrder.Products;
             TotalAmount.Content = storeOrder.Products.Count.ToString();
@@ -213,11 +214,6 @@ namespace His_Pos.ProductPurchase
         {
             UpdateOrderDetailStoreOrder();
             StoreOrderDb.SaveOrderDetail(storeOrderData);
-            
-            orderIndex = StoOrderOverview.SelectedIndex;
-            UpdateUi();
-            StoOrderOverview.SelectedIndex = orderIndex;
-            
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

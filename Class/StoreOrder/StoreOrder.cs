@@ -23,7 +23,8 @@ namespace His_Pos.Class.StoreOrder
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
-            
+            Category = "";
+
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 
             Products = (products is null)? new ObservableCollection<AbstractClass.Product>() : products;
