@@ -28,8 +28,10 @@ namespace His_Pos.Class.Product
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
                     break;
-                case DataSource.PRODUCTBELOWSAFEAMOUNT:
+                case DataSource.PRODUCTBASICORSAFE:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
+                    Amount = Int16.Parse(dataRow["PRO_BASICQTY"].ToString()) -
+                            Int16.Parse(dataRow["PRO_INVENTORY"].ToString());
                     break;
             }
             
@@ -41,8 +43,7 @@ namespace His_Pos.Class.Product
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             
         }
-
-        public int Total { get; set; }//商品數量
+        
         public double TotalPrice { get; set; }//商品總價
     }
 }

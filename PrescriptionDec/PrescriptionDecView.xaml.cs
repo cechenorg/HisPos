@@ -261,19 +261,19 @@ namespace His_Pos.PrescriptionDec
         private void PaySelf_CheckedEvent(object sender, RoutedEventArgs e)
         {
             if (!(sender is CheckBox selfPay)) return;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex || PrescriptionList[PrescriptionMedicines.SelectedIndex].Total.ToString(CultureInfo.InvariantCulture).Equals(string.Empty)) return;
+            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex || PrescriptionList[PrescriptionMedicines.SelectedIndex].Amount.ToString(CultureInfo.InvariantCulture).Equals(string.Empty)) return;
             var medicine = PrescriptionList[PrescriptionMedicines.SelectedIndex];
-            var selfCost = medicine.Price * medicine.Total;
+            var selfCost = medicine.Price * medicine.Amount;
             if (selfPay.IsChecked == true)
             {
                 medicine.PaySelf = true;
-                medicine.TotalPrice = medicine.Price * medicine.Total;
+                medicine.TotalPrice = medicine.Price * medicine.Amount;
                 SelfCost.Text = (int.Parse(SelfCost.Text) + PriceConvert(selfCost)).ToString();
             }
             else
             {
                 medicine.PaySelf = false;
-                medicine.TotalPrice = medicine.HcPrice * medicine.Total;
+                medicine.TotalPrice = medicine.HcPrice * medicine.Amount;
                 SelfCost.Text = (int.Parse(SelfCost.Text) - PriceConvert(selfCost)).ToString();
             }
             CountMedicinesCost();
@@ -286,7 +286,7 @@ namespace His_Pos.PrescriptionDec
             if (PrescriptionMedicines.SelectedIndex >= PrescriptionList.Count || !(sender is TextBox medicineTotal)) return;
             if (medicineTotal.Text.Equals(string.Empty)) return;
             var medicine = PrescriptionList[PrescriptionMedicines.SelectedIndex];
-            medicine.Total = double.Parse(medicineTotal.Text);
+            medicine.Amount = double.Parse(medicineTotal.Text);
             CountMedicineTotalPrice(medicine);
             CountMedicinesCost();
         }

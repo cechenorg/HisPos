@@ -15,8 +15,10 @@ namespace His_Pos.Class.Product
         {
             switch(dataSource)
             {
-                case DataSource.PRODUCTBELOWSAFEAMOUNT:
+                case DataSource.PRODUCTBASICORSAFE:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
+                    Amount = Int16.Parse(dataRow["PRO_BASICQTY"].ToString()) -
+                            Int16.Parse(dataRow["PRO_INVENTORY"].ToString());
                     break;
                 case DataSource.STOORDLIST:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
@@ -47,22 +49,19 @@ namespace His_Pos.Class.Product
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "") ? "0" : dataRow["PRO_INVENTORY"].ToString());
-
-            
         }
 
-        public Medicine(string id, string name, double price, double inventory, double total, bool paySelf, double hcPrice, Medicate medicalCategory)
+        public Medicine(string id, string name, double price, double inventory, double amount, bool paySelf, double hcPrice, Medicate medicalCategory)
         {
             Id = id;
             Name = name;
             Price = price;
-            Total = total;
+            Amount = amount;
             PaySelf = paySelf;
             HcPrice = hcPrice;
             MedicalCategory = medicalCategory;
         }
-
-        public double Total { get; set; }
+        
         public double TotalPrice { get; set; }
         public bool PaySelf { get; set; }
         public double HcPrice { get; set; }

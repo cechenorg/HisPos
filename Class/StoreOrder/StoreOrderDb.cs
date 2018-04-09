@@ -48,14 +48,16 @@ namespace His_Pos.Class.StoreOrder
                 parameters.Add(new SqlParameter("PRICE", row.Price));
                 parameters.Add(new SqlParameter("DESCRIPTION", row.Note));
                 dd.ExecuteProc("[HIS_POS_DB].[SET].[INSERTORDERPRODUCT]",parameters);
+
+                parameters.Clear();
             }
         }
         internal static void SaveOrderDetail(StoreOrder storeOrder) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-         parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
-         parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
-         parameters.Add(new SqlParameter("STOORD_TYPE", storeOrder.Category.Substring(0, 1)));
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
+            parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
+            parameters.Add(new SqlParameter("STOORD_TYPE", (storeOrder.Category == String.Empty)? String.Empty : storeOrder.Category.Substring(0, 1)));
             if (storeOrder.Manufactory.Id == null)
                 parameters.Add(new SqlParameter("MAN_ID", DBNull.Value));
             else

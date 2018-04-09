@@ -38,11 +38,15 @@ namespace His_Pos.ProductPurchase
         public ProductPurchaseView()
         {
             InitializeComponent();
+            InitManufactory();
             UpdateUi();
+
+            StoOrderOverview.SelectedIndex = 0;
+
             IsFirst = false;
         }
 
-        private void UpdateUi()
+        private void InitManufactory()
         {
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
@@ -50,12 +54,13 @@ namespace His_Pos.ProductPurchase
             }
             ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
 
+            ManufactoryAuto.ItemFilter = ManufactoryFilter;
+        }
+
+        private void UpdateUi()
+        {
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
             StoOrderOverview.ItemsSource = storeOrderCollection;
-
-            ManufactoryAuto.ItemFilter = ManufactoryFilter;
-
-            StoOrderOverview.SelectedIndex = 0;
         }
 
         private void ShowOrderDetail(object sender, RoutedEventArgs e)
@@ -131,36 +136,6 @@ namespace His_Pos.ProductPurchase
             }
         }
 
-        private void AddToBasicAmount(Manufactory manufactory = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void AddGoodSales(Manufactory manufactory = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void AddBelowSafeAmount(Manufactory manufactory = null)
-        {
-            ObservableCollection<Manufactory> manufactories = (manufactory is null)
-                ? ManufactoryDb.GetManufactoriesBelowSafeAmount()
-                : new ObservableCollection<Manufactory>(){manufactory};
-
-            foreach (Manufactory man in manufactories)
-            {
-                storeOrderCollection.Insert(0, new StoreOrder(MainWindow.CurrentUser, manufactory, ProductDb.GetBelowSafeAmount(man)));
-            }
-            
-            StoOrderOverview.SelectedIndex = 0;
-        }
-
-        private void AddNewOrderByUm(Manufactory manufactory = null)
-        {
-            storeOrderCollection.Insert(0,new StoreOrder(MainWindow.CurrentUser, manufactory));
-            StoOrderOverview.SelectedIndex = 0;
-        }
-
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
 
@@ -209,11 +184,14 @@ namespace His_Pos.ProductPurchase
             productAuto.PopulateComplete();
         }
       
-
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             UpdateOrderDetailStoreOrder();
             StoreOrderDb.SaveOrderDetail(storeOrderData);
+
+            orderIndex = StoOrderOverview.SelectedIndex;
+            UpdateUi();
+            StoOrderOverview.SelectedIndex = orderIndex;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

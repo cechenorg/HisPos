@@ -58,10 +58,13 @@ namespace His_Pos.Class.StoreOrder
                     CategoryColor = "Blue";
                     Category =  "調貨";
                     break;
+                default:
+                    Category = "";
+                    break;
             }
            
             OrdEmp = row["ORD_EMP"].ToString();
-            TotalPrice = row["TOTAL"].ToString();
+            TotalPrice = Double.Parse(row["TOTAL"].ToString()).ToString("0.##");
             RecEmp = row["REC_EMP"].ToString();
             if (row["MAN_ID"].ToString() == "")
                 Manufactory = new Manufactory.Manufactory();

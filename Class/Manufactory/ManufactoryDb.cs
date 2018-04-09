@@ -51,6 +51,22 @@ namespace His_Pos.Class.Manufactory
 
         internal static ObservableCollection<Manufactory> GetManufactoriesBelowSafeAmount()
         {
+            ObservableCollection<Manufactory> manufactories = new ObservableCollection<Manufactory>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[MANUFACTORYBELOWSAFEAMOUNT]");
+
+            foreach (DataRow m in table.Rows)
+            {
+                manufactories.Add(new Manufactory(m, DataSource.MANUFACTORY));
+            }
+
+            return manufactories;
+        }
+
+        internal static ObservableCollection<Manufactory> GetManufactoriesToBasicAmount()
+        {
             throw new NotImplementedException();
         }
     }
