@@ -93,7 +93,7 @@ namespace His_Pos.ProductPurchase
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
             storeOrderData = storeOrder;
-            StoreOrderDetail.ItemsSource = storeOrder.Products;
+            StoreOrderDetail.ItemsSource = storeOrderData.Products;
             TotalAmount.Content = storeOrder.Products.Count.ToString();
 
             IsChangedLabel.Content = "未修改";
@@ -235,16 +235,20 @@ namespace His_Pos.ProductPurchase
             if (index - 1 < 0) index ++;
             switch (txt.Name) {
                 case "Price":
-                    storeOrderData.Products[index -1].Price = Convert.ToDouble(txt.Text);
+                    if (txt.Text != "")
+                        storeOrderData.Products[index -1].Price = Convert.ToDouble(txt.Text);
                     break; 
                 case "Amount":
+                    if(txt.Text != "")
                        storeOrderData.Products[index -1 ].Amount = Convert.ToInt32(txt.Text);
                     break;
                 case "Notes":
                     storeOrderData.Products[index -1].Note = txt.Text;
                     break;
             }
+            storeOrderData.Products[index - 1].TotalPrice = storeOrderData.Products[index - 1].Amount * storeOrderData.Products[index - 1].Price;
           
+           // ((Product)(Product)StoreOrderDetail.SelectedItem).TotalPrice = storeOrderData.Products[index - 1].TotalPrice;
         }
         
         private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)

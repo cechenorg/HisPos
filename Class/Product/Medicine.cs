@@ -63,7 +63,6 @@ namespace His_Pos.Class.Product
         }
 
         public double Total { get; set; }
-        public double TotalPrice { get; set; }
         public bool PaySelf { get; set; }
         public double HcPrice { get; set; }
         public Medicate MedicalCategory { get; set;}

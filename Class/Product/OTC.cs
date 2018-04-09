@@ -43,6 +43,5 @@ namespace His_Pos.Class.Product
         }
 
         public int Total { get; set; }//商品數量
-        public double TotalPrice { get; set; }//商品總價
     }
 }
