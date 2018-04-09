@@ -1,15 +1,15 @@
-﻿using System.Security.Permissions;
+﻿using System.ComponentModel;
+using System.Security.Permissions;
 using System.Windows.Media.Imaging;
 
 namespace His_Pos.AbstractClass
 {
-    public class Product
+    public class Product: INotifyPropertyChanged
     {
         public BitmapImage TypeIcon { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
         public double LastPrice { get; set; }
-        public double TotalPrice { get; set; }
         public double Price { get; set; }
         public double Amount { get; set; }
         public double Cost { get; set; }
@@ -22,5 +22,26 @@ namespace His_Pos.AbstractClass
         public string Type { get; set; }
         public bool Status { get; set; }
         public string Location { get; set; }
+
+        private double totalPrice;
+
+        public double TotalPrice
+        {
+            get { return totalPrice; }
+            set
+            {
+                totalPrice = value;
+                NotifyPropertyChanged("TotalPrice");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 }

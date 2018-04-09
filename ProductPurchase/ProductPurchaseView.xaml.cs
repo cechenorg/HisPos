@@ -20,6 +20,7 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.ProductPurchase
 {
@@ -211,23 +212,20 @@ namespace His_Pos.ProductPurchase
             SetChanged();
             int index = StoreOrderDetail.SelectedIndex;
             TextBox txt = sender as TextBox;
-            if (index - 1 < 0) index ++;
             switch (txt.Name) {
                 case "Price":
                     if (txt.Text != "")
-                        storeOrderData.Products[index -1].Price = Convert.ToDouble(txt.Text);
+                        storeOrderData.Products[index].Price = Convert.ToDouble(txt.Text);
                     break; 
                 case "Amount":
                     if(txt.Text != "")
-                       storeOrderData.Products[index -1 ].Amount = Convert.ToInt32(txt.Text);
+                       storeOrderData.Products[index].Amount = Convert.ToInt32(txt.Text);
                     break;
                 case "Notes":
-                    storeOrderData.Products[index -1].Note = txt.Text;
+                    storeOrderData.Products[index].Note = txt.Text;
                     break;
             }
-            storeOrderData.Products[index - 1].TotalPrice = storeOrderData.Products[index - 1].Amount * storeOrderData.Products[index - 1].Price;
-          
-           // ((Product)(Product)StoreOrderDetail.SelectedItem).TotalPrice = storeOrderData.Products[index - 1].TotalPrice;
+            storeOrderData.Products[index].TotalPrice = storeOrderData.Products[index].Amount * storeOrderData.Products[index].Price;
         }
         
         private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -247,6 +245,7 @@ namespace His_Pos.ProductPurchase
             if (storeOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
             {
                 storeOrderData.Products.Add(productAuto.SelectedItem as Product);
+                StoreOrderDetail.SelectedIndex--;
             }
             else
             {
