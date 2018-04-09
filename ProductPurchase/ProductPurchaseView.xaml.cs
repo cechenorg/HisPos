@@ -210,21 +210,11 @@ namespace His_Pos.ProductPurchase
             if (StoreOrderDetail.SelectedIndex == -1) return;
             if (IsFirst == true) return;
             SetChanged();
+
+            if ((sender as TextBox).Text == String.Empty)
+                (sender as TextBox).Text = "0";
+
             int index = StoreOrderDetail.SelectedIndex;
-            TextBox txt = sender as TextBox;
-            switch (txt.Name) {
-                case "Price":
-                    if (txt.Text != "")
-                        storeOrderData.Products[index].Price = Convert.ToDouble(txt.Text);
-                    break; 
-                case "Amount":
-                    if(txt.Text != "")
-                       storeOrderData.Products[index].Amount = Convert.ToInt32(txt.Text);
-                    break;
-                case "Notes":
-                    storeOrderData.Products[index].Note = txt.Text;
-                    break;
-            }
             storeOrderData.Products[index].TotalPrice = storeOrderData.Products[index].Amount * storeOrderData.Products[index].Price;
         }
         
