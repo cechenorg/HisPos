@@ -239,7 +239,7 @@
                         <DataGridTemplateColumn MinWidth="210" Header="備註">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Notes" Text="{Binding Note}" Width="210" FontSize="14" FontFamily="Segoe UI Semi"/>
+                                    <TextBox x:Name="Notes" Text="{Binding Note}" Width="210" FontSize="14" FontFamily="Segoe UI Semi" TextChanged="TextBox_TextChanged"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

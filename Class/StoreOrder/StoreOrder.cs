@@ -46,20 +46,22 @@ namespace His_Pos.Class.StoreOrder
             {
                 case "進":
                     CategoryColor = "Green";
+                    Category = "進貨";
                     break;
                 case "退":
                     CategoryColor = "Red";
+                    Category = "退貨";
                     break;
                 case "調":
                     CategoryColor = "Blue";
+                    Category =  "調貨";
                     break;
             }
-            Category = row["STOORD_TYPE"].ToString() + "貨"; 
+           
             OrdEmp = row["ORD_EMP"].ToString();
             TotalPrice = row["TOTAL"].ToString();
             RecEmp = row["REC_EMP"].ToString();
-
-            if(row["MAN_ID"].ToString() == "")
+            if (row["MAN_ID"].ToString() == "")
                 Manufactory = new Manufactory.Manufactory();
             else
             {
