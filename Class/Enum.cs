@@ -34,7 +34,8 @@ namespace His_Pos.Class
         STOORDLIST = 1,
         MEDICINE = 2,
         MANUFACTORY = 3,
-        PROMAN = 4
+        PROMAN = 4,
+        PRODUCTBELOWSAFEAMOUNT = 5
     }
     public enum MessageType
     {

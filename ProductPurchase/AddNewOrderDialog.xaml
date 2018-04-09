@@ -31,7 +31,8 @@
                 <RadioButton Tag="5" GroupName="target" Grid.Row="1" Grid.Column="0" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" Checked="RadioButton_TargetOnChecked"/>
                 <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="300" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" Margin="-130,0,0,0"
-                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Grid.Row="1" Grid.Column="1">
+                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Grid.Row="1" Grid.Column="1"
+                                              DropDownClosing="ManufactoryAuto_OnDropDownClosing">
                     <controls:AutoCompleteBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

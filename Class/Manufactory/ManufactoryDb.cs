@@ -48,5 +48,10 @@ namespace His_Pos.Class.Manufactory
 
             return manufactories;
         }
+
+        internal static ObservableCollection<Manufactory> GetManufactoriesBelowSafeAmount()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

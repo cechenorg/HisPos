@@ -1,4 +1,5 @@
-﻿using His_Pos.Properties;
+﻿using His_Pos.AbstractClass;
+using His_Pos.Properties;
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
@@ -80,6 +81,33 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("LOCATION", product.Location));
             parameters.Add(new SqlParameter("PRO_DESCRIPTION", product.Note));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
+        }
+
+        internal static ObservableCollection<AbstractClass.Product> GetBelowSafeAmount(Manufactory.Manufactory manufactory)
+        {
+            ObservableCollection<AbstractClass.Product> products = new ObservableCollection<AbstractClass.Product>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manufactory.Id));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PRODUCTBELOWSAFEAMOUNT]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                switch ((SearchType)Int16.Parse(row["TYPE"].ToString()))
+                {
+                    case SearchType.MED:
+                        products.Add(new Medicine(row, DataSource.PRODUCTBELOWSAFEAMOUNT));
+                        break;
+                    case SearchType.OTC:
+                        products.Add(new Otc(row, DataSource.PRODUCTBELOWSAFEAMOUNT));
+                        break;
+                }
+            }
+
+            return products;
         }
     }
 }
