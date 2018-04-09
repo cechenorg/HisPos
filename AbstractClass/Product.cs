@@ -10,8 +10,6 @@ namespace His_Pos.AbstractClass
         public string Id { get; set; }
         public string Name { get; set; }
         public double LastPrice { get; set; }
-        public double Price { get; set; }
-        public double Amount { get; set; }
         public double Cost { get; set; }
         public double Inventory { get; set; }
         public string SafeAmount { get; set; } 
@@ -24,7 +22,27 @@ namespace His_Pos.AbstractClass
         public string Location { get; set; }
 
         private double totalPrice;
+        public double amount;
+        public double price;
 
+        public double Price
+        {
+            get { return price; }
+            set
+            {
+                price = value;
+                NotifyPropertyChanged("Price");
+            }
+        }
+        public double Amount
+        {
+            get { return amount; }
+            set
+            {
+                amount = value;
+                NotifyPropertyChanged("Amount");
+            }
+        }
         public double TotalPrice
         {
             get { return totalPrice; }

@@ -102,9 +102,7 @@ namespace His_Pos.ProductPurchase
             storeOrderData = storeOrder;
             StoreOrderDetail.ItemsSource = storeOrderData.Products;
             TotalAmount.Content = storeOrder.Products.Count.ToString();
-
-            IsChangedLabel.Content = "未修改";
-            IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
+            
             IsChanged = false;
             IsFirst = false;
         }
@@ -194,37 +192,17 @@ namespace His_Pos.ProductPurchase
             productAuto.ItemsSource = ProductAutoCompleteCollection;
             productAuto.PopulateComplete();
         }
-      
-        private void ButtonSave_Click(object sender, RoutedEventArgs e)
-        {
-            UpdateOrderDetailStoreOrder();
-            StoreOrderDb.SaveOrderDetail(storeOrderData);
-
-            orderIndex = StoOrderOverview.SelectedIndex;
-            UpdateUi();
-            StoOrderOverview.SelectedIndex = orderIndex;
-        }
         
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (StoreOrderDetail.SelectedIndex == -1) return;
             if (IsFirst == true) return;
             SetChanged();
+
+            if ((sender as TextBox).Text == String.Empty)
+                (sender as TextBox).Text = "0";
+
             int index = StoreOrderDetail.SelectedIndex;
-            TextBox txt = sender as TextBox;
-            switch (txt.Name) {
-                case "Price":
-                    if (txt.Text != "")
-                        storeOrderData.Products[index].Price = Convert.ToDouble(txt.Text);
-                    break; 
-                case "Amount":
-                    if(txt.Text != "")
-                       storeOrderData.Products[index].Amount = Convert.ToInt32(txt.Text);
-                    break;
-                case "Notes":
-                    storeOrderData.Products[index].Note = txt.Text;
-                    break;
-            }
             storeOrderData.Products[index].TotalPrice = storeOrderData.Products[index].Amount * storeOrderData.Products[index].Price;
         }
         
