@@ -70,12 +70,39 @@ namespace His_Pos.ProductPurchase
             if(storeOrderData != null && IsChanged) {
                 UpdateOrderDetailStoreOrder();
                 StoreOrderDb.SaveOrderDetail(storeOrderData);
+
+                orderIndex = StoOrderOverview.SelectedIndex;
                 UpdateUi();
+                StoOrderOverview.SelectedIndex = orderIndex;
             }
-            
-            UpdateOrderDetailUi((StoreOrder)(sender as DataGridCell).DataContext);
+
+            StoreOrder storeOrder =  (StoreOrder) (sender as DataGridCell).DataContext;
+            UpdateOrderDetailUi(storeOrder.Type);
+            UpdateOrderDetailData(storeOrder);
         }
-       
+
+        private void UpdateOrderDetailUi(OrderType type)
+        {
+            switch (type)
+            {
+                case OrderType.PROCESSING:
+                    Confirm.Visibility = Visibility.Visible;
+                    ConfirmToProcess.Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[4].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[5].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[7].Visibility = Visibility.Collapsed;
+                    break;
+                case OrderType.UNPROCESSING:
+                    Confirm.Visibility = Visibility.Collapsed;
+                    ConfirmToProcess.Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[4].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[5].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
+                    break;
+            }
+        }
 
         private void UpdateOrderDetailStoreOrder() {
             storeOrderData.Id = ID.Content.ToString();
@@ -86,7 +113,7 @@ namespace His_Pos.ProductPurchase
             storeOrderData.Category = OrderCategory.Text;
            
         }
-        private void UpdateOrderDetailUi(StoreOrder storeOrder)
+        private void UpdateOrderDetailData(StoreOrder storeOrder)
         {
             IsFirst = true;
             ID.Content = storeOrder.Id;
@@ -96,9 +123,9 @@ namespace His_Pos.ProductPurchase
             ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null)? "": storeOrder.Manufactory.Name;
             Phone.Content = (storeOrder.Manufactory.Telphone is null)? "": storeOrder.Manufactory.Telphone;
 
-            if(storeOrder.Products is null)
+            if (storeOrder.Products is null)
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
-
+            
             storeOrderData = storeOrder;
             StoreOrderDetail.ItemsSource = storeOrderData.Products;
             TotalAmount.Content = storeOrder.Products.Count.ToString();
@@ -121,22 +148,22 @@ namespace His_Pos.ProductPurchase
                         AddNewOrderByUm();
                         break;
                     case AddOrderType.ADDALLBELOWSAFEAMOUNT:
-                        AddBelowSafeAmount();
+                        AddBasicOrSafe(StoreOrderProductType.SAFE);
                         break;
                     case AddOrderType.ADDBYMANUFACTORY:
                         AddNewOrderByUm(addNewOrderDialog.Manufactory);
                         break;
                     case AddOrderType.ADDALLTOBASICAMOUNT:
-                        AddToBasicAmount();
+                        AddBasicOrSafe(StoreOrderProductType.BASIC);
                         break;
                     case AddOrderType.ADDALLGOODSALES:
                         AddGoodSales();
                         break;
                     case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
-                        AddBelowSafeAmount(addNewOrderDialog.Manufactory);
+                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.Manufactory);
                         break;
                     case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
-                        AddToBasicAmount(addNewOrderDialog.Manufactory);
+                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.Manufactory);
                         break;
                     case AddOrderType.ADDBYMANUFACTORYGOODSALES:
                         AddGoodSales(addNewOrderDialog.Manufactory);
@@ -249,6 +276,22 @@ namespace His_Pos.ProductPurchase
         private void SetIsChanged(object sender, EventArgs e)
         {
             SetChanged();
+        }
+
+        private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
+        {
+            storeOrderData.Type = OrderType.PROCESSING;
+            StoreOrderDb.SaveOrderDetail(storeOrderData);
+            UpdateUi();
+            
+            for (int x = 0; x < storeOrderCollection.Count; x++)
+            {
+                if (storeOrderCollection[x].Id == storeOrderData.Id)
+                {
+                    StoOrderOverview.SelectedIndex = x;
+                    StoOrderOverview.ScrollIntoView(storeOrderCollection[x]);
+                }
+            }
         }
     }
 }

@@ -26,7 +26,7 @@
                     <Image Source="/Images/HisDot.png" Width="15"/>
                     <RadioButton Content="全部" Tag="2" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" IsChecked="True"/>
                 </StackPanel>
-                <DataGrid Name="StoOrderOverview" Grid.Row="1" Background="Transparent" HeadersVisibility="None"
+                <DataGrid Name="StoOrderOverview" Grid.Row="1" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="290">
@@ -76,15 +76,15 @@
                     <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0" MouseLeftButtonDown="AddNewOrder"/>
                 </StackPanel>
             </Grid>
-            <Grid Margin="0,10,10,10" Grid.Column="1" Background="{StaticResource GridDarkerBackGround}">
+            <Grid Margin="0,10,10,10" Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="70"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition/>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <Label Name="ID" Content="20180327-001" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
+                    <Label Name="ID" Content="00000000-00" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
                     <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
                     <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="350" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" Height="40"
                                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
@@ -100,9 +100,9 @@
                             </DataTemplate>
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
-                    <Label Name="Phone" Content="0922222222" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label Name="Phone" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -131,8 +131,8 @@
                         <TextBox Name="Note" Width="340" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="SetIsChanged"/>
                     </StackPanel>
                 </Grid>
-                <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                          AutoGenerateColumns="False" >
+                <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                          AutoGenerateColumns="False">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -191,10 +191,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="250" Header="批號" Visibility="Collapsed">
+                        <DataGridTemplateColumn MinWidth="240" Header="批號" Visibility="Collapsed">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="BatchNumber" Width="80" FontSize="14" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center"/>
+                                    <TextBox x:Name="BatchNumber" Width="230" FontSize="14" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -246,7 +246,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Orientation="Horizontal" Grid.Row="3">
+                <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkerBackGround}">
                     <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
                     <Label Name="Total"  Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
@@ -254,8 +254,8 @@
                     <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <Rectangle Width="420"/>
                     <Button Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="DimGray"/>
-                    <Button Width="150" Content="轉成進貨單" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="Red"/>
-                    <Button Width="150" Content="確認收貨" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="Red" Visibility="Collapsed"/>
+                    <Button Name="ConfirmToProcess" Width="150" Content="轉成已處理單" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="Red" Click="ConfirmToProcess_OnClick"/>
+                    <Button Name="Confirm" Width="150" Content="確認收貨" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="DeepSkyBlue" Visibility="Collapsed"/>
                 </StackPanel>
             </Grid>
         </Grid>

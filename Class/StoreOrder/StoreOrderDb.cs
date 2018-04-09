@@ -55,8 +55,9 @@ namespace His_Pos.Class.StoreOrder
         internal static void SaveOrderDetail(StoreOrder storeOrder) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-         parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
-         parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
+            parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
+            parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
+            parameters.Add(new SqlParameter("STOORD_FLAG", (storeOrder.Type == OrderType.PROCESSING)? "G" : "P"));
             if (String.IsNullOrEmpty(storeOrder.Category))
                 parameters.Add(new SqlParameter("STOORD_TYPE",DBNull.Value));
             else

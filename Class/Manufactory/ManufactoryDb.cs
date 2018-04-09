@@ -49,13 +49,16 @@ namespace His_Pos.Class.Manufactory
             return manufactories;
         }
 
-        internal static ObservableCollection<Manufactory> GetManufactoriesBelowSafeAmount()
+        internal static ObservableCollection<Manufactory> GetManufactoriesBasicSafe(StoreOrderProductType type)
         {
             ObservableCollection<Manufactory> manufactories = new ObservableCollection<Manufactory>();
-
-            var dd = new DbConnection(Settings.Default.SQL_global);
             
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[MANUFACTORYBELOWSAFEAMOUNT]");
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("TYPE", (type == StoreOrderProductType.BASIC) ? "BASIC" : "SAFE"));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[MANUFACTORYBASICORSAFE]", parameters);
 
             foreach (DataRow m in table.Rows)
             {
@@ -63,11 +66,6 @@ namespace His_Pos.Class.Manufactory
             }
 
             return manufactories;
-        }
-
-        internal static ObservableCollection<Manufactory> GetManufactoriesToBasicAmount()
-        {
-            throw new NotImplementedException();
         }
     }
 }

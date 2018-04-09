@@ -14,38 +14,20 @@ namespace His_Pos.ProductPurchase
 {
     public partial class ProductPurchaseView : UserControl
     {
-        private void AddToBasicAmount(Manufactory manufactory = null)
-        {
-            ObservableCollection<Manufactory> manufactories = (manufactory is null)
-                ? ManufactoryDb.GetManufactoriesToBasicAmount()
-                : new ObservableCollection<Manufactory>() { manufactory };
-
-            foreach (Manufactory man in manufactories)
-            {
-                StoreOrder newStoreOrder = new StoreOrder(MainWindow.CurrentUser, man, ProductDb.GetBasicOrSafe(man, StoreOrderProductType.BASIC));
-
-                storeOrderCollection.Insert(0, newStoreOrder);
-
-                StoreOrderDb.SaveOrderDetail(newStoreOrder);
-            }
-
-            StoOrderOverview.SelectedIndex = 0;
-        }
-
         private void AddGoodSales(Manufactory manufactory = null)
         {
             throw new NotImplementedException();
         }
 
-        private void AddBelowSafeAmount(Manufactory manufactory = null)
+        private void AddBasicOrSafe(StoreOrderProductType type,Manufactory manufactory = null)
         {
             ObservableCollection<Manufactory> manufactories = (manufactory is null)
-                ? ManufactoryDb.GetManufactoriesBelowSafeAmount()
+                ? ManufactoryDb.GetManufactoriesBasicSafe(type)
                 : new ObservableCollection<Manufactory>() { manufactory };
 
             foreach (Manufactory man in manufactories)
             {
-                StoreOrder newStoreOrder = new StoreOrder(MainWindow.CurrentUser, man, ProductDb.GetBasicOrSafe(man, StoreOrderProductType.SAFE));
+                StoreOrder newStoreOrder = new StoreOrder(MainWindow.CurrentUser, man, ProductDb.GetBasicOrSafe(man, type));
 
                 storeOrderCollection.Insert(0, newStoreOrder);
 

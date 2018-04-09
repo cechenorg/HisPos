@@ -20,7 +20,7 @@
           </ResourceDictionary>
           <ResourceDictionary>
               <Style x:Key="DataGridSpecialCellStyle" TargetType="{x:Type DataGridCell}">
-                  <Setter Property="Background" Value="#99BFBFBF" />
+                  <Setter Property="Background" Value="#19000000" />
                   <Setter Property="BorderBrush" Value="Transparent"/>
                   <Setter Property="Foreground" Value="#FF424040"/>
                   <Setter Property="Margin" Value="-1"/>
