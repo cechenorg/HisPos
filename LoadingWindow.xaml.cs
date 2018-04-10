@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.Manufactory;
+using His_Pos.Class.StoreOrder;
+using His_Pos.ProductPurchase;
 using His_Pos.Properties;
 using His_Pos.Service;
 
@@ -48,7 +52,6 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("Loading Medicine Data...");
-
                 MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
                 MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "PRO_ID" };
                 
@@ -65,6 +68,38 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     mainWindow.Show();
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        public void AddNewOrders(ProductPurchaseView productPurchaseView,StoreOrderProductType type, Manufactory manufactory = null)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ObservableCollection<Manufactory> manufactories = (manufactory is null)
+                    ? ManufactoryDb.GetManufactoriesBasicSafe(type)
+                    : new ObservableCollection<Manufactory>() { manufactory };
+
+                foreach (Manufactory man in manufactories)
+                {
+                    StoreOrder newStoreOrder = new StoreOrder(MainWindow.CurrentUser, man, ProductDb.GetBasicOrSafe(man, type));
+                    newStoreOrder.Freeze();
+
+                    Dispatcher.Invoke((Action)(() =>
+                    {
+                        productPurchaseView.storeOrderCollection.Insert(0, newStoreOrder);
+                    }));
+                    
+                    StoreOrderDb.SaveOrderDetail(newStoreOrder);
+                }
+            };
+
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
                     Close();
                 }));
             };
