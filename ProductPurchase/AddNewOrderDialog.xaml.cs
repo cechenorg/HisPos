@@ -104,5 +104,10 @@ namespace His_Pos.ProductPurchase
 
             Manufactory = autoCompleteBox.SelectedItem as Manufactory;
         }
+
+        private void ManufactoryAuto_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TargetManufactory.IsChecked = true;
+        }
     }
 }

@@ -88,6 +88,35 @@ namespace His_Pos.Class.StoreOrder
         public Manufactory.Manufactory Manufactory{ get; set; }
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
-       
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        public string IsAnyDataEmpty()
+        {
+            string message = "";
+
+            if (String.IsNullOrEmpty(category))
+                message += "請填寫處理單類別\n";
+
+            if(Manufactory is null || Manufactory.Id is null)
+                message += "請填寫廠商名稱\n";
+
+            if (Products is null || Products.Count == 0)
+                message += "請填寫商品\n";
+
+            foreach (AbstractClass.Product product in Products)
+            {
+                if( product.Amount == 0 )
+                    message += "商品數量不能為0\n";
+            }
+
+            return message;
+        }
     }
 }

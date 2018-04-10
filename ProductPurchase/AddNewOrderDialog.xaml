@@ -28,11 +28,11 @@
                 </Grid.ColumnDefinitions>
                 <RadioButton Tag="0" GroupName="target" Grid.Row="0" Grid.Column="0" Content=" 自行新增" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True" Checked="RadioButton_TargetOnChecked"/>
                 <RadioButton Tag="2" GroupName="target" Grid.Row="0" Grid.Column="1" Content=" 所有廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" Checked="RadioButton_TargetOnChecked"/>
-                <RadioButton Tag="5" GroupName="target" Grid.Row="1" Grid.Column="0" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" Checked="RadioButton_TargetOnChecked"/>
+                <RadioButton Name="TargetManufactory" Tag="5" GroupName="target" Grid.Row="1" Grid.Column="0" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" Checked="RadioButton_TargetOnChecked"/>
                 <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="300" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" Margin="-130,0,0,0"
                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Grid.Row="1" Grid.Column="1"
-                                              DropDownClosing="ManufactoryAuto_OnDropDownClosing">
+                                              DropDownClosing="ManufactoryAuto_OnDropDownClosing" GotFocus="ManufactoryAuto_OnGotFocus">
                     <controls:AutoCompleteBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -58,7 +58,7 @@
                 <RadioButton Name="Con3" Tag="3" GroupName="condition" Grid.Row="1" Grid.Column="0" Content=" 全補至基準量" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsEnabled="False"/>
                 <RadioButton Name="Con4" Tag="4" GroupName="condition" Grid.Row="1" Grid.Column="1" Content=" 近期銷量較高" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsEnabled="False"/>
             </Grid>
-            <Button Content="確認"  Grid.Row="4" Width="200" Background="#FF63B6FF" BorderBrush="Transparent" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" Click="ConfirmButtonClick"/>
+            <Button Content="確認"  Grid.Row="4" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmButtonClick"/>
         </Grid>
     </Viewbox>
 </Window>
