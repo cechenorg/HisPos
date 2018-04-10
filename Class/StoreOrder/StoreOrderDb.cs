@@ -34,7 +34,7 @@ namespace His_Pos.Class.StoreOrder
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", Id));
-            dd.ExecuteProc("[HIS_POS_DB].[SET].[DELETEORDERPRODUCT]", parameters);
+            dd.ExecuteProc("[HIS_POS_DB].[SET].[DELETEORDER]", parameters);
         }
         internal static void DeleteOrderProduct(string Id) {
             var dd = new DbConnection(Settings.Default.SQL_global);

@@ -40,11 +40,26 @@ namespace His_Pos.ProductPurchase
         public ProductPurchaseView()
         {
             InitializeComponent();
+            this.Loaded += UserControl1_Loaded;
             InitManufactory();
             UpdateUi();
             StoOrderOverview.SelectedIndex = 0;
         }
+        void UserControl1_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window window = Window.GetWindow(this);
+            window.Closing += window_Closing;
+        }
 
+        void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
+        {
+            if (storeOrderData != null && IsChanged)
+            {
+                UpdateOrderDetailStoreOrder();
+                StoreOrderDb.SaveOrderDetail(storeOrderData);
+            }
+        }
+       
         private void InitManufactory()
         {
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
@@ -299,9 +314,24 @@ namespace His_Pos.ProductPurchase
             }
         }
 
+       
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            if (storeOrderData != null && IsChanged)
+            {
+                UpdateOrderDetailStoreOrder();
+                StoreOrderDb.SaveOrderDetail(storeOrderData);
+            }
+        }
+        
+
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            if (storeOrderData == null) return;
+            StoreOrderDb.DeleteOrder(storeOrderData.Id);
+            UpdateUi();
+            StoOrderOverview.SelectedIndex = 0;
         }
     }
 }
