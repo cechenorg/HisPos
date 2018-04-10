@@ -31,7 +31,7 @@ namespace His_Pos.ProductPurchase
     {
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         public ObservableCollection<Product> ProductAutoCompleteCollection = new ObservableCollection<Product>();
-        private ObservableCollection<StoreOrder> storeOrderCollection;
+        public ObservableCollection<StoreOrder> storeOrderCollection;
         private OrderType OrderTypeFilterCondition = OrderType.ALL; 
         public StoreOrder storeOrderData;
         private int orderIndex = 0;

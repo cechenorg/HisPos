@@ -1,4 +1,6 @@
-﻿using His_Pos.Class.Person;
+﻿using His_Pos.AbstractClass;
+using His_Pos.Class.Manufactory;
+using His_Pos.Class.Person;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,12 +9,27 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace His_Pos.Class.StoreOrder
 {
-    public class StoreOrder
+    public class StoreOrder : Freezable
     {
+
+        private StoreOrder(StoreOrder storeOrder)
+        {
+            TypeIcon = storeOrder.TypeIcon;
+            Type = storeOrder.Type;
+            Category = storeOrder.Category;
+            CategoryColor = storeOrder.CategoryColor;
+            Id = storeOrder.Id;
+            OrdEmp = storeOrder.OrdEmp;
+            TotalPrice = storeOrder.TotalPrice;
+            RecEmp = storeOrder.RecEmp;
+            Manufactory = storeOrder.Manufactory;
+            Products = storeOrder.Products;
+        }
 
         public StoreOrder(User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
@@ -76,7 +93,7 @@ namespace His_Pos.Class.StoreOrder
                 Manufactory = new Manufactory.Manufactory(data[0], DataSource.MANUFACTORY);
             }
         }
-    
+
         public BitmapImage TypeIcon { get; set; }
         public OrderType Type { get; set; }
         public string Category { get; set; }
@@ -117,6 +134,11 @@ namespace His_Pos.Class.StoreOrder
             }
 
             return message;
+        }
+
+        protected override Freezable CreateInstanceCore()
+        {
+            return new StoreOrder(this);
         }
     }
 }
