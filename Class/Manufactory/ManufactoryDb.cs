@@ -13,16 +13,11 @@ namespace His_Pos.Class.Manufactory
 {
    public class ManufactoryDb
     {
-        public static List<string> GetProductByManId(string id) {
+        public static DataTable GetProductByManId(string id) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", id));
-            DataTable table = dd.ExecuteProc("[HIS_POS_DB].[GET].[MANBYID]",parameters);
-            List<string> list = new List<string>();
-            foreach (DataRow row in table.Rows) {
-                list.Add(row["PRO_ID"].ToString());
-            }
-            return list;
+            return dd.ExecuteProc("[HIS_POS_DB].[GET].[MANBYID]", parameters); 
     }
         public static DataTable GetManufactoryData()
         {
