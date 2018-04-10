@@ -80,22 +80,20 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("Adding New Orders...");
-
+                string stoordId;
                 ObservableCollection<Manufactory> manufactories = (manufactory is null)
                     ? ManufactoryDb.GetManufactoriesBasicSafe(type)
                     : new ObservableCollection<Manufactory>() { manufactory };
-
                 foreach (Manufactory man in manufactories)
                 {
-                    StoreOrder newStoreOrder = new StoreOrder(MainWindow.CurrentUser, man, ProductDb.GetBasicOrSafe(man, type));
-                    StoreOrderDb.SaveOrderDetail(newStoreOrder);
-
-                    Dispatcher.Invoke((Action)(() =>
-                    {
-                        productPurchaseView.UpdateUi();
-                        productPurchaseView.StoOrderOverview.SelectedIndex = 0;
-                    }));
+                   stoordId = StoreOrderDb.GetNewOrderId(MainWindow.CurrentUser.Id);
+                   ProductDb.GetBasicOrSafe(man, type,stoordId);
                 }
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    productPurchaseView.UpdateUi();
+                    productPurchaseView.StoOrderOverview.SelectedIndex = 0;
+                }));
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

@@ -84,7 +84,7 @@ namespace His_Pos.Class.Product
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
         }
 
-        internal static ObservableCollection<AbstractClass.Product> GetBasicOrSafe(Manufactory.Manufactory manufactory, StoreOrderProductType type)
+        internal static void GetBasicOrSafe(Manufactory.Manufactory manufactory, StoreOrderProductType type,string stoordId)
         {
             ObservableCollection<AbstractClass.Product> products = new ObservableCollection<AbstractClass.Product>();
 
@@ -92,24 +92,9 @@ namespace His_Pos.Class.Product
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", manufactory.Id));
+            parameters.Add(new SqlParameter("STOORD_ID", stoordId));
             parameters.Add(new SqlParameter("TYPE",(type == StoreOrderProductType.BASIC)? "BASIC" : "SAFE"));
-
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PRODUCTBASICORSAFE]", parameters);
-
-            foreach (DataRow row in table.Rows)
-            {
-                switch ((SearchType)Int16.Parse(row["TYPE"].ToString()))
-                {
-                    case SearchType.MED:
-                        products.Add(new Medicine(row, DataSource.PRODUCTBASICORSAFE));
-                        break;
-                    case SearchType.OTC:
-                        products.Add(new Otc(row, DataSource.PRODUCTBASICORSAFE));
-                        break;
-                }
-            }
-
-            return products;
+            dd.ExecuteProc("[HIS_POS_DB].[SET].[PRODUCTBASICORSAFE]", parameters);
         }
     }
 }
