@@ -86,7 +86,6 @@ namespace His_Pos
                 {
                     StoreOrder newStoreOrder = new StoreOrder(MainWindow.CurrentUser, man, ProductDb.GetBasicOrSafe(man, type));
                     newStoreOrder.Freeze();
-
                     Dispatcher.Invoke((Action)(() =>
                     {
                         productPurchaseView.storeOrderCollection.Insert(0, newStoreOrder);
