@@ -79,6 +79,8 @@ namespace His_Pos
         {
             backgroundWorker.DoWork += (s, o) =>
             {
+                ChangeLoadingMessage("Adding New Orders...");
+
                 ObservableCollection<Manufactory> manufactories = (manufactory is null)
                     ? ManufactoryDb.GetManufactoriesBasicSafe(type)
                     : new ObservableCollection<Manufactory>() { manufactory };
@@ -86,13 +88,13 @@ namespace His_Pos
                 foreach (Manufactory man in manufactories)
                 {
                     StoreOrder newStoreOrder = new StoreOrder(MainWindow.CurrentUser, man, ProductDb.GetBasicOrSafe(man, type));
-                    newStoreOrder.Freeze();
+                    StoreOrderDb.SaveOrderDetail(newStoreOrder);
+
                     Dispatcher.Invoke((Action)(() =>
                     {
-                        productPurchaseView.storeOrderCollection.Insert(0, newStoreOrder);
+                        productPurchaseView.UpdateUi();
+                        productPurchaseView.StoOrderOverview.SelectedIndex = 0;
                     }));
-                    
-                    StoreOrderDb.SaveOrderDetail(newStoreOrder);
                 }
             };
 
