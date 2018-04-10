@@ -14,23 +14,8 @@ using System.Windows.Media.Imaging;
 
 namespace His_Pos.Class.StoreOrder
 {
-    public class StoreOrder : Freezable
+    public class StoreOrder
     {
-
-        private StoreOrder(StoreOrder storeOrder)
-        {
-            TypeIcon = storeOrder.TypeIcon;
-            Type = storeOrder.Type;
-            Category = storeOrder.Category;
-            CategoryColor = storeOrder.CategoryColor;
-            Id = storeOrder.Id;
-            OrdEmp = storeOrder.OrdEmp;
-            TotalPrice = storeOrder.TotalPrice;
-            RecEmp = storeOrder.RecEmp;
-            Manufactory = storeOrder.Manufactory;
-            Products = storeOrder.Products;
-        }
-
         public StoreOrder(User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
             
@@ -134,11 +119,6 @@ namespace His_Pos.Class.StoreOrder
             }
 
             return message;
-        }
-
-        protected override Freezable CreateInstanceCore()
-        {
-            return new StoreOrder(this);
         }
     }
 }

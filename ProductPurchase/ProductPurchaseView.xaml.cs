@@ -71,7 +71,7 @@ namespace His_Pos.ProductPurchase
             ManufactoryAuto.ItemFilter = ManufactoryFilter;
         }
 
-        private void UpdateUi()
+        public void UpdateUi()
         {
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
             StoOrderOverview.ItemsSource = storeOrderCollection;
