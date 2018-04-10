@@ -220,16 +220,19 @@ namespace His_Pos.ProductPurchase
 
         private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
         {
+            List<string> proList = ManufactoryDb.GetProductByManId(storeOrderData.Manufactory.Id);
             var productAuto = sender as AutoCompleteBox;
             ProductAutoCompleteCollection.Clear();
             var tmp1 = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + productAuto.Text + "%' OR PRO_NAME Like '%" + productAuto.Text + "%'");
             foreach (var d in tmp1.Take(50))
             {
+                if(proList.Contains(d["PRO_ID"].ToString()))
                 ProductAutoCompleteCollection.Add(new Otc(d, DataSource.OTC));
             }
             var tmp = MainWindow.MedicineDataTable.Select("PRO_ID Like '%" + productAuto.Text + "%' OR PRO_NAME Like '%" + productAuto.Text + "%'");
             foreach (var d in tmp.Take(50))
             {
+                if (proList.Contains(d["PRO_ID"].ToString()))
                 ProductAutoCompleteCollection.Add(new Medicine(d, DataSource.MEDICINE));
             }
             productAuto.ItemsSource = ProductAutoCompleteCollection;
@@ -346,8 +349,8 @@ namespace His_Pos.ProductPurchase
             return true;
         }
         
-
-        private void ButtonDelete_Click(object sender, RoutedEventArgs e)
+        
+        private void DeleteOrder_Click(object sender, RoutedEventArgs e)
         {
             if (storeOrderData == null) return;
             StoreOrderDb.DeleteOrder(storeOrderData.Id);

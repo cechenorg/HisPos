@@ -57,7 +57,8 @@ namespace His_Pos
 
                 ChangeLoadingMessage("Loading Manufactory Data...");
                 MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
-                
+
+
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

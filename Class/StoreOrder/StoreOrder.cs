@@ -101,7 +101,7 @@ namespace His_Pos.Class.StoreOrder
         {
             string message = "";
 
-            if (String.IsNullOrEmpty(category))
+            if (String.IsNullOrEmpty(Category))
                 message += "請填寫處理單類別\n";
 
             if(Manufactory is null || Manufactory.Id is null)
