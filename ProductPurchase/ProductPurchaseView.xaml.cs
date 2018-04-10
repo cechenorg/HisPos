@@ -85,6 +85,8 @@ namespace His_Pos.ProductPurchase
                 case OrderType.PROCESSING:
                     Confirm.Visibility = Visibility.Visible;
                     ConfirmToProcess.Visibility = Visibility.Collapsed;
+                    DeleteOrder.Visibility = Visibility.Collapsed;
+                    EmptySpace.Width = 550;
                     StoreOrderDetail.Columns[4].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
@@ -93,6 +95,8 @@ namespace His_Pos.ProductPurchase
                 case OrderType.UNPROCESSING:
                     Confirm.Visibility = Visibility.Collapsed;
                     ConfirmToProcess.Visibility = Visibility.Visible;
+                    DeleteOrder.Visibility = Visibility.Visible;
+                    EmptySpace.Width = 420;
                     StoreOrderDetail.Columns[4].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
@@ -103,7 +107,7 @@ namespace His_Pos.ProductPurchase
 
         private void UpdateOrderDetailStoreOrder() {
             storeOrderData.Id = ID.Content.ToString();
-            storeOrderData.OrdEmp = PurchaseEmp.Text;
+            storeOrderData.OrdEmp = PurchaseEmp.Content.ToString();
             storeOrderData.TotalPrice = Total.Content.ToString();
             var temp =  MainWindow.ManufactoryTable.Select("MAN_NAME='" + ManufactoryAuto.Text + "'");
             if(temp.Length !=0) storeOrderData.Manufactory = new Manufactory(temp[0], DataSource.MANUFACTORY);
@@ -114,7 +118,7 @@ namespace His_Pos.ProductPurchase
         {
             IsFirst = true;
             ID.Content = storeOrder.Id;
-            PurchaseEmp.Text = storeOrder.OrdEmp;
+            PurchaseEmp.Content = storeOrder.OrdEmp;
             OrderCategory.Text = storeOrder.Category;
             Total.Content = storeOrder.TotalPrice;
             ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null)? "": storeOrder.Manufactory.Name;
@@ -285,6 +289,10 @@ namespace His_Pos.ProductPurchase
 
         private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
         {
+            UpdateOrderDetailStoreOrder();
+            if(!CheckNoEmptyData())
+                return;
+
             storeOrderData.Type = OrderType.PROCESSING;
             StoreOrderDb.SaveOrderDetail(storeOrderData);
             UpdateUi();
@@ -297,6 +305,19 @@ namespace His_Pos.ProductPurchase
                     StoOrderOverview.ScrollIntoView(storeOrderCollection[x]);
                 }
             }
+        }
+
+        private bool CheckNoEmptyData()
+        {
+            string errorMessage = storeOrderData.IsAnyDataEmpty();
+
+            if (errorMessage != String.Empty)
+            {
+                MessageWindow messageWindow = new MessageWindow(errorMessage, MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return false;
+            }
+            return true;
         }
 
         private void ButtonDelete_Click(object sender, RoutedEventArgs e)
