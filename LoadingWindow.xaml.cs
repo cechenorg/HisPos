@@ -80,15 +80,7 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("Adding New Orders...");
-                string stoordId;
-                ObservableCollection<Manufactory> manufactories = (manufactory is null)
-                    ? ManufactoryDb.GetManufactoriesBasicSafe(type)
-                    : new ObservableCollection<Manufactory>() { manufactory };
-                foreach (Manufactory man in manufactories)
-                {
-                   stoordId = StoreOrderDb.GetNewOrderId(MainWindow.CurrentUser.Id);
-                   ProductDb.GetBasicOrSafe(man, type,stoordId);
-                }
+                ManufactoryDb.GetManufactoriesBasicSafe(type);
                 Dispatcher.Invoke((Action)(() =>
                 {
                     productPurchaseView.UpdateUi();

@@ -83,18 +83,6 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_DESCRIPTION", product.Note));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
         }
-
-        internal static void GetBasicOrSafe(Manufactory.Manufactory manufactory, StoreOrderProductType type,string stoordId)
-        {
-            ObservableCollection<AbstractClass.Product> products = new ObservableCollection<AbstractClass.Product>();
-
-            var dd = new DbConnection(Settings.Default.SQL_global);
-
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MAN_ID", manufactory.Id));
-            parameters.Add(new SqlParameter("STOORD_ID", stoordId));
-            parameters.Add(new SqlParameter("TYPE",(type == StoreOrderProductType.BASIC)? "BASIC" : "SAFE"));
-            dd.ExecuteProc("[HIS_POS_DB].[SET].[PRODUCTBASICORSAFE]", parameters);
-        }
+        
     }
 }

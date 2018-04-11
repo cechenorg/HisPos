@@ -54,7 +54,7 @@ namespace His_Pos.Class.Manufactory
             return manufactories;
         }
 
-        internal static ObservableCollection<Manufactory> GetManufactoriesBasicSafe(StoreOrderProductType type)
+        internal static void GetManufactoriesBasicSafe(StoreOrderProductType type)
         {
             ObservableCollection<Manufactory> manufactories = new ObservableCollection<Manufactory>();
             
@@ -62,15 +62,10 @@ namespace His_Pos.Class.Manufactory
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", (type == StoreOrderProductType.BASIC) ? "BASIC" : "SAFE"));
-
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[MANUFACTORYBASICORSAFE]", parameters);
-
-            foreach (DataRow m in table.Rows)
-            {
-                manufactories.Add(new Manufactory(m, DataSource.MANUFACTORY));
-            }
-
-            return manufactories;
+            parameters.Add(new SqlParameter("ORDEMP_ID", MainWindow.CurrentUser.Id));
+            
+            var table = dd.ExecuteProc("[HIS_POS_DB].[SET].[MANUFACTORYBASICORSAFE]", parameters);
+            
         }
     }
 }
