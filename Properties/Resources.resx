@@ -193,6 +193,9 @@
     <value>庫存管理</value>
   </data>
   <data name="ProductPurchase" xml:space="preserve">
-    <value>商品進出貨</value>
+    <value>處理單管理</value>
+  </data>
+  <data name="ProductPurchaseRecord" xml:space="preserve">
+    <value>處理單紀錄</value>
   </data>
 </root>

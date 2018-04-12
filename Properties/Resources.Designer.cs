@@ -268,11 +268,20 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 商品進出貨 的當地語系化字串。
+        ///   查詢類似 處理單管理 的當地語系化字串。
         /// </summary>
         internal static string ProductPurchase {
             get {
                 return ResourceManager.GetString("ProductPurchase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 處理單紀錄 的當地語系化字串。
+        /// </summary>
+        internal static string ProductPurchaseRecord {
+            get {
+                return ResourceManager.GetString("ProductPurchaseRecord", resourceCulture);
             }
         }
         
