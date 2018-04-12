@@ -225,8 +225,8 @@ namespace His_Pos.ProductPurchase
            
              if (leaveItem is Otc || leaveItem is Medicine)
             {
-                (leaveItem as Otc).Vis = Visibility.Hidden;
-                (leaveItem as Otc).Source = string.Empty;
+                (leaveItem as Product).Vis = Visibility.Hidden;
+                (leaveItem as Product).Source = string.Empty;
             }
         }
 
