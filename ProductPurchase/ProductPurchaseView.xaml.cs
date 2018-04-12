@@ -324,9 +324,6 @@ namespace His_Pos.ProductPurchase
                 }
             }
         }
-
-       
-
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             if (storeOrderData != null && IsChanged)
@@ -356,6 +353,18 @@ namespace His_Pos.ProductPurchase
             StoreOrderDb.DeleteOrder(storeOrderData.Id);
             UpdateUi();
             StoOrderOverview.SelectedIndex = 0;
+        }
+
+        private void NewProduct(object sender, RoutedEventArgs e)
+        {
+            NewItemDialog newItemDialog = new NewItemDialog(ItemType.Product, storeOrderData.Manufactory.Id);
+
+            newItemDialog.ShowDialog();
+
+            if(newItemDialog.ConfirmButtonClicked)
+            {
+                storeOrderData.Products.Add(newItemDialog.SelectedItem as Product);
+            }
         }
     }
 }

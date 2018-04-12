@@ -35,6 +35,33 @@ namespace His_Pos.Class.Product
             return collection;
         }
 
+        internal static ObservableCollection<object> GetItemDialogProduct(string manId)
+        {
+            ObservableCollection<object> collection = new ObservableCollection<object>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[ITEMDIALOGPRODUCT]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                switch((SearchType)Int16.Parse(row["TYPE"].ToString()))
+                {
+                    case SearchType.MED:
+                        collection.Add(new Medicine(row, DataSource.ITEMDIALOGPRODUCT));
+                        break;
+                    case SearchType.OTC:
+                        collection.Add(new Otc(row, DataSource.ITEMDIALOGPRODUCT));
+                        break;
+                }
+            }
+
+            return collection;
+        }
+
         internal static string GetTotalWorth()
         {
             var dd = new DbConnection(Settings.Default.SQL_global);

@@ -19,11 +19,13 @@ namespace His_Pos.Class.Product
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
                     Amount = Int16.Parse(dataRow["PRO_BASICQTY"].ToString()) -
                             Int16.Parse(dataRow["PRO_INVENTORY"].ToString());
+                    Note = dataRow["PRO_DESCRIPTION"].ToString();
                     break;
                 case DataSource.STOORDLIST:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+                    Note = dataRow["PRO_DESCRIPTION"].ToString();
                     break;
                 case DataSource.MEDICINE:
                     TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
@@ -39,13 +41,12 @@ namespace His_Pos.Class.Product
                     IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "")? "False": dataRow["HISMED_CONTROL"].ToString());
                     IsFrozMed = Boolean.Parse((dataRow["HISMED_FROZ"].ToString() == "") ? "False" : dataRow["HISMED_FROZ"].ToString());
                     Location = dataRow["PRO_LOCATION"].ToString();
+                    Note = dataRow["PRO_DESCRIPTION"].ToString();
                     break;
             }
-
             
             Id = dataRow["PRO_ID"].ToString();
             Name = dataRow["PRO_NAME"].ToString();
-            Note = dataRow["PRO_DESCRIPTION"].ToString();
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "") ? "0" : dataRow["PRO_INVENTORY"].ToString());

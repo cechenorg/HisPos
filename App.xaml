@@ -60,6 +60,7 @@
                     <Brush x:Key="GridBackGround">#B2EEEEEE</Brush>
                     <Brush x:Key="GridDarkerBackGround">#99BFBFBF</Brush>
                     <Brush x:Key="GridDarkestBackGround">#99ACACAC</Brush>
+                    <Brush x:Key="Shadow">#19000000</Brush>
                     <Brush x:Key="LightForeGround">#B2EEEEEE</Brush>
                     <Brush x:Key="ForeGround">#FF424040</Brush>
                     <Brush x:Key="GridSelected">#33009DF7</Brush>

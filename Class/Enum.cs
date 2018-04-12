@@ -3,6 +3,11 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum ItemType
+    {
+        Product = 0
+    }
+
     public enum StoreOrderProductType
     {
         BASIC = 0,
@@ -40,7 +45,8 @@ namespace His_Pos.Class
         MEDICINE = 2,
         MANUFACTORY = 3,
         PROMAN = 4,
-        PRODUCTBASICORSAFE = 5
+        PRODUCTBASICORSAFE = 5,
+        ITEMDIALOGPRODUCT = 6
     }
     public enum MessageType
     {

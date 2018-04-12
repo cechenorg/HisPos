@@ -306,6 +306,9 @@
       <DependentUpon>AddNewOrderDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ProductPurchase\AddOrderDetail.cs" />
+    <Compile Include="ProductPurchase\NewItemDialog.xaml.cs">
+      <DependentUpon>NewItemDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProductPurchase\ProductPurchase.cs" />
     <Compile Include="ProductPurchase\ProductPurchaseView.xaml.cs">
       <DependentUpon>ProductPurchaseView.xaml</DependentUpon>
@@ -378,6 +381,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ProductPurchase\AddNewOrderDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProductPurchase\NewItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
