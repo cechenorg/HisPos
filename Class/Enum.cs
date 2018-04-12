@@ -19,7 +19,8 @@ namespace His_Pos.Class
 
         UNPROCESSING= 0,
         PROCESSING = 1,
-        ALL = 2
+        DONE = 2,
+        ALL = 3
     }
    
     public enum AddOrderType

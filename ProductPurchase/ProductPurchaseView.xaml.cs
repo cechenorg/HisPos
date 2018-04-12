@@ -129,6 +129,19 @@ namespace His_Pos.ProductPurchase
             storeOrderData.Category = OrderCategory.Text;
            
         }
+        private void ClearOrderDetailData() {
+            IsFirst = true;
+            ID.Content = "";
+            PurchaseEmp.Content = "";
+            OrderCategory.Text = "";
+            Total.Content = "";
+            ManufactoryAuto.Text = "";
+            Phone.Content ="";
+            StoreOrderDetail.ItemsSource = null;
+            TotalAmount.Content = "";
+            IsChanged = false;
+            IsFirst = false;
+        }
         private void UpdateOrderDetailData(StoreOrder storeOrder)
         {
             IsFirst = true;
@@ -304,17 +317,13 @@ namespace His_Pos.ProductPurchase
         {
             SetChanged();
         }
-
-        private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
-        {
+        private void CofirmAndSave(OrderType type) {
             UpdateOrderDetailStoreOrder();
-            if(!CheckNoEmptyData())
-                return;
-
-            storeOrderData.Type = OrderType.PROCESSING;
+            if (!CheckNoEmptyData()) return;
+            storeOrderData.Type = type;
             StoreOrderDb.SaveOrderDetail(storeOrderData);
             UpdateUi();
-            
+
             for (int x = 0; x < storeOrderCollection.Count; x++)
             {
                 if (storeOrderCollection[x].Id == storeOrderData.Id)
@@ -324,9 +333,18 @@ namespace His_Pos.ProductPurchase
                 }
             }
         }
-
-       
-
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            CofirmAndSave(OrderType.DONE);
+            if (StoOrderOverview.Items.Count == 0)
+                ClearOrderDetailData();
+            else
+                StoOrderOverview.SelectedIndex = 0;
+        }
+        private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
+        {
+            CofirmAndSave(OrderType.PROCESSING);
+        }
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
             if (storeOrderData != null && IsChanged)
@@ -355,7 +373,13 @@ namespace His_Pos.ProductPurchase
             if (storeOrderData == null) return;
             StoreOrderDb.DeleteOrder(storeOrderData.Id);
             UpdateUi();
-            StoOrderOverview.SelectedIndex = 0;
+            if (StoOrderOverview.Items.Count == 0)
+                ClearOrderDetailData();
+            else
+                StoOrderOverview.SelectedIndex = 0;
+            
         }
+
+        
     }
 }

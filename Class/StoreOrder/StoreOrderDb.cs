@@ -42,6 +42,17 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID",Id));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[DELETEORDERPRODUCT]",parameters);
         }
+        internal static void PurchaseAndReturn(StoreOrder storeOrder) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            foreach (var product in storeOrder.Products) {
+                parameters.Add(new SqlParameter("TYPE", storeOrder.Category.Substring(0, 1)));
+                parameters.Add(new SqlParameter("PRO_ID",product.Id));
+                parameters.Add(new SqlParameter("PRO_INVENT", product.Amount));
+                dd.ExecuteProc("[HIS_POS_DB].[SET].[PURCHASEANDRETURN]",parameters);
+                parameters.Clear();
+            }
+        }
         internal static void InsertOrderProduct(StoreOrder storeOrder)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
@@ -63,7 +74,19 @@ namespace His_Pos.Class.StoreOrder
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
             parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
-            parameters.Add(new SqlParameter("STOORD_FLAG", (storeOrder.Type == OrderType.PROCESSING)? "G" : "P"));
+            string type = string.Empty;
+            switch (storeOrder.Type) {
+                case OrderType.UNPROCESSING:
+                    type = "P";
+                    break;
+                case OrderType.PROCESSING:
+                    type = "G";
+                    break;
+                case OrderType.DONE:
+                    type = "D";
+                    break;
+            }
+            parameters.Add(new SqlParameter("STOORD_FLAG", type));
             if (String.IsNullOrEmpty(storeOrder.Category))
                 parameters.Add(new SqlParameter("STOORD_TYPE",DBNull.Value));
             else
@@ -80,7 +103,9 @@ namespace His_Pos.Class.StoreOrder
             dd.ExecuteProc("[HIS_POS_DB].[SET].[SAVEORDERDETAIL]",parameters);
             DeleteOrderProduct(storeOrder.Id);
             InsertOrderProduct(storeOrder);
+            if (type == "D") PurchaseAndReturn(storeOrder);
         }
+
         internal static string GetNewOrderId(string OrdEmpId)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
