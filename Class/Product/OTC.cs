@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace His_Pos.Class.Product
@@ -22,6 +23,7 @@ namespace His_Pos.Class.Product
                     TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
                     StockValue = dataRow["TOTAL"].ToString();
                     Location = dataRow["PRO_LOCATION"].ToString();
+                    Vis = Visibility.Hidden;
                     break;
                 case DataSource.STOORDLIST:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());

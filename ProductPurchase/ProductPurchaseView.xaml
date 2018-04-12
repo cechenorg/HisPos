@@ -152,10 +152,12 @@
                         <DataGridTemplateColumn Width="110" Header="商品編號">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <controls:AutoCompleteBox Width="110" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" Height="40"
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Name="DeleteDot" Source="{Binding Source, NotifyOnSourceUpdated=True}" Width="18" Margin="10" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown"  Visibility="{Binding Vis, NotifyOnSourceUpdated=True}"/>
+                                        <controls:AutoCompleteBox Width="110" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" Height="40"
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}" VerticalContentAlignment="Bottom"
-                                                              ItemFilter="{Binding ManufactoryFilter}"  Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed">
+                                                              ItemFilter="{Binding ManufactoryFilter}"  Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed" LostFocus="AutoCompleteBox_LostFocus">
                                         <controls:AutoCompleteBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
@@ -165,6 +167,7 @@
                                             </DataTemplate>
                                         </controls:AutoCompleteBox.ItemTemplate>
                                     </controls:AutoCompleteBox>
+                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

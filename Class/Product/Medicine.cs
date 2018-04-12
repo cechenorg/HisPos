@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
@@ -39,6 +40,7 @@ namespace His_Pos.Class.Product
                     IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "")? "False": dataRow["HISMED_CONTROL"].ToString());
                     IsFrozMed = Boolean.Parse((dataRow["HISMED_FROZ"].ToString() == "") ? "False" : dataRow["HISMED_FROZ"].ToString());
                     Location = dataRow["PRO_LOCATION"].ToString();
+                    Vis = Visibility.Hidden;
                     break;
             }
 

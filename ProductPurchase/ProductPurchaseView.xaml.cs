@@ -37,6 +37,7 @@ namespace His_Pos.ProductPurchase
         private int orderIndex = 0;
         private bool IsFirst = true;
         private bool IsChanged = false;
+        private int LastSelectedIndex = -1;
         public ProductPurchaseView()
         {
             InitializeComponent();
@@ -203,12 +204,30 @@ namespace His_Pos.ProductPurchase
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
+            var selectedItem = (sender as DataGridRow).Item;
 
+               
+             if (selectedItem is Otc || selectedItem is Medicine)
+            {
+                if (storeOrderData.Products.Contains(selectedItem)){
+                    (selectedItem as Product).Vis = Visibility.Visible;
+                    (selectedItem as Product).Source = "/Images/DeleteDot.png";
+                }
+                 
+                StoreOrderDetail.SelectedItem = selectedItem;
+                LastSelectedIndex = StoreOrderDetail.SelectedIndex;
+            }
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
-
+            var leaveItem = (sender as DataGridRow).Item;
+           
+             if (leaveItem is Otc || leaveItem is Medicine)
+            {
+                (leaveItem as Otc).Vis = Visibility.Hidden;
+                (leaveItem as Otc).Source = string.Empty;
+            }
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
@@ -297,6 +316,7 @@ namespace His_Pos.ProductPurchase
                 storeOrderData.Products[StoreOrderDetail.SelectedIndex] = productAuto.SelectedItem as Product;
                 return;
             }
+           
             productAuto.Text = "";
         }
 
@@ -380,6 +400,20 @@ namespace His_Pos.ProductPurchase
             
         }
 
-        
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            storeOrderData.Products.RemoveAt(StoreOrderDetail.SelectedIndex);
+        }
+
+        private void AutoCompleteBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var ProductAuto = sender as AutoCompleteBox;
+            if (ProductAuto is null) return;
+
+            if ((ProductAuto.Text is null || ProductAuto.Text == String.Empty) && LastSelectedIndex != storeOrderData.Products.Count - 1)
+            {
+                storeOrderData.Products.RemoveAt(LastSelectedIndex);
+            }
+        }
     }
 }

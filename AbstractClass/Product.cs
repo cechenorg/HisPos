@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Security.Permissions;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace His_Pos.AbstractClass
@@ -20,11 +21,30 @@ namespace His_Pos.AbstractClass
         public string Type { get; set; }
         public bool Status { get; set; }
         public string Location { get; set; }
-
+        private string source = string.Empty;
+        private Visibility vis = Visibility.Hidden;
         private double totalPrice;
         public double amount;
         public double price;
         public string note;
+        public string Source
+        {
+            get { return source; }
+            set
+            {
+                source = value;
+                NotifyPropertyChanged("Source");
+            }
+        }
+        public Visibility Vis
+        {
+            get { return vis; }
+            set
+            {
+                vis = value;
+                NotifyPropertyChanged("Vis");
+            }
+        }
         public string Note
          {
             get { return note; }
