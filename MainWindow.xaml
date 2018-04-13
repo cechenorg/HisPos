@@ -10,24 +10,14 @@
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
         xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         xmlns:ProductPurchase="clr-namespace:His_Pos.ProductPurchase"
-    xmlns:ProductPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
-    x:Class="His_Pos.MainWindow"
+        xmlns:ProductPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
+        x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"  Height="900" Width="1600"
         Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}" VerticalContentAlignment="Stretch" 
-        HorizontalContentAlignment="Stretch" MinWidth="800" MinHeight="450"
+        FontFamily="{DynamicResource MaterialDesignFont}" MinWidth="800" MinHeight="450"
         DataContext="{Binding Source={StaticResource Locator},Path=ViewModelMainWindow}">
     <Window.Resources>
-        <Style>
-            <Style.TargetType>
-                <x:Type TypeName="ScrollBar" />
-            </Style.TargetType>
-            <Setter Property="Stylus.IsFlicksEnabled" Value="True" />
-            <Setter Property="Background" Value="DimGray" />
-            <Setter Property="Width" Value="8"/>
-            <Setter Property="MinWidth" Value="8" />
-        </Style>
         <DataTemplate DataType="{x:Type prescriptionDec:PrescriptionDec}">
             <prescriptionDec:PrescriptionDecView/>
         </DataTemplate>
@@ -50,9 +40,6 @@
                 <ColumnDefinition Width="230"/>
                 <ColumnDefinition Width="1365"/>
             </Grid.ColumnDefinitions>
-                    <Grid.Background>
-                <ImageBrush ImageSource="Images/onlyoneeeeeee.jpg"/>
-            </Grid.Background>
             <StackPanel Name="MenuStack"  Background="#FF363535" Orientation="Vertical" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
                     <Image Name="SystemIcon" Source="Images/His.png" Height="60" Width="60" Margin="0,-1,0,5" />
@@ -82,15 +69,14 @@
                     <TextBlock Name="SystemTime" FontSize="15" TextWrapping="Wrap" Margin="10,5,10,10" Foreground="DarkGray" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
-            <DockPanel Name="FeatureDock" Height="Auto" Width="Auto" Grid.Column="1">
+            <DockPanel Grid.Column="1">
                 <DockPanel.Background>
                     <ImageBrush ImageSource="Images/onlyoneeeeeee.jpg"/>
                 </DockPanel.Background>
-                <chromeTabs:ChromeTabControl x:Name="MyChromeTabControl" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
-                             Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="WhiteSmoke"
+                <chromeTabs:ChromeTabControl MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
+                             Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
-                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" TabTearTriggerDistance="10" Height="900">
-                    <!--We override the control template here to show how you can modify the properties of tab panel and content presenter-->
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900">
                     <chromeTabs:ChromeTabControl.Template>
                         <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
                             <ControlTemplate.Resources>
@@ -102,7 +88,7 @@
                                     <RowDefinition Height="30" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
-                                <Border Background="{TemplateBinding Background}" BorderThickness="0,0,0,1" BorderBrush="#FF999999" Grid.Row="0" Padding="10,5,10,0">
+                                <Border Background="{TemplateBinding Background}" BorderThickness="0,0,0,1" BorderBrush="Gray" Grid.Row="0">
                                     <chromeTabs:ChromeTabPanel IsItemsHost="True" Background="{TemplateBinding Background}" />
                                 </Border>
                                 <Grid Grid.Row="1" Visibility="{TemplateBinding TabPersistBehavior,Converter={StaticResource TabPersistBehaviorToContentPresenterVisibilityConverter}}">
@@ -112,19 +98,13 @@
                             </Grid>
                         </ControlTemplate>
                     </chromeTabs:ChromeTabControl.Template>
-                    <!--We must override the item template to show our tab name in the header. Here we use a simple
-            textblock, but you could put any combination of controls here. Uncomment the orange border to show
-            the bounds of the header content presenter-->
                     <chromeTabs:ChromeTabControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type chromeTabs:ChromeTabItem}}}">
-                                <!--<Border BorderBrush="Orange"
-                                BorderThickness="1">-->
                                 <StackPanel Orientation="Horizontal" Background="Transparent">
-                                    <TextBlock Text="{Binding TabName}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                    <Image Source="Images/HisDot.png" Width="15" Height="15" Margin="5,2,0,0"/>
+                                    <TextBlock Text="{Binding TabName}" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" FontSize="18" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <!--</Border>-->
-                                <!--We can implement a context menu for the header here. The ChromeTabItems expose for convenience the following commands, "CloseTabCommand: close the current tab, "CloseAllTabsCommand", and "CloseOtherTabsCommand", which closes all tabs except the current.-->
                             </Grid>
                         </DataTemplate>
                     </chromeTabs:ChromeTabControl.ItemTemplate>
