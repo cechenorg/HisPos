@@ -24,11 +24,13 @@ namespace His_Pos.Class.Product
                     StockValue = dataRow["TOTAL"].ToString();
                     Location = dataRow["PRO_LOCATION"].ToString();
                     Vis = Visibility.Hidden;
+                    Note = dataRow["PRO_DESCRIPTION"].ToString();
                     break;
                 case DataSource.STOORDLIST:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+                    Note = dataRow["PRO_DESCRIPTION"].ToString();
                     break;
                 case DataSource.PRODUCTBASICORSAFE:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
@@ -41,7 +43,6 @@ namespace His_Pos.Class.Product
             Name = dataRow["PRO_NAME"].ToString();
             Inventory = double.Parse(dataRow["PRO_INVENTORY"].ToString());
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
-            Note = dataRow["PRO_DESCRIPTION"].ToString();
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             
         }

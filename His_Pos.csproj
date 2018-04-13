@@ -302,10 +302,17 @@
     </Compile>
     <Compile Include="PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="PrescriptionInquire\SimpleCommand.cs" />
+    <Compile Include="ProductPurchaseRecord\ProductPurchaseRecord.cs" />
+    <Compile Include="ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
+      <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProductPurchase\AddNewOrderDialog.xaml.cs">
       <DependentUpon>AddNewOrderDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="ProductPurchase\AddOrderDetail.cs" />
+    <Compile Include="ProductPurchase\NewItemDialog.xaml.cs">
+      <DependentUpon>NewItemDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ProductPurchase\ProductPurchase.cs" />
     <Compile Include="ProductPurchase\ProductPurchaseView.xaml.cs">
       <DependentUpon>ProductPurchaseView.xaml</DependentUpon>
@@ -377,7 +384,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ProductPurchaseRecord\ProductPurchaseRecordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ProductPurchase\AddNewOrderDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProductPurchase\NewItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

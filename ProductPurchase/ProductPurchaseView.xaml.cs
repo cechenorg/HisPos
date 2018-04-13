@@ -415,5 +415,17 @@ namespace His_Pos.ProductPurchase
                 storeOrderData.Products.RemoveAt(LastSelectedIndex);
             }
         }
+
+        private void NewProduct(object sender, RoutedEventArgs e)
+        {
+            NewItemDialog newItemDialog = new NewItemDialog(ItemType.Product, storeOrderData.Manufactory.Id);
+
+            newItemDialog.ShowDialog();
+
+            if(newItemDialog.ConfirmButtonClicked)
+            {
+                storeOrderData.Products.Add(newItemDialog.SelectedItem as Product);
+            }
+        }
     }
 }

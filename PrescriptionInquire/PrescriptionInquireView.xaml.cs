@@ -29,22 +29,19 @@ namespace His_Pos.PrescriptionInquire
 
     public partial class PrescriptionInquireView : UserControl
     {
-        public ObservableCollection<PrescriptionOverview> prescriptionOverview;
+        public ObservableCollection<PrescriptionOverview> prescriptionOverview = new ObservableCollection<PrescriptionOverview>();
         
         private Function f = new Function();
-        //private readonly ObservableCollection<DeclareDetail> _declareDetailList;
         public PrescriptionInquireView()
         {
             InitializeComponent();
 
-            CultureInfo cag = new CultureInfo("zh-TW");
-            cag.DateTimeFormat.Calendar = new TaiwanCalendar();
-            Thread.CurrentThread.CurrentCulture = cag;
+            //CultureInfo cag = new CultureInfo("zh-TW");
+            //cag.DateTimeFormat.Calendar = new TaiwanCalendar();
+            //Thread.CurrentThread.CurrentCulture = cag;
 
             LoadAdjustCases();
             LoadHospitalData();
-
-            
         }
 
         private void showInquireOutcome(object sender, MouseButtonEventArgs e)

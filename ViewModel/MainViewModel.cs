@@ -137,6 +137,10 @@ namespace His_Pos.ViewModel
             {
                 newTab = new ProductPurchase.ProductPurchase() { TabName = functionNames[3] };
             }
+            else if (tab.ToString().Equals(functionNames[4]))
+            {
+                newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = functionNames[4] };
+            }
             else
             {
                 return;
