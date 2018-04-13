@@ -55,6 +55,7 @@ namespace His_Pos.Class.StoreOrder
         }
         internal static void InsertOrderProduct(StoreOrder storeOrder)
         {
+            if (storeOrder.Products == null) return;
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             foreach (var row in storeOrder.Products)
