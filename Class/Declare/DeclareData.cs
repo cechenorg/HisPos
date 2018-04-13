@@ -122,7 +122,7 @@ namespace His_Pos.Class.Declare
                     CheckDayPay(dayPay);
                     break;
                 case "1" when treatmentCaseId == westMedNormal && medicineDays <= normalDaysLimit && DrugsPoint > dayPay * medicineDays:
-                    MedicalServiceCode = "05203C";
+                    MedicalServiceCode = "05202B";
                     break;
                 case "2" when treatmentCaseId == chronic:
                     SetChronicMedicalServiceCode();
