@@ -38,7 +38,6 @@ namespace His_Pos.ProductPurchase
         private bool IsFirst = true;
         private bool IsChanged = false;
         private int LastSelectedIndex = -1;
-        private string type = string.Empty;
         public ProductPurchaseView()
         {
             InitializeComponent();
@@ -151,14 +150,7 @@ namespace His_Pos.ProductPurchase
             PurchaseEmp.Content = storeOrder.OrdEmp;
             OrderCategory.Text = storeOrder.Category;
             Total.Content = storeOrder.TotalPrice;
-            if (type == "new")
-            { //這一定要這樣寫 不然新增空處方 set value會進入中斷模式
-                ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null) ? "" : storeOrder.Manufactory.Name;
-            }
-            else
-            {
-                ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null) ? "" : storeOrder.Manufactory.Name;
-            }
+            ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null)? "": storeOrder.Manufactory.Name;
             Phone.Content = (storeOrder.Manufactory.Telphone is null)? "": storeOrder.Manufactory.Telphone;
 
             if (storeOrder.Products is null)
@@ -170,7 +162,6 @@ namespace His_Pos.ProductPurchase
             
             IsChanged = false;
             IsFirst = false;
-            type = string.Empty;
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
@@ -185,7 +176,6 @@ namespace His_Pos.ProductPurchase
                 {
                     case AddOrderType.ADDBYUSER:
                         AddNewOrderByUm();
-                        type = "new";
                         break;
                     case AddOrderType.ADDALLBELOWSAFEAMOUNT:
                         AddBasicOrSafe(StoreOrderProductType.SAFE);
