@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -102,8 +103,13 @@ namespace His_Pos.ProductPurchase
                     Confirm.Visibility = Visibility.Visible;
                     ConfirmToProcess.Visibility = Visibility.Collapsed;
                     DeleteOrder.Visibility = Visibility.Collapsed;
-                    EmptySpace.Width = 430;
-                    StoreOrderDetail.Columns[4].Visibility = Visibility.Visible;
+                    AddNewProduct.Visibility = Visibility.Collapsed;
+                    ManufactoryAuto.IsEnabled = false;
+                    OrderCategory.IsEnabled = false;
+                    EmptySpace.Width = 570;
+                    StoreOrderDetail.Columns[11].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[12].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[13].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Collapsed;
@@ -112,8 +118,13 @@ namespace His_Pos.ProductPurchase
                     Confirm.Visibility = Visibility.Collapsed;
                     ConfirmToProcess.Visibility = Visibility.Visible;
                     DeleteOrder.Visibility = Visibility.Visible;
+                    AddNewProduct.Visibility = Visibility.Visible;
+                    ManufactoryAuto.IsEnabled = true;
+                    OrderCategory.IsEnabled = true;
                     EmptySpace.Width = 300;
-                    StoreOrderDetail.Columns[4].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[11].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[12].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[13].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
@@ -205,9 +216,8 @@ namespace His_Pos.ProductPurchase
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
-
-               
-             if (selectedItem is Otc || selectedItem is Medicine)
+            
+            if (selectedItem is Otc || selectedItem is Medicine)
             {
                 if (storeOrderData.Products.Contains(selectedItem)){
                     (selectedItem as Product).Vis = Visibility.Visible;
