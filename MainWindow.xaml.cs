@@ -42,7 +42,10 @@ namespace His_Pos
 
         private void FeatureFactory()
         {
-            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription, new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire, Properties.Resources.InventoryManagement, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord }));
+            HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription,
+                            new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire }));
+            HisFeatures.Add(new Feature(@"..\Images\StockManage.png", Properties.Resources.StockManage,
+                            new string[] { Properties.Resources.InventoryManagement, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord }));
         }
         
         private void InitializePosMenu()
@@ -58,9 +61,10 @@ namespace His_Pos
         {
             for (int i = 0; i < HisFeatures.Count; i++)
             {
-                HisFeature1.SetLabelText(HisFeatures[i].Title);
-                HisFeature1.SetLabelImage(HisFeatures[i].Icon);
-                SetFeaturesItem(HisFeature1, HisFeatures[i].Functions);
+
+                (HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1).SetLabelText(HisFeatures[i].Title);
+                (HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1).SetLabelImage(HisFeatures[i].Icon);
+                SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1), HisFeatures[i].Functions);
             }
         }
         private void MenuChange()

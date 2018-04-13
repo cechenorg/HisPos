@@ -473,7 +473,6 @@
     <Resource Include="Images\PosDot.png" />
     <Resource Include="Images\PrescriptionIcon.png" />
     <Resource Include="Images\Refresh Barcode_50px.png" />
-    <Resource Include="Images\Shop_50px.png" />
     <Resource Include="Images\Spreadsheet_50px.png" />
     <Resource Include="Images\SubmitProgress.png" />
     <Resource Include="Images\Truck_50px.png" />
@@ -491,6 +490,7 @@
     <Resource Include="Images\Delete.png" />
     <Resource Include="Images\Plus.png" />
     <Resource Include="Images\DeleteDot.png" />
+    <Resource Include="Images\StockManage.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

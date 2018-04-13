@@ -26,19 +26,6 @@ namespace His_Pos.ProductPurchase
             loadingWindow.AddNewOrders(this, type, manufactory);
             loadingWindow.ShowDialog();
 
-            //ObservableCollection<Manufactory> manufactories = (manufactory is null)
-            //    ? ManufactoryDb.GetManufactoriesBasicSafe(type)
-            //    : new ObservableCollection<Manufactory>() { manufactory };
-
-            //foreach (Manufactory man in manufactories)
-            //{
-            //    StoreOrder newStoreOrder = new StoreOrder(MainWindow.CurrentUser, man, ProductDb.GetBasicOrSafe(man, type));
-
-            //    storeOrderCollection.Insert(0, newStoreOrder);
-
-            //    StoreOrderDb.SaveOrderDetail(newStoreOrder);
-            //}
-
             StoOrderOverview.SelectedIndex = 0;
         }
 
