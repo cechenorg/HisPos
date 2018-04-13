@@ -9,6 +9,7 @@ using System.Linq;
 using System.Windows.Data;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using His_Pos.Class;
 
 namespace His_Pos.ViewModel
 {
@@ -116,34 +117,38 @@ namespace His_Pos.ViewModel
         }
 
         //Adds a random tab
-        public void AddTabCommandAction(object tab)
+        public void AddTabCommandAction(object featureItem)
         {
-            var functionNames = MainWindow.HisFeatures[0].Functions;
+            foreach (TabBase tab in ItemCollection)
+            {
+                if (tab.TabName == featureItem.ToString())
+                {
+                    SelectedTab = tab;
+                    return;
+                }
+            }
+
             TabBase newTab;
 
-            if (tab.ToString().Equals(functionNames[0]))
+            switch (featureItem.ToString())
             {
-                newTab = new PrescriptionDec.PrescriptionDec() { TabName = functionNames[0] };
-            }
-            else if (tab.ToString().Equals(functionNames[1]))
-            {
-                newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = functionNames[1] };
-            }
-            else if (tab.ToString().Equals(functionNames[2]))
-            {
-                newTab = new InventoryManagement.InventoryManagement(){TabName = functionNames[2]};
-            }
-            else if (tab.ToString().Equals(functionNames[3]))
-            {
-                newTab = new ProductPurchase.ProductPurchase() { TabName = functionNames[3] };
-            }
-            else if (tab.ToString().Equals(functionNames[4]))
-            {
-                newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = functionNames[4] };
-            }
-            else
-            {
-                return;
+                case nameof(FeatureItem.處方登錄):
+                    newTab = new PrescriptionDec.PrescriptionDec() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
+                    break;
+                case nameof(FeatureItem.處方查詢):
+                    newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
+                    break;
+                case nameof(FeatureItem.庫存管理):
+                    newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
+                case nameof(FeatureItem.處理單管理):
+                    newTab = new ProductPurchase.ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
+                case nameof(FeatureItem.處理單紀錄):
+                    newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
+                default:
+                    return;
             }
 
             this.ItemCollection.Add(newTab.getTab());

@@ -3,6 +3,15 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum FeatureItem
+    {
+        處方登錄 = 0,
+        處方查詢 = 1,
+        庫存管理 = 2,
+        處理單管理 = 3,
+        處理單紀錄 = 4
+    }
+
     public enum ItemType
     {
         Product = 0

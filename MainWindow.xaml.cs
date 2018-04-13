@@ -61,7 +61,6 @@ namespace His_Pos
         {
             for (int i = 0; i < HisFeatures.Count; i++)
             {
-
                 (HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1).SetLabelText(HisFeatures[i].Title);
                 (HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1).SetLabelImage(HisFeatures[i].Icon);
                 SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1), HisFeatures[i].Functions);
