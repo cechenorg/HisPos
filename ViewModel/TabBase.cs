@@ -30,6 +30,20 @@ namespace His_Pos.ViewModel
             }
         }
 
+        private string _icon;
+
+        public string Icon
+        {
+            get { return _icon; }
+            set
+            {
+                if (_icon != value)
+                {
+                    Set(() => Icon, ref _icon, value);
+                }
+            }
+        }
+
         public abstract TabBase getTab();
 
     }

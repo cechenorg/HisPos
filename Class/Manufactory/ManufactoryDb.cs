@@ -56,8 +56,6 @@ namespace His_Pos.Class.Manufactory
 
         internal static void GetManufactoriesBasicSafe(StoreOrderProductType type)
         {
-            ObservableCollection<Manufactory> manufactories = new ObservableCollection<Manufactory>();
-            
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();

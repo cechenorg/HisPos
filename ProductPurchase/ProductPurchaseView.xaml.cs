@@ -102,7 +102,7 @@ namespace His_Pos.ProductPurchase
                     Confirm.Visibility = Visibility.Visible;
                     ConfirmToProcess.Visibility = Visibility.Collapsed;
                     DeleteOrder.Visibility = Visibility.Collapsed;
-                    EmptySpace.Width = 550;
+                    EmptySpace.Width = 430;
                     StoreOrderDetail.Columns[4].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
@@ -112,7 +112,7 @@ namespace His_Pos.ProductPurchase
                     Confirm.Visibility = Visibility.Collapsed;
                     ConfirmToProcess.Visibility = Visibility.Visible;
                     DeleteOrder.Visibility = Visibility.Visible;
-                    EmptySpace.Width = 420;
+                    EmptySpace.Width = 300;
                     StoreOrderDetail.Columns[4].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;

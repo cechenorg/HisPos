@@ -20,13 +20,11 @@ namespace His_Pos.Class.Product
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
                     Amount = Int16.Parse(dataRow["PRO_BASICQTY"].ToString()) -
                             Int16.Parse(dataRow["PRO_INVENTORY"].ToString());
-                    Note = dataRow["PRO_DESCRIPTION"].ToString();
                     break;
                 case DataSource.STOORDLIST:
                     LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
-                    Note = dataRow["PRO_DESCRIPTION"].ToString();
                     break;
                 case DataSource.MEDICINE:
                     TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
@@ -51,6 +49,7 @@ namespace His_Pos.Class.Product
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "") ? "0" : dataRow["PRO_INVENTORY"].ToString());
+            Note = dataRow["PRO_DESCRIPTION"].ToString();
         }
 
         public Medicine(string id, string name, double price, double inventory, double amount, bool paySelf, double hcPrice, Medicate medicalCategory)

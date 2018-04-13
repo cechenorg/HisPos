@@ -198,4 +198,7 @@
   <data name="ProductPurchaseRecord" xml:space="preserve">
     <value>處理單紀錄</value>
   </data>
+  <data name="StockManage" xml:space="preserve">
+    <value>庫存管理</value>
+  </data>
 </root>
