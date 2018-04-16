@@ -57,6 +57,7 @@
                                     <Setter Property="Background" Value="Transparent"/>
                                     <Setter Property="BorderBrush" Value="Transparent"/>
                                     <Setter Property="Foreground" Value="#FF424040"/>
+                                    <EventSetter Event="Selected" Handler="ShowOrderDetail"/>
                                     <Style.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
@@ -96,7 +97,7 @@
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
-                        <Label Name="ID" Content="00000000-00" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
+                        <Label Name="ID"  Content="00000000" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
                         <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
                         <Label Content="AAA" Width="350" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                         <Label Name="Phone" Content="09" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>

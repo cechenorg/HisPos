@@ -74,7 +74,7 @@ namespace His_Pos.ProductPurchase
 
         public void UpdateUi()
         {
-            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
+            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview("N");
             StoOrderOverview.ItemsSource = storeOrderCollection;
         }
 
