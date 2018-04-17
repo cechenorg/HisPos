@@ -14,14 +14,15 @@ namespace His_Pos.Class.StoreOrder
 {
     public static class StoreOrderDb
     {
-        public static ObservableCollection<StoreOrder> GetStoreOrderOverview()
+        public static ObservableCollection<StoreOrder> GetStoreOrderOverview(string type)
         {
             ObservableCollection<StoreOrder> StoreOrderOverviewCollection = new ObservableCollection<StoreOrder>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
-
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[STOORDDATA]");
-
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("TYPE", type));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[STOORDDATA]",parameters);
+            
             foreach (DataRow row in table.Rows)
             {
                 StoreOrderOverviewCollection.Add(new StoreOrder(row));

@@ -152,7 +152,7 @@
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Name="DeleteDot" Width="18" Margin="10" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Visibility="{Binding Vis, NotifyOnSourceUpdated=True}"/>
+                                    <Image Name="DeleteDot" Width="18" Margin="10" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Visibility="{Binding Vis, NotifyOnSourceUpdated=True}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -277,7 +277,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkerBackGround}">
-                    <Button Name="AddNewProduct" Content="+ 新增品項" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Click="NewProduct"/>
+                    <Button Name="ButtonNewProduct"  Content="+ 新增品項" IsEnabled="False" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Click="NewProduct"/>
                     <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                     <Label Name="Total"  Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>

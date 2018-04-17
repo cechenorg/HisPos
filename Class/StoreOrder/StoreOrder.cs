@@ -79,7 +79,6 @@ namespace His_Pos.Class.StoreOrder
                 Manufactory = new Manufactory.Manufactory(data[0], DataSource.MANUFACTORY);
             }
         }
-
         public BitmapImage TypeIcon { get; set; }
         public OrderType Type { get; set; }
         public string Category { get; set; }
@@ -89,6 +88,7 @@ namespace His_Pos.Class.StoreOrder
         public string TotalPrice { get; set; }
         public string RecEmp { get; set; }
         public Manufactory.Manufactory Manufactory{ get; set; }
+
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -99,7 +99,7 @@ namespace His_Pos.Class.StoreOrder
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-
+      
         public string IsAnyDataEmpty()
         {
             string message = "";

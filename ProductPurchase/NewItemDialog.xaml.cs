@@ -99,6 +99,7 @@ namespace His_Pos.ProductPurchase
                 column.Binding = new Binding(columnDetail.Binding);
                 column.Width = columnDetail.Width;
                 column.ElementStyle = columnDetail.Style;
+                column.IsReadOnly = true;
                 SearchResult.Columns.Add(column);
             }
         }

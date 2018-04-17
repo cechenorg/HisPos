@@ -76,7 +76,7 @@ namespace His_Pos.ProductPurchase
 
         public void UpdateUi()
         {
-            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview();
+            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview("N");
             StoOrderOverview.ItemsSource = storeOrderCollection;
         }
 
@@ -163,6 +163,7 @@ namespace His_Pos.ProductPurchase
             OrderCategory.Text = storeOrder.Category;
             Total.Content = storeOrder.TotalPrice;
             ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null)? "": storeOrder.Manufactory.Name;
+            ButtonNewProduct.IsEnabled = (storeOrder.Manufactory.Name is null) ? false :true;
             Phone.Content = (storeOrder.Manufactory.Telphone is null)? "": storeOrder.Manufactory.Telphone;
 
             if (storeOrder.Products is null)
@@ -171,7 +172,6 @@ namespace His_Pos.ProductPurchase
             storeOrderData = storeOrder;
             StoreOrderDetail.ItemsSource = storeOrderData.Products;
             TotalAmount.Content = storeOrder.Products.Count.ToString();
-            
             IsChanged = false;
             IsFirst = false;
         }
@@ -306,6 +306,8 @@ namespace His_Pos.ProductPurchase
             AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
             if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
             Phone.Content = ((Manufactory)autoCompleteBox.SelectedItem).Telphone;
+            ButtonNewProduct.IsEnabled = (ManufactoryAuto.Text == string.Empty) ? false : true;
+            storeOrderData.Manufactory = ((Manufactory)autoCompleteBox.SelectedItem);
         }
 
         private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
