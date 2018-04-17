@@ -25,7 +25,7 @@ namespace His_Pos.Class.Product
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", ID));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PRODUCTUNIT]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetProductUnit]", parameters);
 
             foreach (DataRow row in table.Rows)
             {
@@ -80,7 +80,7 @@ namespace His_Pos.Class.Product
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", productID));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PRODUCTDETAILSTOCK]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetProductDetailStock]", parameters);
 
             foreach (DataRow row in table.Rows)
             {
