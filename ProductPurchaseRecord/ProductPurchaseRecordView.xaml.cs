@@ -1,4 +1,5 @@
-﻿using His_Pos.Class.StoreOrder;
+﻿using His_Pos.Class.Manufactory;
+using His_Pos.Class.StoreOrder;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,22 +22,39 @@ namespace His_Pos.ProductPurchaseRecord
     /// <summary>
     /// ProductPurchaseRecordView.xaml 的互動邏輯
     /// </summary>
-    public partial class ProductPurchaseRecordView : UserControl
+    public partial class ProductPurchaseRecordView : UserControl, INotifyPropertyChanged
     {
         public ObservableCollection<StoreOrder> storeOrderCollection;
-        public StoreOrder storeOrderData;
-        
-      
+        private StoreOrder storeOrderData;
+        public StoreOrder StoreOrderData
+        {
+            get { return storeOrderData; }
+            set
+            {
+                storeOrderData = value;
+                NotifyPropertyChanged("StoreOrderData");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public ProductPurchaseRecordView()
         {
             InitializeComponent();
             
             UpdateUi();
+            DataContext = this;
         }
         public void UpdateUi() {
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview("D");
             StoOrderOverview.ItemsSource = storeOrderCollection;
-
+            StoOrderOverview.SelectedIndex = 0;
         }
 
         private void ShowOrderDetail(object sender, RoutedEventArgs e)
@@ -47,12 +65,12 @@ namespace His_Pos.ProductPurchaseRecord
         }
         private void UpdateOrderDetailData(StoreOrder storeOrder)
         {
-            storeOrderData = storeOrder;
-           
+            StoreOrderData = storeOrder;
+            //Id = storeOrder.Id;
+
             //ID.Content = Id;
             //IsFirst = true;
             //ID.Content = storeOrder.Id;
-
             //PurchaseEmp.Content = storeOrder.OrdEmp;
             //OrderCategory.Text = storeOrder.Category;
             //Total.Content = storeOrder.TotalPrice;
@@ -60,12 +78,12 @@ namespace His_Pos.ProductPurchaseRecord
             //ButtonNewProduct.IsEnabled = (storeOrder.Manufactory.Name is null) ? false : true;
             //Phone.Content = (storeOrder.Manufactory.Telphone is null) ? "" : storeOrder.Manufactory.Telphone;
 
-            //if (storeOrder.Products is null)
-            //    storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
+            if (StoreOrderData.Products is null)
+                StoreOrderData.Products = StoreOrderDb.GetStoreOrderCollectionById(StoreOrderData.Id);
+           
 
-
-            //StoreOrderDetail.ItemsSource = storeOrderData.Products;
-            //TotalAmount.Content = storeOrder.Products.Count.ToString();
+            StoreOrderDetail.ItemsSource = StoreOrderData.Products;
+            TotalAmount.Content = StoreOrderData.Products.Count.ToString();
             //IsChanged = false;
             //IsFirst = false;
         }

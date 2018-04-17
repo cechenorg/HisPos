@@ -82,7 +82,7 @@ namespace His_Pos.Class.StoreOrder
         public OrderType Type { get; set; }
         public string Category { get; set; }
         public string CategoryColor { get; set; }
-        public string Id{get; set;}
+        public string Id { get; set; }
         public string OrdEmp { get; set; }
         public string TotalPrice { get; set; }
         public string RecEmp { get; set; }
