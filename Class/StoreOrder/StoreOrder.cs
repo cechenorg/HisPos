@@ -114,8 +114,8 @@ namespace His_Pos.Class.StoreOrder
 
             foreach (AbstractClass.Product product in Products)
             {
-                if( product.Amount == 0 )
-                    message += "商品數量不能為0\n";
+                //if( product.Amount == 0 )
+                //    message += "商品數量不能為0\n";
             }
 
             return message;

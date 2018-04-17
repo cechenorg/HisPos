@@ -28,7 +28,7 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class MedicineDetail : Window
     {
-        public Medicine medicine;
+        public InventoryMedicine InventoryMedicine;
         public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
 
@@ -46,48 +46,47 @@ namespace His_Pos.InventoryManagement
         private bool IsFirst = true;
         private string textBox_oldValue = "NotInit";
 
-        public MedicineDetail(string proId)
+        public MedicineDetail(InventoryMedicine inventoryMedicine)
         {
             InitializeComponent();
-
-            medicine = MedicineDb.GetMedDetail(proId);
+            InventoryMedicine = inventoryMedicine;
 
             UpdateUi();
             MEDManufactoryCollection.CollectionChanged += MedManufactoryCollectionOnCollectionChanged;
             IsFirst = false;
         }
         private void UpdateMed() {
-             medicine.Name = MedName.Content.ToString();
-            medicine.Id = MedId.Content.ToString();
-            medicine.SafeAmount = MedSaveAmount.Text;
-            medicine.Location = MedLocation.Text ;
-            medicine.BasicAmount = MedBasicAmount.Text;
-            TextRange textRange = new TextRange( MedNotes.Document.ContentStart,MedNotes.Document.ContentEnd);
-            medicine.Note = textRange.Text;
+            InventoryMedicine.Name = MedName.Content.ToString();
+            //medicine.Id = MedId.Content.ToString();
+            //medicine.SafeAmount = MedSaveAmount.Text;
+            //medicine.Location = MedLocation.Text ;
+            //medicine.BasicAmount = MedBasicAmount.Text;
+            //TextRange textRange = new TextRange( MedNotes.Document.ContentStart,MedNotes.Document.ContentEnd);
+            //medicine.Note = textRange.Text;
         }
         private void UpdateUi()
         {
-                if (medicine is null) return;
-            MedName.Content = medicine.Name;
-            MedId.Content = medicine.Id;
-            MedSaveAmount.Text = medicine.SafeAmount;
-            MedLocation.Text = medicine.Location;
-            MedBasicAmount.Text = medicine.BasicAmount;
-            MedNotes.Document.Blocks.Clear();
-            MedNotes.AppendText(medicine.Note);
+                if (InventoryMedicine is null) return;
+            //MedName.Content = medicine.Name;
+            //MedId.Content = medicine.Id;
+            //MedSaveAmount.Text = medicine.SafeAmount;
+            //MedLocation.Text = medicine.Location;
+            //MedBasicAmount.Text = medicine.BasicAmount;
+            //MedNotes.Document.Blocks.Clear();
+            //MedNotes.AppendText(medicine.Note);
 
             IsChangedLabel.Content = "未修改";
             
-             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(medicine.Id);
+             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryMedicine.Id);
              MedCusOrder.ItemsSource = CusOrderOverviewCollection;
 
-                StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(medicine.Id);
+                StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(InventoryMedicine.Id);
                 MedStoOrder.ItemsSource = StoreOrderOverviewCollection;
 
-            MEDStockOverviewCollection = ProductDb.GetProductStockOverviewById(medicine.Id);
+            MEDStockOverviewCollection = ProductDb.GetProductStockOverviewById(InventoryMedicine.Id);
                 MedStock.ItemsSource = MEDStockOverviewCollection;
                 UpdateStockOverviewInfo();
-            MedUnitCollection = ProductDb.GetProductUnitById(medicine.Id);
+            MedUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
             MEDManufactoryCollection = GetManufactoryCollection();
             MedManufactory.ItemsSource = MEDManufactoryCollection;
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
@@ -104,7 +103,7 @@ namespace His_Pos.InventoryManagement
         {
             ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();
 
-            var man = MainWindow.ProManTable.Select("PRO_ID = '" + medicine.Id + "'");
+            var man = MainWindow.ProManTable.Select("PRO_ID = '" + InventoryMedicine.Id + "'");
 
             foreach (var m in man)
             {
@@ -153,7 +152,7 @@ namespace His_Pos.InventoryManagement
         }
         private LineSeries GetSalesLineSeries()
         {
-            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(medicine.Id);
+            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(InventoryMedicine.Id);
 
             return new LineSeries
             {
@@ -342,18 +341,18 @@ namespace His_Pos.InventoryManagement
         {
             if (ChangedFlagNotChanged()) return;
            
-            ProductDb.UpdateOtcDataDetail(medicine);
+            ProductDb.UpdateOtcDataDetail(InventoryMedicine);
 
             foreach (var changedIndex in MEDManufactoryChangedCollection)
             {
-                ProductDb.UpdateProductManufactory(medicine.Id, MEDManufactoryCollection[changedIndex].Id, changedIndex);
+                ProductDb.UpdateProductManufactory(InventoryMedicine.Id, MEDManufactoryCollection[changedIndex].Id, changedIndex);
             }
             foreach (string index in MEDUnitChangdedCollection)
             {
                 ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
                                          ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
                                           ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
-                OTCDb.UpdateOtcUnit(prounit, medicine.Id);
+                OTCDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
             }
             InitVariables();
         }

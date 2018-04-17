@@ -15,20 +15,26 @@ namespace His_Pos.Class.Product
         public static DataTable GetMedicineData()
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
-            return dd.ExecuteProc("[HIS_POS_DB].[GET].[MEDICINE]");
+            return dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetMedicine]");
         }
        
-        public static Medicine GetMedDetail(string proId)
+        public static InventoryMedicine GetMedDetail(string proId)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
-            Medicine med = null;
+            InventoryMedicine med = null;
             foreach (DataRow row in dd.ExecuteProc("[HIS_POS_DB].[GET].[MEDIMDETAILBYID]", parameters).Rows)
             {
-                med = new Medicine(row, DataSource.MEDICINE);
+                med = new InventoryMedicine(row);
             }
             return med;
+        }
+
+        internal static DataTable GetInventoryMedicines()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            return dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[GetInventoryMedicine]");
         }
     }
 }

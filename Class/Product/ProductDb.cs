@@ -48,15 +48,15 @@ namespace His_Pos.Class.Product
 
             foreach (DataRow row in table.Rows)
             {
-                switch((SearchType)Int16.Parse(row["TYPE"].ToString()))
-                {
-                    case SearchType.MED:
-                        collection.Add(new Medicine(row, DataSource.ITEMDIALOGPRODUCT));
-                        break;
-                    case SearchType.OTC:
-                        collection.Add(new Otc(row, DataSource.ITEMDIALOGPRODUCT));
-                        break;
-                }
+                //switch((SearchType)Int16.Parse(row["TYPE"].ToString()))
+                //{
+                //    case SearchType.MED:
+                //        collection.Add(new Medicine(row, DataSource.ITEMDIALOGPRODUCT));
+                //        break;
+                //    case SearchType.OTC:
+                //        collection.Add(new Otc(row, DataSource.ITEMDIALOGPRODUCT));
+                //        break;
+                //}
             }
 
             return collection;
@@ -101,14 +101,14 @@ namespace His_Pos.Class.Product
         }
         public static void UpdateOtcDataDetail(AbstractClass.Product product)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", product.Id));
-            parameters.Add(new SqlParameter("SAFEQTY", product.SafeAmount));
-            parameters.Add(new SqlParameter("BASICQTY", product.BasicAmount));
-            parameters.Add(new SqlParameter("LOCATION", product.Location));
-            parameters.Add(new SqlParameter("PRO_DESCRIPTION", product.Note));
-            dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
+            //var dd = new DbConnection(Settings.Default.SQL_global);
+            //var parameters = new List<SqlParameter>();
+            //parameters.Add(new SqlParameter("PRO_ID", product.Id));
+            //parameters.Add(new SqlParameter("SAFEQTY", product.SafeAmount));
+            //parameters.Add(new SqlParameter("BASICQTY", product.BasicAmount));
+            //parameters.Add(new SqlParameter("LOCATION", product.Location));
+            //parameters.Add(new SqlParameter("PRO_DESCRIPTION", product.Note));
+            //dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
         }
         
     }

@@ -131,7 +131,7 @@ namespace His_Pos.PrescriptionDec
             MedicineList.Clear();
             foreach (var d in tmp.Take(50))
             {
-                MedicineList.Add(new Medicine(d, DataSource.MEDICINE));
+                MedicineList.Add(new Medicine(d));
             }
             medicineAuto.ItemsSource = MedicineList;
             medicineAuto.PopulateComplete();
@@ -148,9 +148,9 @@ namespace His_Pos.PrescriptionDec
          */
         private void CountMedicineTotalPrice(Medicine medicine)
         {
-            if (medicine.PaySelf)
-                medicine.TotalPrice = medicine.Price * medicine.Amount;
-            medicine.TotalPrice = medicine.HcPrice * medicine.Amount;
+            //if (medicine.PaySelf)
+            //    medicine.TotalPrice = medicine.Price * medicine.Amount;
+            //medicine.TotalPrice = medicine.HcPrice * medicine.Amount;
         }
         /*
          * 計算處方總藥價
@@ -162,13 +162,13 @@ namespace His_Pos.PrescriptionDec
             double purchaseCosts = 0;//藥品總進貨成本
             foreach (var medicine in PrescriptionList)
             {
-                if (!medicine.PaySelf)
-                    medicinesHcCost += medicine.TotalPrice;
-                else
-                {
-                    medicinesSelfCost += medicine.TotalPrice;
-                }
-                purchaseCosts += medicine.Cost*medicine.Amount;
+                //if (!medicine.PaySelf)
+                //    medicinesHcCost += medicine.TotalPrice;
+                //else
+                //{
+                //    medicinesSelfCost += medicine.TotalPrice;
+                //}
+                //purchaseCosts += medicine.Cost*medicine.Amount;
             }
             SelfCost.Text = PriceConvert(medicinesSelfCost).ToString();//自費金額
             Copayment.Text = CountCopaymentCost(medicinesHcCost);//部分負擔

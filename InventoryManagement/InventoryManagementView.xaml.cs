@@ -7,6 +7,9 @@ using His_Pos.Class.Product;
 using His_Pos.Class;
 using System;
 using System.Data;
+using System.Linq;
+using His_Pos.Interface;
+using His_Pos.Service;
 
 namespace His_Pos.InventoryManagement
 {
@@ -15,6 +18,8 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class InventoryManagementView : UserControl
     {
+        public DataTable InventoryMedicines;
+        public DataTable InventoryOtcs;
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
         private SearchType searchType = SearchType.ALL;
         private double selectStockValue = 0;
@@ -23,7 +28,10 @@ namespace His_Pos.InventoryManagement
         {
             InitializeComponent();
 
-            TotalStockValue.Content = ProductDb.GetTotalWorth();
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.MergeProductInventory(this);
+            loadingWindow.Show();
+            loadingWindow.Topmost = true;
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
@@ -51,7 +59,7 @@ namespace His_Pos.InventoryManagement
             }
 
             SearchCount.Content = _dataList.Count.ToString();
-            SelectStockValue.Content = selectStockValue.ToString("##.#");
+            SelectStockValue.Content = selectStockValue.ToString("0.#");
             ProductList.ItemsSource = _dataList;
         }
 
@@ -69,11 +77,11 @@ namespace His_Pos.InventoryManagement
                 searchCondition += " AND HISMED_FROZ = " + FreezeMed.IsChecked;
             }
 
-            var medicines = MainWindow.MedicineDataTable.Select(searchCondition);
+            var medicines = InventoryMedicines.Select(searchCondition);
 
             foreach (var m in medicines)
             {
-                Medicine medicine = new Medicine(m, DataSource.MEDICINE);
+                InventoryMedicine medicine = new InventoryMedicine(m);
 
                 _dataList.Add(medicine);
 
@@ -83,11 +91,11 @@ namespace His_Pos.InventoryManagement
 
         private void AddOtcResult()
         {
-            var otcs = MainWindow.OtcDataTable.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+            var otcs = InventoryOtcs.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
 
             foreach (var o in otcs)
             {
-                Otc otc = new Otc(o, DataSource.OTC);
+                InventoryOtc otc = new InventoryOtc(o);
 
                 _dataList.Add(otc);
 
@@ -99,15 +107,15 @@ namespace His_Pos.InventoryManagement
         {
             var selectedItem = (sender as DataGridRow).Item;
 
-            if (selectedItem is Otc )
+            if (selectedItem is InventoryOtc)
             {
-                OtcDetail productDetail = new OtcDetail(((Otc)selectedItem).Id);
+                OtcDetail productDetail = new OtcDetail((InventoryOtc)selectedItem);
                 productDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
                 productDetail.Show();
             }
-            else if (selectedItem is Medicine )
+            else if (selectedItem is InventoryMedicine)
             {
-                MedicineDetail medcineDetail = new MedicineDetail(((Medicine)selectedItem).Id);
+                MedicineDetail medcineDetail = new MedicineDetail((InventoryMedicine)selectedItem);
                 medcineDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
                 medcineDetail.Show();
             }
@@ -115,26 +123,7 @@ namespace His_Pos.InventoryManagement
 
         private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-
-
-            Product product;
-            DataRow[] rows;
-
-            if (sender is OtcDetail)
-            {
-                product = (sender as OtcDetail).otc;
-                rows = MainWindow.OtcDataTable.Select("PRO_ID = '" + product.Id + "'");
-            }
-            else
-            {
-                product = (sender as MedicineDetail).medicine;
-                rows = MainWindow.MedicineDataTable.Select("PRO_ID = '" + product.Id + "'");
-            }
-
-            rows[0]["PRO_SAFEQTY"] = product.SafeAmount;
-            rows[0]["PRO_BASICQTY"] = product.BasicAmount;
-
-            SearchData();
+            
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)

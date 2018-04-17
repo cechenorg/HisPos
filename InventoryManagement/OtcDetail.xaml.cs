@@ -45,16 +45,16 @@ namespace His_Pos.InventoryManagement
         public event MouseButtonEventHandler mouseButtonEventHandler;
 
 
-        public Otc otc;
+        public InventoryOtc InventoryOtc;
         private bool IsChanged = false;
         private bool IsFirst = true;
         private int LastSelectedIndex = -1;
 
-        public OtcDetail(string proId)
+        public OtcDetail(InventoryOtc inventoryOtc)
         {
             InitializeComponent();
 
-            otc = OTCDb.GetOtcDetail(proId);
+            InventoryOtc = inventoryOtc;
             
             UpdateUi();
             CheckAuth();
@@ -120,7 +120,7 @@ namespace His_Pos.InventoryManagement
 
         private LineSeries GetSalesLineSeries()
         {
-            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(otc.Id);
+            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(InventoryOtc.Id);
 
             return new LineSeries
             {
@@ -145,33 +145,32 @@ namespace His_Pos.InventoryManagement
 
         private void UpdateUi()
         {
-            if (otc is null) return;
+            if (InventoryOtc is null) return;
 
-            OtcName.Content = otc.Name;
-            OtcId.Content = otc.Id;
+            OtcName.Content = InventoryOtc.Name;
+            OtcId.Content = InventoryOtc.Id;
             
-            OtcType.Text = otc.Type;
-            OtcStatus.Text = (otc.Status)? "啟用":"已停用";
-            OtcSaveAmount.Text = otc.SafeAmount;
-            OtcBasicAmount.Text = otc.BasicAmount;
-            OtcLocation.Text = otc.Location;
+            OtcStatus.Text = (InventoryOtc.Status)? "啟用":"已停用";
+            OtcSaveAmount.Text = InventoryOtc.Stock.SafeAmount;
+            OtcBasicAmount.Text = InventoryOtc.Stock.BasicAmount;
+            OtcLocation.Text = InventoryOtc.Location;
 
             OTCNotes.Document.Blocks.Clear();
-            OTCNotes.AppendText(otc.Note);
+            OTCNotes.AppendText(InventoryOtc.Note);
 
-            CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(otc.Id);
+            CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryOtc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
-            StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(otc.Id);
+            StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(InventoryOtc.Id);
             OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;
 
-            OTCStockOverviewCollection = ProductDb.GetProductStockOverviewById(otc.Id);
+            OTCStockOverviewCollection = ProductDb.GetProductStockOverviewById(InventoryOtc.Id);
             OtcStock.ItemsSource = OTCStockOverviewCollection;
             UpdateStockOverviewInfo();
 
-            OTCUnitCollection = ProductDb.GetProductUnitById(otc.Id);
+            OTCUnitCollection = ProductDb.GetProductUnitById(InventoryOtc.Id);
             
-            OTCManufactoryCollection = ManufactoryDb.GetManufactoryCollection(otc.Id);
+            OTCManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryOtc.Id);
             OTCManufactoryCollection.Add(new ProductDetailManufactory());
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
             OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
@@ -194,9 +193,7 @@ namespace His_Pos.InventoryManagement
             InitVariables();
             SetUnitValue();
         }
-
         
-
         private void InitVariables()
         {
             IsChangedLabel.Content = "未修改";
@@ -234,7 +231,7 @@ namespace His_Pos.InventoryManagement
             else if (selectedItem is ProductDetailManufactory)
             {
                 if (selectedItem != OTCManufactoryCollection.Last())
-                    (selectedItem as ProductDetailManufactory).Vis = Visibility.Visible;
+                    (selectedItem as ProductDetailManufactory).Source = "/Images/DeleteDot.png";
                 OtcManufactory.SelectedItem = selectedItem;
                 LastSelectedIndex = OtcManufactory.SelectedIndex;
             }
@@ -252,7 +249,7 @@ namespace His_Pos.InventoryManagement
                 OtcStock.SelectedItem = null;
             else if (leaveItem is ProductDetailManufactory)
             {
-                (leaveItem as ProductDetailManufactory).Vis = Visibility.Hidden;
+                (leaveItem as ProductDetailManufactory).Source = "";
             }
         }
         
@@ -333,17 +330,17 @@ namespace His_Pos.InventoryManagement
         {
             if(ChangedFlagNotChanged()) return;
            
-            ProductDb.UpdateOtcDataDetail(otc);
+            ProductDb.UpdateOtcDataDetail(InventoryOtc);
            
             foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
             {
-                ManufactoryDb.UpdateProductManufactory(otc.Id, manufactoryChanged);
+                ManufactoryDb.UpdateProductManufactory(InventoryOtc.Id, manufactoryChanged);
             }
             foreach (string index in OTCUnitChangdedCollection) {
                 ProductUnit prounit = new ProductUnit (Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
                                          ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text,
                                           ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text);
-                OTCDb.UpdateOtcUnit(prounit,otc.Id);
+                OTCDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
             InitVariables();
         }
@@ -368,10 +365,10 @@ namespace His_Pos.InventoryManagement
         {
             if (ChangedFlagNotChanged()) return;
 
-            otc.Location = OtcLocation.Text;
-            otc.BasicAmount = OtcBasicAmount.Text;
-            otc.SafeAmount = OtcSaveAmount.Text;
-            otc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
+            InventoryOtc.Location = OtcLocation.Text;
+            InventoryOtc.Stock.BasicAmount = OtcBasicAmount.Text;
+            InventoryOtc.Stock.SafeAmount = OtcSaveAmount.Text;
+            InventoryOtc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
 
             MouseButtonEventHandler handler = mouseButtonEventHandler;
 

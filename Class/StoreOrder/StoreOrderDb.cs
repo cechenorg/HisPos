@@ -48,7 +48,7 @@ namespace His_Pos.Class.StoreOrder
             foreach (var product in storeOrder.Products) {
                 parameters.Add(new SqlParameter("TYPE", storeOrder.Category.Substring(0, 1)));
                 parameters.Add(new SqlParameter("PRO_ID",product.Id));
-                parameters.Add(new SqlParameter("PRO_INVENT", product.Amount));
+                //parameters.Add(new SqlParameter("PRO_INVENT", product.Amount));
                 dd.ExecuteProc("[HIS_POS_DB].[SET].[PURCHASEANDRETURN]",parameters);
                 parameters.Clear();
             }
@@ -62,9 +62,9 @@ namespace His_Pos.Class.StoreOrder
             {
                 parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
                 parameters.Add(new SqlParameter("PRO_ID", row.Id));
-                parameters.Add(new SqlParameter("QTY", row.Amount));
-                parameters.Add(new SqlParameter("PRICE", row.Price));
-                parameters.Add(new SqlParameter("DESCRIPTION", row.Note));
+                //parameters.Add(new SqlParameter("QTY", row.Amount));
+                //parameters.Add(new SqlParameter("PRICE", row.Price));
+                //parameters.Add(new SqlParameter("DESCRIPTION", row.Note));
                 dd.ExecuteProc("[HIS_POS_DB].[SET].[INSERTORDERPRODUCT]",parameters);
 
                 parameters.Clear();
@@ -135,14 +135,14 @@ namespace His_Pos.Class.StoreOrder
             {
                 switch (row["PRO_TYPE"].ToString())
                 {
-                    case "M":
-                        StoreOrderCollection.Add(new Medicine(row, DataSource.STOORDLIST));
-                        StoreOrderCollection[i].Amount = Int32.Parse(row["STOORDDET_QTY"].ToString());
-                        break;
-                    case "O":
-                        StoreOrderCollection.Add(new Otc(row, DataSource.STOORDLIST));
-                        StoreOrderCollection[i].Amount = Int32.Parse(row["STOORDDET_QTY"].ToString());
-                        break;
+                    //case "M":
+                    //    StoreOrderCollection.Add(new Medicine(row, DataSource.STOORDLIST));
+                    //    StoreOrderCollection[i].Amount = Int32.Parse(row["STOORDDET_QTY"].ToString());
+                    //    break;
+                    //case "O":
+                    //    StoreOrderCollection.Add(new Otc(row, DataSource.STOORDLIST));
+                    //    StoreOrderCollection[i].Amount = Int32.Parse(row["STOORDDET_QTY"].ToString());
+                    //    break;
                 }
                 i++;
             }

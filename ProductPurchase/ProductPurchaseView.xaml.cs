@@ -21,6 +21,7 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
+using His_Pos.Interface;
 using MahApps.Metro.Controls;
 
 namespace His_Pos.ProductPurchase
@@ -217,11 +218,10 @@ namespace His_Pos.ProductPurchase
         {
             var selectedItem = (sender as DataGridRow).Item;
             
-            if (selectedItem is Otc || selectedItem is Medicine)
+            if (selectedItem is IDeletable)
             {
                 if (storeOrderData.Products.Contains(selectedItem)){
-                    (selectedItem as Product).Vis = Visibility.Visible;
-                    (selectedItem as Product).Source = "/Images/DeleteDot.png";
+                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
                 }
                  
                 StoreOrderDetail.SelectedItem = selectedItem;
@@ -233,10 +233,9 @@ namespace His_Pos.ProductPurchase
         {
             var leaveItem = (sender as DataGridRow).Item;
            
-             if (leaveItem is Otc || leaveItem is Medicine)
+             if (leaveItem is IDeletable)
             {
-                (leaveItem as Product).Vis = Visibility.Hidden;
-                (leaveItem as Product).Source = string.Empty;
+                (leaveItem as IDeletable).Source = string.Empty;
             }
         }
 
@@ -269,13 +268,13 @@ namespace His_Pos.ProductPurchase
             foreach (var d in tmp1.Take(50))
             {
                 //if(proList.Contains(d["PRO_ID"].ToString()))
-                ProductAutoCompleteCollection.Add(new Otc(d, DataSource.OTC));
+                //ProductAutoCompleteCollection.Add(new ProductPurchaseOtc(d, DataSource.OTC));
             }
             var tmp = MainWindow.MedicineDataTable.Select("PRO_ID Like '%" + productAuto.Text + "%' OR PRO_NAME Like '%" + productAuto.Text + "%'");
             foreach (var d in tmp.Take(50))
             {
                 //if (proList.Contains(d["PRO_ID"].ToString()))
-                ProductAutoCompleteCollection.Add(new Medicine(d, DataSource.MEDICINE));
+                //ProductAutoCompleteCollection.Add(new ProductPurchaseMedicine(d, DataSource.MEDICINE));
             }
             productAuto.ItemsSource = ProductAutoCompleteCollection;
             productAuto.PopulateComplete();
@@ -291,12 +290,12 @@ namespace His_Pos.ProductPurchase
                 (sender as TextBox).Text = "0";
 
             int index = StoreOrderDetail.SelectedIndex;
-            storeOrderData.Products[index].TotalPrice = storeOrderData.Products[index].Amount * storeOrderData.Products[index].Price;
-            double count = 0;
-            foreach (var product in storeOrderData.Products) {
-                count += product.TotalPrice;
-            }
-            storeOrderData.TotalPrice = count.ToString();
+            //storeOrderData.Products[index].TotalPrice = storeOrderData.Products[index].Amount * storeOrderData.Products[index].Price;
+            //double count = 0;
+            //foreach (var product in storeOrderData.Products) {
+            //    count += product.TotalPrice;
+            //}
+            //storeOrderData.TotalPrice = count.ToString();
             Total.Content = storeOrderData.TotalPrice;
             TotalAmount.Content = storeOrderData.Products.Count.ToString();
 

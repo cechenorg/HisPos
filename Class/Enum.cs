@@ -50,9 +50,9 @@ namespace His_Pos.Class
     }
     public enum DataSource
     {
-        OTC = 0,
+        GetOtc = 0,
         STOORDLIST = 1,
-        MEDICINE = 2,
+        GetMedicine = 2,
         MANUFACTORY = 3,
         PROMAN = 4,
         PRODUCTBASICORSAFE = 5,

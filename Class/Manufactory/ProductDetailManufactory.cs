@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using His_Pos.Interface;
 
 namespace His_Pos.Class.Manufactory
 {
-    public class ProductDetailManufactory : Manufactory, INotifyPropertyChanged
+    public class ProductDetailManufactory : Manufactory, IDeletable
     {
         public ProductDetailManufactory()
         {
@@ -41,12 +42,19 @@ namespace His_Pos.Class.Manufactory
             Name = row["MAN_NAME"].ToString();
         }
 
-
+        private string source;
         public event PropertyChangedEventHandler PropertyChanged;
-        private Visibility vis = Visibility.Hidden;
-
         
         public string OrderId { get; set; }
+
+        public string Source {
+            get { return source; }
+            set
+            {
+                source = value;
+                NotifyPropertyChanged("Source");
+            }
+        }
 
         public AutoCompleteFilterPredicate<object> ManufactoryFilter
         {
@@ -57,16 +65,6 @@ namespace His_Pos.Class.Manufactory
                     || (obj as Manufactory).Name.Contains(searchText);
             }
         }
-
-        public Visibility Vis
-        {
-            get { return vis; }
-            set
-            {
-                vis = value;
-                NotifyPropertyChanged("Vis");
-            }
-        }
         
         private void NotifyPropertyChanged(string info)
         {
@@ -75,5 +73,7 @@ namespace His_Pos.Class.Manufactory
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+
+
     }
 }

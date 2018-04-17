@@ -18,15 +18,15 @@ namespace His_Pos.Class.Product
         public static DataTable GetOtcData()
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
-            return dd.ExecuteProc("[HIS_POS_DB].[GET].[OTC]");
+            return dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetOtc]");
         }
-        public static Otc GetOtcDetail(string proId) {
+        public static InventoryOtc GetOtcDetail(string proId) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
-            Otc otc = null;
+            InventoryOtc otc = null;
             foreach (DataRow row in dd.ExecuteProc("[HIS_POS_DB].[GET].[OTCIMDETAILBYID]", parameters).Rows) {
-                 otc = new Otc(row, DataSource.OTC);
+                 otc = new InventoryOtc(row);
             }
             return otc;
         }
@@ -45,7 +45,13 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_BASETYPE_STATUS", productunit.Id));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEUNIT]", parameters);
         }
-       
+
+        internal static DataTable GetInventoryOtcs()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            return dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[GetInventoryOtc]");
+        }
+
         public static ObservableCollection<CusOrderOverview> GetOtcCusOrderOverviewByID(string OtcID)
         {
             ObservableCollection<CusOrderOverview> collection = new ObservableCollection<CusOrderOverview>();

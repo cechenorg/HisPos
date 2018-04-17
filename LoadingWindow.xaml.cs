@@ -7,6 +7,7 @@ using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.StoreOrder;
+using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchase;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -92,6 +93,32 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        public void MergeProductInventory(InventoryManagementView inventoryManagementView)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("Merging Data...");
+                string totalWorth = ProductDb.GetTotalWorth();
+                inventoryManagementView.InventoryMedicines = NewFunction.JoinTables(MainWindow.MedicineDataTable, MedicineDb.GetInventoryMedicines(), "PRO_ID");
+                inventoryManagementView.InventoryOtcs = NewFunction.JoinTables(MainWindow.OtcDataTable, OTCDb.GetInventoryOtcs(), "PRO_ID");
+
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    inventoryManagementView.TotalStockValue.Content = totalWorth;
+                }));
+            };
+
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    inventoryManagementView.Search.IsEnabled = true;
                     Close();
                 }));
             };
