@@ -61,7 +61,7 @@ namespace His_Pos.Class.Product
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("OTCID", OtcID));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[OTCCUSORDBYID]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetOtcCustomerById]", parameters);
 
             foreach(DataRow row in table.Rows)
             {
@@ -99,7 +99,7 @@ namespace His_Pos.Class.Product
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("OTCID", OtcID));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[OTCSTOORDBYID]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetOtcStoordById]", parameters);
 
             foreach( DataRow row in table.Rows )
             {

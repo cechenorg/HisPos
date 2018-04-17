@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
+using His_Pos.Interface;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
 using LiveCharts.Wpf;
@@ -228,10 +229,10 @@ namespace His_Pos.InventoryManagement
                 OtcStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 OtcStock.SelectedItem = selectedItem;
-            else if (selectedItem is ProductDetailManufactory)
+            else if (selectedItem is IDeletable)
             {
                 if (selectedItem != OTCManufactoryCollection.Last())
-                    (selectedItem as ProductDetailManufactory).Source = "/Images/DeleteDot.png";
+                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
                 OtcManufactory.SelectedItem = selectedItem;
                 LastSelectedIndex = OtcManufactory.SelectedIndex;
             }

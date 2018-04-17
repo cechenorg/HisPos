@@ -44,7 +44,7 @@ namespace His_Pos.Class.Manufactory
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[PROMAN]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetProMan]", parameters);
             
             foreach (DataRow m in table.Rows)
             {

@@ -11,7 +11,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Manufactory
 {
-    public class ProductDetailManufactory : Manufactory, IDeletable
+    public class ProductDetailManufactory : Manufactory, IDeletable, INotifyPropertyChanged
     {
         public ProductDetailManufactory()
         {
