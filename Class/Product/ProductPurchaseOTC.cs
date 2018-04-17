@@ -14,6 +14,13 @@ namespace His_Pos.Class.Product
     {
         public ProductPurchaseOtc(DataRow dataRow, DataSource dataSource) : base(dataRow)
         {
+            Stock = new InStock()
+            {
+                Inventory = double.Parse(dataRow["PRO_INVENTORY"].ToString()),
+                SafeAmount = dataRow["PRO_SAFEQTY"].ToString(),
+                BasicAmount = dataRow["PRO_BASICQTY"].ToString()
+            };
+
             switch (dataSource)
             {
                 case DataSource.STOORDLIST:
@@ -29,6 +36,7 @@ namespace His_Pos.Class.Product
             }
         }
 
+        public InStock Stock { get; set; }
         public double LastPrice { get; set; }
         public string Source { get; set; }
         public double Cost { get; set; }

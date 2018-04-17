@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using His_Pos.Interface;
 
 namespace His_Pos.Class.StoreOrder
 {
@@ -114,8 +115,8 @@ namespace His_Pos.Class.StoreOrder
 
             foreach (AbstractClass.Product product in Products)
             {
-                //if( product.Amount == 0 )
-                //    message += "商品數量不能為0\n";
+                if ( Math.Abs(((ITrade)product).Amount) <= 0)
+                    message += "商品數量不能為0\n";
             }
 
             return message;
