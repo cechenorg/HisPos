@@ -98,13 +98,16 @@ namespace His_Pos.InventoryManagement
             {
                 searchCondition += " AND HISMED_FROZ = " + FreezeMed.IsChecked;
             }
-             
-            var medicines = InventoryMedicines.Select(searchCondition);
             if (BelowSafeAmount.IsChecked is true)
-            {
-                medicines = InventoryMedicines.Select("PRO_INVENTORY <= PRO_SAFEQTY");
-            }
-               
+                searchCondition += " AND PRO_INVENTORY <= PRO_SAFEQTY";
+
+            if (IsStop.IsChecked is true)
+                searchCondition += " AND PRO_STATUS == '0'";
+            else
+                searchCondition += " AND PRO_STATUS == '1'";
+
+            var medicines = InventoryMedicines.Select(searchCondition);
+            
             foreach (var m in medicines)
             {
                 InventoryMedicine medicine = new InventoryMedicine(m);
@@ -117,9 +120,16 @@ namespace His_Pos.InventoryManagement
 
         private void AddOtcResult()
         {
-            var otcs = InventoryOtcs.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
-            if(BelowSafeAmount.IsChecked is true)
-                otcs = InventoryOtcs.Select("PRO_INVENTORY <= PRO_SAFEQTY");
+            string condition = "PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'";
+            if (BelowSafeAmount.IsChecked is true)
+                condition += " AND PRO_INVENTORY <= PRO_SAFEQTY";
+            if (IsStop.IsChecked is true)
+                condition += " AND PRO_STATUS = '0'";
+            else
+                condition += " AND PRO_STATUS = '1'";
+
+            var otcs = InventoryOtcs.Select(condition);
+            
             foreach (var o in otcs)
             {
                 InventoryOtc otc = new InventoryOtc(o);
