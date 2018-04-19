@@ -36,8 +36,6 @@
                     <TextBox Name="ID" Margin="0,0,10,0" Width="120" FontSize="16"/>
                     <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <TextBox Name="Name" Margin="0,0,10,0" Width="120" FontSize="16"/>
-                    <Label Content="供應商" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="Manufactory" Margin="0,0,10,0" Width="270" FontSize="16"/>
                     <CheckBox Name="IsStop" Content="已停用" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Name="BelowSafeAmount" Content="低於安全量" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Name="NearValidDate" Content="於" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>

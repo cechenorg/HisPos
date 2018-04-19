@@ -380,10 +380,26 @@ namespace His_Pos.InventoryManagement
                 return false;
             }
         }
-        private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
+        
+       
+
+        private void MedNotes_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsChangedLabel is null || IsFirst)
+                return;
+            if (ChangedFlagNotChanged())
+                setChangedFlag();
+        }
+
+        private void ButtonUpdateSubmmit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (ChangedFlagNotChanged()) return;
-           
+            
+            InventoryMedicine.Location = MedLocation.Text;
+            InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
+            InventoryMedicine.Stock.SafeAmount = MedSaveAmount.Text;
+            InventoryMedicine.Note = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text;
+
             ProductDb.UpdateOtcDataDetail(InventoryMedicine, "InventoryMedicine");
 
             foreach (var manufactoryChanged in MEDManufactoryChangedCollection)
@@ -398,23 +414,8 @@ namespace His_Pos.InventoryManagement
                 ProductDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
             }
             InitVariables();
-        }
-
-       
-
-        private void MedNotes_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (IsChangedLabel is null || IsFirst)
-                return;
-            if (ChangedFlagNotChanged())
-                setChangedFlag();
-        }
-
-        private void ButtonUpdateSubmmit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (ChangedFlagNotChanged()) return;
-            UpdateMed();
             MouseButtonEventHandler handler = mouseButtonEventHandler;
+
             handler(this, e);
         }
         private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
