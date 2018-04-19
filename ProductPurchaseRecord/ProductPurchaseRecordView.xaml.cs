@@ -52,7 +52,7 @@ namespace His_Pos.ProductPurchaseRecord
             DataContext = this;
         }
         public void UpdateUi() {
-            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview("D");
+            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
             StoOrderOverview.ItemsSource = storeOrderCollection;
             StoOrderOverview.SelectedIndex = 0;
         }

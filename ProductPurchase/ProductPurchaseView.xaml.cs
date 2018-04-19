@@ -29,20 +29,35 @@ namespace His_Pos.ProductPurchase
     /// <summary>
     /// ProductPurchaseView.xaml 的互動邏輯
     /// </summary>
-    public partial class ProductPurchaseView : UserControl
+    public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
     {
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         public ObservableCollection<Product> ProductAutoCompleteCollection = new ObservableCollection<Product>();
         public ObservableCollection<StoreOrder> storeOrderCollection;
-        private OrderType OrderTypeFilterCondition = OrderType.ALL; 
-        public StoreOrder storeOrderData;
+        private OrderType OrderTypeFilterCondition = OrderType.ALL;
+        private StoreOrder storeOrderData;
+        public StoreOrder StoreOrderData {
+            get
+            {
+                return storeOrderData;
+            }
+            set
+            {
+                storeOrderData = value;
+                NotifyPropertyChanged("StoreOrderData");
+            }
+        }
         private int orderIndex = 0;
         private bool IsFirst = true;
         private bool IsChanged = false;
         private int LastSelectedIndex = -1;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public ProductPurchaseView()
         {
             InitializeComponent();
+            DataContext = this;
             this.Loaded += UserControl1_Loaded;
             InitManufactory();
             UpdateUi();
@@ -56,9 +71,8 @@ namespace His_Pos.ProductPurchase
 
         void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
         {
-            if (storeOrderData != null && IsChanged)
+            if (StoreOrderData != null && IsChanged)
             {
-                UpdateOrderDetailStoreOrder();
                 StoreOrderDb.SaveOrderDetail(storeOrderData);
             }
         }
@@ -70,34 +84,57 @@ namespace His_Pos.ProductPurchase
                 ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
             }
             ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
-
             ManufactoryAuto.ItemFilter = ManufactoryFilter;
         }
 
         public void UpdateUi()
         {
-            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview("N");
+            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
             StoOrderOverview.ItemsSource = storeOrderCollection;
         }
 
-        private void ShowOrderDetail(object sender, RoutedEventArgs e)
+        private void ShowOrderDetail(object sender, SelectionChangedEventArgs e)
         {
-            if(storeOrderData != null && IsChanged) {
-                UpdateOrderDetailStoreOrder();
-                StoreOrderDb.SaveOrderDetail(storeOrderData);
-
-                orderIndex = StoOrderOverview.SelectedIndex;
-                UpdateUi();
-                StoOrderOverview.SelectedIndex = orderIndex;
+            if (storeOrderData != null && IsChanged)
+            {
+                SaveOrder();
             }
 
-            StoreOrder storeOrder =  (StoreOrder) (sender as DataGridCell).DataContext;
-            UpdateOrderDetailUi(storeOrder.Type);
+            DataGrid dataGrid = sender as DataGrid;
+
+            if (dataGrid.SelectedItem is null) return;
+
+            StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
             UpdateOrderDetailData(storeOrder);
+            UpdateOrderDetailUi(storeOrder.Type);
+        }
+
+        private void SaveOrder()
+        {
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            Saving.Visibility = Visibility.Visible;
+
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                StoreOrderDb.SaveOrderDetail(storeOrderData);
+            };
+
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Saving.Visibility = Visibility.Hidden;
+                }));
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
 
         private void UpdateOrderDetailUi(OrderType type)
         {
+            AddNewProduct.IsEnabled = string.IsNullOrEmpty(StoreOrderData.Manufactory.Id) ? false : true;
+
             switch (type)
             {
                 case OrderType.PROCESSING:
@@ -133,45 +170,18 @@ namespace His_Pos.ProductPurchase
             }
         }
 
-        private void UpdateOrderDetailStoreOrder() {
-            storeOrderData.Id = ID.Content.ToString();
-            storeOrderData.OrdEmp = PurchaseEmp.Content.ToString();
-            storeOrderData.TotalPrice = Total.Content.ToString();
-            var temp =  MainWindow.ManufactoryTable.Select("MAN_NAME='" + ManufactoryAuto.Text + "'");
-            if(temp.Length !=0) storeOrderData.Manufactory = new Manufactory(temp[0], DataSource.MANUFACTORY);
-            storeOrderData.Category = OrderCategory.Text;
-           
-        }
         private void ClearOrderDetailData() {
             IsFirst = true;
-            ID.Content = "";
-            PurchaseEmp.Content = "";
-            OrderCategory.Text = "";
-            Total.Content = "";
-            ManufactoryAuto.Text = "";
-            Phone.Content ="";
-            StoreOrderDetail.ItemsSource = null;
-            TotalAmount.Content = "";
+            StoreOrderData = null;
             IsChanged = false;
             IsFirst = false;
         }
         private void UpdateOrderDetailData(StoreOrder storeOrder)
         {
             IsFirst = true;
-            ID.Content = storeOrder.Id;
-            PurchaseEmp.Content = storeOrder.OrdEmp;
-            OrderCategory.Text = storeOrder.Category;
-            Total.Content = storeOrder.TotalPrice;
-            ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null)? "": storeOrder.Manufactory.Name;
-            AddNewProduct.IsEnabled = (storeOrder.Manufactory.Name is null) ? false :true;
-            Phone.Content = (storeOrder.Manufactory.Telphone is null)? "": storeOrder.Manufactory.Telphone;
-
-            if (storeOrder.Products is null)
+            if(storeOrder.Products is null)
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
-            
-            storeOrderData = storeOrder;
-            StoreOrderDetail.ItemsSource = storeOrderData.Products;
-            TotalAmount.Content = storeOrder.Products.Count.ToString();
+            StoreOrderData = storeOrder;
             IsChanged = false;
             IsFirst = false;
         }
@@ -220,7 +230,7 @@ namespace His_Pos.ProductPurchase
             
             if (selectedItem is IDeletable)
             {
-                if (storeOrderData.Products.Contains(selectedItem)){
+                if (StoreOrderData.Products.Contains(selectedItem)){
                     (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
                 }
                  
@@ -282,32 +292,27 @@ namespace His_Pos.ProductPurchase
         
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (StoreOrderDetail.SelectedIndex == -1) return;
-            if (IsFirst == true) return;
-            SetChanged();
-
-            if ((sender as TextBox).Text == String.Empty)
-                (sender as TextBox).Text = "0";
-
-            int index = StoreOrderDetail.SelectedIndex;
-            //storeOrderData.Products[index].TotalPrice = storeOrderData.Products[index].Amount * storeOrderData.Products[index].Price;
-            //double count = 0;
-            //foreach (var product in storeOrderData.Products) {
-            //    count += product.TotalPrice;
-            //}
-            //storeOrderData.TotalPrice = count.ToString();
-            Total.Content = storeOrderData.TotalPrice;
-            TotalAmount.Content = storeOrderData.Products.Count.ToString();
-
+            CalculateTotalPrice();
         }
-        
+
+        private void CalculateTotalPrice()
+        {
+            double count = 0;
+            foreach (var product in storeOrderData.Products)
+            {
+                count += ((ITrade)product).TotalPrice;
+            }
+
+            storeOrderData.TotalPrice = count.ToString();
+        }
+
         private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
-            AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
-            if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
-            Phone.Content = ((Manufactory)autoCompleteBox.SelectedItem).Telphone;
+            //AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
+            //if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
+            //Phone.Content = ((Manufactory)autoCompleteBox.SelectedItem).Telphone;
             AddNewProduct.IsEnabled = (ManufactoryAuto.Text == string.Empty) ? false : true;
-            storeOrderData.Manufactory = ((Manufactory)autoCompleteBox.SelectedItem);
+            //StoreOrderData.Manufactory = ((Manufactory)autoCompleteBox.SelectedItem);
         }
 
         private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -317,14 +322,15 @@ namespace His_Pos.ProductPurchase
             if (productAuto is null) return;
             if (productAuto.SelectedItem is null) return;
 
-            if (storeOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
+            if (StoreOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
             {
-                storeOrderData.Products.Add(productAuto.SelectedItem as Product);
+                SetChanged();
+                StoreOrderData.Products.Add(productAuto.SelectedItem as Product);
                 StoreOrderDetail.SelectedIndex--;
             }
             else
             {
-                storeOrderData.Products[StoreOrderDetail.SelectedIndex] = productAuto.SelectedItem as Product;
+                StoreOrderData.Products[StoreOrderDetail.SelectedIndex] = productAuto.SelectedItem as Product;
                 return;
             }
            
@@ -348,21 +354,11 @@ namespace His_Pos.ProductPurchase
         {
             SetChanged();
         }
-        private void CofirmAndSave(OrderType type) {
-            UpdateOrderDetailStoreOrder();
-            if (!CheckNoEmptyData()) return;
-            storeOrderData.Type = type;
-            StoreOrderDb.SaveOrderDetail(storeOrderData);
-            UpdateUi();
 
-            for (int x = 0; x < storeOrderCollection.Count; x++)
-            {
-                if (storeOrderCollection[x].Id == storeOrderData.Id)
-                {
-                    StoOrderOverview.SelectedIndex = x;
-                    StoOrderOverview.ScrollIntoView(storeOrderCollection[x]);
-                }
-            }
+        private void CofirmAndSave(OrderType type) {
+            if (!CheckNoEmptyData()) return;
+            StoreOrderData.Type = type;
+            SaveOrder();
         }
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
@@ -375,19 +371,24 @@ namespace His_Pos.ProductPurchase
         private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
         {
             CofirmAndSave(OrderType.PROCESSING);
+            
+            for (int x = 0; x < storeOrderCollection.Count; x++)
+            {
+                if (storeOrderCollection[x].Id == StoreOrderData.Id)
+                {
+                    StoOrderOverview.SelectedIndex = x;
+                    StoOrderOverview.ScrollIntoView(storeOrderCollection[x]);
+                }
+            }
         }
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (storeOrderData != null && IsChanged)
-            {
-                UpdateOrderDetailStoreOrder();
-                StoreOrderDb.SaveOrderDetail(storeOrderData);
-            }
+            SaveOrder();
         }
 
         private bool CheckNoEmptyData()
         {
-            string errorMessage = storeOrderData.IsAnyDataEmpty();
+            string errorMessage = StoreOrderData.IsAnyDataEmpty();
 
             if (errorMessage != String.Empty)
             {
@@ -401,9 +402,10 @@ namespace His_Pos.ProductPurchase
         
         private void DeleteOrder_Click(object sender, RoutedEventArgs e)
         {
-            if (storeOrderData == null) return;
-            StoreOrderDb.DeleteOrder(storeOrderData.Id);
-            UpdateUi();
+            if (StoreOrderData == null) return;
+            StoreOrderDb.DeleteOrder(StoreOrderData.Id);
+            storeOrderCollection.Remove(StoreOrderData);
+
             if (StoOrderOverview.Items.Count == 0)
                 ClearOrderDetailData();
             else
@@ -413,7 +415,9 @@ namespace His_Pos.ProductPurchase
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            storeOrderData.Products.RemoveAt(StoreOrderDetail.SelectedIndex);
+            SetChanged();
+            StoreOrderData.Products.RemoveAt(StoreOrderDetail.SelectedIndex);
+            CalculateTotalPrice();
         }
 
         private void AutoCompleteBox_LostFocus(object sender, RoutedEventArgs e)
@@ -421,21 +425,30 @@ namespace His_Pos.ProductPurchase
             var ProductAuto = sender as AutoCompleteBox;
             if (ProductAuto is null) return;
 
-            if ((ProductAuto.Text is null || ProductAuto.Text == String.Empty) && LastSelectedIndex != storeOrderData.Products.Count - 1)
+            if ((ProductAuto.Text is null || ProductAuto.Text == String.Empty) && LastSelectedIndex != StoreOrderData.Products.Count - 1)
             {
-                storeOrderData.Products.RemoveAt(LastSelectedIndex);
+                StoreOrderData.Products.RemoveAt(LastSelectedIndex);
             }
         }
 
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ItemType.Product, storeOrderData.Manufactory.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(ItemType.Product, StoreOrderData.Manufactory.Id);
 
             newItemDialog.ShowDialog();
 
             if(newItemDialog.ConfirmButtonClicked)
             {
-                storeOrderData.Products.Add(newItemDialog.SelectedItem as Product);
+                SetChanged();
+                StoreOrderData.Products.Add(newItemDialog.SelectedItem as Product);
+            }
+        }
+
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
     }

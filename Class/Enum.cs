@@ -30,7 +30,6 @@ namespace His_Pos.Class
     }
     public enum OrderType
     {
-
         UNPROCESSING= 0,
         PROCESSING = 1,
         DONE = 2,
@@ -56,7 +55,9 @@ namespace His_Pos.Class
         MANUFACTORY = 3,
         PROMAN = 4,
         PRODUCTBASICORSAFE = 5,
-        ITEMDIALOGPRODUCT = 6
+        ITEMDIALOGPRODUCT = 6,
+        GetStoreOrderDetail = 7,
+        GetItemDialogProduct = 8
     }
     public enum MessageType
     {

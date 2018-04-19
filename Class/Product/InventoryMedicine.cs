@@ -9,7 +9,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class InventoryMedicine : Medicine, IInventory
+    public class InventoryMedicine : AbstractClass.Product, IInventory
     {
         public InventoryMedicine(DataRow dataRow) : base(dataRow)
         {

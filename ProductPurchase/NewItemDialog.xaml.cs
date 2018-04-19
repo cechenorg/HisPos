@@ -81,9 +81,9 @@ namespace His_Pos.ProductPurchase
                     ColumnDetails = new Collection<ColumnDetail>() {
                                     new ColumnDetail("商品編號", "Id", 90, textInMidStyle),
                                     new ColumnDetail("商品名稱", "Name", 200),
-                                    new ColumnDetail("庫存", "Inventory", 50, textInMidStyle),
-                                    new ColumnDetail("安全量", "SafeAmount", 60, textInMidStyle),
-                                    new ColumnDetail("基準量", "BasicAmount", 60, textInMidStyle)};
+                                    new ColumnDetail("庫存", "Stock.Inventory", 50, textInMidStyle),
+                                    new ColumnDetail("安全量", "Stock.SafeAmount", 60, textInMidStyle),
+                                    new ColumnDetail("基準量", "Stock.BasicAmount", 60, textInMidStyle)};
                     break;
             }
 
