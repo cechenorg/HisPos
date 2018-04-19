@@ -205,17 +205,8 @@ namespace His_Pos.InventoryManagement
 
         private void UpdateStockOverviewInfo()
         {
-            int totalStock = 0;
-            double totalPrice = 0;
-
-            foreach (var Otc in OTCStockOverviewCollection)
-            {
-                totalStock += Int32.Parse(Otc.Amount);
-                totalPrice += Double.Parse(Otc.Price) * Int32.Parse(Otc.Amount);
-            }
-
-            TotalStock.Content = totalStock.ToString();
-            StockTotalPrice.Content = "$" + totalPrice.ToString("0.00");
+            TotalStock.Content = InventoryOtc.Stock.Inventory.ToString();
+            StockTotalPrice.Content = "$" + InventoryOtc.StockValue;
 
         }
 
@@ -331,7 +322,7 @@ namespace His_Pos.InventoryManagement
         {
             if(ChangedFlagNotChanged()) return;
            
-            ProductDb.UpdateOtcDataDetail(InventoryOtc);
+            ProductDb.UpdateOtcDataDetail(InventoryOtc, "InventoryOtc");
            
             foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
             {
@@ -341,7 +332,7 @@ namespace His_Pos.InventoryManagement
                 ProductUnit prounit = new ProductUnit (Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
                                          ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text,
                                           ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text);
-                OTCDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
+                ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
             InitVariables();
         }

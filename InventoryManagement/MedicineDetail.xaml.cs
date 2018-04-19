@@ -176,8 +176,8 @@ namespace His_Pos.InventoryManagement
                 totalPrice += Double.Parse(Otc.Price) * Int32.Parse(Otc.Amount);
             }
 
-            TotalStock.Content = totalStock.ToString();
-            StockTotalPrice.Content = "$" + totalPrice.ToString("0.00");
+            TotalStock.Content = InventoryMedicine.Stock.Inventory;
+            StockTotalPrice.Content = "$" + InventoryMedicine.StockValue;
         }
         private void ChangedCancelButton_Click(object sender, RoutedEventArgs e)
         {
@@ -384,7 +384,7 @@ namespace His_Pos.InventoryManagement
         {
             if (ChangedFlagNotChanged()) return;
            
-            ProductDb.UpdateOtcDataDetail(InventoryMedicine);
+            ProductDb.UpdateOtcDataDetail(InventoryMedicine, "InventoryMedicine");
 
             foreach (var manufactoryChanged in MEDManufactoryChangedCollection)
             {
@@ -395,7 +395,7 @@ namespace His_Pos.InventoryManagement
                 ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
                                          ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
                                           ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
-                OTCDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
+                ProductDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
             }
             InitVariables();
         }

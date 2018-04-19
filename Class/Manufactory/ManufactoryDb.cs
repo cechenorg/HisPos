@@ -33,7 +33,7 @@ namespace His_Pos.Class.Manufactory
             parameters.Add(new SqlParameter("MAN_ID", manufactoryChanged.ManufactoryId));
             parameters.Add(new SqlParameter("ORDER_ID", manufactoryChanged.changedOrderId));
             parameters.Add(new SqlParameter("PROCESSTYPE", manufactoryChanged.ProcessType.ToString()));
-            dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
+            dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProMan]", parameters);
         }
 
         internal static ObservableCollection<ProductDetailManufactory> GetManufactoryCollection(string proId)

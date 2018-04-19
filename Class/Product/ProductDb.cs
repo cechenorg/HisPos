@@ -34,7 +34,19 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
-
+        public static void UpdateOtcUnit(ProductUnit productunit, string proid)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proid));
+            parameters.Add(new SqlParameter("PROUNI_TYPE", productunit.Unit));
+            parameters.Add(new SqlParameter("PROUNI_QTY", productunit.Amount));
+            parameters.Add(new SqlParameter("PRO_SELL_PRICE", productunit.Price));
+            parameters.Add(new SqlParameter("PRO_VIP_PRICE", productunit.VIPPrice));
+            parameters.Add(new SqlParameter("PRO_EMP_PRICE", productunit.EmpPrice));
+            parameters.Add(new SqlParameter("PRO_BASETYPE_STATUS", productunit.Id));
+            dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateUnit]", parameters);
+        }
         internal static ObservableCollection<object> GetItemDialogProduct(string manId)
         {
             ObservableCollection<object> collection = new ObservableCollection<object>();
@@ -66,7 +78,7 @@ namespace His_Pos.Class.Product
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
             
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[INVENTORYTOTALWORTH]");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[InventoryTotalWorth]");
             
             return table.Rows[0]["TOTAL"].ToString();
         }
@@ -99,16 +111,28 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("ORDER_ID", orderId));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
         }
-        public static void UpdateOtcDataDetail(AbstractClass.Product product)
+        public static void UpdateOtcDataDetail(AbstractClass.Product product,string type)
         {
-            //var dd = new DbConnection(Settings.Default.SQL_global);
-            //var parameters = new List<SqlParameter>();
-            //parameters.Add(new SqlParameter("PRO_ID", product.Id));
-            //parameters.Add(new SqlParameter("SAFEQTY", product.SafeAmount));
-            //parameters.Add(new SqlParameter("BASICQTY", product.BasicAmount));
-            //parameters.Add(new SqlParameter("LOCATION", product.Location));
-            //parameters.Add(new SqlParameter("PRO_DESCRIPTION", product.Note));
-            //dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEOTCDATADETAIL]", parameters);
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            if (type == "InventoryMedicine") {
+                parameters.Add(new SqlParameter("PRO_ID", ((InventoryMedicine)product).Id));
+                parameters.Add(new SqlParameter("SAFEQTY", ((InventoryMedicine)product).Stock.SafeAmount));
+                parameters.Add(new SqlParameter("BASICQTY", ((InventoryMedicine)product).Stock.BasicAmount));
+                parameters.Add(new SqlParameter("LOCATION", ((InventoryMedicine)product).Location));
+                parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryMedicine)product).Note));
+                dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
+            }
+            else if (type == "InventoryOtc") {
+                parameters.Add(new SqlParameter("PRO_ID", ((InventoryOtc)product).Id));
+                parameters.Add(new SqlParameter("SAFEQTY", ((InventoryOtc)product).Stock.SafeAmount));
+                parameters.Add(new SqlParameter("BASICQTY", ((InventoryOtc)product).Stock.BasicAmount));
+                parameters.Add(new SqlParameter("LOCATION", ((InventoryOtc)product).Location));
+                parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryOtc)product).Note));
+                dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
+
+            }
         }
         
     }
