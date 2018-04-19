@@ -75,7 +75,7 @@
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="MedManufactory" Grid.Column="1" Margin="10,0,0,0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="True">
+                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -94,19 +94,22 @@
                         <DataGridTemplateColumn Width="250" Header="供應商">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <controls:AutoCompleteBox x:Name="MedManufactoryAuto" Width="250" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
-                                                              ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" 
-                                                              ItemFilter="{Binding ManufactoryFilter}" DropDownClosing="MedManufactoryAuto_OnDropDownClosing">
-                                        <controls:AutoCompleteBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Label x:Name="ManId" Width="100" Content="{Binding Id}"/>
-                                                    <Label x:Name="ManName" Width="350" Content="{Binding Name}"/>
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </controls:AutoCompleteBox.ItemTemplate>
-                                    </controls:AutoCompleteBox>
+                                    <StackPanel Orientation="Horizontal">
+                                        <controls:AutoCompleteBox x:Name="MedManufactoryAuto" Width="200" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
+                                                                  ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
+                                                                  BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="10,0,0,0"
+                                                                  ItemFilter="{Binding ManufactoryFilter}" Populating="MedManufactoryAuto_Populating"  DropDownClosing="MedManufactoryAuto_DropDownClosing"  LostFocus="MedManufactoryAuto_LostFocus">
+                                            <controls:AutoCompleteBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label x:Name="ManId" Width="100" Content="{Binding Id}"/>
+                                                        <Label x:Name="ManName" Width="350" Content="{Binding Name}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </controls:AutoCompleteBox.ItemTemplate>
+                                        </controls:AutoCompleteBox>
+                                        <Image Name="DeleteDot" Source="{Binding Source}" Width="18" Margin="10" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown" Visibility="{Binding Vis, NotifyOnSourceUpdated=True}"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

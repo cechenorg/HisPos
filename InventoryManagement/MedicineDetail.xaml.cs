@@ -20,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.Class;
 using System.Collections.Specialized;
+using His_Pos.Interface;
 
 namespace His_Pos.InventoryManagement
 {
@@ -39,41 +40,42 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<ProductUnit> MedUnitCollection;
         public ObservableCollection<ProductDetailManufactory> MEDManufactoryCollection;
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
-        public HashSet<int> MEDManufactoryChangedCollection = new HashSet<int>();
+        public HashSet<ManufactoryChanged> MEDManufactoryChangedCollection = new HashSet<ManufactoryChanged>();
         public event MouseButtonEventHandler mouseButtonEventHandler;
 
         private bool IsChanged = false;
         private bool IsFirst = true;
         private string textBox_oldValue = "NotInit";
-
+        private int LastSelectedIndex = -1;
         public MedicineDetail(InventoryMedicine inventoryMedicine)
         {
             InitializeComponent();
             InventoryMedicine = inventoryMedicine;
 
             UpdateUi();
-            MEDManufactoryCollection.CollectionChanged += MedManufactoryCollectionOnCollectionChanged;
+           
             IsFirst = false;
+            DataContext = this;
         }
         private void UpdateMed() {
             InventoryMedicine.Name = MedName.Content.ToString();
-            //medicine.Id = MedId.Content.ToString();
-            //medicine.SafeAmount = MedSaveAmount.Text;
-            //medicine.Location = MedLocation.Text ;
-            //medicine.BasicAmount = MedBasicAmount.Text;
-            //TextRange textRange = new TextRange( MedNotes.Document.ContentStart,MedNotes.Document.ContentEnd);
-            //medicine.Note = textRange.Text;
+            InventoryMedicine.Id = MedId.Content.ToString();
+            InventoryMedicine.Stock.SafeAmount = MedSaveAmount.Text;
+            InventoryMedicine.Location = MedLocation.Text;
+            InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
+            TextRange textRange = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd);
+            InventoryMedicine.Note = textRange.Text;
         }
         private void UpdateUi()
         {
                 if (InventoryMedicine is null) return;
-            //MedName.Content = medicine.Name;
-            //MedId.Content = medicine.Id;
-            //MedSaveAmount.Text = medicine.SafeAmount;
-            //MedLocation.Text = medicine.Location;
-            //MedBasicAmount.Text = medicine.BasicAmount;
-            //MedNotes.Document.Blocks.Clear();
-            //MedNotes.AppendText(medicine.Note);
+            MedName.Content = InventoryMedicine.Name;
+            MedId.Content = InventoryMedicine.Id;
+            MedSaveAmount.Text = InventoryMedicine.Stock.SafeAmount;
+            MedLocation.Text = InventoryMedicine.Location;
+            MedBasicAmount.Text = InventoryMedicine.Stock.BasicAmount;
+            MedNotes.Document.Blocks.Clear();
+            MedNotes.AppendText(InventoryMedicine.Note);
 
             IsChangedLabel.Content = "未修改";
             
@@ -87,31 +89,31 @@ namespace His_Pos.InventoryManagement
                 MedStock.ItemsSource = MEDStockOverviewCollection;
                 UpdateStockOverviewInfo();
             MedUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
-            MEDManufactoryCollection = GetManufactoryCollection();
+           
+            MEDManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryMedicine.Id);
+            MEDManufactoryCollection.Add(new ProductDetailManufactory());
             MedManufactory.ItemsSource = MEDManufactoryCollection;
+            MEDManufactoryCollection.CollectionChanged += MedManufactoryCollectionOnCollectionChanged;
+
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
+                bool keep = true;
+
+                foreach (var detailManufactory in MEDManufactoryCollection)
+                {
+                    if (row["MAN_ID"].ToString() == detailManufactory.Id)
+                        keep = false;
+                }
+
+                if (keep)
+                    ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
             }
 
             UpdateChart();
             InitVariables();
             SetUnitValue();
-            
         }
-        private ObservableCollection<ProductDetailManufactory> GetManufactoryCollection()
-        {
-            ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();
-
-            var man = MainWindow.ProManTable.Select("PRO_ID = '" + InventoryMedicine.Id + "'");
-
-            foreach (var m in man)
-            {
-                manufactories.Add(new ProductDetailManufactory(m,DataSource.PROMAN));
-            }
-
-            return manufactories;
-        }
+      
         private void InitVariables()
         {
             IsChangedLabel.Content = "未修改";
@@ -189,21 +191,31 @@ namespace His_Pos.InventoryManagement
             if (selectedItem is CusOrderOverview)
                 MedCusOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStoreOrderOverview)
-                MedCusOrder.SelectedItem = selectedItem;
+                MedStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 MedStock.SelectedItem = selectedItem;
+            else if (selectedItem is IDeletable)
+            {
+                if (selectedItem != MEDManufactoryCollection.Last())
+                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+                MedManufactory.SelectedItem = selectedItem;
+                LastSelectedIndex = MedManufactory.SelectedIndex;
+            }
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
             var leaveItem = (sender as DataGridRow).Item;
-
             if (leaveItem is CusOrderOverview)
                 MedCusOrder.SelectedItem = null;
             else if (leaveItem is OTCStoreOrderOverview)
-                MedCusOrder.SelectedItem = null;
+                MedStoOrder.SelectedItem = null;
             else if (leaveItem is OTCStockOverview)
                 MedStock.SelectedItem = null;
+            else if (leaveItem is ProductDetailManufactory)
+            {
+                (leaveItem as ProductDetailManufactory).Source = "";
+            }
         }
 
      
@@ -334,8 +346,39 @@ namespace His_Pos.InventoryManagement
         }
         private void MedManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add) return;
-            MEDManufactoryChangedCollection.Add(e.NewStartingIndex);
+
+            ProductDetailManufactory OldProductDetailManufactory = (e.OldItems is null) ? null : e.OldItems[0] as ProductDetailManufactory;
+            ProductDetailManufactory NewProductDetailManufactory = (e.NewItems is null) ? null : e.NewItems[0] as ProductDetailManufactory;
+
+            if (ChangedFlagNotChanged())
+                setChangedFlag();
+
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    return;
+                case NotifyCollectionChangedAction.Replace:
+                    if (NewProductDetailManufactory.OrderId is null && OldProductDetailManufactory.Id is null)
+                        MEDManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.INSERT));
+                    else
+                    {
+                        MEDManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.UPDATE));
+                        ManufactoryAutoCompleteCollection.Add(OldProductDetailManufactory);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    MEDManufactoryChangedCollection.RemoveWhere(DeleteManufactoryChanged);
+                    if (OldProductDetailManufactory.OrderId != null)
+                        MEDManufactoryChangedCollection.Add(new ManufactoryChanged(OldProductDetailManufactory, ProcedureProcessType.DELETE));
+                    ManufactoryAutoCompleteCollection.Add(OldProductDetailManufactory);
+                    break;
+            }
+            bool DeleteManufactoryChanged(ManufactoryChanged manufactoryChanged)
+            {
+                if (OldProductDetailManufactory.Id == manufactoryChanged.ManufactoryId)
+                    return true;
+                return false;
+            }
         }
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
         {
@@ -343,9 +386,9 @@ namespace His_Pos.InventoryManagement
            
             ProductDb.UpdateOtcDataDetail(InventoryMedicine);
 
-            foreach (var changedIndex in MEDManufactoryChangedCollection)
+            foreach (var manufactoryChanged in MEDManufactoryChangedCollection)
             {
-                ProductDb.UpdateProductManufactory(InventoryMedicine.Id, MEDManufactoryCollection[changedIndex].Id, changedIndex);
+                ManufactoryDb.UpdateProductManufactory(InventoryMedicine.Id, manufactoryChanged);
             }
             foreach (string index in MEDUnitChangdedCollection)
             {
@@ -357,25 +400,7 @@ namespace His_Pos.InventoryManagement
             InitVariables();
         }
 
-        private void MedManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-
-            if (ManufactoryAuto is null) return;
-            if (ManufactoryAuto.SelectedItem is null) return;
-
-            if (MEDManufactoryCollection.Count <= MedManufactory.SelectedIndex)
-            {
-                MEDManufactoryCollection[MedManufactory.SelectedIndex] = (ProductDetailManufactory)ManufactoryAuto.SelectedItem;
-                MEDManufactoryCollection.Add(new ProductDetailManufactory());
-            }
-            else
-            {
-                MEDManufactoryCollection[MedManufactory.SelectedIndex] = (ProductDetailManufactory)ManufactoryAuto.SelectedItem;
-                return;
-            }
-            ManufactoryAuto.Text = "";
-        }
+       
 
         private void MedNotes_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -391,6 +416,60 @@ namespace His_Pos.InventoryManagement
             UpdateMed();
             MouseButtonEventHandler handler = mouseButtonEventHandler;
             handler(this, e);
+        }
+        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            MEDManufactoryCollection.RemoveAt(MedManufactory.SelectedIndex);
+        }
+
+        private void MedManufactoryAuto_Populating(object sender, PopulatingEventArgs e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
+
+            if (ManufactoryAuto is null) return;
+
+            if (ManufactoryAuto.ItemsSource is null)
+                ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
+
+            foreach (Manufactory manufactory in ManufactoryAutoCompleteCollection)
+            {
+                if (manufactory.Id == MEDManufactoryCollection[MEDManufactoryCollection.Count - 2].Id)
+                {
+                    ManufactoryAutoCompleteCollection.Remove(manufactory);
+                    break;
+                }
+            }
+
+            ManufactoryAuto.PopulateComplete();
+        }
+
+        private void MedManufactoryAuto_DropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
+
+            if (ManufactoryAuto is null) return;
+            if (ManufactoryAuto.SelectedItem is null) return;
+
+            if (MEDManufactoryCollection.Count == MedManufactory.SelectedIndex + 1)
+            {
+                MEDManufactoryCollection[MedManufactory.SelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
+                MEDManufactoryCollection.Add(new ProductDetailManufactory());
+            }
+            else
+            {
+                MEDManufactoryCollection[LastSelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
+            }
+        }
+
+        private void MedManufactoryAuto_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var ManufactoryAuto = sender as AutoCompleteBox;
+            if (ManufactoryAuto is null) return;
+
+            if ((ManufactoryAuto.Text is null || ManufactoryAuto.Text == String.Empty) && LastSelectedIndex != MEDManufactoryCollection.Count - 1)
+            {
+                MEDManufactoryCollection.RemoveAt(LastSelectedIndex);
+            }
         }
     }
 }
