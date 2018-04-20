@@ -22,7 +22,6 @@ namespace His_Pos.ViewModel
         public ObservableCollection<TabBase> ItemCollection { get; set; }
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
         private TabBase _selectedTab;
-
         public TabBase SelectedTab
         {
             get { return _selectedTab; }
@@ -150,7 +149,6 @@ namespace His_Pos.ViewModel
                 default:
                     return;
             }
-
             this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
         }

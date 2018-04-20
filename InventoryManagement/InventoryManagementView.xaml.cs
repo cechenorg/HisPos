@@ -103,9 +103,9 @@ namespace His_Pos.InventoryManagement
                 searchCondition += " AND PRO_INVENTORY <= PRO_SAFEQTY";
 
             if (IsStop.IsChecked is true)
-                searchCondition += " AND PRO_STATUS == '0'";
+                searchCondition += " AND PRO_STATUS = '0'";
             else
-                searchCondition += " AND PRO_STATUS == '1'";
+                searchCondition += " AND PRO_STATUS = '1'";
 
             var medicines = InventoryMedicines.Select(searchCondition);
             

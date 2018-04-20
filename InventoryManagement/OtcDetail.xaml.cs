@@ -21,6 +21,7 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Interface;
+using His_Pos.ViewModel;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
 using LiveCharts.Wpf;
@@ -368,6 +369,13 @@ namespace His_Pos.InventoryManagement
         {
             OTCManufactoryCollection.RemoveAt(OtcManufactory.SelectedIndex);
         }
-        
+
+        private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OTCStoreOrderOverview otcStoreOrderOverview = sender as OTCStoreOrderOverview;
+            //if (MainViewModel.tabList.Contains("處理單紀錄")) {
+
+            //}
+        }
     }
 }
