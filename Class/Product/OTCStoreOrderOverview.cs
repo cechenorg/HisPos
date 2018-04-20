@@ -13,9 +13,10 @@ namespace His_Pos.Class.Product
         public string StoreReceiveDate { get; }
         public string Price { get; }
         public string Amount { get; }
+        public string FreeAmount { get; }
         public string ManufactoryName { get; }
 
-        public OTCStoreOrderOverview(string manufactoryName ,string storeOrderDate, string orderEmployee, string storeReceiveDate, string price, string amount)
+        public OTCStoreOrderOverview(string manufactoryName ,string storeOrderDate, string orderEmployee, string storeReceiveDate, string price, string amount,string freeAmount)
         {
             ManufactoryName = manufactoryName;
             StoreOrderDate = storeOrderDate;
@@ -23,6 +24,7 @@ namespace His_Pos.Class.Product
             StoreReceiveDate = storeReceiveDate;
             Price = price;
             Amount = amount;
+            FreeAmount = freeAmount;
         }
     }
 }
