@@ -61,7 +61,19 @@ namespace His_Pos.Class.Product
         public InStock Stock { get; set; }
         public string Note { get; set; }
         public double LastPrice { get; set; }
-        public string Source { get; set; }
+        public string source;
+        public string Source
+        {
+            get
+            {
+                return source;
+            }
+            set
+            {
+                source = value;
+                NotifyPropertyChanged("Source");
+            }
+        }
         public double Cost { get; set; }
         public double totalPrice;
         public double TotalPrice

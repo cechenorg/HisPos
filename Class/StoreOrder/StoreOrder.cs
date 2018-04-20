@@ -40,11 +40,9 @@ namespace His_Pos.Class.StoreOrder
             {
                 case "P":
                     Type = OrderType.UNPROCESSING;
-                    TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
                     break;
                 case "G":
                     Type = OrderType.PROCESSING;
-                    TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
                     break;
             }
 
@@ -61,8 +59,37 @@ namespace His_Pos.Class.StoreOrder
                 Manufactory = new Manufactory.Manufactory(data[0], DataSource.MANUFACTORY);
             }
         }
-        public BitmapImage TypeIcon { get; set; }
-        public OrderType Type { get; set; }
+
+        public BitmapImage typeIcon;
+
+        public BitmapImage TypeIcon
+        {
+            get { return typeIcon; }
+            set
+            {
+                typeIcon = value;
+                NotifyPropertyChanged("TypeIcon");
+            }
+        }
+
+        public OrderType type;
+        public OrderType Type
+        {
+            get { return type; }
+            set
+            {
+                type = value;
+                switch (type)
+                {
+                    case OrderType.UNPROCESSING:
+                        TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
+                        break;
+                    case OrderType.PROCESSING:
+                        TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
+                        break;
+                }
+            }
+        }
         public Category Category { get; set; }
         public string Id { get; set; }
         public string OrdEmp { get; set; }
