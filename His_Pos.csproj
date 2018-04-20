@@ -252,6 +252,7 @@
     <Compile Include="Class\Product\ProductPurchaseOTC.cs" />
     <Compile Include="Class\Product\ProductUnit.cs" />
     <Compile Include="Class\SpecialCode.cs" />
+    <Compile Include="Class\StoreOrder\Category.cs" />
     <Compile Include="Class\StoreOrder\StoreOrderDb.cs" />
     <Compile Include="Class\StoreOrder\StoreOrder.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />

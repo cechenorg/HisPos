@@ -56,19 +56,19 @@ namespace His_Pos.Class.Product
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", manId));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[ITEMDIALOGPRODUCT]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetItemDialogProduct]", parameters);
 
             foreach (DataRow row in table.Rows)
             {
-                //switch((SearchType)Int16.Parse(row["TYPE"].ToString()))
-                //{
-                //    case SearchType.MED:
-                //        collection.Add(new Medicine(row, DataSource.ITEMDIALOGPRODUCT));
-                //        break;
-                //    case SearchType.OTC:
-                //        collection.Add(new Otc(row, DataSource.ITEMDIALOGPRODUCT));
-                //        break;
-                //}
+                switch (row["TYPE"].ToString())
+                {
+                    case "M":
+                        collection.Add(new ProductPurchaseMedicine(row, DataSource.GetItemDialogProduct));
+                        break;
+                    case "O":
+                        collection.Add(new ProductPurchaseOtc(row, DataSource.GetItemDialogProduct));
+                        break;
+                }
             }
 
             return collection;

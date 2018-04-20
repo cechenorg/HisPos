@@ -29,5 +29,10 @@ namespace His_Pos.Class.Product
         public double TotalPrice { get; set; }
         public double Amount { get; set; }
         public double Price { get; set; }
+
+        public void CalculateData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

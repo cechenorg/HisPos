@@ -12,5 +12,7 @@ namespace His_Pos.Interface
         double TotalPrice { get; set; }
         double Amount { get; set; }
         double Price { get; set; }
+
+        void CalculateData();
     }
 }

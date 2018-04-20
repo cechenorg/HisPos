@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,14 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    class ProductPurchaseMedicine : Medicine, IProductPurchase, IDeletable, ITrade
+    class ProductPurchaseMedicine : AbstractClass.Product, IProductPurchase, IDeletable, ITrade, INotifyPropertyChanged
     {
         public ProductPurchaseMedicine(DataRow dataRow, DataSource dataSource) : base(dataRow)
         {
+            BatchNumber = "";
+
+            LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
+
             Stock = new InStock()
             {
                 Inventory = double.Parse(dataRow["PRO_INVENTORY"].ToString()),
@@ -23,14 +28,32 @@ namespace His_Pos.Class.Product
             switch (dataSource)
             {
                 case DataSource.PRODUCTBASICORSAFE:
-                    LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
                     Amount = Int16.Parse(dataRow["PRO_BASICQTY"].ToString()) -
                              Int16.Parse(dataRow["PRO_INVENTORY"].ToString());
+                    Price = 0;
+                    TotalPrice = 0;
+                    Note = "";
+                    Invoice = "";
+                    FreeAmount = 0;
+                    ValidDate = "";
                     break;
-                case DataSource.STOORDLIST:
-                    LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
+                case DataSource.GetStoreOrderDetail:
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+                    Amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
+                    Note = dataRow["PRO_DESCRIPTION"].ToString();
+                    Invoice = dataRow["STOORDDET_INVOICE"].ToString();
+                    FreeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
+                    ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
+                    break;
+                case DataSource.GetItemDialogProduct:
+                    Amount = 0;
+                    Price = 0;
+                    TotalPrice = 0;
+                    Note = "";
+                    Invoice = "";
+                    FreeAmount = 0;
+                    ValidDate = "";
                     break;
             }
         }
@@ -40,8 +63,53 @@ namespace His_Pos.Class.Product
         public double LastPrice { get; set; }
         public string Source { get; set; }
         public double Cost { get; set; }
-        public double TotalPrice { get; set; }
-        public double Amount { get; set; }
-        public double Price { get; set; }
+        public double totalPrice;
+        public double TotalPrice
+        {
+            get { return totalPrice; }
+            set
+            {
+                totalPrice = value;
+                NotifyPropertyChanged("TotalPrice");
+            }
+        }
+        public double amount;
+        public double Amount
+        {
+            get { return amount; }
+            set
+            {
+                amount = value;
+                CalculateData();
+            }
+        }
+        public double price;
+        public double Price
+        {
+            get { return price; }
+            set
+            {
+                price = value;
+                CalculateData();
+            }
+        }
+        public int FreeAmount { get; set; }
+        public string Invoice { get; set; }
+        public string ValidDate { get; set; }
+        public string BatchNumber { get; set; }
+
+        public void CalculateData()
+        {
+            TotalPrice = amount * price;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 }

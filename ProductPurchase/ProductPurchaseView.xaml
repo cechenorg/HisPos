@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.ProductPurchase"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+             xmlns:gif="http://wpfanimatedgif.codeplex.com"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365" Unloaded="UserControl_Unloaded">
     <Viewbox Stretch="Fill">
@@ -27,15 +28,15 @@
                     <RadioButton Content="全部" Tag="3" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" IsChecked="True"/>
                 </StackPanel>
                 <DataGrid Name="StoOrderOverview" Grid.Row="1" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
-                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
+                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" SelectionChanged="ShowOrderDetail">
+
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="290">
                             <DataGridTemplateColumn.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
+                                <Style TargetType="DataGridCell">
                                     <Setter Property="Background" Value="Transparent"/>
                                     <Setter Property="BorderBrush" Value="Transparent"/>
                                     <Setter Property="Foreground" Value="#FF424040"/>
-                                    <EventSetter Event="Selected" Handler="ShowOrderDetail"/>
                                     <Style.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
@@ -57,8 +58,8 @@
                                         <Image Source="{Binding TypeIcon}" Width="20" Margin="10,0,5,0" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
                                             <Label Content="{Binding Id}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
-                                            <Border BorderBrush="{Binding CategoryColor}" BorderThickness="1" CornerRadius="6" Margin="25,8,1,5">
-                                                <TextBlock Text="{Binding Category}" Foreground="{Binding CategoryColor}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                            <Border BorderBrush="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="1" CornerRadius="6" Margin="25,8,1,5">
+                                                <TextBlock Text="{Binding Path=Category.CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
                                             </Border>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
@@ -74,9 +75,11 @@
                 </DataGrid>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}">
                     <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0" MouseLeftButtonDown="AddNewOrder"/>
+                    <Rectangle Width="200"/>
+                    <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Hidden"/>
                 </StackPanel>
             </Grid>
-            <Grid Margin="0,10,10,10" Grid.Column="1">
+            <Grid Margin="0,10,10,10" Grid.Column="1" DataContext="{Binding StoreOrderData}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="70"/>
                     <RowDefinition Height="50"/>
@@ -84,11 +87,11 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
-                    <Label Name="ID" Content="00000000-00" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
+                    <Label Name="ID" Content="{Binding Id}" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
                     <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
                     <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="400" FontSize="25" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" Height="40"
                                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="0,0,20,0"
+                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Path=Manufactory.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0"
                                                               VerticalContentAlignment="Bottom" DropDownClosed="ManufactoryAuto_DropDownClosed">
                                                              
                         <controls:AutoCompleteBox.ItemTemplate>
@@ -100,7 +103,7 @@
                             </DataTemplate>
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
-                    <Label Name="Phone" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label Name="Phone" Content="{Binding Path=Manufactory.Telphone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
                     <Grid.ColumnDefinitions>
@@ -112,7 +115,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
                         <Label Content="處理單類別" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <ComboBox Name="OrderCategory" Width="90"   FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="SetIsChanged">
+                        <ComboBox Name="OrderCategory" Width="90" Text="{Binding Path=Category.CategoryName}"  FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="SetIsChanged">
                             <ComboBoxItem Content="進貨" Foreground="Green"/>
                             <ComboBoxItem Content="退貨" Foreground="Red"/>
                             <ComboBoxItem Content="調貨" Foreground="Blue"/>
@@ -120,19 +123,19 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
                         <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <Label Name="PurchaseEmp" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                        <Label Name="PurchaseEmp" Content="{Binding OrdEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="0" >
                         <Label Content="收貨人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <TextBox Name="ReceiveEmp" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="SetIsChanged"/>
+                        <TextBox Name="ReceiveEmp" Text="{Binding RecEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="SetIsChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2">
                         <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <TextBox Name="Note" Width="340" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="SetIsChanged"/>
+                        <TextBox Name="Note" Width="340" Text="{Binding Note}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="SetIsChanged"/>
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal">
+                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding Products}">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -144,7 +147,7 @@
                             <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
                             <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="FontSize" Value="18"/>
+                            <Setter Property="FontSize" Value="16"/>
                             <Setter Property="Height" Value="40"/>
                         </Style>
                     </DataGrid.RowStyle>
@@ -156,11 +159,11 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Width="100" Header="商品編號">
+                        <DataGridTemplateColumn Width="120" Header="商品編號">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <controls:AutoCompleteBox Width="100" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
+                                        <controls:AutoCompleteBox Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}"
                                                               ItemFilter="{Binding ManufactoryFilter}"  Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed" LostFocus="AutoCompleteBox_LostFocus">
@@ -200,7 +203,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="庫存" Width="60" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                        <DataGridTextColumn Header="庫存" Width="60" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.Inventory}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -208,7 +211,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="安全量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SafeAmount}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                        <DataGridTextColumn Header="安全量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.SafeAmount}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -216,7 +219,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="基準量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding BasicAmount}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
+                        <DataGridTextColumn Header="基準量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.BasicAmount}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -234,7 +237,7 @@
                         <DataGridTemplateColumn MinWidth="70" Header="贈量">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Amount" TextChanged="TextBox_TextChanged" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Amount" Text="{Binding FreeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -249,28 +252,28 @@
                         <DataGridTemplateColumn MinWidth="120" Header="批號">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="BatchNumber" Width="120" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                                    <TextBox Width="120" FontSize="18" Text="{Binding BatchNumber}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="100" Header="發票號碼">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="BatchNumber" Width="100" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                                    <TextBox Width="100" FontSize="18" Text="{Binding Invoice}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="120" Header="效期">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <DatePicker Width="120" Height="33" Name="start" SelectedDateFormat="Short"/>
+                                    <DatePicker Width="120" Height="33" Name="start" SelectedDateFormat="Short" Text="{Binding ValidDate}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="140" Header="備註">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Notes" Text="{Binding Note}" Width="140" FontSize="18" FontFamily="Segoe UI Semi" TextChanged="TextBox_TextChanged" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Notes" Text="{Binding Note}" Width="140" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -279,9 +282,9 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkerBackGround}">
                     <Button Name="AddNewProduct"  Content="+ 新增品項" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Click="NewProduct"/>
                     <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-                    <Label Name="Total"  Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label Name="Total" Content="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-                    <Label Name="TotalAmount" HorizontalContentAlignment="Center" Width="50" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                    <Label Name="TotalAmount" Content="{Binding Path=Products.Count}" HorizontalContentAlignment="Center" Width="50" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                     <Rectangle Name="EmptySpace" Width="300"/>
                     <Button Name="DeleteOrder" Width="120" Content="刪除" Click="DeleteOrder_Click" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="DimGray"/>

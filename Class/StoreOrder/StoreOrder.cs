@@ -15,11 +15,10 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.StoreOrder
 {
-    public class StoreOrder
+    public class StoreOrder : INotifyPropertyChanged
     {
         public StoreOrder(User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
-            
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
 
@@ -27,7 +26,7 @@ namespace His_Pos.Class.StoreOrder
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
-            Category = "";
+            Category = new Category();
 
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 
@@ -48,25 +47,8 @@ namespace His_Pos.Class.StoreOrder
                     TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
                     break;
             }
-            switch (row["STOORD_TYPE"].ToString())
-            {
-                case "進":
-                    CategoryColor = "Green";
-                    Category = "進貨";
-                    break;
-                case "退":
-                    CategoryColor = "Red";
-                    Category = "退貨";
-                    break;
-                case "調":
-                    CategoryColor = "Blue";
-                    Category =  "調貨";
-                    break;
-                default:
-                    Category = "";
-                    break;
-            }
-           
+
+            Category = new Category(row["STOORD_TYPE"].ToString());
             OrdEmp = row["ORD_EMP"].ToString();
             TotalPrice = Double.Parse(row["TOTAL"].ToString()).ToString("0.##");
             RecEmp = row["REC_EMP"].ToString();
@@ -81,11 +63,19 @@ namespace His_Pos.Class.StoreOrder
         }
         public BitmapImage TypeIcon { get; set; }
         public OrderType Type { get; set; }
-        public string Category { get; set; }
-        public string CategoryColor { get; set; }
+        public Category Category { get; set; }
         public string Id { get; set; }
         public string OrdEmp { get; set; }
-        public string TotalPrice { get; set; }
+        public string totalPrice;
+        public string TotalPrice
+        {
+            get { return totalPrice; }
+            set
+            {
+                totalPrice = value;
+                NotifyPropertyChanged("TotalPrice");
+            }
+        }
         public string RecEmp { get; set; }
         public Manufactory.Manufactory Manufactory{ get; set; }
 
@@ -104,7 +94,7 @@ namespace His_Pos.Class.StoreOrder
         {
             string message = "";
 
-            if (String.IsNullOrEmpty(Category))
+            if (String.IsNullOrEmpty(Category.CategoryName))
                 message += "請填寫處理單類別\n";
 
             if(Manufactory is null || Manufactory.Id is null)

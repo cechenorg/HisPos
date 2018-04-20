@@ -8,6 +8,8 @@ namespace His_Pos.AbstractClass
 {
     public class Product
     {
+        public Product() {}
+
         public Product(DataRow dataRow)
         {
             Id = dataRow["PRO_ID"].ToString();
