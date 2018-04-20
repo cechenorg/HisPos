@@ -10,20 +10,41 @@ using System.Data;
 using System.Linq;
 using His_Pos.Interface;
 using His_Pos.Service;
+using System.ComponentModel;
+using System.Drawing;
+using System.Threading;
 
 namespace His_Pos.InventoryManagement
 {
     /// <summary>
     /// InventoryManagementView.xaml 的互動邏輯
     /// </summary>
-    public partial class InventoryManagementView : UserControl
+    public partial class InventoryManagementView : UserControl, INotifyPropertyChanged
     {
         public DataTable InventoryMedicines;
         public DataTable InventoryOtcs;
-        private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
         private SearchType searchType = SearchType.ALL;
         private double selectStockValue = 0;
+        private string selectProductId = string.Empty;
+        private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
+        public ObservableCollection<Product> _DataList 
+        {
+            get { return _dataList; }
+            set
+            {
+                _dataList = value;
+                NotifyPropertyChanged("_DataList");
+            }
+        }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public InventoryManagementView()
         {
             InitializeComponent();
@@ -32,6 +53,8 @@ namespace His_Pos.InventoryManagement
             loadingWindow.MergeProductInventory(this);
             loadingWindow.Show();
             loadingWindow.Topmost = true;
+
+            DataContext = this;
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
@@ -39,9 +62,9 @@ namespace His_Pos.InventoryManagement
             SearchData();
         }
 
-        private void SearchData()
+        public void SearchData()
         {
-            _dataList.Clear();
+            _DataList.Clear();
             selectStockValue = 0;
 
             switch (searchType)
@@ -58,9 +81,9 @@ namespace His_Pos.InventoryManagement
                     break;
             }
 
-            SearchCount.Content = _dataList.Count.ToString();
+            SearchCount.Content = _DataList.Count.ToString();
             SelectStockValue.Content = selectStockValue.ToString("0.#");
-            ProductList.ItemsSource = _dataList;
+            ProductList.ItemsSource = _DataList;
         }
 
         private void AddMedicineResult()
@@ -76,14 +99,21 @@ namespace His_Pos.InventoryManagement
             {
                 searchCondition += " AND HISMED_FROZ = " + FreezeMed.IsChecked;
             }
+            if (BelowSafeAmount.IsChecked is true)
+                searchCondition += " AND PRO_INVENTORY <= PRO_SAFEQTY";
+
+            if (IsStop.IsChecked is true)
+                searchCondition += " AND PRO_STATUS = '0'";
+            else
+                searchCondition += " AND PRO_STATUS = '1'";
 
             var medicines = InventoryMedicines.Select(searchCondition);
-
+            
             foreach (var m in medicines)
             {
                 InventoryMedicine medicine = new InventoryMedicine(m);
 
-                _dataList.Add(medicine);
+                _DataList.Add(medicine);
 
                 selectStockValue += Double.Parse(medicine.StockValue);
             }
@@ -91,13 +121,21 @@ namespace His_Pos.InventoryManagement
 
         private void AddOtcResult()
         {
-            var otcs = InventoryOtcs.Select("PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'");
+            string condition = "PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'";
+            if (BelowSafeAmount.IsChecked is true)
+                condition += " AND PRO_INVENTORY <= PRO_SAFEQTY";
+            if (IsStop.IsChecked is true)
+                condition += " AND PRO_STATUS = '0'";
+            else
+                condition += " AND PRO_STATUS = '1'";
 
+            var otcs = InventoryOtcs.Select(condition);
+            
             foreach (var o in otcs)
             {
                 InventoryOtc otc = new InventoryOtc(o);
 
-                _dataList.Add(otc);
+                _DataList.Add(otc);
 
                 selectStockValue += Double.Parse(otc.StockValue);
             }
@@ -106,11 +144,13 @@ namespace His_Pos.InventoryManagement
         private void showProductDetail(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
-
+            selectProductId = ((Product)selectedItem).Id;
             if (selectedItem is InventoryOtc)
             {
                 OtcDetail productDetail = new OtcDetail((InventoryOtc)selectedItem);
+                
                 productDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
+               
                 productDetail.Show();
             }
             else if (selectedItem is InventoryMedicine)
@@ -123,9 +163,21 @@ namespace His_Pos.InventoryManagement
 
         private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            
+            Product product;
+            if (sender is OtcDetail)
+            {
+                product = (sender as OtcDetail).InventoryOtc;
+               InventoryOtcs.Select("PRO_ID='" + product.Id + "'")[0]["PRO_SAFEQTY"] = ((InventoryOtc)product).Stock.SafeAmount;
+               InventoryOtcs.Select("PRO_ID='" + product.Id + "'")[0]["PRO_BASICQTY"] = ((InventoryOtc)product).Stock.BasicAmount;
+            }
+            else
+            {
+                product = (sender as MedicineDetail).InventoryMedicine;
+                InventoryMedicines.Select("PRO_ID='" + product.Id + "'")[0]["PRO_SAFEQTY"] = ((InventoryMedicine)product).Stock.SafeAmount;
+                InventoryMedicines.Select("PRO_ID='" + product.Id + "'")[0]["PRO_BASICQTY"] = ((InventoryMedicine)product).Stock.BasicAmount;
+            }
+            SearchData();
         }
-
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             ProductList.SelectedItem = (sender as DataGridRow).Item;

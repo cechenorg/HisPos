@@ -98,7 +98,7 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-
+        
         public void MergeProductInventory(InventoryManagementView inventoryManagementView)
         {
             backgroundWorker.DoWork += (s, o) =>
@@ -125,7 +125,7 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        private void ChangeLoadingMessage(string message)
+        public void ChangeLoadingMessage(string message)
         {
             Dispatcher.Invoke((Action)(() =>
             {

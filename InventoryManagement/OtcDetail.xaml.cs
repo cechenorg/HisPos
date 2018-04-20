@@ -16,10 +16,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Interface;
+using His_Pos.ViewModel;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
 using LiveCharts.Wpf;
@@ -44,8 +46,7 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
 
         public event MouseButtonEventHandler mouseButtonEventHandler;
-
-
+       
         public InventoryOtc InventoryOtc;
         private bool IsChanged = false;
         private bool IsFirst = true;
@@ -205,17 +206,8 @@ namespace His_Pos.InventoryManagement
 
         private void UpdateStockOverviewInfo()
         {
-            int totalStock = 0;
-            double totalPrice = 0;
-
-            foreach (var Otc in OTCStockOverviewCollection)
-            {
-                totalStock += Int32.Parse(Otc.Amount);
-                totalPrice += Double.Parse(Otc.Price) * Int32.Parse(Otc.Amount);
-            }
-
-            TotalStock.Content = totalStock.ToString();
-            StockTotalPrice.Content = "$" + totalPrice.ToString("0.00");
+            TotalStock.Content = InventoryOtc.Stock.Inventory.ToString();
+            StockTotalPrice.Content = "$" + InventoryOtc.StockValue;
 
         }
 
@@ -327,24 +319,7 @@ namespace His_Pos.InventoryManagement
                 count++;
             }
         }
-        private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
-        {
-            if(ChangedFlagNotChanged()) return;
-           
-            ProductDb.UpdateOtcDataDetail(InventoryOtc);
-           
-            foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
-            {
-                ManufactoryDb.UpdateProductManufactory(InventoryOtc.Id, manufactoryChanged);
-            }
-            foreach (string index in OTCUnitChangdedCollection) {
-                ProductUnit prounit = new ProductUnit (Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
-                                         ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text,
-                                          ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text);
-                OTCDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
-            }
-            InitVariables();
-        }
+      
         private void SetOtcTextBoxChangedCollection(string name) {
             if (ChangedFlagNotChanged())
                 setChangedFlag();
@@ -370,7 +345,21 @@ namespace His_Pos.InventoryManagement
             InventoryOtc.Stock.BasicAmount = OtcBasicAmount.Text;
             InventoryOtc.Stock.SafeAmount = OtcSaveAmount.Text;
             InventoryOtc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
+            
+            ProductDb.UpdateOtcDataDetail(InventoryOtc, "InventoryOtc");
 
+            foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
+            {
+                ManufactoryDb.UpdateProductManufactory(InventoryOtc.Id, manufactoryChanged);
+            }
+            foreach (string index in OTCUnitChangdedCollection)
+            {
+                ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
+                                         ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text,
+                                          ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text);
+                ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
+            }
+            InitVariables();
             MouseButtonEventHandler handler = mouseButtonEventHandler;
 
             handler(this, e);
@@ -380,6 +369,13 @@ namespace His_Pos.InventoryManagement
         {
             OTCManufactoryCollection.RemoveAt(OtcManufactory.SelectedIndex);
         }
-        
+
+        private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OTCStoreOrderOverview otcStoreOrderOverview = sender as OTCStoreOrderOverview;
+
+            MainWindow.MainWindowInstance.AddNewTab("處理單紀錄");
+          
+        }
     }
 }
