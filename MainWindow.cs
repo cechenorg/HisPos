@@ -22,5 +22,7 @@ namespace His_Pos
 
         private List<DockingWindow> _openWindows;
         public static DataView View;
+
+        public static MainWindow MainWindowInstance;
     }
 }

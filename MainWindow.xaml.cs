@@ -28,6 +28,7 @@ namespace His_Pos
             Width = SystemParameters.PrimaryScreenWidth * 0.833;
             Height = Width * 0.5625;
             CurrentUser = userLogin;
+            MainWindowInstance = this;
             InitializePosMenu();
             InitializeHisMenu();
             InitialUserBlock();
@@ -94,7 +95,13 @@ namespace His_Pos
         {
             var m = sender as MenuItem;
             Debug.Assert(m != null, nameof(m) + " != null");
-            ((ViewModelMainWindow) DataContext).AddTabCommandAction(m.Name);
+            AddNewTab(m.Name);
+        }
+
+        public void AddNewTab(string tabName)
+        {
+            ((ViewModelMainWindow)DataContext).AddTabCommandAction(tabName);
+            this.Focus();
         }
 
         private void MenuSwitchMouseDown(object sender, MouseButtonEventArgs e)
