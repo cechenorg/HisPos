@@ -98,29 +98,7 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void InventoryManagementViewUpdateData( InventoryManagementView inventoryManagementView)
-        {
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("存檔與資料同步中...");
-                string totalWorth = ProductDb.GetTotalWorth();
-                inventoryManagementView.InventoryMedicines = NewFunction.JoinTables(MainWindow.MedicineDataTable, MedicineDb.GetInventoryMedicines(), "PRO_ID");
-                inventoryManagementView.InventoryOtcs = NewFunction.JoinTables(MainWindow.OtcDataTable, OTCDb.GetInventoryOtcs(), "PRO_ID");
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    inventoryManagementView.TotalStockValue.Content = totalWorth;
-                    inventoryManagementView.SearchData();
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+        
         public void MergeProductInventory(InventoryManagementView inventoryManagementView)
         {
             backgroundWorker.DoWork += (s, o) =>

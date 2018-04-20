@@ -25,6 +25,7 @@ namespace His_Pos.InventoryManagement
         public DataTable InventoryOtcs;
         private SearchType searchType = SearchType.ALL;
         private double selectStockValue = 0;
+        private string selectProductId = string.Empty;
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
         public ObservableCollection<Product> _DataList 
         {
@@ -143,10 +144,11 @@ namespace His_Pos.InventoryManagement
         private void showProductDetail(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
-
+            selectProductId = ((Product)selectedItem).Id;
             if (selectedItem is InventoryOtc)
             {
                 OtcDetail productDetail = new OtcDetail((InventoryOtc)selectedItem);
+                
                 productDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
                
                 productDetail.Show();
@@ -161,10 +163,20 @@ namespace His_Pos.InventoryManagement
 
         private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.InventoryManagementViewUpdateData(this);
-            loadingWindow.Show();
-            loadingWindow.Topmost = true;
+            Product product;
+            if (sender is OtcDetail)
+            {
+                product = (sender as OtcDetail).InventoryOtc;
+               InventoryOtcs.Select("PRO_ID='" + product.Id + "'")[0]["PRO_SAFEQTY"] = ((InventoryOtc)product).Stock.SafeAmount;
+               InventoryOtcs.Select("PRO_ID='" + product.Id + "'")[0]["PRO_BASICQTY"] = ((InventoryOtc)product).Stock.BasicAmount;
+            }
+            else
+            {
+                product = (sender as MedicineDetail).InventoryMedicine;
+                InventoryMedicines.Select("PRO_ID='" + product.Id + "'")[0]["PRO_SAFEQTY"] = ((InventoryMedicine)product).Stock.SafeAmount;
+                InventoryMedicines.Select("PRO_ID='" + product.Id + "'")[0]["PRO_BASICQTY"] = ((InventoryMedicine)product).Stock.BasicAmount;
+            }
+            SearchData();
         }
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
