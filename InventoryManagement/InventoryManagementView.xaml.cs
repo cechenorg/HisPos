@@ -108,17 +108,21 @@ namespace His_Pos.InventoryManagement
                 searchCondition += " AND PRO_STATUS = '1'";
 
             var medicines = InventoryMedicines.Select(searchCondition);
-            
             foreach (var m in medicines)
             {
                 InventoryMedicine medicine = new InventoryMedicine(m);
-
                 _DataList.Add(medicine);
-
                 selectStockValue += Double.Parse(medicine.StockValue);
             }
         }
+        private bool OrderTypeFilter(object item)
+        {
+            //if (OrderTypeFilterCondition == OrderType.ALL) return true;
 
+            //if (((StoreOrder)item).Type == OrderTypeFilterCondition)
+                return true;
+            return false;
+        }
         private void AddOtcResult()
         {
             string condition = "PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'";
@@ -134,9 +138,7 @@ namespace His_Pos.InventoryManagement
             foreach (var o in otcs)
             {
                 InventoryOtc otc = new InventoryOtc(o);
-
                 _DataList.Add(otc);
-
                 selectStockValue += Double.Parse(otc.StockValue);
             }
         }
