@@ -106,12 +106,33 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("Merging Data...");
                 string totalWorth = ProductDb.GetTotalWorth();
+                double stockValue = 0;
                 inventoryManagementView.InventoryMedicines = NewFunction.JoinTables(MainWindow.MedicineDataTable, MedicineDb.GetInventoryMedicines(), "PRO_ID");
                 inventoryManagementView.InventoryOtcs = NewFunction.JoinTables(MainWindow.OtcDataTable, OTCDb.GetInventoryOtcs(), "PRO_ID");
 
                 Dispatcher.Invoke((Action)(() =>
                 {
+                    foreach (DataRow k in inventoryManagementView.InventoryOtcs.Rows)
+                    {
+                        InventoryOtc otc = new InventoryOtc(k);
+
+                        inventoryManagementView._DataList.Add(otc);
+
+                        stockValue += Double.Parse(otc.StockValue);
+                    }
+
+                    foreach (DataRow m in inventoryManagementView.InventoryMedicines.Rows)
+                    {
+                        InventoryMedicine medicine = new InventoryMedicine(m);
+                        
+                        inventoryManagementView._DataList.Add(medicine);
+
+                        stockValue += Double.Parse(medicine.StockValue);
+                    }
+
+                    inventoryManagementView.selectStockValue = stockValue;
                     inventoryManagementView.TotalStockValue.Content = totalWorth;
+                    inventoryManagementView.ProductList.Items.Filter = inventoryManagementView.OrderTypeFilter;
                 }));
             };
 

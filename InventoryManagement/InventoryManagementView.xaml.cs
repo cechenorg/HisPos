@@ -24,7 +24,8 @@ namespace His_Pos.InventoryManagement
         public DataTable InventoryMedicines;
         public DataTable InventoryOtcs;
         private SearchType searchType = SearchType.ALL;
-        private double selectStockValue = 0;
+        public double selectStockValue = 0;
+        public double searchCount = 0;
         private string selectProductId = string.Empty;
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
         public ObservableCollection<Product> _DataList 
@@ -59,89 +60,68 @@ namespace His_Pos.InventoryManagement
 
         private void Search_Click(object sender, RoutedEventArgs e)
         {
+            selectStockValue = 0;
+            searchCount = 0;
             SearchData();
+            SearchCount.Content = searchCount;
+            SelectStockValue.Content = selectStockValue.ToString("0.#");
         }
 
         public void SearchData()
         {
-            _DataList.Clear();
-            selectStockValue = 0;
-
-            switch (searchType)
-            {
+            ProductList.Items.Filter = OrderTypeFilter;
+        }
+        public bool OrderTypeFilter(object item)
+        {
+            bool reply = false;
+            switch (searchType) {
                 case SearchType.OTC:
-                    AddOtcResult();
+                    if (item is InventoryOtc)
+                    {
+                        if(
+                            (((InventoryOtc)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
+                        && (((InventoryOtc)item).Name.Contains(Name.Text) ||  Name.Text == string.Empty) //Name filter
+                       && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
+                        && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
+                       ) reply = true;
+                    }
+                    if (reply) {
+                        searchCount++;
+                        selectStockValue += Convert.ToDouble(((InventoryOtc)item).StockValue);
+                    } 
                     break;
                 case SearchType.MED:
-                    AddMedicineResult();
+                    if (item is InventoryMedicine)
+                    {
+                        if ((((InventoryMedicine)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
+                        && (((InventoryMedicine)item).Name.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
+                        && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
+                        && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
+                        ) reply = true;
+                    if (reply)
+                        {
+                            searchCount++;
+                            selectStockValue += Convert.ToDouble(((InventoryMedicine)item).StockValue);
+                        }
+                    }
                     break;
                 case SearchType.ALL:
-                    AddOtcResult();
-                    AddMedicineResult();
+                    if (
+                        (((Product)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
+                           && (((Product)item).Name.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
+                           && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
+                        && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
+                        ) reply = true;
+                    if (reply)
+                    {
+                        searchCount++;
+                        selectStockValue += Convert.ToDouble(((IInventory)item).StockValue);
+                    }
                     break;
             }
-
-            SearchCount.Content = _DataList.Count.ToString();
-            SelectStockValue.Content = selectStockValue.ToString("0.#");
-            ProductList.ItemsSource = _DataList;
+            return reply;
         }
-
-        private void AddMedicineResult()
-        {
-            string searchCondition = "PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'";
-
-            if (ControlMed.IsChecked == true )
-            {
-                searchCondition += "AND HISMED_CONTROL = " + ControlMed.IsChecked;
-            }
-
-            if(FreezeMed.IsChecked == true)
-            {
-                searchCondition += " AND HISMED_FROZ = " + FreezeMed.IsChecked;
-            }
-            if (BelowSafeAmount.IsChecked is true)
-                searchCondition += " AND PRO_INVENTORY <= PRO_SAFEQTY";
-
-            if (IsStop.IsChecked is true)
-                searchCondition += " AND PRO_STATUS = '0'";
-            else
-                searchCondition += " AND PRO_STATUS = '1'";
-
-            var medicines = InventoryMedicines.Select(searchCondition);
-            foreach (var m in medicines)
-            {
-                InventoryMedicine medicine = new InventoryMedicine(m);
-                _DataList.Add(medicine);
-                selectStockValue += Double.Parse(medicine.StockValue);
-            }
-        }
-        private bool OrderTypeFilter(object item)
-        {
-            //if (OrderTypeFilterCondition == OrderType.ALL) return true;
-
-            //if (((StoreOrder)item).Type == OrderTypeFilterCondition)
-                return true;
-            return false;
-        }
-        private void AddOtcResult()
-        {
-            string condition = "PRO_ID Like '%" + ID.Text + "%' AND PRO_NAME Like '%" + Name.Text + "%'";
-            if (BelowSafeAmount.IsChecked is true)
-                condition += " AND PRO_INVENTORY <= PRO_SAFEQTY";
-            if (IsStop.IsChecked is true)
-                condition += " AND PRO_STATUS = '0'";
-            else
-                condition += " AND PRO_STATUS = '1'";
-
-            var otcs = InventoryOtcs.Select(condition);
-            
-            foreach (var o in otcs)
-            {
-                InventoryOtc otc = new InventoryOtc(o);
-                _DataList.Add(otc);
-                selectStockValue += Double.Parse(otc.StockValue);
-            }
-        }
+        
 
         private void showProductDetail(object sender, MouseButtonEventArgs e)
         {

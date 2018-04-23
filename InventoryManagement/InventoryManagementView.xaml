@@ -65,8 +65,8 @@
                 <CheckBox Name="ControlMed" Content="管制藥" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <CheckBox Name="FreezeMed" Content="冷藏品" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
             </StackPanel>
-            <DataGrid Name="ProductList" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" Margin="10" Grid.Row="3">
+            <DataGrid Name="ProductList" ItemsSource="{Binding _DataList}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="3">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
