@@ -201,7 +201,8 @@ namespace His_Pos.ProductPurchase
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
             StoreOrderData = storeOrder;
-            Products = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
+            
+            Products = String.IsNullOrEmpty(storeOrderData.Manufactory.Id) ? null : ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
             IsChanged = false;
             IsFirst = false;
         }
@@ -325,6 +326,7 @@ namespace His_Pos.ProductPurchase
             AddNewProduct.IsEnabled = (ManufactoryAuto.Text != string.Empty);
             StoreOrderData.Manufactory = ((Manufactory)autoCompleteBox.SelectedItem);
             Products = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
+            SetChanged();
         }
 
         private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)

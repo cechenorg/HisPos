@@ -27,12 +27,16 @@ namespace His_Pos.ProductPurchase
             loadingWindow.ShowDialog();
 
             StoOrderOverview.SelectedIndex = 0;
+
+            SetChanged();
         }
 
         private void AddNewOrderByUm(Manufactory manufactory = null)
         {
             StoreOrderCollection.Insert(0, new StoreOrder(MainWindow.CurrentUser, manufactory));
             StoOrderOverview.SelectedIndex = 0;
+
+            SetChanged();
         }
     }
 }

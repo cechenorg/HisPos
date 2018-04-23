@@ -54,16 +54,20 @@ namespace His_Pos.Class.Manufactory
             return manufactories;
         }
 
-        internal static void GetManufactoriesBasicSafe(StoreOrderProductType type)
+        internal static void AddNewOrderBasicSafe(StoreOrderProductType type, Manufactory manufactory)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", (type == StoreOrderProductType.BASIC) ? "BASIC" : "SAFE"));
             parameters.Add(new SqlParameter("ORDEMP_ID", MainWindow.CurrentUser.Id));
-            
-            var table = dd.ExecuteProc("[HIS_POS_DB].[SET].[MANUFACTORYBASICORSAFE]", parameters);
-            
+
+            if(manufactory is null)
+                parameters.Add(new SqlParameter("MAN_ID", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("MAN_ID", manufactory.Id));
+
+            dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddNewOrderBySafeOrBasic]", parameters);
         }
     }
 }

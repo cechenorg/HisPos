@@ -81,7 +81,8 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("Adding New Orders...");
-                ManufactoryDb.GetManufactoriesBasicSafe(type);
+                ManufactoryDb.AddNewOrderBasicSafe(type, manufactory);
+
                 Dispatcher.Invoke((Action)(() =>
                 {
                     productPurchaseView.UpdateUi();
