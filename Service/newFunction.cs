@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace His_Pos.Service
 {
@@ -19,6 +22,49 @@ namespace His_Pos.Service
             resultTable.Merge(dataTable2, false, MissingSchemaAction.Add);
             
             return resultTable;
+        }
+
+        public static void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
+        {
+            // Checks should be made, but preferably one time before calling.
+            // And here it is assumed that the programmer has taken into
+            // account all of these conditions and checks are not needed.
+            //if ((parent == null) || (childName == null) || (<Type T is not inheritable from FrameworkElement>))
+            //{
+            //    return;
+            //}
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+
+            for (int i = 0; i < childrenCount; i++)
+            {
+                // Get the child
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                // Compare on conformity the type
+
+                // Not compare - go next
+                if (!(child is T childTest))
+                {
+                    // Go the deep
+                    FindChildGroup(child, childName, ref list);
+                }
+                else
+                {
+                    // If match, then check the name of the item
+                    FrameworkElement childElement = childTest as FrameworkElement;
+
+                    Debug.Assert(childElement != null, nameof(childElement) + " != null");
+                    if (childElement.Name == childName)
+                    {
+                        // Found
+                        list.Add(childTest);
+                    }
+
+                    // We are looking for further, perhaps there are
+                    // children with the same name
+                    FindChildGroup(child, childName, ref list);
+                }
+            }
         }
     }
 }

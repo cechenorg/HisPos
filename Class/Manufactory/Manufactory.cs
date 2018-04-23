@@ -10,7 +10,7 @@ using System.Windows.Controls;
 
 namespace His_Pos.Class.Manufactory
 {
-    public class Manufactory
+    public class Manufactory : ICloneable
     {
         public Manufactory()
         {
@@ -36,5 +36,17 @@ namespace His_Pos.Class.Manufactory
         public string Address{ get; set; }
         public string Telphone{ get; set; }
         public string Fax { get; set; }
+        public object Clone()
+        {
+            Manufactory manufactory = new Manufactory();
+
+            manufactory.Id = Id;
+            manufactory.Address = Address;
+            manufactory.Fax = Fax;
+            manufactory.Name = Name;
+            manufactory.Telphone = Telphone;
+
+            return manufactory;
+        }
     }
 }
