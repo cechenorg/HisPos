@@ -8,6 +8,9 @@
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365" Unloaded="UserControl_Unloaded">
+    <UserControl.Resources>
+        <local:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
+    </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.ColumnDefinitions>
@@ -163,10 +166,11 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <controls:AutoCompleteBox Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
+                                        <controls:AutoCompleteBox x:Name="Id" Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}" MinimumPrefixLength="4"
-                                                              ItemFilter="{Binding ManufactoryFilter}"  Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed" LostFocus="AutoCompleteBox_LostFocus">
+                                                              ItemFilter="{Binding ManufactoryFilter}"  Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed"
+                                                              IsEnabled="{Binding Id, Converter={StaticResource AutoCompleteIsEnableConverter}}">
                                         <controls:AutoCompleteBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
@@ -199,7 +203,7 @@
                         <DataGridTemplateColumn MinWidth="70" Header="單價">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Price" TextChanged="TextBox_TextChanged" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Price" TextChanged="TextBox_TextChanged" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown" GotFocus="OnGotFocus"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -230,14 +234,14 @@
                         <DataGridTemplateColumn MinWidth="70" Header="數量">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Amount" TextChanged="TextBox_TextChanged" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Amount" TextChanged="TextBox_TextChanged" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown" GotFocus="OnGotFocus"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="70" Header="贈量">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Amount" Text="{Binding FreeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="FreeAmount" TextChanged="TextBox_TextChanged" Text="{Binding FreeAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown" GotFocus="OnGotFocus"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -256,13 +260,6 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="100" Header="發票號碼">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox Width="100" FontSize="18" Text="{Binding Invoice}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="120" Header="效期">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
@@ -270,10 +267,17 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
+                        <DataGridTemplateColumn MinWidth="100" Header="發票號碼">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Width="100" FontSize="18" Text="{Binding Invoice}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="140" Header="備註">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Notes" Text="{Binding Note}" Width="140" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Notes" Text="{Binding Note}" Width="140" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown" GotFocus="OnGotFocus"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

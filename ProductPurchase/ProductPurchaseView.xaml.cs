@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
+using His_Pos.Service;
 using MahApps.Metro.Controls;
 
 namespace His_Pos.ProductPurchase
@@ -35,7 +37,7 @@ namespace His_Pos.ProductPurchase
         public DataTable ProductPurchaseOtc;
 
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
-        public ObservableCollection<object> Products = new ObservableCollection<object>();
+        public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
 
@@ -151,7 +153,7 @@ namespace His_Pos.ProductPurchase
 
         private void UpdateOrderDetailUi(OrderType type)
         {
-            AddNewProduct.IsEnabled = string.IsNullOrEmpty(StoreOrderData.Manufactory.Id) ? false : true;
+            AddNewProduct.IsEnabled = !string.IsNullOrEmpty(StoreOrderData.Manufactory.Id);
 
             switch (type)
             {
@@ -197,14 +199,34 @@ namespace His_Pos.ProductPurchase
         private void UpdateOrderDetailData(StoreOrder storeOrder)
         {
             IsFirst = true;
-            if(storeOrder.Products is null)
+            if (storeOrder.Products is null)
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
-
-            StoreOrderData = storeOrder;
             
-            Products = String.IsNullOrEmpty(storeOrderData.Manufactory.Id) ? null : ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
+            StoreOrderData = storeOrder;
+
+            if (!String.IsNullOrEmpty(storeOrderData.Manufactory.Id))
+            {
+                GetProductAutoComplete();
+            }
+
             IsChanged = false;
             IsFirst = false;
+        }
+
+        private void GetProductAutoComplete()
+        {
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ObservableCollection<object> temp = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Products = temp;
+                }));
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
@@ -256,7 +278,6 @@ namespace His_Pos.ProductPurchase
                 }
                  
                 StoreOrderDetail.SelectedItem = selectedItem;
-                LastSelectedIndex = StoreOrderDetail.SelectedIndex;
             }
         }
 
@@ -294,9 +315,9 @@ namespace His_Pos.ProductPurchase
         {
             var productAuto = sender as AutoCompleteBox;
 
-            if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null) return;
+            if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || Products is null) return;
             
-            var result = Products.Where(x => ((Product)x).Id.Contains(productAuto.Text) || ((Product)x).Name.Contains(productAuto.Text));
+            var result = Products.Where(x => ((Product)x).Id.Contains(productAuto.Text) || ((Product)x).Name.Contains(productAuto.Text)).Take(50);
             ProductAutoCompleteCollection = new ObservableCollection<object>(result.ToList());
 
             productAuto.ItemsSource = ProductAutoCompleteCollection;
@@ -305,7 +326,15 @@ namespace His_Pos.ProductPurchase
         
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CalculateTotalPrice();
+            TextBox textBox = sender as TextBox;
+            
+            if(textBox is null) return;
+
+            if (textBox.Text == String.Empty)
+                textBox.Text = "0";
+
+            if( !textBox.Name.Equals("FreeAmount") )
+                CalculateTotalPrice();
         }
 
         private void CalculateTotalPrice()
@@ -324,8 +353,8 @@ namespace His_Pos.ProductPurchase
             AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
             if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
             AddNewProduct.IsEnabled = (ManufactoryAuto.Text != string.Empty);
-            StoreOrderData.Manufactory = ((Manufactory)autoCompleteBox.SelectedItem);
-            Products = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
+            StoreOrderData.Manufactory = (Manufactory)((Manufactory)autoCompleteBox.SelectedItem).Clone();
+            GetProductAutoComplete();
             SetChanged();
         }
 
@@ -448,17 +477,6 @@ namespace His_Pos.ProductPurchase
             CalculateTotalPrice();
         }
 
-        private void AutoCompleteBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var ProductAuto = sender as AutoCompleteBox;
-            if (ProductAuto is null) return;
-
-            if ((ProductAuto.Text is null || ProductAuto.Text == String.Empty) && LastSelectedIndex != StoreOrderData.Products.Count - 1)
-            {
-                StoreOrderData.Products.RemoveAt(LastSelectedIndex);
-            }
-        }
-
         private void NewProduct(object sender, RoutedEventArgs e)
         {
             NewItemDialog newItemDialog = new NewItemDialog(ItemType.Product, StoreOrderData.Manufactory.Id);
@@ -471,13 +489,68 @@ namespace His_Pos.ProductPurchase
                 StoreOrderData.Products.Add(newItemDialog.SelectedItem as Product);
             }
         }
-
+        
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
+        }
+
+        private void OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                List<TextBox> temp = new List<TextBox>();
+                TextBox textBox = sender as TextBox;
+                
+                switch (textBox.Name)
+                {
+                    case "Price":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref temp);
+                        break;
+                    case "Amount":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref temp);
+                        break;
+                    case "FreeAmount":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref temp);
+                        break;
+                    case "Notes":
+                        if (LastSelectedIndex == storeOrderData.Products.Count - 1)
+                        {
+                            List<AutoCompleteBox> autoList = new List<AutoCompleteBox>();
+                            NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, "Id", ref autoList);
+                            autoList[LastSelectedIndex + 1].Focus();
+                        }
+                        else
+                        {
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref temp);
+                            temp[LastSelectedIndex + 1].Focus();
+                        }
+                        return;
+                }
+                temp[LastSelectedIndex].Focus();
+            }
+        }
+
+        private void OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            LastSelectedIndex = StoreOrderDetail.SelectedIndex;
+        }
+    }
+    public class AutoCompleteIsEnableConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value.ToString().Equals("")) return true;
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return "";
         }
     }
 }

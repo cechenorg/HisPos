@@ -104,7 +104,16 @@ namespace His_Pos.Class.StoreOrder
             }
         }
         public string RecEmp { get; set; }
-        public Manufactory.Manufactory Manufactory{ get; set; }
+        private Manufactory.Manufactory manufactory;
+        public Manufactory.Manufactory Manufactory
+        {
+            get { return manufactory; }
+            set
+            {
+                manufactory = value;
+                NotifyPropertyChanged("Manufactory");
+            }
+        }
 
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
