@@ -33,9 +33,6 @@ namespace His_Pos.ProductPurchase
     /// </summary>
     public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
     {
-        public DataTable ProductPurchaseMedicine;
-        public DataTable ProductPurchaseOtc;
-
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
@@ -434,6 +431,7 @@ namespace His_Pos.ProductPurchase
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = storeOrderData;
             StoOrderOverview.ScrollIntoView(storeOrderData);
+            UpdateOrderDetailUi(OrderType.PROCESSING);
         }
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -539,7 +537,6 @@ namespace His_Pos.ProductPurchase
                             List<AutoCompleteBox> autoList = new List<AutoCompleteBox>();
                             NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, "Id", ref autoList);
                             autoList[currentRowIndex + 1].Focus();
-
                         }
                         else
                         {
