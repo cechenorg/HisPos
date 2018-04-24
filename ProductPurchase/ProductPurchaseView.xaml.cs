@@ -31,13 +31,14 @@ namespace His_Pos.ProductPurchase
     /// <summary>
     /// ProductPurchaseView.xaml 的互動邏輯
     /// </summary>
-    public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
+    /// 
+    public partial class ProductPurchaseRecord : UserControl, INotifyPropertyChanged
     {
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
-
+        
         public ObservableCollection<StoreOrder> StoreOrderCollection
         {
             get
@@ -71,7 +72,7 @@ namespace His_Pos.ProductPurchase
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ProductPurchaseView()
+        public ProductPurchaseRecord()
         {
             InitializeComponent();
             DataContext = this;

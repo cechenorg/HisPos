@@ -7,7 +7,8 @@
              xmlns:local2="clr-namespace:His_Pos.Class.StoreOrder"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365" >
+             d:DesignHeight="839" d:DesignWidth="1365"
+            >
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>

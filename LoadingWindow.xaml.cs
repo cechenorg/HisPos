@@ -76,7 +76,7 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void AddNewOrders(ProductPurchaseView productPurchaseView,StoreOrderProductType type, Manufactory manufactory = null)
+        public void AddNewOrders(ProductPurchase.ProductPurchaseRecord productPurchaseView,StoreOrderProductType type, Manufactory manufactory = null)
         {
             backgroundWorker.DoWork += (s, o) =>
             {

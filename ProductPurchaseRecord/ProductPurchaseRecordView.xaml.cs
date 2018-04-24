@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class.Manufactory;
 using His_Pos.Class.StoreOrder;
+using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,6 +27,7 @@ namespace His_Pos.ProductPurchaseRecord
     {
         public ObservableCollection<StoreOrder> storeOrderCollection;
         private StoreOrder storeOrderData;
+        public static string Proid;
         public StoreOrder StoreOrderData
         {
             get { return storeOrderData; }
@@ -47,9 +49,10 @@ namespace His_Pos.ProductPurchaseRecord
         public ProductPurchaseRecordView()
         {
             InitializeComponent();
-            
+            Focusable = true;
             UpdateUi();
             DataContext = this;
+            PassValueSearchData();
         }
         public void UpdateUi() {
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
@@ -125,9 +128,26 @@ namespace His_Pos.ProductPurchaseRecord
         }
         private void Search_Click(object sender, RoutedEventArgs e)
         {
+            SearchData();
+        }
+
+        private void SearchData()
+        {
             StoOrderOverview.Items.Filter = StoOrderOverviewFilter;
             StoreOrderData = null;
             StoOrderOverview.SelectedIndex = 0;
         }
+
+        private void PassValueSearchData() {
+            if (Proid != null)
+            {
+                TextBoxId.Text = Proid;
+                SearchData();
+                Proid = null;
+            }
+        }
+      
+        
+        
     }
 }

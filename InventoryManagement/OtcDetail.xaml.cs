@@ -21,6 +21,8 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Interface;
+using His_Pos.ProductPurchase;
+using His_Pos.ProductPurchaseRecord;
 using His_Pos.ViewModel;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
@@ -372,9 +374,10 @@ namespace His_Pos.InventoryManagement
 
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            OTCStoreOrderOverview otcStoreOrderOverview = sender as OTCStoreOrderOverview;
+            var selectitem = OtcStoOrder.SelectedItem;
 
             MainWindow.MainWindowInstance.AddNewTab("處理單紀錄");
+            ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
           
         }
     }

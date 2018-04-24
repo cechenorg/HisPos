@@ -10,6 +10,8 @@ using System.Windows.Data;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using His_Pos.Class;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace His_Pos.ViewModel
 {
