@@ -92,5 +92,10 @@ namespace His_Pos.ProductPurchaseRecord
         {
 
         }
+
+        private void Search_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

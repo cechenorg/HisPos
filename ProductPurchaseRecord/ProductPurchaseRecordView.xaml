@@ -42,7 +42,7 @@
                     <RadioButton Content="退貨" Tag="1" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                     <RadioButton Content="全部" Tag="2" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
                 </StackPanel>
-                <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="查詢" Name="Search" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+                <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -75,8 +75,8 @@
                                         </Grid.RowDefinitions>
                                         <StackPanel Orientation="Horizontal" Grid.Row="0">
                                             <Label Content="{Binding Id}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
-                                            <Border BorderBrush="{Binding CategoryColor}" BorderThickness="1" CornerRadius="6" Margin="25,8,1,5">
-                                                <TextBlock Text="{Binding Category}" Foreground="{Binding CategoryColor}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                            <Border BorderBrush="{Binding Category.CategoryColor}" BorderThickness="1" CornerRadius="6" Margin="25,8,1,5">
+                                                <TextBlock Text="{Binding Category.CategoryName}" Foreground="{Binding Category.CategoryColor}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
                                             </Border>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Row="1">
@@ -113,7 +113,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
                             <Label Content="處理單類別" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                            <Label Content="{Binding Path=StoreOrderData.Category,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                            <Label Content="{Binding Path=StoreOrderData.Category.CategoryName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
                             <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>

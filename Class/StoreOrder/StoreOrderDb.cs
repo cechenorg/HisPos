@@ -21,7 +21,7 @@ namespace His_Pos.Class.StoreOrder
 
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("TYPE", nameof(type)));
+            parameters.Add(new SqlParameter("TYPE", type.ToString()));
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrder]", parameters);
             
             foreach (DataRow row in table.Rows)
