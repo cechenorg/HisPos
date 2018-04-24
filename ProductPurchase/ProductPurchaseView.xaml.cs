@@ -23,6 +23,7 @@ using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
+using His_Pos.InventoryManagement;
 using His_Pos.Service;
 using MahApps.Metro.Controls;
 
@@ -405,6 +406,7 @@ namespace His_Pos.ProductPurchase
             CofirmAndSave(OrderType.DONE);
 
             storeOrderCollection.Remove(storeOrderData);
+            InventoryManagementView.DataChanged = true;
 
             if (StoOrderOverview.Items.Count == 0)
                 ClearOrderDetailData();

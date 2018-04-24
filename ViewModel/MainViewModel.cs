@@ -125,6 +125,28 @@ namespace His_Pos.ViewModel
                 if (tab.TabName == featureItem.ToString())
                 {
                     SelectedTab = tab;
+
+                    switch (featureItem.ToString())
+                    {
+                        case nameof(FeatureItem.處方登錄):
+                            break;
+                        case nameof(FeatureItem.處方查詢):
+                            break;
+                        case nameof(FeatureItem.庫存管理):
+                            if(InventoryManagement.InventoryManagementView.DataChanged)
+                                InventoryManagement.InventoryManagementView.Instance.MergingData();
+                            break;
+                        case nameof(FeatureItem.處理單管理):
+                            break;
+                        case nameof(FeatureItem.處理單紀錄):
+                            ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
+                            break;
+                        case nameof(FeatureItem.庫存盤點):
+                            break;
+                        default:
+                            return;
+                    }
+
                     return;
                 }
             }

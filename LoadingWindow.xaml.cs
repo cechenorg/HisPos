@@ -112,6 +112,8 @@ namespace His_Pos
 
                 Dispatcher.Invoke((Action)(() =>
                 {
+                    inventoryManagementView._DataList.Clear();
+
                     foreach (DataRow k in inventoryManagementView.InventoryOtcs.Rows)
                     {
                         InventoryOtc otc = new InventoryOtc(k);

@@ -25,6 +25,7 @@ namespace His_Pos.ProductPurchaseRecord
     /// </summary>
     public partial class ProductPurchaseRecordView : UserControl, INotifyPropertyChanged
     {
+        public static ProductPurchaseRecordView Instance;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         private StoreOrder storeOrderData;
         public static string Proid;
@@ -49,6 +50,7 @@ namespace His_Pos.ProductPurchaseRecord
         public ProductPurchaseRecordView()
         {
             InitializeComponent();
+            Instance = this;
             Focusable = true;
             UpdateUi();
             DataContext = this;
@@ -69,17 +71,6 @@ namespace His_Pos.ProductPurchaseRecord
         private void UpdateOrderDetailData(StoreOrder storeOrder)
         {
             StoreOrderData = storeOrder;
-            //Id = storeOrder.Id;
-
-            //ID.Content = Id;
-            //IsFirst = true;
-            //ID.Content = storeOrder.Id;
-            //PurchaseEmp.Content = storeOrder.OrdEmp;
-            //OrderCategory.Text = storeOrder.Category;
-            //Total.Content = storeOrder.TotalPrice;
-            //ManufactoryAuto.Text = (storeOrder.Manufactory.Name is null) ? "" : storeOrder.Manufactory.Name;
-            //ButtonNewProduct.IsEnabled = (storeOrder.Manufactory.Name is null) ? false : true;
-            //Phone.Content = (storeOrder.Manufactory.Telphone is null) ? "" : storeOrder.Manufactory.Telphone;
 
             if (StoreOrderData.Products is null)
                 StoreOrderData.Products = StoreOrderDb.GetStoreOrderCollectionById(StoreOrderData.Id);
@@ -87,8 +78,6 @@ namespace His_Pos.ProductPurchaseRecord
 
             StoreOrderDetail.ItemsSource = StoreOrderData.Products;
             TotalAmount.Content = StoreOrderData.Products.Count.ToString();
-            //IsChanged = false;
-            //IsFirst = false;
         }
 
         private void ID_SourceUpdated(object sender, DataTransferEventArgs e)
@@ -138,7 +127,7 @@ namespace His_Pos.ProductPurchaseRecord
             StoOrderOverview.SelectedIndex = 0;
         }
 
-        private void PassValueSearchData() {
+        public void PassValueSearchData() {
             if (Proid != null)
             {
                 TextBoxId.Text = Proid;
@@ -146,8 +135,5 @@ namespace His_Pos.ProductPurchaseRecord
                 Proid = null;
             }
         }
-      
-        
-        
     }
 }

@@ -30,7 +30,7 @@ namespace His_Pos
             Width = SystemParameters.PrimaryScreenWidth * 0.833;
             Height = Width * 0.5625;
             CurrentUser = userLogin;
-            MainWindowInstance = this;
+            Instance = this;
             InitializePosMenu();
             InitializeHisMenu();
             InitialUserBlock();
