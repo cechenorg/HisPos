@@ -201,4 +201,7 @@
   <data name="StockManage" xml:space="preserve">
     <value>庫存管理</value>
   </data>
+  <data name="StockTaking" xml:space="preserve">
+    <value>庫存盤點</value>
+  </data>
 </root>

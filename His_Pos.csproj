@@ -332,6 +332,10 @@
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="Service\newFunction.cs" />
+    <Compile Include="StockTaking\StockTaking.cs" />
+    <Compile Include="StockTaking\StockTakingView.xaml.cs">
+      <DependentUpon>StockTakingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\TabBase.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -409,6 +413,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ProductPurchase\ProductPurchaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StockTaking\StockTakingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

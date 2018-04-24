@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using ChromeTabs;
 using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.ViewModel;
@@ -46,7 +48,7 @@ namespace His_Pos
             HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription,
                             new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire }));
             HisFeatures.Add(new Feature(@"..\Images\StockManage.png", Properties.Resources.StockManage,
-                            new string[] { Properties.Resources.InventoryManagement, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord }));
+                            new string[] { Properties.Resources.InventoryManagement, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord, Properties.Resources.StockTaking }));
         }
         
         private void InitializePosMenu()

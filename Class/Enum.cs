@@ -9,7 +9,8 @@ namespace His_Pos.Class
         處方查詢 = 1,
         庫存管理 = 2,
         處理單管理 = 3,
-        處理單紀錄 = 4
+        處理單紀錄 = 4,
+        庫存盤點 = 5
     }
 
     public enum ItemType

@@ -61,7 +61,7 @@ namespace His_Pos.Class.StoreOrder
             foreach (var row in storeOrder.Products)
             {
                 parameters.Clear();
-
+                parameters.Add(new SqlParameter("MAN_ID", storeOrder.Manufactory.Id));
                 parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
                 parameters.Add(new SqlParameter("PRO_ID", row.Id));
                 parameters.Add(new SqlParameter("QTY", ((ITrade)row).Amount));

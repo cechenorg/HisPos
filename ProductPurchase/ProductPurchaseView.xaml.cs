@@ -177,7 +177,7 @@ namespace His_Pos.ProductPurchase
                     AddNewProduct.Visibility = Visibility.Visible;
                     ManufactoryAuto.IsEnabled = true;
                     OrderCategory.IsEnabled = true;
-                    EmptySpace.Width = 300;
+                    EmptySpace.Width = 270;
                     StoreOrderDetail.Columns[11].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[12].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[13].Visibility = Visibility.Collapsed;
@@ -501,25 +501,12 @@ namespace His_Pos.ProductPurchase
             {
                 e.Handled = true;
                 List<TextBox> temp = new List<TextBox>();
-                TextBox textBox = sender as TextBox;
-                int currentRowIndex = -1;
-
-                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, textBox.Name, ref temp);
-
-                for (int x = 0; x < temp.Count; x++)
-                {
-                    if (temp[x].Equals(sender))
-                    {
-                        currentRowIndex = x;
-                        break;
-                    }
-                }
-
+                int currentRowIndex = GetCurrentRowIndex(sender);
+                string objectName = (sender as Control).Name;
+                
                 if (currentRowIndex == -1) return;
 
-                temp.Clear();
-
-                switch (textBox.Name)
+                switch (objectName)
                 {
                     case "Price":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref temp);
@@ -528,6 +515,22 @@ namespace His_Pos.ProductPurchase
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref temp);
                         break;
                     case "FreeAmount":
+                        if( storeOrderData.Type == OrderType.UNPROCESSING )
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref temp);
+                        else
+                        {
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref temp);
+                        }
+                        break;
+                    case "BatchNumber":
+                        List<DatePicker> pickerList = new List<DatePicker>();
+                        NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
+                        pickerList[currentRowIndex].Focus();
+                        return;
+                    case "ValidDate":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref temp);
+                        break;
+                    case "Invoice":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref temp);
                         break;
                     case "Notes":
@@ -535,7 +538,8 @@ namespace His_Pos.ProductPurchase
                         {
                             List<AutoCompleteBox> autoList = new List<AutoCompleteBox>();
                             NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, "Id", ref autoList);
-                            autoList[currentRowIndex + 1].Focus();
+                            NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref temp);
+                            temp[0].Focus();
                         }
                         else
                         {
@@ -546,6 +550,42 @@ namespace His_Pos.ProductPurchase
                 }
                 temp[currentRowIndex].Focus();
             }
+        }
+
+        private int GetCurrentRowIndex(object sender)
+        {
+            if (sender is TextBox)
+            {
+                List<TextBox> temp = new List<TextBox>();
+                TextBox textBox = sender as TextBox;
+
+                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, textBox.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
+            else if (sender is DatePicker)
+            {
+                List<DatePicker> temp = new List<DatePicker>();
+                DatePicker datePicker = sender as DatePicker;
+
+                NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, datePicker.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
+
+            return -1;
         }
     }
     public class AutoCompleteIsEnableConverter : IValueConverter
