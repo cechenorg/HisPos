@@ -375,10 +375,8 @@ namespace His_Pos.InventoryManagement
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectitem = OtcStoOrder.SelectedItem;
-
-            MainWindow.MainWindowInstance.AddNewTab("處理單紀錄");
             ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
-          
+            MainWindow.Instance.AddNewTab("處理單紀錄");
         }
     }
 }

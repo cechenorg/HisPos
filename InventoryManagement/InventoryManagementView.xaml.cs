@@ -21,6 +21,7 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class InventoryManagementView : UserControl, INotifyPropertyChanged
     {
+        public static InventoryManagementView Instance;
         public DataTable InventoryMedicines;
         public DataTable InventoryOtcs;
         private SearchType searchType = SearchType.ALL;
@@ -38,6 +39,8 @@ namespace His_Pos.InventoryManagement
             }
         }
 
+        public static bool DataChanged { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -49,13 +52,22 @@ namespace His_Pos.InventoryManagement
         public InventoryManagementView()
         {
             InitializeComponent();
+            Instance = this;
+            MergingData();
+
+            DataContext = this;
+        }
+
+        public void MergingData()
+        {
+            Search.IsEnabled = false;
 
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.MergeProductInventory(this);
             loadingWindow.Show();
             loadingWindow.Topmost = true;
 
-            DataContext = this;
+            DataChanged = false;
         }
 
         private void Search_Click(object sender, RoutedEventArgs e)
