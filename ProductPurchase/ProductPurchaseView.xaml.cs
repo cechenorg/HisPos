@@ -33,9 +33,6 @@ namespace His_Pos.ProductPurchase
     /// </summary>
     public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
     {
-        public DataTable ProductPurchaseMedicine;
-        public DataTable ProductPurchaseOtc;
-
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
@@ -434,6 +431,7 @@ namespace His_Pos.ProductPurchase
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = storeOrderData;
             StoOrderOverview.ScrollIntoView(storeOrderData);
+            UpdateOrderDetailUi(OrderType.PROCESSING);
         }
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
@@ -505,7 +503,23 @@ namespace His_Pos.ProductPurchase
                 e.Handled = true;
                 List<TextBox> temp = new List<TextBox>();
                 TextBox textBox = sender as TextBox;
-                
+                int currentRowIndex = -1;
+
+                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, textBox.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        currentRowIndex = x;
+                        break;
+                    }
+                }
+
+                if (currentRowIndex == -1) return;
+
+                temp.Clear();
+
                 switch (textBox.Name)
                 {
                     case "Price":
@@ -518,26 +532,21 @@ namespace His_Pos.ProductPurchase
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref temp);
                         break;
                     case "Notes":
-                        if (LastSelectedIndex == storeOrderData.Products.Count - 1)
+                        if (currentRowIndex == storeOrderData.Products.Count - 1)
                         {
                             List<AutoCompleteBox> autoList = new List<AutoCompleteBox>();
                             NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, "Id", ref autoList);
-                            autoList[LastSelectedIndex + 1].Focus();
+                            autoList[currentRowIndex + 1].Focus();
                         }
                         else
                         {
                             NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref temp);
-                            temp[LastSelectedIndex + 1].Focus();
+                            temp[currentRowIndex + 1].Focus();
                         }
                         return;
                 }
-                temp[LastSelectedIndex].Focus();
+                temp[currentRowIndex].Focus();
             }
-        }
-
-        private void OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            LastSelectedIndex = StoreOrderDetail.SelectedIndex;
         }
     }
     public class AutoCompleteIsEnableConverter : IValueConverter
