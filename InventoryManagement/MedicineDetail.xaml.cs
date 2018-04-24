@@ -21,6 +21,7 @@ using System.Windows.Shapes;
 using His_Pos.Class;
 using System.Collections.Specialized;
 using His_Pos.Interface;
+using His_Pos.ProductPurchaseRecord;
 
 namespace His_Pos.InventoryManagement
 {
@@ -471,6 +472,13 @@ namespace His_Pos.InventoryManagement
             {
                 MEDManufactoryCollection.RemoveAt(LastSelectedIndex);
             }
+        }
+
+        private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var selectitem = MedStoOrder.SelectedItem;
+            MainWindow.MainWindowInstance.AddNewTab("處理單紀錄");
+            ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
         }
     }
 }
