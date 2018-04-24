@@ -92,10 +92,42 @@ namespace His_Pos.ProductPurchaseRecord
         {
 
         }
-
+        public bool StoOrderOverviewFilter(object item)
+        {
+            bool reply = false;
+            switch (((StoreOrder)item).Category.CategoryName) {
+                case "進貨":
+                    if (
+                        ((bool)RadioButtonPurchase.IsChecked || (bool)RadioButtonAll.IsChecked)
+                        && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
+                        && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
+                        && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                        ) reply = true;
+                    break;
+                case "退貨":
+                        if (
+                           ((bool)RadioButtonReturns.IsChecked || (bool)RadioButtonAll.IsChecked)
+                           && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
+                           && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
+                           && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                           ) reply = true;
+                    break;
+                case "調貨":
+                        if (
+                           ((bool)RadioButtonTransfer.IsChecked || (bool)RadioButtonAll.IsChecked)
+                           && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
+                           && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
+                           && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                           ) reply = true;
+                    break;
+            }
+            return reply;
+        }
         private void Search_Click(object sender, RoutedEventArgs e)
         {
-
+            StoOrderOverview.Items.Filter = StoOrderOverviewFilter;
+            StoreOrderData = null;
+            StoOrderOverview.SelectedIndex = 0;
         }
     }
 }

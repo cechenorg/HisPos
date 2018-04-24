@@ -358,9 +358,7 @@ namespace His_Pos.ProductPurchase
         private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             var productAuto = sender as AutoCompleteBox;
-
             SetChanged();
-
             if (productAuto is null) return;
             if (productAuto.SelectedItem is null) return;
             if (StoreOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
