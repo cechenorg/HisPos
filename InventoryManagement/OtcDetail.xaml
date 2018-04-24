@@ -26,7 +26,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                 <StackPanel Orientation="Horizontal" Width="1000">
-                    <Label Name="OtcName" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,20,10" Padding="0"/>
+                    <Label Name="OtcName" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="20,10,10,10" Padding="0"/>
                     <Label Name="OtcId" Foreground="DimGray" FontSize="25" FontFamily="Segoe UI Semi" Margin="0,25,0,10" Padding="0"/>
                 </StackPanel>
                 <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>

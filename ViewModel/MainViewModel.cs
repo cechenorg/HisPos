@@ -146,6 +146,9 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.處理單紀錄):
                     newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
+                case nameof(FeatureItem.庫存盤點):
+                    newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
                 default:
                     return;
             }

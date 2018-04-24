@@ -304,6 +304,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 庫存盤點 的當地語系化字串。
+        /// </summary>
+        internal static string StockTaking {
+            get {
+                return ResourceManager.GetString("StockTaking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 非藥事居家照護者，至少需填寫一項國際疾病分類碼 的當地語系化字串。
         /// </summary>
         internal static string TreatmentCodeNull {

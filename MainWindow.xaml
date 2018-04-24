@@ -11,6 +11,7 @@
         xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         xmlns:ProductPurchase="clr-namespace:His_Pos.ProductPurchase"
         xmlns:ProductPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
+        xmlns:StockTaking="clr-namespace:His_Pos.StockTaking"
         x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"  Height="900" Width="1600"
@@ -32,6 +33,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type ProductPurchaseRecord:ProductPurchaseRecord}">
             <ProductPurchaseRecord:ProductPurchaseRecordView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type StockTaking:StockTaking}">
+            <StockTaking:StockTakingView/>
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">

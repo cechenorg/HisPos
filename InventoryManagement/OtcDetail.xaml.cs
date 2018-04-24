@@ -372,8 +372,6 @@ namespace His_Pos.InventoryManagement
 
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
         {
-            OTCStoreOrderOverview otcStoreOrderOverview = sender as OTCStoreOrderOverview;
-
             MainWindow.MainWindowInstance.AddNewTab("處理單紀錄");
           
         }
