@@ -176,7 +176,7 @@ namespace His_Pos.ProductPurchase
                     AddNewProduct.Visibility = Visibility.Visible;
                     ManufactoryAuto.IsEnabled = true;
                     OrderCategory.IsEnabled = true;
-                    EmptySpace.Width = 300;
+                    EmptySpace.Width = 270;
                     StoreOrderDetail.Columns[11].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[12].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[13].Visibility = Visibility.Collapsed;
