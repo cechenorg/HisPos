@@ -77,10 +77,10 @@
                 <DockPanel.Background>
                     <ImageBrush ImageSource="Images/onlyoneeeeeee.jpg"/>
                 </DockPanel.Background>
-                <chromeTabs:ChromeTabControl MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
+                <chromeTabs:ChromeTabControl Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
-                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900">
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900" SelectionChanged="Tabs_SelectionChanged">
                     <chromeTabs:ChromeTabControl.Template>
                         <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
                             <ControlTemplate.Resources>

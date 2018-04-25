@@ -29,7 +29,7 @@ namespace His_Pos
             var userLogin = new User();
             var auth = new string[2];
             userLogin.Id = UserName.Text;
-            userLogin.Password = Password.Text;
+            userLogin.Password = Password.Password;
             if (CheckAccount(ref userLogin, ref auth))
             {
                 userLogin.Authority.HisFeatures = auth.ToList();
@@ -41,6 +41,7 @@ namespace His_Pos
             else
             {
                 ErrorStack.Visibility = Visibility.Visible;
+                Password.Password = "";
             }
         }
 

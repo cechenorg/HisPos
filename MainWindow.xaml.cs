@@ -139,5 +139,13 @@ namespace His_Pos
             timer.Tick += TickEvent;
             timer.Start();
         }
+
+        private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Tabs.SelectedItem is null) return;
+
+            ((ViewModelMainWindow)DataContext).AddTabCommandAction(((TabBase)Tabs.SelectedItem).TabName);
+            this.Focus();
+        }
     }
 }

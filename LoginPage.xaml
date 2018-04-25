@@ -21,7 +21,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="32,0,0,0">
                         <materialDesign:PackIcon Kind ="Lock" Height="22" Width="22" Margin="1.5,0,1.5,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom"/>
-                        <TextBox Name="Password"  Width="200" Height="50" Margin="0,30,0,0" materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.IsFloating="True" FontSize="20" FontWeight="Bold" KeyUp="Password_KeyUp"/>
+                        <PasswordBox Name="Password" Width="200" Height="50" Margin="0,30,0,0" materialDesign:HintAssist.Hint="Password" materialDesign:HintAssist.IsFloating="True" FontSize="20" FontWeight="Bold" KeyUp="Password_KeyUp"/>
                     </StackPanel>
                     <StackPanel Name="ErrorStack" Orientation="Horizontal" Margin="32,25,0,0" Visibility="Hidden">
                         <materialDesign:PackIcon Kind ="Alert" Foreground="Red" Height="22" Width="22" Margin="1.5,0,1.5,6" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom" VerticalAlignment="Bottom"/>

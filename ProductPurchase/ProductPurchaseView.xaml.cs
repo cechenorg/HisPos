@@ -24,6 +24,7 @@ using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
 using His_Pos.InventoryManagement;
+using His_Pos.ProductPurchaseRecord;
 using His_Pos.Service;
 using MahApps.Metro.Controls;
 
@@ -66,10 +67,8 @@ namespace His_Pos.ProductPurchase
                 NotifyPropertyChanged("StoreOrderData");
             }
         }
-        private int orderIndex = 0;
         private bool IsFirst = true;
         private bool IsChanged = false;
-        private int LastSelectedIndex = -1;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -160,10 +159,9 @@ namespace His_Pos.ProductPurchase
                     Confirm.Visibility = Visibility.Visible;
                     ConfirmToProcess.Visibility = Visibility.Collapsed;
                     DeleteOrder.Visibility = Visibility.Collapsed;
-                    AddNewProduct.Visibility = Visibility.Collapsed;
                     ManufactoryAuto.IsEnabled = false;
                     OrderCategory.IsEnabled = false;
-                    EmptySpace.Width = 570;
+                    EmptySpace.Width = 400;
                     StoreOrderDetail.Columns[11].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[12].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[13].Visibility = Visibility.Visible;
@@ -175,7 +173,6 @@ namespace His_Pos.ProductPurchase
                     Confirm.Visibility = Visibility.Collapsed;
                     ConfirmToProcess.Visibility = Visibility.Visible;
                     DeleteOrder.Visibility = Visibility.Visible;
-                    AddNewProduct.Visibility = Visibility.Visible;
                     ManufactoryAuto.IsEnabled = true;
                     OrderCategory.IsEnabled = true;
                     EmptySpace.Width = 270;
@@ -407,6 +404,7 @@ namespace His_Pos.ProductPurchase
 
             storeOrderCollection.Remove(storeOrderData);
             InventoryManagementView.DataChanged = true;
+            ProductPurchaseRecordView.DataChanged = true;
 
             if (StoOrderOverview.Items.Count == 0)
                 ClearOrderDetailData();
