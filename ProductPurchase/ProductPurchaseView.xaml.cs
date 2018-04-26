@@ -398,7 +398,7 @@ namespace His_Pos.ProductPurchase
             if (!CheckNoEmptyData()) return;
             StoreOrderData.Type = OrderType.DONE;
             SaveOrder();
-            //storeOrderData = null;
+            IsChanged = false;
             storeOrderCollection.Remove(storeOrderData);
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
