@@ -9,32 +9,34 @@
     <Viewbox Stretch="Fill">
         <Grid Name="ViewGrid" Width="1365" Height="839">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="15"/>
                 <RowDefinition Height="150"/>
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,10,0,0">
                 <Rectangle Width="150"/>
-                <Ellipse Name="AddProductsEllipse" Width="30" Height="30" Fill="GreenYellow"/>
-                <Polyline Name="PrintLine" Stroke="LightSlateGray" StrokeThickness="5" Width="310" Points="10,25 300,25" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
-                <Ellipse Name="PrintEllipse" Width="30" Height="30" Fill="LightSlateGray"/>
-                <Polyline Name="InputLine" Stroke="LightSlateGray" StrokeThickness="5" Width="310" Points="10,25 300,25" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
-                <Ellipse Name="InputEllipse" Width="30" Height="30" Fill="LightSlateGray"/>
-                <Polyline Name="CompleteLine" Stroke="LightSlateGray" StrokeThickness="5" Width="310" Points="10,25 300,25" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
-                <Ellipse Name="CompleteEllipse" Width="30" Height="30" Fill="LightSlateGray"/>
+                <Ellipse Name="AddProductsEllipse" Width="25" Height="25" Fill="GreenYellow"/>
+                <Polyline Name="PrintLine" Stroke="LightSlateGray" StrokeThickness="5" Width="315" Points="10,15 305,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
+                <Ellipse Name="PrintEllipse" Width="25" Height="25" Fill="LightSlateGray"/>
+                <Polyline Name="InputLine" Stroke="LightSlateGray" StrokeThickness="5" Width="320" Points="10,15 305,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
+                <Ellipse Name="InputEllipse" Width="25" Height="25" Fill="LightSlateGray"/>
+                <Polyline Name="CompleteLine" Stroke="LightSlateGray" StrokeThickness="5" Width="315" Points="10,15 305,15" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeDashArray="4" StrokeDashCap="Round"/>
+                <Ellipse Name="CompleteEllipse" Width="25" Height="25" Fill="LightSlateGray"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <Rectangle Width="100"/>
                 <Label Content="新增盤點品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="240"/>
-                <Button Name="Print" Content="列印" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DeepSkyBlue" BorderThickness="0"/>
-                <Rectangle Width="240"/>
+                <Rectangle Width="250"/>
+                <Label Content="列印" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Rectangle Width="255"/>
                 <Label Content="輸入盤點結果" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Rectangle Width="250"/>
-                <Label Content="完成" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Label Content="盤損" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
             </StackPanel>
             <Polygon Points="165,0 180,15, 150,15" Fill="{StaticResource GridDarkestBackGround}" Grid.Row="2"/>
             <Grid Grid.Row="3" Background="{StaticResource GridDarkestBackGround}">
@@ -50,7 +52,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="4" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="DeepSkyBlue" BorderThickness="0"/>
+                <Button Grid.Column="4" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0"/>
             </Grid>
             <DataGrid Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="4">
@@ -72,13 +74,29 @@
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource GridDarkerBackGround}">
                 <Button Content="+ 新增單筆商品" Width="150" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0"/>
+                <Label Content="盤點商品  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Label Content="0" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+                <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Rectangle Width="780"/>
+                <Button Name="FinishedAddProduct" Width="150" Content="新增完成" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Click="NextStatus_Click"/>
+                <Button Name="Print" Width="150" Content="列印盤點單" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DeepSkyBlue" BorderThickness="0" Click="NextStatus_Click"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="6" Background="{StaticResource GridDarkerBackGround}">
                 <Label Content="已盤點" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Content="0" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="項 , 剩餘" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Label  Content="0" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+                <Label Content="0" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="660"/>
-                <Button Width="150" Content="完成盤點" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="Red" BorderThickness="0" Click="Button_Click"/>
+                <Rectangle Width="410"/>
+                <Label Content="有更動  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Label Content="0" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
+                <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" Margin="0,0,20,0"/>
+                <Button Width="150" Content="自動補齊未填寫" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,20,0" Background="DimGray" BorderThickness="0"/>
+                <Button Width="150" Content="完成盤點" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="Red" BorderThickness="0" Click="NextStatus_Click"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="7" Background="{StaticResource GridDarkerBackGround}">
+                <Rectangle Width="1200"/>
+                <Button Width="150" Content="完成" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="Red" BorderThickness="0" Click="Complete_Click"/>
             </StackPanel>
         </Grid>
     </Viewbox>
