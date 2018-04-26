@@ -77,7 +77,7 @@ namespace His_Pos.InventoryManagement
             MedBasicAmount.Text = InventoryMedicine.Stock.BasicAmount;
             MedNotes.Document.Blocks.Clear();
             MedNotes.AppendText(InventoryMedicine.Note);
-
+            MedStatus.Text = InventoryMedicine.Status == true ? "啟用" : "已停用";
             IsChangedLabel.Content = "未修改";
             
              CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryMedicine.Id);
@@ -338,12 +338,19 @@ namespace His_Pos.InventoryManagement
                     MEDUnitChangdedCollection.Add(index);
             }
         }
-        private void MedData_TextChanged(object sender, TextChangedEventArgs e)
+        private void MedData_TextChanged(object sender,EventArgs e)
         {
             if (IsChangedLabel is null || IsFirst)
                 return;
-            TextBox txt = sender as TextBox;
-            SetMedTextBoxChangedCollection(txt.Name);
+            if (sender is TextBox) {
+                TextBox txt = sender as TextBox;
+                SetMedTextBoxChangedCollection(txt.Name);
+            }
+            if (sender is ComboBox)
+            {
+                ComboBox txt = sender as ComboBox;
+                SetMedTextBoxChangedCollection(txt.Name);
+            }
         }
         private void MedManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -400,7 +407,7 @@ namespace His_Pos.InventoryManagement
             InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
             InventoryMedicine.Stock.SafeAmount = MedSaveAmount.Text;
             InventoryMedicine.Note = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text;
-
+            InventoryMedicine.Status = MedSaveAmount.Text == "啟用" ? true : false;
             ProductDb.UpdateOtcDataDetail(InventoryMedicine, "InventoryMedicine");
 
             foreach (var manufactoryChanged in MEDManufactoryChangedCollection)
@@ -477,8 +484,10 @@ namespace His_Pos.InventoryManagement
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectitem = MedStoOrder.SelectedItem;
-            MainWindow.Instance.AddNewTab("處理單紀錄");
             ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
+            MainWindow.Instance.AddNewTab("處理單紀錄");
+
         }
+        
     }
 }

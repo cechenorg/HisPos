@@ -331,12 +331,18 @@ namespace His_Pos.InventoryManagement
                     OTCUnitChangdedCollection.Add(index);
             }
         }
-        private void OtcData_TextChanged(object sender, TextChangedEventArgs e)
+        private void OtcData_TextChanged(object sender,EventArgs e)
         {
             if (IsChangedLabel is null || IsFirst)
                 return;
-            TextBox txt = sender as TextBox;
-            SetOtcTextBoxChangedCollection(txt.Name);
+            if(sender is TextBox){
+                TextBox txt = sender as TextBox;
+                SetOtcTextBoxChangedCollection(txt.Name);
+            }
+            if (sender is ComboBox) {
+                ComboBox txt = sender as ComboBox;
+                SetOtcTextBoxChangedCollection(txt.Name);
+            }
         }
 
         private void ButtonUpdateSubmmit_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -347,7 +353,7 @@ namespace His_Pos.InventoryManagement
             InventoryOtc.Stock.BasicAmount = OtcBasicAmount.Text;
             InventoryOtc.Stock.SafeAmount = OtcSaveAmount.Text;
             InventoryOtc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
-            
+            InventoryOtc.Status = OtcStatus.Text =="啟用" ? true : false;
             ProductDb.UpdateOtcDataDetail(InventoryOtc, "InventoryOtc");
 
             foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
@@ -378,5 +384,7 @@ namespace His_Pos.InventoryManagement
             ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
             MainWindow.Instance.AddNewTab("處理單紀錄");
         }
+
+       
     }
 }

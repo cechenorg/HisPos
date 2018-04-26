@@ -122,6 +122,7 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("BASICQTY", ((InventoryMedicine)product).Stock.BasicAmount));
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryMedicine)product).Location));
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryMedicine)product).Note));
+                parameters.Add(new SqlParameter("@STATUS", ((InventoryMedicine)product).Status));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
             }
             else if (type == "InventoryOtc") {
@@ -130,6 +131,7 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("BASICQTY", ((InventoryOtc)product).Stock.BasicAmount));
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryOtc)product).Location));
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryOtc)product).Note));
+                parameters.Add(new SqlParameter("@STATUS", ((InventoryOtc)product).Status));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
 
             }

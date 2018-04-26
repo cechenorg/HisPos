@@ -55,7 +55,10 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
                         <Label Content="狀態" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="MedStatus" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
+                        <ComboBox Name="MedStatus" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" SelectionChanged="MedData_TextChanged">
+                            <ComboBoxItem>啟用</ComboBoxItem>
+                            <ComboBoxItem>已停用</ComboBoxItem>
+                        </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
