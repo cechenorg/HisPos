@@ -144,6 +144,9 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.庫存盤點):
                     newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
+                case nameof(FeatureItem.庫存盤點紀錄):
+                    newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
                 default:
                     return;
             }
@@ -182,6 +185,8 @@ namespace His_Pos.ViewModel
                             ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
                             break;
                         case nameof(FeatureItem.庫存盤點):
+                            break;
+                        case nameof(FeatureItem.庫存盤點紀錄):
                             break;
                     }
 

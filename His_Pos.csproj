@@ -332,6 +332,10 @@
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="Service\newFunction.cs" />
+    <Compile Include="StockTakingRecord\StockTakingRecord.cs" />
+    <Compile Include="StockTakingRecord\StockTakingRecordView.xaml.cs">
+      <DependentUpon>StockTakingRecordView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StockTaking\StockTaking.cs" />
     <Compile Include="StockTaking\StockTakingHistory.xaml.cs">
       <DependentUpon>StockTakingHistory.xaml</DependentUpon>
@@ -416,6 +420,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ProductPurchase\ProductPurchaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StockTakingRecord\StockTakingRecordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

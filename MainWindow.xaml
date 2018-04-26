@@ -12,7 +12,8 @@
         xmlns:ProductPurchase="clr-namespace:His_Pos.ProductPurchase"
         xmlns:ProductPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
         xmlns:StockTaking="clr-namespace:His_Pos.StockTaking"
-        x:Class="His_Pos.MainWindow"
+    xmlns:StockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
+    x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"  Height="900" Width="1600"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -36,6 +37,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type StockTaking:StockTaking}">
             <StockTaking:StockTakingView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type StockTakingRecord:StockTakingRecord}">
+            <StockTakingRecord:StockTakingRecordView/>
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">

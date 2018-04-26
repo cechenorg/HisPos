@@ -17,7 +17,8 @@ namespace His_Pos.Class
         庫存管理 = 2,
         處理單管理 = 3,
         處理單紀錄 = 4,
-        庫存盤點 = 5
+        庫存盤點 = 5,
+        庫存盤點紀錄 = 6
     }
 
     public enum ItemType
