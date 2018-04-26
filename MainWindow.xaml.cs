@@ -22,6 +22,7 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+        public static MainWindow MainWindowInstance;
         public MainWindow(User userLogin)
         {
             FeatureFactory();
@@ -36,6 +37,7 @@ namespace His_Pos
             InitialUserBlock();
             StratClock();
             _openWindows = new List<DockingWindow>();
+            MainWindowInstance = this;
         }
 
         private void InitialUserBlock()

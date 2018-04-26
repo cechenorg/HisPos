@@ -395,16 +395,13 @@ namespace His_Pos.ProductPurchase
         {
             SetChanged();
         }
-
-        private void CofirmAndSave(OrderType type) {
-            if (!CheckNoEmptyData()) return;
-            StoreOrderData.Type = type;
-            SaveOrder();
-        }
+        
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            CofirmAndSave(OrderType.DONE);
-
+            if (!CheckNoEmptyData()) return;
+            StoreOrderData.Type = OrderType.DONE;
+            SaveOrder();
+            storeOrderData = null;
             storeOrderCollection.Remove(storeOrderData);
             InventoryManagementView.DataChanged = true;
 
@@ -426,9 +423,9 @@ namespace His_Pos.ProductPurchase
                     break;
                 }
             }
-
-            CofirmAndSave(OrderType.PROCESSING);
-            
+            if (!CheckNoEmptyData()) return;
+            StoreOrderData.Type = OrderType.PROCESSING;
+            SaveOrder();
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = storeOrderData;
             StoOrderOverview.ScrollIntoView(storeOrderData);
