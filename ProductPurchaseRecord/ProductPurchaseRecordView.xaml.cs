@@ -39,6 +39,8 @@ namespace His_Pos.ProductPurchaseRecord
             }
         }
 
+        public static bool DataChanged { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -57,6 +59,7 @@ namespace His_Pos.ProductPurchaseRecord
             PassValueSearchData();
         }
         public void UpdateUi() {
+            DataChanged = false;
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
             StoOrderOverview.ItemsSource = storeOrderCollection;
             StoOrderOverview.SelectedIndex = 0;
@@ -65,7 +68,6 @@ namespace His_Pos.ProductPurchaseRecord
         private void ShowOrderDetail(object sender, RoutedEventArgs e)
         {
             StoreOrder storeOrder = (StoreOrder)(sender as DataGridCell).DataContext;
-           // UpdateOrderDetailUi(storeOrder.Type);
             UpdateOrderDetailData(storeOrder);
         }
         private void UpdateOrderDetailData(StoreOrder storeOrder)

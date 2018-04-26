@@ -120,36 +120,7 @@ namespace His_Pos.ViewModel
         //Adds a random tab
         public void AddTabCommandAction(object featureItem)
         {
-            foreach (TabBase tab in ItemCollection)
-            {
-                if (tab.TabName == featureItem.ToString())
-                {
-                    SelectedTab = tab;
-
-                    switch (featureItem.ToString())
-                    {
-                        case nameof(FeatureItem.處方登錄):
-                            break;
-                        case nameof(FeatureItem.處方查詢):
-                            break;
-                        case nameof(FeatureItem.庫存管理):
-                            if(InventoryManagement.InventoryManagementView.DataChanged)
-                                InventoryManagement.InventoryManagementView.Instance.MergingData();
-                            break;
-                        case nameof(FeatureItem.處理單管理):
-                            break;
-                        case nameof(FeatureItem.處理單紀錄):
-                            ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
-                            break;
-                        case nameof(FeatureItem.庫存盤點):
-                            break;
-                        default:
-                            return;
-                    }
-
-                    return;
-                }
-            }
+            if (IsTabOpened(featureItem.ToString())) return;
 
             TabBase newTab;
 
@@ -173,11 +144,57 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.庫存盤點):
                     newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
+                case nameof(FeatureItem.庫存盤點紀錄):
+                    newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[1].Icon };
+                    break;
                 default:
                     return;
             }
             this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
+        }
+
+        public bool IsTabOpened(string tabName)
+        {
+            foreach (TabBase tab in ItemCollection)
+            {
+                if (tab.TabName == tabName)
+                {
+                    SelectedTab = tab;
+
+                    switch (tabName)
+                    {
+                        case nameof(FeatureItem.處方登錄):
+                            break;
+                        case nameof(FeatureItem.處方查詢):
+                            break;
+                        case nameof(FeatureItem.庫存管理):
+                            if (InventoryManagement.InventoryManagementView.Instance is null) break;
+
+                            if (InventoryManagement.InventoryManagementView.DataChanged)
+                                InventoryManagement.InventoryManagementView.Instance.MergingData();
+                            break;
+                        case nameof(FeatureItem.處理單管理):
+                            break;
+                        case nameof(FeatureItem.處理單紀錄):
+                            if (ProductPurchaseRecord.ProductPurchaseRecordView.Instance is null) break;
+
+                            if (ProductPurchaseRecord.ProductPurchaseRecordView.DataChanged)
+                                ProductPurchaseRecord.ProductPurchaseRecordView.Instance.UpdateUi();
+
+                            ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
+                            break;
+                        case nameof(FeatureItem.庫存盤點):
+                            break;
+                        case nameof(FeatureItem.庫存盤點紀錄):
+                            break;
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -11,6 +11,8 @@ using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchase;
 using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.AbstractClass;
+using System.Linq;
 
 namespace His_Pos
 {
@@ -109,16 +111,16 @@ namespace His_Pos
                 double stockValue = 0;
                 inventoryManagementView.InventoryMedicines = NewFunction.JoinTables(MainWindow.MedicineDataTable, MedicineDb.GetInventoryMedicines(), "PRO_ID");
                 inventoryManagementView.InventoryOtcs = NewFunction.JoinTables(MainWindow.OtcDataTable, OTCDb.GetInventoryOtcs(), "PRO_ID");
-
+                
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    inventoryManagementView._DataList.Clear();
+                    ObservableCollection<Product> products = new ObservableCollection<Product>();
 
                     foreach (DataRow k in inventoryManagementView.InventoryOtcs.Rows)
                     {
                         InventoryOtc otc = new InventoryOtc(k);
 
-                        inventoryManagementView._DataList.Add(otc);
+                        products.Add(otc);
 
                         stockValue += Double.Parse(otc.StockValue);
                     }
@@ -126,12 +128,13 @@ namespace His_Pos
                     foreach (DataRow m in inventoryManagementView.InventoryMedicines.Rows)
                     {
                         InventoryMedicine medicine = new InventoryMedicine(m);
-                        
-                        inventoryManagementView._DataList.Add(medicine);
+
+                        products.Add(medicine);
 
                         stockValue += Double.Parse(medicine.StockValue);
                     }
 
+                    inventoryManagementView._DataList = products;
                     inventoryManagementView.selectStockValue = stockValue;
                     inventoryManagementView.TotalStockValue.Content = totalWorth;
                     inventoryManagementView.ProductList.Items.Filter = inventoryManagementView.OrderTypeFilter;

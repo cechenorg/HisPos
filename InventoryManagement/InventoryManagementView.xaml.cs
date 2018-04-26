@@ -137,6 +137,8 @@ namespace His_Pos.InventoryManagement
 
         private void showProductDetail(object sender, MouseButtonEventArgs e)
         {
+            if (!Search.IsEnabled) return;
+
             var selectedItem = (sender as DataGridRow).Item;
             selectProductId = ((Product)selectedItem).Id;
             if (selectedItem is InventoryOtc)

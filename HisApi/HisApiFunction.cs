@@ -89,8 +89,6 @@ namespace His_Pos.HisApi
         public string GetBasicData() {
             string data = string.Empty;
             int comConnection = HisApiBase.csOpenCom(0);
-            char bb = new char();
-            int length = 78;
             HisApiBase.csCloseCom();
             return data;
         }//GetBasicData()

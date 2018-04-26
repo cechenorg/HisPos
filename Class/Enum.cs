@@ -3,6 +3,13 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum StockTakingStatus
+    {
+        ADDPRODUCTS = 0,
+        PRINT = 1,
+        INPUTRESULT = 2,
+        COMPLETE = 3
+    }
     public enum FeatureItem
     {
         處方登錄 = 0,
@@ -10,7 +17,8 @@ namespace His_Pos.Class
         庫存管理 = 2,
         處理單管理 = 3,
         處理單紀錄 = 4,
-        庫存盤點 = 5
+        庫存盤點 = 5,
+        庫存盤點紀錄 = 6
     }
 
     public enum ItemType
