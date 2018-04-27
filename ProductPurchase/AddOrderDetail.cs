@@ -12,7 +12,7 @@ using His_Pos.Class.StoreOrder;
 
 namespace His_Pos.ProductPurchase
 {
-    public partial class ProductPurchaseRecord : UserControl
+    public partial class ProductPurchaseView : UserControl
     {
         private void AddGoodSales(Manufactory manufactory = null)
         {

@@ -34,8 +34,20 @@ namespace His_Pos.ProductPurchase
     /// ProductPurchaseView.xaml 的互動邏輯
     /// </summary>
     /// 
-    public partial class ProductPurchaseRecord : UserControl, INotifyPropertyChanged
+    public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
     {
+        public class NewItemProduct
+        {
+            public bool IsThisMan { get; }
+            public Product Product { get; }
+
+            public NewItemProduct(bool isThisMan, Product product)
+            {
+                IsThisMan = isThisMan;
+                Product = product;
+            }
+        }
+
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
@@ -72,7 +84,7 @@ namespace His_Pos.ProductPurchase
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ProductPurchaseRecord()
+        public ProductPurchaseView()
         {
             InitializeComponent();
             DataContext = this;
@@ -195,11 +207,8 @@ namespace His_Pos.ProductPurchase
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
             
             StoreOrderData = storeOrder;
-
-            if (!String.IsNullOrEmpty(storeOrderData.Manufactory.Id))
-            {
-                GetProductAutoComplete();
-            }
+            
+             GetProductAutoComplete();
 
             IsChanged = false;
             IsFirst = false;
@@ -306,7 +315,7 @@ namespace His_Pos.ProductPurchase
 
             if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || Products is null) return;
             
-            var result = Products.Where(x => ((Product)x).Id.Contains(productAuto.Text) || ((Product)x).Name.Contains(productAuto.Text)).Take(50);
+            var result = Products.Where(x => ((NewItemProduct)x).Product.Id.Contains(productAuto.Text) || ((NewItemProduct)x).Product.Name.Contains(productAuto.Text)).Take(50).Select(x => ((NewItemProduct)x).Product);
             ProductAutoCompleteCollection = new ObservableCollection<object>(result.ToList());
 
             productAuto.ItemsSource = ProductAutoCompleteCollection;
@@ -345,7 +354,6 @@ namespace His_Pos.ProductPurchase
             if (productAuto.SelectedItem is null) return;
             if (StoreOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
             {
-                
                 StoreOrderData.Products.Add(productAuto.SelectedItem as Product);
                 StoreOrderDetail.SelectedIndex--;
             }
@@ -456,7 +464,7 @@ namespace His_Pos.ProductPurchase
 
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ItemType.Product, StoreOrderData.Manufactory.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(ItemType.Product, Products);
 
             newItemDialog.ShowDialog();
 

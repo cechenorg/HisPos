@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.ProductPurchase;
 
 namespace His_Pos.Class.Product
 {
@@ -63,10 +64,10 @@ namespace His_Pos.Class.Product
                 switch (row["TYPE"].ToString())
                 {
                     case "M":
-                        collection.Add(new ProductPurchaseMedicine(row, DataSource.GetItemDialogProduct));
+                        collection.Add(new ProductPurchase.ProductPurchaseView.NewItemProduct(Boolean.Parse(row["IS_MAN"].ToString()), new ProductPurchaseMedicine(row, DataSource.GetItemDialogProduct)));
                         break;
                     case "O":
-                        collection.Add(new ProductPurchaseOtc(row, DataSource.GetItemDialogProduct));
+                        collection.Add(new ProductPurchase.ProductPurchaseView.NewItemProduct(Boolean.Parse(row["IS_MAN"].ToString()), new ProductPurchaseOtc(row, DataSource.GetItemDialogProduct)));
                         break;
                 }
             }

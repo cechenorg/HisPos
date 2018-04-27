@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="His_Pos.ProductPurchase.ProductPurchaseRecord"
+﻿<UserControl x:Class="His_Pos.ProductPurchase.ProductPurchaseView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -156,13 +156,13 @@
                                         <controls:AutoCompleteBox x:Name="Id" Width="110" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}" MinimumPrefixLength="4"
-                                                              ItemFilter="{Binding ManufactoryFilter}"  Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed"
+                                                              Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed"
                                                               IsEnabled="{Binding Id, Converter={StaticResource AutoCompleteIsEnableConverter}}">
                                         <controls:AutoCompleteBox.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Label x:Name="ProId" Width="120" Content="{Binding Id}"/>
-                                                    <Label x:Name="ProName" Width="350" Content="{Binding Name}"/>
+                                                        <Label x:Name="ProName" Width="350" Content="{Binding Name}"/>
                                                 </StackPanel>
                                             </DataTemplate>
                                         </controls:AutoCompleteBox.ItemTemplate>

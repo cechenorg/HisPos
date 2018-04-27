@@ -30,7 +30,7 @@
             <inventoryManagement:InventoryManagementView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type ProductPurchase:ProductPurchase}">
-            <ProductPurchase:ProductPurchaseRecord/>
+            <ProductPurchase:ProductPurchaseView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type ProductPurchaseRecord:ProductPurchaseRecord}">
             <ProductPurchaseRecord:ProductPurchaseRecordView/>

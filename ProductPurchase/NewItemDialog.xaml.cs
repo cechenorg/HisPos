@@ -23,10 +23,10 @@ namespace His_Pos.ProductPurchase
     /// </summary>
     public partial class NewItemDialog : Window
     {
-        ObservableCollection<object> DataCollection;
+        private ObservableCollection<object> DataCollection;
         Collection<ColumnDetail> ColumnDetails;
         private ItemType ItemType;
-        private string Para;
+        public string Para;
 
         public object SelectedItem;
         public bool ConfirmButtonClicked = false;
@@ -47,27 +47,38 @@ namespace His_Pos.ProductPurchase
             }
         }
 
+        
 
-        public NewItemDialog(ItemType type, string para)
+
+        public NewItemDialog(ItemType type, ObservableCollection<object> collection)
         {
             InitializeComponent();
             ItemType = type;
-            Para = para;
+            DataCollection = collection;
+
+            InitUi();
 
             InitColumnDetails();
 
             InitCollection();
         }
 
-        private void InitCollection()
+        private void InitUi()
         {
             switch (ItemType)
             {
                 case ItemType.Product:
-                    DataCollection = ProductDb.GetItemDialogProduct(Para);
-                    SearchResult.ItemsSource = DataCollection;
+                    OnlyManufactory.Visibility = Visibility.Visible;
+                    AllProducts.Visibility = Visibility.Visible;
                     break;
             }
+
+        }
+
+        private void InitCollection()
+        {
+            SearchResult.ItemsSource = DataCollection;
+            SearchResult.Items.Filter = SearchFilter;
         }
 
         private void InitColumnDetails()
@@ -79,11 +90,11 @@ namespace His_Pos.ProductPurchase
                     Style textInMidStyle = this.FindResource("TextInMiddleCellStyle") as Style;
 
                     ColumnDetails = new Collection<ColumnDetail>() {
-                                    new ColumnDetail("商品編號", "Id", 90, textInMidStyle),
-                                    new ColumnDetail("商品名稱", "Name", 200),
-                                    new ColumnDetail("庫存", "Stock.Inventory", 50, textInMidStyle),
-                                    new ColumnDetail("安全量", "Stock.SafeAmount", 60, textInMidStyle),
-                                    new ColumnDetail("基準量", "Stock.BasicAmount", 60, textInMidStyle)};
+                                    new ColumnDetail("商品編號", "Product.Id", 120, textInMidStyle),
+                                    new ColumnDetail("商品名稱", "Product.Name", 250),
+                                    new ColumnDetail("庫存", "Product.Stock.Inventory", 50, textInMidStyle),
+                                    new ColumnDetail("安全量", "Product.Stock.SafeAmount", 70, textInMidStyle),
+                                    new ColumnDetail("基準量", "Product.Stock.BasicAmount", 70, textInMidStyle)};
                     break;
             }
 
@@ -114,8 +125,22 @@ namespace His_Pos.ProductPurchase
             switch (ItemType)
             {
                 case ItemType.Product:
-                    if ((item as Product).Id.Contains(SearchText.Text) || (item as Product).Name.Contains(SearchText.Text))
-                        return true;
+                    if ((bool) OnlyManufactory.IsChecked)
+                    {
+                        if (String.IsNullOrEmpty(SearchText.Text))
+                            return (item as ProductPurchaseView.NewItemProduct).IsThisMan;
+
+                        if (((item as ProductPurchaseView.NewItemProduct).Product.Id.Contains(SearchText.Text) || (item as ProductPurchaseView.NewItemProduct).Product.Name.Contains(SearchText.Text)) && (item as ProductPurchaseView.NewItemProduct).IsThisMan)
+                            return true;
+                    }
+                    else
+                    {
+                        if (String.IsNullOrEmpty(SearchText.Text))
+                            return true;
+
+                        if ((item as ProductPurchaseView.NewItemProduct).Product.Id.Contains(SearchText.Text) || (item as ProductPurchaseView.NewItemProduct).Product.Name.Contains(SearchText.Text))
+                            return true;
+                    }
                     break;
             }
 
@@ -131,9 +156,16 @@ namespace His_Pos.ProductPurchase
                 return;
             }
 
-            SelectedItem = SearchResult.SelectedItem;
+            SelectedItem = (SearchResult.SelectedItem as ProductPurchaseView.NewItemProduct).Product;
             ConfirmButtonClicked = true;
             Close();
+        }
+
+        private void Radio_OnChecked(object sender, RoutedEventArgs e)
+        {
+            if (SearchResult is null) return;
+
+            SearchResult.Items.Filter = SearchFilter;
         }
     }
 }
