@@ -63,8 +63,6 @@ namespace His_Pos
 
                 ChangeLoadingMessage("Loading Manufactory Data...");
                 MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
-
-
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -78,7 +76,7 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void AddNewOrders(ProductPurchase.ProductPurchaseRecord productPurchaseView,StoreOrderProductType type, Manufactory manufactory = null)
+        public void AddNewOrders(ProductPurchase.ProductPurchaseView productPurchaseView,StoreOrderProductType type, Manufactory manufactory = null)
         {
             backgroundWorker.DoWork += (s, o) =>
             {
