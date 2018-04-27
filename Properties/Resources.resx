@@ -189,9 +189,6 @@
   <data name="ChronicAdjustCaseId" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="InventoryManagement" xml:space="preserve">
-    <value>庫存管理</value>
-  </data>
   <data name="ProductPurchase" xml:space="preserve">
     <value>處理單管理</value>
   </data>
@@ -206,5 +203,11 @@
   </data>
   <data name="StockTakingRecord" xml:space="preserve">
     <value>庫存盤點紀錄</value>
+  </data>
+  <data name="NewStockTaking" xml:space="preserve">
+    <value>新增盤點</value>
+  </data>
+  <data name="StockSearch" xml:space="preserve">
+    <value>庫存查詢</value>
   </data>
 </root>

@@ -73,13 +73,6 @@ namespace His_Pos.ProductPurchase
 
             switch (radioButton.Tag)
             {
-                case "0":
-                    Con1.IsEnabled = true;
-                    Con2.IsEnabled = false;
-                    Con3.IsEnabled = false;
-                    Con4.IsEnabled = false;
-                    Con1.IsChecked = true;
-                    break;
                 case "2":
                     Con1.IsEnabled = false;
                     Con2.IsEnabled = true;

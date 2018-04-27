@@ -132,7 +132,7 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.處方查詢):
                     newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
-                case nameof(FeatureItem.庫存管理):
+                case nameof(FeatureItem.庫存查詢):
                     newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
                 case nameof(FeatureItem.處理單管理):
@@ -141,11 +141,11 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.處理單紀錄):
                     newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
-                case nameof(FeatureItem.庫存盤點):
-                    newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[1].Icon };
+                case nameof(FeatureItem.新增盤點):
+                    newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
                 case nameof(FeatureItem.庫存盤點紀錄):
-                    newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
                 default:
                     return;
@@ -168,7 +168,7 @@ namespace His_Pos.ViewModel
                             break;
                         case nameof(FeatureItem.處方查詢):
                             break;
-                        case nameof(FeatureItem.庫存管理):
+                        case nameof(FeatureItem.庫存查詢):
                             if (InventoryManagement.InventoryManagementView.Instance is null) break;
 
                             if (InventoryManagement.InventoryManagementView.DataChanged)
@@ -184,7 +184,7 @@ namespace His_Pos.ViewModel
 
                             ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
                             break;
-                        case nameof(FeatureItem.庫存盤點):
+                        case nameof(FeatureItem.新增盤點):
                             break;
                         case nameof(FeatureItem.庫存盤點紀錄):
                             break;

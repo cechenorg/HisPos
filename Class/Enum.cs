@@ -14,10 +14,10 @@ namespace His_Pos.Class
     {
         處方登錄 = 0,
         處方查詢 = 1,
-        庫存管理 = 2,
+        庫存查詢 = 2,
         處理單管理 = 3,
         處理單紀錄 = 4,
-        庫存盤點 = 5,
+        新增盤點 = 5,
         庫存盤點紀錄 = 6
     }
 
@@ -47,7 +47,6 @@ namespace His_Pos.Class
    
     public enum AddOrderType
     {
-        ADDBYUSER = 0,
         ADDALLBELOWSAFEAMOUNT = 4,
         ADDBYMANUFACTORY = 5,
         ADDALLTOBASICAMOUNT = 6,

@@ -58,6 +58,7 @@
                     <StackPanel Orientation="Vertical">
                         <menuusercontrol:UserControl1 Name="HisFeature1" MouseDown="FeatureMouseDown"/>
                         <menuusercontrol:UserControl1 Name="HisFeature2" MouseDown="FeatureMouseDown"/>
+                        <menuusercontrol:UserControl1 Name="HisFeature3" MouseDown="FeatureMouseDown"/>
                     </StackPanel>
                 </ScrollViewer>
                 <ScrollViewer Name="PosMenu" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">

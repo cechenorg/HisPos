@@ -92,20 +92,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
                     <Label Name="ID" Content="{Binding Id}" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
                     <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-                    <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="400" FontSize="25" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalAlignment="Bottom" Height="40"
-                                                              ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Path=Manufactory.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,20,0"
-                                                              VerticalContentAlignment="Bottom" DropDownClosed="ManufactoryAuto_DropDownClosed">
-                                                             
-                        <controls:AutoCompleteBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label x:Name="ManId" Width="100" Content="{Binding Id}"/>
-                                    <Label x:Name="ManName" Width="350" Content="{Binding Name}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </controls:AutoCompleteBox.ItemTemplate>
-                    </controls:AutoCompleteBox>
+                    <Label Content="{Binding Path=Manufactory.Name}" Width="400" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
                     <Label Name="Phone" Content="{Binding Path=Manufactory.Telphone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">

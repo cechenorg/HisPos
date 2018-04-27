@@ -102,8 +102,6 @@ namespace His_Pos.ProductPurchase
             {
                 ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
             }
-            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
-            ManufactoryAuto.ItemFilter = ManufactoryFilter;
         }
 
         public void UpdateUi()
@@ -159,7 +157,6 @@ namespace His_Pos.ProductPurchase
                     Confirm.Visibility = Visibility.Visible;
                     ConfirmToProcess.Visibility = Visibility.Collapsed;
                     DeleteOrder.Visibility = Visibility.Collapsed;
-                    ManufactoryAuto.IsEnabled = false;
                     OrderCategory.IsEnabled = false;
                     EmptySpace.Width = 400;
                     StoreOrderDetail.Columns[11].Visibility = Visibility.Visible;
@@ -173,7 +170,6 @@ namespace His_Pos.ProductPurchase
                     Confirm.Visibility = Visibility.Collapsed;
                     ConfirmToProcess.Visibility = Visibility.Visible;
                     DeleteOrder.Visibility = Visibility.Visible;
-                    ManufactoryAuto.IsEnabled = true;
                     OrderCategory.IsEnabled = true;
                     EmptySpace.Width = 270;
                     StoreOrderDetail.Columns[11].Visibility = Visibility.Collapsed;
@@ -235,9 +231,6 @@ namespace His_Pos.ProductPurchase
             {
                 switch(addNewOrderDialog.AddOrderType)
                 {
-                    case AddOrderType.ADDBYUSER:
-                        AddNewOrderByUm();
-                        break;
                     case AddOrderType.ADDALLBELOWSAFEAMOUNT:
                         AddBasicOrSafe(StoreOrderProductType.SAFE);
                         break;
@@ -343,17 +336,7 @@ namespace His_Pos.ProductPurchase
 
             storeOrderData.TotalPrice = count.ToString();
         }
-
-        private void ManufactoryAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
-        {
-            AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
-            if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
-            AddNewProduct.IsEnabled = (ManufactoryAuto.Text != string.Empty);
-            StoreOrderData.Manufactory = (Manufactory)((Manufactory)autoCompleteBox.SelectedItem).Clone();
-            GetProductAutoComplete();
-            SetChanged();
-        }
-
+        
         private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             var productAuto = sender as AutoCompleteBox;

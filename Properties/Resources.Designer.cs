@@ -178,15 +178,6 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 庫存管理 的當地語系化字串。
-        /// </summary>
-        internal static string InventoryManagement {
-            get {
-                return ResourceManager.GetString("InventoryManagement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 非藥事居家照護或協助辦理門診戒菸計畫且直接交付指示用藥、提供「戒菸個案追蹤」或「戒菸衛教暨個案管理」者，需填寫原處方機構案件分類 的當地語系化字串。
         /// </summary>
         internal static string MedicalCaseNull {
@@ -219,6 +210,15 @@ namespace His_Pos.Properties {
         internal static string MedicineDaysOutOfRange_1_7 {
             get {
                 return ResourceManager.GetString("MedicineDaysOutOfRange_1_7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 新增盤點 的當地語系化字串。
+        /// </summary>
+        internal static string NewStockTaking {
+            get {
+                return ResourceManager.GetString("NewStockTaking", resourceCulture);
             }
         }
         
@@ -300,6 +300,15 @@ namespace His_Pos.Properties {
         internal static string StockManage {
             get {
                 return ResourceManager.GetString("StockManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 庫存查詢 的當地語系化字串。
+        /// </summary>
+        internal static string StockSearch {
+            get {
+                return ResourceManager.GetString("StockSearch", resourceCulture);
             }
         }
         
