@@ -46,7 +46,7 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<ProductUnit> OTCUnitCollection;
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
-
+        public ListCollectionView ProductTypeCollection;
         public event MouseButtonEventHandler mouseButtonEventHandler;
        
         public InventoryOtc InventoryOtc;
@@ -179,6 +179,9 @@ namespace His_Pos.InventoryManagement
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
             OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
 
+            ProductTypeCollection = ProductDb.GetProductType();
+            OtcType.ItemsSource = ProductTypeCollection;
+           
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
                 bool keep = true;
@@ -398,6 +401,7 @@ namespace His_Pos.InventoryManagement
             ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
             MainWindow.Instance.AddNewTab("處理單紀錄");
         }
-        
+
+       
     }
 }

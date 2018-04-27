@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace His_Pos.Class.Product
 {
@@ -99,6 +100,20 @@ namespace His_Pos.Class.Product
                 collection.Add(new OTCStockOverview(row["VALIDDATE"].ToString(), row["PRICE"].ToString(), row["STOCK"].ToString()));
             }
 
+            return collection;
+        }
+        internal static ListCollectionView GetProductType() {
+            
+            List<ProductType> productTypes = new List<ProductType>();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetProductType]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                productTypes.Add(new ProductType(row["PROTYP_ID"].ToString(), row["PROTYP_PARENT"].ToString(), row["PROTYP_CHINAME"].ToString()));
+            }
+            ListCollectionView collection = new ListCollectionView(productTypes);
+            collection.GroupDescriptions.Add(new PropertyGroupDescription("Rank"));
             return collection;
         }
         internal static void UpdateProductManufactory(string productId,string manId,int orderId) {
