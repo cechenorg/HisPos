@@ -61,7 +61,7 @@ namespace His_Pos.InventoryManagement
         private void UpdateMed() {
             InventoryMedicine.Name = MedName.Content.ToString();
             InventoryMedicine.Id = MedId.Content.ToString();
-            InventoryMedicine.Stock.SafeAmount = MedSaveAmount.Text;
+            InventoryMedicine.Stock.SafeAmount = MedSafeAmount.Text;
             InventoryMedicine.Location = MedLocation.Text;
             InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
             TextRange textRange = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd);
@@ -72,7 +72,7 @@ namespace His_Pos.InventoryManagement
                 if (InventoryMedicine is null) return;
             MedName.Content = InventoryMedicine.Name;
             MedId.Content = InventoryMedicine.Id;
-            MedSaveAmount.Text = InventoryMedicine.Stock.SafeAmount;
+            MedSafeAmount.Text = InventoryMedicine.Stock.SafeAmount;
             MedLocation.Text = InventoryMedicine.Location;
             MedBasicAmount.Text = InventoryMedicine.Stock.BasicAmount;
             MedNotes.Document.Blocks.Clear();
@@ -398,16 +398,33 @@ namespace His_Pos.InventoryManagement
             if (ChangedFlagNotChanged())
                 setChangedFlag();
         }
+        private bool CheckValue()
+        {
+            List<string> _errorList = new List<string>();
+            bool check = true;
 
+            if (Convert.ToInt32(MedBasicAmount.Text) < Convert.ToInt32(MedSafeAmount.Text))
+            {
+                _errorList.Add("安全量不可高於基準量");
+                check = false;
+            }
+            if (!check)
+            {
+                var errors = _errorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
+                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR);
+                messageWindow.ShowDialog();
+            }
+            return check;
+        }
         private void ButtonUpdateSubmmit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (ChangedFlagNotChanged()) return;
-            
+            if (!CheckValue()) return;
             InventoryMedicine.Location = MedLocation.Text;
             InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
-            InventoryMedicine.Stock.SafeAmount = MedSaveAmount.Text;
+            InventoryMedicine.Stock.SafeAmount = MedSafeAmount.Text;
             InventoryMedicine.Note = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text;
-            InventoryMedicine.Status = MedSaveAmount.Text == "啟用" ? true : false;
+            InventoryMedicine.Status = MedSafeAmount.Text == "啟用" ? true : false;
             ProductDb.UpdateOtcDataDetail(InventoryMedicine, "InventoryMedicine");
 
             foreach (var manufactoryChanged in MEDManufactoryChangedCollection)
@@ -488,6 +505,7 @@ namespace His_Pos.InventoryManagement
             MainWindow.Instance.AddNewTab("處理單紀錄");
 
         }
-        
+
+      
     }
 }

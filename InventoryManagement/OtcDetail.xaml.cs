@@ -155,7 +155,7 @@ namespace His_Pos.InventoryManagement
             OtcId.Content = InventoryOtc.Id;
             
             OtcStatus.Text = (InventoryOtc.Status)? "啟用":"已停用";
-            OtcSaveAmount.Text = InventoryOtc.Stock.SafeAmount;
+            OtcSafeAmount.Text = InventoryOtc.Stock.SafeAmount;
             OtcBasicAmount.Text = InventoryOtc.Stock.BasicAmount;
             OtcLocation.Text = InventoryOtc.Location;
 
@@ -344,14 +344,28 @@ namespace His_Pos.InventoryManagement
                 SetOtcTextBoxChangedCollection(txt.Name);
             }
         }
-
+        private bool CheckValue() {
+            List<string> _errorList = new List<string>();
+            bool check = true;
+            
+            if (Convert.ToInt32(OtcBasicAmount.Text) < Convert.ToInt32(OtcSafeAmount.Text)) {
+                _errorList.Add("安全量不可高於基準量");
+                check = false;
+            }
+            if (!check) {
+                var errors = _errorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
+                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR);
+                messageWindow.ShowDialog();
+            }
+            return check;
+        }
         private void ButtonUpdateSubmmit_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (ChangedFlagNotChanged()) return;
-
+            if (!CheckValue()) return;
             InventoryOtc.Location = OtcLocation.Text;
             InventoryOtc.Stock.BasicAmount = OtcBasicAmount.Text;
-            InventoryOtc.Stock.SafeAmount = OtcSaveAmount.Text;
+            InventoryOtc.Stock.SafeAmount = OtcSafeAmount.Text;
             InventoryOtc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
             InventoryOtc.Status = OtcStatus.Text =="啟用" ? true : false;
             ProductDb.UpdateOtcDataDetail(InventoryOtc, "InventoryOtc");
@@ -384,7 +398,6 @@ namespace His_Pos.InventoryManagement
             ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
             MainWindow.Instance.AddNewTab("處理單紀錄");
         }
-
-       
+        
     }
 }
