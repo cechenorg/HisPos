@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:His_Pos.ProductPurchase"
         mc:Ignorable="d"
-        Title="NewItemDialog" Height="300" Width="500" WindowStartupLocation="CenterScreen">
+        Title="NewItemDialog" Height="400" Width="600" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -14,7 +14,7 @@
         </Style>
     </Window.Resources>
     <Viewbox Stretch="Fill">
-        <Grid Height="300" Width="500">
+        <Grid Height="400" Width="600">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition/>
