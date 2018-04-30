@@ -497,55 +497,69 @@ namespace His_Pos.ProductPurchase
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
-                List<TextBox> temp = new List<TextBox>();
-                int currentRowIndex = GetCurrentRowIndex(sender);
-                string objectName = (sender as Control).Name;
+                var nextTextBox = new List<TextBox>();
+                var thisTextBox = new List<TextBox>();
+                var pickerList = new List<DatePicker>();
+                var currentRowIndex = GetCurrentRowIndex(sender);
+                var objectName = (sender as Control).Name;
                 
                 if (currentRowIndex == -1) return;
 
                 switch (objectName)
                 {
                     case "Price":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref temp);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
                         break;
                     case "Amount":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref temp);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
                         break;
                     case "FreeAmount":
-                        if( storeOrderData.Type == OrderType.UNPROCESSING )
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref temp);
+                        if ( storeOrderData.Type == OrderType.UNPROCESSING )
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
                         else
-                        {
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref temp);
-                        }
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
                         break;
                     case "BatchNumber":
-                        List<DatePicker> pickerList = new List<DatePicker>();
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref thisTextBox);
+
+                        if ((sender as TextBox).Text == String.Empty && currentRowIndex > 0 && thisTextBox.Count > 0)
+                            (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
+
                         NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
                         pickerList[currentRowIndex].Focus();
                         return;
                     case "ValidDate":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref temp);
-                        break;
+                        NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
+                        if ((sender as DatePicker).Text == String.Empty && currentRowIndex > 0)
+                            (sender as DatePicker).Text = thisTextBox[currentRowIndex - 1].Text;
+
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
+                        nextTextBox[currentRowIndex].Focus();
+                        return;
                     case "Invoice":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref temp);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref thisTextBox);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
                         break;
                     case "Notes":
                         if (currentRowIndex == storeOrderData.Products.Count - 1)
                         {
-                            List<AutoCompleteBox> autoList = new List<AutoCompleteBox>();
+                            var autoList = new List<AutoCompleteBox>();
                             NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, "Id", ref autoList);
-                            NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref temp);
-                            temp[0].Focus();
+                            NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref nextTextBox);
+                            nextTextBox[0].Focus();
                         }
                         else
                         {
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref temp);
-                            temp[currentRowIndex + 1].Focus();
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref nextTextBox);
+                            nextTextBox[currentRowIndex + 1].Focus();
                         }
                         return;
                 }
-                temp[currentRowIndex].Focus();
+
+                if ((sender as TextBox).Text == String.Empty && currentRowIndex > 0 && thisTextBox.Count > 0)
+                    (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
+
+                nextTextBox[currentRowIndex].Focus();
             }
 
             if(!IsKeyAvailable(e.Key))
