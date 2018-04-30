@@ -161,7 +161,12 @@ namespace His_Pos.ProductPurchase
 
         private void UpdateOrderDetailUi(OrderType type)
         {
-            AddNewProduct.IsEnabled = !string.IsNullOrEmpty(StoreOrderData.Manufactory.Id);
+            AddNewProduct.IsEnabled = true;
+            DeleteOrder.IsEnabled = true;
+            ConfirmToProcess.IsEnabled = true;
+            Confirm.IsEnabled = true;
+            ReceiveEmp.IsEnabled = true;
+            Note.IsEnabled = true;
 
             switch (type)
             {
@@ -298,6 +303,19 @@ namespace His_Pos.ProductPurchase
             if (StoOrderOverview is null) return;
             StoOrderOverview.Items.Filter = OrderTypeFilter;
 
+            if (StoOrderOverview.Items.Count == 0)
+            {
+                ClearOrderDetailData();
+
+                OrderCategory.IsEnabled = false;
+                AddNewProduct.IsEnabled = false;
+                DeleteOrder.IsEnabled = false;
+                ConfirmToProcess.IsEnabled = false;
+                Confirm.IsEnabled = false;
+                ReceiveEmp.IsEnabled = false;
+                Note.IsEnabled = false;
+            }
+            
             StoOrderOverview.SelectedIndex = 0;
         }
         private bool OrderTypeFilter(object item)
@@ -327,7 +345,7 @@ namespace His_Pos.ProductPurchase
             TextBox textBox = sender as TextBox;
             
             if(textBox is null) return;
-
+            
             if (textBox.Text == String.Empty)
                 textBox.Text = "0";
 
@@ -365,16 +383,7 @@ namespace His_Pos.ProductPurchase
            
             productAuto.Text = "";
         }
-
-        public AutoCompleteFilterPredicate<object> ManufactoryFilter
-        {
-            get
-            {
-                return (searchText, obj) =>
-                    ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
-                    || (obj as Manufactory).Name.Contains(searchText);
-            }
-        }
+        
         private void SetChanged() {
             if (IsFirst == true) return;
             IsChanged = true;
@@ -538,6 +547,18 @@ namespace His_Pos.ProductPurchase
                 }
                 temp[currentRowIndex].Focus();
             }
+
+            if(!IsKeyAvailable(e.Key))
+                e.Handled = true;
+        }
+
+        private bool IsKeyAvailable(Key key)
+        {
+            if (key >= Key.D0 && key <= Key.D9) return true;
+            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
+            if( key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right) return true;
+
+            return false;
         }
 
         private int GetCurrentRowIndex(object sender)
