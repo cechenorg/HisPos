@@ -13,6 +13,7 @@ using His_Pos.Service;
 using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
+using System.Windows.Data;
 
 namespace His_Pos.InventoryManagement
 {
@@ -28,6 +29,7 @@ namespace His_Pos.InventoryManagement
         public double selectStockValue = 0;
         public double searchCount = 0;
         private string selectProductId = string.Empty;
+        public ListCollectionView ProductTypeCollection;
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
         public ObservableCollection<Product> _DataList 
         {
@@ -54,10 +56,14 @@ namespace His_Pos.InventoryManagement
             InitializeComponent();
             Instance = this;
             MergingData();
-
             DataContext = this;
+            SetOtcTypeUi();
         }
-
+        public void SetOtcTypeUi() {
+            ProductTypeCollection = ProductDb.GetProductType();
+            OtcType.ItemsSource = ProductTypeCollection;
+            OtcType.Text = string.Empty;
+        }
         public void MergingData()
         {
             Search.IsEnabled = false;
@@ -90,13 +96,15 @@ namespace His_Pos.InventoryManagement
                 case SearchType.OTC:
                     if (item is InventoryOtc)
                     {
-                        if(
+                        if (
                             (((InventoryOtc)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
-                        && (((InventoryOtc)item).Name.Contains(Name.Text) ||  Name.Text == string.Empty) //Name filter
+                        && (((InventoryOtc)item).Name.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
                        && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
-                       ) reply = true;
+                        && (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()) || OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
+                        ) reply = true;
                     }
+                    
                     if (reply) {
                         searchCount++;
                         selectStockValue += Convert.ToDouble(((InventoryOtc)item).StockValue);
@@ -109,6 +117,7 @@ namespace His_Pos.InventoryManagement
                         && (((InventoryMedicine)item).Name.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
                         && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
+                        && (OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
                         ) reply = true;
                     if (reply)
                         {
@@ -122,8 +131,22 @@ namespace His_Pos.InventoryManagement
                         (((Product)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
                            && (((Product)item).Name.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
                            && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
-                        && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
-                        ) reply = true;
+                        && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter              
+                        )
+                    {
+                        if (item is InventoryOtc)
+                        {
+                            if (OtcType.SelectedValue == null) {
+                                reply = true;
+                            }
+                            else if (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()) || OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
+                                reply = true;
+                        }
+                        else if (item is InventoryMedicine) {
+                            if (OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無") reply = true;
+                        }
+                           
+                    }
                     if (reply)
                     {
                         searchCount++;

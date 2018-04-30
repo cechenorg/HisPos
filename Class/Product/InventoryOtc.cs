@@ -25,8 +25,13 @@ namespace His_Pos.Class.Product
                 SafeAmount = dataRow["PRO_SAFEQTY"].ToString(),
                 BasicAmount = dataRow["PRO_BASICQTY"].ToString()
             };
+            ProductType = new ProductType(
+                dataRow["PROTYP_ID"].ToString(), 
+                dataRow["PROTYP_PARENT"].ToString(), 
+                dataRow["PROTYP_CHINAME"].ToString()
+          );
         }
-
+        public ProductType ProductType { get; set; }
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }

@@ -181,7 +181,9 @@ namespace His_Pos.InventoryManagement
 
             ProductTypeCollection = ProductDb.GetProductType();
             OtcType.ItemsSource = ProductTypeCollection;
-           
+            if(OtcType.Items.Contains(InventoryOtc.ProductType.Name))
+                 OtcType.SelectedValue = InventoryOtc.ProductType.Name;
+
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
                 bool keep = true;

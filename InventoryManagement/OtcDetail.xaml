@@ -48,15 +48,15 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
+                    <StackPanel  Orientation="Horizontal" Grid.Column="0" Grid.Row="0">
                         <Label Content="類別" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <ComboBox Name="OtcType" SelectedValuePath="Name"  Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center">
+                        <ComboBox Name="OtcType" SelectedValuePath="Name" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center">
                             
                             <ComboBox.GroupStyle>
                                 <GroupStyle>
                                     <GroupStyle.HeaderTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" />
+                                            <TextBlock Text="{Binding Name}"    />
                                         </DataTemplate>
                                     </GroupStyle.HeaderTemplate>
                                 </GroupStyle>
