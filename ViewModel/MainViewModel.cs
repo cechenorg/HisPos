@@ -171,8 +171,10 @@ namespace His_Pos.ViewModel
                         case nameof(FeatureItem.庫存查詢):
                             if (InventoryManagement.InventoryManagementView.Instance is null) break;
 
-                            if (InventoryManagement.InventoryManagementView.DataChanged)
+                            if (InventoryManagement.InventoryManagementView.DataChanged) {
                                 InventoryManagement.InventoryManagementView.Instance.MergingData();
+                                InventoryManagement.InventoryManagementView.Instance.SearchData();
+                            }
                             break;
                         case nameof(FeatureItem.處理單管理):
                             break;

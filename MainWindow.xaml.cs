@@ -149,7 +149,6 @@ namespace His_Pos
             if (Tabs.SelectedItem is null) return;
 
             ((ViewModelMainWindow)DataContext).AddTabCommandAction(((TabBase)Tabs.SelectedItem).TabName);
-            this.Focus();
         }
     }
 }
