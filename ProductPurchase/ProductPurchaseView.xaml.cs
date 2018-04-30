@@ -494,6 +494,8 @@ namespace His_Pos.ProductPurchase
 
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            var objectName = (sender as Control).Name;
+
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
@@ -501,7 +503,6 @@ namespace His_Pos.ProductPurchase
                 var thisTextBox = new List<TextBox>();
                 var pickerList = new List<DatePicker>();
                 var currentRowIndex = GetCurrentRowIndex(sender);
-                var objectName = (sender as Control).Name;
                 
                 if (currentRowIndex == -1) return;
 
@@ -514,10 +515,17 @@ namespace His_Pos.ProductPurchase
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
                         break;
                     case "FreeAmount":
-                        if ( storeOrderData.Type == OrderType.UNPROCESSING )
+                        if (storeOrderData.Type == OrderType.UNPROCESSING)
                             NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-                        else
+                        else if (storeOrderData.Products[currentRowIndex] is ProductPurchaseMedicine)
                             NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
+                        else
+                        {
+                            NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
+                            pickerList[currentRowIndex].Focus();
+                            return;
+                        }
+
                         break;
                     case "BatchNumber":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref thisTextBox);
@@ -562,7 +570,7 @@ namespace His_Pos.ProductPurchase
                 nextTextBox[currentRowIndex].Focus();
             }
 
-            if(!IsKeyAvailable(e.Key))
+            if(!IsKeyAvailable(e.Key) && (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount")))
                 e.Handled = true;
         }
 
@@ -615,7 +623,35 @@ namespace His_Pos.ProductPurchase
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.ToString().Equals("")) return true;
+            if (value is null || value.ToString().Equals("")) return true;
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return "";
+        }
+    }
+
+    public class LastRowIsEnableConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Product) return true;
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return "";
+        }
+    }
+
+    public class BatchNamberIsEnableConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ProductPurchaseMedicine) return true;
             return false;
         }
 
