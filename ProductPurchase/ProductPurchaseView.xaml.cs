@@ -161,7 +161,12 @@ namespace His_Pos.ProductPurchase
 
         private void UpdateOrderDetailUi(OrderType type)
         {
-            AddNewProduct.IsEnabled = !string.IsNullOrEmpty(StoreOrderData.Manufactory.Id);
+            AddNewProduct.IsEnabled = true;
+            DeleteOrder.IsEnabled = true;
+            ConfirmToProcess.IsEnabled = true;
+            Confirm.IsEnabled = true;
+            ReceiveEmp.IsEnabled = true;
+            Note.IsEnabled = true;
 
             switch (type)
             {
@@ -298,6 +303,19 @@ namespace His_Pos.ProductPurchase
             if (StoOrderOverview is null) return;
             StoOrderOverview.Items.Filter = OrderTypeFilter;
 
+            if (StoOrderOverview.Items.Count == 0)
+            {
+                ClearOrderDetailData();
+
+                OrderCategory.IsEnabled = false;
+                AddNewProduct.IsEnabled = false;
+                DeleteOrder.IsEnabled = false;
+                ConfirmToProcess.IsEnabled = false;
+                Confirm.IsEnabled = false;
+                ReceiveEmp.IsEnabled = false;
+                Note.IsEnabled = false;
+            }
+            
             StoOrderOverview.SelectedIndex = 0;
         }
         private bool OrderTypeFilter(object item)
@@ -327,7 +345,7 @@ namespace His_Pos.ProductPurchase
             TextBox textBox = sender as TextBox;
             
             if(textBox is null) return;
-
+            
             if (textBox.Text == String.Empty)
                 textBox.Text = "0";
 
@@ -365,16 +383,7 @@ namespace His_Pos.ProductPurchase
            
             productAuto.Text = "";
         }
-
-        public AutoCompleteFilterPredicate<object> ManufactoryFilter
-        {
-            get
-            {
-                return (searchText, obj) =>
-                    ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
-                    || (obj as Manufactory).Name.Contains(searchText);
-            }
-        }
+        
         private void SetChanged() {
             if (IsFirst == true) return;
             IsChanged = true;
@@ -485,59 +494,93 @@ namespace His_Pos.ProductPurchase
 
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            var objectName = (sender as Control).Name;
+
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
-                List<TextBox> temp = new List<TextBox>();
-                int currentRowIndex = GetCurrentRowIndex(sender);
-                string objectName = (sender as Control).Name;
+                var nextTextBox = new List<TextBox>();
+                var thisTextBox = new List<TextBox>();
+                var pickerList = new List<DatePicker>();
+                var currentRowIndex = GetCurrentRowIndex(sender);
                 
                 if (currentRowIndex == -1) return;
 
                 switch (objectName)
                 {
                     case "Price":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref temp);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
                         break;
                     case "Amount":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref temp);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
                         break;
                     case "FreeAmount":
-                        if( storeOrderData.Type == OrderType.UNPROCESSING )
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref temp);
+                        if (storeOrderData.Type == OrderType.UNPROCESSING)
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
+                        else if (storeOrderData.Products[currentRowIndex] is ProductPurchaseMedicine)
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
                         else
                         {
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref temp);
+                            NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
+                            pickerList[currentRowIndex].Focus();
+                            return;
                         }
+
                         break;
                     case "BatchNumber":
-                        List<DatePicker> pickerList = new List<DatePicker>();
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref thisTextBox);
+
+                        if ((sender as TextBox).Text == String.Empty && currentRowIndex > 0 && thisTextBox.Count > 0)
+                            (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
+
                         NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
                         pickerList[currentRowIndex].Focus();
                         return;
                     case "ValidDate":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref temp);
-                        break;
+                        NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
+                        if ((sender as DatePicker).Text == String.Empty && currentRowIndex > 0)
+                            (sender as DatePicker).Text = thisTextBox[currentRowIndex - 1].Text;
+
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
+                        nextTextBox[currentRowIndex].Focus();
+                        return;
                     case "Invoice":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref temp);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref thisTextBox);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
                         break;
                     case "Notes":
                         if (currentRowIndex == storeOrderData.Products.Count - 1)
                         {
-                            List<AutoCompleteBox> autoList = new List<AutoCompleteBox>();
+                            var autoList = new List<AutoCompleteBox>();
                             NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, "Id", ref autoList);
-                            NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref temp);
-                            temp[0].Focus();
+                            NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref nextTextBox);
+                            nextTextBox[0].Focus();
                         }
                         else
                         {
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref temp);
-                            temp[currentRowIndex + 1].Focus();
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref nextTextBox);
+                            nextTextBox[currentRowIndex + 1].Focus();
                         }
                         return;
                 }
-                temp[currentRowIndex].Focus();
+
+                if ((sender as TextBox).Text == String.Empty && currentRowIndex > 0 && thisTextBox.Count > 0)
+                    (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
+
+                nextTextBox[currentRowIndex].Focus();
             }
+
+            if(!IsKeyAvailable(e.Key) && (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount")))
+                e.Handled = true;
+        }
+
+        private bool IsKeyAvailable(Key key)
+        {
+            if (key >= Key.D0 && key <= Key.D9) return true;
+            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
+            if( key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right) return true;
+
+            return false;
         }
 
         private int GetCurrentRowIndex(object sender)
@@ -580,7 +623,35 @@ namespace His_Pos.ProductPurchase
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.ToString().Equals("")) return true;
+            if (value is null || value.ToString().Equals("")) return true;
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return "";
+        }
+    }
+
+    public class LastRowIsEnableConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Product) return true;
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return "";
+        }
+    }
+
+    public class BatchNamberIsEnableConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ProductPurchaseMedicine) return true;
             return false;
         }
 

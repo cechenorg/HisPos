@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using His_Pos.Class.Product;
 using His_Pos.Interface;
 
 namespace His_Pos.Class.StoreOrder
@@ -139,10 +140,22 @@ namespace His_Pos.Class.StoreOrder
             if (Products is null || Products.Count == 0)
                 message += "請填寫商品\n";
 
+            if (type == OrderType.PROCESSING && String.IsNullOrEmpty(RecEmp))
+                message += "請填寫收貨人\n";
+
             foreach (AbstractClass.Product product in Products)
             {
+                if (type == OrderType.PROCESSING)
+                {
+                    if(product is ProductPurchaseMedicine && String.IsNullOrEmpty(((IProductPurchase)product).BatchNumber) )
+                        message += "請填寫商品 " + product.Id + " 批號\n";
+
+                    if (String.IsNullOrEmpty(((IProductPurchase)product).Invoice))
+                        message += "請填寫商品 " + product.Id + " 發票號碼\n";
+                }
+
                 if ( Math.Abs(((ITrade)product).Amount) <= 0)
-                    message += "商品數量不能為0\n";
+                    message += "商品 " + product.Id + " 數量不能為0\n";
             }
 
             return message;
