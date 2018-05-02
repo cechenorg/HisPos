@@ -94,6 +94,7 @@ namespace His_Pos.Class.Product
             {
                 amount = value;
                 CalculateData();
+                NotifyPropertyChanged("Amount");
             }
         }
         public double price;

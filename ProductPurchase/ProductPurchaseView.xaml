@@ -242,10 +242,13 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTemplateColumn MinWidth="120" Header="批號">
+                        <DataGridTemplateColumn MinWidth="170" Header="批號">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber}" IsEnabled="{Binding Converter={StaticResource BatchNamberIsEnableConverter}}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber}" IsEnabled="{Binding Converter={StaticResource BatchNamberIsEnableConverter}}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
+                                        <Button x:Name="Split" Content="拆批" Width="40" Margin="5" Padding="0" FontFamily="Segoe UI Semi" IsEnabled="{Binding Converter={StaticResource BatchNamberIsEnableConverter}}" Click="SplitBatchNumber_Click"/>
+                                    </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

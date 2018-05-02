@@ -638,8 +638,39 @@ namespace His_Pos.ProductPurchase
                     }
                 }
             }
+            else if ( sender is Button )
+            {
+                List<Button> temp = new List<Button>();
+                Button SplitBtn = sender as Button;
+
+                NewFunction.FindChildGroup<Button>(StoreOrderDetail, SplitBtn.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
 
             return -1;
+        }
+
+        private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            var currentRowIndex = GetCurrentRowIndex(sender);
+            
+            double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
+
+            ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
+
+            StoreOrderData.Products.Insert( currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
+
+            if (left != 0)
+                ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
         }
     }
     public class AutoCompleteIsEnableConverter : IValueConverter
