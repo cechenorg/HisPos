@@ -36,24 +36,7 @@
                     <TextBox Name="ID" Margin="0,0,10,0" Width="120" FontSize="16"/>
                     <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <TextBox Name="Name" Margin="0,0,10,0" Width="120" FontSize="16"/>
-                    <Label Content="類別" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" Margin="10,0,10,0" FontSize="18" VerticalAlignment="Center"/>
-                    <ComboBox Name="OtcType" SelectedValuePath="Name" Margin="0,0,10,0"  Width="140"  Foreground="Black"  FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" >
-                        <ComboBox.GroupStyle>
-                                <GroupStyle>
-                                    <GroupStyle.HeaderTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Name}"    />
-                                        </DataTemplate>
-                                    </GroupStyle.HeaderTemplate>
-                                </GroupStyle>
-                            </ComboBox.GroupStyle>
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
-                        <CheckBox Name="IsStop" Content="已停用" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <CheckBox Name="IsStop" Content="已停用" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Name="BelowSafeAmount" Content="低於安全量" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Margin="9">
@@ -70,7 +53,22 @@
             <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkestBackGround}">
                 <Label Content="進階搜尋" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="19,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <Label Content="類別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="Ingredien" Margin="0,9,10,9" Width="150" FontSize="16"/>
+                <ComboBox Name="OtcType" SelectedValuePath="Name" Margin="0,0,10,0"  Width="140"  Foreground="Black"  FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" >
+                    <ComboBox.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"    />
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ComboBox.GroupStyle>
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}">
                 <Label Content="進階搜尋" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="19,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>

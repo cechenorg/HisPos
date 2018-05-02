@@ -62,7 +62,7 @@ namespace His_Pos.InventoryManagement
         public void SetOtcTypeUi() {
             ProductTypeCollection = ProductDb.GetProductType();
             OtcType.ItemsSource = ProductTypeCollection;
-            OtcType.Text = string.Empty;
+            OtcType.SelectedValue = "無";
         }
         public void MergingData()
         {
@@ -136,10 +136,10 @@ namespace His_Pos.InventoryManagement
                     {
                         if (item is InventoryOtc)
                         {
-                            if (OtcType.SelectedValue == null) {
+                            if (OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無") {
                                 reply = true;
                             }
-                            else if (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()) || OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
+                            else if (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()))
                                 reply = true;
                         }
                         else if (item is InventoryMedicine) {
