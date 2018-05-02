@@ -32,9 +32,9 @@
                     <Label Content="採購人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <TextBox Name="OrdEmp" Margin="0,0,10,0" Width="130" FontSize="16"/>
                     <Label Content="處理單日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <DatePicker Width="100" Height="30" Name="start" SelectedDateFormat="Short"/>
+                    <DatePicker Width="100" Height="30" Name="datestart" SelectedDateFormat="Short"  />
                     <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                    <DatePicker Width="100" Height="30" Name="end" SelectedDateFormat="Short"/>
+                    <DatePicker Width="100" Height="30" Name="dateend" SelectedDateFormat="Short" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="9" HorizontalAlignment="Right">
                     <Label Content="搜尋範圍" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>

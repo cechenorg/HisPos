@@ -28,6 +28,7 @@ namespace His_Pos.ProductPurchaseRecord
         public static ProductPurchaseRecordView Instance;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         private StoreOrder storeOrderData;
+        private int sdate,edate;
         public static string Proid;
         public StoreOrder StoreOrderData
         {
@@ -89,6 +90,7 @@ namespace His_Pos.ProductPurchaseRecord
         public bool StoOrderOverviewFilter(object item)
         {
             bool reply = false;
+            int id = Convert.ToInt32(((StoreOrder)item).Id.Substring(0,8));
             switch (((StoreOrder)item).Category.CategoryName) {
                 case "進貨":
                     if (
@@ -96,6 +98,8 @@ namespace His_Pos.ProductPurchaseRecord
                         && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
                         && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
                         && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                        && (id <= edate && id >= sdate)
+                        && (OrdEmp.Text.Contains(((StoreOrder)item).OrdEmp) || OrdEmp.Text == string.Empty)
                         ) reply = true;
                     break;
                 case "退貨":
@@ -104,6 +108,8 @@ namespace His_Pos.ProductPurchaseRecord
                            && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
                            && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
                            && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                           && (id <= edate && id >= sdate)
+                           && (OrdEmp.Text.Contains(((StoreOrder)item).OrdEmp) || OrdEmp.Text == string.Empty)
                            ) reply = true;
                     break;
                 case "調貨":
@@ -112,6 +118,8 @@ namespace His_Pos.ProductPurchaseRecord
                            && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
                            && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
                            && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                           && (id <= edate && id >= sdate)
+                           && (OrdEmp.Text.Contains(((StoreOrder)item).OrdEmp) || OrdEmp.Text == string.Empty)
                            ) reply = true;
                     break;
             }
@@ -124,6 +132,9 @@ namespace His_Pos.ProductPurchaseRecord
 
         private void SearchData()
         {
+            
+            sdate = datestart.SelectedDate.ToString() != "" ?Convert.ToInt32(((DateTime)datestart.SelectedDate).ToString("yyyyMMdd")) : 0;
+            edate = dateend.SelectedDate.ToString() != "" ?Convert.ToInt32(((DateTime)dateend.SelectedDate).ToString("yyyyMMdd")) : 99999999;
             StoOrderOverview.Items.Filter = StoOrderOverviewFilter;
             StoreOrderData = null;
             StoOrderOverview.SelectedIndex = 0;
