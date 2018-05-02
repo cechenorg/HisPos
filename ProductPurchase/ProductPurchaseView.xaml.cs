@@ -52,7 +52,8 @@ namespace His_Pos.ProductPurchase
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
-        
+        public static ProductPurchaseView Instance;
+
         public ObservableCollection<StoreOrder> StoreOrderCollection
         {
             get
@@ -88,6 +89,7 @@ namespace His_Pos.ProductPurchase
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
             this.Loaded += UserControl1_Loaded;
             InitManufactory();
             UpdateUi();
