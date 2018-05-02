@@ -570,8 +570,35 @@ namespace His_Pos.ProductPurchase
                 nextTextBox[currentRowIndex].Focus();
             }
 
-            if(!IsKeyAvailable(e.Key) && (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount")))
-                e.Handled = true;
+            if (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount"))
+            {
+                if (!IsKeyAvailable(e.Key))
+                    e.Handled = true;
+                else
+                {
+                    TextBox textBox = sender as TextBox;
+
+                    if (textBox.Text.Equals("0"))
+                    {
+                        textBox.Text = GetCharFromKey(e.Key);
+                        textBox.CaretIndex = 1;
+                        e.Handled = true;
+                    }
+                }
+            }
+                
+        }
+
+        private string GetCharFromKey(Key key)
+        {
+            if (key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right) return "0";
+
+            int num = (int)key;
+
+            if (num > 50)
+                return (num - 74).ToString();
+            else
+                return (num - 34).ToString();
         }
 
         private bool IsKeyAvailable(Key key)
