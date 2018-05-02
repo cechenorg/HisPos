@@ -38,7 +38,7 @@
                     <ColumnDefinition Width="400"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0" Background="{StaticResource GridBackGround}">
+                <Grid Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,92,0" RenderTransformOrigin="0.572,0.507">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -50,35 +50,33 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
-                        <Label Content="類別" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="MedType" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
                         <Label Content="狀態" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <ComboBox Name="MedStatus" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" SelectionChanged="MedData_TextChanged">
+                        <ComboBox Name="MedStatus" Width="70" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" SelectionChanged="MedData_TextChanged">
                             <ComboBoxItem>啟用</ComboBoxItem>
                             <ComboBoxItem>已停用</ComboBoxItem>
                         </ComboBox>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="MedSafeAmount" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
+                        <TextBox Name="MedSafeAmount" Width="70" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" >
                         <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="MedBasicAmount" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
+                        <TextBox Name="MedBasicAmount" Width="70" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1" >
+                        <Label Content="櫃位" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
+                        <TextBox Name="MedLocation" Width="70" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" >
-                        <Label Content="櫃位" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="MedLocation" Width="140" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
+                        <CheckBox Content="管制藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
-                        <CheckBox Content="管制藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
                         <CheckBox Content="冷藏藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
                     </StackPanel>
                 </Grid>
-                <DataGrid Name="MedManufactory" Grid.Column="1" Margin="10,0,0,0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid Name="MedManufactory" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalAlignment="Right" Width="240" Grid.ColumnSpan="2" Margin="0,0,113,0">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -118,13 +116,54 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <DataGrid Name="MedIngredient" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False" HorizontalAlignment="Right" Width="240" Margin="0,0,-141,0" Grid.Column="1">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                            <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
+                            <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Height" Value="40"/>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="250" Header="成分">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <controls:AutoCompleteBox x:Name="MedManufactoryAuto" Width="200" FontSize="14" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
+                                                                  ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
+                                                                  BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Margin="10,0,0,0"
+                                                                  ItemFilter="{Binding ManufactoryFilter}" Populating="MedManufactoryAuto_Populating"  DropDownClosing="MedManufactoryAuto_DropDownClosing"  LostFocus="MedManufactoryAuto_LostFocus">
+                                            <controls:AutoCompleteBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label x:Name="ManId" Width="100" Content="{Binding Id}"/>
+                                                        <Label x:Name="ManName" Width="350" Content="{Binding Name}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </controls:AutoCompleteBox.ItemTemplate>
+                                        </controls:AutoCompleteBox>
+                                        <Image Name="DeleteDot" Source="{Binding Source}" Width="18" Margin="10" MouseLeftButtonDown="UIElement_OnMouseLeftButtonDown" Visibility="{Binding Vis, NotifyOnSourceUpdated=True}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
-            <Grid Grid.Column="1" Grid.Row="1">
+            <Grid Grid.Column="1" Grid.Row="1" Margin="10,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="500"/>
                     <ColumnDefinition Width="300"/>
                 </Grid.ColumnDefinitions>
-                <DockPanel Name="DockUnit" Background="{StaticResource GridBackGround}" Margin="-20,0,5,5" Grid.Column="0">
+                <DockPanel Name="DockUnit" Background="{StaticResource GridBackGround}" Margin="108,0,5,5" Grid.Column="0">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
