@@ -11,7 +11,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class ProductPurchaseOtc : AbstractClass.Product, IProductPurchase, IDeletable, ITrade, INotifyPropertyChanged
+    public class ProductPurchaseOtc : AbstractClass.Product, IProductPurchase, IDeletable, ITrade, INotifyPropertyChanged, ICloneable
     {
         public ProductPurchaseOtc(DataRow dataRow, DataSource dataSource) : base(dataRow)
         {
@@ -57,6 +57,10 @@ namespace His_Pos.Class.Product
                     ValidDate = "";
                     break;
             }
+        }
+
+        private ProductPurchaseOtc()
+        {
         }
 
         public InStock Stock { get; set; }
@@ -121,6 +125,28 @@ namespace His_Pos.Class.Product
         public void CalculateData()
         {
             TotalPrice = amount * price;
+        }
+
+        public object Clone()
+        {
+            ProductPurchaseOtc otc = new ProductPurchaseOtc();
+
+            otc.Id = Id;
+            otc.Name = Name;
+            otc.Stock=Stock;
+            otc.LastPrice=LastPrice;
+            otc.Source=Source;
+            otc.Cost=Cost;
+            otc.TotalPrice=TotalPrice;
+            otc.Amount=Amount;
+            otc.Price=Price;
+            otc.Note=Note;
+            otc.FreeAmount=FreeAmount;
+            otc.Invoice=Invoice;
+            otc.ValidDate=ValidDate;
+            otc.BatchNumber=BatchNumber;
+
+            return otc;
         }
     }
 }

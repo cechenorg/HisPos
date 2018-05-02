@@ -10,7 +10,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    class ProductPurchaseMedicine : AbstractClass.Product, IProductPurchase, IDeletable, ITrade, INotifyPropertyChanged
+    class ProductPurchaseMedicine : AbstractClass.Product, IProductPurchase, IDeletable, ITrade, INotifyPropertyChanged, ICloneable
     {
         public ProductPurchaseMedicine(DataRow dataRow, DataSource dataSource) : base(dataRow)
         {
@@ -56,6 +56,10 @@ namespace His_Pos.Class.Product
                     ValidDate = "";
                     break;
             }
+        }
+
+        private ProductPurchaseMedicine()
+        {
         }
 
         public InStock Stock { get; set; }
@@ -122,6 +126,28 @@ namespace His_Pos.Class.Product
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
+        }
+
+        public object Clone()
+        {
+            ProductPurchaseMedicine med = new ProductPurchaseMedicine();
+
+            med.Id = Id;
+            med.Name = Name;
+            med.Stock = Stock;
+            med.LastPrice = LastPrice;
+            med.Source = Source;
+            med.Cost = Cost;
+            med.TotalPrice = TotalPrice;
+            med.Amount = Amount;
+            med.Price = Price;
+            med.Note = Note;
+            med.FreeAmount = FreeAmount;
+            med.Invoice = Invoice;
+            med.ValidDate = ValidDate;
+            med.BatchNumber = BatchNumber;
+
+            return med;
         }
     }
 }

@@ -222,9 +222,9 @@ namespace His_Pos.ProductPurchase
 
         private void GetProductAutoComplete()
         {
-            BackgroundWorker background = new BackgroundWorker();
+            BackgroundWorker getProductAutobackground = new BackgroundWorker();
 
-            background.DoWork += (s, o) =>
+            getProductAutobackground.DoWork += (s, o) =>
             {
                 ObservableCollection<object> temp = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
                 Dispatcher.BeginInvoke(new Action(() =>
@@ -233,7 +233,7 @@ namespace His_Pos.ProductPurchase
                 }));
             };
 
-            background.RunWorkerAsync();
+            getProductAutobackground.RunWorkerAsync();
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
@@ -374,15 +374,8 @@ namespace His_Pos.ProductPurchase
             SetChanged();
             if (productAuto is null) return;
             if (productAuto.SelectedItem is null) return;
-            if (StoreOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
-            {
-                StoreOrderData.Products.Add(productAuto.SelectedItem as Product);
-            }
-            else
-            {
-                StoreOrderData.Products[StoreOrderDetail.SelectedIndex] = productAuto.SelectedItem as Product;
-                return;
-            }
+
+            StoreOrderData.Products.Add(((ICloneable)productAuto.SelectedItem).Clone() as Product);
            
             productAuto.Text = "";
         }
@@ -667,13 +660,18 @@ namespace His_Pos.ProductPurchase
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Product) return true;
+            if (value is Product)
+            {
+                if (String.IsNullOrEmpty((value as Product).Id))
+                    return false;
+                return true;
+            }
             return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "";
+            return null;
         }
     }
 
