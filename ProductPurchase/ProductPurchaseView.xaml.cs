@@ -53,6 +53,7 @@ namespace His_Pos.ProductPurchase
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;
+        public BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public ObservableCollection<StoreOrder> StoreOrderCollection
         {
@@ -141,8 +142,6 @@ namespace His_Pos.ProductPurchase
 
         private void SaveOrder()
         {
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
-
             Saving.Visibility = Visibility.Visible;
 
             backgroundWorker.DoWork += (s, o) =>
@@ -223,9 +222,9 @@ namespace His_Pos.ProductPurchase
 
         private void GetProductAutoComplete()
         {
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            BackgroundWorker background = new BackgroundWorker();
 
-            backgroundWorker.DoWork += (s, o) =>
+            background.DoWork += (s, o) =>
             {
                 ObservableCollection<object> temp = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
                 Dispatcher.BeginInvoke(new Action(() =>
@@ -234,7 +233,7 @@ namespace His_Pos.ProductPurchase
                 }));
             };
 
-            backgroundWorker.RunWorkerAsync();
+            background.RunWorkerAsync();
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
@@ -283,7 +282,10 @@ namespace His_Pos.ProductPurchase
                 }
                  
                 StoreOrderDetail.SelectedItem = selectedItem;
+                return;
             }
+
+            StoreOrderDetail.SelectedIndex = StoreOrderData.Products.Count;
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -375,7 +377,6 @@ namespace His_Pos.ProductPurchase
             if (StoreOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
             {
                 StoreOrderData.Products.Add(productAuto.SelectedItem as Product);
-                StoreOrderDetail.SelectedIndex--;
             }
             else
             {
