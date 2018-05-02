@@ -160,7 +160,7 @@ namespace His_Pos.InventoryManagement
             OtcLocation.Text = InventoryOtc.Location;
 
             OTCNotes.Document.Blocks.Clear();
-            OTCNotes.AppendText(InventoryOtc.Note);
+            OTCNotes.AppendText(InventoryOtc.Note.Trim());
 
             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryOtc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
@@ -404,6 +404,12 @@ namespace His_Pos.InventoryManagement
             MainWindow.Instance.AddNewTab("處理單紀錄");
         }
 
-       
+        private void OTCNotes_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (IsChangedLabel is null || IsFirst)
+                return;
+            if (ChangedFlagNotChanged())
+                setChangedFlag();
+        }
     }
 }

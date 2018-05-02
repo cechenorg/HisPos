@@ -140,7 +140,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="350" MaxWidth="350" Header="成分" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Ingredient}">
+                    <DataGridTextColumn MinWidth="350" MaxWidth="350" Header="成分" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Ingredient}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Left"/>

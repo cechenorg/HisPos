@@ -22,6 +22,7 @@ using His_Pos.Class;
 using System.Collections.Specialized;
 using His_Pos.Interface;
 using His_Pos.ProductPurchaseRecord;
+using System.ComponentModel;
 
 namespace His_Pos.InventoryManagement
 {
@@ -38,16 +39,17 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> MEDStockOverviewCollection;
         public ObservableCollection<string> MEDUnitChangdedCollection = new ObservableCollection<string>();
+        public ObservableCollection<string> MedIngredientCollection = new ObservableCollection<string>();
+       
         public ObservableCollection<ProductUnit> MedUnitCollection;
         public ObservableCollection<ProductDetailManufactory> MEDManufactoryCollection;
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
-        public HashSet<ManufactoryChanged> MEDManufactoryChangedCollection = new HashSet<ManufactoryChanged>();
+       
         public event MouseButtonEventHandler mouseButtonEventHandler;
 
         private bool IsChanged = false;
         private bool IsFirst = true;
         private string textBox_oldValue = "NotInit";
-        private int LastSelectedIndex = -1;
         public MedicineDetail(InventoryMedicine inventoryMedicine)
         {
             InitializeComponent();
@@ -90,12 +92,15 @@ namespace His_Pos.InventoryManagement
                 MedStock.ItemsSource = MEDStockOverviewCollection;
                 UpdateStockOverviewInfo();
             MedUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
-           
-            MEDManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryMedicine.Id);
-            MEDManufactoryCollection.Add(new ProductDetailManufactory());
-            MedManufactory.ItemsSource = MEDManufactoryCollection;
-            MEDManufactoryCollection.CollectionChanged += MedManufactoryCollectionOnCollectionChanged;
 
+            string [] split = InventoryMedicine.Ingredient.Split('+');
+            foreach (string row in split) {
+                MedIngredientCollection.Add(row.Trim());
+            }
+            MedIngredient.ItemsSource = MedIngredientCollection;
+
+            MEDManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryMedicine.Id);
+            MedManufactory.ItemsSource = MEDManufactoryCollection;
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
                 bool keep = true;
@@ -184,7 +189,6 @@ namespace His_Pos.InventoryManagement
         {
             UpdateUi();
         }
-
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
@@ -195,15 +199,8 @@ namespace His_Pos.InventoryManagement
                 MedStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 MedStock.SelectedItem = selectedItem;
-            else if (selectedItem is IDeletable)
-            {
-                if (selectedItem != MEDManufactoryCollection.Last())
-                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
-                MedManufactory.SelectedItem = selectedItem;
-                LastSelectedIndex = MedManufactory.SelectedIndex;
-            }
+           
         }
-
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
             var leaveItem = (sender as DataGridRow).Item;
@@ -218,9 +215,6 @@ namespace His_Pos.InventoryManagement
                 (leaveItem as ProductDetailManufactory).Source = "";
             }
         }
-
-     
-
         private void setChangedFlag()
         {
             IsChanged = true;
@@ -235,16 +229,7 @@ namespace His_Pos.InventoryManagement
 
         public static void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
         {
-            //List<TextBox> textBoxList = new List<TextBox>();
-            //FindChildGroup(PrescriptionSet, "MedicineDays", ref textBoxList);
-
-            // Checks should be made, but preferably one time before calling.
-            // And here it is assumed that the programmer has taken into
-            // account all of these conditions and checks are not needed.
-            //if ((parent == null) || (childName == null) || (<Type T is not inheritable from FrameworkElement>))
-            //{
-            //    return;
-            //}
+           
             int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
 
             for (int i = 0; i < childrenCount; i++)
@@ -278,14 +263,7 @@ namespace His_Pos.InventoryManagement
                 }
             }
         }
-
-        private void OtcUnitOnLostFocus(object sender, RoutedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-
-           
-        }
-
+        
         private void AddNewMedUnit(object tag, string text)
         {
             ProductUnit otcUnit = new ProductUnit();
@@ -319,14 +297,6 @@ namespace His_Pos.InventoryManagement
             textBox_oldValue = (sender as TextBox).Text;
         }
 
-        private void MedUnit_OnLoaded(object sender, EventArgs e)
-        {
-            ChangeFirstAmountToReadOnly();
-        }
-
-        private void ChangeFirstAmountToReadOnly()
-        {
-        }
         private void SetMedTextBoxChangedCollection(string name)
         {
             if (ChangedFlagNotChanged())
@@ -352,45 +322,7 @@ namespace His_Pos.InventoryManagement
                 SetMedTextBoxChangedCollection(txt.Name);
             }
         }
-        private void MedManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-
-            ProductDetailManufactory OldProductDetailManufactory = (e.OldItems is null) ? null : e.OldItems[0] as ProductDetailManufactory;
-            ProductDetailManufactory NewProductDetailManufactory = (e.NewItems is null) ? null : e.NewItems[0] as ProductDetailManufactory;
-
-            if (ChangedFlagNotChanged())
-                setChangedFlag();
-
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    return;
-                case NotifyCollectionChangedAction.Replace:
-                    if (NewProductDetailManufactory.OrderId is null && OldProductDetailManufactory.Id is null)
-                        MEDManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.INSERT));
-                    else
-                    {
-                        MEDManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.UPDATE));
-                        ManufactoryAutoCompleteCollection.Add(OldProductDetailManufactory);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    MEDManufactoryChangedCollection.RemoveWhere(DeleteManufactoryChanged);
-                    if (OldProductDetailManufactory.OrderId != null)
-                        MEDManufactoryChangedCollection.Add(new ManufactoryChanged(OldProductDetailManufactory, ProcedureProcessType.DELETE));
-                    ManufactoryAutoCompleteCollection.Add(OldProductDetailManufactory);
-                    break;
-            }
-            bool DeleteManufactoryChanged(ManufactoryChanged manufactoryChanged)
-            {
-                if (OldProductDetailManufactory.Id == manufactoryChanged.ManufactoryId)
-                    return true;
-                return false;
-            }
-        }
-        
-       
-
+      
         private void MedNotes_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (IsChangedLabel is null || IsFirst)
@@ -426,11 +358,7 @@ namespace His_Pos.InventoryManagement
             InventoryMedicine.Note = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text;
             InventoryMedicine.Status = MedSafeAmount.Text == "啟用" ? true : false;
             ProductDb.UpdateOtcDataDetail(InventoryMedicine, "InventoryMedicine");
-
-            foreach (var manufactoryChanged in MEDManufactoryChangedCollection)
-            {
-                ManufactoryDb.UpdateProductManufactory(InventoryMedicine.Id, manufactoryChanged);
-            }
+            
             foreach (string index in MEDUnitChangdedCollection)
             {
                 ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
@@ -443,69 +371,12 @@ namespace His_Pos.InventoryManagement
 
             handler(this, e);
         }
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            MEDManufactoryCollection.RemoveAt(MedManufactory.SelectedIndex);
-        }
-
-        private void MedManufactoryAuto_Populating(object sender, PopulatingEventArgs e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-
-            if (ManufactoryAuto is null) return;
-
-            if (ManufactoryAuto.ItemsSource is null)
-                ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
-
-            foreach (Manufactory manufactory in ManufactoryAutoCompleteCollection)
-            {
-                if (manufactory.Id == MEDManufactoryCollection[MEDManufactoryCollection.Count - 2].Id)
-                {
-                    ManufactoryAutoCompleteCollection.Remove(manufactory);
-                    break;
-                }
-            }
-
-            ManufactoryAuto.PopulateComplete();
-        }
-
-        private void MedManufactoryAuto_DropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-
-            if (ManufactoryAuto is null) return;
-            if (ManufactoryAuto.SelectedItem is null) return;
-
-            if (MEDManufactoryCollection.Count == MedManufactory.SelectedIndex + 1)
-            {
-                MEDManufactoryCollection[MedManufactory.SelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
-                MEDManufactoryCollection.Add(new ProductDetailManufactory());
-            }
-            else
-            {
-                MEDManufactoryCollection[LastSelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
-            }
-        }
-
-        private void MedManufactoryAuto_LostFocus(object sender, RoutedEventArgs e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-            if (ManufactoryAuto is null) return;
-
-            if ((ManufactoryAuto.Text is null || ManufactoryAuto.Text == String.Empty) && LastSelectedIndex != MEDManufactoryCollection.Count - 1)
-            {
-                MEDManufactoryCollection.RemoveAt(LastSelectedIndex);
-            }
-        }
-
+     
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectitem = MedStoOrder.SelectedItem;
             ProductPurchaseRecordView.Proid = ((OTCStoreOrderOverview)selectitem).StoreOrderId;
             MainWindow.Instance.AddNewTab("處理單紀錄");
-
         }
-
-      
     }
 }
