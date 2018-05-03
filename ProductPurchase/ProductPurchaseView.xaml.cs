@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
+using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
@@ -49,6 +50,7 @@ namespace His_Pos.ProductPurchase
         }
 
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
+        public ObservableCollection<Person> UserAutoCompleteCollection;
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
@@ -93,10 +95,19 @@ namespace His_Pos.ProductPurchase
             Instance = this;
             this.Loaded += UserControl1_Loaded;
             InitManufactory();
+            InitUser();
             UpdateUi();
             StoOrderOverview.SelectedIndex = 0;
         }
         
+        private void InitUser()
+        {
+            UserAutoCompleteCollection = PersonDb.GetUserCollection();
+
+            ReceiveEmp.ItemsSource = UserAutoCompleteCollection;
+            ReceiveEmp.ItemFilter = UserFilter;
+        }
+
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
         {
             Window window = Window.GetWindow(this);
@@ -671,6 +682,16 @@ namespace His_Pos.ProductPurchase
 
             if (left != 0)
                 ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+        }
+
+        public AutoCompleteFilterPredicate<object> UserFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Person).Id is null) ? true : (obj as Person).Id.Contains(searchText)
+                    || (obj as Person).Name.Contains(searchText);
+            }
         }
     }
     public class AutoCompleteIsEnableConverter : IValueConverter

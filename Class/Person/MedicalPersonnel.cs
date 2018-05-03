@@ -1,6 +1,6 @@
 ﻿namespace His_Pos.Class.Person
 {
-    public class MedicalPersonnel : AbstractClass.Person
+    public class MedicalPersonnel : Person
     {
         public MedicalPersonnel()
         {
