@@ -356,7 +356,7 @@ namespace His_Pos.InventoryManagement
             InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
             InventoryMedicine.Stock.SafeAmount = MedSafeAmount.Text;
             InventoryMedicine.Note = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text;
-            InventoryMedicine.Status = MedSafeAmount.Text == "啟用" ? true : false;
+            InventoryMedicine.Status = MedStatus.Text == "啟用" ? true : false;
             ProductDb.UpdateOtcDataDetail(InventoryMedicine, "InventoryMedicine");
             
             foreach (string index in MEDUnitChangdedCollection)

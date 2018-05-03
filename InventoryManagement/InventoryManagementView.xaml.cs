@@ -117,7 +117,7 @@ namespace His_Pos.InventoryManagement
                         && (((InventoryMedicine)item).Name.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
                         && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
-                        && (OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
+                        && (((InventoryMedicine)item).Ingredient.Contains(Ingredient.Text) || Ingredient.Text == string.Empty)
                         ) reply = true;
                     if (reply)
                         {
