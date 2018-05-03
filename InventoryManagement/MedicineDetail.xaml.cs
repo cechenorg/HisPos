@@ -60,15 +60,7 @@ namespace His_Pos.InventoryManagement
             IsFirst = false;
             DataContext = this;
         }
-        private void UpdateMed() {
-            InventoryMedicine.Name = MedName.Content.ToString();
-            InventoryMedicine.Id = MedId.Content.ToString();
-            InventoryMedicine.Stock.SafeAmount = MedSafeAmount.Text;
-            InventoryMedicine.Location = MedLocation.Text;
-            InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
-            TextRange textRange = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd);
-            InventoryMedicine.Note = textRange.Text;
-        }
+   
         private void UpdateUi()
         {
                 if (InventoryMedicine is null) return;
@@ -264,38 +256,7 @@ namespace His_Pos.InventoryManagement
             }
         }
         
-        private void AddNewMedUnit(object tag, string text)
-        {
-            ProductUnit otcUnit = new ProductUnit();
-
-            switch (tag)
-            {
-                case "Unit":
-                    otcUnit.Unit = text;
-                    break;
-                case "Amount":
-                    otcUnit.Amount = text;
-                    break;
-                case "Price":
-                    otcUnit.Price = text;
-                    break;
-                case "VIPPrice":
-                    otcUnit.VIPPrice = text;
-                    break;
-                case "EmpPrice":
-                    otcUnit.EmpPrice = text;
-                    break;
-                default:
-                    return;
-            }
-
-            MedUnitCollection.Add(otcUnit);
-        }
-
-        private void OtcMedGotFocus(object sender, RoutedEventArgs e)
-        {
-            textBox_oldValue = (sender as TextBox).Text;
-        }
+       
 
         private void SetMedTextBoxChangedCollection(string name)
         {

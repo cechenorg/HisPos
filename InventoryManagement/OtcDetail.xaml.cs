@@ -264,55 +264,7 @@ namespace His_Pos.InventoryManagement
         {
             return !IsChanged;
         }
-        private void OtcManufactoryAuto_OnPopulating(object sender, PopulatingEventArgs e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-
-            if (ManufactoryAuto is null) return;
-
-            if (ManufactoryAuto.ItemsSource is null)
-                ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
-
-            foreach (Manufactory manufactory in ManufactoryAutoCompleteCollection)
-            {
-                if (manufactory.Id == OTCManufactoryCollection[OTCManufactoryCollection.Count - 2].Id)
-                {
-                    ManufactoryAutoCompleteCollection.Remove(manufactory);
-                    break;
-                }
-            }
-
-            ManufactoryAuto.PopulateComplete();
-        }
-        private void OtcManufactoryAuto_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-            if (ManufactoryAuto is null) return;
-
-            if ((ManufactoryAuto.Text is null || ManufactoryAuto.Text == String.Empty) && LastSelectedIndex != OTCManufactoryCollection.Count - 1)
-            {
-                OTCManufactoryCollection.RemoveAt(LastSelectedIndex);
-            }
-        }
-
-        private void OtcManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
-        {
-            var ManufactoryAuto = sender as AutoCompleteBox;
-
-            if (ManufactoryAuto is null) return;
-            if (ManufactoryAuto.SelectedItem is null) return;
-
-            if (OTCManufactoryCollection.Count == OtcManufactory.SelectedIndex + 1)
-            {
-                OTCManufactoryCollection[OtcManufactory.SelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
-                OTCManufactoryCollection.Add(new ProductDetailManufactory());
-            }
-            else
-            {
-                OTCManufactoryCollection[LastSelectedIndex] = new ProductDetailManufactory(ManufactoryAuto.SelectedItem as Manufactory);
-            }
-        }
-
+      
         private void SetUnitValue() {
             int count = 0;
             string index = "";
@@ -391,12 +343,7 @@ namespace His_Pos.InventoryManagement
 
             handler(this, e);
         }
-
-        private void UIElement_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            OTCManufactoryCollection.RemoveAt(OtcManufactory.SelectedIndex);
-        }
-
+        
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectitem = OtcStoOrder.SelectedItem;
