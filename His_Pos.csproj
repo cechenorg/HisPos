@@ -236,6 +236,7 @@
     <Compile Include="Class\NewbornsData.cs" />
     <Compile Include="Class\PaymentCategory\PaymentCategory.cs" />
     <Compile Include="Class\PaymentCategory\PaymentCategroyDb.cs" />
+    <Compile Include="Class\Person\PersonDb.cs" />
     <Compile Include="Class\Pharmacy.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
@@ -260,7 +261,7 @@
     <Compile Include="Class\TreatmentCase\TreatmentCaseDb.cs" />
     <Compile Include="Class\Treatment.cs" />
     <Compile Include="AbstractClass\Instution.cs" />
-    <Compile Include="AbstractClass\Person.cs" />
+    <Compile Include="Class\Person\Person.cs" />
     <Compile Include="AbstractClass\Product.cs" />
     <Compile Include="Class\Selection.cs" />
     <Compile Include="Class\Leave.cs" />

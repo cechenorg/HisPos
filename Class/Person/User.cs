@@ -2,7 +2,7 @@
 
 namespace His_Pos.Class.Person
 {
-    public class User : AbstractClass.Person
+    public class User : Person
 	{
 	    public string Password { get; set; }
 	    public Pharmacy Pharmacy { get; set; }

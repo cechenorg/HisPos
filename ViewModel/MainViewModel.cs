@@ -114,6 +114,31 @@ namespace His_Pos.ViewModel
         //To close a tab, we simply remove the viewmodel from the source collection.
         private void CloseTabCommandAction(TabBase vm)
         {
+            switch ( vm.TabName )
+            {
+                case nameof(FeatureItem.處方登錄):
+                    break;
+                case nameof(FeatureItem.處方查詢):
+                    break;
+                case nameof(FeatureItem.庫存查詢):
+                    break;
+                case nameof(FeatureItem.處理單管理):
+                    if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
+                    {
+                        MessageWindow message = new MessageWindow("正在儲存", MessageType.ERROR);
+                        return;
+                    }
+                    break;
+                case nameof(FeatureItem.處理單紀錄):
+                    break;
+                case nameof(FeatureItem.新增盤點):
+                    break;
+                case nameof(FeatureItem.庫存盤點紀錄):
+                    break;
+                default:
+                    return;
+            }
+
             this.ItemCollection.Remove(vm);
         }
 

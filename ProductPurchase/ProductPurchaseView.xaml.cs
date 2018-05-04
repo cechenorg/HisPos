@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
+using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
@@ -49,10 +50,13 @@ namespace His_Pos.ProductPurchase
         }
 
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
+        public ObservableCollection<Person> UserAutoCompleteCollection;
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
-        
+        public static ProductPurchaseView Instance;
+        public BackgroundWorker backgroundWorker = new BackgroundWorker();
+
         public ObservableCollection<StoreOrder> StoreOrderCollection
         {
             get
@@ -88,12 +92,22 @@ namespace His_Pos.ProductPurchase
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
             this.Loaded += UserControl1_Loaded;
             InitManufactory();
+            InitUser();
             UpdateUi();
             StoOrderOverview.SelectedIndex = 0;
         }
         
+        private void InitUser()
+        {
+            UserAutoCompleteCollection = PersonDb.GetUserCollection();
+
+            ReceiveEmp.ItemsSource = UserAutoCompleteCollection;
+            ReceiveEmp.ItemFilter = UserFilter;
+        }
+
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
         {
             Window window = Window.GetWindow(this);
@@ -139,8 +153,6 @@ namespace His_Pos.ProductPurchase
 
         private void SaveOrder()
         {
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
-
             Saving.Visibility = Visibility.Visible;
 
             backgroundWorker.DoWork += (s, o) =>
@@ -221,9 +233,9 @@ namespace His_Pos.ProductPurchase
 
         private void GetProductAutoComplete()
         {
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            BackgroundWorker getProductAutobackground = new BackgroundWorker();
 
-            backgroundWorker.DoWork += (s, o) =>
+            getProductAutobackground.DoWork += (s, o) =>
             {
                 ObservableCollection<object> temp = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
                 Dispatcher.BeginInvoke(new Action(() =>
@@ -232,7 +244,7 @@ namespace His_Pos.ProductPurchase
                 }));
             };
 
-            backgroundWorker.RunWorkerAsync();
+            getProductAutobackground.RunWorkerAsync();
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
@@ -281,7 +293,10 @@ namespace His_Pos.ProductPurchase
                 }
                  
                 StoreOrderDetail.SelectedItem = selectedItem;
+                return;
             }
+
+            StoreOrderDetail.SelectedIndex = StoreOrderData.Products.Count;
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -370,16 +385,8 @@ namespace His_Pos.ProductPurchase
             SetChanged();
             if (productAuto is null) return;
             if (productAuto.SelectedItem is null) return;
-            if (StoreOrderData.Products.Count == StoreOrderDetail.SelectedIndex)
-            {
-                StoreOrderData.Products.Add(productAuto.SelectedItem as Product);
-                StoreOrderDetail.SelectedIndex--;
-            }
-            else
-            {
-                StoreOrderData.Products[StoreOrderDetail.SelectedIndex] = productAuto.SelectedItem as Product;
-                return;
-            }
+
+            StoreOrderData.Products.Add(((ICloneable)productAuto.SelectedItem).Clone() as Product);
            
             productAuto.Text = "";
         }
@@ -570,8 +577,35 @@ namespace His_Pos.ProductPurchase
                 nextTextBox[currentRowIndex].Focus();
             }
 
-            if(!IsKeyAvailable(e.Key) && (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount")))
-                e.Handled = true;
+            if (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount"))
+            {
+                if (!IsKeyAvailable(e.Key))
+                    e.Handled = true;
+                else
+                {
+                    TextBox textBox = sender as TextBox;
+
+                    if (textBox.Text.Equals("0"))
+                    {
+                        textBox.Text = GetCharFromKey(e.Key);
+                        textBox.CaretIndex = 1;
+                        e.Handled = true;
+                    }
+                }
+            }
+                
+        }
+
+        private string GetCharFromKey(Key key)
+        {
+            if (key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right) return "0";
+
+            int num = (int)key;
+
+            if (num > 50)
+                return (num - 74).ToString();
+            else
+                return (num - 34).ToString();
         }
 
         private bool IsKeyAvailable(Key key)
@@ -615,8 +649,49 @@ namespace His_Pos.ProductPurchase
                     }
                 }
             }
+            else if ( sender is Button )
+            {
+                List<Button> temp = new List<Button>();
+                Button SplitBtn = sender as Button;
+
+                NewFunction.FindChildGroup<Button>(StoreOrderDetail, SplitBtn.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
 
             return -1;
+        }
+
+        private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            var currentRowIndex = GetCurrentRowIndex(sender);
+            
+            double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
+
+            ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
+
+            StoreOrderData.Products.Insert( currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
+
+            if (left != 0)
+                ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+        }
+
+        public AutoCompleteFilterPredicate<object> UserFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Person).Id is null) ? true : (obj as Person).Id.Contains(searchText)
+                    || (obj as Person).Name.Contains(searchText);
+            }
         }
     }
     public class AutoCompleteIsEnableConverter : IValueConverter
@@ -637,13 +712,18 @@ namespace His_Pos.ProductPurchase
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Product) return true;
+            if (value is Product)
+            {
+                if (String.IsNullOrEmpty((value as Product).Id))
+                    return false;
+                return true;
+            }
             return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return "";
+            return null;
         }
     }
 
