@@ -52,7 +52,6 @@ namespace His_Pos.InventoryManagement
         public InventoryOtc InventoryOtc;
         private bool IsChanged = false;
         private bool IsFirst = true;
-        private int LastSelectedIndex = -1;
 
         public OtcDetail(InventoryOtc inventoryOtc)
         {
@@ -65,43 +64,6 @@ namespace His_Pos.InventoryManagement
             
             IsFirst = false;
             DataContext = this;
-        }
-
-        private void OtcManufactoryCollectionOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            ProductDetailManufactory OldProductDetailManufactory = (e.OldItems is null)? null: e.OldItems[0] as ProductDetailManufactory;
-            ProductDetailManufactory NewProductDetailManufactory = (e.NewItems is null) ? null : e.NewItems[0] as ProductDetailManufactory;
-
-            if (ChangedFlagNotChanged())
-                setChangedFlag();
-
-            switch (e.Action)
-            {
-                case NotifyCollectionChangedAction.Add:
-                    return;
-                case NotifyCollectionChangedAction.Replace:
-                    if (NewProductDetailManufactory.OrderId is null && OldProductDetailManufactory.Id is null)
-                        OTCManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.INSERT));
-                    else
-                    {
-                        OTCManufactoryChangedCollection.Add(new ManufactoryChanged(NewProductDetailManufactory, ProcedureProcessType.UPDATE));
-                        ManufactoryAutoCompleteCollection.Add(OldProductDetailManufactory);
-                    }
-                    break;
-                case NotifyCollectionChangedAction.Remove:
-                    OTCManufactoryChangedCollection.RemoveWhere(DeleteManufactoryChanged);
-                    if (OldProductDetailManufactory.OrderId != null)
-                        OTCManufactoryChangedCollection.Add(new ManufactoryChanged(OldProductDetailManufactory, ProcedureProcessType.DELETE));
-                    ManufactoryAutoCompleteCollection.Add(OldProductDetailManufactory);
-                    break;
-            }
-
-            bool DeleteManufactoryChanged(ManufactoryChanged manufactoryChanged)
-            {
-                if (OldProductDetailManufactory.Id == manufactoryChanged.ManufactoryId)
-                    return true;
-                return false;
-            }
         }
         
 
@@ -175,29 +137,13 @@ namespace His_Pos.InventoryManagement
             OTCUnitCollection = ProductDb.GetProductUnitById(InventoryOtc.Id);
             
             OTCManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryOtc.Id);
-            OTCManufactoryCollection.Add(new ProductDetailManufactory());
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
-            OTCManufactoryCollection.CollectionChanged += OtcManufactoryCollectionOnCollectionChanged;
 
             ProductTypeCollection = ProductDb.GetProductType();
             OtcType.ItemsSource = ProductTypeCollection;
             if(OtcType.Items.Contains(InventoryOtc.ProductType.Name))
                  OtcType.SelectedValue = InventoryOtc.ProductType.Name;
-
-            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
-            {
-                bool keep = true;
-
-                foreach (var detailManufactory in OTCManufactoryCollection)
-                {
-                    if (row["MAN_ID"].ToString() == detailManufactory.Id)
-                        keep = false;
-                }
-
-                if ( keep )
-                    ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
-            }
-
+            
             UpdateChart();
             InitVariables();
             SetUnitValue();
@@ -228,14 +174,9 @@ namespace His_Pos.InventoryManagement
                 OtcStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 OtcStock.SelectedItem = selectedItem;
-            else if (selectedItem is IDeletable)
-            {
-                if (selectedItem != OTCManufactoryCollection.Last())
-                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+            else if (selectedItem is ProductDetailManufactory)
                 OtcManufactory.SelectedItem = selectedItem;
-                LastSelectedIndex = OtcManufactory.SelectedIndex;
-            }
-            
+
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -248,9 +189,7 @@ namespace His_Pos.InventoryManagement
             else if (leaveItem is OTCStockOverview)
                 OtcStock.SelectedItem = null;
             else if (leaveItem is ProductDetailManufactory)
-            {
-                (leaveItem as ProductDetailManufactory).Source = "";
-            }
+                OtcManufactory.SelectedItem = null;
         }
         
         private void setChangedFlag()

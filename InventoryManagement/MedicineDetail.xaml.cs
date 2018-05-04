@@ -43,13 +43,11 @@ namespace His_Pos.InventoryManagement
        
         public ObservableCollection<ProductUnit> MedUnitCollection;
         public ObservableCollection<ProductDetailManufactory> MEDManufactoryCollection;
-        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
        
         public event MouseButtonEventHandler mouseButtonEventHandler;
 
         private bool IsChanged = false;
         private bool IsFirst = true;
-        private string textBox_oldValue = "NotInit";
         public MedicineDetail(InventoryMedicine inventoryMedicine)
         {
             InitializeComponent();
@@ -85,6 +83,7 @@ namespace His_Pos.InventoryManagement
                 UpdateStockOverviewInfo();
             MedUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
 
+            MedIngredientCollection.Clear();
             string [] split = InventoryMedicine.Ingredient.Split('+');
             foreach (string row in split) {
                 MedIngredientCollection.Add(row.Trim());
@@ -93,20 +92,7 @@ namespace His_Pos.InventoryManagement
 
             MEDManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryMedicine.Id);
             MedManufactory.ItemsSource = MEDManufactoryCollection;
-            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
-            {
-                bool keep = true;
-
-                foreach (var detailManufactory in MEDManufactoryCollection)
-                {
-                    if (row["MAN_ID"].ToString() == detailManufactory.Id)
-                        keep = false;
-                }
-
-                if (keep)
-                    ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
-            }
-
+      
             UpdateChart();
             InitVariables();
             SetUnitValue();
@@ -191,7 +177,12 @@ namespace His_Pos.InventoryManagement
                 MedStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
                 MedStock.SelectedItem = selectedItem;
-           
+            else if (selectedItem is string) 
+                MedIngredient.SelectedItem = selectedItem; 
+            else if (selectedItem is ProductDetailManufactory)
+                MedManufactory.SelectedItem = selectedItem;
+
+
         }
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -202,10 +193,10 @@ namespace His_Pos.InventoryManagement
                 MedStoOrder.SelectedItem = null;
             else if (leaveItem is OTCStockOverview)
                 MedStock.SelectedItem = null;
+            else if (leaveItem is string)
+                MedIngredient.SelectedItem = null;
             else if (leaveItem is ProductDetailManufactory)
-            {
-                (leaveItem as ProductDetailManufactory).Source = "";
-            }
+                MedManufactory.SelectedItem = null;
         }
         private void setChangedFlag()
         {
