@@ -53,6 +53,8 @@ namespace His_Pos.ProductPurchase
         public NewItemDialog(ItemType type, ObservableCollection<object> collection)
         {
             InitializeComponent();
+            Title = "新增";
+
             ItemType = type;
             DataCollection = collection;
 

@@ -57,6 +57,8 @@ namespace His_Pos.InventoryManagement
         {
             InitializeComponent();
 
+            Title = inventoryOtc.Name;
+
             InventoryOtc = inventoryOtc;
             
             UpdateUi();

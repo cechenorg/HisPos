@@ -51,6 +51,7 @@ namespace His_Pos.InventoryManagement
         public MedicineDetail(InventoryMedicine inventoryMedicine)
         {
             InitializeComponent();
+            Title = inventoryMedicine.Name;
             InventoryMedicine = inventoryMedicine;
 
             UpdateUi();

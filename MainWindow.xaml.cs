@@ -27,9 +27,8 @@ namespace His_Pos
         {
             FeatureFactory();
             InitializeComponent();
+            Title = "藥健康 POS-HIS 系統";
             WindowState = WindowState.Normal;
-            Width = SystemParameters.PrimaryScreenWidth * 0.833;
-            Height = Width * 0.5625;
             CurrentUser = userLogin;
             Instance = this;
             InitializePosMenu();
