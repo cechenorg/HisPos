@@ -55,7 +55,7 @@ namespace His_Pos.ProductPurchase
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;
-        public BackgroundWorker backgroundWorker = new BackgroundWorker();
+        
 
         public ObservableCollection<StoreOrder> StoreOrderCollection
         {
@@ -153,6 +153,7 @@ namespace His_Pos.ProductPurchase
 
         private void SaveOrder()
         {
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
             Saving.Visibility = Visibility.Visible;
 
             backgroundWorker.DoWork += (s, o) =>
@@ -546,7 +547,7 @@ namespace His_Pos.ProductPurchase
                     case "ValidDate":
                         NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
                         if ((sender as DatePicker).Text == String.Empty && currentRowIndex > 0)
-                            (sender as DatePicker).Text = thisTextBox[currentRowIndex - 1].Text;
+                            (sender as DatePicker).Text = pickerList[currentRowIndex - 1].Text;
 
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
                         nextTextBox[currentRowIndex].Focus();

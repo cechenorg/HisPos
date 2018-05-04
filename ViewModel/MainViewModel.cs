@@ -123,11 +123,11 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.庫存查詢):
                     break;
                 case nameof(FeatureItem.處理單管理):
-                    if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
-                    {
-                        MessageWindow message = new MessageWindow("正在儲存", MessageType.ERROR);
-                        return;
-                    }
+                    //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
+                    //{
+                    //    MessageWindow message = new MessageWindow("正在儲存", MessageType.ERROR);
+                    //    return;
+                    //}
                     break;
                 case nameof(FeatureItem.處理單紀錄):
                     break;
