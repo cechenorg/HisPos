@@ -156,9 +156,11 @@ namespace His_Pos.ProductPurchase
             BackgroundWorker backgroundWorker = new BackgroundWorker();
             Saving.Visibility = Visibility.Visible;
 
+            StoreOrder saveOrder = storeOrderData.Clone() as StoreOrder;
+
             backgroundWorker.DoWork += (s, o) =>
             {
-                StoreOrderDb.SaveOrderDetail(storeOrderData);
+                StoreOrderDb.SaveOrderDetail(saveOrder);
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -539,7 +541,10 @@ namespace His_Pos.ProductPurchase
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref thisTextBox);
 
                         if ((sender as TextBox).Text == String.Empty && currentRowIndex > 0 && thisTextBox.Count > 0)
+                        {
+                            SetChanged();
                             (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
+                        }
 
                         NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
                         pickerList[currentRowIndex].Focus();
@@ -547,8 +552,11 @@ namespace His_Pos.ProductPurchase
                     case "ValidDate":
                         NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
                         if ((sender as DatePicker).Text == String.Empty && currentRowIndex > 0)
+                        {
+                            SetChanged();
                             (sender as DatePicker).Text = pickerList[currentRowIndex - 1].Text;
-
+                        }
+                        
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
                         nextTextBox[currentRowIndex].Focus();
                         return;
@@ -573,7 +581,11 @@ namespace His_Pos.ProductPurchase
                 }
 
                 if ((sender as TextBox).Text == String.Empty && currentRowIndex > 0 && thisTextBox.Count > 0)
+                {
+                    SetChanged();
                     (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
+                }
+                
 
                 nextTextBox[currentRowIndex].Focus();
             }
@@ -588,11 +600,16 @@ namespace His_Pos.ProductPurchase
 
                     if (textBox.Text.Equals("0"))
                     {
+                        SetChanged();
                         textBox.Text = GetCharFromKey(e.Key);
                         textBox.CaretIndex = 1;
                         e.Handled = true;
                     }
                 }
+            }
+            else
+            {
+                SetChanged();
             }
                 
         }

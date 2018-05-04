@@ -16,7 +16,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.StoreOrder
 {
-    public class StoreOrder : INotifyPropertyChanged
+    public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
         public StoreOrder(User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
@@ -59,6 +59,10 @@ namespace His_Pos.Class.StoreOrder
 
                 Manufactory = new Manufactory.Manufactory(data[0], DataSource.MANUFACTORY);
             }
+        }
+
+        private StoreOrder()
+        {
         }
 
         public BitmapImage typeIcon;
@@ -162,6 +166,28 @@ namespace His_Pos.Class.StoreOrder
             }
 
             return message;
+        }
+
+        public object Clone()
+        {
+            StoreOrder storeOrder = new StoreOrder();
+
+            storeOrder.TypeIcon = TypeIcon;
+            storeOrder.Type = Type;
+            storeOrder.Category = Category;
+            storeOrder.Id = Id;
+            storeOrder.OrdEmp = OrdEmp;
+            storeOrder.TotalPrice = TotalPrice;
+            storeOrder.RecEmp = RecEmp;
+            storeOrder.Manufactory = Manufactory;
+            storeOrder.Products = new ObservableCollection<AbstractClass.Product>();
+
+            foreach (AbstractClass.Product product in Products)
+            {
+                storeOrder.Products.Add(((ICloneable)product).Clone() as AbstractClass.Product);
+            }
+
+            return storeOrder;
         }
     }
 }

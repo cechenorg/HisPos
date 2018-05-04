@@ -36,6 +36,7 @@ namespace His_Pos.Class.Product
                     Invoice = "";
                     FreeAmount = 0;
                     ValidDate = "";
+                    BatchNumber = "";
                     break;
                 case DataSource.GetStoreOrderDetail:
                     Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
@@ -44,7 +45,8 @@ namespace His_Pos.Class.Product
                     Note = dataRow["PRO_DESCRIPTION"].ToString();
                     Invoice = dataRow["STOORDDET_INVOICE"].ToString();
                     FreeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
-                    ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
+                    ValidDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01"))? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
+                    BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
                     break;
                 case DataSource.GetItemDialogProduct:
                     Amount = 0;
@@ -54,6 +56,7 @@ namespace His_Pos.Class.Product
                     Invoice = "";
                     FreeAmount = 0;
                     ValidDate = "";
+                    BatchNumber = "";
                     break;
             }
         }
@@ -63,9 +66,18 @@ namespace His_Pos.Class.Product
         }
 
         public InStock Stock { get; set; }
-        public string Note { get; set; }
+        private string note;
+        public string Note
+        {
+            get { return note; }
+            set
+            {
+                note = value;
+                NotifyPropertyChanged("Note");
+            }
+        }
         public double LastPrice { get; set; }
-        public string source;
+        private string source;
         public string Source
         {
             get
@@ -79,7 +91,7 @@ namespace His_Pos.Class.Product
             }
         }
         public double Cost { get; set; }
-        public double totalPrice;
+        private double totalPrice;
         public double TotalPrice
         {
             get { return totalPrice; }
@@ -89,7 +101,7 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("TotalPrice");
             }
         }
-        public double amount;
+        private double amount;
         public double Amount
         {
             get { return amount; }
@@ -100,7 +112,7 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Amount");
             }
         }
-        public double price;
+        private double price;
         public double Price
         {
             get { return price; }
@@ -110,10 +122,54 @@ namespace His_Pos.Class.Product
                 CalculateData();
             }
         }
-        public int FreeAmount { get; set; }
-        public string Invoice { get; set; }
-        public string ValidDate { get; set; }
-        public string BatchNumber { get; set; }
+
+        private int freeAmount;
+
+        public int FreeAmount
+        {
+            get { return freeAmount; }
+            set
+            {
+                freeAmount = value;
+                NotifyPropertyChanged("FreeAmount");
+            }
+        }
+
+        private string invoice;
+
+        public string Invoice
+        {
+            get { return invoice; }
+            set
+            {
+                invoice = value;
+                NotifyPropertyChanged("Invoice");
+            }
+        }
+
+        private string validDate;
+
+        public string ValidDate
+        {
+            get { return validDate; }
+            set
+            {
+                validDate = value;
+                NotifyPropertyChanged("ValidDate");
+            }
+        }
+
+        private string batchNumber;
+
+        public string BatchNumber
+        {
+            get { return batchNumber; }
+            set
+            {
+                batchNumber = value;
+                NotifyPropertyChanged("BatchNumber");
+            }
+        }
 
         public void CalculateData()
         {
