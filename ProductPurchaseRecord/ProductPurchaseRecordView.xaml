@@ -129,7 +129,7 @@
                             <Label Content="{Binding Path=StoreOrderData.RecEmp,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Grid>
-                    <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                    <DataGrid Name="StoreOrderDetail" Grid.Row="2" CanUserAddRows="False" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                           AutoGenerateColumns="False">
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
