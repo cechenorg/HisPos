@@ -1,10 +1,13 @@
-﻿using His_Pos.Class.Manufactory;
+﻿using His_Pos.Class;
+using His_Pos.Class.Manufactory;
+using His_Pos.Class.Person;
 using His_Pos.Class.StoreOrder;
 using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +31,8 @@ namespace His_Pos.ProductPurchaseRecord
         public static ProductPurchaseRecordView Instance;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         private StoreOrder storeOrderData;
+        public ObservableCollection<Person> UserAutoCompleteCollection;
+        private ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         private int sdate,edate;
         public static string Proid;
         public StoreOrder StoreOrderData
@@ -56,8 +61,42 @@ namespace His_Pos.ProductPurchaseRecord
             Instance = this;
             Focusable = true;
             UpdateUi();
+            InitUser();
+            InitManufactory();
             DataContext = this;
             PassValueSearchData();
+        }
+        private void InitManufactory() {
+            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
+            }
+            Manufactory.ItemsSource = ManufactoryAutoCompleteCollection;
+            Manufactory.ItemFilter = ManufactoryFilter;
+        }
+        public AutoCompleteFilterPredicate<object> ManufactoryFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
+                                                               || (obj as Manufactory).Name.Contains(searchText);
+            }
+        }
+        private void InitUser()
+        {
+            UserAutoCompleteCollection = PersonDb.GetUserCollection();
+            OrdEmp.ItemsSource = UserAutoCompleteCollection;
+            OrdEmp.ItemFilter = UserFilter;
+        }
+        public AutoCompleteFilterPredicate<object> UserFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Person).Id is null) ? true : (obj as Person).Id.Contains(searchText)
+                    || (obj as Person).Name.Contains(searchText);
+            }
         }
         public void UpdateUi() {
             DataChanged = false;
@@ -139,6 +178,8 @@ namespace His_Pos.ProductPurchaseRecord
             StoreOrderData = null;
             StoOrderOverview.SelectedIndex = 0;
         }
+
+     
 
         public void PassValueSearchData() {
             if (Proid != null)
