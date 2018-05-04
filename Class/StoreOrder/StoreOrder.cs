@@ -108,7 +108,18 @@ namespace His_Pos.Class.StoreOrder
                 NotifyPropertyChanged("TotalPrice");
             }
         }
-        public string RecEmp { get; set; }
+
+        private string recEmp;
+
+        public string RecEmp
+        {
+            get { return recEmp; }
+            set
+            {
+                recEmp = value;
+                NotifyPropertyChanged("RecEmp");
+            }
+        }
         private Manufactory.Manufactory manufactory;
         public Manufactory.Manufactory Manufactory
         {
