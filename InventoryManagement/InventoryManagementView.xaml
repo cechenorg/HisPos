@@ -79,6 +79,12 @@
             </StackPanel>
             <DataGrid Name="ProductList" ItemsSource="{Binding _DataList}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="3">
+                <DataGrid.Resources>
+                    <Style TargetType="Thumb">
+                        <Setter Property="Background" Value="Red" />
+                        <Setter Property="Foreground" Value="Blue"/>
+                    </Style>
+                </DataGrid.Resources>
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
