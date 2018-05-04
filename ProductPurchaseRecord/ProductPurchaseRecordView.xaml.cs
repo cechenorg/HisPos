@@ -88,6 +88,8 @@ namespace His_Pos.ProductPurchaseRecord
             UserAutoCompleteCollection = PersonDb.GetUserCollection();
             OrdEmp.ItemsSource = UserAutoCompleteCollection;
             OrdEmp.ItemFilter = UserFilter;
+            ReceiveEmp.ItemsSource = UserAutoCompleteCollection;
+            ReceiveEmp.ItemFilter = UserFilter;
         }
         public AutoCompleteFilterPredicate<object> UserFilter
         {
@@ -137,8 +139,8 @@ namespace His_Pos.ProductPurchaseRecord
                         && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
                         && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
                         && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                        && (((StoreOrder)item).RecEmp.Contains(ReceiveEmp.Text) || ReceiveEmp.Text == string.Empty)
                         && (id <= edate && id >= sdate)
-                        && (OrdEmp.Text.Contains(((StoreOrder)item).OrdEmp) || OrdEmp.Text == string.Empty)
                         ) reply = true;
                     break;
                 case "退貨":
@@ -147,8 +149,8 @@ namespace His_Pos.ProductPurchaseRecord
                            && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
                            && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
                            && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                           && (((StoreOrder)item).RecEmp.Contains(ReceiveEmp.Text) || ReceiveEmp.Text == string.Empty)
                            && (id <= edate && id >= sdate)
-                           && (OrdEmp.Text.Contains(((StoreOrder)item).OrdEmp) || OrdEmp.Text == string.Empty)
                            ) reply = true;
                     break;
                 case "調貨":
@@ -157,8 +159,8 @@ namespace His_Pos.ProductPurchaseRecord
                            && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
                            && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
                            && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                           && (((StoreOrder)item).RecEmp.Contains(ReceiveEmp.Text) || ReceiveEmp.Text == string.Empty)
                            && (id <= edate && id >= sdate)
-                           && (OrdEmp.Text.Contains(((StoreOrder)item).OrdEmp) || OrdEmp.Text == string.Empty)
                            ) reply = true;
                     break;
             }

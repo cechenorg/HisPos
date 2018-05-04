@@ -54,6 +54,19 @@
                             </DataTemplate>
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
+                    <Label Content="收貨人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <controls:AutoCompleteBox Name="ReceiveEmp" Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
+                                                              ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
+                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding RecEmp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <controls:AutoCompleteBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Width="50" Content="{Binding Id}"/>
+                                    <Label Width="100" Content="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:AutoCompleteBox.ItemTemplate>
+                    </controls:AutoCompleteBox>
                     <Label Content="處理單日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <DatePicker Width="100" Height="30" Name="datestart" SelectedDateFormat="Short"  />
                     <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>

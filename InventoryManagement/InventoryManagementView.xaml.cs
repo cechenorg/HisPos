@@ -104,7 +104,6 @@ namespace His_Pos.InventoryManagement
                         && (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()) || OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
                         ) reply = true;
                     }
-                    
                     if (reply) {
                         searchCount++;
                         selectStockValue += Convert.ToDouble(((InventoryOtc)item).StockValue);
@@ -132,21 +131,7 @@ namespace His_Pos.InventoryManagement
                            && (((Product)item).Name.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
                            && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter              
-                        )
-                    {
-                        if (item is InventoryOtc)
-                        {
-                            if (OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無") {
-                                reply = true;
-                            }
-                            else if (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()))
-                                reply = true;
-                        }
-                        else if (item is InventoryMedicine) {
-                            if (OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無") reply = true;
-                        }
-                           
-                    }
+                        ) reply = true;
                     if (reply)
                     {
                         searchCount++;
@@ -156,12 +141,9 @@ namespace His_Pos.InventoryManagement
             }
             return reply;
         }
-        
-
         private void showProductDetail(object sender, MouseButtonEventArgs e)
         {
             if (!Search.IsEnabled) return;
-
             var selectedItem = (sender as DataGridRow).Item;
             selectProductId = ((Product)selectedItem).Id;
             if (selectedItem is InventoryOtc)
