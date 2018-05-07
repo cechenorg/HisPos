@@ -344,7 +344,16 @@ namespace His_Pos.ProductPurchase
                 return true;
             return false;
         }
-
+     
+        public AutoCompleteFilterPredicate<object> ProductFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as NewItemProduct).Product.Id is null) ? true : (obj as NewItemProduct).Product.Id.Contains(searchText)
+                    || (obj as NewItemProduct).Product.Name.Contains(searchText);
+            }
+        }
         private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
         {
             var productAuto = sender as AutoCompleteBox;
@@ -387,8 +396,14 @@ namespace His_Pos.ProductPurchase
             var productAuto = sender as AutoCompleteBox;
             SetChanged();
             if (productAuto is null) return;
-            if (productAuto.SelectedItem is null) return;
+            if (productAuto.SelectedItem is null) {
+                if(productAuto.Text != string.Empty && productAuto.ItemsSource != null)
+                    productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<object>)[0];
+                else
+                    return;
 
+            } 
+            
             StoreOrderData.Products.Add(((ICloneable)productAuto.SelectedItem).Clone() as Product);
            
             productAuto.Text = "";
@@ -711,6 +726,7 @@ namespace His_Pos.ProductPurchase
                     || (obj as Person).Name.Contains(searchText);
             }
         }
+        
     }
     public class AutoCompleteIsEnableConverter : IValueConverter
     {

@@ -91,7 +91,7 @@ namespace His_Pos.Class.Product
 
             foreach( DataRow row in table.Rows )
             {
-                collection.Add(new OTCStoreOrderOverview(row["STOORD_ID"].ToString(),row["MAN_NAME"].ToString(),row["STOORD_DATE"].ToString(), row["EMP_NAME"].ToString(), row["STOORD_RECDATE"].ToString(), row["STOORDDET_PRICE"].ToString(), row["STOORDDET_QTY"].ToString(),row["STOORDDET_FREEQTY"].ToString()));
+                collection.Add(new OTCStoreOrderOverview(row["STOORD_ID"].ToString(),row["MAN_NAME"].ToString(),row["STOORD_DATE"].ToString(),row["STOORDDET_VALIDDATE"].ToString(),row["EMP_NAME"].ToString(), row["STOORD_RECDATE"].ToString(), row["STOORDDET_PRICE"].ToString(), row["STOORDDET_QTY"].ToString(),row["STOORDDET_FREEQTY"].ToString()));
             }
 
             return collection;
