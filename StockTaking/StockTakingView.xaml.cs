@@ -1,6 +1,7 @@
 ﻿using His_Pos.Class;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
+using His_Pos.Class.Product;
 
 namespace His_Pos.StockTaking
 {
@@ -21,11 +24,19 @@ namespace His_Pos.StockTaking
     /// </summary>
     public partial class StockTakingView : UserControl
     {
+        private Collection<Product> ProductCollection;
         private StockTakingStatus stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
         public StockTakingView()
         {
             InitializeComponent();
             UpdateUi();
+
+            InitProduct();
+        }
+
+        private void InitProduct()
+        {
+            ProductCollection = ProductDb.GetProductTakingItems();
         }
 
         private void UpdateUi()
@@ -35,9 +46,12 @@ namespace His_Pos.StockTaking
                 case StockTakingStatus.ADDPRODUCTS:
                     ViewGrid.RowDefinitions[2].Height = new GridLength(15);
                     ViewGrid.RowDefinitions[3].Height = new GridLength(150);
-                    ViewGrid.RowDefinitions[5].Height = new GridLength(50);
-                    ViewGrid.RowDefinitions[6].Height = new GridLength(0);
+                    ViewGrid.RowDefinitions[4].Height = new GridLength(0);
+                    ViewGrid.RowDefinitions[6].Height = new GridLength(50);
                     ViewGrid.RowDefinitions[7].Height = new GridLength(0);
+                    ViewGrid.RowDefinitions[8].Height = new GridLength(0);
+                    AddProductTri.Visibility = Visibility.Visible;
+                    PrintTri.Visibility = Visibility.Collapsed;
                     AddProductsEllipse.Fill = Brushes.GreenYellow;
                     PrintLine.Stroke = Brushes.LightSlateGray;
                     PrintLine.StrokeDashArray = new DoubleCollection() { 4 };
@@ -52,8 +66,10 @@ namespace His_Pos.StockTaking
                     Print.Visibility = Visibility.Collapsed;
                     break;
                 case StockTakingStatus.PRINT:
-                    ViewGrid.RowDefinitions[2].Height = new GridLength(0);
                     ViewGrid.RowDefinitions[3].Height = new GridLength(0);
+                    ViewGrid.RowDefinitions[4].Height = new GridLength(50);
+                    AddProductTri.Visibility = Visibility.Collapsed;
+                    PrintTri.Visibility = Visibility.Visible;
                     AddProductsEllipse.Fill = Brushes.DeepSkyBlue;
                     PrintLine.Stroke = Brushes.DeepSkyBlue;
                     PrintLine.StrokeDashArray = new DoubleCollection() { 300 };
@@ -62,24 +78,24 @@ namespace His_Pos.StockTaking
                     Print.Visibility = Visibility.Visible;
                     break;
                 case StockTakingStatus.INPUTRESULT:
-                    ViewGrid.RowDefinitions[5].Height = new GridLength(0);
-                    ViewGrid.RowDefinitions[6].Height = new GridLength(50);
+                    ViewGrid.RowDefinitions[4].Height = new GridLength(0);
+                    ViewGrid.RowDefinitions[6].Height = new GridLength(0);
+                    ViewGrid.RowDefinitions[7].Height = new GridLength(50);
+                    PrintTri.Visibility = Visibility.Collapsed;
                     PrintEllipse.Fill = Brushes.DeepSkyBlue;
                     InputLine.Stroke = Brushes.DeepSkyBlue;
                     InputLine.StrokeDashArray = new DoubleCollection() { 300 };
                     InputEllipse.Fill = Brushes.GreenYellow;
                     break;
                 case StockTakingStatus.COMPLETE:
-                    ViewGrid.RowDefinitions[6].Height = new GridLength(0);
-                    ViewGrid.RowDefinitions[7].Height = new GridLength(50);
+                    ViewGrid.RowDefinitions[7].Height = new GridLength(0);
+                    ViewGrid.RowDefinitions[8].Height = new GridLength(50);
                     InputEllipse.Fill = Brushes.DeepSkyBlue;
                     CompleteLine.Stroke = Brushes.DeepSkyBlue;
                     CompleteLine.StrokeDashArray = new DoubleCollection() { 300 };
                     CompleteEllipse.Fill = Brushes.GreenYellow;
                     break;
             }
-
-
         }
 
         private void NextStatus_Click(object sender, RoutedEventArgs e)
