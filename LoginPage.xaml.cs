@@ -99,5 +99,11 @@ namespace His_Pos
             if (e.Key == Key.Enter)
                 Login_Click(sender, e);
         }
+
+        private void UserName_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Password.Focus();
+        }
     }
 }

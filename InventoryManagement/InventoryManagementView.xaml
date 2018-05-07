@@ -12,7 +12,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:system="clr-namespace:System;assembly=mscorlib"
     dialog:DialogParticipation.Register="{Binding}"
-    mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
+    mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365" KeyUp="StartSearch">
     <Viewbox Stretch="Fill">
         <Grid Name="InventoryGrid" Width="1365">
             <Grid.RowDefinitions>
@@ -32,10 +32,10 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="9">
-                    <Label Content="商品編號" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="ID" Margin="0,0,10,0" Width="120" FontSize="16"/>
+                    <Label Content="商品代碼" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="ID" Margin="0,0,10,0" Width="120" FontSize="16" KeyUp="DeleteKeyUp"/>
                     <Label Content="商品名稱" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="Name" Margin="0,0,10,0" Width="120" FontSize="16"/>
+                    <TextBox Name="Name" Margin="0,0,10,0" Width="120" FontSize="16" KeyUp="DeleteKeyUp"/>
                     <CheckBox Name="IsStop" Content="已停用" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Name="BelowSafeAmount" Content="低於安全量" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
@@ -73,7 +73,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}">
                 <Label Content="進階搜尋" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="19,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <Label Content="成分" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="Ingredient" Margin="0,9,10,9" Width="150" FontSize="16"/>
+                <TextBox Name="Ingredient" Margin="0,9,10,9" Width="150" FontSize="16" KeyUp="DeleteKeyUp"/>
                 <CheckBox Name="ControlMed" Content="管制藥" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <CheckBox Name="FreezeMed" Content="冷藏品" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
             </StackPanel>
@@ -115,7 +115,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="商品編號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>

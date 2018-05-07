@@ -58,6 +58,7 @@ namespace His_Pos.InventoryManagement
             InitializeComponent();
 
             Title = inventoryOtc.Name;
+            this.Owner = MainWindow.Instance;
 
             InventoryOtc = inventoryOtc;
             
