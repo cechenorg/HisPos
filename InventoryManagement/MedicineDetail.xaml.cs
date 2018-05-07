@@ -53,7 +53,7 @@ namespace His_Pos.InventoryManagement
             InitializeComponent();
             Title = inventoryMedicine.Name;
             InventoryMedicine = inventoryMedicine;
-
+            //this.Owner = MainWindow.Instance;
             UpdateUi();
            
             IsFirst = false;

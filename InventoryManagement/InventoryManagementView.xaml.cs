@@ -210,5 +210,19 @@ namespace His_Pos.InventoryManagement
                     break;
             }
         }
+
+        private void DeleteKeyUp(object sender, KeyEventArgs e)
+        {
+            if(sender is null) return;
+
+            if (e.Key == Key.Delete)
+                ((TextBox) sender).Text = "";
+        }
+
+        private void StartSearch(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                SearchData();
+        }
     }
 }

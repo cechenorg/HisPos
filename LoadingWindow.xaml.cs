@@ -54,14 +54,14 @@ namespace His_Pos
 
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("Loading Medicine Data...");
+                ChangeLoadingMessage("取得藥品資料...");
                 MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
                 MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "PRO_ID" };
                 
-                ChangeLoadingMessage("Loading Product Data...");
+                ChangeLoadingMessage("取得商品資料...");
                 MainWindow.OtcDataTable = OTCDb.GetOtcData();
 
-                ChangeLoadingMessage("Loading Manufactory Data...");
+                ChangeLoadingMessage("取得廠商資料...");
                 MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
             };
 
@@ -80,7 +80,7 @@ namespace His_Pos
         {
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("Adding New Orders...");
+                ChangeLoadingMessage("新增新處理單...");
                 ManufactoryDb.AddNewOrderBasicSafe(type, manufactory);
 
                 Dispatcher.Invoke((Action)(() =>
@@ -104,7 +104,7 @@ namespace His_Pos
         {
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("Merging Data...");
+                ChangeLoadingMessage("處理商品資料...");
                 string totalWorth = ProductDb.GetTotalWorth();
                 double stockValue = 0;
                 inventoryManagementView.InventoryMedicines = NewFunction.JoinTables(MainWindow.MedicineDataTable, MedicineDb.GetInventoryMedicines(), "PRO_ID");
