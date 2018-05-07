@@ -12,12 +12,11 @@
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -72,62 +71,68 @@
                     <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
                     <DatePicker Width="100" Height="30" Name="dateend" SelectedDateFormat="Short" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="9" HorizontalAlignment="Right">
-                    <Label Content="搜尋範圍" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <RadioButton Name="RadioButtonPurchase" Content="進貨" Tag="0" Margin="0,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
-                    <RadioButton Name="RadioButtonTransfer" Content="調貨" Tag="1" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                    <RadioButton Name="RadioButtonReturns" Content="退貨" Tag="1" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                    <RadioButton Name="RadioButtonAll" Content="全部" Tag="2" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
-                </StackPanel>
-                <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+                <Button Grid.Column="1" Grid.Row="0" Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="280"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="776*"/>
+                    <ColumnDefinition Width="309*"/>
                 </Grid.ColumnDefinitions>
-                <DataGrid Name="StoOrderOverview" Grid.Column="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" Margin="10,10,0,10"
+                <Grid Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="10,10,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
+                        <RadioButton Name="RadioButtonPurchase" Content="進貨" Tag="0" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                        <RadioButton Name="RadioButtonTransfer" Content="調貨" Tag="1" Margin="5,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Name="RadioButtonReturns" Content="退貨" Tag="1" Margin="5,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Name="RadioButtonAll" Content="全部" Tag="2" Margin="5,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
+                    </StackPanel>
+                    <DataGrid Name="StoOrderOverview" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="290">
-                            <DataGridTemplateColumn.CellStyle>
-                                <Style TargetType="{x:Type DataGridCell}">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="BorderBrush" Value="Transparent"/>
-                                    <Setter Property="Foreground" Value="#FF424040"/>
-                                    <EventSetter Event="Selected" Handler="ShowOrderDetail"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGridTemplateColumn.CellStyle>
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid Height="70" Margin="20,0,0,0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                            <Label Content="{Binding Id}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
-                                            <Border BorderBrush="{Binding Category.CategoryColor}" BorderThickness="1" CornerRadius="6" Margin="25,8,1,5">
-                                                <TextBlock Text="{Binding Category.CategoryName}" Foreground="{Binding Category.CategoryColor}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
-                                            </Border>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                            <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="130" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                                            <Label Content="$" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="25,0,0,0"/>
-                                            <Label Content="{Binding TotalPrice}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <Grid Margin="0,10,10,10" Grid.Column="1">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="290">
+                                <DataGridTemplateColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderBrush" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="#FF424040"/>
+                                        <EventSetter Event="Selected" Handler="ShowOrderDetail"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGridTemplateColumn.CellStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid Height="70" Margin="20,0,0,0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                                                <Label Content="{Binding Id}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                                <Border BorderBrush="{Binding Category.CategoryColor}" BorderThickness="1" CornerRadius="6" Margin="25,8,1,5">
+                                                    <TextBlock Text="{Binding Category.CategoryName}" Foreground="{Binding Category.CategoryColor}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                                <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="130" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <Label Content="$" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="25,0,0,0"/>
+                                                <Label Content="{Binding TotalPrice}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                <Grid Margin="0,10,10,10" Grid.Column="1" Grid.ColumnSpan="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"/>
                         <RowDefinition Height="50"/>
