@@ -49,36 +49,7 @@ namespace His_Pos.Class.StoreOrder
                 parameters.Clear();
             }
         }
-        internal static void InsertOrderProduct(StoreOrder storeOrder, string flag)
-        {
-            if (storeOrder.Products == null) return;
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
 
-            parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
-            dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[DeleteStoreOrderDetail]", parameters);
-
-            foreach (var row in storeOrder.Products)
-            {
-                parameters.Clear();
-                parameters.Add(new SqlParameter("MAN_ID", storeOrder.Manufactory.Id));
-                parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
-                parameters.Add(new SqlParameter("PRO_ID", row.Id));
-                parameters.Add(new SqlParameter("QTY", ((ITrade)row).Amount));
-                parameters.Add(new SqlParameter("PRICE", ((ITrade)row).Price));
-                parameters.Add(new SqlParameter("DESCRIPTION", ((IProductPurchase)row).Note));
-                parameters.Add(new SqlParameter("VALIDDATE", ((IProductPurchase)row).ValidDate));
-                parameters.Add(new SqlParameter("BATCHNUMBER", ((IProductPurchase)row).BatchNumber));
-                parameters.Add(new SqlParameter("FREEQTY", ((IProductPurchase)row).FreeAmount));
-                parameters.Add(new SqlParameter("INVOICE", ((IProductPurchase)row).Invoice));
-                parameters.Add(new SqlParameter("FLAG", flag));
-                if (String.IsNullOrEmpty(storeOrder.Category.CategoryName))
-                    parameters.Add(new SqlParameter("TYPE", DBNull.Value));
-                else
-                    parameters.Add(new SqlParameter("TYPE", storeOrder.Category.CategoryName.Substring(0, 1)));
-                dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[UpdateStoreOrderDetail]", parameters);
-            }
-        }
         internal static void SaveOrderDetail(StoreOrder storeOrder) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
@@ -112,9 +83,36 @@ namespace His_Pos.Class.StoreOrder
                 parameters.Add(new SqlParameter("REC_EMP",DBNull.Value ));
             else
                 parameters.Add(new SqlParameter("REC_EMP", storeOrder.RecEmp));
+            
+            DataTable details = new DataTable();
+            details.Columns.Add("PRO_ID", typeof(string));
+            details.Columns.Add("QTY", typeof(int));
+            details.Columns.Add("PRICE", typeof(double));
+            details.Columns.Add("DESCRIPTION", typeof(string));
+            details.Columns.Add("VALIDDATE", typeof(string));
+            details.Columns.Add("BATCHNUMBER", typeof(string));
+            details.Columns.Add("FREEQTY", typeof(int));
+            details.Columns.Add("INVOICE", typeof(string));
+
+            foreach (var product in storeOrder.Products)
+            {
+                var newRow = details.NewRow();
+
+                newRow["PRO_ID"] = product.Id;
+                newRow["QTY"] = ((ITrade)product).Amount;
+                newRow["PRICE"] = ((ITrade)product).Price;
+                newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
+                newRow["VALIDDATE"] = ((IProductPurchase)product).ValidDate;
+                newRow["BATCHNUMBER"] = ((IProductPurchase) product).BatchNumber;
+                newRow["FREEQTY"] = ((IProductPurchase)product).FreeAmount;
+                newRow["INVOICE"] = ((IProductPurchase)product).Invoice;
+
+                details.Rows.Add(newRow);
+            }
+
+            parameters.Add(new SqlParameter("DETAILS", details));
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
-            InsertOrderProduct(storeOrder, type);
         }
 
         internal static string GetNewOrderId(string OrdEmpId)
