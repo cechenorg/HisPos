@@ -181,7 +181,11 @@ namespace His_Pos.ProductPurchaseRecord
             StoOrderOverview.SelectedIndex = 0;
         }
 
-     
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if(StoOrderOverview != null)
+            SearchData();
+        }
 
         public void PassValueSearchData() {
             if (Proid != null)
