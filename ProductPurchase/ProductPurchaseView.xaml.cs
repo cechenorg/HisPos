@@ -520,13 +520,13 @@ namespace His_Pos.ProductPurchase
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             var objectName = (sender as Control).Name;
-
+            
+            //按 Enter 下一欄
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
                 var nextTextBox = new List<TextBox>();
                 var thisTextBox = new List<TextBox>();
-                var pickerList = new List<DatePicker>();
                 var currentRowIndex = GetCurrentRowIndex(sender);
                 
                 if (currentRowIndex == -1) return;
@@ -546,9 +546,7 @@ namespace His_Pos.ProductPurchase
                             NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
                         else
                         {
-                            NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
-                            pickerList[currentRowIndex].Focus();
-                            return;
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
                         }
 
                         break;
@@ -561,20 +559,12 @@ namespace His_Pos.ProductPurchase
                             (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
                         }
 
-                        NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
-                        pickerList[currentRowIndex].Focus();
-                        return;
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
+                        break;
                     case "ValidDate":
-                        NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, "ValidDate", ref pickerList);
-                        if ((sender as DatePicker).Text == String.Empty && currentRowIndex > 0)
-                        {
-                            SetChanged();
-                            (sender as DatePicker).Text = pickerList[currentRowIndex - 1].Text;
-                        }
-                        
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref thisTextBox);
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
-                        nextTextBox[currentRowIndex].Focus();
-                        return;
+                        break;
                     case "Invoice":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref thisTextBox);
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
@@ -605,6 +595,114 @@ namespace His_Pos.ProductPurchase
                 nextTextBox[currentRowIndex].Focus();
             }
 
+            //按 Up Down
+            if (e.Key == Key.Up || e.Key == Key.Down)
+            {
+                e.Handled = true;
+                var thisTextBox = new List<TextBox>();
+                var currentRowIndex = GetCurrentRowIndex(sender);
+
+                if (currentRowIndex == -1) return;
+
+                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, objectName, ref thisTextBox);
+
+                int newIndex = (e.Key == Key.Up) ? currentRowIndex - 1 : currentRowIndex + 1;
+
+                if (newIndex < 0)
+                    newIndex = 0;
+                else if (newIndex >= thisTextBox.Count)
+                    newIndex = thisTextBox.Count - 1;
+
+                thisTextBox[newIndex].Focus();
+            }
+
+            //按 Left
+            if (e.Key == Key.Left)
+            {
+                e.Handled = true;
+                var nextTextBox = new List<TextBox>();
+                var currentRowIndex = GetCurrentRowIndex(sender);
+
+                if (currentRowIndex == -1) return;
+
+                switch (objectName)
+                {
+                    case "Price":
+                        return;
+                    case "Amount":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref nextTextBox);
+                        break;
+                    case "FreeAmount":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
+                        break;
+                    case "BatchNumber":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
+                        break;
+                    case "ValidDate":
+                        if (storeOrderData.Products[currentRowIndex] is ProductPurchaseMedicine)
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
+                        else
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
+                        break;
+                    case "Invoice":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
+                        break;
+                    case "Notes":
+                        if (storeOrderData.Type == OrderType.UNPROCESSING)
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
+                        else
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
+                        break;
+                }
+
+                nextTextBox[currentRowIndex].Focus();
+            }
+
+            //按 Right
+            if (e.Key == Key.Right)
+            {
+                e.Handled = true;
+                var nextTextBox = new List<TextBox>();
+                var thisTextBox = new List<TextBox>();
+                var currentRowIndex = GetCurrentRowIndex(sender);
+
+                if (currentRowIndex == -1) return;
+
+                switch (objectName)
+                {
+                    case "Price":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
+                        break;
+                    case "Amount":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
+                        break;
+                    case "FreeAmount":
+                        if (storeOrderData.Type == OrderType.UNPROCESSING)
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
+                        else if (storeOrderData.Products[currentRowIndex] is ProductPurchaseMedicine)
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
+                        else
+                        {
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
+                        }
+                        break;
+                    case "BatchNumber":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
+                        break;
+                    case "ValidDate":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
+                        break;
+                    case "Invoice":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
+                        break;
+                    case "Notes":
+                        return;
+                }
+
+                nextTextBox[currentRowIndex].Focus();
+            }
+
+            // Price Amount FreeAmount "0 打字 直接顯示數字"
             if (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount"))
             {
                 if (!IsKeyAvailable(e.Key))
