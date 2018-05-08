@@ -7,7 +7,7 @@ using His_Pos.Class;
 
 namespace His_Pos.Interface
 {
-    interface IProductTaking
+    interface IStockTaking
     {
         string Category { get; set; }
         double Inventory { get; set; }

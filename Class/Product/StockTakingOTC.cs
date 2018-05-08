@@ -8,9 +8,9 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class ProductTakingMedicine : AbstractClass.Product, IProductTaking
+    public class StockTakingOTC : AbstractClass.Product, IStockTaking
     {
-        public ProductTakingMedicine(DataRow dataRow) : base(dataRow)
+        public StockTakingOTC(DataRow dataRow) : base(dataRow)
         {
         }
 
@@ -18,7 +18,6 @@ namespace His_Pos.Class.Product
         public double Inventory { get; set; }
         public string ValidDate { get; set; }
         public string LastCheckDate { get; set; }
-        public string BatchNumber { get; set; }
         public string Location { get; set; }
     }
 }
