@@ -267,7 +267,7 @@
                         <DataGridTemplateColumn MinWidth="120" Header="效期">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <DatePicker x:Name="ValidDate" Width="120" Height="33" SelectedDateFormat="Short" Text="{Binding ValidDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="OnPreviewKeyDown"/>
+                                    <TextBox x:Name="ValidDate" Width="120" FontSize="18" Text="{Binding ValidDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
