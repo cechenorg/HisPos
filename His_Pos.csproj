@@ -294,6 +294,10 @@
     <Compile Include="InventoryManagement\OtcDetail.xaml.cs">
       <DependentUpon>OtcDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InventoryManagement\OtcDetailView.cs" />
+    <Compile Include="InventoryManagement\ProductDetail.xaml.cs">
+      <DependentUpon>ProductDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
@@ -349,10 +353,13 @@
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
+    <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
+    <Compile Include="ViewModel\ProductDetailViewModel.cs" />
     <Compile Include="ViewModel\TabBase.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\ViewModelMainWindow.cs" />
+    <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ViewModel\Win32.cs" />
     <Page Include="DockingWindow.xaml">
       <SubType>Designer</SubType>
@@ -371,6 +378,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="InventoryManagement\OtcDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InventoryManagement\ProductDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

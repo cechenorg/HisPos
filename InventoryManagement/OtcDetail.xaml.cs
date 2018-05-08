@@ -33,7 +33,7 @@ namespace His_Pos.InventoryManagement
     /// <summary>
     /// OtcDetail.xaml 的互動邏輯
     /// </summary>
-    public partial class OtcDetail : Window
+    public partial class OtcDetail : UserControl
     {
         public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
@@ -57,7 +57,7 @@ namespace His_Pos.InventoryManagement
         {
             InitializeComponent();
 
-            Title = inventoryOtc.Name;
+            
             
             InventoryOtc = inventoryOtc;
             
@@ -65,7 +65,6 @@ namespace His_Pos.InventoryManagement
             CheckAuth();
             
             IsFirst = false;
-            DataContext = this;
         }
         
 
@@ -154,7 +153,7 @@ namespace His_Pos.InventoryManagement
         private void InitVariables()
         {
             IsChangedLabel.Content = "未修改";
-            IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
+           // IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
             
             IsChanged = false;
         }

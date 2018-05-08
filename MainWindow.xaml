@@ -12,6 +12,7 @@
         xmlns:ProductPurchase="clr-namespace:His_Pos.ProductPurchase"
         xmlns:ProductPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
         xmlns:StockTaking="clr-namespace:His_Pos.StockTaking"
+        
     xmlns:StockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
     x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"

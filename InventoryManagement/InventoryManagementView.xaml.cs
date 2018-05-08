@@ -83,6 +83,10 @@ namespace His_Pos.InventoryManagement
             SearchData();
             SearchCount.Content = searchCount;
             SelectStockValue.Content = selectStockValue.ToString("0.#");
+
+            ProductDetail productDetail = new ProductDetail();
+            productDetail.Show();
+            productDetail.AddNewTab();
         }
 
         public void SearchData()
@@ -155,7 +159,7 @@ namespace His_Pos.InventoryManagement
                 
                 productDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
                
-                productDetail.Show();
+               // productDetail.Show();
             }
             else if (selectedItem is InventoryMedicine)
             {
