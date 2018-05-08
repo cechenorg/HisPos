@@ -26,7 +26,6 @@ namespace His_Pos.Class.Product
             }; 
         Ingredient =  dataRow["HISMED_INGREDIENT"].ToString();
     }
-
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }

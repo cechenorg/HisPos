@@ -36,7 +36,7 @@ namespace His_Pos.StockTaking
 
         private void InitProduct()
         {
-            ProductCollection = ProductDb.GetProductTakingItems();
+            //ProductCollection = ProductDb.GetProductTakingItems();
         }
 
         private void UpdateUi()

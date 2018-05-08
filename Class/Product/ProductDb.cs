@@ -74,16 +74,13 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_BASETYPE_STATUS", productunit.Id));
             dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateUnit]", parameters);
         }
-        internal static ObservableCollection<object> GetItemDialogProduct(string manId)
+        internal static ObservableCollection<object> GetItemDialogProduct()
         {
             ObservableCollection<object> collection = new ObservableCollection<object>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
-
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MAN_ID", manId));
-
-            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetItemDialogProduct]", parameters);
+            
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetItemDialogProduct]");
 
             foreach (DataRow row in table.Rows)
             {

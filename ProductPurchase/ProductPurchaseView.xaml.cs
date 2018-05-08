@@ -240,7 +240,7 @@ namespace His_Pos.ProductPurchase
 
             getProductAutobackground.DoWork += (s, o) =>
             {
-                ObservableCollection<object> temp = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
+                ObservableCollection<object> temp = ProductDb.GetItemDialogProduct();
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     Products = temp;
@@ -397,11 +397,10 @@ namespace His_Pos.ProductPurchase
             SetChanged();
             if (productAuto is null) return;
             if (productAuto.SelectedItem is null) {
-                if(productAuto.Text != string.Empty && productAuto.ItemsSource != null)
+                if(productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<object>).Count != 0)
                     productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<object>)[0];
                 else
                     return;
-
             } 
             
             StoreOrderData.Products.Add(((ICloneable)productAuto.SelectedItem).Clone() as Product);
