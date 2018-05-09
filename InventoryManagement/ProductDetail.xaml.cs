@@ -35,7 +35,6 @@ namespace His_Pos.InventoryManagement
      
         public void AddNewTab()
         {
-           
             ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("OTCC");
             this.Focus();
         }
