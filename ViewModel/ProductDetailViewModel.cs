@@ -12,7 +12,6 @@ using MahApps.Metro.Controls.Dialogs;
 using His_Pos.Class;
 using System.Windows;
 using System.Windows.Controls;
-using His_Pos.InventoryManagement;
 
 namespace His_Pos.ViewModel
 {
@@ -55,8 +54,8 @@ namespace His_Pos.ViewModel
             this.ItemCollection = new ObservableCollection<TabBase>();
             this.ItemCollection.CollectionChanged += ItemCollection_CollectionChanged;
             this.ReorderTabsCommand = new RelayCommand<TabReorder>(ReorderTabsCommandAction);
-            //this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
-            this.AddTabCommand = new RelayCommand<object>(AddProductDetailTabAction);
+            this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
+            //this.AddTabCommand = new RelayCommand<object>(AddProductDetailTabAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
         }
@@ -142,9 +141,9 @@ namespace His_Pos.ViewModel
         }
         public void AddProductDetailTabAction(object featureItem)
         {
-
+            if (IsTabOpened(featureItem.ToString())) return;
             TabBase newTab;
-            newTab = new OtcDetailView() { TabName = "OTCCC", Icon = MainWindow.HisFeatures[0].Icon };
+            newTab = new InventoryManagement.OtcDetailView() { TabName = "OTCCC", Icon = MainWindow.HisFeatures[0].Icon };
             this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
         }

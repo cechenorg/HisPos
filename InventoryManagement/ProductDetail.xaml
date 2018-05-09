@@ -7,12 +7,16 @@
          xmlns:InventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
+        xmlns:ProductPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
         mc:Ignorable="d"
-         DataContext="{Binding Source={StaticResource Locator},Path=ViewModelProductDetailWindow}"
+         DataContext="{Binding Source={StaticResource ProductDetailViewModelLocator},Path=ViewModelProductDetailWindow}"
         Title="ProductDetail" Height="800" Width="1300">
     <Window.Resources>
         <DataTemplate DataType="{x:Type InventoryManagement:OtcDetailView}">
-            <InventoryManagement:InventoryManagementView/>
+            <InventoryManagement:OtcDetail/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ProductPurchaseRecord:ProductPurchaseRecord}">
+            <ProductPurchaseRecord:ProductPurchaseRecordView/>
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -23,7 +27,7 @@
             <chromeTabs:ChromeTabControl Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
-                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" SelectionChanged="Tabs_SelectionChanged">
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900" SelectionChanged="Tabs_SelectionChanged">
                 <chromeTabs:ChromeTabControl.Template>
                     <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
                         <ControlTemplate.Resources>

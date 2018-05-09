@@ -1,10 +1,11 @@
-﻿using System.ComponentModel;
+﻿using His_Pos.InventoryManagement;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 
 namespace His_Pos.ViewModel
 {
-    public class ViewModelProductDetailWindow : ProductDetailViewModel, IViewModelMainWindow
+    public class ViewModelProductDetailWindow : ProductDetailViewModel, IViewModelProdcutDetailWindow
     {
         private bool _canMoveTabs;
         public bool CanMoveTabs
@@ -36,7 +37,7 @@ namespace His_Pos.ViewModel
         {
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
-
+          
             //This sort description is what keeps the source collection sorted, based on tab number. 
             //You can also use the sort description to manually sort the tabs, based on your own criterias.
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));

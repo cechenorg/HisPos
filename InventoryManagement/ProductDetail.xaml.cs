@@ -28,13 +28,13 @@ namespace His_Pos.InventoryManagement
         private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Tabs.SelectedItem is null) return;
-            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(((TabBase)Tabs.SelectedItem).TabName);
+            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction(((TabBase)Tabs.SelectedItem).TabName);
         }
         
         public void AddNewTab()
         {
-            DataContext = this;
-            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("處方登錄");
+           
+            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("處理單紀錄");
             this.Focus();
         }
     }

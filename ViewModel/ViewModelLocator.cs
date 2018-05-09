@@ -34,7 +34,7 @@ namespace His_Pos.ViewModel
                 SimpleIoc.Default.Register<IViewModelMainWindow, ViewModelMainWindow>();
 
         }
-
+     
         public IViewModelMainWindow ViewModelMainWindow
         {
             get

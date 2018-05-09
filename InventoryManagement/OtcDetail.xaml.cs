@@ -53,12 +53,10 @@ namespace His_Pos.InventoryManagement
         private bool IsChanged = false;
         private bool IsFirst = true;
 
-        public OtcDetail(InventoryOtc inventoryOtc)
+        public OtcDetail()
         {
             InitializeComponent();
-
-            
-            
+            InventoryOtc inventoryOtc = null;
             InventoryOtc = inventoryOtc;
             
             UpdateUi();

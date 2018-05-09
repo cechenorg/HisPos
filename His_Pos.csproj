@@ -355,6 +355,7 @@
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
     <Compile Include="ViewModel\ProductDetailViewModel.cs" />
+    <Compile Include="ViewModel\ProductDetailViewModelLocator.cs" />
     <Compile Include="ViewModel\TabBase.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
