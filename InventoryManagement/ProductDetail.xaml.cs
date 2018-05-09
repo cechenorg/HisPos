@@ -1,4 +1,5 @@
 ﻿using His_Pos.ViewModel;
+using MenuUserControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +29,14 @@ namespace His_Pos.InventoryManagement
         private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (Tabs.SelectedItem is null) return;
-            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction(((TabBase)Tabs.SelectedItem).TabName);
+            //((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction(((TabBase)Tabs.SelectedItem).TabName);
+            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("OTCCC");
         }
-        
+     
         public void AddNewTab()
         {
            
-            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("處理單紀錄");
+            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("OTCC");
             this.Focus();
         }
     }

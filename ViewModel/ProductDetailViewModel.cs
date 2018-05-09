@@ -114,6 +114,8 @@ namespace His_Pos.ViewModel
         {
             switch (vm.TabName)
             {
+                case "OTCCC":
+                    break;
                 case nameof(FeatureItem.處方登錄):
                     break;
                 case nameof(FeatureItem.處方查詢):
@@ -186,6 +188,7 @@ namespace His_Pos.ViewModel
 
         public bool IsTabOpened(string tabName)
         {
+            
             foreach (TabBase tab in ItemCollection)
             {
                 if (tab.TabName == tabName)
