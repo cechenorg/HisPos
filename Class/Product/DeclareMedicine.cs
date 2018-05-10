@@ -29,6 +29,8 @@ namespace His_Pos.Class.Product
         public double TotalPrice { get; set; }
         public double Amount { get; set; }
         public double Price { get; set; }
+        public string CountStatus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string FocusColumn { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void CalculateData(string inputSource)
         {

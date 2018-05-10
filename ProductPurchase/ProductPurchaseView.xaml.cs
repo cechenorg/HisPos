@@ -539,15 +539,13 @@ namespace His_Pos.ProductPurchase
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
                         break;
                     case "FreeAmount":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
+                        break;
+                    case "TotalPrice":
                         if (storeOrderData.Type == OrderType.UNPROCESSING)
                             NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-                        else if (storeOrderData.Products[currentRowIndex] is ProductPurchaseMedicine)
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
                         else
-                        {
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
-                        }
-
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
                         break;
                     case "BatchNumber":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref thisTextBox);
@@ -634,21 +632,21 @@ namespace His_Pos.ProductPurchase
                     case "FreeAmount":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
                         break;
-                    case "BatchNumber":
+                    case "TotalPrice":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
                         break;
+                    case "BatchNumber":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
+                        break;
                     case "ValidDate":
-                        if (storeOrderData.Products[currentRowIndex] is ProductPurchaseMedicine)
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
-                        else
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
                         break;
                     case "Invoice":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
                         break;
                     case "Notes":
                         if (storeOrderData.Type == OrderType.UNPROCESSING)
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
                         else
                             NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
                         break;
@@ -676,14 +674,13 @@ namespace His_Pos.ProductPurchase
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
                         break;
                     case "FreeAmount":
+                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
+                        break;
+                    case "TotalPrice":
                         if (storeOrderData.Type == OrderType.UNPROCESSING)
                             NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-                        else if (storeOrderData.Products[currentRowIndex] is ProductPurchaseMedicine)
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
                         else
-                        {
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
-                        }
+                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
                         break;
                     case "BatchNumber":
                         NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);

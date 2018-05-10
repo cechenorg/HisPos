@@ -66,8 +66,8 @@ namespace His_Pos.Class.Product
         {
         }
 
-        private string CountStatus = "";
-        private string FocusColumn = "";
+        public string CountStatus { get; set; } = "";
+        public string FocusColumn { get; set; } = "";
         public InStock Stock { get; set; }
         public double LastPrice { get; set; }
         public string source;
