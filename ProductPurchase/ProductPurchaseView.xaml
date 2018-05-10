@@ -9,7 +9,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365" Unloaded="UserControl_Unloaded">
     <UserControl.Resources>
-        <local:BatchNamberIsEnableConverter x:Key="BatchNamberIsEnableConverter"/>
         <local:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
         <local:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
     </UserControl.Resources>
@@ -139,7 +138,7 @@
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding Products}">
+                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding Products}" FrozenColumnCount="3">
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -257,8 +256,8 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource BatchNamberIsEnableConverter}}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
-                                        <Button x:Name="Split" Content="拆批" Width="40" Margin="5" Padding="0" FontFamily="Segoe UI Semi" IsEnabled="{Binding Converter={StaticResource BatchNamberIsEnableConverter}}" Click="SplitBatchNumber_Click"/>
+                                        <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
+                                        <Button x:Name="Split" Content="拆批" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Width="40" Margin="5" Padding="0" FontFamily="Segoe UI Semi" Click="SplitBatchNumber_Click"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
