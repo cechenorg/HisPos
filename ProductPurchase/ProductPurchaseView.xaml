@@ -106,7 +106,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
                         <Label Content="處理單類別" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                        <ComboBox Name="OrderCategory" Width="90" Text="{Binding Path=Category.CategoryName}" IsEnabled="False"  FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="SetIsChanged">
+                        <ComboBox Name="OrderCategory" Width="90" Text="{Binding Path=Category.CategoryName}" IsEnabled="False"  FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" SelectionChanged="SetIsChanged">
                             <ComboBoxItem Content="進貨" Foreground="Green"/>
                             <ComboBoxItem Content="退貨" Foreground="Red"/>
                             <ComboBoxItem Content="調貨" Foreground="Blue"/>
