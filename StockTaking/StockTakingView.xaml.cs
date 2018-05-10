@@ -24,7 +24,7 @@ namespace His_Pos.StockTaking
     /// </summary>
     public partial class StockTakingView : UserControl
     {
-        private Collection<Product> ProductCollection;
+        public Collection<Product> ProductCollection;
         private StockTakingStatus stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
         public StockTakingView()
         {
@@ -32,11 +32,16 @@ namespace His_Pos.StockTaking
             UpdateUi();
 
             InitProduct();
+
+            
         }
 
         private void InitProduct()
         {
-            ProductCollection = ProductDb.GetStockTakingItems();
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.MergeProductStockTaking(this);
+            loadingWindow.Topmost = true;
+            loadingWindow.Show();
         }
 
         private void UpdateUi()

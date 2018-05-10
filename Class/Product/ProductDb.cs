@@ -37,30 +37,6 @@ namespace His_Pos.Class.Product
             return collection;
         }
 
-        internal static Collection<AbstractClass.Product> GetStockTakingItems()
-        {
-            ObservableCollection<AbstractClass.Product> collection = new ObservableCollection<AbstractClass.Product>();
-
-            var dd = new DbConnection(Settings.Default.SQL_global);
-
-            var table = dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[GetStockTakingItems]");
-
-            foreach (DataRow row in table.Rows)
-            {
-                switch (row["TYPE"].ToString())
-                {
-                    case "M":
-                        collection.Add(new StockTakingMedicine(row));
-                        break;
-                    case "O":
-                        collection.Add(new StockTakingOTC(row));
-                        break;
-                }
-            }
-
-            return collection;
-        }
-
         public static void UpdateOtcUnit(ProductUnit productunit, string proid)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);

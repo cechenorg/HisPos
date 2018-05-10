@@ -13,6 +13,7 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.AbstractClass;
 using System.Linq;
+using His_Pos.StockTaking;
 
 namespace His_Pos
 {
@@ -144,6 +145,57 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     inventoryManagementView.Search.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        public void MergeProductStockTaking(StockTakingView stockTakingView)
+        {
+            stockTakingView.AddItems.IsEnabled = false;
+            stockTakingView.AddOneItem.IsEnabled = false;
+            stockTakingView.FinishedAddProduct.IsEnabled = false;
+            stockTakingView.Print.IsEnabled = false;
+
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("處理商品資料...");
+                
+                var Medicines = NewFunction.JoinTables(MainWindow.MedicineDataTable, MedicineDb.GetStockTakingMedicines(), "PRO_ID");
+                var Otcs = NewFunction.JoinTables(MainWindow.OtcDataTable, OTCDb.GetStockTakingOtcs(), "PRO_ID");
+
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    ObservableCollection<Product> products = new ObservableCollection<Product>();
+
+                    foreach (DataRow k in Otcs.Rows)
+                    {
+                        StockTakingOTC otc = new StockTakingOTC(k);
+
+                        products.Add(otc);
+                    }
+
+                    foreach (DataRow m in Medicines.Rows)
+                    {
+                        StockTakingMedicine medicine = new StockTakingMedicine(m);
+
+                        products.Add(medicine);
+                    }
+
+                    stockTakingView.ProductCollection = products;
+                }));
+            };
+
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    stockTakingView.CheckItems.ItemsSource = stockTakingView.ProductCollection;
+                    stockTakingView.AddItems.IsEnabled = true;
+                    stockTakingView.AddOneItem.IsEnabled = true;
+                    stockTakingView.FinishedAddProduct.IsEnabled = true;
+                    stockTakingView.Print.IsEnabled = true;
                     Close();
                 }));
             };

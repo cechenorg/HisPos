@@ -12,7 +12,12 @@ namespace His_Pos.Class.Product
     {
         public StockTakingMedicine(DataRow dataRow) : base(dataRow)
         {
-
+            Location = dataRow["PRO_LOCATION"].ToString();
+            Category = dataRow["PROTYP_CHINAME"].ToString();
+            LastCheckDate = dataRow["PROCHE_DATE"].ToString();
+            BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
+            Inventory = Double.Parse(dataRow["PRO_INVENTORY"].ToString());
+            ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
         }
 
         public string Category { get; set; }

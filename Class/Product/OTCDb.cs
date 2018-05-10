@@ -96,6 +96,11 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
-        
+
+        internal static DataTable GetStockTakingOtcs()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            return dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[GetStockTakingOtc]");
+        }
     }
 }
