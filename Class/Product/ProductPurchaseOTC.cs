@@ -66,6 +66,8 @@ namespace His_Pos.Class.Product
         {
         }
 
+        private string CountStatus = "";
+        private string FocusColumn = "";
         public InStock Stock { get; set; }
         public double LastPrice { get; set; }
         public string source;
@@ -86,6 +88,8 @@ namespace His_Pos.Class.Product
             set
             {
                 totalPrice = value;
+                CalculateData("TotalPrice");
+                FocusColumn = "TotalPrice";
                 NotifyPropertyChanged("TotalPrice");
             }
         }
@@ -96,7 +100,8 @@ namespace His_Pos.Class.Product
             set
             {
                 amount = value;
-                CalculateData();
+                CalculateData("Amount");
+                FocusColumn = "Amount";
                 NotifyPropertyChanged("Amount");
             }
         }
@@ -107,7 +112,9 @@ namespace His_Pos.Class.Product
             set
             {
                 price = value;
-                CalculateData();
+                CalculateData("Price");
+                FocusColumn = "Price";
+                NotifyPropertyChanged("Price");
             }
         }
         private string note;
@@ -178,9 +185,34 @@ namespace His_Pos.Class.Product
             }
         }
 
-        public void CalculateData()
+        public void CalculateData(string inputSource)
         {
-            TotalPrice = amount * price;
+            if (totalPrice == amount * price || price == totalPrice / amount) return;
+
+            bool isColumnChanged;
+
+            if (FocusColumn.Equals(""))
+                isColumnChanged = false;
+            else
+                isColumnChanged = !FocusColumn.Equals(inputSource);
+
+            if (isColumnChanged) CountStatus = "";
+
+            if (inputSource.Equals("Amount") && amount == 0)
+                return;
+            else if (inputSource.Equals("Amount") && totalPrice != 0 && amount != 0 && !CountStatus.Equals("*"))
+            {
+                Price = totalPrice / amount;
+            }
+            else if (!inputSource.Equals("TotalPrice"))
+            {
+                CountStatus = "*";
+                TotalPrice = amount * price;
+            }
+            else if (amount != 0)
+            {
+                Price = totalPrice / amount;
+            }
         }
 
         public object Clone()

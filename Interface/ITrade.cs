@@ -13,6 +13,6 @@ namespace His_Pos.Interface
         double Amount { get; set; }
         double Price { get; set; }
 
-        void CalculateData();
+        void CalculateData(string inputSource);
     }
 }

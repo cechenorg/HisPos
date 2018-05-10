@@ -98,6 +98,7 @@ namespace His_Pos.Class.Product
             set
             {
                 totalPrice = value;
+                CalculateData("TotalPrice");
                 NotifyPropertyChanged("TotalPrice");
             }
         }
@@ -120,6 +121,7 @@ namespace His_Pos.Class.Product
             {
                 price = value;
                 CalculateData();
+                NotifyPropertyChanged("Price");
             }
         }
 
@@ -171,9 +173,12 @@ namespace His_Pos.Class.Product
             }
         }
 
-        public void CalculateData()
+        public void CalculateData(string inputSource = "")
         {
-            TotalPrice = amount * price;
+            if (inputSource.Equals(String.Empty))
+                TotalPrice = amount * price;
+            else
+                price = TotalPrice / amount;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

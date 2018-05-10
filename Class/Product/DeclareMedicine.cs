@@ -30,7 +30,7 @@ namespace His_Pos.Class.Product
         public double Amount { get; set; }
         public double Price { get; set; }
 
-        public void CalculateData()
+        public void CalculateData(string inputSource)
         {
             throw new NotImplementedException();
         }
