@@ -6,42 +6,42 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:His_Pos.ProductPurchase"
         mc:Ignorable="d"
-        Title="NewItemDialog" Height="400" Width="600" WindowStartupLocation="CenterScreen">
+        Title="NewItemDialog" MinHeight="400" Height="400" MaxWidth="730" MinWidth="730" WindowStartupLocation="CenterScreen" SizeChanged="Window_SizeChanged">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
             <Setter Property="HorizontalAlignment"  Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
-    <Viewbox Stretch="Fill">
-        <Grid Height="400" Width="600">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0">
-                <TextBox Name="SearchText" Width="300" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="18" TextChanged="SearchTextChanged" Margin="10,0,0,0"/>
-                <RadioButton Name="OnlyManufactory" Content="只有此供應商" Tag="0" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Visibility="Collapsed" Checked="Radio_OnChecked"/>
-                <RadioButton Name="AllProducts" Content="所有商品" Tag="1" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Visibility="Collapsed" Checked="Radio_OnChecked"/>
-            </StackPanel>
-            <DataGrid Name="SearchResult" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+    <Grid Name="ItemGrid" Width="730" HorizontalAlignment="Left">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="260"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBox Name="SearchText" Width="300" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="18" TextChanged="SearchTextChanged" Margin="10,0,0,0"/>
+            <RadioButton Name="OnlyManufactory" Content="只有此供應商" Tag="0" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="Radio_OnChecked"/>
+            <RadioButton Name="AllProducts" Content="所有商品" Tag="1" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="Radio_OnChecked"/>
+            <CheckBox Content="顯示停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" />
+        </StackPanel>
+        <DataGrid Name="SearchResult" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="695" HorizontalAlignment="Left"
                       AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Margin="10" Background="{StaticResource GridBackGround}">
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Style.Triggers>
-                            <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                            </Trigger>
-                        </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="FontSize" Value="18"/>
-                        <Setter Property="Height" Value="40"/>
-                    </Style>
-                </DataGrid.RowStyle>
-            </DataGrid>
-            <Button Content="確認" Grid.Row="2" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmClick"/>
-        </Grid>
-    </Viewbox>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="DataGridRow.IsSelected" Value="True">
+                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                    <EventSetter Event="MouseDoubleClick" Handler="ConfirmClick"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="FontSize" Value="18"/>
+                    <Setter Property="Height" Value="40"/>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+        <Button Content="確認" Grid.Row="2" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmClick"/>
+    </Grid>
 </Window>
