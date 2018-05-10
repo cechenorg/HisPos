@@ -28,7 +28,7 @@
                     <RadioButton Content="未處理" Tag="0" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
                     <Image Source="/Images/PosDot.png" Width="15"/>
                     <RadioButton Content="已處理" Tag="1" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
-                    <Image Source="/Images/HisDot.png" Width="15"/>
+                    <Image Source="/Images/DarkerHisDot.png" Width="15"/>
                     <RadioButton Content="全部" Tag="3" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" IsChecked="True"/>
                 </StackPanel>
                 <DataGrid Name="StoOrderOverview" Grid.Row="1" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
