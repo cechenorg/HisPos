@@ -4,62 +4,62 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.InventoryManagement"
-         xmlns:InventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
-        xmlns:ProductPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
         mc:Ignorable="d"
-         DataContext="{Binding Source={StaticResource ProductDetailViewModelLocator},Path=ViewModelProductDetailWindow}"
-        Title="ProductDetail" Height="800" Width="1300">
+        DataContext="{Binding Source={StaticResource ProductDetailViewModelLocator},Path=ViewModelProductDetailWindow}"
+        Title="ProductDetail" Height="930" Width="1600" Closed="ProductDetail_OnClosed" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type InventoryManagement:OtcDetailView}">
-            <InventoryManagement:OtcDetail/>
+        <DataTemplate DataType="{x:Type local:OtcDetailView}">
+            <local:OtcDetail/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type ProductPurchaseRecord:ProductPurchaseRecord}">
-            <ProductPurchaseRecord:ProductPurchaseRecordView/>
+        <DataTemplate DataType="{x:Type local:MedicineDetailView}">
+            <local:MedicineDetail/>
         </DataTemplate>
     </Window.Resources>
-    <Grid>
-        <DockPanel Grid.Column="1">
-            <DockPanel.Background>
-                <ImageBrush ImageSource="../Images/onlyoneeeeeee.jpg"/>
-            </DockPanel.Background>
-            <chromeTabs:ChromeTabControl Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
+    <Viewbox Stretch="Fill">
+        <Grid Height="930" Width="1600">
+            <DockPanel>
+                <DockPanel.Background>
+                    <ImageBrush ImageSource="../Images/onlyoneeeeeee.jpg"/>
+                </DockPanel.Background>
+                <chromeTabs:ChromeTabControl Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
-                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900" SelectionChanged="Tabs_SelectionChanged">
-                <chromeTabs:ChromeTabControl.Template>
-                    <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
-                        <ControlTemplate.Resources>
-                            <converters:TabPersistBehaviorToContentPresenterVisibilityConverter x:Key="TabPersistBehaviorToContentPresenterVisibilityConverter" />
-                            <converters:TabPersistBehaviorToItemHolderVisibilityConverter x:Key="TabPersistBehaviorToItemHolderVisibilityConverter" />
-                        </ControlTemplate.Resources>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Border Background="{TemplateBinding Background}" BorderThickness="0,0,0,1" BorderBrush="Gray" Grid.Row="0">
-                                <chromeTabs:ChromeTabPanel IsItemsHost="True" Background="{TemplateBinding Background}" />
-                            </Border>
-                            <Grid Grid.Row="1" Visibility="{TemplateBinding TabPersistBehavior,Converter={StaticResource TabPersistBehaviorToContentPresenterVisibilityConverter}}">
-                                <ContentPresenter Content="{TemplateBinding SelectedContent}" />
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="930">
+                    <chromeTabs:ChromeTabControl.Template>
+                        <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
+                            <ControlTemplate.Resources>
+                                <converters:TabPersistBehaviorToContentPresenterVisibilityConverter x:Key="TabPersistBehaviorToContentPresenterVisibilityConverter" />
+                                <converters:TabPersistBehaviorToItemHolderVisibilityConverter x:Key="TabPersistBehaviorToItemHolderVisibilityConverter" />
+                            </ControlTemplate.Resources>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Border Background="{TemplateBinding Background}" BorderThickness="0,0,0,1" BorderBrush="Gray" Grid.Row="0">
+                                    <chromeTabs:ChromeTabPanel IsItemsHost="True" Background="{TemplateBinding Background}" />
+                                </Border>
+                                <Grid Grid.Row="1" Visibility="{TemplateBinding TabPersistBehavior,Converter={StaticResource TabPersistBehaviorToContentPresenterVisibilityConverter}}">
+                                    <ContentPresenter Content="{TemplateBinding SelectedContent}" />
+                                </Grid>
+                                <Grid x:Name="PART_ItemsHolder" Grid.Row="1" Visibility="{TemplateBinding TabPersistBehavior,Converter={StaticResource TabPersistBehaviorToItemHolderVisibilityConverter}}" />
                             </Grid>
-                            <Grid x:Name="PART_ItemsHolder" Grid.Row="1" Visibility="{TemplateBinding TabPersistBehavior,Converter={StaticResource TabPersistBehaviorToItemHolderVisibilityConverter}}" />
-                        </Grid>
-                    </ControlTemplate>
-                </chromeTabs:ChromeTabControl.Template>
-                <chromeTabs:ChromeTabControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type chromeTabs:ChromeTabItem}}}">
-                            <StackPanel Orientation="Horizontal" Background="Transparent">
-                                <Image Source="{Binding Icon}" Width="20" Height="20" Margin="5,2,0,0"/>
-                                <TextBlock Text="{Binding TabName}" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" FontSize="18" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Grid>
-                    </DataTemplate>
-                </chromeTabs:ChromeTabControl.ItemTemplate>
-            </chromeTabs:ChromeTabControl>
-        </DockPanel>
-    </Grid>
+                        </ControlTemplate>
+                    </chromeTabs:ChromeTabControl.Template>
+                    <chromeTabs:ChromeTabControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type chromeTabs:ChromeTabItem}}}">
+                                <StackPanel Orientation="Horizontal" Background="Transparent">
+                                    <Image Source="{Binding Icon}" Width="20" Height="20" Margin="5,2,0,0"/>
+                                    <TextBlock Text="{Binding TabName}" Margin="10,0,0,0" FontFamily="Segoe UI Semibold" FontSize="18" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </chromeTabs:ChromeTabControl.ItemTemplate>
+                </chromeTabs:ChromeTabControl>
+            </DockPanel>
+        </Grid>
+    </Viewbox>
 </Window>

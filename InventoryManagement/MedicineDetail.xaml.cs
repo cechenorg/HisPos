@@ -29,7 +29,7 @@ namespace His_Pos.InventoryManagement
     /// <summary>
     /// MedicineDetail.xaml 的互動邏輯
     /// </summary>
-    public partial class MedicineDetail : Window
+    public partial class MedicineDetail : UserControl
     {
         public InventoryMedicine InventoryMedicine;
         public SeriesCollection SalesCollection { get; set; }
@@ -48,23 +48,27 @@ namespace His_Pos.InventoryManagement
 
         private bool IsChanged = false;
         private bool IsFirst = true;
-        public MedicineDetail(InventoryMedicine inventoryMedicine)
+        public MedicineDetail()
         {
             InitializeComponent();
-            Title = inventoryMedicine.Name;
-            InventoryMedicine = inventoryMedicine;
-            //this.Owner = MainWindow.Instance;
+
+            InventoryMedicine = (InventoryMedicine)ProductDetail.NewProduct;
+            ProductDetail.NewProduct = null;
+
             UpdateUi();
-           
+            
             IsFirst = false;
             DataContext = this;
         }
    
         private void UpdateUi()
         {
-                if (InventoryMedicine is null) return;
-            MedName.Content = InventoryMedicine.Name;
+            if (InventoryMedicine is null) return;
+
             MedId.Content = InventoryMedicine.Id;
+            MedChiName.Content = InventoryMedicine.ChiName;
+            MedEngName.Content = InventoryMedicine.EngName;
+
             MedSafeAmount.Text = InventoryMedicine.Stock.SafeAmount;
             MedLocation.Text = InventoryMedicine.Location;
             MedBasicAmount.Text = InventoryMedicine.Stock.BasicAmount;

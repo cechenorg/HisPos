@@ -13,6 +13,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
+using His_Pos.Class;
+using His_Pos.Class.Product;
 
 namespace His_Pos.InventoryManagement
 {
@@ -21,22 +24,36 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class ProductDetail : Window
     {
+        public static Product NewProduct;
+
+        public struct NewProductTab
+        {
+            public NewProductTab(string id, SearchType type)
+            {
+                Id = id;
+                Type = type;
+            }
+
+            public string Id { get; set; }
+            public SearchType Type { get; set; }
+        }
+        
         public ProductDetail()
         {
             InitializeComponent();
         }
+        
+        public void AddNewTab(Product newProduct)
+        {
+            NewProduct = newProduct;
 
-        private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (Tabs.SelectedItem is null) return;
-            //((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction(((TabBase)Tabs.SelectedItem).TabName);
-            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("OTCCC");
+            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id,(NewProduct is InventoryMedicine)? SearchType.MED : SearchType.OTC));
         }
-     
-        public void AddNewTab()
+
+        private void ProductDetail_OnClosed(object sender, EventArgs e)
         {
-            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("OTCC");
-            this.Focus();
+            InventoryManagementView.productDetail = null;
+            ((ViewModelProductDetailWindow)DataContext).ItemCollection.Clear();
         }
     }
 }

@@ -12,6 +12,7 @@ using MahApps.Metro.Controls.Dialogs;
 using His_Pos.Class;
 using System.Windows;
 using System.Windows.Controls;
+using His_Pos.InventoryManagement;
 
 namespace His_Pos.ViewModel
 {
@@ -55,7 +56,6 @@ namespace His_Pos.ViewModel
             this.ItemCollection.CollectionChanged += ItemCollection_CollectionChanged;
             this.ReorderTabsCommand = new RelayCommand<TabReorder>(ReorderTabsCommandAction);
             this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
-            //this.AddTabCommand = new RelayCommand<object>(AddProductDetailTabAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
             CanAddTabs = true;
         }
@@ -112,125 +112,29 @@ namespace His_Pos.ViewModel
         }
         private void CloseTabCommandAction(TabBase vm)
         {
-            switch (vm.TabName)
-            {
-                case "OTCCC":
-                    break;
-                case nameof(FeatureItem.處方登錄):
-                    break;
-                case nameof(FeatureItem.處方查詢):
-                    break;
-                case nameof(FeatureItem.庫存查詢):
-                    break;
-                case nameof(FeatureItem.處理單管理):
-                    //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
-                    //{
-                    //    MessageWindow message = new MessageWindow("正在儲存", MessageType.ERROR);
-                    //    return;
-                    //}
-                    break;
-                case nameof(FeatureItem.處理單紀錄):
-                    break;
-                case nameof(FeatureItem.新增盤點):
-                    break;
-                case nameof(FeatureItem.庫存盤點紀錄):
-                    break;
-                default:
-                    return;
-            }
-
             this.ItemCollection.Remove(vm);
         }
-        public void AddProductDetailTabAction(object featureItem)
-        {
-            if (IsTabOpened(featureItem.ToString())) return;
-            TabBase newTab;
-            newTab = new InventoryManagement.OtcDetailView() { TabName = "OTCCC", Icon = MainWindow.HisFeatures[0].Icon };
-            this.ItemCollection.Add(newTab.getTab());
-            this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
-        }
-        //Adds a random tab
+        
         public void AddTabCommandAction(object featureItem)
         {
-            if (IsTabOpened(featureItem.ToString())) return;
-
             TabBase newTab;
 
-            switch (featureItem.ToString())
+            ProductDetail.NewProductTab newProductTab = (ProductDetail.NewProductTab)featureItem;
+
+            switch (newProductTab.Type)
             {
-                case nameof(FeatureItem.處方登錄):
-                    newTab = new PrescriptionDec.PrescriptionDec() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
+                case SearchType.OTC:
+                    newTab = new OtcDetailView() { TabName = newProductTab.Id, Icon = "..\\Images\\PosDot.png" };
                     break;
-                case nameof(FeatureItem.處方查詢):
-                    newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
-                    break;
-                case nameof(FeatureItem.庫存查詢):
-                    newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
-                    break;
-                case nameof(FeatureItem.處理單管理):
-                    newTab = new ProductPurchase.ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
-                    break;
-                case nameof(FeatureItem.處理單紀錄):
-                    newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
-                    break;
-                case nameof(FeatureItem.新增盤點):
-                    newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
-                    break;
-                case nameof(FeatureItem.庫存盤點紀錄):
-                    newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
+                case SearchType.MED:
+                    newTab = new MedicineDetailView() { TabName = newProductTab.Id, Icon = "..\\Images\\HisDot.png" };
                     break;
                 default:
                     return;
             }
+
             this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
-        }
-
-        public bool IsTabOpened(string tabName)
-        {
-            
-            foreach (TabBase tab in ItemCollection)
-            {
-                if (tab.TabName == tabName)
-                {
-                    SelectedTab = tab;
-
-                    switch (tabName)
-                    {
-                        case nameof(FeatureItem.處方登錄):
-                            break;
-                        case nameof(FeatureItem.處方查詢):
-                            break;
-                        case nameof(FeatureItem.庫存查詢):
-                            if (InventoryManagement.InventoryManagementView.Instance is null) break;
-
-                            if (InventoryManagement.InventoryManagementView.DataChanged)
-                            {
-                                InventoryManagement.InventoryManagementView.Instance.MergingData();
-                                InventoryManagement.InventoryManagementView.Instance.SearchData();
-                            }
-                            break;
-                        case nameof(FeatureItem.處理單管理):
-                            break;
-                        case nameof(FeatureItem.處理單紀錄):
-                            if (ProductPurchaseRecord.ProductPurchaseRecordView.Instance is null) break;
-
-                            if (ProductPurchaseRecord.ProductPurchaseRecordView.DataChanged)
-                                ProductPurchaseRecord.ProductPurchaseRecordView.Instance.UpdateUi();
-
-                            ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
-                            break;
-                        case nameof(FeatureItem.新增盤點):
-                            break;
-                        case nameof(FeatureItem.庫存盤點紀錄):
-                            break;
-                    }
-
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

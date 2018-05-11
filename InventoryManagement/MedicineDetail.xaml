@@ -1,45 +1,46 @@
-﻿<Window x:Class="His_Pos.InventoryManagement.MedicineDetail"
+﻿<UserControl x:Class="His_Pos.InventoryManagement.MedicineDetail"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.InventoryManagement"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        xmlns:product="clr-namespace:His_Pos.Class.Product"
-         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-        mc:Ignorable="d"
-        Title="MedicineDetail" Height="800" Width="1500" WindowStartupLocation="CenterScreen">
-
-    <Window.Background>
-        <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
-    </Window.Background>
+        mc:Ignorable="d" Height="900" Width="1600" Background="Transparent">
     <Viewbox Stretch="Fill">
-        <Grid Width="1500">
+        <Grid Width="1600">
             <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="200"/>
                 <RowDefinition Height="70"/>
-                <RowDefinition Height="230"/>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="430"/>
+                <RowDefinition Height="510"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="700"/>
-                <ColumnDefinition Width="800"/>
+                <ColumnDefinition Width="750"/>
+                <ColumnDefinition Width="850"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <StackPanel Orientation="Horizontal" Width="1200">
-                    <Label Name="MedName" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,20,10" Padding="0"/>
-                    <Label Name="MedId" Foreground="DimGray" FontSize="25" FontFamily="Segoe UI Semi" Margin="0,25,0,10" Padding="0"/>
-                </StackPanel>
-                <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
-                <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,10,20,10" Padding="0" VerticalContentAlignment="Bottom"/>
-            </StackPanel>
-            <Grid Grid.Row="1" Grid.Column="0" Margin="10,0,10,5" Grid.ColumnSpan="2">
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="300"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Name="MedId" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Foreground="DimGray" FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" VerticalAlignment="Center" Padding="0"/>
+                <Label Name="MedChiName" Foreground="Black" FontSize="40" Grid.Row="0" Grid.Column="1" FontFamily="Segoe UI Semibold" Margin="20,10,20,0" Padding="0"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                    <Label Name="MedEngName" Width="950" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semi" Margin="20,0,20,0" Padding="0"/>
+                    <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
+                    <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,0,20,0" Padding="0" VerticalContentAlignment="Bottom"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="0" Margin="10,0,10,5" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="350"/>
                     <ColumnDefinition Width="250"/>
                     <ColumnDefinition Width="350"/>
-                    <ColumnDefinition Width="360"/>
-                    <ColumnDefinition Width="220"/>
+                    <ColumnDefinition Width="370"/>
+                    <ColumnDefinition Width="260"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" Background="{StaticResource GridBackGround}">
                     <Grid.RowDefinitions>
@@ -54,22 +55,22 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
                         <Label Content="狀態" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <ComboBox Name="MedStatus" Width="70" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" SelectionChanged="MedData_TextChanged">
+                        <ComboBox Name="MedStatus" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" SelectionChanged="MedData_TextChanged">
                             <ComboBoxItem>啟用</ComboBoxItem>
                             <ComboBoxItem>已停用</ComboBoxItem>
                         </ComboBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="MedSafeAmount" Width="70" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
+                        <TextBox Name="MedSafeAmount" Width="95" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" >
                         <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="MedBasicAmount" Width="70" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
+                        <TextBox Name="MedBasicAmount" Width="95" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1" >
                         <Label Content="櫃位" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Name="MedLocation" Width="70" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
+                        <TextBox Name="MedLocation" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" >
                         <CheckBox Content="管制藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
@@ -179,11 +180,11 @@
                 </DockPanel>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Column="4" Margin="10,0,0,0">
                     <Label Content="備註" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                    <RichTextBox Name="MedNotes" Height="168" Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible" TextChanged="MedNotes_TextChanged"/>
+                    <RichTextBox Name="MedNotes" Height="140" Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible" TextChanged="MedNotes_TextChanged"/>
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="10,5,10,5">
-                <Rectangle Width="1080"/>
+                <Rectangle Width="1180"/>
                 <Label Name="IsChangedLabel" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0,0,5,0"/>
                 <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="Gray" Click="ChangedCancelButton_Click" />
                 <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,14,0,0" Background="Red" Name="ButtonUpdateSubmmit" PreviewMouseLeftButtonUp="ButtonUpdateSubmmit_MouseLeftButtonUp" Height="31" VerticalAlignment="Top" />
@@ -191,12 +192,13 @@
             <Grid Grid.Column="0" Grid.Row="3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="250"/>
+                    <RowDefinition Height="80"/>
                     <RowDefinition Height="180"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="300"/>
                     <ColumnDefinition Width="170"/>
-                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="280"/>
                 </Grid.ColumnDefinitions>
                 <DataGrid Name="MedStock" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="0" Margin="10,5,0,5">
@@ -223,7 +225,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="病患" Width="80" Binding="{Binding Patient}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                        <DataGridTextColumn Header="病患" Width="90" Binding="{Binding Patient}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -231,7 +233,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="數量" Width="70" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                        <DataGridTextColumn Header="數量" Width="80" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -255,7 +257,7 @@
                 </StackPanel>
                 <DockPanel Background="{StaticResource GridBackGround}" Margin="5,5,5,5" Grid.Row="0" Grid.Column="2">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Top">
-                        <Label Content="處方紀錄" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="0,0,40,0"/>
+                        <Label Content="處方紀錄" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="0,0,60,0"/>
                         <Image Source="/Images/showDetail.png" Width="25" Margin="0,0,5,0"/>
                     </StackPanel>
                     <DataGrid Name="MedCusOrder" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
@@ -283,7 +285,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="數量" Width="50" Binding="{Binding CUSORDDET_QTY}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Header="數量" Width="70" Binding="{Binding CUSORDDET_QTY}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -291,7 +293,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="病患" Width="70" Binding="{Binding CUS_NAME}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Header="病患" Width="80" Binding="{Binding CUS_NAME}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -302,7 +304,27 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
-                <lvc:CartesianChart Series="{Binding SalesCollection}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource GridBackGround}" Margin="10,5,5,10">
+                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="10,5,5,5" Grid.Column="0">
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="5" Grid.Column="1">
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="5" Grid.Column="2">
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="5" Grid.Column="3">
+
+                    </StackPanel>
+                </Grid>
+                <lvc:CartesianChart Series="{Binding SalesCollection}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource GridBackGround}" Margin="10,5,5,10">
                     <lvc:CartesianChart.AxisY>
                         <lvc:Axis ShowLabels="False"/>
                     </lvc:CartesianChart.AxisY>
@@ -315,10 +337,10 @@
                     </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>
             </Grid>
-            <Grid Grid.Row="3" Grid.Column="1">
+            <Grid Grid.Row="4" Grid.Column="1">
                 <DockPanel Background="{StaticResource GridBackGround}" Margin="5,5,10,10">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Top">
-                        <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="0,0,310,0"/>
+                        <Label Content="訂單紀錄" HorizontalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="0,0,350,0"/>
                         <Image Source="/Images/showDetail.png" Width="25" Margin="0,0,5,0"/>
                     </StackPanel>
                     <DataGrid Name="MedStoOrder" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False">
@@ -338,7 +360,7 @@
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="120" Header="供應商" Binding="{Binding ManufactoryName}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Width="160" Header="供應商" Binding="{Binding ManufactoryName}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -346,7 +368,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="130" Header="訂貨日期" Binding="{Binding StoreOrderDate}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Width="120" Header="訂貨日期" Binding="{Binding StoreOrderDate}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -354,7 +376,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="130" Header="有效日期" Binding="{Binding StoreValidDate}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Width="120" Header="有效日期" Binding="{Binding StoreValidDate}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -362,7 +384,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="80" Header="訂貨人" Binding="{Binding OrderEmployee}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Width="100" Header="訂貨人" Binding="{Binding OrderEmployee}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -370,7 +392,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="80" Header="批號" Binding="{Binding BatchNumber}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Width="150" Header="批號" Binding="{Binding BatchNumber}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -400,4 +422,4 @@
             </Grid>
         </Grid>
     </Viewbox>
-</Window>
+</UserControl>
