@@ -12,8 +12,7 @@
     <Viewbox Stretch="Fill">
         <Grid Width="1600">
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="120"/>
                 <RowDefinition Height="200"/>
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="510"/>
@@ -22,16 +21,24 @@
                 <ColumnDefinition Width="750"/>
                 <ColumnDefinition Width="850"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Name="OtcId" Foreground="DimGray" FontSize="40" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0"/>
-                <Label Name="OtcChiName" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semi" Margin="20,10,20,10" Padding="0"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Name="OtcEngName" Width="1200" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,20,0" VerticalAlignment="Center" Padding="0"/>
-                <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
-                <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,10,20,10" Padding="0" VerticalContentAlignment="Bottom"/>
-            </StackPanel>
-            <Grid Grid.Row="2" Grid.Column="0" Margin="10,0,10,5" Grid.ColumnSpan="2">
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Name="OtcId" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Foreground="DimGray" FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
+                <Label Name="OtcChiName" Foreground="Black" FontSize="40" Grid.Row="0" Grid.Column="1" FontFamily="Segoe UI Semibold" Margin="20,10,20,10" Padding="0"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+                    <Label Name="OtcEngName" Width="1000" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,20,0" VerticalAlignment="Center" Padding="0"/>
+                    <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
+                    <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,10,20,10" Padding="0" VerticalContentAlignment="Bottom"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="0" Margin="10,0,10,5" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="350"/>
                     <ColumnDefinition Width="250"/>
@@ -165,13 +172,13 @@
                     <RichTextBox Name="OTCNotes" Height="140" Margin="10" FontFamily="Segoe UI Semi" FontSize="14" VerticalScrollBarVisibility="Visible"  TextChanged="OTCNotes_TextChanged" />
                 </StackPanel>
             </Grid>
-            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="10,5,10,5">
+            <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="10,5,10,5">
                 <Rectangle Width="1180"/>
                 <Label Name="IsChangedLabel" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0,0,5,0"/>
                 <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="Gray" Click="ChangedCancelButton_Click" />
                 <Button Name="ButtonUpdateSubmmit" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="Red" PreviewMouseUp="ButtonUpdateSubmmit_OnMouseLeftButtonUp"/>
             </StackPanel>
-            <Grid Grid.Column="0" Grid.Row="4">
+            <Grid Grid.Column="0" Grid.Row="3">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="250"/>
                     <RowDefinition Height="80"/>
