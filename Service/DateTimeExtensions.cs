@@ -64,5 +64,6 @@ namespace His_Pos.Service
         {
             return dateStr.PadLeft(2,'0');
         }
+       
     }
 }

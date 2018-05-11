@@ -59,18 +59,22 @@
                 <Label Grid.Column="0" Grid.Row="0" Content="全部" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,0,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="9">
                     <Label Content="櫃位" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Margin="0,0,10,0" Width="120" FontSize="16"/>
+                    <TextBox Name="Location" Margin="0,0,10,0" Width="120" FontSize="16"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="9">
-                    <Label Content="商品開頭" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Margin="0,0,10,0" Width="90" FontSize="16"/>
+                    <Label Content="商品編號開頭" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="ProductId" Margin="0,0,10,0" Width="90" FontSize="16"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Margin="9">
+                    <Label Content="商品名稱開頭" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="ProductName" Margin="0,0,10,0" Width="90" FontSize="16"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="4" Margin="9">
                     <Label Content="效期" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Width="60" FontSize="16"/>
+                    <TextBox Name="ValidDate" Width="60" FontSize="16"/>
                     <Label Content="個月內" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
-                <CheckBox Grid.Column="4" Grid.Row="0" Content="低於安全量" Margin="50,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <CheckBox Grid.Column="5" Grid.Row="0" Content="低於安全量" Margin="50,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <Label Grid.Column="0" Grid.Row="1" Content="OTC" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,0,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="9">
                     <Label Content="類別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>

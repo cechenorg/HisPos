@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
+using static His_Pos.ProductPurchase.ProductPurchaseView;
+using His_Pos.Interface;
 
 namespace His_Pos.StockTaking
 {
@@ -42,10 +44,10 @@ namespace His_Pos.StockTaking
             loadingWindow.Topmost = true;
             loadingWindow.Show();
         }
-       
+
         private void UpdateUi()
         {
-            switch(stockTakingStatus)
+            switch (stockTakingStatus)
             {
                 case StockTakingStatus.ADDPRODUCTS:
                     ViewGrid.RowDefinitions[2].Height = new GridLength(15);
@@ -113,9 +115,28 @@ namespace His_Pos.StockTaking
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             UpdateUi();
         }
+        private bool CaculateValidDate(string validdate, string month) {
+            if (String.IsNullOrEmpty(month) || String.IsNullOrEmpty(validdate)) return false;
+            var reply = false;
+            int nowDate = Int32.Parse(DateTime.Now.AddMonths().ToString("yyyyMMdd"));
+
+            return reply;
+        }
 
         private void AddItems_Click(object sender, RoutedEventArgs e)
         {
+
+            var result = ProductCollection.Where(x => (
+                (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
+            &&  (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
+            && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
+            && (CaculateValidDate(((IStockTaking)x).ValidDate,ValidDate.Text) || ValidDate.Text == string.Empty)
+            ));
+            var tempCollection = new Collection<Product>(result.ToList());
+            foreach (var product in tempCollection){
+                TakingCollection.Add(product);
+            }
+            
 
         }
     }
