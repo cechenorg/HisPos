@@ -14,5 +14,6 @@ namespace His_Pos.Interface
         string ValidDate { get; set; }
         string LastCheckDate { get; set; }
         string Location { get; set; }
+        string BatchNumber { get; set; }
     }
 }

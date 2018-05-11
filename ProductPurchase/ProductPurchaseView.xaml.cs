@@ -397,7 +397,7 @@ namespace His_Pos.ProductPurchase
             SetChanged();
             if (productAuto is null) return;
             if (productAuto.SelectedItem is null) {
-                if(productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<object>).Count != 0)
+                if(productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<object>).Count != 0 && productAuto.Text.Length >=4)
                     productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<object>)[0];
                 else
                     return;

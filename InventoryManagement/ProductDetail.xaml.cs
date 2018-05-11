@@ -21,6 +21,8 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class ProductDetail : Window
     {
+
+
         public ProductDetail()
         {
             InitializeComponent();
