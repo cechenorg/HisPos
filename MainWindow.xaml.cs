@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using ChromeTabs;
 using His_Pos.Class;
 using His_Pos.Class.Person;
+using His_Pos.Service;
 using His_Pos.ViewModel;
 using MenuUserControl;
 using Label = System.Windows.Controls.Label;
@@ -37,8 +38,9 @@ namespace His_Pos
             StratClock();
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
+           
         }
-
+        
         private void InitialUserBlock()
         {
             UserName.Content = CurrentUser.Name;

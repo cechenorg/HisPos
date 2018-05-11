@@ -108,7 +108,6 @@ namespace His_Pos.Class.StoreOrder
                 NotifyPropertyChanged("TotalPrice");
             }
         }
-
         private string recEmp;
 
         public string RecEmp

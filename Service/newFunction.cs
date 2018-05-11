@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace His_Pos.Service
@@ -64,6 +65,16 @@ namespace His_Pos.Service
                     // children with the same name
                     FindChildGroup(child, childName, ref list);
                 }
+            }
+        }
+        public static void GridPrinter(Grid grid, string title, string subtitle)
+        {
+            PrintDialog dlg = new PrintDialog();
+
+            if ((bool)dlg.ShowDialog().GetValueOrDefault())
+            {
+                grid.Arrange(new Rect(new Point(0, 0), grid.DesiredSize));
+                dlg.PrintVisual(grid, title + "\r\n" + subtitle);
             }
         }
     }

@@ -96,7 +96,7 @@
                     <CheckBox Content="管制藥" Foreground="{StaticResource ForeGround}" Margin="20,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Content="冷藏品" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
-                <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0"/>
+                <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Click="AddItems_Click"/>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkestBackGround}">
                 <Label Content="列印排序" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,10,0"/>

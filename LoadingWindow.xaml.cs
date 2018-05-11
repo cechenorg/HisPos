@@ -191,7 +191,6 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    stockTakingView.CheckItems.ItemsSource = stockTakingView.ProductCollection;
                     stockTakingView.AddItems.IsEnabled = true;
                     stockTakingView.AddOneItem.IsEnabled = true;
                     stockTakingView.FinishedAddProduct.IsEnabled = true;

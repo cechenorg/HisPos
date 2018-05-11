@@ -45,7 +45,7 @@
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">
-        <Grid>
+        <Grid Name="MainGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="230"/>
                 <ColumnDefinition Width="1365"/>

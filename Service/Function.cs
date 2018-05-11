@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml;
 using His_Pos.Class;
@@ -191,6 +192,8 @@ namespace His_Pos
         /*
          * 判斷輸入是否為數字
          */
+
+     
         public static bool IsNumeric(string input)
         {
             try
