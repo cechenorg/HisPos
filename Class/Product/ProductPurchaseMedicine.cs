@@ -65,6 +65,8 @@ namespace His_Pos.Class.Product
         {
         }
 
+        public string CountStatus { get; set; } = "";
+        public string FocusColumn { get; set; } = "";
         public InStock Stock { get; set; }
         private string note;
         public string Note
@@ -98,6 +100,7 @@ namespace His_Pos.Class.Product
             set
             {
                 totalPrice = value;
+                CalculateData("TotalPrice");
                 NotifyPropertyChanged("TotalPrice");
             }
         }
@@ -108,7 +111,7 @@ namespace His_Pos.Class.Product
             set
             {
                 amount = value;
-                CalculateData();
+                CalculateData("Amount");
                 NotifyPropertyChanged("Amount");
             }
         }
@@ -119,7 +122,8 @@ namespace His_Pos.Class.Product
             set
             {
                 price = value;
-                CalculateData();
+                CalculateData("Price");
+                NotifyPropertyChanged("Price");
             }
         }
 
@@ -171,9 +175,34 @@ namespace His_Pos.Class.Product
             }
         }
 
-        public void CalculateData()
+        public void CalculateData(string inputSource)
         {
-            TotalPrice = amount * price;
+            if (totalPrice == amount * price || price == totalPrice / amount) return;
+
+            bool isColumnChanged;
+
+            if (FocusColumn.Equals(""))
+                isColumnChanged = false;
+            else
+                isColumnChanged = !FocusColumn.Equals(inputSource);
+
+            if (isColumnChanged) CountStatus = "";
+
+            if (inputSource.Equals("Amount") && amount == 0)
+                return;
+            else if (inputSource.Equals("Amount") && totalPrice != 0 && amount != 0 && !CountStatus.Equals("*"))
+            {
+                Price = totalPrice / amount;
+            }
+            else if (!inputSource.Equals("TotalPrice"))
+            {
+                CountStatus = "*";
+                TotalPrice = amount * price;
+            }
+            else if (amount != 0)
+            {
+                Price = totalPrice / amount;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

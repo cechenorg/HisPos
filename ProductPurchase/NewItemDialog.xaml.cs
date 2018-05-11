@@ -93,7 +93,7 @@ namespace His_Pos.ProductPurchase
 
                     ColumnDetails = new Collection<ColumnDetail>() {
                                     new ColumnDetail("商品編號", "Product.Id", 120, textInMidStyle),
-                                    new ColumnDetail("商品名稱", "Product.Name", 250),
+                                    new ColumnDetail("商品名稱", "Product.Name", 350),
                                     new ColumnDetail("庫存", "Product.Stock.Inventory", 50, textInMidStyle),
                                     new ColumnDetail("安全量", "Product.Stock.SafeAmount", 70, textInMidStyle),
                                     new ColumnDetail("基準量", "Product.Stock.BasicAmount", 70, textInMidStyle)};
@@ -168,6 +168,13 @@ namespace His_Pos.ProductPurchase
             if (SearchResult is null) return;
 
             SearchResult.Items.Filter = SearchFilter;
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (sender is null) return;
+
+            ItemGrid.RowDefinitions[1].Height = new GridLength((sender as NewItemDialog).Height - 140);
         }
     }
 }

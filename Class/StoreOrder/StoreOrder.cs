@@ -90,7 +90,7 @@ namespace His_Pos.Class.StoreOrder
                         TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
                         break;
                     case OrderType.PROCESSING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
+                        TypeIcon = new BitmapImage(new Uri(@"..\Images\DarkerHisDot.png", UriKind.Relative));
                         break;
                 }
             }

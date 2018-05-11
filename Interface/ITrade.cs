@@ -13,6 +13,9 @@ namespace His_Pos.Interface
         double Amount { get; set; }
         double Price { get; set; }
 
-        void CalculateData();
+        string CountStatus { get; set; }
+        string FocusColumn { get; set; }
+
+        void CalculateData(string inputSource);
     }
 }

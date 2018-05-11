@@ -8,10 +8,15 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class ProductTakingOTC : AbstractClass.Product, IProductTaking
+    public class StockTakingOTC : AbstractClass.Product, IStockTaking
     {
-        public ProductTakingOTC(DataRow dataRow) : base(dataRow)
+        public StockTakingOTC(DataRow dataRow) : base(dataRow)
         {
+            Location = dataRow["PRO_LOCATION"].ToString();
+            Category = dataRow["PROTYP_CHINAME"].ToString();
+            LastCheckDate = dataRow["PROCHE_DATE"].ToString();
+            Inventory = Double.Parse(dataRow["PRO_INVENTORY"].ToString());
+            ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
         }
 
         public string Category { get; set; }
