@@ -25,17 +25,10 @@ namespace His_Pos.InventoryManagement
         {
             InitializeComponent();
         }
-
-        private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (Tabs.SelectedItem is null) return;
-            //((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction(((TabBase)Tabs.SelectedItem).TabName);
-            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("OTCCC");
-        }
      
         public void AddNewTab()
         {
-            ((ViewModelProductDetailWindow)DataContext).AddProductDetailTabAction("OTCC");
+            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction("OTC");
             this.Focus();
         }
     }
