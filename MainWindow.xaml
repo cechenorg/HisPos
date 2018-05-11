@@ -16,7 +16,8 @@
     xmlns:StockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
     x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
-        WindowStartupLocation="CenterScreen"  Height="900" Width="1600"
+        WindowStartupLocation="CenterScreen"   Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}" 
+    Width="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}" MinWidth="800" MinHeight="450"
         DataContext="{Binding Source={StaticResource Locator},Path=ViewModelMainWindow}">
