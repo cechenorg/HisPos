@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.StockTaking"
              mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365">
+             d:DesignHeight="839" d:DesignWidth="1365" Name="StockTaking">
     <Viewbox Stretch="Fill">
         <Grid Name="ViewGrid" Width="1365" Height="839">
             <Grid.RowDefinitions>
@@ -74,7 +74,7 @@
                     <TextBox Name="ValidDate" Width="60" FontSize="16"/>
                     <Label Content="個月內" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
-                <CheckBox Grid.Column="5" Grid.Row="0" Content="低於安全量" Margin="50,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <CheckBox Name="SafeAmount" Grid.Column="5" Grid.Row="0" Content="低於安全量" Margin="50,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <Label Grid.Column="0" Grid.Row="1" Content="OTC" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,0,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="9">
                     <Label Content="類別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
@@ -97,8 +97,8 @@
                 </StackPanel>
                 <Label Grid.Column="0" Grid.Row="2" Content="藥品" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,0,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
-                    <CheckBox Content="管制藥" Foreground="{StaticResource ForeGround}" Margin="20,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <CheckBox Content="冷藏品" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <CheckBox Name="ControlMed" Content="管制藥" Foreground="{StaticResource ForeGround}" Margin="20,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <CheckBox Name="FreezeMed" Content="冷藏品" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
                 <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Click="AddItems_Click"/>
             </Grid>
@@ -106,7 +106,7 @@
                 <Label Content="列印排序" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,10,0"/>
             </StackPanel>
             <DataGrid Name="CheckItems" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="5">
+                       ItemsSource="{Binding TakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="5">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -190,7 +190,8 @@
                 <Label Content="盤點商品  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Content="0" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="780"/>
+                <Rectangle Name="Row1Rectangle" Width="610"/>
+                <Button Name="ClearProduct" Margin="0,0,20,0" Width="150" Content="清空盤點單" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ClearProduct_Click"/>
                 <Button Name="FinishedAddProduct" Width="150" Content="新增完成" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Click="NextStatus_Click"/>
                 <Button Name="Print" Width="150" Content="列印盤點單" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DeepSkyBlue" BorderThickness="0" Click="NextStatus_Click"/>
             </StackPanel>

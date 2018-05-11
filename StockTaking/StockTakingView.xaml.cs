@@ -18,25 +18,54 @@ using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
 using static His_Pos.ProductPurchase.ProductPurchaseView;
 using His_Pos.Interface;
+using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace His_Pos.StockTaking
 {
     /// <summary>
     /// StockTakingView.xaml 的互動邏輯
     /// </summary>
-    public partial class StockTakingView : UserControl
+    public partial class StockTakingView : UserControl, INotifyPropertyChanged
     {
         public Collection<Product> ProductCollection;
-        public Collection<Product> TakingCollection = new Collection<Product>();
+        public ListCollectionView ProductTypeCollection;
+        public ObservableCollection<Product> takingCollection = new ObservableCollection<Product>();
+        public ObservableCollection<Product> TakingCollection {
+            get
+            {
+                return takingCollection;
+            }
+            set
+            {
+                takingCollection = value;
+                NotifyPropertyChanged("TakingCollection");
+            }
+        }
         private StockTakingStatus stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public StockTakingView()
         {
             InitializeComponent();
             UpdateUi();
-
+            SetOtcTypeUi();
+            DataContext = this;
             InitProduct();
         }
-
+      
+        public void SetOtcTypeUi()
+        {
+            ProductTypeCollection = ProductDb.GetProductType();
+            OtcType.ItemsSource = ProductTypeCollection;
+            OtcType.SelectedValue = "無";
+        }
         private void InitProduct()
         {
             LoadingWindow loadingWindow = new LoadingWindow();
@@ -68,6 +97,7 @@ namespace His_Pos.StockTaking
                     CompleteLine.Stroke = Brushes.LightSlateGray;
                     CompleteLine.StrokeDashArray = new DoubleCollection() { 4 };
                     CompleteEllipse.Fill = Brushes.LightSlateGray;
+                    ClearProduct.Visibility = Visibility.Visible;
                     FinishedAddProduct.Visibility = Visibility.Visible;
                     Print.Visibility = Visibility.Collapsed;
                     break;
@@ -80,8 +110,10 @@ namespace His_Pos.StockTaking
                     PrintLine.Stroke = Brushes.DeepSkyBlue;
                     PrintLine.StrokeDashArray = new DoubleCollection() { 300 };
                     PrintEllipse.Fill = Brushes.GreenYellow;
+                    ClearProduct.Visibility = Visibility.Collapsed;
                     FinishedAddProduct.Visibility = Visibility.Collapsed;
                     Print.Visibility = Visibility.Visible;
+                    Row1Rectangle.Width = 780;
                     break;
                 case StockTakingStatus.INPUTRESULT:
                     ViewGrid.RowDefinitions[4].Height = new GridLength(0);
@@ -117,27 +149,32 @@ namespace His_Pos.StockTaking
         }
         private bool CaculateValidDate(string validdate, string month) {
             if (String.IsNullOrEmpty(month) || String.IsNullOrEmpty(validdate)) return false;
-            var reply = false;
-            int nowDate = Int32.Parse(DateTime.Now.AddMonths().ToString("yyyyMMdd"));
-
-            return reply;
+            validdate = validdate.Replace("/","");
+            int compareDate = Int32.Parse(DateTime.Now.AddMonths(Int32.Parse(month)).ToString("yyyyMMdd"));
+            if (Int32.Parse(validdate) <= compareDate && Int32.Parse(validdate) > Int32.Parse(DateTime.Now.ToString("yyyyMMdd")) )return true;
+            return false;
         }
 
         private void AddItems_Click(object sender, RoutedEventArgs e)
         {
-
-            var result = ProductCollection.Where(x => (
+            
+               var result = ProductCollection.Where(x => (
                 (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
             &&  (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
             && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
             && (CaculateValidDate(((IStockTaking)x).ValidDate,ValidDate.Text) || ValidDate.Text == string.Empty)
+            && ( (((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
+            && (( x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
+            && (!TakingCollection.Contains(x))
             ));
-            var tempCollection = new Collection<Product>(result.ToList());
-            foreach (var product in tempCollection){
+            foreach (var product in result){
                 TakingCollection.Add(product);
             }
-            
+        }
 
+        private void ClearProduct_Click(object sender, RoutedEventArgs e)
+        {
+            TakingCollection.Clear();
         }
     }
 }

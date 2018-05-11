@@ -155,6 +155,7 @@ namespace His_Pos
         {
             stockTakingView.AddItems.IsEnabled = false;
             stockTakingView.AddOneItem.IsEnabled = false;
+            stockTakingView.ClearProduct.IsEnabled = false;
             stockTakingView.FinishedAddProduct.IsEnabled = false;
             stockTakingView.Print.IsEnabled = false;
 
@@ -194,6 +195,7 @@ namespace His_Pos
                     stockTakingView.AddItems.IsEnabled = true;
                     stockTakingView.AddOneItem.IsEnabled = true;
                     stockTakingView.FinishedAddProduct.IsEnabled = true;
+                    stockTakingView.ClearProduct.IsEnabled = true;
                     stockTakingView.Print.IsEnabled = true;
                     Close();
                 }));
