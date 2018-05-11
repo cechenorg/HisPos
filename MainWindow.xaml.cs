@@ -27,8 +27,8 @@ namespace His_Pos
         {
             FeatureFactory();
             InitializeComponent();
+            WindowState = WindowState.Maximized;
             Title = "藥健康 POS-HIS 系統";
-            WindowState = WindowState.Normal;
             CurrentUser = userLogin;
             Instance = this;
             InitializePosMenu();
