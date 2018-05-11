@@ -52,8 +52,10 @@ namespace His_Pos.InventoryManagement
         {
             InitializeComponent();
 
+            InventoryMedicine = (InventoryMedicine)ProductDetail.NewProduct;
+
             UpdateUi();
-           
+            
             IsFirst = false;
             DataContext = this;
         }

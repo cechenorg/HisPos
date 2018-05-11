@@ -56,7 +56,9 @@ namespace His_Pos.InventoryManagement
         public OtcDetail()
         {
             InitializeComponent();
-            
+
+            //InventoryOtc = (InventoryOtc)ProductDetail.NewProduct;
+
             UpdateUi();
             CheckAuth();
             

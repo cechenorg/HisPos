@@ -23,7 +23,7 @@
                 <ColumnDefinition Width="850"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Name="MedId" Foreground="DimGray" FontSize="40" FontFamily="Segoe UI Semibold" Margin="0,10,0,10" Padding="0"/>
+                <Label Content="{Binding }" Foreground="DimGray" FontSize="40" FontFamily="Segoe UI Semibold" Margin="0,10,0,10" Padding="0"/>
                 <Label Name="MedChiName" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semi" Margin="20,10,20,10" Padding="0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">

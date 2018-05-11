@@ -80,12 +80,20 @@ namespace His_Pos.InventoryManagement
         {
             selectStockValue = 0;
             searchCount = 0;
-            SearchData();
+            //SearchData();
             SearchCount.Content = searchCount;
             SelectStockValue.Content = selectStockValue.ToString("0.#");
+
+            if (productDetail is null)
+            {
+                productDetail = new ProductDetail();
+                productDetail.Show();
+            }
+
+            productDetail.AddNewTab();
         }
 
-        private void SearchData()
+        public void SearchData()
         {
             ProductList.Items.Filter = OrderTypeFilter;
         }
@@ -155,7 +163,7 @@ namespace His_Pos.InventoryManagement
                 productDetail.Show();
             }
 
-            productDetail.AddNewTab((Product)selectedItem);
+            productDetail.AddNewTab();
         }
 
         private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)

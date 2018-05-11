@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.AbstractClass;
+using His_Pos.Class;
+using His_Pos.Class.Product;
 
 namespace His_Pos.InventoryManagement
 {
@@ -22,16 +24,30 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class ProductDetail : Window
     {
-        //((ViewModelProductDetailWindow)DataContext).AddTabCommandAction("OTC");
+        public static Product NewProduct;
 
+        public struct NewProductTab
+        {
+            public NewProductTab(string id, SearchType type)
+            {
+                Id = id;
+                Type = type;
+            }
+
+            public string Id { get; set; }
+            public SearchType Type { get; set; }
+        }
+        
         public ProductDetail()
         {
             InitializeComponent();
         }
      
-        public void AddNewTab( Product newProduct)
+        public void AddNewTab()
         {
-            
+            //NewProduct = newProduct;
+            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction("OO");
+            //((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id,(NewProduct is InventoryMedicine)? SearchType.MED : SearchType.OTC));
         }
     }
 }

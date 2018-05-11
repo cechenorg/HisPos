@@ -10,9 +10,7 @@
         DataContext="{Binding Source={StaticResource ProductDetailViewModelLocator},Path=ViewModelProductDetailWindow}"
         Title="ProductDetail" Height="830" Width="1400">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type local:MedicineDetailView}">
-            <local:MedicineDetail/>
-        </DataTemplate>
+        
         <DataTemplate DataType="{x:Type local:OtcDetailView}">
             <local:OtcDetail/>
         </DataTemplate>
