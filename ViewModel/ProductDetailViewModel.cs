@@ -118,15 +118,19 @@ namespace His_Pos.ViewModel
         public void AddTabCommandAction(object featureItem)
         {
             TabBase newTab;
-            newTab = new OtcDetailView();
-            //switch (featureItem.ToString())
-            //{
-            //    case nameof(FeatureItem.處方登錄):
-            //        newTab = new PrescriptionDec.PrescriptionDec() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
-            //        break;
-            //    default:
-            //        return;
-            //}
+
+            switch (featureItem)
+            {
+                case SearchType.OTC:
+                    newTab = new OtcDetailView() { TabName = "", Icon = "" };
+                    break;
+                case SearchType.MED:
+                    newTab = new MedicineDetailView() { TabName = "", Icon = "" };
+                    break;
+                default:
+                    return;
+            }
+
             this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];
         }

@@ -48,11 +48,10 @@ namespace His_Pos.InventoryManagement
 
         private bool IsChanged = false;
         private bool IsFirst = true;
-        public MedicineDetail(InventoryMedicine inventoryMedicine)
+        public MedicineDetail()
         {
             InitializeComponent();
-            InventoryMedicine = inventoryMedicine;
-            //this.Owner = MainWindow.Instance;
+
             UpdateUi();
            
             IsFirst = false;
@@ -62,7 +61,6 @@ namespace His_Pos.InventoryManagement
         private void UpdateUi()
         {
                 if (InventoryMedicine is null) return;
-            MedName.Content = InventoryMedicine.Name;
             MedId.Content = InventoryMedicine.Id;
             MedSafeAmount.Text = InventoryMedicine.Stock.SafeAmount;
             MedLocation.Text = InventoryMedicine.Location;

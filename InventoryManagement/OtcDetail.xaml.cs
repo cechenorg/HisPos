@@ -56,8 +56,6 @@ namespace His_Pos.InventoryManagement
         public OtcDetail()
         {
             InitializeComponent();
-            InventoryOtc inventoryOtc = null;
-            InventoryOtc = inventoryOtc;
             
             UpdateUi();
             CheckAuth();
@@ -111,9 +109,7 @@ namespace His_Pos.InventoryManagement
         private void UpdateUi()
         {
             if (InventoryOtc is null) return;
-
-            OtcName.Content = InventoryOtc.Name;
-            OtcId.Content = InventoryOtc.Id;
+            
             
             OtcStatus.Text = (InventoryOtc.Status)? "啟用":"已停用";
             OtcSafeAmount.Text = InventoryOtc.Stock.SafeAmount;

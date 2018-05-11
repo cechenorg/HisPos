@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
 
 namespace His_Pos.InventoryManagement
 {
@@ -21,17 +22,16 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class ProductDetail : Window
     {
-
+        //((ViewModelProductDetailWindow)DataContext).AddTabCommandAction("OTC");
 
         public ProductDetail()
         {
             InitializeComponent();
         }
      
-        public void AddNewTab()
+        public void AddNewTab( Product newProduct)
         {
-            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction("OTC");
-            this.Focus();
+            
         }
     }
 }

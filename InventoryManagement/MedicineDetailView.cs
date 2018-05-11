@@ -7,7 +7,7 @@ using His_Pos.ViewModel;
 
 namespace His_Pos.InventoryManagement
 {
-    class MedicineDetailView : TabBase
+    public class MedicineDetailView : TabBase
     {
         public override TabBase getTab()
         {

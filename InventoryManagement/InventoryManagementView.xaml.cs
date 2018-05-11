@@ -28,10 +28,8 @@ namespace His_Pos.InventoryManagement
         private SearchType searchType = SearchType.ALL;
         public double selectStockValue = 0;
         public double searchCount = 0;
-        private string selectProductId = string.Empty;
         public ListCollectionView ProductTypeCollection;
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
-        private bool IsNewProductDetail = true;
         private ProductDetail productDetail = null;
         public ObservableCollection<Product> _DataList 
         {
@@ -82,20 +80,12 @@ namespace His_Pos.InventoryManagement
         {
             selectStockValue = 0;
             searchCount = 0;
-           // SearchData();
+            SearchData();
             SearchCount.Content = searchCount;
             SelectStockValue.Content = selectStockValue.ToString("0.#");
-            
-            if (IsNewProductDetail)
-            {
-                productDetail = new ProductDetail();
-                productDetail.Show();
-                IsNewProductDetail = false;
-            }
-            productDetail.AddNewTab();
         }
 
-        public void SearchData()
+        private void SearchData()
         {
             ProductList.Items.Filter = OrderTypeFilter;
         }
@@ -158,21 +148,14 @@ namespace His_Pos.InventoryManagement
         {
             if (!Search.IsEnabled) return;
             var selectedItem = (sender as DataGridRow).Item;
-            selectProductId = ((Product)selectedItem).Id;
-            if (selectedItem is InventoryOtc)
+
+            if (productDetail is null)
             {
-               // OtcDetail productDetail = new OtcDetail((InventoryOtc)selectedItem);
-                
-               // productDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
-               
-               // productDetail.Show();
+                productDetail = new ProductDetail();
+                productDetail.Show();
             }
-            else if (selectedItem is InventoryMedicine)
-            {
-                MedicineDetail medcineDetail = new MedicineDetail((InventoryMedicine)selectedItem);
-                medcineDetail.mouseButtonEventHandler += ComfirmChangeButtonOnMouseLeftButtonUp;
-                medcineDetail.Show();
-            }
+
+            productDetail.AddNewTab((Product)selectedItem);
         }
 
         private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)

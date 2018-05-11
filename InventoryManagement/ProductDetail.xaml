@@ -4,23 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.InventoryManagement"
-         xmlns:InventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
-        xmlns:ProductPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource ProductDetailViewModelLocator},Path=ViewModelProductDetailWindow}"
         Title="ProductDetail" Height="830" Width="1400">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type InventoryManagement:OtcDetailView}">
-            <InventoryManagement:OtcDetail/>
+        <DataTemplate DataType="{x:Type local:MedicineDetailView}">
+            <local:MedicineDetail/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type InventoryManagement:MedicineDetailView}">
-            <InventoryManagement:MedicineDetail/>
+        <DataTemplate DataType="{x:Type local:OtcDetailView}">
+            <local:OtcDetail/>
         </DataTemplate>
     </Window.Resources>
     <Grid>
-        <DockPanel Grid.Column="1">
+        <DockPanel>
             <DockPanel.Background>
                 <ImageBrush ImageSource="../Images/onlyoneeeeeee.jpg"/>
             </DockPanel.Background>
