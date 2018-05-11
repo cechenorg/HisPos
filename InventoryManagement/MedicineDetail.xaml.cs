@@ -62,8 +62,12 @@ namespace His_Pos.InventoryManagement
    
         private void UpdateUi()
         {
-                if (InventoryMedicine is null) return;
+            if (InventoryMedicine is null) return;
+
             MedId.Content = InventoryMedicine.Id;
+            MedChiName.Content = InventoryMedicine.ChiName;
+            MedEngName.Content = InventoryMedicine.EngName;
+
             MedSafeAmount.Text = InventoryMedicine.Stock.SafeAmount;
             MedLocation.Text = InventoryMedicine.Location;
             MedBasicAmount.Text = InventoryMedicine.Stock.BasicAmount;

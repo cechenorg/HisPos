@@ -43,11 +43,11 @@ namespace His_Pos.InventoryManagement
             InitializeComponent();
         }
      
-        public void AddNewTab()
+        public void AddNewTab(Product newProduct)
         {
-            //NewProduct = newProduct;
-            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction("OO");
-            //((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id,(NewProduct is InventoryMedicine)? SearchType.MED : SearchType.OTC));
+            NewProduct = newProduct;
+
+            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id,(NewProduct is InventoryMedicine)? SearchType.MED : SearchType.OTC));
         }
     }
 }

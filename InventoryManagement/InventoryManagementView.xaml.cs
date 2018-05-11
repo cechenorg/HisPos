@@ -80,17 +80,9 @@ namespace His_Pos.InventoryManagement
         {
             selectStockValue = 0;
             searchCount = 0;
-            //SearchData();
+            SearchData();
             SearchCount.Content = searchCount;
             SelectStockValue.Content = selectStockValue.ToString("0.#");
-
-            if (productDetail is null)
-            {
-                productDetail = new ProductDetail();
-                productDetail.Show();
-            }
-
-            productDetail.AddNewTab();
         }
 
         public void SearchData()
@@ -163,7 +155,8 @@ namespace His_Pos.InventoryManagement
                 productDetail.Show();
             }
 
-            productDetail.AddNewTab();
+            productDetail.AddNewTab((Product)selectedItem);
+            productDetail.Focus();
         }
 
         private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)

@@ -118,20 +118,20 @@ namespace His_Pos.ViewModel
         public void AddTabCommandAction(object featureItem)
         {
             TabBase newTab;
-            newTab = new OtcDetailView() { TabName = featureItem.ToString(), Icon = "..\\Images\\PosDot.png" };
-            //ProductDetail.NewProductTab newProductTab = (ProductDetail.NewProductTab)featureItem;
 
-            //switch (newProductTab.Type)
-            //{
-            //    case SearchType.OTC:
-            //        newTab = new OtcDetailView() { TabName = newProductTab.Id, Icon = "..\\Images\\PosDot.png" };
-            //        break;
-            //    case SearchType.MED:
-            //        newTab = new MedicineDetailView() { TabName = newProductTab.Id, Icon = "..\\Images\\HisDot.png" };
-            //        break;
-            //    default:
-            //        return;
-            //}
+            ProductDetail.NewProductTab newProductTab = (ProductDetail.NewProductTab)featureItem;
+
+            switch (newProductTab.Type)
+            {
+                case SearchType.OTC:
+                    newTab = new OtcDetailView() { TabName = newProductTab.Id, Icon = "..\\Images\\PosDot.png" };
+                    break;
+                case SearchType.MED:
+                    newTab = new MedicineDetailView() { TabName = newProductTab.Id, Icon = "..\\Images\\HisDot.png" };
+                    break;
+                default:
+                    return;
+            }
 
             this.ItemCollection.Add(newTab.getTab());
             this.SelectedTab = this.ItemCollection[ItemCollection.Count - 1];

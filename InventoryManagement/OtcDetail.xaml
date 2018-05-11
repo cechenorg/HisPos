@@ -23,11 +23,11 @@
                 <ColumnDefinition Width="850"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Content="{Binding }" Foreground="DimGray" FontSize="40" FontFamily="Segoe UI Semibold" Margin="0,10,0,10" Padding="0"/>
-                <Label Name="MedChiName" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semi" Margin="20,10,20,10" Padding="0"/>
+                <Label Name="OtcId" Foreground="DimGray" FontSize="40" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0"/>
+                <Label Name="OtcChiName" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semi" Margin="20,10,20,10" Padding="0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label Name="MedEngName" Width="1200" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,20,0" VerticalAlignment="Center" Padding="0"/>
+                <Label Name="OtcEngName" Width="1200" Foreground="Black" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,20,0" VerticalAlignment="Center" Padding="0"/>
                 <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
                 <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,10,20,10" Padding="0" VerticalContentAlignment="Bottom"/>
             </StackPanel>

@@ -57,11 +57,11 @@ namespace His_Pos.InventoryManagement
         {
             InitializeComponent();
 
-            //InventoryOtc = (InventoryOtc)ProductDetail.NewProduct;
+            InventoryOtc = (InventoryOtc)ProductDetail.NewProduct;
 
             UpdateUi();
             CheckAuth();
-            
+
             IsFirst = false;
         }
         
@@ -111,8 +111,11 @@ namespace His_Pos.InventoryManagement
         private void UpdateUi()
         {
             if (InventoryOtc is null) return;
-            
-            
+
+            OtcId.Content = InventoryOtc.Id;
+            OtcChiName.Content = InventoryOtc.ChiName;
+            OtcEngName.Content = InventoryOtc.EngName;
+
             OtcStatus.Text = (InventoryOtc.Status)? "啟用":"已停用";
             OtcSafeAmount.Text = InventoryOtc.Stock.SafeAmount;
             OtcBasicAmount.Text = InventoryOtc.Stock.BasicAmount;
