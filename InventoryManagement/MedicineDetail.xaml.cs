@@ -29,7 +29,7 @@ namespace His_Pos.InventoryManagement
     /// <summary>
     /// MedicineDetail.xaml 的互動邏輯
     /// </summary>
-    public partial class MedicineDetail : Window
+    public partial class MedicineDetail : UserControl
     {
         public InventoryMedicine InventoryMedicine;
         public SeriesCollection SalesCollection { get; set; }
@@ -51,7 +51,6 @@ namespace His_Pos.InventoryManagement
         public MedicineDetail(InventoryMedicine inventoryMedicine)
         {
             InitializeComponent();
-            Title = inventoryMedicine.Name;
             InventoryMedicine = inventoryMedicine;
             //this.Owner = MainWindow.Instance;
             UpdateUi();

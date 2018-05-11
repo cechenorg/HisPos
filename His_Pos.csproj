@@ -291,6 +291,7 @@
     <Compile Include="InventoryManagement\MedicineDetail.xaml.cs">
       <DependentUpon>MedicineDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InventoryManagement\MedicineDetailView.cs" />
     <Compile Include="InventoryManagement\OtcDetail.xaml.cs">
       <DependentUpon>OtcDetail.xaml</DependentUpon>
     </Compile>
