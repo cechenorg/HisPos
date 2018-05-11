@@ -42,12 +42,18 @@ namespace His_Pos.InventoryManagement
         {
             InitializeComponent();
         }
-     
+        
         public void AddNewTab(Product newProduct)
         {
             NewProduct = newProduct;
 
             ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id,(NewProduct is InventoryMedicine)? SearchType.MED : SearchType.OTC));
+        }
+
+        private void ProductDetail_OnClosed(object sender, EventArgs e)
+        {
+            InventoryManagementView.productDetail = null;
+            ((ViewModelProductDetailWindow)DataContext).ItemCollection.Clear();
         }
     }
 }

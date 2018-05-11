@@ -53,6 +53,7 @@ namespace His_Pos.InventoryManagement
             InitializeComponent();
 
             InventoryMedicine = (InventoryMedicine)ProductDetail.NewProduct;
+            ProductDetail.NewProduct = null;
 
             UpdateUi();
             

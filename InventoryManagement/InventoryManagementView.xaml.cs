@@ -30,7 +30,7 @@ namespace His_Pos.InventoryManagement
         public double searchCount = 0;
         public ListCollectionView ProductTypeCollection;
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
-        private ProductDetail productDetail = null;
+        public static ProductDetail productDetail = null;
         public ObservableCollection<Product> _DataList 
         {
             get { return _dataList; }

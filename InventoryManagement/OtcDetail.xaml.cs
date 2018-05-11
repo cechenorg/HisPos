@@ -58,11 +58,13 @@ namespace His_Pos.InventoryManagement
             InitializeComponent();
 
             InventoryOtc = (InventoryOtc)ProductDetail.NewProduct;
+            ProductDetail.NewProduct = null;
 
             UpdateUi();
             CheckAuth();
 
             IsFirst = false;
+            DataContext = this;
         }
         
 
