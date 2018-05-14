@@ -181,7 +181,7 @@ namespace His_Pos.ProductPurchase
             ConfirmToProcess.IsEnabled = true;
             Confirm.IsEnabled = true;
             ReceiveEmp.IsEnabled = true;
-            Note.IsEnabled = true;
+            
 
             switch (type)
             {
@@ -331,7 +331,7 @@ namespace His_Pos.ProductPurchase
                 ConfirmToProcess.IsEnabled = false;
                 Confirm.IsEnabled = false;
                 ReceiveEmp.IsEnabled = false;
-                Note.IsEnabled = false;
+               
             }
             
             StoOrderOverview.SelectedIndex = 0;
@@ -485,9 +485,7 @@ namespace His_Pos.ProductPurchase
                 ClearOrderDetailData();
             else
                 StoOrderOverview.SelectedIndex = 0;
-            
         }
-
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             SetChanged();

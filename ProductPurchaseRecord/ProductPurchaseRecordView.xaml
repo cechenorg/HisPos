@@ -165,10 +165,6 @@
                             <Label Content="收貨人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
                             <Label Content="{Binding Path=StoreOrderData.RecEmp,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Column="3" Grid.Row="0" Grid.ColumnSpan="2">
-                            <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                            <Label Content="{Binding Path=StoreOrderData.RecEmp,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center"/>
-                        </StackPanel>
                     </Grid>
                     <DataGrid Name="StoreOrderDetail" Grid.Row="2" CanUserAddRows="False" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                           AutoGenerateColumns="False">
@@ -218,7 +214,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="贈量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
+                            <DataGridTextColumn Header="贈量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FreeAmount}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
