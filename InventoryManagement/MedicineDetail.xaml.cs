@@ -307,6 +307,8 @@ namespace His_Pos.InventoryManagement
         {
             if (ChangedFlagNotChanged()) return;
             if (!CheckValue()) return;
+            InventoryMedicine.ChiName = MedChiName.Text;
+            InventoryMedicine.EngName = MedEngName.Text;
             InventoryMedicine.Location = MedLocation.Text;
             InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
             InventoryMedicine.Stock.SafeAmount = MedSafeAmount.Text;
@@ -321,6 +323,8 @@ namespace His_Pos.InventoryManagement
                                           ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
                 ProductDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
             }
+            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS);
+            messageWindow.Show();
             InitVariables();
         }
      

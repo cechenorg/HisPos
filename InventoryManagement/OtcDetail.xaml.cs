@@ -260,6 +260,8 @@ namespace His_Pos.InventoryManagement
         {
             if (ChangedFlagNotChanged()) return;
             if (!CheckValue()) return;
+            InventoryOtc.ChiName = OtcChiName.Text;
+            InventoryOtc.EngName = OtcEngName.Text;
             InventoryOtc.Location = OtcLocation.Text;
             InventoryOtc.Stock.BasicAmount = OtcBasicAmount.Text;
             InventoryOtc.Stock.SafeAmount = OtcSafeAmount.Text;
@@ -278,6 +280,8 @@ namespace His_Pos.InventoryManagement
                                           ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text);
                 ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
+            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS);
+            messageWindow.Show();
             InitVariables();
         }
         
