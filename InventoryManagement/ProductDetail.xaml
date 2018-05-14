@@ -8,7 +8,10 @@
         xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
         mc:Ignorable="d"
         DataContext="{Binding Source={StaticResource ProductDetailViewModelLocator},Path=ViewModelProductDetailWindow}"
-        Title="ProductDetail" Height="930" Width="1600" Closed="ProductDetail_OnClosed" WindowStartupLocation="CenterScreen">
+        Title="ProductDetail" Height="930" Width="1600" Closed="ProductDetail_OnClosed"
+        Left="{Binding RelativeSource={RelativeSource Self}, Path=StartLeft}" 
+        Top="{Binding RelativeSource={RelativeSource Self}, Path=StartTop}"
+        >
     <Window.Resources>
         <DataTemplate DataType="{x:Type local:OtcDetailView}">
             <local:OtcDetail/>

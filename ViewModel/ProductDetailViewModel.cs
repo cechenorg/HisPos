@@ -113,6 +113,13 @@ namespace His_Pos.ViewModel
         private void CloseTabCommandAction(TabBase vm)
         {
             this.ItemCollection.Remove(vm);
+
+            if (ItemCollection.Count == 0 && ProductDetail.Instance != null)
+            {
+                ProductDetail.Instance.Close();
+                ProductDetail.Instance = null;
+            }
+                
         }
         
         public void AddTabCommandAction(object featureItem)
@@ -120,6 +127,15 @@ namespace His_Pos.ViewModel
             TabBase newTab;
 
             ProductDetail.NewProductTab newProductTab = (ProductDetail.NewProductTab)featureItem;
+
+            foreach (TabBase tab in ItemCollection)
+            {
+                if (tab.TabName == newProductTab.Id)
+                {
+                    this.SelectedTab = tab;
+                    return;
+                }
+            }
 
             switch (newProductTab.Type)
             {
