@@ -136,6 +136,25 @@
                 </Grid>
                 <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding Products}" FrozenColumnCount="3">
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="OverridesDefaultStyle" Value="true"/>
+                            <Setter Property="Width" Value="100"/>
+                            <Style.Triggers>
+                                <Trigger Property="Orientation" Value="Horizontal">
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Height" Value="15" />
+                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                </Trigger>
+                                <Trigger Property="Orientation" Value="Vertical">
+                                    <Setter Property="Width" Value="15"/>
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>

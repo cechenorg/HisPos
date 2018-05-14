@@ -159,23 +159,6 @@ namespace His_Pos.InventoryManagement
             productDetail.Focus();
         }
 
-        private void ComfirmChangeButtonOnMouseLeftButtonUp(object sender, MouseButtonEventArgs mouseButtonEventArgs)
-        {
-            Product product;
-            if (sender is OtcDetail)
-            {
-                product = (sender as OtcDetail).InventoryOtc;
-               InventoryOtcs.Select("PRO_ID='" + product.Id + "'")[0]["PRO_SAFEQTY"] = ((InventoryOtc)product).Stock.SafeAmount;
-               InventoryOtcs.Select("PRO_ID='" + product.Id + "'")[0]["PRO_BASICQTY"] = ((InventoryOtc)product).Stock.BasicAmount;
-            }
-            else
-            {
-                product = (sender as MedicineDetail).InventoryMedicine;
-                InventoryMedicines.Select("PRO_ID='" + product.Id + "'")[0]["PRO_SAFEQTY"] = ((InventoryMedicine)product).Stock.SafeAmount;
-                InventoryMedicines.Select("PRO_ID='" + product.Id + "'")[0]["PRO_BASICQTY"] = ((InventoryMedicine)product).Stock.BasicAmount;
-            }
-            SearchData();
-        }
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             ProductList.SelectedItem = (sender as DataGridRow).Item;

@@ -43,8 +43,6 @@ namespace His_Pos.InventoryManagement
        
         public ObservableCollection<ProductUnit> MedUnitCollection;
         public ObservableCollection<ProductDetailManufactory> MEDManufactoryCollection;
-       
-        public event MouseButtonEventHandler mouseButtonEventHandler;
 
         private bool IsChanged = false;
         private bool IsFirst = true;
@@ -324,9 +322,6 @@ namespace His_Pos.InventoryManagement
                 ProductDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
             }
             InitVariables();
-            MouseButtonEventHandler handler = mouseButtonEventHandler;
-
-            handler(this, e);
         }
      
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)

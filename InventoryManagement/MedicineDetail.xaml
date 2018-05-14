@@ -81,6 +81,25 @@
                 </Grid>
                 <DataGrid Name="MedManufactory" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="1" Margin="10,0,10,0">
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="OverridesDefaultStyle" Value="true"/>
+                            <Setter Property="Width" Value="100"/>
+                            <Style.Triggers>
+                                <Trigger Property="Orientation" Value="Horizontal">
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Height" Value="15" />
+                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                </Trigger>
+                                <Trigger Property="Orientation" Value="Vertical">
+                                    <Setter Property="Width" Value="15"/>
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -109,6 +128,25 @@
                 </DataGrid>
                 <DataGrid Name="MedIngredient" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="2" Margin="0,0,10,0">
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="OverridesDefaultStyle" Value="true"/>
+                            <Setter Property="Width" Value="100"/>
+                            <Style.Triggers>
+                                <Trigger Property="Orientation" Value="Horizontal">
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Height" Value="15" />
+                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                </Trigger>
+                                <Trigger Property="Orientation" Value="Vertical">
+                                    <Setter Property="Width" Value="15"/>
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -202,6 +240,25 @@
                 </Grid.ColumnDefinitions>
                 <DataGrid Name="MedStock" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="0" Margin="10,5,0,5">
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="OverridesDefaultStyle" Value="true"/>
+                            <Setter Property="Width" Value="100"/>
+                            <Style.Triggers>
+                                <Trigger Property="Orientation" Value="Horizontal">
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Height" Value="15" />
+                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                </Trigger>
+                                <Trigger Property="Orientation" Value="Vertical">
+                                    <Setter Property="Width" Value="15"/>
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Style.Triggers>
@@ -262,6 +319,25 @@
                     </StackPanel>
                     <DataGrid Name="MedCusOrder" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                               CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                <Setter Property="Width" Value="100"/>
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15"/>
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <Style.Triggers>
@@ -344,6 +420,25 @@
                         <Image Source="/Images/showDetail.png" Width="25" Margin="0,0,5,0"/>
                     </StackPanel>
                     <DataGrid Name="MedStoOrder" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"  AutoGenerateColumns="False">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                <Setter Property="Width" Value="100"/>
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15"/>
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <Style.Triggers>

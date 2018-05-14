@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -23,9 +24,10 @@ namespace His_Pos.Class.Product
                 Inventory = double.Parse(dataRow["PRO_INVENTORY"].ToString()),
                 SafeAmount = dataRow["PRO_SAFEQTY"].ToString(),
                 BasicAmount = dataRow["PRO_BASICQTY"].ToString()
-            }; 
-        Ingredient =  dataRow["HISMED_INGREDIENT"].ToString();
-    }
+            };
+            Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
+        }
+
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }

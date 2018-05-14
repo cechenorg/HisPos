@@ -23,10 +23,29 @@
             <TextBox Name="SearchText" Width="300" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="18" TextChanged="SearchTextChanged" Margin="10,0,0,0"/>
             <RadioButton Name="OnlyManufactory" Content="只有此供應商" Tag="0" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="Radio_OnChecked"/>
             <RadioButton Name="AllProducts" Content="所有商品" Tag="1" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="Radio_OnChecked"/>
-            <CheckBox Content="顯示停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" />
+            <CheckBox Name="IsStatusTrue" Content="顯示停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" Click="Radio_OnChecked"/>
         </StackPanel>
         <DataGrid Name="SearchResult" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="695" HorizontalAlignment="Left"
                       AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Margin="10" Background="{StaticResource GridBackGround}">
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type ScrollBar}">
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="OverridesDefaultStyle" Value="true"/>
+                    <Setter Property="Width" Value="100"/>
+                    <Style.Triggers>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Width" Value="Auto" />
+                            <Setter Property="Height" Value="15" />
+                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter Property="Width" Value="15"/>
+                            <Setter Property="Height" Value="Auto" />
+                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>

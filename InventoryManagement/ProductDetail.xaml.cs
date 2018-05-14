@@ -25,6 +25,10 @@ namespace His_Pos.InventoryManagement
     public partial class ProductDetail : Window
     {
         public static Product NewProduct;
+        public static ProductDetail Instance;
+
+        public double StartTop => (SystemParameters.WorkArea.Height - this.Height) / 2;
+        public double StartLeft => (SystemParameters.WorkArea.Width - this.Width) / 2;
 
         public struct NewProductTab
         {
@@ -41,6 +45,10 @@ namespace His_Pos.InventoryManagement
         public ProductDetail()
         {
             InitializeComponent();
+
+            Title = "商品詳細資料管理";
+
+            Instance = this;
         }
         
         public void AddNewTab(Product newProduct)

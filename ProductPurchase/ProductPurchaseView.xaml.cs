@@ -360,7 +360,7 @@ namespace His_Pos.ProductPurchase
 
             if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || Products is null) return;
             
-            var result = Products.Where(x => ((NewItemProduct)x).Product.Id.Contains(productAuto.Text) || ((NewItemProduct)x).Product.Name.Contains(productAuto.Text)).Take(50).Select(x => ((NewItemProduct)x).Product);
+            var result = Products.Where(x => (((NewItemProduct)x).Product.Id.Contains(productAuto.Text) || ((NewItemProduct)x).Product.Name.Contains(productAuto.Text)) && ((IProductPurchase)((NewItemProduct)x).Product).Status).Take(50).Select(x => ((NewItemProduct)x).Product);
             ProductAutoCompleteCollection = new ObservableCollection<object>(result.ToList());
 
             productAuto.ItemsSource = ProductAutoCompleteCollection;
