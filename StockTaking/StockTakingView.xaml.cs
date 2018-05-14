@@ -147,7 +147,7 @@ namespace His_Pos.StockTaking
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             UpdateUi();
         }
-        private bool CaculateValidDate(string validdate, string month) {
+        public bool CaculateValidDate(string validdate, string month) {
             if (String.IsNullOrEmpty(month) || String.IsNullOrEmpty(validdate)) return false;
             validdate = validdate.Replace("/","");
             int compareDate = Int32.Parse(DateTime.Now.AddMonths(Int32.Parse(month)).ToString("yyyyMMdd"));
@@ -165,11 +165,9 @@ namespace His_Pos.StockTaking
             && (CaculateValidDate(((IStockTaking)x).ValidDate,ValidDate.Text) || ValidDate.Text == string.Empty)
             && ( (((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
             && (( x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
-            && (!TakingCollection.Contains(x))
+            || (TakingCollection.Contains(x))
             ));
-            foreach (var product in result){
-                TakingCollection.Add(product);
-            }
+            TakingCollection = new ObservableCollection<Product>(result.ToList());
         }
 
         private void ClearProduct_Click(object sender, RoutedEventArgs e)

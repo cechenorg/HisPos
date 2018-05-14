@@ -150,14 +150,14 @@ namespace His_Pos.ProductPurchase
             UpdateOrderDetailData(storeOrder);
             UpdateOrderDetailUi(storeOrder.Type);
         }
-
+       
         private void SaveOrder()
         {
             BackgroundWorker backgroundWorker = new BackgroundWorker();
             Saving.Visibility = Visibility.Visible;
 
             StoreOrder saveOrder = storeOrderData.Clone() as StoreOrder;
-
+            
             backgroundWorker.DoWork += (s, o) =>
             {
                 StoreOrderDb.SaveOrderDetail(saveOrder);
@@ -611,90 +611,90 @@ namespace His_Pos.ProductPurchase
                 thisTextBox[newIndex].Focus();
             }
 
-            //按 Left
-            if (e.Key == Key.Left)
-            {
-                e.Handled = true;
-                var nextTextBox = new List<TextBox>();
-                var currentRowIndex = GetCurrentRowIndex(sender);
+            ////按 Left
+            //if (e.Key == Key.Left)
+            //{
+            //    e.Handled = true;
+            //    var nextTextBox = new List<TextBox>();
+            //    var currentRowIndex = GetCurrentRowIndex(sender);
 
-                if (currentRowIndex == -1) return;
+            //    if (currentRowIndex == -1) return;
 
-                switch (objectName)
-                {
-                    case "Price":
-                        return;
-                    case "Amount":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref nextTextBox);
-                        break;
-                    case "FreeAmount":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
-                        break;
-                    case "TotalPrice":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
-                        break;
-                    case "BatchNumber":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
-                        break;
-                    case "ValidDate":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
-                        break;
-                    case "Invoice":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
-                        break;
-                    case "Notes":
-                        if (storeOrderData.Type == OrderType.UNPROCESSING)
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
-                        else
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
-                        break;
-                }
+            //    switch (objectName)
+            //    {
+            //        case "Price":
+            //            return;
+            //        case "Amount":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref nextTextBox);
+            //            break;
+            //        case "FreeAmount":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
+            //            break;
+            //        case "TotalPrice":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
+            //            break;
+            //        case "BatchNumber":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
+            //            break;
+            //        case "ValidDate":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
+            //            break;
+            //        case "Invoice":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
+            //            break;
+            //        case "Notes":
+            //            if (storeOrderData.Type == OrderType.UNPROCESSING)
+            //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
+            //            else
+            //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
+            //            break;
+            //    }
 
-                nextTextBox[currentRowIndex].Focus();
-            }
+            //    nextTextBox[currentRowIndex].Focus();
+            //}
 
-            //按 Right
-            if (e.Key == Key.Right)
-            {
-                e.Handled = true;
-                var nextTextBox = new List<TextBox>();
-                var thisTextBox = new List<TextBox>();
-                var currentRowIndex = GetCurrentRowIndex(sender);
+            ////按 Right
+            //if (e.Key == Key.Right)
+            //{
+            //    e.Handled = true;
+            //    var nextTextBox = new List<TextBox>();
+            //    var thisTextBox = new List<TextBox>();
+            //    var currentRowIndex = GetCurrentRowIndex(sender);
 
-                if (currentRowIndex == -1) return;
+            //    if (currentRowIndex == -1) return;
 
-                switch (objectName)
-                {
-                    case "Price":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
-                        break;
-                    case "Amount":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
-                        break;
-                    case "FreeAmount":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
-                        break;
-                    case "TotalPrice":
-                        if (storeOrderData.Type == OrderType.UNPROCESSING)
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-                        else
-                            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
-                        break;
-                    case "BatchNumber":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
-                        break;
-                    case "ValidDate":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
-                        break;
-                    case "Invoice":
-                        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-                        break;
-                    case "Notes":
-                        return;
-                }
+            //    switch (objectName)
+            //    {
+            //        case "Price":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
+            //            break;
+            //        case "Amount":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
+            //            break;
+            //        case "FreeAmount":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
+            //            break;
+            //        case "TotalPrice":
+            //            if (storeOrderData.Type == OrderType.UNPROCESSING)
+            //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
+            //            else
+            //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
+            //            break;
+            //        case "BatchNumber":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
+            //            break;
+            //        case "ValidDate":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
+            //            break;
+            //        case "Invoice":
+            //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
+            //            break;
+            //        case "Notes":
+            //            return;
+            //    }
 
-                nextTextBox[currentRowIndex].Focus();
-            }
+            //    nextTextBox[currentRowIndex].Focus();
+            //}
 
             // Price Amount FreeAmount "0 打字 直接顯示數字"
             if (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount"))
@@ -710,6 +710,21 @@ namespace His_Pos.ProductPurchase
                         SetChanged();
                         textBox.Text = GetCharFromKey(e.Key);
                         textBox.CaretIndex = 1;
+                        e.Handled = true;
+                    }
+                }
+            }
+            else if (objectName.Equals("ValidDate")) {
+                if (!IsKeyAvailable(e.Key))
+                    e.Handled = true;
+                else
+                {
+                    SetChanged();
+                    TextBox textBox = sender as TextBox;
+
+                    if (e.Key == Key.Back || e.Key == Key.Delete)
+                    {
+                        textBox.Text = string.Empty;
                         e.Handled = true;
                     }
                 }
@@ -737,7 +752,7 @@ namespace His_Pos.ProductPurchase
         {
             if (key >= Key.D0 && key <= Key.D9) return true;
             if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
-            if( key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right) return true;
+            if( key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right || key == Key.OemPeriod || key == Key.Decimal) return true;
 
             return false;
         }
@@ -818,8 +833,46 @@ namespace His_Pos.ProductPurchase
                     || (obj as Person).Name.Contains(searchText);
             }
         }
-        
+
+      
     }
+    public class TextBoxDateConverter : IValueConverter {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTime dateValue;
+            if ( DateTime.TryParse(value.ToString(), out dateValue)) {
+                return dateValue.AddYears(-1911).ToString("yyyy/MM/dd").Substring(1,9);
+            } 
+            return value;
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTime dateValue;
+            var tempvalue = value;
+            if(tempvalue.ToString().Length >= 7)
+            {
+                switch (tempvalue.ToString().Substring(0, 1))
+                {
+                    case "1":
+                        if (!tempvalue.ToString().Contains("/"))
+                            tempvalue = Int32.Parse(tempvalue.ToString()) + 19110000;
+                        break;
+                    case "2":
+                        break;
+                    default:
+                        return value;
+                }
+                tempvalue = tempvalue.ToString().Insert(6, "/");
+                tempvalue = tempvalue.ToString().Insert(4, "/");
+            }
+            if (tempvalue.ToString().Length == 10 && DateTime.TryParse(tempvalue.ToString(), out dateValue))
+            {
+                return tempvalue;
+            }
+            return value;
+        }
+    }
+
     public class AutoCompleteIsEnableConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -832,6 +885,7 @@ namespace His_Pos.ProductPurchase
         {
             return "";
         }
+
     }
 
     public class LastRowIsEnableConverter : IValueConverter

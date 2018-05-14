@@ -93,7 +93,7 @@ namespace His_Pos.Class.StoreOrder
             details.Columns.Add("BATCHNUMBER", typeof(string));
             details.Columns.Add("FREEQTY", typeof(int));
             details.Columns.Add("INVOICE", typeof(string));
-
+            DateTime datetimevalue;
             foreach (var product in storeOrder.Products)
             {
                 var newRow = details.NewRow();
@@ -102,7 +102,7 @@ namespace His_Pos.Class.StoreOrder
                 newRow["QTY"] = ((ITrade)product).Amount;
                 newRow["PRICE"] = ((ITrade)product).Price;
                 newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
-                newRow["VALIDDATE"] = ((IProductPurchase)product).ValidDate;
+                newRow["VALIDDATE"] = ( DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue) ) ? ((IProductPurchase)product).ValidDate:string.Empty ;
                 newRow["BATCHNUMBER"] = ((IProductPurchase) product).BatchNumber;
                 newRow["FREEQTY"] = ((IProductPurchase)product).FreeAmount;
                 newRow["INVOICE"] = ((IProductPurchase)product).Invoice;

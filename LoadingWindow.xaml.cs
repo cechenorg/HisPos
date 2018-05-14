@@ -13,6 +13,7 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.AbstractClass;
 using System.Linq;
+using His_Pos.Interface;
 using His_Pos.StockTaking;
 
 namespace His_Pos
@@ -151,6 +152,8 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
+
+       
         public void MergeProductStockTaking(StockTakingView stockTakingView)
         {
             stockTakingView.AddItems.IsEnabled = false;

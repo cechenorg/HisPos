@@ -144,7 +144,7 @@ namespace His_Pos.Class.StoreOrder
         public string IsAnyDataEmpty()
         {
             string message = "";
-
+            DateTime datetimevalue;
             if (String.IsNullOrEmpty(Category.CategoryName))
                 message += "請填寫處理單類別\n";
 
@@ -173,6 +173,10 @@ namespace His_Pos.Class.StoreOrder
 
                 if( (Category.CategoryName.Equals("退貨") || Category.CategoryName.Equals("調貨")) && Math.Abs(((ITrade)product).Amount) > ((IProductPurchase)product).Stock.Inventory)
                     message += "商品 " + product.Id + " 數量不能超過庫存量\n";
+               
+                if ( !DateTime.TryParse( ((IProductPurchase)product).ValidDate,out datetimevalue) ){
+                    message += "商品 " + product.Id + " 效期格式不正確\n";
+                }
             }
 
             return message;
