@@ -114,8 +114,8 @@ namespace His_Pos.InventoryManagement
             if (InventoryOtc is null) return;
 
             OtcId.Content = InventoryOtc.Id;
-            OtcChiName.Content = InventoryOtc.ChiName;
-            OtcEngName.Content = InventoryOtc.EngName;
+            OtcChiName.Text = InventoryOtc.ChiName.Trim();
+            OtcEngName.Text = InventoryOtc.EngName.Trim();
 
             OtcStatus.Text = (InventoryOtc.Status)? "啟用":"已停用";
             OtcSafeAmount.Text = InventoryOtc.Stock.SafeAmount;

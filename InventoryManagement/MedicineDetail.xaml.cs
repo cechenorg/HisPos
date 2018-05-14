@@ -64,8 +64,8 @@ namespace His_Pos.InventoryManagement
             if (InventoryMedicine is null) return;
 
             MedId.Content = InventoryMedicine.Id;
-            MedChiName.Content = InventoryMedicine.ChiName;
-            MedEngName.Content = InventoryMedicine.EngName;
+            MedChiName.Text = InventoryMedicine.ChiName.Trim();
+            MedEngName.Text = InventoryMedicine.EngName.Trim();
 
             MedSafeAmount.Text = InventoryMedicine.Stock.SafeAmount;
             MedLocation.Text = InventoryMedicine.Location;
