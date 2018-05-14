@@ -57,6 +57,7 @@ namespace His_Pos.Class.Product
                     FreeAmount = 0;
                     ValidDate = "";
                     BatchNumber = "";
+                    Status = dataRow["PRO_STATUS"].ToString().Equals("1");
                     break;
             }
         }
@@ -65,6 +66,7 @@ namespace His_Pos.Class.Product
         {
         }
 
+        public bool Status { get; set; } = false;
         public string CountStatus { get; set; } = "";
         public string FocusColumn { get; set; } = "";
         public InStock Stock { get; set; }
@@ -220,6 +222,8 @@ namespace His_Pos.Class.Product
 
             med.Id = Id;
             med.Name = Name;
+            med.ChiName = ChiName;
+            med.EngName = EngName;
             med.Stock = Stock;
             med.LastPrice = LastPrice;
             med.Source = Source;
@@ -232,6 +236,7 @@ namespace His_Pos.Class.Product
             med.Invoice = Invoice;
             med.ValidDate = ValidDate;
             med.BatchNumber = BatchNumber;
+            med.Status = Status;
 
             return med;
         }

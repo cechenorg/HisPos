@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Interface;
 
 namespace His_Pos.ProductPurchase
 {
@@ -46,10 +47,6 @@ namespace His_Pos.ProductPurchase
                 Style = style;
             }
         }
-
-        
-
-
         public NewItemDialog(ItemType type, ObservableCollection<object> collection)
         {
             InitializeComponent();
@@ -127,6 +124,10 @@ namespace His_Pos.ProductPurchase
             switch (ItemType)
             {
                 case ItemType.Product:
+                    if (!((bool) IsStatusTrue.IsChecked ||
+                          ((IProductPurchase) (item as ProductPurchaseView.NewItemProduct).Product).Status))
+                        return false;
+
                     if ((bool) OnlyManufactory.IsChecked)
                     {
                         if (String.IsNullOrEmpty(SearchText.Text))

@@ -9,6 +9,7 @@ namespace His_Pos.Interface
 {
     public interface IProductPurchase
     {
+        bool Status { get; set; }
         string Note { get; set; }
         InStock Stock { get; set; }
         double LastPrice { get; set; }
