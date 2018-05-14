@@ -47,7 +47,6 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
         public ListCollectionView ProductTypeCollection;
-        public event MouseButtonEventHandler mouseButtonEventHandler;
        
         public InventoryOtc InventoryOtc;
         private bool IsChanged = false;
@@ -154,7 +153,7 @@ namespace His_Pos.InventoryManagement
         private void InitVariables()
         {
             IsChangedLabel.Content = "未修改";
-           // IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
+            IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
             
             IsChanged = false;
         }
@@ -280,9 +279,6 @@ namespace His_Pos.InventoryManagement
                 ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
             InitVariables();
-            MouseButtonEventHandler handler = mouseButtonEventHandler;
-
-            handler(this, e);
         }
         
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
