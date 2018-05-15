@@ -351,7 +351,7 @@ namespace His_Pos.ProductPurchase
             {
                 return (searchText, obj) =>
                     ((obj as NewItemProduct).Product.Id is null) ? true : (obj as NewItemProduct).Product.Id.Contains(searchText)
-                    || (obj as NewItemProduct).Product.Name.Contains(searchText);
+                    || (obj as NewItemProduct).Product.ChiName.Contains(searchText) || (obj as NewItemProduct).Product.EngName.Contains(searchText);
             }
         }
         private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
