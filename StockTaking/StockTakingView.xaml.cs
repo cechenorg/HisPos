@@ -20,6 +20,8 @@ using static His_Pos.ProductPurchase.ProductPurchaseView;
 using His_Pos.Interface;
 using System.ComponentModel;
 using System.Windows.Threading;
+using His_Pos.PrintDocuments;
+using His_Pos.Service;
 
 namespace His_Pos.StockTaking
 {
@@ -31,7 +33,8 @@ namespace His_Pos.StockTaking
         public ObservableCollection<Product> ProductCollection;
         public ListCollectionView ProductTypeCollection;
         public ObservableCollection<Product> takingCollection = new ObservableCollection<Product>();
-        public ObservableCollection<Product> TakingCollection {
+        public ObservableCollection<Product> TakingCollection
+        {
             get
             {
                 return takingCollection;
@@ -59,7 +62,7 @@ namespace His_Pos.StockTaking
             DataContext = this;
             InitProduct();
         }
-      
+
         public void SetOtcTypeUi()
         {
             ProductTypeCollection = ProductDb.GetProductType();
@@ -177,26 +180,27 @@ namespace His_Pos.StockTaking
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             UpdateUi();
         }
-        public bool CaculateValidDate(string validdate, string month) {
+        public bool CaculateValidDate(string validdate, string month)
+        {
             if (String.IsNullOrEmpty(month) || String.IsNullOrEmpty(validdate)) return false;
-            validdate = validdate.Replace("/","");
+            validdate = validdate.Replace("/", "");
             int compareDate = Int32.Parse(DateTime.Now.AddMonths(Int32.Parse(month)).ToString("yyyyMMdd"));
-            if (Int32.Parse(validdate) <= compareDate && Int32.Parse(validdate) > Int32.Parse(DateTime.Now.ToString("yyyyMMdd")) )return true;
+            if (Int32.Parse(validdate) <= compareDate && Int32.Parse(validdate) > Int32.Parse(DateTime.Now.ToString("yyyyMMdd"))) return true;
             return false;
         }
 
         private void AddItems_Click(object sender, RoutedEventArgs e)
         {
-            
-               var result = ProductCollection.Where(x => (
-                (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
-            &&  (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
-            && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
-            && (CaculateValidDate(((IStockTaking)x).ValidDate,ValidDate.Text) || ValidDate.Text == string.Empty)
-            && ( (((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
-            && (( x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
-            || (TakingCollection.Contains(x))
-            ));
+
+            var result = ProductCollection.Where(x => (
+             (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
+         && (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
+         && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
+         && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
+         && ((((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
+         && ((x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
+         || (TakingCollection.Contains(x))
+         ));
             TakingCollection = new ObservableCollection<Product>(result.ToList());
         }
 
@@ -207,12 +211,18 @@ namespace His_Pos.StockTaking
 
         private void OrderMode_OnChecked(object sender, RoutedEventArgs e)
         {
-            if(CheckItems is null) return;
+            if (CheckItems is null) return;
 
-            RadioButton radioButton = sender as RadioButton;;
+            RadioButton radioButton = sender as RadioButton; ;
 
             CheckItems.Items.SortDescriptions.Clear();
             CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[Int32.Parse(radioButton.Tag.ToString())].SortMemberPath, ListSortDirection.Ascending));
+        }
+
+        private void Print_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            NewFunction.GridPrinter(new StockTakingDocument(takingCollection), "TEST", "ttt");
         }
 
         private void AddOneItem_Click(object sender, RoutedEventArgs e)
