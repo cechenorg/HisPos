@@ -20,6 +20,8 @@ using static His_Pos.ProductPurchase.ProductPurchaseView;
 using His_Pos.Interface;
 using System.ComponentModel;
 using System.Windows.Threading;
+using His_Pos.PrintDocuments;
+using His_Pos.Service;
 
 namespace His_Pos.StockTaking
 {
@@ -215,6 +217,12 @@ namespace His_Pos.StockTaking
 
             CheckItems.Items.SortDescriptions.Clear();
             CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[Int32.Parse(radioButton.Tag.ToString())].SortMemberPath, ListSortDirection.Ascending));
+        }
+
+        private void Print_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            NewFunction.GridPrinter(new StockTakingDocument(takingCollection), "TEST", "ttt");
         }
     }
 }

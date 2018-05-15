@@ -67,14 +67,14 @@ namespace His_Pos.Service
                 }
             }
         }
-        public static void GridPrinter(Grid grid, string title, string subtitle)
+        public static void GridPrinter(UserControl userControl, string title, string subtitle)
         {
             PrintDialog dlg = new PrintDialog();
 
             if ((bool)dlg.ShowDialog().GetValueOrDefault())
             {
-                grid.Arrange(new Rect(new Point(0, 0), grid.DesiredSize));
-                dlg.PrintVisual(grid, title + "\r\n" + subtitle);
+                userControl.Arrange(new Rect(new Point(0, 0), userControl.DesiredSize));
+                dlg.PrintVisual(userControl, title + "\r\n" + subtitle);
             }
         }
     }
