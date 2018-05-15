@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -19,7 +18,11 @@ using His_Pos.Class.Product;
 using static His_Pos.ProductPurchase.ProductPurchaseView;
 using His_Pos.Interface;
 using System.ComponentModel;
+using System.Windows.Forms;
 using System.Windows.Threading;
+using His_Pos.Service;
+using RadioButton = System.Windows.Controls.RadioButton;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.StockTaking
 {
@@ -100,6 +103,7 @@ namespace His_Pos.StockTaking
                     ClearProduct.Visibility = Visibility.Visible;
                     FinishedAddProduct.Visibility = Visibility.Visible;
                     Print.Visibility = Visibility.Collapsed;
+                    Row1Rectangle.Width = 610;
                     break;
                 case StockTakingStatus.PRINT:
                     ViewGrid.RowDefinitions[3].Height = new GridLength(0);
@@ -183,6 +187,16 @@ namespace His_Pos.StockTaking
 
             CheckItems.Items.SortDescriptions.Clear();
             CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[Int32.Parse(radioButton.Tag.ToString())].SortMemberPath, ListSortDirection.Ascending));
+        }
+
+        private void Print_OnClick(object sender, RoutedEventArgs e)
+        {
+            stockTakingStatus++;
+            UpdateUi();
+
+            PrintPreviewDialog printPreviewDialog = new PrintPreviewDialog();
+
+            printPreviewDialog.Document = 
         }
     }
 }
