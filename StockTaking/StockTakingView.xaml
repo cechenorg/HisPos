@@ -115,12 +115,21 @@
                             </Trigger>
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
+                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
+                        <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
                         <Setter Property="FontSize" Value="14"/>
                         <Setter Property="Height" Value="40"/>
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="130" MaxWidth="130" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                    <DataGridTemplateColumn Width="30">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Margin="10,0,0,0"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn MinWidth="110" MaxWidth="110" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>

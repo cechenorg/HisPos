@@ -141,7 +141,37 @@ namespace His_Pos.StockTaking
             stockTakingStatus++;
             UpdateUi();
         }
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
 
+            if (selectedItem is IDeletable)
+            {
+                if (takingCollection.Contains(selectedItem))
+                {
+                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+                }
+
+                CheckItems.SelectedItem = selectedItem;
+                return;
+            }
+
+            CheckItems.SelectedIndex = takingCollection.Count;
+        }
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var leaveItem = (sender as DataGridRow).Item;
+
+            if (leaveItem is IDeletable)
+            {
+                (leaveItem as IDeletable).Source = string.Empty;
+            }
+        }
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+            takingCollection.RemoveAt(CheckItems.SelectedIndex);
+        }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
