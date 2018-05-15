@@ -175,7 +175,7 @@
                         <DataGridTemplateColumn Width="30">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Visibility="{Binding Vis, NotifyOnSourceUpdated=True}"/>
+                                    <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

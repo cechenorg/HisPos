@@ -28,10 +28,14 @@ namespace His_Pos
         public MessageWindow(string message, MessageType type)
         {
             InitializeComponent();
-
-            if (type == MessageType.ERROR)
-                Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png", UriKind.Relative));
-
+            switch (type) {
+                case MessageType.ERROR:
+                    Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png", UriKind.Relative));
+                    break;
+                case MessageType.SUCCESS:
+                    Icon.Source = new BitmapImage(new Uri(@"..\Images\Success.png", UriKind.Relative));
+                    break;
+            }
             Message.Content = message;
         }
 

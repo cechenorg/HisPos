@@ -127,11 +127,12 @@ namespace His_Pos.Class.Product
         }
         public static void UpdateOtcDataDetail(AbstractClass.Product product,string type)
         {
-
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             if (type == "InventoryMedicine") {
                 parameters.Add(new SqlParameter("PRO_ID", ((InventoryMedicine)product).Id));
+                parameters.Add(new SqlParameter("PRO_CHI", ((InventoryMedicine)product).ChiName));
+                parameters.Add(new SqlParameter("PRO_ENG", ((InventoryMedicine)product).EngName));
                 parameters.Add(new SqlParameter("SAFEQTY", ((InventoryMedicine)product).Stock.SafeAmount));
                 parameters.Add(new SqlParameter("BASICQTY", ((InventoryMedicine)product).Stock.BasicAmount));
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryMedicine)product).Location));
@@ -141,6 +142,8 @@ namespace His_Pos.Class.Product
             }
             else if (type == "InventoryOtc") {
                 parameters.Add(new SqlParameter("PRO_ID", ((InventoryOtc)product).Id));
+                parameters.Add(new SqlParameter("PRO_CHI", ((InventoryOtc)product).ChiName));
+                parameters.Add(new SqlParameter("PRO_ENG", ((InventoryOtc)product).EngName));
                 parameters.Add(new SqlParameter("SAFEQTY", ((InventoryOtc)product).Stock.SafeAmount));
                 parameters.Add(new SqlParameter("BASICQTY", ((InventoryOtc)product).Stock.BasicAmount));
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryOtc)product).Location));

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class StockTakingOTC : AbstractClass.Product, IStockTaking
+    public class StockTakingOTC : AbstractClass.Product, IStockTaking, IDeletable, INotifyPropertyChanged
     {
         public StockTakingOTC(DataRow dataRow) : base(dataRow)
         {
@@ -20,7 +21,14 @@ namespace His_Pos.Class.Product
             SafeAmount = Double.Parse(dataRow["PRO_SAFEQTY"].ToString());
             ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
         }
-
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public string Category { get; set; }
         public double Inventory { get; set; }
         public double SafeAmount { get; set; }
@@ -28,5 +36,18 @@ namespace His_Pos.Class.Product
         public string LastCheckDate { get; set; }
         public string Location { get; set; }
         public string BatchNumber { get; set; }
+        private string source;
+        public string Source
+        {
+            get
+            {
+                return source;
+            }
+            set
+            {
+                source = value;
+                NotifyPropertyChanged("Source");
+            }
+        }
     }
 }
