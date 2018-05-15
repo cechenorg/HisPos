@@ -12,6 +12,7 @@
         <local:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
         <local:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <local:TextBoxDateConverter x:Key="TextBoxDateConverter"/>
+        <local:ProductPurchaseView x:Key="ProductPurchaseView"/>
     </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
@@ -185,7 +186,7 @@
                                         <controls:AutoCompleteBox x:Name="Id" Width="110" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}" MinimumPrefixLength="4"
-                                                              Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed"
+                                                              Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed" ItemFilter="{Binding Source=ProductPurchaseView, Path=ProductFilter}"
                                                               IsEnabled="{Binding Id, Converter={StaticResource AutoCompleteIsEnableConverter}}">
                                         <controls:AutoCompleteBox.ItemTemplate>
                                             <DataTemplate>

@@ -204,5 +204,15 @@ namespace His_Pos.StockTaking
         {
             TakingCollection.Clear();
         }
+
+        private void OrderMode_OnChecked(object sender, RoutedEventArgs e)
+        {
+            if(CheckItems is null) return;
+
+            RadioButton radioButton = sender as RadioButton;;
+
+            CheckItems.Items.SortDescriptions.Clear();
+            CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[Int32.Parse(radioButton.Tag.ToString())].SortMemberPath, ListSortDirection.Ascending));
+        }
     }
 }
