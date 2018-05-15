@@ -16,5 +16,6 @@ namespace His_Pos.Interface
         string LastCheckDate { get; set; }
         string Location { get; set; }
         string BatchNumber { get; set; }
+        bool Status { get; set; }
     }
 }

@@ -28,7 +28,7 @@ namespace His_Pos.StockTaking
     /// </summary>
     public partial class StockTakingView : UserControl, INotifyPropertyChanged
     {
-        public Collection<Product> ProductCollection;
+        public ObservableCollection<Product> ProductCollection;
         public ListCollectionView ProductTypeCollection;
         public ObservableCollection<Product> takingCollection = new ObservableCollection<Product>();
         public ObservableCollection<Product> TakingCollection {
@@ -213,6 +213,17 @@ namespace His_Pos.StockTaking
 
             CheckItems.Items.SortDescriptions.Clear();
             CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[Int32.Parse(radioButton.Tag.ToString())].SortMemberPath, ListSortDirection.Ascending));
+        }
+
+        private void AddOneItem_Click(object sender, RoutedEventArgs e)
+        {
+            StockTakingItemDialog stockTakingItemDialog = new StockTakingItemDialog(ProductCollection,TakingCollection);
+            stockTakingItemDialog.ShowDialog();
+
+            if (stockTakingItemDialog.ConfirmButtonClicked)
+            {
+                TakingCollection.Add(stockTakingItemDialog.SelectedItem as Product);
+            }
         }
     }
 }

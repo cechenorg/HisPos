@@ -350,6 +350,9 @@
     <Compile Include="StockTaking\StockTakingHistory.xaml.cs">
       <DependentUpon>StockTakingHistory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StockTaking\StockTakingItemDialog.xaml.cs">
+      <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="StockTaking\StockTakingView.xaml.cs">
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
@@ -446,6 +449,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StockTaking\StockTakingHistory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="StockTaking\StockTakingItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

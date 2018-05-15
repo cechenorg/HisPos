@@ -60,6 +60,7 @@
                     <Setter Property="Height" Value="40"/>
                 </Style>
             </DataGrid.RowStyle>
+            
         </DataGrid>
         <Button Content="確認" Grid.Row="2" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmClick"/>
     </Grid>

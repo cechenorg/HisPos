@@ -20,6 +20,7 @@ namespace His_Pos.Class.Product
             Inventory = Double.Parse(dataRow["PRO_INVENTORY"].ToString());
             SafeAmount = Double.Parse(dataRow["PRO_SAFEQTY"].ToString());
             ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
+            Status = dataRow["PRO_STATUS"].ToString().Equals("1");
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
@@ -36,6 +37,7 @@ namespace His_Pos.Class.Product
         public string LastCheckDate { get; set; }
         public string Location { get; set; }
         public string BatchNumber { get; set; }
+        public bool Status { get; set; }
         private string source;
         public string Source
         {
