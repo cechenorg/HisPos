@@ -119,6 +119,8 @@ namespace His_Pos.InventoryManagement
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
                         && (((InventoryMedicine)item).Ingredient.Contains(Ingredient.Text) || Ingredient.Text == string.Empty)
                        && ((((InventoryMedicine)item).Stock.Inventory == 0 && (bool)NoneInventory.IsChecked) || (((InventoryMedicine)item).Stock.Inventory != 0 && (bool)!NoneInventory.IsChecked))
+                         && ((((InventoryMedicine)item).Frozen && (bool)FreezeMed.IsChecked) ||  !(bool)FreezeMed.IsChecked)
+                          && ((((InventoryMedicine)item).Control && (bool)ControlMed.IsChecked) || !(bool)ControlMed.IsChecked)
                         ) reply = true;
                     if (reply)
                         {

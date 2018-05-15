@@ -26,11 +26,14 @@ namespace His_Pos.Class.Product
                 BasicAmount = dataRow["PRO_BASICQTY"].ToString()
             };
             Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
+            Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
+            Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");
         }
-
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }
+        public bool Frozen { get; set; }
+        public bool Control { get; set; }
         public BitmapImage TypeIcon { get; set; }
         public string StockValue { get; set; }
         public string Note { get; set; }

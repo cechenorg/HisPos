@@ -23,7 +23,8 @@ namespace His_Pos.Class
 
     public enum ItemType
     {
-        Product = 0
+        Product = 0,
+        Taking = 1
     }
 
     public enum StoreOrderProductType
