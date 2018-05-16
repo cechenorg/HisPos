@@ -22,6 +22,7 @@ using System.ComponentModel;
 using System.Windows.Threading;
 using His_Pos.PrintDocuments;
 using His_Pos.Service;
+using System.Windows.Markup;
 
 namespace His_Pos.StockTaking
 {
@@ -221,8 +222,53 @@ namespace His_Pos.StockTaking
 
         private void Print_OnClick(object sender, RoutedEventArgs e)
         {
+            var pageSize = new Size(8.26 * 96, 11.69 * 96);
+            var document = new FixedDocument();
+            document.DocumentPaginator.PageSize = pageSize;
 
-            NewFunction.GridPrinter(new StockTakingDocument(takingCollection), "TEST", "ttt");
+            Collection<FixedPage> stockTakingDocuments = ConvertDataToDoc(pageSize);
+            
+            foreach( var page in stockTakingDocuments)
+            {
+                var pageContent = new PageContent();
+                ((IAddChild)pageContent).AddChild(page);
+                document.Pages.Add(pageContent);
+            }
+            
+            NewFunction.DocumentPrinter(document, "盤點單" + DateTime.Now.ToShortDateString());
+        }
+
+        private Collection<FixedPage> ConvertDataToDoc(Size pageSize)
+        {
+            Collection<FixedPage> documents = new Collection<FixedPage>();
+
+            int ITEM_LIMIT = 32;
+
+            int totalPage = takingCollection.Count / ITEM_LIMIT + ((takingCollection.Count % ITEM_LIMIT == 0)? 0 : 1);
+            int currentPage = 1;
+            for ( int x = 0; x < takingCollection.Count; x += ITEM_LIMIT)
+            {
+                var fixedPage = new FixedPage();
+                fixedPage.Width = pageSize.Width;
+                fixedPage.Height = pageSize.Height;
+
+                List<Product> temp;
+
+                if ( currentPage == totalPage )
+                    temp = takingCollection.ToList().GetRange(x, takingCollection.Count % ITEM_LIMIT);
+                else
+                    temp = takingCollection.ToList().GetRange(x, ITEM_LIMIT);
+
+                fixedPage.Children.Add(new StockTakingDocument(temp, MainWindow.CurrentUser.Name, currentPage, totalPage));
+                fixedPage.Measure(pageSize);
+                fixedPage.Arrange(new Rect(new Point(), pageSize));
+                fixedPage.UpdateLayout();
+
+                documents.Add(fixedPage);
+                currentPage++;
+            }
+            
+            return documents;
         }
 
         private void AddOneItem_Click(object sender, RoutedEventArgs e)

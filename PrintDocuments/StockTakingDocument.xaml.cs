@@ -24,8 +24,9 @@ namespace His_Pos.PrintDocuments
     public partial class StockTakingDocument : UserControl, INotifyPropertyChanged
     {
         public string PrintDate => DateTime.Now.ToString();
-        private ObservableCollection<Product> printCollection;
-        public ObservableCollection<Product> PrintCollection
+        public string PageNumber => ThisPage + " / " + TotalPage;
+        private List<Product> printCollection;
+        public List<Product> PrintCollection
         {
             get { return printCollection; }
             set
@@ -35,13 +36,20 @@ namespace His_Pos.PrintDocuments
             }
         }
 
+        public string ThisPage { get; private set; }
+        public string TotalPage { get; private set; }
+        public string UserName { get; private set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public StockTakingDocument(ObservableCollection<Product> products)
+        public StockTakingDocument(List<Product> products, string userName, int thisPage, int totalPage)
         {
             InitializeComponent();
             DataContext = this;
             PrintCollection = products;
+            ThisPage = thisPage.ToString();
+            TotalPage = totalPage.ToString();
+            UserName = userName;
         }
         private void NotifyPropertyChanged(string info)
         {
