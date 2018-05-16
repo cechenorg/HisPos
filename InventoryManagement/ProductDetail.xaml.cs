@@ -47,7 +47,10 @@ namespace His_Pos.InventoryManagement
             InitializeComponent();
 
             Title = "商品詳細資料管理";
-
+           // WindowState = WindowState.Maximized;
+            Height = Height * 0.8;
+            Width = Width * 0.8;
+            
             Instance = this;
         }
         
