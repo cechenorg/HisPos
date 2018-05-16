@@ -12,6 +12,7 @@
         <local:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
         <local:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <local:TextBoxDateConverter x:Key="TextBoxDateConverter"/>
+        <local:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
         <local:ProductPurchaseView x:Key="ProductPurchaseView"/>
     </UserControl.Resources>
     <Viewbox Stretch="Fill">
@@ -220,7 +221,7 @@
                         <DataGridTemplateColumn MinWidth="70" Header="單價">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Price" TextChanged="TextBox_TextChanged" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
+                                    <TextBox x:Name="Price" TextChanged="TextBox_TextChanged" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DoubleToStringConverter} }"  IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

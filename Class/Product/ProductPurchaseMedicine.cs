@@ -30,7 +30,7 @@ namespace His_Pos.Class.Product
                 case DataSource.PRODUCTBASICORSAFE:
                     Amount = Int16.Parse(dataRow["PRO_BASICQTY"].ToString()) -
                              Int16.Parse(dataRow["PRO_INVENTORY"].ToString());
-                    Price = 0;
+                    Price = "0";
                     TotalPrice = 0;
                     Note = "";
                     Invoice = "";
@@ -39,7 +39,7 @@ namespace His_Pos.Class.Product
                     BatchNumber = "";
                     break;
                 case DataSource.GetStoreOrderDetail:
-                    Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
+                    Price = dataRow["STOORDDET_PRICE"].ToString();
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
                     Amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
                     Note = dataRow["PRO_DESCRIPTION"].ToString();
@@ -50,7 +50,7 @@ namespace His_Pos.Class.Product
                     break;
                 case DataSource.GetItemDialogProduct:
                     Amount = 0;
-                    Price = 0;
+                    Price = "0";
                     TotalPrice = 0;
                     Note = "";
                     Invoice = "";
@@ -117,8 +117,8 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Amount");
             }
         }
-        private double price;
-        public double Price
+        private string price;
+        public string Price
         {
             get { return price; }
             set
@@ -179,7 +179,9 @@ namespace His_Pos.Class.Product
 
         public void CalculateData(string inputSource)
         {
-            if (totalPrice == amount * price || price == totalPrice / amount) return;
+            double dprice;
+            if (!double.TryParse(price, out dprice)) return;
+            if (totalPrice == amount * dprice || dprice == totalPrice / amount) return;
 
             bool isColumnChanged;
 
@@ -194,16 +196,16 @@ namespace His_Pos.Class.Product
                 return;
             else if (inputSource.Equals("Amount") && totalPrice != 0 && amount != 0 && !CountStatus.Equals("*"))
             {
-                Price = totalPrice / amount;
+                Price = (totalPrice / amount).ToString();
             }
             else if (!inputSource.Equals("TotalPrice"))
             {
                 CountStatus = "*";
-                TotalPrice = amount * price;
+                TotalPrice = amount * dprice;
             }
             else if (amount != 0)
             {
-                Price = totalPrice / amount;
+                Price = (totalPrice / amount).ToString();
             }
         }
 

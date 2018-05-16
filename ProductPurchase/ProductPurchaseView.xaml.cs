@@ -7,6 +7,7 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -55,7 +56,7 @@ namespace His_Pos.ProductPurchase
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;
-        
+
 
         public ObservableCollection<StoreOrder> StoreOrderCollection
         {
@@ -99,7 +100,7 @@ namespace His_Pos.ProductPurchase
             UpdateUi();
             StoOrderOverview.SelectedIndex = 0;
         }
-        
+
         private void InitUser()
         {
             UserAutoCompleteCollection = PersonDb.GetUserCollection();
@@ -121,7 +122,7 @@ namespace His_Pos.ProductPurchase
                 SaveOrder();
             }
         }
-       
+
         private void InitManufactory()
         {
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
@@ -150,14 +151,14 @@ namespace His_Pos.ProductPurchase
             UpdateOrderDetailData(storeOrder);
             UpdateOrderDetailUi(storeOrder.Type);
         }
-       
+
         private void SaveOrder()
         {
             BackgroundWorker backgroundWorker = new BackgroundWorker();
             Saving.Visibility = Visibility.Visible;
 
             StoreOrder saveOrder = storeOrderData.Clone() as StoreOrder;
-            
+
             backgroundWorker.DoWork += (s, o) =>
             {
                 StoreOrderDb.SaveOrderDetail(saveOrder);
@@ -181,7 +182,7 @@ namespace His_Pos.ProductPurchase
             ConfirmToProcess.IsEnabled = true;
             Confirm.IsEnabled = true;
             ReceiveEmp.IsEnabled = true;
-            
+
 
             switch (type)
             {
@@ -225,10 +226,10 @@ namespace His_Pos.ProductPurchase
             IsFirst = true;
             if (storeOrder.Products is null)
                 storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
-            
+
             StoreOrderData = storeOrder;
-            
-             GetProductAutoComplete();
+
+            GetProductAutoComplete();
 
             IsChanged = false;
             IsFirst = false;
@@ -258,7 +259,7 @@ namespace His_Pos.ProductPurchase
 
             if (addNewOrderDialog.ConfirmButtonClicked)
             {
-                switch(addNewOrderDialog.AddOrderType)
+                switch (addNewOrderDialog.AddOrderType)
                 {
                     case AddOrderType.ADDALLBELOWSAFEAMOUNT:
                         AddBasicOrSafe(StoreOrderProductType.SAFE);
@@ -288,13 +289,13 @@ namespace His_Pos.ProductPurchase
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
-            
+
             if (selectedItem is IDeletable)
             {
-                if (StoreOrderData.Products.Contains(selectedItem)){
+                if (StoreOrderData.Products.Contains(selectedItem)) {
                     (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
                 }
-                 
+
                 StoreOrderDetail.SelectedItem = selectedItem;
                 return;
             }
@@ -305,8 +306,8 @@ namespace His_Pos.ProductPurchase
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
             var leaveItem = (sender as DataGridRow).Item;
-           
-             if (leaveItem is IDeletable)
+
+            if (leaveItem is IDeletable)
             {
                 (leaveItem as IDeletable).Source = string.Empty;
             }
@@ -331,9 +332,9 @@ namespace His_Pos.ProductPurchase
                 ConfirmToProcess.IsEnabled = false;
                 Confirm.IsEnabled = false;
                 ReceiveEmp.IsEnabled = false;
-               
+
             }
-            
+
             StoOrderOverview.SelectedIndex = 0;
         }
         private bool OrderTypeFilter(object item)
@@ -344,7 +345,7 @@ namespace His_Pos.ProductPurchase
                 return true;
             return false;
         }
-     
+
         public AutoCompleteFilterPredicate<object> ProductFilter
         {
             get
@@ -359,24 +360,24 @@ namespace His_Pos.ProductPurchase
             var productAuto = sender as AutoCompleteBox;
 
             if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || Products is null) return;
-            
+
             var result = Products.Where(x => (((NewItemProduct)x).Product.Id.Contains(productAuto.Text) || ((NewItemProduct)x).Product.Name.Contains(productAuto.Text)) && ((IProductPurchase)((NewItemProduct)x).Product).Status).Take(50).Select(x => ((NewItemProduct)x).Product);
             ProductAutoCompleteCollection = new ObservableCollection<object>(result.ToList());
 
             productAuto.ItemsSource = ProductAutoCompleteCollection;
             productAuto.PopulateComplete();
         }
-        
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            
-            if(textBox is null) return;
-            
+
+            if (textBox is null) return;
+
             if (textBox.Text == String.Empty)
                 textBox.Text = "0";
 
-            if( !textBox.Name.Equals("FreeAmount") )
+            if (!textBox.Name.Equals("FreeAmount"))
                 CalculateTotalPrice();
         }
 
@@ -390,24 +391,24 @@ namespace His_Pos.ProductPurchase
 
             storeOrderData.TotalPrice = count.ToString();
         }
-        
+
         private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             var productAuto = sender as AutoCompleteBox;
             SetChanged();
             if (productAuto is null) return;
             if (productAuto.SelectedItem is null) {
-                if(productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<object>).Count != 0 && productAuto.Text.Length >=4)
+                if (productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<object>).Count != 0 && productAuto.Text.Length >= 4)
                     productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<object>)[0];
                 else
                     return;
-            } 
-            
+            }
+
             StoreOrderData.Products.Add(((ICloneable)productAuto.SelectedItem).Clone() as Product);
-           
+
             productAuto.Text = "";
         }
-        
+
         private void SetChanged() {
             if (IsFirst == true) return;
             IsChanged = true;
@@ -416,7 +417,7 @@ namespace His_Pos.ProductPurchase
         {
             SetChanged();
         }
-        
+
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
             if (!CheckNoEmptyData()) return;
@@ -437,7 +438,7 @@ namespace His_Pos.ProductPurchase
             int oldIndex = storeOrderCollection.IndexOf(storeOrderData);
             int newIndex = storeOrderCollection.Count - 1;
 
-            for( int x = 0; x < storeOrderCollection.Count; x++ )
+            for (int x = 0; x < storeOrderCollection.Count; x++)
             {
                 if (storeOrderCollection[x].type == OrderType.PROCESSING)
                 {
@@ -473,8 +474,8 @@ namespace His_Pos.ProductPurchase
             }
             return true;
         }
-        
-        
+
+
         private void DeleteOrder_Click(object sender, RoutedEventArgs e)
         {
             if (StoreOrderData == null) return;
@@ -499,13 +500,13 @@ namespace His_Pos.ProductPurchase
 
             newItemDialog.ShowDialog();
 
-            if(newItemDialog.ConfirmButtonClicked)
+            if (newItemDialog.ConfirmButtonClicked)
             {
                 SetChanged();
                 StoreOrderData.Products.Add(newItemDialog.SelectedItem as Product);
             }
         }
-        
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -517,7 +518,7 @@ namespace His_Pos.ProductPurchase
         private void OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
             var objectName = (sender as Control).Name;
-            
+
             //按 Enter 下一欄
             if (e.Key == Key.Enter)
             {
@@ -525,7 +526,7 @@ namespace His_Pos.ProductPurchase
                 var nextTextBox = new List<TextBox>();
                 var thisTextBox = new List<TextBox>();
                 var currentRowIndex = GetCurrentRowIndex(sender);
-                
+
                 if (currentRowIndex == -1) return;
 
                 switch (objectName)
@@ -585,7 +586,7 @@ namespace His_Pos.ProductPurchase
                     SetChanged();
                     (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
                 }
-                
+
 
                 nextTextBox[currentRowIndex].Focus();
             }
@@ -733,7 +734,7 @@ namespace His_Pos.ProductPurchase
             {
                 SetChanged();
             }
-                
+
         }
 
         private string GetCharFromKey(Key key)
@@ -752,7 +753,7 @@ namespace His_Pos.ProductPurchase
         {
             if (key >= Key.D0 && key <= Key.D9) return true;
             if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
-            if( key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right || key == Key.OemPeriod || key == Key.Decimal) return true;
+            if (key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right || key == Key.OemPeriod || key == Key.Decimal) return true;
 
             return false;
         }
@@ -789,7 +790,7 @@ namespace His_Pos.ProductPurchase
                     }
                 }
             }
-            else if ( sender is Button )
+            else if (sender is Button)
             {
                 List<Button> temp = new List<Button>();
                 Button SplitBtn = sender as Button;
@@ -813,12 +814,12 @@ namespace His_Pos.ProductPurchase
             if (sender is null) return;
 
             var currentRowIndex = GetCurrentRowIndex(sender);
-            
+
             double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
 
             ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
 
-            StoreOrderData.Products.Insert( currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
+            StoreOrderData.Products.Insert(currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
 
             if (left != 0)
                 ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
@@ -834,22 +835,22 @@ namespace His_Pos.ProductPurchase
             }
         }
 
-      
+
     }
     public class TextBoxDateConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime dateValue;
-            if ( DateTime.TryParse(value.ToString(), out dateValue)) {
-                return dateValue.AddYears(-1911).ToString("yyyy/MM/dd").Substring(1,9);
-            } 
+            if (DateTime.TryParse(value.ToString(), out dateValue)) {
+                return dateValue.AddYears(-1911).ToString("yyyy/MM/dd").Substring(1, 9);
+            }
             return value;
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime dateValue;
             var tempvalue = value;
-            if(tempvalue.ToString().Length >= 7)
+            if (tempvalue.ToString().Length >= 7)
             {
                 switch (tempvalue.ToString().Substring(0, 1))
                 {
@@ -887,7 +888,25 @@ namespace His_Pos.ProductPurchase
         }
 
     }
+    public class DoubleToStringConverter : IValueConverter{
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture){
 
+            if (value.ToString().Contains("..") || value.ToString() == string.Empty)
+                return value.ToString().Replace("..", ".");
+            else if (value.ToString().Contains("0.000"))
+                return double.Parse(value.ToString());
+            else if (value.ToString().Length > 5)
+                return value.ToString().Substring(0, 5);
+            else if (value.ToString().Substring(value.ToString().Length - 1, 1) == ".")
+                return value;
+           
+                return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture){
+             return value;
+        }
+    }
     public class LastRowIsEnableConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

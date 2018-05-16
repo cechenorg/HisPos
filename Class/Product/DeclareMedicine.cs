@@ -20,7 +20,7 @@ namespace His_Pos.Class.Product
                     ? "0" : dataRow["PRO_INVENTORY"].ToString())
             };
 
-            Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
+            Price = dataRow["STOORDDET_PRICE"].ToString();
             TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
         }
 
@@ -28,7 +28,7 @@ namespace His_Pos.Class.Product
         public double Cost { get; set; }
         public double TotalPrice { get; set; }
         public double Amount { get; set; }
-        public double Price { get; set; }
+        public string Price { get; set; }
         public string CountStatus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public string FocusColumn { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

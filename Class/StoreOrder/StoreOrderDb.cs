@@ -87,7 +87,7 @@ namespace His_Pos.Class.StoreOrder
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
             details.Columns.Add("QTY", typeof(int));
-            details.Columns.Add("PRICE", typeof(double));
+            details.Columns.Add("PRICE", typeof(string));
             details.Columns.Add("DESCRIPTION", typeof(string));
             details.Columns.Add("VALIDDATE", typeof(string));
             details.Columns.Add("BATCHNUMBER", typeof(string));
