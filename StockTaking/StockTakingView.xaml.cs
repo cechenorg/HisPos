@@ -231,7 +231,7 @@ namespace His_Pos.StockTaking
             foreach( var page in stockTakingDocuments)
             {
                 var pageContent = new PageContent();
-                ((IAddChild)pageContent).AddChild(page);
+                pageContent.Child = page;
                 document.Pages.Add(pageContent);
             }
             
