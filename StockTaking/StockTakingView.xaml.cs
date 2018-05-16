@@ -259,7 +259,7 @@ namespace His_Pos.StockTaking
                 else
                     temp = takingCollection.ToList().GetRange(x, ITEM_LIMIT);
 
-                fixedPage.Children.Add(new StockTakingDocument(temp, MainWindow.CurrentUser.Name, currentPage, totalPage));
+                fixedPage.Children.Add(new StockTakingDocument(temp, MainWindow.CurrentUser.Name, takingCollection.Count, currentPage, totalPage));
                 fixedPage.Measure(pageSize);
                 fixedPage.Arrange(new Rect(new Point(), pageSize));
                 fixedPage.UpdateLayout();

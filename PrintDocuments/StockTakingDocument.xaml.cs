@@ -35,14 +35,14 @@ namespace His_Pos.PrintDocuments
                 NotifyPropertyChanged("PrintCollection");
             }
         }
-
+        public int TotalProductCount { get; private set; }
         public string ThisPage { get; private set; }
         public string TotalPage { get; private set; }
         public string UserName { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public StockTakingDocument(List<Product> products, string userName, int thisPage, int totalPage)
+        public StockTakingDocument(List<Product> products, string userName, int totalProductCount, int thisPage, int totalPage)
         {
             InitializeComponent();
             DataContext = this;
@@ -50,6 +50,7 @@ namespace His_Pos.PrintDocuments
             ThisPage = thisPage.ToString();
             TotalPage = totalPage.ToString();
             UserName = userName;
+            TotalProductCount = totalProductCount;
         }
         private void NotifyPropertyChanged(string info)
         {
