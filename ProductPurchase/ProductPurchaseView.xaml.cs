@@ -705,13 +705,14 @@ namespace His_Pos.ProductPurchase
                 else
                 {
                     TextBox textBox = sender as TextBox;
-
+                    if ((e.Key == Key.Decimal || e.Key == Key.OemPeriod) && textBox.Text.Contains(".")) {
+                        e.Handled = true;
+                    }
                     if (textBox.Text.Equals("0"))
                     {
                         SetChanged();
-                        textBox.Text = GetCharFromKey(e.Key);
+                        textBox.Text = "";
                         textBox.CaretIndex = 1;
-                        e.Handled = true;
                     }
                 }
             }

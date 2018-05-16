@@ -78,7 +78,6 @@ namespace His_Pos.Class.StoreOrder
                 parameters.Add(new SqlParameter("MAN_ID", DBNull.Value));
             else
                 parameters.Add(new SqlParameter("MAN_ID", storeOrder.Manufactory.Id));
-
             if (storeOrder.RecEmp == "")
                 parameters.Add(new SqlParameter("REC_EMP",DBNull.Value ));
             else
@@ -100,7 +99,7 @@ namespace His_Pos.Class.StoreOrder
 
                 newRow["PRO_ID"] = product.Id;
                 newRow["QTY"] = ((ITrade)product).Amount;
-                newRow["PRICE"] = ((ITrade)product).Price;
+                newRow["PRICE"] = ((ITrade)product).Price == "" ? "0" : ((ITrade)product).Price;
                 newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
                 newRow["VALIDDATE"] = ( DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue) ) ? ((IProductPurchase)product).ValidDate:string.Empty ;
                 newRow["BATCHNUMBER"] = ((IProductPurchase) product).BatchNumber;
