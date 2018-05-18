@@ -23,6 +23,7 @@ namespace His_Pos.Class.Product
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
             TakingResult = "";
             IsChecked = false;
+            isEqual = true;
         }
      
         public string Category { get; set; }
@@ -45,8 +46,13 @@ namespace His_Pos.Class.Product
             {
                 takingResult = value;
                 UserFilledResult();
+                CheckIsEqual();
                 NotifyPropertyChanged("TakingResult");
             }
+        }
+        private void CheckIsEqual()
+        {
+            IsEqual = (TakingResult == Inventory.ToString()) || TakingResult.Equals(String.Empty);
         }
         private void UserFilledResult()
         {
@@ -81,6 +87,20 @@ namespace His_Pos.Class.Product
             {
                 isChecked = value;
                 NotifyPropertyChanged("IsChecked");
+            }
+        }
+
+        private bool isEqual;
+        public bool IsEqual
+        {
+            get
+            {
+                return isEqual;
+            }
+            set
+            {
+                isEqual = value;
+                NotifyPropertyChanged("IsEqual");
             }
         }
     }

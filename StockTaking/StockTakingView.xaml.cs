@@ -357,12 +357,12 @@ namespace His_Pos.StockTaking
             CountFilledResult();
         }
     }
-    public class IsCheckedToImageConverter : IValueConverter
+    public class IsResultEqualConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((bool) value)
-                return "/Images/Checked.png";
+            if (!(bool) value)
+                return "/Images/Changed.png";
             return "";
         }
 
