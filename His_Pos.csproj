@@ -562,6 +562,7 @@
     <Resource Include="Images\DarkerHisDot.png" />
     <Resource Include="Images\Success.png" />
     <Resource Include="Images\Checked.png" />
+    <Resource Include="Images\Changed.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

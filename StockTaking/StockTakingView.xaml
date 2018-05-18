@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365" Name="StockTaking">
     <UserControl.Resources>
-        <local:IsCheckedToImageConverter x:Key="IsCheckedToImageConverter"/>
+        <local:IsResultEqualConverter x:Key="IsResultEqualConverter"/>
     </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Name="ViewGrid" Width="1365" Height="839">
@@ -193,10 +193,10 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="20" MaxWidth="20">
+                    <DataGridTemplateColumn MinWidth="30" MaxWidth="30">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsCheckedToImageConverter}}" Width="20"/>
+                                <Image Source="{Binding IsEqual, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsResultEqualConverter}}" Width="20"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

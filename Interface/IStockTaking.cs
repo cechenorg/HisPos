@@ -19,5 +19,6 @@ namespace His_Pos.Interface
         bool Status { get; set; }
         string TakingResult { get; set; }
         bool IsChecked { get; set; }
+        bool IsEqual { get; set; }
     }
 }
