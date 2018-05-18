@@ -56,12 +56,12 @@ namespace His_Pos
 
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("取得藥品資料...");
-                MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
-                MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "PRO_ID" };
+                //ChangeLoadingMessage("取得藥品資料...");
+                //MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
+                //MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "PRO_ID" };
                 
-                ChangeLoadingMessage("取得商品資料...");
-                MainWindow.OtcDataTable = OTCDb.GetOtcData();
+                //ChangeLoadingMessage("取得商品資料...");
+                //MainWindow.OtcDataTable = OTCDb.GetOtcData();
 
                 ChangeLoadingMessage("取得廠商資料...");
                 MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
@@ -166,8 +166,8 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("處理商品資料...");
                 
-                var Medicines = NewFunction.JoinTables(MainWindow.MedicineDataTable, MedicineDb.GetStockTakingMedicines(), "PRO_ID");
-                var Otcs = NewFunction.JoinTables(MainWindow.OtcDataTable, OTCDb.GetStockTakingOtcs(), "PRO_ID");
+                var Medicines =  MedicineDb.GetStockTakingMedicines();
+                var Otcs =  OTCDb.GetStockTakingOtcs();
 
                 Dispatcher.Invoke((Action)(() =>
                 {

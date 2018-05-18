@@ -14,8 +14,8 @@ namespace His_Pos
         public static List<Feature> HisFeatures = new List<Feature>();
         public static List<Feature> PosFeatures = new List<Feature>();
 
-        public static DataTable MedicineDataTable = new DataTable();
-        public static DataTable OtcDataTable = new DataTable();
+        //public static DataTable MedicineDataTable = new DataTable();
+        //public static DataTable OtcDataTable = new DataTable();
         public static DataTable ManufactoryTable = new DataTable();
         public static DataTable ProManTable = new DataTable();
         public static User CurrentUser;

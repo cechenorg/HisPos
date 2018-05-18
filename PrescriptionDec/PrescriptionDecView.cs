@@ -127,12 +127,12 @@ namespace His_Pos.PrescriptionDec
         {
             var medicineAuto = sender as AutoCompleteBox;
             Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
-            var tmp = MainWindow.MedicineDataTable.Select("PRO_ID Like '%" + medicineAuto.Text + "%' OR PRO_NAME Like '%" + medicineAuto.Text + "%'");
-            MedicineList.Clear();
-            foreach (var d in tmp.Take(50))
-            {
-                MedicineList.Add(new Medicine(d));
-            }
+            //var tmp = MainWindow.MedicineDataTable.Select("PRO_ID Like '%" + medicineAuto.Text + "%' OR PRO_NAME Like '%" + medicineAuto.Text + "%'");
+            //MedicineList.Clear();
+            //foreach (var d in tmp.Take(50))
+            //{
+            //    MedicineList.Add(new Medicine(d));
+            //}
             medicineAuto.ItemsSource = MedicineList;
             medicineAuto.PopulateComplete();
         }
