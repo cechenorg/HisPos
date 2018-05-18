@@ -30,6 +30,9 @@ namespace His_Pos.InventoryManagement
         public double StartTop => (SystemParameters.WorkArea.Height - this.Height) / 2;
         public double StartLeft => (SystemParameters.WorkArea.Width - this.Width) / 2;
 
+        public double WindowWidth => SystemParameters.WorkArea.Width * 0.8;
+        public double WindowHeight => SystemParameters.WorkArea.Height * 0.8;
+
         public struct NewProductTab
         {
             public NewProductTab(string id, SearchType type)
@@ -48,8 +51,7 @@ namespace His_Pos.InventoryManagement
 
             Title = "商品詳細資料管理";
            // WindowState = WindowState.Maximized;
-            Height = Height * 0.8;
-            Width = Width * 0.8;
+
             
             Instance = this;
         }

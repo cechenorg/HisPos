@@ -21,6 +21,8 @@ namespace His_Pos.Class.Product
             SafeAmount = Double.Parse(dataRow["PRO_SAFEQTY"].ToString());
             ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
+            Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
+            Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
@@ -30,6 +32,8 @@ namespace His_Pos.Class.Product
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        public bool Frozen { get; set; }
+        public bool Control { get; set; }
         public string Category { get; set; }
         public double Inventory { get; set; }
         public double SafeAmount { get; set; }

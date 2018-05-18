@@ -262,6 +262,7 @@ namespace His_Pos.InventoryManagement
             if (!CheckValue()) return;
             InventoryOtc.ChiName = OtcChiName.Text;
             InventoryOtc.EngName = OtcEngName.Text;
+            InventoryOtc.Name = InventoryOtc.EngName.Contains(" ") ? InventoryOtc.EngName.Split(' ')[0] + " " + InventoryOtc.EngName.Split(' ')[1] + "... " + InventoryOtc.ChiName : InventoryOtc.ChiName;
             InventoryOtc.Location = OtcLocation.Text;
             InventoryOtc.Stock.BasicAmount = OtcBasicAmount.Text;
             InventoryOtc.Stock.SafeAmount = OtcSafeAmount.Text;

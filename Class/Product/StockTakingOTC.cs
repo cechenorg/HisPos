@@ -22,14 +22,7 @@ namespace His_Pos.Class.Product
             ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
         }
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
+     
         public string Category { get; set; }
         public double Inventory { get; set; }
         public double SafeAmount { get; set; }

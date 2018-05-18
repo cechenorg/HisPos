@@ -200,6 +200,8 @@ namespace His_Pos.StockTaking
          && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
          && ((((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
          && ((x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
+         && ( (x is StockTakingMedicine && (bool)ControlMed.IsChecked && ((StockTakingMedicine)x).Control )  || !(bool)ControlMed.IsChecked)
+         && ((x is StockTakingMedicine && (bool)FreezeMed.IsChecked && ((StockTakingMedicine)x).Frozen) || !(bool)FreezeMed.IsChecked)
          || (TakingCollection.Contains(x))
          ));
             TakingCollection = new ObservableCollection<Product>(result.ToList());

@@ -6,7 +6,7 @@ using System.Windows.Media.Imaging;
 
 namespace His_Pos.AbstractClass
 {
-    public class Product
+    public class Product : INotifyPropertyChanged
     {
         public Product() {}
 
@@ -19,8 +19,29 @@ namespace His_Pos.AbstractClass
         }
 
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string name;
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                NotifyPropertyChanged("name");
+            }
+        }
         public string ChiName { get; set; }
         public string EngName { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 }

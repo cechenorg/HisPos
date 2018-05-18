@@ -73,10 +73,10 @@
                         <TextBox Name="MedLocation" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="MedData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" >
-                        <CheckBox Content="管制藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
+                        <CheckBox Name="IsControl" Content="管制藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10" Click="MedData_TextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
-                        <CheckBox Content="冷藏藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
+                        <CheckBox  Name="IsFrozen" Content="冷藏藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10" Click="MedData_TextChanged"/>
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="MedManufactory" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"

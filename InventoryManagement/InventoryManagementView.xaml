@@ -129,7 +129,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="250" MaxWidth="400" Header="商品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Name}">
+                    <DataGridTextColumn MinWidth="250" MaxWidth="400" Header="商品名稱" FontSize="18" FontFamily="Segoe UI SemiBold" IsReadOnly="True" Binding="{Binding Name, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="VerticalAlignment" Value="Center"/>

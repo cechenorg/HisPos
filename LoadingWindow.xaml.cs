@@ -109,8 +109,8 @@ namespace His_Pos
                 ChangeLoadingMessage("處理商品資料...");
                 string totalWorth = ProductDb.GetTotalWorth();
                 double stockValue = 0;
-                inventoryManagementView.InventoryMedicines = NewFunction.JoinTables(MainWindow.MedicineDataTable, MedicineDb.GetInventoryMedicines(), "PRO_ID");
-                inventoryManagementView.InventoryOtcs = NewFunction.JoinTables(MainWindow.OtcDataTable, OTCDb.GetInventoryOtcs(), "PRO_ID");
+                inventoryManagementView.InventoryMedicines = MedicineDb.GetInventoryMedicines();
+                inventoryManagementView.InventoryOtcs = OTCDb.GetInventoryOtcs();
                 
                 Dispatcher.Invoke((Action)(() =>
                 {

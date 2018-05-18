@@ -138,6 +138,8 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryMedicine)product).Location));
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryMedicine)product).Note));
                 parameters.Add(new SqlParameter("@STATUS", ((InventoryMedicine)product).Status));
+                parameters.Add(new SqlParameter("@CONTROL", ((InventoryMedicine)product).Control));
+                parameters.Add(new SqlParameter("@FROZEN", ((InventoryMedicine)product).Frozen));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
             }
             else if (type == "InventoryOtc") {
@@ -149,6 +151,8 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryOtc)product).Location));
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryOtc)product).Note));
                 parameters.Add(new SqlParameter("@STATUS", ((InventoryOtc)product).Status));
+                parameters.Add(new SqlParameter("@CONTROL", DBNull.Value));
+                parameters.Add(new SqlParameter("@FROZEN", DBNull.Value));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
 
             }
