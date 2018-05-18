@@ -5,14 +5,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Markup;
 using System.Windows.Media;
+using PrintDialog = System.Windows.Controls.PrintDialog;
 
 namespace His_Pos.Service
 {
@@ -72,10 +74,16 @@ namespace His_Pos.Service
                 }
             }
         }
-        public static void DocumentPrinter(FixedDocument document, string documentName)
+        public static bool DocumentPrinter(FixedDocument document, string documentName)
         {
-            var pd = new PrintDialog();
-            pd.PrintDocument(document.DocumentPaginator, documentName);
+            PrintDialog pd = new PrintDialog();
+
+            if ((bool) pd.ShowDialog())
+            {
+                pd.PrintDocument(document.DocumentPaginator, documentName);
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -19,6 +19,7 @@ using His_Pos.Class.Product;
 using static His_Pos.ProductPurchase.ProductPurchaseView;
 using His_Pos.Interface;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Threading;
 using His_Pos.PrintDocuments;
 using His_Pos.Service;
@@ -47,6 +48,40 @@ namespace His_Pos.StockTaking
             }
         }
         private StockTakingStatus stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
+
+        private int resultFilled;
+        public int ResultFilled
+        {
+            get { return resultFilled; }
+            set
+            {
+                resultFilled = value;
+                NotifyPropertyChanged("ResultFilled");
+            }
+        }
+
+        private int resultNotFilled;
+        public int ResultNotFilled
+        {
+            get { return resultNotFilled; }
+            set
+            {
+                resultNotFilled = value;
+                NotifyPropertyChanged("ResultNotFilled");
+            }
+        }
+
+        private int resultChanged;
+        public int ResultChanged
+        {
+            get { return resultChanged; }
+            set
+            {
+                resultChanged = value;
+                NotifyPropertyChanged("ResultChanged");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -83,6 +118,13 @@ namespace His_Pos.StockTaking
             switch (stockTakingStatus)
             {
                 case StockTakingStatus.ADDPRODUCTS:
+                    CheckItems.Columns[0].Visibility = Visibility.Visible;
+                    CheckItems.Columns[5].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[6].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[7].Visibility = Visibility.Visible;
+                    CheckItems.Columns[8].Visibility = Visibility.Visible;
+                    CheckItems.Columns[9].Visibility = Visibility.Visible;
+                    CheckItems.Columns[10].Visibility = Visibility.Visible;
                     ViewGrid.RowDefinitions[2].Height = new GridLength(15);
                     ViewGrid.RowDefinitions[3].Height = new GridLength(150);
                     ViewGrid.RowDefinitions[4].Height = new GridLength(0);
@@ -120,6 +162,13 @@ namespace His_Pos.StockTaking
                     Row1Rectangle.Width = 780;
                     break;
                 case StockTakingStatus.INPUTRESULT:
+                    CheckItems.Columns[0].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[5].Visibility = Visibility.Visible;
+                    CheckItems.Columns[6].Visibility = Visibility.Visible;
+                    CheckItems.Columns[7].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[8].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[9].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[10].Visibility = Visibility.Collapsed;
                     ViewGrid.RowDefinitions[4].Height = new GridLength(0);
                     ViewGrid.RowDefinitions[6].Height = new GridLength(0);
                     ViewGrid.RowDefinitions[7].Height = new GridLength(50);
@@ -142,9 +191,15 @@ namespace His_Pos.StockTaking
 
         private void NextStatus_Click(object sender, RoutedEventArgs e)
         {
+            NextStatus();
+        }
+
+        private void NextStatus()
+        {
             stockTakingStatus++;
             UpdateUi();
         }
+
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
@@ -234,8 +289,12 @@ namespace His_Pos.StockTaking
                 pageContent.Child = page;
                 document.Pages.Add(pageContent);
             }
-            
-            NewFunction.DocumentPrinter(document, "盤點單" + DateTime.Now.ToShortDateString());
+
+            if (NewFunction.DocumentPrinter(document, "盤點單" + DateTime.Now.ToShortDateString()))
+            {
+                CountFilledResult();
+                NextStatus();
+            }   
         }
 
         private Collection<FixedPage> ConvertDataToDoc(Size pageSize)
@@ -280,6 +339,34 @@ namespace His_Pos.StockTaking
             {
                 TakingCollection.Add(stockTakingItemDialog.SelectedItem as Product);
             }
+        }
+
+        private void CountFilledResult()
+        {
+            ResultFilled = takingCollection.Count(x => ((IStockTaking)x).IsChecked);
+            ResultNotFilled = takingCollection.Count(x => !((IStockTaking)x).IsChecked);
+
+            ResultChanged = takingCollection.Count(x =>
+                !((IStockTaking) x).Inventory.ToString().Equals(((IStockTaking) x).TakingResult) && !((IStockTaking)x).TakingResult.Equals(String.Empty));
+        }
+
+        private void StockTakingResult_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            CountFilledResult();
+        }
+    }
+    public class IsCheckedToImageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool) value)
+                return "/Images/Checked.png";
+            return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return "";
         }
     }
 }
