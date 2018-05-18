@@ -23,6 +23,8 @@ namespace His_Pos.Class.Product
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
             Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
             Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");
+            TakingResult = "";
+            IsChecked = false;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
@@ -42,6 +44,32 @@ namespace His_Pos.Class.Product
         public string BatchNumber { get; set; }
         public bool Status { get; set; }
         public string Location { get; set; }
+        private string takingResult;
+
+        public string TakingResult
+        {
+            get
+            {
+                return takingResult;
+            }
+            set
+            {
+                takingResult = value;
+                UserFilledResult();
+                NotifyPropertyChanged("TakingResult");
+            }
+        }
+
+        private void UserFilledResult()
+        {
+            if (takingResult.Equals(String.Empty))
+                IsChecked = false;
+            else
+            {
+                IsChecked = true;
+            }
+        }
+
         private string source;
         public string Source
         {
@@ -53,6 +81,19 @@ namespace His_Pos.Class.Product
             {
                 source = value;
                 NotifyPropertyChanged("Source");
+            }
+        }
+        private bool isChecked;
+        public bool IsChecked
+        {
+            get
+            {
+                return isChecked;
+            }
+            set
+            {
+                isChecked = value;
+                NotifyPropertyChanged("IsChecked");
             }
         }
     }

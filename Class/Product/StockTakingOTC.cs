@@ -21,6 +21,8 @@ namespace His_Pos.Class.Product
             SafeAmount = Double.Parse(dataRow["PRO_SAFEQTY"].ToString());
             ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
+            TakingResult = "";
+            IsChecked = false;
         }
      
         public string Category { get; set; }
@@ -31,6 +33,30 @@ namespace His_Pos.Class.Product
         public string Location { get; set; }
         public string BatchNumber { get; set; }
         public bool Status { get; set; }
+        private string takingResult;
+
+        public string TakingResult
+        {
+            get
+            {
+                return takingResult;
+            }
+            set
+            {
+                takingResult = value;
+                UserFilledResult();
+                NotifyPropertyChanged("TakingResult");
+            }
+        }
+        private void UserFilledResult()
+        {
+            if (takingResult.Equals(String.Empty))
+                IsChecked = false;
+            else
+            {
+                IsChecked = true;
+            }
+        }
         private string source;
         public string Source
         {
@@ -42,6 +68,19 @@ namespace His_Pos.Class.Product
             {
                 source = value;
                 NotifyPropertyChanged("Source");
+            }
+        }
+        private bool isChecked;
+        public bool IsChecked
+        {
+            get
+            {
+                return isChecked;
+            }
+            set
+            {
+                isChecked = value;
+                NotifyPropertyChanged("IsChecked");
             }
         }
     }
