@@ -1,5 +1,8 @@
-﻿using System;
+﻿using His_Pos.AbstractClass;
+using His_Pos.PrintDocuments;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Windows.Media;
 
 namespace His_Pos.Service
@@ -67,15 +72,10 @@ namespace His_Pos.Service
                 }
             }
         }
-        public static void GridPrinter(UserControl userControl, string title, string subtitle)
+        public static void DocumentPrinter(FixedDocument document, string documentName)
         {
-            PrintDialog dlg = new PrintDialog();
-
-            if ((bool)dlg.ShowDialog().GetValueOrDefault())
-            {
-                userControl.Arrange(new Rect(new Point(0, 0), userControl.DesiredSize));
-                dlg.PrintVisual(userControl, title + "\r\n" + subtitle);
-            }
+            var pd = new PrintDialog();
+            pd.PrintDocument(document.DocumentPaginator, documentName);
         }
     }
 }

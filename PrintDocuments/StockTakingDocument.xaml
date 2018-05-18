@@ -9,18 +9,30 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="盤點單" FontSize="30" FontFamily="Segoe UI Semibold"/>
-            <Label Content="日期: " FontSize="20" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
-            <Label Content="{Binding PrintDate}" FontSize="20" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi"/>
-            <Label Content="盤點數量: " FontSize="20" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
-            <Label Content="{Binding Path=PrintCollection.Count}" FontSize="20" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi"/>
-            <Label Content="盤點人: " FontSize="20" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+            <Label Content="日期: " FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+            <Label Content="{Binding PrintDate}" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi"/>
+            <Label Content="盤點品項: " FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+            <Label Content="{Binding TotalProductCount}" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi"/>
+            <Label Content="盤點人: " FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+            <Label Content="{Binding UserName}" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semi"/>
         </StackPanel>
-        <DataGrid Grid.Row="1" Name="PrintData" Background="Transparent" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" ItemsSource="{Binding PrintCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  AutoGenerateColumns="False" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label Content="商品代碼" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="商品名稱" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="67,0,0,0"/>
+            <Label Content="類別" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="78,0,0,0"/>
+            <Label Content="庫存" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="35,0,0,0"/>
+            <Label Content="批號" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="43,0,0,0"/>
+            <Label Content="效期" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="55,0,0,0"/>
+            <Label Content="櫃位" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="43,0,0,0"/>
+        </StackPanel>
+        <DataGrid Grid.Row="2" Name="PrintData" Background="Transparent" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" ItemsSource="{Binding PrintCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  AutoGenerateColumns="False" CanUserAddRows="False" FontFamily="Segoe UI Semibold" HeadersVisibility="None">
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Setter Property="Background" Value="Transparent"/>
@@ -86,5 +98,6 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        <Label Content="{Binding PageNumber}" FontSize="20" HorizontalAlignment="Center" FontFamily="Segoe UI Semibold" Grid.Row="3"/>
     </Grid>
 </UserControl>
