@@ -113,7 +113,7 @@
                 <RadioButton Content="依櫃位" Tag="6" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="OrderMode_OnChecked"/>
             </StackPanel>
             <DataGrid Name="CheckItems" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CanUserSortColumns="False"
-                       ItemsSource="{Binding TakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="5">
+                       ItemsSource="{Binding TakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="5">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -178,6 +178,32 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
+                    <DataGridTemplateColumn MinWidth="150" MaxWidth="150" Header="批號" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <DataGrid Background="Transparent" CanUserAddRows="False" AutoGenerateColumns="False" HeadersVisibility="None" ItemsSource="{Binding BatchNumbersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn MinWidth="100" MaxWidth="100" FontSize="18" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding BatchNumber}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment"  Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                        <DataGridTextColumn MinWidth="50" MaxWidth="50" FontSize="18" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
+                                            <DataGridTextColumn.ElementStyle>
+                                                <Style TargetType="{x:Type TextBlock}">
+                                                    <Setter Property="HorizontalAlignment"  Value="Center" />
+                                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                                </Style>
+                                            </DataGridTextColumn.ElementStyle>
+                                        </DataGridTextColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="庫存總量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -200,14 +226,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="150" MaxWidth="300" Header="批號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding BatchNumber}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
                     <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="效期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValidDate}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
