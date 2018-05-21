@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,10 @@ namespace His_Pos.Interface
         BatchNumbers(string batchnumber,double amount) {
             Batchnumber = batchnumber;
             Amount = amount;
+        }
+        public BatchNumbers(DataRow dataRow) {
+            Batchnumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
+            Amount = Convert.ToDouble(dataRow["PRO_INVENTORY"].ToString());
         }
         string Batchnumber { get; set; }
         double Amount { get; set; }

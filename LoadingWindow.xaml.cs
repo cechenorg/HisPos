@@ -166,27 +166,40 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("處理商品資料...");
                 
-                var Medicines =  MedicineDb.GetStockTakingMedicines();
-                var Otcs =  OTCDb.GetStockTakingOtcs();
+                var Products =  ProductDb.GetStockTakingProduct();
+
 
                 Dispatcher.Invoke((Action)(() =>
                 {
                     ObservableCollection<Product> products = new ObservableCollection<Product>();
-
-                    foreach (DataRow k in Otcs.Rows)
+                    var lastProid = string.Empty;
+                    foreach (DataRow p in Products.Rows)
                     {
-                        StockTakingOTC otc = new StockTakingOTC(k);
-
-                        products.Add(otc);
+                       
+                        switch (p["P_TYPE"].ToString())
+                        {
+                            case "O" when lastProid == p["PRO_ID"].ToString():
+                                BatchNumbers obatchnumber = new BatchNumbers(p);
+                                ((StockTakingOTC)products[products.Count]).BatchNumbersCollection.Add(obatchnumber);
+                                break;
+                            case "O":
+                                StockTakingOTC otc = new StockTakingOTC(p);
+                                products.Add(otc);
+                                break;
+                            case "M" when lastProid == p["PRO_ID"].ToString():
+                                BatchNumbers mbatchnumber = new BatchNumbers(p);
+                                ((StockTakingMedicine)products[products.Count]).BatchNumbersCollection.Add(mbatchnumber);
+                                break;
+                            case "M":
+                                    StockTakingMedicine medicine = new StockTakingMedicine(p);
+                                    products.Add(medicine);
+                                    break;
+                        }
+                        
+                        
+                        lastProid = p["PRO_ID"].ToString();
                     }
-
-                    foreach (DataRow m in Medicines.Rows)
-                    {
-                        StockTakingMedicine medicine = new StockTakingMedicine(m);
-
-                        products.Add(medicine);
-                    }
-
+                    
                     stockTakingView.ProductCollection = products;
                 }));
             };

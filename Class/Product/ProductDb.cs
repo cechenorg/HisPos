@@ -50,6 +50,12 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_BASETYPE_STATUS", productunit.Id));
             dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateUnit]", parameters);
         }
+        internal static DataTable GetStockTakingProduct()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            return dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[GetStockTakingProduct]");
+        }
+
         internal static ObservableCollection<object> GetItemDialogProduct()
         {
             ObservableCollection<object> collection = new ObservableCollection<object>();

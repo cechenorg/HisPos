@@ -24,6 +24,9 @@ namespace His_Pos.Class.Product
             TakingResult = "";
             IsChecked = false;
             isEqual = true;
+            BatchNumbers batchNumber = new BatchNumbers(dataRow);
+            BatchNumbersCollection = new ObservableCollection<BatchNumbers>();
+            BatchNumbersCollection.Add(batchNumber);
         }
      
         public string Category { get; set; }

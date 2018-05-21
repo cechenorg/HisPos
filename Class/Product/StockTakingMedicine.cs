@@ -26,14 +26,9 @@ namespace His_Pos.Class.Product
             TakingResult = "";
             IsChecked = false;
             isEqual = true;
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            BatchNumbers batchNumber = new BatchNumbers(dataRow);
+            BatchNumbersCollection = new ObservableCollection<BatchNumbers>();
+            BatchNumbersCollection.Add(batchNumber);
         }
         public bool Frozen { get; set; }
         public bool Control { get; set; }
