@@ -113,7 +113,8 @@
                 <RadioButton Content="依櫃位" Tag="6" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="OrderMode_OnChecked"/>
             </StackPanel>
             <DataGrid Name="CheckItems" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CanUserSortColumns="False"
-                       ItemsSource="{Binding TakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="5">
+                       ItemsSource="{Binding TakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
+                      CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="5">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -144,7 +145,6 @@
                         <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
                         <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
                         <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="Height" Value="40"/>
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
@@ -178,12 +178,26 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="150" MaxWidth="150" Header="批號" IsReadOnly="True">
+                    <DataGridTemplateColumn MinWidth="200" MaxWidth="200" Header="批號" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <DataGrid Background="Transparent" CanUserAddRows="False" AutoGenerateColumns="False" HeadersVisibility="None" ItemsSource="{Binding BatchNumbersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <DataGrid Background="Transparent" CanUserAddRows="False" AutoGenerateColumns="False" HeadersVisibility="None"
+                                          ItemsSource="{Binding BatchNumbersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" CellStyle="{StaticResource DataGridCellStyle}"
+                                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled">
+                                    <DataGrid.RowStyle>
+                                        <Style TargetType="{x:Type DataGridRow}">
+                                            <Style.Triggers>
+                                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="FontSize" Value="14"/>
+                                            <Setter Property="Height" Value="40"/>
+                                        </Style>
+                                    </DataGrid.RowStyle>
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn MinWidth="100" MaxWidth="100" FontSize="18" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding BatchNumber}">
+                                        <DataGridTextColumn MinWidth="125" MaxWidth="125" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding BatchNumber}">
                                             <DataGridTextColumn.ElementStyle>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -191,7 +205,7 @@
                                                 </Style>
                                             </DataGridTextColumn.ElementStyle>
                                         </DataGridTextColumn>
-                                        <DataGridTextColumn MinWidth="50" MaxWidth="50" FontSize="18" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
+                                        <DataGridTextColumn MinWidth="70" MaxWidth="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
                                             <DataGridTextColumn.ElementStyle>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Setter Property="HorizontalAlignment"  Value="Center" />

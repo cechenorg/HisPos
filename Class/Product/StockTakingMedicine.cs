@@ -27,9 +27,11 @@ namespace His_Pos.Class.Product
             IsChecked = false;
             isEqual = true;
             BatchNumbers batchNumber = new BatchNumbers(dataRow);
-            BatchNumbersCollection = new ObservableCollection<BatchNumbers>();
             BatchNumbersCollection.Add(batchNumber);
+
+            BatchNumbersCollection.CollectionChanged += (sender, args) => RowHeight += 40;
         }
+        public int RowHeight { get; set; }
         public bool Frozen { get; set; }
         public bool Control { get; set; }
         public string Category { get; set; }
@@ -39,7 +41,7 @@ namespace His_Pos.Class.Product
         public string LastCheckDate { get; set; }
         public bool Status { get; set; }
         public string Location { get; set; }
-        private ObservableCollection<BatchNumbers> batchNumbersCollection;
+        private ObservableCollection<BatchNumbers> batchNumbersCollection = new ObservableCollection<BatchNumbers>();
         public ObservableCollection<BatchNumbers> BatchNumbersCollection
         {
             get
