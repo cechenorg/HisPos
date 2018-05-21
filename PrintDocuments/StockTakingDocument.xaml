@@ -25,11 +25,11 @@
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Label Content="商品代碼" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Content="商品名稱" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="67,0,0,0"/>
-            <Label Content="類別" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="78,0,0,0"/>
-            <Label Content="庫存" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="35,0,0,0"/>
-            <Label Content="批號" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="43,0,0,0"/>
-            <Label Content="效期" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="55,0,0,0"/>
-            <Label Content="櫃位" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="43,0,0,0"/>
+            <Label Content="類別" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="63,0,0,0"/>
+            <Label Content="批號" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="75,0,0,0"/>
+            <Label Content="庫存" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="70,0,0,0"/>
+            <Label Content="效期" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="35,0,0,0"/>
+            <Label Content="櫃位" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="35,0,0,0"/>
         </StackPanel>
         <DataGrid Grid.Row="2" Name="PrintData" Background="Transparent" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" ItemsSource="{Binding PrintCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" CanUserAddRows="False" FontFamily="Segoe UI Semibold" HeadersVisibility="None">
@@ -37,11 +37,10 @@
                 <Style TargetType="{x:Type DataGridRow}">
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="FontSize" Value="12"/>
-                    <Setter Property="Height" Value="30"/>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                <DataGridTextColumn MinWidth="90" MaxWidth="90" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -56,7 +55,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="類別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Category}">
+                <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="類別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Category}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -64,7 +63,47 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="庫存" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
+                <DataGridTemplateColumn MinWidth="170" MaxWidth="170" Header="批號" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DataGrid Background="Transparent" CanUserAddRows="False" AutoGenerateColumns="False" HeadersVisibility="None" VerticalAlignment="Center"
+                                          ItemsSource="{Binding BatchNumbersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" Margin="-13" GridLinesVisibility="None">
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="{x:Type DataGridRow}">
+                                        <Style.Triggers>
+                                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="FontSize" Value="12"/>
+                                        <Setter Property="Height" Value="28"/>
+                                    </Style>
+                                </DataGrid.RowStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn MinWidth="90" MaxWidth="90" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding BatchNumber}">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                    <DataGridTextColumn MinWidth="70" MaxWidth="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
+                                        <DataGridTextColumn.ElementStyle>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGridTextColumn.ElementStyle>
+                                    </DataGridTextColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="庫存" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Inventory}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -72,15 +111,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="批號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding BatchNumber}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="效期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValidDate}">
+                <DataGridTextColumn MinWidth="90" MaxWidth="90" Header="效期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValidDate}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center" />
