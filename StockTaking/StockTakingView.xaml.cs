@@ -191,6 +191,12 @@ namespace His_Pos.StockTaking
 
         private void NextStatus_Click(object sender, RoutedEventArgs e)
         {
+            if (!CheckTakingResult(takingCollection))
+            {
+                MessageWindow messageWindow = new MessageWindow("尚有品項未填寫盤點數量!", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
             NextStatus();
         }
 
@@ -231,12 +237,19 @@ namespace His_Pos.StockTaking
 
             takingCollection.RemoveAt(CheckItems.SelectedIndex);
         }
+        private bool CheckTakingResult(ObservableCollection<Product> takingCollection) {
+            foreach (Product p in takingCollection)
+            {
+                if (((IStockTaking)p).TakingResult == string.Empty) return false;
+            }
+            return true;
+        }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
+         
             ProductDb.SaveStockTaking(takingCollection);
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             UpdateUi();
-
         }
         public bool CaculateValidDate(string validdate, string month)
         {
@@ -365,8 +378,11 @@ namespace His_Pos.StockTaking
                 var fixedPage = new FixedPage();
                 fixedPage.Width = pageSize.Width;
                 fixedPage.Height = pageSize.Height;
-
-                fixedPage.Children.Add(new StockTakingDocument(pages[x], MainWindow.CurrentUser.Name, takingCollection.Count, x + 1, totalPage, CheckItems.Items.SortDescriptions[0]));
+                if (CheckItems.Items.SortDescriptions.Count > 0)
+                    fixedPage.Children.Add(new StockTakingDocument(pages[x], MainWindow.CurrentUser.Name, takingCollection.Count, x + 1, totalPage, CheckItems.Items.SortDescriptions[0]));
+                else
+                    fixedPage.Children.Add(new StockTakingDocument(pages[x], MainWindow.CurrentUser.Name, takingCollection.Count, x + 1, totalPage, new SortDescription(CheckItems.Columns[1].SortMemberPath, ListSortDirection.Ascending)));
+               
                 fixedPage.Measure(pageSize);
                 fixedPage.Arrange(new Rect(new Point(), pageSize));
                 fixedPage.UpdateLayout();
@@ -404,7 +420,14 @@ namespace His_Pos.StockTaking
 
         private void AutoFill_Click(object sender, RoutedEventArgs e)
         {
-          
+            foreach (Product p in takingCollection) {
+                ((IStockTaking)p).TakingResult = ((IStockTaking)p).TakingResult == string.Empty ? ((IStockTaking)p).Inventory.ToString() : ((IStockTaking)p).TakingResult;
+            }
+        }
+
+        private void FinishedAddProduct_Click(object sender, RoutedEventArgs e)
+        {
+            NextStatus();
         }
     }
     public class IsResultEqualConverter : IValueConverter
