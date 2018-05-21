@@ -711,7 +711,10 @@ namespace His_Pos.ProductPurchase
                     if (textBox.Text.Equals("0"))
                     {
                         SetChanged();
-                        textBox.Text = "";
+                        if (!(e.Key == Key.Decimal || e.Key == Key.OemPeriod)) { 
+                            textBox.Text = GetCharFromKey(e.Key);
+                            e.Handled = true;
+                        }
                         textBox.CaretIndex = 1;
                     }
                 }
