@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +16,20 @@ namespace His_Pos.Interface
         string ValidDate { get; set; }
         string LastCheckDate { get; set; }
         string Location { get; set; }
-        string BatchNumber { get; set; }
         bool Status { get; set; }
         string TakingResult { get; set; }
         bool IsChecked { get; set; }
         bool IsEqual { get; set; }
+        ObservableCollection<BatchNumbers> BatchNumbersCollection { get; set; }
+        
     }
+    public struct BatchNumbers {
+
+        BatchNumbers(string batchnumber,double amount) {
+            Batchnumber = batchnumber;
+            Amount = amount;
+        }
+        string Batchnumber { get; set; }
+        double Amount { get; set; }
+    } 
 }
