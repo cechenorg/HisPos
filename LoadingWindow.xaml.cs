@@ -180,7 +180,7 @@ namespace His_Pos
                         {
                             case "O" when lastProid == p["PRO_ID"].ToString():
                                 BatchNumbers obatchnumber = new BatchNumbers(p);
-                                ((StockTakingOTC)products[products.Count]).BatchNumbersCollection.Add(obatchnumber);
+                                ((StockTakingOTC)products[products.Count-1]).BatchNumbersCollection.Add(obatchnumber);
                                 break;
                             case "O":
                                 StockTakingOTC otc = new StockTakingOTC(p);
@@ -188,7 +188,7 @@ namespace His_Pos
                                 break;
                             case "M" when lastProid == p["PRO_ID"].ToString():
                                 BatchNumbers mbatchnumber = new BatchNumbers(p);
-                                ((StockTakingMedicine)products[products.Count]).BatchNumbersCollection.Add(mbatchnumber);
+                                ((StockTakingMedicine)products[products.Count-1]).BatchNumbersCollection.Add(mbatchnumber);
                                 break;
                             case "M":
                                     StockTakingMedicine medicine = new StockTakingMedicine(p);

@@ -233,8 +233,10 @@ namespace His_Pos.StockTaking
         }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
+
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             UpdateUi();
+
         }
         public bool CaculateValidDate(string validdate, string month)
         {
@@ -355,6 +357,11 @@ namespace His_Pos.StockTaking
         private void StockTakingResult_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             CountFilledResult();
+        }
+
+        private void AutoFill_Click(object sender, RoutedEventArgs e)
+        {
+            ProductDb.SaveStockTaking(takingCollection);
         }
     }
     public class IsResultEqualConverter : IValueConverter

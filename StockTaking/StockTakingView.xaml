@@ -272,7 +272,7 @@
                 <Label Content="有更動  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Content="{Binding ResultChanged, UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" Margin="0,0,20,0"/>
-                <Button Width="150" Content="自動補齊未填寫" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,20,0" Background="DimGray" BorderThickness="0"/>
+                <Button Width="150" Content="自動補齊未填寫" Name="AutoFill" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,20,0" Background="DimGray" BorderThickness="0" Click="AutoFill_Click" />
                 <Button Width="150" Content="完成盤點" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="Red" BorderThickness="0" Click="NextStatus_Click"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="8" Background="{StaticResource GridDarkerBackGround}">

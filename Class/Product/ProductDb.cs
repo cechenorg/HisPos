@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using His_Pos.ProductPurchase;
+using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
@@ -131,6 +132,29 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("ORDER_ID", orderId));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
         }
+        public static void SaveStockTaking(ObservableCollection<AbstractClass.Product> takingCollection) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            DataTable details = new DataTable();
+            details.Columns.Add("PRO_ID", typeof(string));
+            details.Columns.Add("EMP_ID", typeof(int));
+            details.Columns.Add("PROCHE_OLDVAL", typeof(string));
+            details.Columns.Add("PROCHE_NEWVAL", typeof(string));
+            foreach (var product in takingCollection)
+            {
+                var newRow = details.NewRow();
+                newRow["PRO_ID"] = product.Id;
+                newRow["EMP_ID"] = MainWindow.CurrentUser.Name;
+                newRow["PROCHE_OLDVAL"] = ((IStockTaking)product).Inventory;
+                newRow["PROCHE_NEWVAL"] = ((IStockTaking)product).TakingResult;
+                details.Rows.Add(newRow);
+            }
+            parameters.Add(new SqlParameter("DETAILS", details));
+            dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[SaveStockTakingProducts]", parameters);
+             
+         
+    }
+
         public static void UpdateOtcDataDetail(AbstractClass.Product product,string type)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
