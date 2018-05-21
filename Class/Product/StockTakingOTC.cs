@@ -35,10 +35,21 @@ namespace His_Pos.Class.Product
         public string ValidDate { get; set; }
         public string LastCheckDate { get; set; }
         public string Location { get; set; }
-        public ObservableCollection<BatchNumbers> BatchNumbersCollection { get; set; }
         public bool Status { get; set; }
+        private ObservableCollection<BatchNumbers> batchNumbersCollection;
+        public ObservableCollection<BatchNumbers> BatchNumbersCollection
+        {
+            get
+            {
+                return batchNumbersCollection;
+            }
+            set
+            {
+                batchNumbersCollection = value;
+                NotifyPropertyChanged("BatchNumbersCollection");
+            }
+        }
         private string takingResult;
-
         public string TakingResult
         {
             get
