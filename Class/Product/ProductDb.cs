@@ -137,14 +137,14 @@ namespace His_Pos.Class.Product
             var parameters = new List<SqlParameter>();
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
-            details.Columns.Add("EMP_ID", typeof(int));
+            details.Columns.Add("EMP_ID", typeof(string));
             details.Columns.Add("PROCHE_OLDVAL", typeof(string));
             details.Columns.Add("PROCHE_NEWVAL", typeof(string));
             foreach (var product in takingCollection)
             {
                 var newRow = details.NewRow();
                 newRow["PRO_ID"] = product.Id;
-                newRow["EMP_ID"] = MainWindow.CurrentUser.Name;
+                newRow["EMP_ID"] = MainWindow.CurrentUser.Id;
                 newRow["PROCHE_OLDVAL"] = ((IStockTaking)product).Inventory;
                 newRow["PROCHE_NEWVAL"] = ((IStockTaking)product).TakingResult;
                 details.Rows.Add(newRow);

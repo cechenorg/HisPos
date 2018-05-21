@@ -233,7 +233,7 @@ namespace His_Pos.StockTaking
         }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
-
+            ProductDb.SaveStockTaking(takingCollection);
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             UpdateUi();
 
@@ -361,7 +361,7 @@ namespace His_Pos.StockTaking
 
         private void AutoFill_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.SaveStockTaking(takingCollection);
+          
         }
     }
     public class IsResultEqualConverter : IValueConverter
