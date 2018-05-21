@@ -119,9 +119,9 @@ namespace His_Pos.StockTaking
             {
                 case StockTakingStatus.ADDPRODUCTS:
                     CheckItems.Columns[0].Visibility = Visibility.Visible;
-                    CheckItems.Columns[5].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[5].Visibility = Visibility.Visible;
                     CheckItems.Columns[6].Visibility = Visibility.Collapsed;
-                    CheckItems.Columns[7].Visibility = Visibility.Visible;
+                    CheckItems.Columns[7].Visibility = Visibility.Collapsed;
                     CheckItems.Columns[8].Visibility = Visibility.Visible;
                     CheckItems.Columns[9].Visibility = Visibility.Visible;
                     CheckItems.Columns[10].Visibility = Visibility.Visible;
@@ -165,7 +165,7 @@ namespace His_Pos.StockTaking
                     CheckItems.Columns[0].Visibility = Visibility.Collapsed;
                     CheckItems.Columns[5].Visibility = Visibility.Visible;
                     CheckItems.Columns[6].Visibility = Visibility.Visible;
-                    CheckItems.Columns[7].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[7].Visibility = Visibility.Visible;
                     CheckItems.Columns[8].Visibility = Visibility.Collapsed;
                     CheckItems.Columns[9].Visibility = Visibility.Collapsed;
                     CheckItems.Columns[10].Visibility = Visibility.Collapsed;
