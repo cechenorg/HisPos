@@ -275,6 +275,7 @@ namespace His_Pos.StockTaking
 
             CheckItems.Items.SortDescriptions.Clear();
             CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[Int32.Parse(radioButton.Tag.ToString())].SortMemberPath, ListSortDirection.Ascending));
+            CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[1].SortMemberPath, ListSortDirection.Ascending));
         }
 
         private void Print_OnClick(object sender, RoutedEventArgs e)
@@ -303,32 +304,74 @@ namespace His_Pos.StockTaking
         {
             Collection<FixedPage> documents = new Collection<FixedPage>();
 
-            int ITEM_LIMIT = 32;
+            Collection< List < Product >> pages = new BindingList<List<Product>>();
 
-            int totalPage = takingCollection.Count / ITEM_LIMIT + ((takingCollection.Count % ITEM_LIMIT == 0)? 0 : 1);
-            int currentPage = 1;
-            for ( int x = 0; x < takingCollection.Count; x += ITEM_LIMIT)
+            List<RadioButton> radioButtons = SortType.Children.OfType<RadioButton>().ToList();
+            int target = Int16.Parse(radioButtons.Single(r => r.IsChecked == true).Tag.ToString());
+
+            List<Product> temp;
+
+            switch (target)
+            {
+                case 1:
+                    temp = takingCollection.OrderBy(x => x.Id).ToList();
+                    break;
+                case 2:
+                    temp = takingCollection.OrderBy(x => x.Name).ToList();
+                    break;
+                case 3:
+                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).Category).ThenBy(x => x.Id).ToList();
+                    break;
+                case 9:
+                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).Location).ThenBy(x => x.Id).ToList();
+                    break;
+                default:
+                    temp = takingCollection.OrderBy(x => x.Id).ToList();
+                    break;
+            }
+
+            int LENGTH_LIMIT = 25;
+
+            double length = 0;
+            int lastIndex = 0;
+            for (int x = 0; x < temp.Count; x ++)
+            {
+                int itemCount = ((IStockTaking)temp[x]).BatchNumbersCollection.Count;
+                if (itemCount == 1)
+                    length += 0.9;
+                else
+                {
+                    length += (0.8 * (itemCount - 2) + 1.2);
+                }
+
+                if (length >= LENGTH_LIMIT)
+                {
+                    pages.Add(temp.GetRange(lastIndex, x - 1 - lastIndex));
+                    lastIndex = x - 1;
+                    length = 0;
+                }
+                else if (x == temp.Count - 1)
+                {
+                    pages.Add(temp.GetRange(lastIndex, x - lastIndex + 1));
+                }
+            }
+            
+            int totalPage = pages.Count;
+
+            for (int x = 0; x < pages.Count; x ++)
             {
                 var fixedPage = new FixedPage();
                 fixedPage.Width = pageSize.Width;
                 fixedPage.Height = pageSize.Height;
 
-                List<Product> temp;
-
-                if ( currentPage == totalPage )
-                    temp = takingCollection.ToList().GetRange(x, takingCollection.Count % ITEM_LIMIT);
-                else
-                    temp = takingCollection.ToList().GetRange(x, ITEM_LIMIT);
-
-                fixedPage.Children.Add(new StockTakingDocument(temp, MainWindow.CurrentUser.Name, takingCollection.Count, currentPage, totalPage));
+                fixedPage.Children.Add(new StockTakingDocument(pages[x], MainWindow.CurrentUser.Name, takingCollection.Count, x + 1, totalPage, CheckItems.Items.SortDescriptions[0]));
                 fixedPage.Measure(pageSize);
                 fixedPage.Arrange(new Rect(new Point(), pageSize));
                 fixedPage.UpdateLayout();
 
                 documents.Add(fixedPage);
-                currentPage++;
             }
-            
+
             return documents;
         }
 

@@ -42,7 +42,7 @@ namespace His_Pos.PrintDocuments
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public StockTakingDocument(List<Product> products, string userName, int totalProductCount, int thisPage, int totalPage)
+        public StockTakingDocument(List<Product> products, string userName, int totalProductCount, int thisPage, int totalPage, SortDescription sortDescription)
         {
             InitializeComponent();
             DataContext = this;
@@ -51,6 +51,8 @@ namespace His_Pos.PrintDocuments
             TotalPage = totalPage.ToString();
             UserName = userName;
             TotalProductCount = totalProductCount;
+            PrintData.Items.SortDescriptions.Add(sortDescription);
+            PrintData.Items.SortDescriptions.Add(new SortDescription(PrintData.Columns[0].SortMemberPath, ListSortDirection.Ascending));
         }
         private void NotifyPropertyChanged(string info)
         {
