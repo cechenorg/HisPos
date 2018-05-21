@@ -22,8 +22,6 @@ namespace His_Pos.Interface
         bool IsChecked { get; set; }
         bool IsEqual { get; set; }
         ObservableCollection<BatchNumbers> BatchNumbersCollection { get; set; }
-        int RowHeight { get; set; }
-        
     }
     public struct BatchNumbers {
 

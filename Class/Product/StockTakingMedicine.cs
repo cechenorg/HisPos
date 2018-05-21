@@ -28,10 +28,7 @@ namespace His_Pos.Class.Product
             isEqual = true;
             BatchNumbers batchNumber = new BatchNumbers(dataRow);
             BatchNumbersCollection.Add(batchNumber);
-
-            BatchNumbersCollection.CollectionChanged += (sender, args) => RowHeight += 40;
         }
-        public int RowHeight { get; set; }
         public bool Frozen { get; set; }
         public bool Control { get; set; }
         public string Category { get; set; }
