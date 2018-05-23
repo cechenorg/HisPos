@@ -97,6 +97,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 基本資料管理 的當地語系化字串。
+        /// </summary>
+        internal static string DataManagement {
+            get {
+                return ResourceManager.GetString("DataManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 ..\Images\Done.png 的當地語系化字串。
         /// </summary>
         internal static string declareDone {
@@ -174,6 +183,24 @@ namespace His_Pos.Properties {
         internal static string InstitutionIdError {
             get {
                 return ResourceManager.GetString("InstitutionIdError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 櫃位管理 的當地語系化字串。
+        /// </summary>
+        internal static string LocationManage {
+            get {
+                return ResourceManager.GetString("LocationManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 供應商管理 的當地語系化字串。
+        /// </summary>
+        internal static string ManufactoryManage {
+            get {
+                return ResourceManager.GetString("ManufactoryManage", resourceCulture);
             }
         }
         
@@ -282,6 +309,15 @@ namespace His_Pos.Properties {
         internal static string ProductPurchaseRecord {
             get {
                 return ResourceManager.GetString("ProductPurchaseRecord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 商品類別管理 的當地語系化字串。
+        /// </summary>
+        internal static string ProductTypeManage {
+            get {
+                return ResourceManager.GetString("ProductTypeManage", resourceCulture);
             }
         }
         

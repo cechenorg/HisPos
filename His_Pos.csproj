@@ -302,8 +302,16 @@
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LocationManage\LocationManage.cs" />
+    <Compile Include="LocationManage\LocationManageView.xaml.cs">
+      <DependentUpon>LocationManageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ManufactoryManage\ManufactoryManage.cs" />
+    <Compile Include="ManufactoryManage\ManufactoryManageView.xaml.cs">
+      <DependentUpon>ManufactoryManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
@@ -340,6 +348,10 @@
     <Compile Include="ProductPurchase\ProductPurchase.cs" />
     <Compile Include="ProductPurchase\ProductPurchaseView.xaml.cs">
       <DependentUpon>ProductPurchaseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ProductTypeManage\ProductTypeManage.cs" />
+    <Compile Include="ProductTypeManage\ProductTypeManageView.xaml.cs">
+      <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
@@ -397,6 +409,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="LocationManage\LocationManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoginPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -415,6 +431,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ManufactoryManage\ManufactoryManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -448,6 +468,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ProductPurchase\ProductPurchaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProductTypeManage\ProductTypeManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -563,6 +587,7 @@
     <Resource Include="Images\Success.png" />
     <Resource Include="Images\Checked.png" />
     <Resource Include="Images\Changed.png" />
+    <Resource Include="Images\Management.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

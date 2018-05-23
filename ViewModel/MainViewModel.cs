@@ -173,6 +173,15 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.庫存盤點紀錄):
                     newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
+                case nameof(FeatureItem.商品類別管理):
+                    newTab = new ProductTypeManage.ProductTypeManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+                case nameof(FeatureItem.櫃位管理):
+                    newTab = new LocationManage.LocationManage() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+                case nameof(FeatureItem.供應商管理):
+                    newTab = new ManufactoryManage.ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
                 default:
                     return;
             }

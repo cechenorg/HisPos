@@ -18,7 +18,10 @@ namespace His_Pos.Class
         處理單管理 = 3,
         處理單紀錄 = 4,
         新增盤點 = 5,
-        庫存盤點紀錄 = 6
+        庫存盤點紀錄 = 6,
+        商品類別管理 = 7,
+        櫃位管理 = 8,
+        供應商管理 = 9
     }
 
     public enum ItemType

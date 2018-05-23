@@ -210,4 +210,16 @@
   <data name="StockSearch" xml:space="preserve">
     <value>庫存查詢</value>
   </data>
+  <data name="DataManagement" xml:space="preserve">
+    <value>基本資料管理</value>
+  </data>
+  <data name="LocationManage" xml:space="preserve">
+    <value>櫃位管理</value>
+  </data>
+  <data name="ManufactoryManage" xml:space="preserve">
+    <value>供應商管理</value>
+  </data>
+  <data name="ProductTypeManage" xml:space="preserve">
+    <value>商品類別管理</value>
+  </data>
 </root>

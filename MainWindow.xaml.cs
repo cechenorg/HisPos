@@ -54,6 +54,8 @@ namespace His_Pos
                             new string[] { Properties.Resources.StockSearch, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord }));
             HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.StockTaking,
                             new string[] { Properties.Resources.NewStockTaking, Properties.Resources.StockTakingRecord }));
+            HisFeatures.Add(new Feature(@"..\Images\Management.png", Properties.Resources.DataManagement,
+                            new string[] { Properties.Resources.ProductTypeManage, Properties.Resources.LocationManage, Properties.Resources.ManufactoryManage }));
         }
         
         private void InitializePosMenu()

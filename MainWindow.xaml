@@ -14,6 +14,9 @@
         xmlns:StockTaking="clr-namespace:His_Pos.StockTaking"
         
     xmlns:StockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
+    xmlns:ProductTypeManage="clr-namespace:His_Pos.ProductTypeManage"
+    xmlns:ManufactoryManage="clr-namespace:His_Pos.ManufactoryManage"
+    xmlns:LocationManage="clr-namespace:His_Pos.LocationManage"
     x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"   Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}" 
@@ -43,6 +46,15 @@
         <DataTemplate DataType="{x:Type StockTakingRecord:StockTakingRecord}">
             <StockTakingRecord:StockTakingRecordView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type ProductTypeManage:ProductTypeManage}">
+            <ProductTypeManage:ProductTypeManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type LocationManage:LocationManage}">
+            <LocationManage:LocationManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type ManufactoryManage:ManufactoryManage}">
+            <ManufactoryManage:ManufactoryManageView/>
+        </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid Name="MainGrid">
@@ -61,6 +73,7 @@
                         <menuusercontrol:UserControl1 Name="HisFeature1" MouseDown="FeatureMouseDown"/>
                         <menuusercontrol:UserControl1 Name="HisFeature2" MouseDown="FeatureMouseDown"/>
                         <menuusercontrol:UserControl1 Name="HisFeature3" MouseDown="FeatureMouseDown"/>
+                        <menuusercontrol:UserControl1 Name="HisFeature4" MouseDown="FeatureMouseDown"/>
                     </StackPanel>
                 </ScrollViewer>
                 <ScrollViewer Name="PosMenu" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
