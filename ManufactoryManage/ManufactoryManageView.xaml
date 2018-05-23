@@ -18,7 +18,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                 <Rectangle Width="1250"/>
-                <Button Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+                <Button Content="查詢" Name="Search" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
             </StackPanel>
             <DataGrid Grid.Column="0" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridBackGround}" Margin="10,10,0,10">
@@ -29,7 +29,6 @@
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                                 <Setter Property="Foreground" Value="#FF424040"/>
-                                <EventSetter Event="Selected" Handler="ShowOrderDetail"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Background" Value="{StaticResource GridSelected}"/>
