@@ -33,6 +33,7 @@ namespace His_Pos.Class.Product
         public bool Control { get; set; }
         public string Category { get; set; }
         public double Inventory { get; set; }
+        public string EmpId { get; set; }
         public double SafeAmount { get; set; }
         public string ValidDate { get; set; }
         public string LastCheckDate { get; set; }
