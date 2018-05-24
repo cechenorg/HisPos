@@ -125,6 +125,7 @@ namespace His_Pos.StockTaking
                     CheckItems.Columns[8].Visibility = Visibility.Visible;
                     CheckItems.Columns[9].Visibility = Visibility.Visible;
                     CheckItems.Columns[10].Visibility = Visibility.Visible;
+                    CheckItems.Columns[11].Visibility = Visibility.Collapsed;
                     ViewGrid.RowDefinitions[2].Height = new GridLength(15);
                     ViewGrid.RowDefinitions[3].Height = new GridLength(150);
                     ViewGrid.RowDefinitions[4].Height = new GridLength(0);
@@ -181,6 +182,7 @@ namespace His_Pos.StockTaking
                 case StockTakingStatus.COMPLETE:
                     ViewGrid.RowDefinitions[7].Height = new GridLength(0);
                     ViewGrid.RowDefinitions[8].Height = new GridLength(50);
+                    CheckItems.Columns[11].Visibility = Visibility.Visible;
                     InputEllipse.Fill = Brushes.DeepSkyBlue;
                     CompleteLine.Stroke = Brushes.DeepSkyBlue;
                     CompleteLine.StrokeDashArray = new DoubleCollection() { 300 };
@@ -189,7 +191,7 @@ namespace His_Pos.StockTaking
             }
         }
 
-        private void NextStatus_Click(object sender, RoutedEventArgs e)
+        private void StockTakingComplete_Click(object sender, RoutedEventArgs e)
         {
             if (!CheckTakingResult(takingCollection))
             {
@@ -197,7 +199,29 @@ namespace His_Pos.StockTaking
                 messageWindow.ShowDialog();
                 return;
             }
-            NextStatus();
+
+            if(ResultChanged == 0)
+            {
+                ProductDb.SaveStockTaking(takingCollection);
+
+                takingCollection.Clear();
+                
+                stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
+                UpdateUi();
+            }
+            else
+            {
+                CheckItems.Items.Filter = ChangedFilter;
+
+
+                NextStatus();
+            }
+
+        }
+
+        private bool ChangedFilter( object product )
+        {
+            return !(product as IStockTaking).IsEqual;
         }
 
         private void NextStatus()
@@ -234,7 +258,6 @@ namespace His_Pos.StockTaking
         }
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
             takingCollection.RemoveAt(CheckItems.SelectedIndex);
         }
         private bool CheckTakingResult(ObservableCollection<Product> takingCollection) {
@@ -246,8 +269,9 @@ namespace His_Pos.StockTaking
         }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
-         
             ProductDb.SaveStockTaking(takingCollection);
+            takingCollection.Clear();
+            CheckItems.Items.Filter = null;
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             UpdateUi();
         }
