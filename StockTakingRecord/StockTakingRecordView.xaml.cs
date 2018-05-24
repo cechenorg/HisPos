@@ -34,7 +34,7 @@ namespace His_Pos.StockTakingRecord
             set
             {
                 stocktakingCollection = value;
-                NotifyPropertyChanged("TakingCollection");
+                NotifyPropertyChanged("StocktakingCollection");
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;

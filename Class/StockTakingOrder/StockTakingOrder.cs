@@ -16,6 +16,22 @@ namespace His_Pos.Class.Product
         public StockTakingOrder(DataRow row) {
             Id = row["PROCHE_ID"].ToString();
         }
+        public StockTakingOrder(string id)
+        {
+            Id = id;
+        }
+        public int amount;
+        public int Amount {
+            get
+            {
+                return amount;
+            }
+            set
+            {
+                amount = value;
+                NotifyPropertyChanged("Amount");
+            }
+        }
         public string id; 
         public string Id
         {
@@ -30,17 +46,30 @@ namespace His_Pos.Class.Product
             }
         }
         public string stockTakingTime;
-        private ObservableCollection<StockTakingOrderProduct> takingCollection = new ObservableCollection<StockTakingOrderProduct>();
-        public ObservableCollection<StockTakingOrderProduct> TakingCollection
+        private ObservableCollection<StockTakingOrderProduct> changedtakingCollection = new ObservableCollection<StockTakingOrderProduct>();
+        public ObservableCollection<StockTakingOrderProduct> ChangedtakingCollection
         {
             get
             {
-                return takingCollection;
+                return changedtakingCollection;
             }
             set
             {
-                takingCollection = value;
-                NotifyPropertyChanged("TakingCollection");
+                changedtakingCollection = value;
+                NotifyPropertyChanged("ChangedtakingCollection");
+            }
+        }
+        private ObservableCollection<StockTakingOrderProduct> unchangedtakingCollection = new ObservableCollection<StockTakingOrderProduct>();
+        public ObservableCollection<StockTakingOrderProduct> UnchangedtakingCollection
+        {
+            get
+            {
+                return unchangedtakingCollection;
+            }
+            set
+            {
+                unchangedtakingCollection = value;
+                NotifyPropertyChanged("UnchangedtakingCollection");
             }
         }
 

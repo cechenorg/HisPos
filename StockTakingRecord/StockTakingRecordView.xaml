@@ -31,7 +31,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <DataGrid Name="StockTakingRecord" Grid.Column="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" Margin="10,10,0,10"
-                           ItemsSource="{Binding TakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
+                           ItemsSource="{Binding StocktakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="290">
                             <DataGridTemplateColumn.CellStyle>
@@ -54,12 +54,12 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <StackPanel Orientation="Horizontal" Grid.Row="0">
-                                            <Label Content="{Binding Path=TakingCollection.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                            <Label Content="{Binding Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
                                             <TextBlock FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Row="1">
                                             <Label Content="盤點項目  共" FontFamily="Segoe UI Semi"/>
-                                            <TextBlock FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
+                                            <TextBlock Text="{Binding Amount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
                                             <Label Content="項" FontFamily="Segoe UI Semi"/>
                                         </StackPanel>
                                     </Grid>
@@ -90,8 +90,7 @@
                         </Grid.ColumnDefinitions>
                         <Label Content="有更動" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Grid.Column="0" Grid.Row="0"/>
                         <Label Content="未更動" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Grid.Column="1" Grid.Row="0"/>
-                        <DataGrid Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,5,10" Grid.Row="1" Grid.Column="0">
+                        <DataGrid Name="UnChanged" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,5,10" Grid.Row="1" Grid.Column="0">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Style.Triggers>
@@ -108,8 +107,8 @@
 
                             </DataGrid.Columns>
                         </DataGrid>
-                        <DataGrid Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5,0,10,10" Grid.Row="1" Grid.Column="1">
+                        <DataGrid Name="Changed" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5,0,10,10" Grid.Row="1" Grid.Column="1">
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Style.Triggers>

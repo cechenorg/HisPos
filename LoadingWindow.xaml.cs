@@ -170,23 +170,35 @@ namespace His_Pos
                     StockTakingOrder stockTakingOrder;
                     foreach (DataRow p in Products.Rows)
                     {
-                        if (p["PROCHE_ID"].ToString() != lastProcheId && count != 1) {
-                            stockTakingOrder = new StockTakingOrder(p);
+                        if (p["PROCHE_ID"].ToString() != lastProcheId && count != 1)
+                        {
+                            stockTakingOrder = new StockTakingOrder(lastProcheId);
                             foreach (var product in products)
                             {
-                                stockTakingOrder.TakingCollection.Add(product);
+                                if (product.OldValue == product.NewValue)
+                                    stockTakingOrder.UnchangedtakingCollection.Add(product);
+                                else
+                                    stockTakingOrder.ChangedtakingCollection.Add(product);
                             }
+                            stockTakingOrder.Amount = products.Count;
                             stockTakingRecord.StocktakingCollection.Add(stockTakingOrder);
                             products.Clear();
                         }
-                        else if (count == Products.Rows.Count)
-                        {
-                            stockTakingOrder = new StockTakingOrder(p);
+                        else if (count == Products.Rows.Count) {
+                            StockTakingOrderProduct laststockTakingOrderProduct = new StockTakingOrderProduct(p);
+                            products.Add(laststockTakingOrderProduct);
+                            stockTakingOrder = new StockTakingOrder(lastProcheId);
                             foreach (var product in products)
                             {
-                                stockTakingOrder.TakingCollection.Add(product);
+                                if (product.OldValue == product.NewValue)
+                                    stockTakingOrder.UnchangedtakingCollection.Add(product);
+                                else
+                                    stockTakingOrder.ChangedtakingCollection.Add(product);
                             }
+                            stockTakingOrder.Amount = products.Count;
                             stockTakingRecord.StocktakingCollection.Add(stockTakingOrder);
+                            products.Clear();
+                            break;
                         }
                         StockTakingOrderProduct stockTakingOrderProduct = new StockTakingOrderProduct(p);
                         products.Add(stockTakingOrderProduct);
