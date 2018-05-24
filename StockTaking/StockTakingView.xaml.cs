@@ -164,7 +164,6 @@ namespace His_Pos.StockTaking
                     break;
                 case StockTakingStatus.INPUTRESULT:
                     CheckItems.Columns[0].Visibility = Visibility.Collapsed;
-                    CheckItems.Columns[5].Visibility = Visibility.Visible;
                     CheckItems.Columns[6].Visibility = Visibility.Visible;
                     CheckItems.Columns[7].Visibility = Visibility.Visible;
                     CheckItems.Columns[8].Visibility = Visibility.Collapsed;
@@ -180,6 +179,7 @@ namespace His_Pos.StockTaking
                     InputEllipse.Fill = Brushes.GreenYellow;
                     break;
                 case StockTakingStatus.COMPLETE:
+                    CheckItems.Columns[7].Visibility = Visibility.Collapsed;
                     ViewGrid.RowDefinitions[7].Height = new GridLength(0);
                     ViewGrid.RowDefinitions[8].Height = new GridLength(50);
                     CheckItems.Columns[11].Visibility = Visibility.Visible;
@@ -205,18 +205,25 @@ namespace His_Pos.StockTaking
                 ProductDb.SaveStockTaking(takingCollection);
 
                 takingCollection.Clear();
-                
-                stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
-                UpdateUi();
+
+                InitToBegin();
             }
             else
             {
                 CheckItems.Items.Filter = ChangedFilter;
 
+                CheckItems
 
                 NextStatus();
             }
 
+        }
+
+        private void InitToBegin()
+        {
+            stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
+            ClearAddCondition();
+            UpdateUi();
         }
 
         private bool ChangedFilter( object product )
@@ -272,8 +279,7 @@ namespace His_Pos.StockTaking
             ProductDb.SaveStockTaking(takingCollection);
             takingCollection.Clear();
             CheckItems.Items.Filter = null;
-            stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
-            UpdateUi();
+            InitToBegin();
         }
         public bool CaculateValidDate(string validdate, string month)
         {
@@ -299,6 +305,22 @@ namespace His_Pos.StockTaking
          || (TakingCollection.Contains(x))
          ));
             TakingCollection = new ObservableCollection<Product>(result.ToList());
+
+            ClearAddCondition();
+
+        }
+
+        private void ClearAddCondition()
+        {
+            Location.Text = "";
+            ProductId.Text = "";
+            ProductName.Text = "";
+            ValidDate.Text = "";
+            OtcType.Text = "無";
+
+            FreezeMed.IsChecked = false;
+            ControlMed.IsChecked = false;
+            SafeAmount.IsChecked = false;
         }
 
         private void ClearProduct_Click(object sender, RoutedEventArgs e)
