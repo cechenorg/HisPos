@@ -1,9 +1,11 @@
 ﻿using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
+using His_Pos.Class.StockTakingOrder;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +26,34 @@ namespace His_Pos.StockTakingRecord
     /// </summary>
     public partial class StockTakingRecordView : UserControl, INotifyPropertyChanged
     {
+        public ObservableCollection<StockTakingOrderProduct> changedtakingCollection;
+        public ObservableCollection<StockTakingOrderProduct> ChangedtakingCollection
+        {
+            get
+            {
+                return changedtakingCollection;
+            }
+            set
+            {
+                changedtakingCollection = value;
+                NotifyPropertyChanged("ChangedtakingCollection");
+            }
+        }
+        public ObservableCollection<StockTakingOrderProduct> unchangedtakingCollection;
+        public ObservableCollection<StockTakingOrderProduct> UnchangedtakingCollection
+        {
+            get
+            {
+                return unchangedtakingCollection;
+            }
+            set
+            {
+                unchangedtakingCollection = value;
+                NotifyPropertyChanged("UnchangedtakingCollection");
+            }
+        }
+
+
         public ObservableCollection<StockTakingOrder> stocktakingCollection = new ObservableCollection<StockTakingOrder>();
         public ObservableCollection<StockTakingOrder> StocktakingCollection
         {
@@ -62,7 +92,29 @@ namespace His_Pos.StockTakingRecord
 
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
-            string a = "";
+        }
+
+        private void StockTakingRecord_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ChangedtakingCollection =  ((StockTakingOrder)StockTakingRecord.SelectedItem).ChangedtakingCollection;
+            UnchangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).UnchangedtakingCollection;
+        }
+
+        
+    }
+    public class ValueDifferentColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if( int.Parse(value.ToString()) > 0 )
+            return Brushes.Green;
+            else
+            return Brushes.Red;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return "";
         }
     }
 }

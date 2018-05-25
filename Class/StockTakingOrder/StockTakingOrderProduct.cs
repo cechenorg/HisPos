@@ -21,6 +21,8 @@ namespace His_Pos.Class.StockTakingOrder
         public string empId;
         public string oldValue;
         public string newValue;
+        public string ValueDiff => (Convert.ToInt32(oldValue) - Convert.ToInt32(newValue)).ToString();
+
         public string EmpId
         {
             get
