@@ -15,6 +15,8 @@ using His_Pos.AbstractClass;
 using System.Linq;
 using His_Pos.Interface;
 using His_Pos.StockTaking;
+using His_Pos.StockTakingRecord;
+using His_Pos.Class.StockTakingOrder;
 
 namespace His_Pos
 {
@@ -152,6 +154,68 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
+        public void GetStockTakingRecord(StockTakingRecordView stockTakingRecord) {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得盤點紀錄資料...");
+
+                var Products = StockTakingOrderDb.GetStockTakingRecord();
+
+
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    ObservableCollection<StockTakingOrderProduct> products = new ObservableCollection<StockTakingOrderProduct>();
+                    var lastProcheId = string.Empty;
+                    int count = 1;
+                    StockTakingOrder stockTakingOrder;
+                    foreach (DataRow p in Products.Rows)
+                    {
+                        if (p["PROCHE_ID"].ToString() != lastProcheId && count != 1)
+                        {
+                            stockTakingOrder = new StockTakingOrder(lastProcheId);
+                            foreach (var product in products)
+                            {
+                                if (product.OldValue == product.NewValue)
+                                    stockTakingOrder.UnchangedtakingCollection.Add(product);
+                                else
+                                    stockTakingOrder.ChangedtakingCollection.Add(product);
+                            }
+                            stockTakingOrder.Amount = products.Count;
+                            stockTakingRecord.StocktakingCollection.Add(stockTakingOrder);
+                            products.Clear();
+                        }
+                        else if (count == Products.Rows.Count) {
+                            StockTakingOrderProduct laststockTakingOrderProduct = new StockTakingOrderProduct(p);
+                            products.Add(laststockTakingOrderProduct);
+                            stockTakingOrder = new StockTakingOrder(lastProcheId);
+                            foreach (var product in products)
+                            {
+                                if (product.OldValue == product.NewValue)
+                                    stockTakingOrder.UnchangedtakingCollection.Add(product);
+                                else
+                                    stockTakingOrder.ChangedtakingCollection.Add(product);
+                            }
+                            stockTakingOrder.Amount = products.Count;
+                            stockTakingRecord.StocktakingCollection.Add(stockTakingOrder);
+                            products.Clear();
+                            break;
+                        }
+                        StockTakingOrderProduct stockTakingOrderProduct = new StockTakingOrderProduct(p);
+                        products.Add(stockTakingOrderProduct);
+                        count++;
+                        lastProcheId = p["PROCHE_ID"].ToString();
+                    }
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
 
        
         public void MergeProductStockTaking(StockTakingView stockTakingView)
@@ -191,9 +255,9 @@ namespace His_Pos
                                 ((StockTakingMedicine)products[products.Count - 1]).BatchNumbersCollection.Add(mbatchnumber);
                                 break;
                             case "M":
-                                    StockTakingMedicine medicine = new StockTakingMedicine(p);
-                                    products.Add(medicine);
-                                    break;
+                                StockTakingMedicine medicine = new StockTakingMedicine(p);
+                                products.Add(medicine);
+                                break;
                         }
                         
                         

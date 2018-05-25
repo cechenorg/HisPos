@@ -13,6 +13,7 @@ namespace His_Pos.Interface
     {
         string Category { get; set; }
         double Inventory { get; set; }
+        string EmpId { get; set; }
         double SafeAmount { get; set; }
         string ValidDate { get; set; }
         string LastCheckDate { get; set; }

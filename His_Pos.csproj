@@ -255,7 +255,10 @@
     <Compile Include="Class\Product\StockTakingOTC.cs" />
     <Compile Include="Class\Product\ProductType.cs" />
     <Compile Include="Class\Product\ProductUnit.cs" />
+    <Compile Include="Class\StockTakingOrder\StockTakingOrder.cs" />
     <Compile Include="Class\SpecialCode.cs" />
+    <Compile Include="Class\StockTakingOrder\StockTakingOrderDb.cs" />
+    <Compile Include="Class\StockTakingOrder\StockTakingOrderProduct.cs" />
     <Compile Include="Class\StoreOrder\Category.cs" />
     <Compile Include="Class\StoreOrder\StoreOrderDb.cs" />
     <Compile Include="Class\StoreOrder\StoreOrder.cs" />
@@ -283,6 +286,7 @@
     <Compile Include="Interface\IProductPurchase.cs" />
     <Compile Include="Interface\IStockTaking.cs" />
     <Compile Include="Interface\ISelection.cs" />
+    <Compile Include="Interface\IStockTakingRecord.cs" />
     <Compile Include="Interface\ITrade.cs" />
     <Compile Include="InventoryManagement\InventoryManagement.cs" />
     <Compile Include="InventoryManagement\InventoryManagementView.xaml.cs">
