@@ -27,18 +27,18 @@
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="180"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <DataGrid Name="StockTakingRecord" Grid.Column="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="{StaticResource GridBackGround}" Margin="10,10,0,10"
                            ItemsSource="{Binding StocktakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="290">
+                        <DataGridTemplateColumn Width="180">
                             <DataGridTemplateColumn.CellStyle>
                                 <Style TargetType="{x:Type DataGridCell}">
                                     <Setter Property="Background" Value="Transparent"/>
                                     <Setter Property="BorderBrush" Value="Transparent"/>
-                                    <Setter Property="Foreground" Value="#FF424040"/>
+                                    <Setter Property="Foreground" Value="{StaticResource ForeGround}"/>
                                     <Style.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
                                             <Setter Property="Background" Value="{StaticResource GridSelected}"/>
@@ -58,9 +58,9 @@
                                             <TextBlock FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Row="1">
-                                            <Label Content="盤點項目  共" FontFamily="Segoe UI Semi"/>
+                                            <Label Content="盤點項目  共" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
                                             <TextBlock Text="{Binding Amount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
-                                            <Label Content="項" FontFamily="Segoe UI Semi"/>
+                                            <Label Content="項" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>
