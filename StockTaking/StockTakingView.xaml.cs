@@ -212,7 +212,7 @@ namespace His_Pos.StockTaking
             {
                 CheckItems.Items.Filter = ChangedFilter;
 
-                CheckItems
+                
 
                 NextStatus();
             }
