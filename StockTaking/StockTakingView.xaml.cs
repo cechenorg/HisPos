@@ -147,6 +147,7 @@ namespace His_Pos.StockTaking
                     ClearProduct.Visibility = Visibility.Visible;
                     FinishedAddProduct.Visibility = Visibility.Visible;
                     Print.Visibility = Visibility.Collapsed;
+                    Row1Rectangle.Width = 610;
                     break;
                 case StockTakingStatus.PRINT:
                     ViewGrid.RowDefinitions[3].Height = new GridLength(0);

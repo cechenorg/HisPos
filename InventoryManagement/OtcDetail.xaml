@@ -34,8 +34,8 @@
                 <TextBox Name="OtcChiName" Foreground="Black" FontSize="40" Grid.Row="0" Grid.Column="1" FontFamily="Segoe UI Semibold" Margin="20,10,20,0" Padding="0" BorderBrush="Transparent" TextChanged="OtcData_TextChanged" />
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <TextBox Name="OtcEngName" Width="1000" Foreground="Black" FontSize="30" FontFamily="Segoe UI Semi" Margin="20,0,20,0" VerticalAlignment="Center" Padding="0" BorderBrush="Transparent" TextChanged="OtcData_TextChanged"/>
-                    <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
-                    <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,10,20,10" Padding="0" VerticalContentAlignment="Bottom"/>
+                    <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,10,10" Padding="0" VerticalContentAlignment="Bottom"/>
+                    <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,10,20,10" Padding="0" VerticalContentAlignment="Bottom" MouseLeftButtonDown="LastCheckTime_OnMouseLeftButtonDown"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1" Grid.Column="0" Margin="10,0,10,5" Grid.ColumnSpan="2">

@@ -20,9 +20,11 @@ using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
+using His_Pos.Class.StockTakingOrder;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.ProductPurchaseRecord;
+using His_Pos.StockTaking;
 using His_Pos.ViewModel;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
@@ -45,7 +47,7 @@ namespace His_Pos.InventoryManagement
         public HashSet<ManufactoryChanged> OTCManufactoryChangedCollection = new HashSet<ManufactoryChanged>();
         public ObservableCollection<ProductUnit> OTCUnitCollection;
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
-        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
+        public ObservableCollection<StockTakingOverview> StockTakingOverviewCollection;
         public ListCollectionView ProductTypeCollection;
        
         public InventoryOtc InventoryOtc;
@@ -144,7 +146,11 @@ namespace His_Pos.InventoryManagement
             OtcType.ItemsSource = ProductTypeCollection;
             if(OtcType.Items.Contains(InventoryOtc.ProductType.Name))
                  OtcType.SelectedValue = InventoryOtc.ProductType.Name;
-            
+
+            StockTakingOverviewCollection = ProductDb.GetProductStockTakingDate(InventoryOtc.Id);
+            if (StockTakingOverviewCollection.Count != 0)
+                LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
+
             UpdateChart();
             InitVariables();
             SetUnitValue();
@@ -299,6 +305,13 @@ namespace His_Pos.InventoryManagement
                 return;
             if (ChangedFlagNotChanged())
                 setChangedFlag();
+        }
+
+        private void LastCheckTime_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            StockTakingHistory stockTakingHistory = new StockTakingHistory(StockTakingOverviewCollection);
+
+            stockTakingHistory.Show();
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductPurchase;
 using His_Pos.Interface;
 
@@ -108,6 +109,26 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
+
+        internal static ObservableCollection<StockTakingOverview> GetProductStockTakingDate(string proId)
+        {
+            ObservableCollection<StockTakingOverview> collection = new ObservableCollection<StockTakingOverview>();
+            
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetStockTakingOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new StockTakingOverview(row));
+            }
+
+            return collection;
+        }
+
         internal static ListCollectionView GetProductType() {
             
             List<ProductType> productTypes = new List<ProductType>();

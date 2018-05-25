@@ -30,7 +30,7 @@
                 <TextBox Name="MedChiName"  Foreground="Black" FontSize="40" Grid.Row="0" Grid.Column="1" FontFamily="Segoe UI Semibold" Margin="20,10,20,0" Padding="0" BorderBrush="Transparent" TextChanged="MedData_TextChanged"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <TextBox Name="MedEngName" Width="950" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semi" Margin="20,0,20,0" Padding="0" BorderBrush="Transparent" TextChanged="MedData_TextChanged"/>
-                    <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" Padding="0" VerticalContentAlignment="Bottom"/>
+                    <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,10,10" Padding="0" VerticalContentAlignment="Bottom"/>
                     <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,0,20,0" Padding="0" VerticalContentAlignment="Bottom"/>
                 </StackPanel>
             </Grid>
