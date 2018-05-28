@@ -153,7 +153,7 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("ORDER_ID", orderId));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
         }
-        public static void SaveStockTaking(ObservableCollection<AbstractClass.Product> takingCollection) {
+        public static void SaveStockTaking(ObservableCollection<AbstractClass.Product> takingCollection, bool isComplete) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             DataTable details = new DataTable();
@@ -161,6 +161,7 @@ namespace His_Pos.Class.Product
             details.Columns.Add("EMP_ID", typeof(string));
             details.Columns.Add("PROCHE_OLDVAL", typeof(string));
             details.Columns.Add("PROCHE_NEWVAL", typeof(string));
+            details.Columns.Add("PROCHE_REASON", typeof(string));
             foreach (var product in takingCollection)
             {
                 var newRow = details.NewRow();
@@ -168,12 +169,12 @@ namespace His_Pos.Class.Product
                 newRow["EMP_ID"] = MainWindow.CurrentUser.Id;
                 newRow["PROCHE_OLDVAL"] = ((IStockTaking)product).Inventory;
                 newRow["PROCHE_NEWVAL"] = ((IStockTaking)product).TakingResult;
+                newRow["PROCHE_REASON"] = ((IStockTaking)product).TakingReason;
                 details.Rows.Add(newRow);
             }
             parameters.Add(new SqlParameter("DETAILS", details));
+            parameters.Add(new SqlParameter("ISCOMPLETE", isComplete));
             dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[SaveStockTakingProducts]", parameters);
-             
-         
     }
 
         public static void UpdateOtcDataDetail(AbstractClass.Product product,string type)

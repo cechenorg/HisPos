@@ -203,7 +203,7 @@ namespace His_Pos.StockTaking
 
             if(ResultChanged == 0)
             {
-                ProductDb.SaveStockTaking(takingCollection);
+                ProductDb.SaveStockTaking(takingCollection, true);
 
                 takingCollection.Clear();
 
@@ -212,9 +212,7 @@ namespace His_Pos.StockTaking
             else
             {
                 CheckItems.Items.Filter = ChangedFilter;
-
                 
-
                 NextStatus();
             }
 
@@ -277,7 +275,7 @@ namespace His_Pos.StockTaking
         }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.SaveStockTaking(takingCollection);
+            ProductDb.SaveStockTaking(takingCollection, true);
             takingCollection.Clear();
             CheckItems.Items.Filter = null;
             InitToBegin();
@@ -317,7 +315,7 @@ namespace His_Pos.StockTaking
             ProductId.Text = "";
             ProductName.Text = "";
             ValidDate.Text = "";
-            OtcType.Text = "無";
+            OtcType.SelectedIndex = 0;
 
             FreezeMed.IsChecked = false;
             ControlMed.IsChecked = false;
@@ -358,6 +356,7 @@ namespace His_Pos.StockTaking
             if (NewFunction.DocumentPrinter(document, "盤點單" + DateTime.Now.ToShortDateString()))
             {
                 CountFilledResult();
+                ProductDb.SaveStockTaking(takingCollection, false);
                 NextStatus();
             }   
         }

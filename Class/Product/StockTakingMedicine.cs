@@ -40,6 +40,20 @@ namespace His_Pos.Class.Product
         public bool Status { get; set; }
         public string Location { get; set; }
         private ObservableCollection<BatchNumbers> batchNumbersCollection = new ObservableCollection<BatchNumbers>();
+        private string takingReason;
+        public string TakingReason
+        {
+            get
+            {
+                return takingReason;
+            }
+            set
+            {
+                takingReason = value;
+                NotifyPropertyChanged("TakingReason");
+            }
+        }
+
         public ObservableCollection<BatchNumbers> BatchNumbersCollection
         {
             get
