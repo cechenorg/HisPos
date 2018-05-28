@@ -26,6 +26,7 @@ namespace His_Pos.StockTakingRecord
     /// </summary>
     public partial class StockTakingRecordView : UserControl, INotifyPropertyChanged
     {
+
         public ObservableCollection<StockTakingOrderProduct> changedtakingCollection;
         public ObservableCollection<StockTakingOrderProduct> ChangedtakingCollection
         {
@@ -92,16 +93,31 @@ namespace His_Pos.StockTakingRecord
 
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
+            StockTakingRecord.Items.Filter = Filter;
         }
 
         private void StockTakingRecord_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ChangedtakingCollection =  ((StockTakingOrder)StockTakingRecord.SelectedItem).ChangedtakingCollection;
+            ChangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).ChangedtakingCollection;
             UnchangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).UnchangedtakingCollection;
+            TotalAmount.Content = ChangedtakingCollection.Count + UnchangedtakingCollection.Count;
+            ChangedAmount.Content = ChangedtakingCollection.Count;
+        }
+        private bool Filter(object item)
+        {
+            int id = Convert.ToInt32(((StockTakingOrder)item).Id.Substring(0,8));
+           int sdate = start.SelectedDate.ToString() != "" ? Convert.ToInt32(((DateTime)start.SelectedDate).ToString("yyyyMMdd")) : 0;
+           int edate = end.SelectedDate.ToString() != "" ? Convert.ToInt32(((DateTime)end.SelectedDate).ToString("yyyyMMdd")) : 99999999;
+            if ((((StockTakingOrder)item).Id.Contains(PROCHE_ID.Text) || PROCHE_ID.Text == string.Empty)
+              &&((((((StockTakingOrder)item).ChangedtakingCollection).Count(x => x.Id.Contains(PRO_ID.Text)) > 0) || ((((StockTakingOrder)item).UnchangedtakingCollection).Count(x => x.Id.Contains(PRO_ID.Text)) > 0) && PRO_ID.Text != string.Empty) || PRO_ID.Text ==string.Empty)
+              &&((((((StockTakingOrder)item).ChangedtakingCollection).Count(x => x.Name.Contains(PRO_NAME.Text)) > 0) || ((((StockTakingOrder)item).UnchangedtakingCollection).Count(x => x.Name.Contains(PRO_NAME.Text)) > 0) && PRO_NAME.Text != string.Empty) || PRO_NAME.Text == string.Empty)
+              && ( id >= sdate && id <= edate)
+               ) return true;
+            return false;
         }
 
-        
     }
+  
     public class ValueDifferentColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

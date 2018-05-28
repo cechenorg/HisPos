@@ -20,18 +20,6 @@ namespace His_Pos.Class.Product
         {
             Id = id;
         }
-        public int amount;
-        public int Amount {
-            get
-            {
-                return amount;
-            }
-            set
-            {
-                amount = value;
-                NotifyPropertyChanged("Amount");
-            }
-        }
         public string id; 
         public string Id
         {
