@@ -27,6 +27,19 @@ namespace His_Pos.StockTakingRecord
     public partial class StockTakingRecordView : UserControl, INotifyPropertyChanged
     {
 
+        public ObservableCollection<string> empName = new ObservableCollection<string>();
+        public ObservableCollection<string> EmpName
+        {
+            get
+            {
+                return empName;
+            }
+            set
+            {
+                empName = value;
+                NotifyPropertyChanged("EmpName");
+            }
+        }
         public ObservableCollection<StockTakingOrderProduct> changedtakingCollection;
         public ObservableCollection<StockTakingOrderProduct> ChangedtakingCollection
         {
@@ -76,6 +89,7 @@ namespace His_Pos.StockTakingRecord
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        private StockTakingOrder SelectedItem;
         public StockTakingRecordView()
         {
             InitializeComponent();
@@ -98,10 +112,21 @@ namespace His_Pos.StockTakingRecord
 
         private void StockTakingRecord_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            SelectedItem = (StockTakingOrder)StockTakingRecord.SelectedItem;
             ChangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).ChangedtakingCollection;
             UnchangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).UnchangedtakingCollection;
             TotalAmount.Content = ChangedtakingCollection.Count + UnchangedtakingCollection.Count;
             ChangedAmount.Content = ChangedtakingCollection.Count;
+            EmpName.Clear();
+            UnChanged.Items.Filter = null;
+            Changed.Items.Filter = null;
+            foreach (var product in ChangedtakingCollection) {
+                if (!EmpName.Contains(product.EmpName)) EmpName.Add(product.EmpName);
+            }
+            foreach (var product in UnchangedtakingCollection)
+            {
+                if (!EmpName.Contains(product.EmpName)) EmpName.Add(product.EmpName);
+            }
         }
         private bool Filter(object item)
         {
@@ -115,9 +140,23 @@ namespace His_Pos.StockTakingRecord
                ) return true;
             return false;
         }
-
+        private bool UnchangedEmpFilter(object item) {
+           
+            if (SelectedItem.UnchangedtakingCollection.Count(x => x.EmpName.Contains(((StockTakingOrderProduct)item).EmpName)) > 0)return true;
+            return false;
+        }
+        private bool ChangedEmpFilter(object item)
+        {
+            if (SelectedItem.ChangedtakingCollection.Count(x => x.EmpName.Contains(((StockTakingOrderProduct)item).EmpName)) > 0) return true;
+            return false;
+        }
+        private void Header_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UnChanged.Items.Filter = UnchangedEmpFilter;
+            Changed.Items.Filter = ChangedEmpFilter;
+        }
     }
-  
+
     public class ValueDifferentColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

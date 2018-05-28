@@ -8,7 +8,7 @@ namespace His_Pos.Interface
 {
     interface IStockTakingRecord
     {
-        string EmpId { get; set; }
+        string EmpName { get; set; }
         string OldValue { get; set; }
         string NewValue { get; set; }
     }

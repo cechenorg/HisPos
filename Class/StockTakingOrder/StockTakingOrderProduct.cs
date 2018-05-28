@@ -13,27 +13,27 @@ namespace His_Pos.Class.StockTakingOrder
     {
         public StockTakingOrderProduct(DataRow dataRow) : base(dataRow)
         {
-            EmpId = dataRow["EMP_ID"].ToString();
+            EmpName = dataRow["EMP_NAME"].ToString();
             OldValue = dataRow["PROCHE_OLDVAL"].ToString();
             NewValue = dataRow["PROCHE_NEWVAL"].ToString();
            
         }
-        public string empId;
+        public string empName;
         public string oldValue;
         public string newValue;
        
         public string ValueDiff => (Convert.ToInt32(newValue) - Convert.ToInt32(oldValue)).ToString();
 
-        public string EmpId
+        public string EmpName
         {
             get
             {
-                return empId;
+                return empName;
             }
             set
             {
-                empId = value;
-                NotifyPropertyChanged("EmpId");
+                empName = value;
+                NotifyPropertyChanged("EmpName");
             }
         }
        public string OldValue
