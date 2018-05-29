@@ -49,7 +49,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="盤點人員" Width="90" Binding="{Binding EmpId}">
+                <DataGridTextColumn Header="盤點人員" Width="90" Binding="{Binding EmpName}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

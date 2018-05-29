@@ -27,6 +27,7 @@ namespace His_Pos.StockTakingRecord
     public partial class StockTakingRecordView : UserControl, INotifyPropertyChanged
     {
         public string selectEmpName;
+     
         public ObservableCollection<string> empName = new ObservableCollection<string>();
         public ObservableCollection<string> EmpName
         {
@@ -126,6 +127,7 @@ namespace His_Pos.StockTakingRecord
             {
                 if (!EmpName.Contains(product.EmpName)) EmpName.Add(product.EmpName);
             }
+            EmpName.Add("全部");
         }
         private bool Filter(object item)
         {
@@ -142,7 +144,7 @@ namespace His_Pos.StockTakingRecord
       
         private bool ChangedEmpFilter(object item)
         {
-            if (((StockTakingOrderProduct)item).EmpName == selectEmpName) return true;
+            if (((StockTakingOrderProduct)item).EmpName == selectEmpName || selectEmpName == "全部") return true;
             return false;
         }
         private void Header_SelectionChanged(object sender, SelectionChangedEventArgs e)

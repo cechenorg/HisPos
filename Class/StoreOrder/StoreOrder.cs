@@ -166,6 +166,10 @@ namespace His_Pos.Class.StoreOrder
 
                     if (String.IsNullOrEmpty(((IProductPurchase)product).Invoice))
                         message += "請填寫商品 " + product.Id + " 發票號碼\n";
+
+                    if (!DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue))
+                        message += "商品 " + product.Id + " 效期格式不正確\n";
+                    
                 }
 
                 if ( Math.Abs(((ITrade)product).Amount) <= 0)
@@ -174,9 +178,7 @@ namespace His_Pos.Class.StoreOrder
                 if( (Category.CategoryName.Equals("退貨") || Category.CategoryName.Equals("調貨")) && Math.Abs(((ITrade)product).Amount) > ((IProductPurchase)product).Stock.Inventory)
                     message += "商品 " + product.Id + " 數量不能超過庫存量\n";
                
-                if ( !DateTime.TryParse( ((IProductPurchase)product).ValidDate,out datetimevalue) ){
-                    message += "商品 " + product.Id + " 效期格式不正確\n";
-                }
+                
             }
 
             return message;

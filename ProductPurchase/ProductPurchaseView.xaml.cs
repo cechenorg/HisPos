@@ -465,7 +465,7 @@ namespace His_Pos.ProductPurchase
         private bool CheckNoEmptyData()
         {
             string errorMessage = StoreOrderData.IsAnyDataEmpty();
-
+            
             if (errorMessage != String.Empty)
             {
                 MessageWindow messageWindow = new MessageWindow(errorMessage, MessageType.ERROR);
