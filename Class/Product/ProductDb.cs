@@ -162,14 +162,16 @@ namespace His_Pos.Class.Product
             details.Columns.Add("PROCHE_OLDVAL", typeof(string));
             details.Columns.Add("PROCHE_NEWVAL", typeof(string));
             details.Columns.Add("PROCHE_REASON", typeof(string));
+            details.Columns.Add("PROCHE_VALUEDIFF", typeof(double));
             foreach (var product in takingCollection)
             {
                 var newRow = details.NewRow();
                 newRow["PRO_ID"] = product.Id;
-                newRow["EMP_ID"] = ((IStockTaking)product).EmpId;
+                newRow["EMP_ID"] = MainWindow.CurrentUser.Id;
                 newRow["PROCHE_OLDVAL"] = ((IStockTaking)product).Inventory;
                 newRow["PROCHE_NEWVAL"] = ((IStockTaking)product).TakingResult;
                 newRow["PROCHE_REASON"] = ((IStockTaking)product).TakingReason;
+                newRow["PROCHE_VALUEDIFF"] = ((IStockTaking)product).ValueDiff;
                 details.Rows.Add(newRow);
             }
             parameters.Add(new SqlParameter("DETAILS", details));

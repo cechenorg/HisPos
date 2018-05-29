@@ -23,19 +23,23 @@ namespace His_Pos.Interface
         bool IsChecked { get; set; }
         bool IsEqual { get; set; }
         string TakingReason { get; set; }
+        double ValueDiff { get; set; }
         ObservableCollection<BatchNumbers> BatchNumbersCollection { get; set; }
     }
     public struct BatchNumbers {
 
-        BatchNumbers(string batchnumber,double amount) {
+        BatchNumbers(string batchnumber,double amount, double price) {
             BatchNumber = batchnumber;
             Amount = amount;
+            Price = price;
         }
         public BatchNumbers(DataRow dataRow) {
             BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
             Amount = Convert.ToDouble(dataRow["STOCK"].ToString());
+            Price = Convert.ToDouble(dataRow["STOORDDET_PRICE"].ToString());
         }
         public string BatchNumber { get; set; }
         public double Amount { get; set; }
+        public double Price { get; set; }
     } 
 }

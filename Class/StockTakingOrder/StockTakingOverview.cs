@@ -14,7 +14,7 @@ namespace His_Pos.Class.StockTakingOrder
         {
             StockTakingId = dataRow["PROCHE_ID"].ToString();
             StockTakingDate = dataRow["PROCHE_DATE"].ToString();
-            EmpId = dataRow["EMP_NAME"].ToString();
+            EmpName = dataRow["EMP_NAME"].ToString();
             OldValue = dataRow["PROCHE_OLDVAL"].ToString();
             NewValue = dataRow["PROCHE_NEWVAL"].ToString();
         }
@@ -22,7 +22,7 @@ namespace His_Pos.Class.StockTakingOrder
         //PROCHE_ID, EMP_NAME, PROCHE_DATE, PROCHE_OLDVAL, PROCHE_NEWVAL
         public string StockTakingId { get; set; }
         public string StockTakingDate { get; set; }
-        public string EmpId { get; set; }
+        public string EmpName { get; set; }
         public string OldValue { get; set; }
         public string NewValue { get; set; }
     }

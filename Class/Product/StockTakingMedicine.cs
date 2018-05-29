@@ -23,6 +23,7 @@ namespace His_Pos.Class.Product
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
             Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
             Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");
+            ValueDiff = 0;
             TakingResult = "";
             IsChecked = false;
             isEqual = true;
@@ -135,6 +136,16 @@ namespace His_Pos.Class.Product
             {
                 isEqual = value;
                 NotifyPropertyChanged("IsEqual");
+            }
+        }
+        private double valueDiff;
+        public double ValueDiff
+        {
+            get { return valueDiff; }
+            set
+            {
+                valueDiff = value;
+                NotifyPropertyChanged("ValueDiff");
             }
         }
     }

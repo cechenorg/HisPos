@@ -21,6 +21,7 @@ namespace His_Pos.Class.Product
             SafeAmount = Double.Parse(dataRow["PRO_SAFEQTY"].ToString());
             ValidDate = dataRow["STOORDDET_VALIDDATE"].ToString();
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
+            ValueDiff = 0;
             TakingResult = "";
             IsChecked = false;
             isEqual = true;
@@ -74,9 +75,42 @@ namespace His_Pos.Class.Product
                 takingResult = value;
                 UserFilledResult();
                 CheckIsEqual();
+                CountValueDiff();
                 NotifyPropertyChanged("TakingResult");
             }
         }
+
+        private void CountValueDiff()
+        {
+            if(takingResult.Equals(String.Empty)) return;
+
+            double diff = Double.Parse(takingResult) - Inventory;
+
+            if (diff > 0)
+                ValueDiff = 0;
+            else
+            {
+                double valueDiff = 0;
+
+                for (int x = batchNumbersCollection.Count - 1; x >= 0; x--)
+                {
+                    if (diff + batchNumbersCollection[x].Amount >= 0)
+                    {
+                        valueDiff += (-diff) * batchNumbersCollection[x].Price;
+                        break;
+                    }
+                    else
+                    {
+                        valueDiff += batchNumbersCollection[x].Amount  * batchNumbersCollection[x].Price;
+                    }
+
+                    diff += batchNumbersCollection[x].Amount;
+                }
+
+                ValueDiff = valueDiff;
+            }
+        }
+
         private void CheckIsEqual()
         {
             IsEqual = (TakingResult == Inventory.ToString()) || TakingResult.Equals(String.Empty);
@@ -128,6 +162,17 @@ namespace His_Pos.Class.Product
             {
                 isEqual = value;
                 NotifyPropertyChanged("IsEqual");
+            }
+        }
+
+        private double valueDiff;
+        public double ValueDiff
+        {
+            get{ return valueDiff; }
+            set
+            {
+                valueDiff = value;
+                NotifyPropertyChanged("ValueDiff");
             }
         }
     }
