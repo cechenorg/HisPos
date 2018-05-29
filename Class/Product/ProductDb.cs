@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductPurchase;
 using His_Pos.Interface;
 
@@ -108,6 +109,26 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
+
+        internal static ObservableCollection<StockTakingOverview> GetProductStockTakingDate(string proId)
+        {
+            ObservableCollection<StockTakingOverview> collection = new ObservableCollection<StockTakingOverview>();
+            
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetStockTakingOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new StockTakingOverview(row));
+            }
+
+            return collection;
+        }
+
         internal static ListCollectionView GetProductType() {
             
             List<ProductType> productTypes = new List<ProductType>();
@@ -132,7 +153,7 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("ORDER_ID", orderId));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
         }
-        public static void SaveStockTaking(ObservableCollection<AbstractClass.Product> takingCollection) {
+        public static void SaveStockTaking(ObservableCollection<AbstractClass.Product> takingCollection, bool isComplete) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             DataTable details = new DataTable();
@@ -140,19 +161,20 @@ namespace His_Pos.Class.Product
             details.Columns.Add("EMP_ID", typeof(string));
             details.Columns.Add("PROCHE_OLDVAL", typeof(string));
             details.Columns.Add("PROCHE_NEWVAL", typeof(string));
+            details.Columns.Add("PROCHE_REASON", typeof(string));
             foreach (var product in takingCollection)
             {
                 var newRow = details.NewRow();
                 newRow["PRO_ID"] = product.Id;
-                newRow["EMP_ID"] = MainWindow.CurrentUser.Id;
+                newRow["EMP_ID"] = ((IStockTaking)product).EmpId;
                 newRow["PROCHE_OLDVAL"] = ((IStockTaking)product).Inventory;
                 newRow["PROCHE_NEWVAL"] = ((IStockTaking)product).TakingResult;
+                newRow["PROCHE_REASON"] = ((IStockTaking)product).TakingReason;
                 details.Rows.Add(newRow);
             }
             parameters.Add(new SqlParameter("DETAILS", details));
+            parameters.Add(new SqlParameter("ISCOMPLETE", isComplete));
             dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[SaveStockTakingProducts]", parameters);
-             
-         
     }
 
         public static void UpdateOtcDataDetail(AbstractClass.Product product,string type)

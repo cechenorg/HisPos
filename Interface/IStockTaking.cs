@@ -22,6 +22,7 @@ namespace His_Pos.Interface
         string TakingResult { get; set; }
         bool IsChecked { get; set; }
         bool IsEqual { get; set; }
+        string TakingReason { get; set; }
         ObservableCollection<BatchNumbers> BatchNumbersCollection { get; set; }
     }
     public struct BatchNumbers {

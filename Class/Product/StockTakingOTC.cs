@@ -36,6 +36,19 @@ namespace His_Pos.Class.Product
         public string LastCheckDate { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }
+        private string takingReason;
+        public string TakingReason
+        {
+            get
+            {
+                return takingReason;
+            }
+            set
+            {
+                takingReason = value;
+                NotifyPropertyChanged("TakingReason");
+            }
+        }
         private ObservableCollection<BatchNumbers> batchNumbersCollection = new ObservableCollection<BatchNumbers>();
         public ObservableCollection<BatchNumbers> BatchNumbersCollection
         {

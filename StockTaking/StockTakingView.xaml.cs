@@ -35,6 +35,8 @@ namespace His_Pos.StockTaking
         public ObservableCollection<Product> ProductCollection;
         public ListCollectionView ProductTypeCollection;
         public ObservableCollection<Product> takingCollection = new ObservableCollection<Product>();
+        public static StockTakingView Instance;
+        public static bool DataChanged { get; set; }
         public ObservableCollection<Product> TakingCollection
         {
             get
@@ -95,6 +97,7 @@ namespace His_Pos.StockTaking
             InitializeComponent();
             UpdateUi();
             SetOtcTypeUi();
+            Instance = this;
             DataContext = this;
             InitProduct();
         }
@@ -147,6 +150,7 @@ namespace His_Pos.StockTaking
                     ClearProduct.Visibility = Visibility.Visible;
                     FinishedAddProduct.Visibility = Visibility.Visible;
                     Print.Visibility = Visibility.Collapsed;
+                    Row1Rectangle.Width = 610;
                     break;
                 case StockTakingStatus.PRINT:
                     ViewGrid.RowDefinitions[3].Height = new GridLength(0);
@@ -202,7 +206,7 @@ namespace His_Pos.StockTaking
 
             if(ResultChanged == 0)
             {
-                ProductDb.SaveStockTaking(takingCollection);
+                ProductDb.SaveStockTaking(takingCollection, true);
 
                 takingCollection.Clear();
 
@@ -211,9 +215,7 @@ namespace His_Pos.StockTaking
             else
             {
                 CheckItems.Items.Filter = ChangedFilter;
-
                 
-
                 NextStatus();
             }
 
@@ -276,7 +278,7 @@ namespace His_Pos.StockTaking
         }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.SaveStockTaking(takingCollection);
+            ProductDb.SaveStockTaking(takingCollection, true);
             takingCollection.Clear();
             CheckItems.Items.Filter = null;
             InitToBegin();
@@ -293,21 +295,20 @@ namespace His_Pos.StockTaking
         private void AddItems_Click(object sender, RoutedEventArgs e)
         {
 
-            var result = ProductCollection.Where(x => (
-             (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
-         && (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
-         && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
-         && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
-         && ((((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
-         && ((x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
-         && ( (x is StockTakingMedicine && (bool)ControlMed.IsChecked && ((StockTakingMedicine)x).Control )  || !(bool)ControlMed.IsChecked)
-         && ((x is StockTakingMedicine && (bool)FreezeMed.IsChecked && ((StockTakingMedicine)x).Frozen) || !(bool)FreezeMed.IsChecked)
-         || (TakingCollection.Contains(x))
-         ));
+            var result = ProductCollection.Where(x => 
+            (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
+            && (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
+            && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
+            && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
+            && ((((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
+            && ((x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
+            && ( (x is StockTakingMedicine && (bool)ControlMed.IsChecked && ((StockTakingMedicine)x).Control )  || !(bool)ControlMed.IsChecked)
+            && ((x is StockTakingMedicine && (bool)FreezeMed.IsChecked && ((StockTakingMedicine)x).Frozen) || !(bool)FreezeMed.IsChecked)
+            || TakingCollection.Contains(x));
+
             TakingCollection = new ObservableCollection<Product>(result.ToList());
-
+            
             ClearAddCondition();
-
         }
 
         private void ClearAddCondition()
@@ -316,7 +317,7 @@ namespace His_Pos.StockTaking
             ProductId.Text = "";
             ProductName.Text = "";
             ValidDate.Text = "";
-            OtcType.Text = "無";
+            OtcType.SelectedIndex = 0;
 
             FreezeMed.IsChecked = false;
             ControlMed.IsChecked = false;
@@ -357,6 +358,7 @@ namespace His_Pos.StockTaking
             if (NewFunction.DocumentPrinter(document, "盤點單" + DateTime.Now.ToShortDateString()))
             {
                 CountFilledResult();
+                ProductDb.SaveStockTaking(takingCollection, false);
                 NextStatus();
             }   
         }

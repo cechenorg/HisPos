@@ -23,6 +23,7 @@ using System.Collections.Specialized;
 using His_Pos.Interface;
 using His_Pos.ProductPurchaseRecord;
 using System.ComponentModel;
+using His_Pos.Class.StockTakingOrder;
 
 namespace His_Pos.InventoryManagement
 {
@@ -43,6 +44,7 @@ namespace His_Pos.InventoryManagement
        
         public ObservableCollection<ProductUnit> MedUnitCollection;
         public ObservableCollection<ProductDetailManufactory> MEDManufactoryCollection;
+        public ObservableCollection<StockTakingOverview> StockTakingOverviewCollection;
 
         private bool IsChanged = false;
         private bool IsFirst = true;
@@ -76,15 +78,15 @@ namespace His_Pos.InventoryManagement
             MedStatus.Text = InventoryMedicine.Status == true ? "啟用" : "已停用";
             IsChangedLabel.Content = "未修改";
             
-             CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryMedicine.Id);
-             MedCusOrder.ItemsSource = CusOrderOverviewCollection;
+            CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryMedicine.Id);
+            MedCusOrder.ItemsSource = CusOrderOverviewCollection;
 
-                StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(InventoryMedicine.Id);
-                MedStoOrder.ItemsSource = StoreOrderOverviewCollection;
+            StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(InventoryMedicine.Id);
+            MedStoOrder.ItemsSource = StoreOrderOverviewCollection;
 
             MEDStockOverviewCollection = ProductDb.GetProductStockOverviewById(InventoryMedicine.Id);
-                MedStock.ItemsSource = MEDStockOverviewCollection;
-                UpdateStockOverviewInfo();
+            MedStock.ItemsSource = MEDStockOverviewCollection;
+            UpdateStockOverviewInfo();
             MedUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
 
             MedIngredientCollection.Clear();
@@ -96,7 +98,11 @@ namespace His_Pos.InventoryManagement
 
             MEDManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryMedicine.Id);
             MedManufactory.ItemsSource = MEDManufactoryCollection;
-      
+
+            StockTakingOverviewCollection = ProductDb.GetProductStockTakingDate(InventoryMedicine.Id);
+            if(StockTakingOverviewCollection.Count != 0)
+                LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
+
             UpdateChart();
             InitVariables();
             SetUnitValue();

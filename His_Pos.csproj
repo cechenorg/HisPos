@@ -259,6 +259,7 @@
     <Compile Include="Class\SpecialCode.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrderDb.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrderProduct.cs" />
+    <Compile Include="Class\StockTakingOrder\StockTakingOverview.cs" />
     <Compile Include="Class\StoreOrder\Category.cs" />
     <Compile Include="Class\StoreOrder\StoreOrderDb.cs" />
     <Compile Include="Class\StoreOrder\StoreOrder.cs" />
