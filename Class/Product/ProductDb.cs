@@ -166,7 +166,7 @@ namespace His_Pos.Class.Product
             {
                 var newRow = details.NewRow();
                 newRow["PRO_ID"] = product.Id;
-                newRow["EMP_ID"] = MainWindow.CurrentUser.Id;
+                newRow["EMP_ID"] = ((IStockTaking)product).EmpId;
                 newRow["PROCHE_OLDVAL"] = ((IStockTaking)product).Inventory;
                 newRow["PROCHE_NEWVAL"] = ((IStockTaking)product).TakingResult;
                 newRow["PROCHE_REASON"] = ((IStockTaking)product).TakingReason;

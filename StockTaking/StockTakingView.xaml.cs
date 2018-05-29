@@ -35,6 +35,8 @@ namespace His_Pos.StockTaking
         public ObservableCollection<Product> ProductCollection;
         public ListCollectionView ProductTypeCollection;
         public ObservableCollection<Product> takingCollection = new ObservableCollection<Product>();
+        public static StockTakingView Instance;
+        public static bool DataChanged { get; set; }
         public ObservableCollection<Product> TakingCollection
         {
             get
@@ -95,6 +97,7 @@ namespace His_Pos.StockTaking
             InitializeComponent();
             UpdateUi();
             SetOtcTypeUi();
+            Instance = this;
             DataContext = this;
             InitProduct();
         }
@@ -292,21 +295,20 @@ namespace His_Pos.StockTaking
         private void AddItems_Click(object sender, RoutedEventArgs e)
         {
 
-            var result = ProductCollection.Where(x => (
-             (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
-         && (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
-         && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
-         && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
-         && ((((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
-         && ((x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
-         && ( (x is StockTakingMedicine && (bool)ControlMed.IsChecked && ((StockTakingMedicine)x).Control )  || !(bool)ControlMed.IsChecked)
-         && ((x is StockTakingMedicine && (bool)FreezeMed.IsChecked && ((StockTakingMedicine)x).Frozen) || !(bool)FreezeMed.IsChecked)
-         || (TakingCollection.Contains(x))
-         ));
+            var result = ProductCollection.Where(x => 
+            (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
+            && (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
+            && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
+            && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
+            && ((((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
+            && ((x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
+            && ( (x is StockTakingMedicine && (bool)ControlMed.IsChecked && ((StockTakingMedicine)x).Control )  || !(bool)ControlMed.IsChecked)
+            && ((x is StockTakingMedicine && (bool)FreezeMed.IsChecked && ((StockTakingMedicine)x).Frozen) || !(bool)FreezeMed.IsChecked)
+            || TakingCollection.Contains(x));
+
             TakingCollection = new ObservableCollection<Product>(result.ToList());
-
+            
             ClearAddCondition();
-
         }
 
         private void ClearAddCondition()
