@@ -26,7 +26,7 @@ namespace His_Pos.StockTakingRecord
     /// </summary>
     public partial class StockTakingRecordView : UserControl, INotifyPropertyChanged
     {
-
+        public string selectEmpName;
         public ObservableCollection<string> empName = new ObservableCollection<string>();
         public ObservableCollection<string> EmpName
         {
@@ -89,7 +89,7 @@ namespace His_Pos.StockTakingRecord
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        private StockTakingOrder SelectedItem;
+        
         public StockTakingRecordView()
         {
             InitializeComponent();
@@ -112,7 +112,6 @@ namespace His_Pos.StockTakingRecord
 
         private void StockTakingRecord_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SelectedItem = (StockTakingOrder)StockTakingRecord.SelectedItem;
             ChangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).ChangedtakingCollection;
             UnchangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).UnchangedtakingCollection;
             TotalAmount.Content = ChangedtakingCollection.Count + UnchangedtakingCollection.Count;
@@ -140,19 +139,17 @@ namespace His_Pos.StockTakingRecord
                ) return true;
             return false;
         }
-        private bool UnchangedEmpFilter(object item) {
-           
-            if (SelectedItem.UnchangedtakingCollection.Count(x => x.EmpName.Contains(((StockTakingOrderProduct)item).EmpName)) > 0)return true;
-            return false;
-        }
+      
         private bool ChangedEmpFilter(object item)
         {
-            if (SelectedItem.ChangedtakingCollection.Count(x => x.EmpName.Contains(((StockTakingOrderProduct)item).EmpName)) > 0) return true;
+            if (((StockTakingOrderProduct)item).EmpName == selectEmpName) return true;
             return false;
         }
         private void Header_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UnChanged.Items.Filter = UnchangedEmpFilter;
+            if (EmpHeader.SelectedItem == null) return;
+            selectEmpName = (EmpHeader.SelectedItem).ToString();
+            UnChanged.Items.Filter = ChangedEmpFilter;
             Changed.Items.Filter = ChangedEmpFilter;
         }
     }
