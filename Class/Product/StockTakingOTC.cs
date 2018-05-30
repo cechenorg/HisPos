@@ -23,6 +23,7 @@ namespace His_Pos.Class.Product
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
             ValueDiff = 0;
             TakingResult = "";
+            EmpId = "";
             IsChecked = false;
             isEqual = true;
             BatchNumbers batchNumber = new BatchNumbers(dataRow);

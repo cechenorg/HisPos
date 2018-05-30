@@ -86,7 +86,7 @@
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"    />
+                                        <TextBlock Text="{Binding Name}"/>
                                     </DataTemplate>
                                 </GroupStyle.HeaderTemplate>
                             </GroupStyle>
@@ -105,7 +105,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="6" Margin="9">
                     <Label Content="盤點人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Margin="0,0,10,0" Width="110" FontSize="16"/>
+                    <TextBox Name="TakingEmp" Margin="0,0,10,0" Width="110" FontSize="16"/>
                 </StackPanel>
                 <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Click="AddItems_Click"/>
             </Grid>
@@ -275,7 +275,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="盤點人" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ValueDiff, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="盤點人" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding EmpId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>

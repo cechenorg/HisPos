@@ -307,8 +307,19 @@ namespace His_Pos.StockTaking
             || TakingCollection.Contains(x));
 
             TakingCollection = new ObservableCollection<Product>(result.ToList());
+
+            AddStockTakingEmp();
             
             ClearAddCondition();
+        }
+
+        private void AddStockTakingEmp()
+        {
+            foreach(var product in takingCollection)
+            {
+                if (((IStockTaking)product).EmpId.Equals(""))
+                    ((IStockTaking)product).EmpId = (TakingEmp.Text.Equals("")) ? MainWindow.CurrentUser.Id : TakingEmp.Text;
+            }
         }
 
         private void ClearAddCondition()
@@ -326,6 +337,11 @@ namespace His_Pos.StockTaking
 
         private void ClearProduct_Click(object sender, RoutedEventArgs e)
         {
+            foreach (var product in takingCollection)
+            {
+                ((IStockTaking)product).EmpId = "";
+            }
+
             TakingCollection.Clear();
         }
 

@@ -25,6 +25,7 @@ namespace His_Pos.Class.Product
             Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");
             ValueDiff = 0;
             TakingResult = "";
+            EmpId = "";
             IsChecked = false;
             isEqual = true;
             BatchNumbers batchNumber = new BatchNumbers(dataRow);
@@ -79,7 +80,38 @@ namespace His_Pos.Class.Product
                 takingResult = value;
                 UserFilledResult();
                 CheckIsEqual();
+                CountValueDiff();
                 NotifyPropertyChanged("TakingResult");
+            }
+        }
+        private void CountValueDiff()
+        {
+            if (takingResult.Equals(String.Empty)) return;
+
+            double diff = Double.Parse(takingResult) - Inventory;
+
+            if (diff > 0)
+                ValueDiff = 0;
+            else
+            {
+                double valueDiff = 0;
+
+                for (int x = batchNumbersCollection.Count - 1; x >= 0; x--)
+                {
+                    if (diff + batchNumbersCollection[x].Amount >= 0)
+                    {
+                        valueDiff += (-diff) * batchNumbersCollection[x].Price;
+                        break;
+                    }
+                    else
+                    {
+                        valueDiff += batchNumbersCollection[x].Amount * batchNumbersCollection[x].Price;
+                    }
+
+                    diff += batchNumbersCollection[x].Amount;
+                }
+
+                ValueDiff = valueDiff;
             }
         }
 
