@@ -201,6 +201,8 @@ namespace His_Pos.StockTaking
                     break;
                 case StockTakingStatus.COMPLETE:
                     CheckItems.Columns[7].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[8].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[12].Visibility = Visibility.Visible;
                     ViewGrid.RowDefinitions[7].Height = new GridLength(0);
                     ViewGrid.RowDefinitions[8].Height = new GridLength(50);
                     CheckItems.Columns[11].Visibility = Visibility.Visible;
@@ -243,6 +245,7 @@ namespace His_Pos.StockTaking
             stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             ClearAddCondition();
             UpdateUi();
+            InitProduct();
         }
 
         private bool ChangedFilter( object product )
