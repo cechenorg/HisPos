@@ -140,10 +140,11 @@ namespace His_Pos.StockTaking
                     CheckItems.Columns[5].Visibility = Visibility.Visible;
                     CheckItems.Columns[6].Visibility = Visibility.Collapsed;
                     CheckItems.Columns[7].Visibility = Visibility.Collapsed;
-                    CheckItems.Columns[8].Visibility = Visibility.Visible;
+                    CheckItems.Columns[8].Visibility = Visibility.Collapsed;
                     CheckItems.Columns[9].Visibility = Visibility.Visible;
                     CheckItems.Columns[10].Visibility = Visibility.Visible;
-                    CheckItems.Columns[11].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[11].Visibility = Visibility.Visible;
+                    CheckItems.Columns[12].Visibility = Visibility.Collapsed;
                     ViewGrid.RowDefinitions[2].Height = new GridLength(15);
                     ViewGrid.RowDefinitions[3].Height = new GridLength(150);
                     ViewGrid.RowDefinitions[4].Height = new GridLength(0);
@@ -185,9 +186,10 @@ namespace His_Pos.StockTaking
                     CheckItems.Columns[0].Visibility = Visibility.Collapsed;
                     CheckItems.Columns[6].Visibility = Visibility.Visible;
                     CheckItems.Columns[7].Visibility = Visibility.Visible;
-                    CheckItems.Columns[8].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[8].Visibility = Visibility.Visible;
                     CheckItems.Columns[9].Visibility = Visibility.Collapsed;
                     CheckItems.Columns[10].Visibility = Visibility.Collapsed;
+                    CheckItems.Columns[11].Visibility = Visibility.Collapsed;
                     ViewGrid.RowDefinitions[4].Height = new GridLength(0);
                     ViewGrid.RowDefinitions[6].Height = new GridLength(0);
                     ViewGrid.RowDefinitions[7].Height = new GridLength(50);

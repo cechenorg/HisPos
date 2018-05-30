@@ -121,7 +121,7 @@ namespace His_Pos.Class.StoreOrder
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDEMP_ID", OrdEmpId));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[SET].[NEWSTOORD]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddNewStoreOrder]", parameters);
 
             return table.Rows[0]["STOORD_ID"].ToString();
         }
