@@ -374,8 +374,8 @@ namespace His_Pos.StockTaking
             RadioButton radioButton = sender as RadioButton; ;
 
             CheckItems.Items.SortDescriptions.Clear();
+            CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[13].SortMemberPath, ListSortDirection.Ascending));
             CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[Int32.Parse(radioButton.Tag.ToString())].SortMemberPath, ListSortDirection.Ascending));
-            CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[1].SortMemberPath, ListSortDirection.Ascending));
         }
 
         private void Print_OnClick(object sender, RoutedEventArgs e)
@@ -415,19 +415,19 @@ namespace His_Pos.StockTaking
             switch (target)
             {
                 case 1:
-                    temp = takingCollection.OrderBy(x => x.Id).ToList();
+                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ThenBy(x => x.Id).ToList();
                     break;
                 case 2:
-                    temp = takingCollection.OrderBy(x => x.Name).ToList();
+                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ThenBy(x => x.Name).ToList();
                     break;
                 case 3:
-                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).Category).ThenBy(x => x.Id).ToList();
+                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ThenBy(x => ((IStockTaking)x).Category).ThenBy(x => x.Id).ToList();
                     break;
                 case 9:
-                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).Location).ThenBy(x => x.Id).ToList();
+                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ThenBy(x => ((IStockTaking)x).Location).ThenBy(x => x.Id).ToList();
                     break;
                 default:
-                    temp = takingCollection.OrderBy(x => x.Id).ToList();
+                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ToList();
                     break;
             }
 
@@ -445,7 +445,7 @@ namespace His_Pos.StockTaking
                     length += (0.8 * (itemCount - 2) + 1.2);
                 }
 
-                if (length >= LENGTH_LIMIT)
+                if (length >= LENGTH_LIMIT || (x != 0 && ((IStockTaking)temp[x - 1]).EmpId != ((IStockTaking)temp[x]).EmpId))
                 {
                     pages.Add(temp.GetRange(lastIndex, x - 1 - lastIndex));
                     lastIndex = x - 1;
@@ -515,6 +515,9 @@ namespace His_Pos.StockTaking
 
         private void FinishedAddProduct_Click(object sender, RoutedEventArgs e)
         {
+            CheckItems.Items.SortDescriptions.Clear();
+            CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[13].SortMemberPath, ListSortDirection.Ascending));
+
             NextStatus();
         }
     }
