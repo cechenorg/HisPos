@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.StockTaking"
+             xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365" Name="StockTaking">
     <UserControl.Resources>
@@ -103,9 +104,25 @@
                     <CheckBox Name="ControlMed" Content="管制藥" Foreground="{StaticResource ForeGround}" Margin="20,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Name="FreezeMed" Content="冷藏品" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="6" Margin="9">
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="5" Margin="9">
                     <Label Content="盤點人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="TakingEmp" Margin="0,0,10,0" Width="110" FontSize="16"/>
+                    <controls:AutoCompleteBox Name="TakingEmp" Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30" HorizontalContentAlignment="Center"
+                                                              ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
+                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding RecEmp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <controls:AutoCompleteBox.TextBoxStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </controls:AutoCompleteBox.TextBoxStyle>
+                        <controls:AutoCompleteBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Width="50" Content="{Binding Id}"/>
+                                    <Label Width="100" Content="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:AutoCompleteBox.ItemTemplate>
+                    </controls:AutoCompleteBox>
                 </StackPanel>
                 <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Click="AddItems_Click"/>
             </Grid>

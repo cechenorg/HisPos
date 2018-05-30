@@ -24,6 +24,7 @@ using System.Windows.Threading;
 using His_Pos.PrintDocuments;
 using His_Pos.Service;
 using System.Windows.Markup;
+using His_Pos.Class.Person;
 
 namespace His_Pos.StockTaking
 {
@@ -74,6 +75,8 @@ namespace His_Pos.StockTaking
         }
 
         private int resultChanged;
+        private ObservableCollection<Person> UserAutoCompleteCollection;
+
         public int ResultChanged
         {
             get { return resultChanged; }
@@ -99,7 +102,19 @@ namespace His_Pos.StockTaking
             SetOtcTypeUi();
             Instance = this;
             DataContext = this;
+            UserAutoCompleteCollection = PersonDb.GetUserCollection();
+            TakingEmp.ItemsSource = UserAutoCompleteCollection;
+            TakingEmp.ItemFilter = UserFilter;
             InitProduct();
+        }
+        public AutoCompleteFilterPredicate<object> UserFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Person).Id is null) ? true : (obj as Person).Id.Contains(searchText)
+                    || (obj as Person).Name.Contains(searchText);
+            }
         }
 
         public void SetOtcTypeUi()
@@ -328,6 +343,7 @@ namespace His_Pos.StockTaking
             ProductId.Text = "";
             ProductName.Text = "";
             ValidDate.Text = "";
+            TakingEmp.Text = "";
             OtcType.SelectedIndex = 0;
 
             FreezeMed.IsChecked = false;
