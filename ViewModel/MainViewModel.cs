@@ -222,6 +222,10 @@ namespace His_Pos.ViewModel
                             ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
                             break;
                         case nameof(FeatureItem.新增盤點):
+                            if (StockTaking.StockTakingView.Instance is null) break;
+
+                            if (StockTaking.StockTakingView.DataChanged)
+                                StockTaking.StockTakingView.Instance.InitProduct();
                             break;
                         case nameof(FeatureItem.庫存盤點紀錄):
                             break;

@@ -37,7 +37,7 @@ namespace His_Pos.StockTaking
         public ListCollectionView ProductTypeCollection;
         public ObservableCollection<Product> takingCollection = new ObservableCollection<Product>();
         public static StockTakingView Instance;
-        public static bool DataChanged { get; set; }
+        public static bool DataChanged { get; set; } = false;
         public ObservableCollection<Product> TakingCollection
         {
             get
@@ -123,8 +123,9 @@ namespace His_Pos.StockTaking
             OtcType.ItemsSource = ProductTypeCollection;
             OtcType.SelectedValue = "無";
         }
-        private void InitProduct()
+        public void InitProduct()
         {
+            DataChanged = false;
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.MergeProductStockTaking(this);
             loadingWindow.Topmost = true;

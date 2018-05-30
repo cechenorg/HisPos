@@ -28,6 +28,7 @@ using His_Pos.Interface;
 using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchaseRecord;
 using His_Pos.Service;
+using His_Pos.StockTaking;
 using MahApps.Metro.Controls;
 
 namespace His_Pos.ProductPurchase
@@ -427,6 +428,7 @@ namespace His_Pos.ProductPurchase
             storeOrderCollection.Remove(storeOrderData);
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
+            StockTakingView.DataChanged = true;
 
             if (StoOrderOverview.Items.Count == 0)
                 ClearOrderDetailData();
