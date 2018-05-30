@@ -487,6 +487,8 @@ namespace His_Pos.StockTaking
             if (stockTakingItemDialog.ConfirmButtonClicked)
             {
                 TakingCollection.Add(stockTakingItemDialog.SelectedItem as Product);
+
+                AddStockTakingEmp();
             }
         }
 
