@@ -34,7 +34,7 @@ namespace His_Pos.Interface
             Price = price;
         }
         public BatchNumbers(DataRow dataRow) {
-            BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
+            BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString().Equals("")? "X" : dataRow["STOORDDET_BATCHNUMBER"].ToString();
             Amount = Convert.ToDouble(dataRow["STOCK"].ToString());
             Price = Convert.ToDouble(dataRow["STOORDDET_PRICE"].ToString());
         }
