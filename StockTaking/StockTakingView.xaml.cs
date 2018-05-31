@@ -445,7 +445,13 @@ namespace His_Pos.StockTaking
                     length += (0.8 * (itemCount - 2) + 1.2);
                 }
 
-                if (length >= LENGTH_LIMIT || (x != 0 && ((IStockTaking)temp[x - 1]).EmpId != ((IStockTaking)temp[x]).EmpId))
+                if (x != 0 && ((IStockTaking)temp[x - 1]).EmpId != ((IStockTaking)temp[x]).EmpId)
+                {
+                    pages.Add(temp.GetRange(lastIndex, x - lastIndex));
+                    lastIndex = x;
+                    length = 0;
+                }
+                else if (length >= LENGTH_LIMIT)
                 {
                     pages.Add(temp.GetRange(lastIndex, x - 1 - lastIndex));
                     lastIndex = x - 1;
@@ -464,10 +470,10 @@ namespace His_Pos.StockTaking
                 var fixedPage = new FixedPage();
                 fixedPage.Width = pageSize.Width;
                 fixedPage.Height = pageSize.Height;
-                if (CheckItems.Items.SortDescriptions.Count > 0)
-                    fixedPage.Children.Add(new StockTakingDocument(pages[x], MainWindow.CurrentUser.Name, takingCollection.Count, x + 1, totalPage, CheckItems.Items.SortDescriptions[0]));
+                if (CheckItems.Items.SortDescriptions.Count > 1)
+                    fixedPage.Children.Add(new StockTakingDocument(pages[x], ((IStockTaking)pages[x][0]).EmpId, takingCollection.Count, x + 1, totalPage, CheckItems.Items.SortDescriptions[1]));
                 else
-                    fixedPage.Children.Add(new StockTakingDocument(pages[x], MainWindow.CurrentUser.Name, takingCollection.Count, x + 1, totalPage, new SortDescription(CheckItems.Columns[1].SortMemberPath, ListSortDirection.Ascending)));
+                    fixedPage.Children.Add(new StockTakingDocument(pages[x], ((IStockTaking)pages[x][0]).EmpId, takingCollection.Count, x + 1, totalPage, new SortDescription(CheckItems.Columns[1].SortMemberPath, ListSortDirection.Ascending)));
                
                 fixedPage.Measure(pageSize);
                 fixedPage.Arrange(new Rect(new Point(), pageSize));
