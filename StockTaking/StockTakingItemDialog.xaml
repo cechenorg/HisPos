@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.StockTaking"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d"
-        Title="StockTakingItemDialog"  MinHeight="400" Height="400" MaxWidth="680" MinWidth="680" WindowStartupLocation="CenterScreen">
+        Title="StockTakingItemDialog" MinHeight="400" Height="400" MaxWidth="655" MinWidth="655" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -16,14 +17,14 @@
     <Grid Name="ItemGrid" Width="650" HorizontalAlignment="Left">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="260"/>
+            <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBox Name="SearchText" Width="300" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="18"  Margin="10,0,0,0" TextChanged="SearchText_TextChanged"/>
-            <CheckBox Name="IsStatusTrue" Content="顯示停用" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" Click="IsStatusTrue_Click"/>
+            <TextBox Name="SearchText" Width="350" materialDesign:HintAssist.Hint="輸入搜尋字串" FontFamily="Segoe UI Semi" FontSize="18"  Margin="10,0,0,0" TextChanged="SearchText_TextChanged"/>
+            <CheckBox Name="IsStatusTrue" Content="顯示停用" Margin="20,0,30,0" FontSize="18" FontFamily="Segoe UI Semibold" Click="IsStatusTrue_Click"/>
         </StackPanel>
-        <DataGrid Name="SearchResult" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="650" HorizontalAlignment="Left"
+        <DataGrid Name="SearchResult" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Width="630" HorizontalAlignment="Left"
                       ItemsSource="{Binding ProductsCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Margin="10" Background="{StaticResource GridBackGround}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -59,7 +60,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn MinWidth="110" MaxWidth="110" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                <DataGridTextColumn MinWidth="120" MaxWidth="120" Header="商品代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -67,7 +68,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="110" MaxWidth="170" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                <DataGridTextColumn MinWidth="250" MaxWidth="250" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -82,7 +83,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn MinWidth="110" MaxWidth="150" Header="上次盤點時間" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding LastCheckDate}">
+                <DataGridTextColumn MinWidth="150" MaxWidth="150" Header="上次盤點時間" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding LastCheckDate}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -92,6 +93,27 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="確認" Name="Confirm" Grid.Row="2" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="Confirm_Click"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Label Content="盤點人" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,10,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <controls:AutoCompleteBox Name="TakingEmp" Width="120" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30" HorizontalContentAlignment="Center"
+                                                              ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" Margin="0,0,40,0"
+                                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding RecEmp, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <controls:AutoCompleteBox.TextBoxStyle>
+                    <Style TargetType="TextBox">
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style>
+                </controls:AutoCompleteBox.TextBoxStyle>
+                <controls:AutoCompleteBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Width="50" Content="{Binding Id}"/>
+                            <Label Width="100" Content="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </controls:AutoCompleteBox.ItemTemplate>
+            </controls:AutoCompleteBox>
+            <Button Content="確認" Name="Confirm" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="Confirm_Click"/>
+        </StackPanel>
+        
     </Grid>
 </Window>

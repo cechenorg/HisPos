@@ -494,7 +494,10 @@ namespace His_Pos.StockTaking
             {
                 TakingCollection.Add(stockTakingItemDialog.SelectedItem as Product);
 
+                TakingEmp.Text = stockTakingItemDialog.SelectedUser;
+
                 AddStockTakingEmp();
+                ClearAddCondition();
             }
         }
 

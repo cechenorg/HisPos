@@ -1,5 +1,6 @@
 ﻿using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.Class.Person;
 using His_Pos.Interface;
 using System;
 using System.Collections.Generic;
@@ -25,8 +26,10 @@ namespace His_Pos.StockTaking
     public partial class StockTakingItemDialog : Window,INotifyPropertyChanged
     {
         public Product SelectedItem;
+        public string SelectedUser;
         public bool ConfirmButtonClicked = false;
         public ObservableCollection<Product> productsTakingCollection;
+        private ObservableCollection<Person> UserAutoCompleteCollection;
         public ObservableCollection<Product> productsCollection;
         public ObservableCollection<Product> ProductsCollection {
             get {
@@ -53,10 +56,21 @@ namespace His_Pos.StockTaking
             ProductsCollection = products;
             productsTakingCollection = takingCollection;
             SearchResult.Items.Filter = SearchFilter;
+            UserAutoCompleteCollection = PersonDb.GetUserCollection();
+            TakingEmp.ItemsSource = UserAutoCompleteCollection;
+            TakingEmp.ItemFilter = UserFilter;
         }
 
-        
-        
+        public AutoCompleteFilterPredicate<object> UserFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Person).Id is null) ? true : (obj as Person).Id.Contains(searchText)
+                    || (obj as Person).Name.Contains(searchText);
+            }
+        }
+
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
             if (SearchResult.SelectedItem is null)
@@ -66,6 +80,7 @@ namespace His_Pos.StockTaking
                 return;
             }
             SelectedItem = (SearchResult.SelectedItem as Product);
+            SelectedUser = (TakingEmp.SelectedItem != null)? (TakingEmp.SelectedItem as Person).Id : "";
             ConfirmButtonClicked = true;
             Close();
         }
