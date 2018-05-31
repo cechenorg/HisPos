@@ -180,6 +180,7 @@ namespace His_Pos
                                 else
                                     stockTakingOrder.ChangedtakingCollection.Add(product);
                             }
+                            stockTakingOrder.Amount = products.Count;
                             stockTakingRecord.StocktakingCollection.Add(stockTakingOrder);
                             products.Clear();
                         }
@@ -194,7 +195,7 @@ namespace His_Pos
                                 else
                                     stockTakingOrder.ChangedtakingCollection.Add(product);
                             }
-                        
+                            stockTakingOrder.Amount = products.Count;
                             stockTakingRecord.StocktakingCollection.Add(stockTakingOrder);
                             products.Clear();
                             break;

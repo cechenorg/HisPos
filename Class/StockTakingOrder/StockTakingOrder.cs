@@ -33,6 +33,19 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Id");
             }
         }
+        public int amount;
+        public int Amount
+        {
+            get
+            {
+                return amount;
+            }
+            set
+            {
+                amount = value;
+                NotifyPropertyChanged("Amount");
+            }
+        }
         public string stockTakingTime;
         private ObservableCollection<StockTakingOrderProduct> changedtakingCollection = new ObservableCollection<StockTakingOrderProduct>();
         public ObservableCollection<StockTakingOrderProduct> ChangedtakingCollection
