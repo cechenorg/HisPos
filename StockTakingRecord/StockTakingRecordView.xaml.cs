@@ -28,47 +28,19 @@ namespace His_Pos.StockTakingRecord
     {
         public string selectEmpName;
      
-        public ObservableCollection<string> empName = new ObservableCollection<string>();
-        public ObservableCollection<string> EmpName
+        public StockTakingOrder stockTakingOrder;
+        public StockTakingOrder StockTakingOrder
         {
             get
             {
-                return empName;
+                return stockTakingOrder;
             }
             set
             {
-                empName = value;
-                NotifyPropertyChanged("EmpName");
+                stockTakingOrder = value;
+                NotifyPropertyChanged("StockTakingOrder");
             }
         }
-        public ObservableCollection<StockTakingOrderProduct> changedtakingCollection;
-        public ObservableCollection<StockTakingOrderProduct> ChangedtakingCollection
-        {
-            get
-            {
-                return changedtakingCollection;
-            }
-            set
-            {
-                changedtakingCollection = value;
-                NotifyPropertyChanged("ChangedtakingCollection");
-            }
-        }
-        public ObservableCollection<StockTakingOrderProduct> unchangedtakingCollection;
-        public ObservableCollection<StockTakingOrderProduct> UnchangedtakingCollection
-        {
-            get
-            {
-                return unchangedtakingCollection;
-            }
-            set
-            {
-                unchangedtakingCollection = value;
-                NotifyPropertyChanged("UnchangedtakingCollection");
-            }
-        }
-
-
         public ObservableCollection<StockTakingOrder> stocktakingCollection = new ObservableCollection<StockTakingOrder>();
         public ObservableCollection<StockTakingOrder> StocktakingCollection
         {
@@ -109,25 +81,26 @@ namespace His_Pos.StockTakingRecord
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
             StockTakingRecord.Items.Filter = Filter;
+            if (StocktakingCollection.Count > 0) StockTakingRecord.SelectedIndex = 0;
         }
 
         private void StockTakingRecord_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ChangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).ChangedtakingCollection;
-            UnchangedtakingCollection = ((StockTakingOrder)StockTakingRecord.SelectedItem).UnchangedtakingCollection;
-            TotalAmount.Content = ChangedtakingCollection.Count + UnchangedtakingCollection.Count;
-            ChangedAmount.Content = ChangedtakingCollection.Count;
-            EmpName.Clear();
+            StockTakingOrder =  (StockTakingOrder)(sender as DataGrid).SelectedItem;
+            TotalAmount.Content = StockTakingOrder.ChangedtakingCollection.Count + StockTakingOrder.UnchangedtakingCollection.Count;
+            ChangedAmount.Content = StockTakingOrder.ChangedtakingCollection.Count;
+            StockTakingOrder.EmpName.Clear();
+            foreach (var product in StockTakingOrder.ChangedtakingCollection)
+            {
+                if (!StockTakingOrder.EmpName.Contains(product.EmpName)) StockTakingOrder.EmpName.Add(product.EmpName);
+            }
+            foreach (var product in StockTakingOrder.UnchangedtakingCollection)
+            {
+                if (!StockTakingOrder.EmpName.Contains(product.EmpName)) StockTakingOrder.EmpName.Add(product.EmpName);
+            }
             UnChanged.Items.Filter = null;
             Changed.Items.Filter = null;
-            foreach (var product in ChangedtakingCollection) {
-                if (!EmpName.Contains(product.EmpName)) EmpName.Add(product.EmpName);
-            }
-            foreach (var product in UnchangedtakingCollection)
-            {
-                if (!EmpName.Contains(product.EmpName)) EmpName.Add(product.EmpName);
-            }
-            EmpName.Add("全部");
+            StockTakingOrder.EmpName.Add("全部");
         }
         private bool Filter(object item)
         {

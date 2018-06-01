@@ -46,6 +46,31 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Amount");
             }
         }
+        public ObservableCollection<string> empName = new ObservableCollection<string>();
+        public ObservableCollection<string> EmpName
+        {
+            get
+            {
+                return empName;
+            }
+            set
+            {
+                empName = value;
+                NotifyPropertyChanged("EmpName");
+            }
+        }
+        
+        public double TotalPriceDiff
+        {
+            get
+            {
+                double totalPriceDiff = 0;
+                foreach (var product in changedtakingCollection) {
+                    totalPriceDiff += Convert.ToDouble(product.PriceDiff);
+                }
+                return totalPriceDiff;
+            }
+        }
         public string stockTakingTime;
         private ObservableCollection<StockTakingOrderProduct> changedtakingCollection = new ObservableCollection<StockTakingOrderProduct>();
         public ObservableCollection<StockTakingOrderProduct> ChangedtakingCollection

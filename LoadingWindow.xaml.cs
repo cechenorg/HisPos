@@ -211,6 +211,7 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    if (stockTakingRecord.StocktakingCollection.Count > 0) stockTakingRecord.StockTakingRecord.SelectedIndex = 0;
                     Close();
                 }));
             };

@@ -16,13 +16,13 @@ namespace His_Pos.Class.StockTakingOrder
             EmpName = dataRow["EMP_NAME"].ToString();
             OldValue = dataRow["PROCHE_OLDVAL"].ToString();
             NewValue = dataRow["PROCHE_NEWVAL"].ToString();
-            PriceDiff = Convert.ToInt32(ValueDiff) > 0 ? "+" + dataRow["PROCHE_VALUEDIFF"].ToString(): "-" + dataRow["PROCHE_VALUEDIFF"].ToString();
+            PriceDiff = Convert.ToInt32(ValueDiff) > 0 ? "+" + Math.Round(Convert.ToDouble(dataRow["PROCHE_VALUEDIFF"].ToString()), 2): "-" + Math.Round(Convert.ToDouble(dataRow["PROCHE_VALUEDIFF"].ToString()), 2);
         }
         public string empName;
         public string oldValue;
         public string newValue;
         public string priceDiff;
-        public string ValueDiff => (Convert.ToInt32(newValue) - Convert.ToInt32(oldValue)) > 0 ? "+" + (Convert.ToInt32(newValue) - Convert.ToInt32(oldValue)).ToString():(Convert.ToInt32(newValue) - Convert.ToInt32(oldValue)).ToString();
+        public string ValueDiff => (Convert.ToInt32(newValue) - Convert.ToInt32(oldValue)) > 0 ? "+" + (Math.Round(Convert.ToDouble(newValue) - Convert.ToDouble(oldValue), 2)).ToString():Math.Round(Convert.ToDouble(newValue) - Convert.ToDouble(oldValue), 2).ToString();
         public string PriceDiff
         {
             get
