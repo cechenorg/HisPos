@@ -289,91 +289,91 @@
     <Compile Include="Interface\ISelection.cs" />
     <Compile Include="Interface\IStockTakingRecord.cs" />
     <Compile Include="Interface\ITrade.cs" />
-    <Compile Include="InventoryManagement\InventoryManagement.cs" />
-    <Compile Include="InventoryManagement\InventoryManagementView.xaml.cs">
+    <Compile Include="2_STOCK_MANAGE\InventoryManagement\InventoryManagement.cs" />
+    <Compile Include="2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml.cs">
       <DependentUpon>InventoryManagementView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InventoryManagement\MedicineDetail.xaml.cs">
+    <Compile Include="2_STOCK_MANAGE\InventoryManagement\MedicineDetail.xaml.cs">
       <DependentUpon>MedicineDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InventoryManagement\MedicineDetailView.cs" />
-    <Compile Include="InventoryManagement\OtcDetail.xaml.cs">
+    <Compile Include="2_STOCK_MANAGE\InventoryManagement\MedicineDetailView.cs" />
+    <Compile Include="2_STOCK_MANAGE\InventoryManagement\OtcDetail.xaml.cs">
       <DependentUpon>OtcDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InventoryManagement\OtcDetailView.cs" />
-    <Compile Include="InventoryManagement\ProductDetail.xaml.cs">
+    <Compile Include="2_STOCK_MANAGE\InventoryManagement\OtcDetailView.cs" />
+    <Compile Include="2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml.cs">
       <DependentUpon>ProductDetail.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LocationManage\LocationManage.cs" />
-    <Compile Include="LocationManage\LocationManageView.xaml.cs">
+    <Compile Include="4_BASIC_MANAGE\LocationManage\LocationManage.cs" />
+    <Compile Include="4_BASIC_MANAGE\LocationManage\LocationManageView.xaml.cs">
       <DependentUpon>LocationManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ManufactoryManage\ManufactoryManage.cs" />
-    <Compile Include="ManufactoryManage\ManufactoryManageView.xaml.cs">
+    <Compile Include="4_BASIC_MANAGE\ManufactoryManage\ManufactoryManage.cs" />
+    <Compile Include="4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageView.xaml.cs">
       <DependentUpon>ManufactoryManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PrescriptionDec\PrescriptionDec.cs" />
-    <Compile Include="PrescriptionDec\PrescriptionDecView.cs" />
-    <Compile Include="PrescriptionDec\PrescriptionDecView.xaml.cs">
+    <Compile Include="1_DECLARE\PrescriptionDec\PrescriptionDec.cs" />
+    <Compile Include="1_DECLARE\PrescriptionDec\PrescriptionDecView.cs" />
+    <Compile Include="1_DECLARE\PrescriptionDec\PrescriptionDecView.xaml.cs">
       <DependentUpon>PrescriptionDecView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.cs" />
-    <Compile Include="PrescriptionInquire\PrescriptionInquire.cs" />
-    <Compile Include="PrescriptionInquire\PrescriptionInquireOutcome.xaml.cs">
+    <Compile Include="1_DECLARE\PrescriptionInquire\PrescriptionInquire.cs" />
+    <Compile Include="1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml.cs">
       <DependentUpon>PrescriptionInquireOutcome.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PrescriptionInquire\PrescriptionInquireView.xaml.cs">
+    <Compile Include="1_DECLARE\PrescriptionInquire\PrescriptionInquireView.xaml.cs">
       <DependentUpon>PrescriptionInquireView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PrescriptionInquire\PrescriptionOverview.cs" />
-    <Compile Include="PrescriptionInquire\SimpleCommand.cs" />
+    <Compile Include="1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
+    <Compile Include="1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
     <Compile Include="PrintDocuments\StockTakingDocument.xaml.cs">
       <DependentUpon>StockTakingDocument.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProductPurchaseRecord\ProductPurchaseRecord.cs" />
-    <Compile Include="ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
+    <Compile Include="2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecord.cs" />
+    <Compile Include="2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
       <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProductPurchase\AddNewOrderDialog.xaml.cs">
+    <Compile Include="2_STOCK_MANAGE\ProductPurchase\AddNewOrderDialog.xaml.cs">
       <DependentUpon>AddNewOrderDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProductPurchase\AddOrderDetail.cs" />
-    <Compile Include="ProductPurchase\NewItemDialog.xaml.cs">
+    <Compile Include="2_STOCK_MANAGE\ProductPurchase\AddOrderDetail.cs" />
+    <Compile Include="2_STOCK_MANAGE\ProductPurchase\NewItemDialog.xaml.cs">
       <DependentUpon>NewItemDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProductPurchase\ProductPurchase.cs" />
-    <Compile Include="ProductPurchase\ProductPurchaseView.xaml.cs">
+    <Compile Include="2_STOCK_MANAGE\ProductPurchase\ProductPurchase.cs" />
+    <Compile Include="2_STOCK_MANAGE\ProductPurchase\ProductPurchaseView.xaml.cs">
       <DependentUpon>ProductPurchaseView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ProductTypeManage\ProductTypeManage.cs" />
-    <Compile Include="ProductTypeManage\ProductTypeManageView.xaml.cs">
+    <Compile Include="4_BASIC_MANAGE\ProductTypeManage\ProductTypeManage.cs" />
+    <Compile Include="4_BASIC_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="Service\newFunction.cs" />
-    <Compile Include="StockTakingRecord\StockTakingRecord.cs" />
-    <Compile Include="StockTakingRecord\StockTakingRecordView.xaml.cs">
+    <Compile Include="3_STOCKTAKING\StockTakingRecord\StockTakingRecord.cs" />
+    <Compile Include="3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
       <DependentUpon>StockTakingRecordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StockTaking\StockTaking.cs" />
-    <Compile Include="StockTaking\StockTakingHistory.xaml.cs">
+    <Compile Include="3_STOCKTAKING\StockTaking\StockTaking.cs" />
+    <Compile Include="3_STOCKTAKING\StockTaking\StockTakingHistory.xaml.cs">
       <DependentUpon>StockTakingHistory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StockTaking\StockTakingItemDialog.xaml.cs">
+    <Compile Include="3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
       <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StockTaking\StockTakingView.xaml.cs">
+    <Compile Include="3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
@@ -394,19 +394,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InventoryManagement\InventoryManagementView.xaml">
+    <Page Include="2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InventoryManagement\MedicineDetail.xaml">
+    <Page Include="2_STOCK_MANAGE\InventoryManagement\MedicineDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InventoryManagement\OtcDetail.xaml">
+    <Page Include="2_STOCK_MANAGE\InventoryManagement\OtcDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InventoryManagement\ProductDetail.xaml">
+    <Page Include="2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -414,7 +414,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LocationManage\LocationManageView.xaml">
+    <Page Include="4_BASIC_MANAGE\LocationManage\LocationManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -436,7 +436,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ManufactoryManage\ManufactoryManageView.xaml">
+    <Page Include="4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -444,15 +444,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PrescriptionDec\PrescriptionDecView.xaml">
+    <Page Include="1_DECLARE\PrescriptionDec\PrescriptionDecView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PrescriptionInquire\PrescriptionInquireOutcome.xaml">
+    <Page Include="1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PrescriptionInquire\PrescriptionInquireView.xaml">
+    <Page Include="1_DECLARE\PrescriptionInquire\PrescriptionInquireView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -460,39 +460,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ProductPurchaseRecord\ProductPurchaseRecordView.xaml">
+    <Page Include="2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ProductPurchase\AddNewOrderDialog.xaml">
+    <Page Include="2_STOCK_MANAGE\ProductPurchase\AddNewOrderDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ProductPurchase\NewItemDialog.xaml">
+    <Page Include="2_STOCK_MANAGE\ProductPurchase\NewItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ProductPurchase\ProductPurchaseView.xaml">
+    <Page Include="2_STOCK_MANAGE\ProductPurchase\ProductPurchaseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ProductTypeManage\ProductTypeManageView.xaml">
+    <Page Include="4_BASIC_MANAGE\ProductTypeManage\ProductTypeManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StockTakingRecord\StockTakingRecordView.xaml">
+    <Page Include="3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StockTaking\StockTakingHistory.xaml">
+    <Page Include="3_STOCKTAKING\StockTaking\StockTakingHistory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StockTaking\StockTakingItemDialog.xaml">
+    <Page Include="3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StockTaking\StockTakingView.xaml">
+    <Page Include="3_STOCKTAKING\StockTaking\StockTakingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
