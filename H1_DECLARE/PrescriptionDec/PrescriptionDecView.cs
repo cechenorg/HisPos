@@ -45,10 +45,10 @@ namespace His_Pos.PrescriptionDec
         }
         private void InitializeUiElementResource()
         {
-            _genderIcons.Add(new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative)));
-            _genderIcons.Add(new BitmapImage(new Uri(@"..\Images\Female.png", UriKind.Relative)));
-            IcPatientId.Source = new BitmapImage(new Uri(@"..\Images\ID_Card.png", UriKind.Relative));
-            IcPatientBirthday.Source = new BitmapImage(new Uri(@"..\Images\birthday.png", UriKind.Relative));
+            _genderIcons.Add(new BitmapImage(new Uri(@"..\..\Images\Male.png", UriKind.Relative)));
+            _genderIcons.Add(new BitmapImage(new Uri(@"..\..\Images\Female.png", UriKind.Relative)));
+            IcPatientId.Source = new BitmapImage(new Uri(@"..\..\Images\ID_Card.png", UriKind.Relative));
+            IcPatientBirthday.Source = new BitmapImage(new Uri(@"..\..\Images\birthday.png", UriKind.Relative));
             Deposit.Text = "0";
             SelfCost.Text = "0";
             Copayment.Text = "0";

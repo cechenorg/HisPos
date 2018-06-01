@@ -441,10 +441,10 @@ namespace His_Pos.PrescriptionDec
             if (combo == null) return;
             var seleced = combo.SelectedItem as ListBoxItem;
             if (seleced != null && seleced.Content.ToString() == "男")
-                IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Male.png", UriKind.Relative));
+                IcPatientGender.Source = new BitmapImage(new Uri(@"..\..\Images\Male.png", UriKind.Relative));
             else
             {
-                IcPatientGender.Source = new BitmapImage(new Uri(@"..\Images\Female.png", UriKind.Relative));
+                IcPatientGender.Source = new BitmapImage(new Uri(@"..\..\Images\Female.png", UriKind.Relative));
             }
         }
 
