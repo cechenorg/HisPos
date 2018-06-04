@@ -278,6 +278,8 @@
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H4_BASIC_MANAGE\LocationManage\MoveThumb.cs" />
+    <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
     <Compile Include="HisApi\HisApiFunction.cs" />
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
@@ -593,6 +595,7 @@
     <Resource Include="Images\Checked.png" />
     <Resource Include="Images\Changed.png" />
     <Resource Include="Images\Management.png" />
+    <Resource Include="Images\blueprint.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
