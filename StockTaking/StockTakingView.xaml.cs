@@ -319,7 +319,7 @@ namespace His_Pos.StockTaking
             var result = ProductCollection.Where(x => 
             (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
             && (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
-            && (((Product)x).Name.Contains(ProductName.Text) || ProductName.Text == string.Empty)
+            && (((Product)x).Name.ToLower().Contains(ProductName.Text.ToLower()) || ProductName.Text == string.Empty)
             && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
             && ((((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
             && ((x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")

@@ -238,7 +238,7 @@
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
                                     <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
+                                </Style> 
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn Header="基準量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.BasicAmount}" CellStyle="{StaticResource DataGridSpecialCellStyle}">
@@ -252,7 +252,7 @@
                         <DataGridTemplateColumn MinWidth="70" Header="數量">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Amount" TextChanged="TextBox_TextChanged" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
+                                    <TextBox x:Name="Amount" TextChanged="TextBox_TextChanged"  Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="OnPreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

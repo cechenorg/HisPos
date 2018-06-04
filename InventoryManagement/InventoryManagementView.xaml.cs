@@ -98,7 +98,7 @@ namespace His_Pos.InventoryManagement
                     {
                         if (
                             (((InventoryOtc)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
-                        && (((InventoryOtc)item).ChiName.Contains(Name.Text) || ((InventoryOtc)item).EngName.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
+                        && (((InventoryOtc)item).ChiName.ToLower().Contains(Name.Text.ToLower()) || ((InventoryOtc)item).EngName.ToLower().Contains(Name.Text.ToLower()) || Name.Text == string.Empty) //Name filter
                        && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
                         && (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()) || OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
@@ -114,7 +114,7 @@ namespace His_Pos.InventoryManagement
                     if (item is InventoryMedicine)
                     {
                         if ((((InventoryMedicine)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
-                       && (((InventoryMedicine)item).ChiName.Contains(Name.Text) || ((InventoryMedicine)item).EngName.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
+                       && (((InventoryMedicine)item).ChiName.ToLower().Contains(Name.Text.ToLower()) || ((InventoryMedicine)item).EngName.ToLower().Contains(Name.Text.ToLower()) || Name.Text == string.Empty) //Name filter
                         && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
                         && (((InventoryMedicine)item).Ingredient.Contains(Ingredient.Text) || Ingredient.Text == string.Empty)
@@ -132,7 +132,7 @@ namespace His_Pos.InventoryManagement
                 case SearchType.ALL:
                     if (
                         (((Product)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
-                          && (((Product)item).ChiName.Contains(Name.Text) || ((Product)item).EngName.Contains(Name.Text) || Name.Text == string.Empty) //Name filter
+                          && (((Product)item).ChiName.ToLower().Contains(Name.Text.ToLower()) || ((Product)item).EngName.ToLower().Contains(Name.Text.ToLower()) || Name.Text == string.Empty) //Name filter
                            && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter              
                         && ((((IInventory)item).Stock.Inventory == 0 && (bool)NoneInventory.IsChecked) || (((IInventory)item).Stock.Inventory != 0 && (bool)!NoneInventory.IsChecked))
