@@ -1,5 +1,7 @@
-﻿using System;
+﻿using His_Pos.Class;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +22,7 @@ namespace His_Pos.LocationManage
     /// </summary>
     public partial class LocationManageView : UserControl
     {
+        public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();
         public LocationManageView()
         {
             InitializeComponent();
@@ -49,7 +52,12 @@ namespace His_Pos.LocationManage
             Canvas.SetTop(c,top == 0 ? 360 : top);
             Canvas.SetLeft(c, left == 0 ? 648 : left );
         }
+        public void SaveLocation() {
+            foreach (var location in LocationCanvus.Children) {
 
+            }
+
+        }
         public void InitLocation() {
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetLocation(this);

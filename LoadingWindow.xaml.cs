@@ -163,7 +163,8 @@ namespace His_Pos
                 Dispatcher.Invoke((Action)(() =>
                 {
                     foreach (DataRow row in location.Rows) {
-                        locationManageView.NewLocation(Convert.ToDouble(row["LOC_WIDTH"].ToString()), Convert.ToDouble(row["LOC_HEIGHT"].ToString()), Convert.ToDouble(row["LOC_Y"].ToString()), Convert.ToDouble(row["LOC_X"].ToString()));
+                        locationManageView.NewLocation(Convert.ToDouble(row["LOC_HEIGHT"].ToString()), Convert.ToDouble(row["LOC_WIDTH"].ToString()), Convert.ToDouble(row["LOC_Y"].ToString()), Convert.ToDouble(row["LOC_X"].ToString()));
+                        locationManageView.locationCollection.Add(new Location(row)); 
                     }
                    
                 }));
