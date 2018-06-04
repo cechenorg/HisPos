@@ -210,6 +210,8 @@
     <Compile Include="Class\IcCardPay.cs" />
     <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\InStock.cs" />
+    <Compile Include="Class\Location.cs" />
+    <Compile Include="Class\LocationDetail.cs" />
     <Compile Include="Class\Manufactory\Manufactory.cs" />
     <Compile Include="Class\Manufactory\ManufactoryChanged.cs" />
     <Compile Include="Class\Manufactory\ManufactoryDb.cs" />
