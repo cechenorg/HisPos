@@ -136,6 +136,12 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.庫存盤點紀錄):
                     break;
+                case nameof(FeatureItem.商品類別管理):
+                    break;
+                case nameof(FeatureItem.供應商管理):
+                    break;
+                case nameof(FeatureItem.櫃位管理):
+                    break;
                 default:
                     return;
             }

@@ -23,10 +23,14 @@ namespace His_Pos.LocationManage
         public LocationManageView()
         {
             InitializeComponent();
+            InitLocation();
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
+            NewLocation();
+        }
+        public void NewLocation(double height = 0,double width = 0,double top = 0,double left = 0) {
             ContentControl c = new ContentControl();
             c.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
 
@@ -35,16 +39,23 @@ namespace His_Pos.LocationManage
             Rectangle r = new Rectangle();
             r.Fill = (SolidColorBrush)(new BrushConverter().ConvertFrom("#33009DF7"));
             r.IsHitTestVisible = false;
-            
+
             g.Children.Add(r);
 
-            c.Height = 50;
-            c.Width = 50;
+            c.Height = height == 0? 50 : height;
+            c.Width = width == 0 ? 50 : width;
             c.Content = g;
-
             LocationCanvus.Children.Add(c);
-            Canvas.SetTop(c, 360);
-            Canvas.SetLeft(c, 648);
+            Canvas.SetTop(c,top == 0 ? 360 : top);
+            Canvas.SetLeft(c, left == 0 ? 648 : left );
         }
+
+        public void InitLocation() {
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.GetLocation(this);
+            loadingWindow.Topmost = true;
+            loadingWindow.Show();
+        }
+
     }
 }

@@ -153,6 +153,32 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
+        public void GetLocation(LocationManage.LocationManageView locationManageView) {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得櫃位資料...");
+
+                var location = LocationDb.GetLocationData();
+                
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    foreach (DataRow row in location.Rows) {
+                        locationManageView.NewLocation(Convert.ToDouble(row["LOC_WIDTH"].ToString()), Convert.ToDouble(row["LOC_HEIGHT"].ToString()), Convert.ToDouble(row["LOC_Y"].ToString()), Convert.ToDouble(row["LOC_X"].ToString()));
+                    }
+                   
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+
+
+        }
 
         public void GetStockTakingRecord(StockTakingRecordView stockTakingRecord) {
             backgroundWorker.DoWork += (s, o) =>
