@@ -33,10 +33,9 @@ namespace His_Pos.LocationManage
             Grid g = new Grid();
 
             Rectangle r = new Rectangle();
-            r.Fill = Brushes.DarkRed;
+            r.Fill = (SolidColorBrush)(new BrushConverter().ConvertFrom("#33009DF7"));
             r.IsHitTestVisible = false;
-
-
+            
             g.Children.Add(r);
 
             c.Height = 50;
@@ -44,8 +43,8 @@ namespace His_Pos.LocationManage
             c.Content = g;
 
             LocationCanvus.Children.Add(c);
-            Canvas.SetTop(c, 200);
-            Canvas.SetLeft(c, 75);
+            Canvas.SetTop(c, 360);
+            Canvas.SetLeft(c, 648);
         }
     }
 }
