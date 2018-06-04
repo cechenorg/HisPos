@@ -21,7 +21,7 @@ namespace His_Pos.Class.StoreOrder
         public StoreOrder(User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
             Type = OrderType.UNPROCESSING;
-            TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
+            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
 
             Id = StoreOrderDb.GetNewOrderId(ordEmp.Id);
             OrdEmp = ordEmp.Name;
@@ -87,10 +87,10 @@ namespace His_Pos.Class.StoreOrder
                 switch (type)
                 {
                     case OrderType.UNPROCESSING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\Images\PosDot.png", UriKind.Relative));
+                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
                         break;
                     case OrderType.PROCESSING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\Images\DarkerHisDot.png", UriKind.Relative));
+                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\DarkerHisDot.png", UriKind.Relative));
                         break;
                 }
             }

@@ -15,7 +15,7 @@ namespace His_Pos.Class.Product
         public InventoryMedicine(DataRow dataRow) : base(dataRow)
         {
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
-            TypeIcon = new BitmapImage(new Uri(@"..\Images\HisDot.png", UriKind.Relative));
+            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\HisDot.png", UriKind.Relative));
             StockValue = dataRow["TOTAL"].ToString();
             Location = dataRow["PRO_LOCATION"].ToString();
             Note = dataRow["PRO_DESCRIPTION"].ToString();
