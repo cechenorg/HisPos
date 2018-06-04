@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.H4_BASIC_MANAGE.LocationManage;
 
 namespace His_Pos.LocationManage
 {
@@ -27,24 +28,23 @@ namespace His_Pos.LocationManage
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            ContentControl c = new ContentControl();
-            c.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
+            ContentControl contentControl = new ContentControl();
+            contentControl.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
 
-            Grid g = new Grid();
-
-            Rectangle r = new Rectangle();
-            r.Fill = (SolidColorBrush)(new BrushConverter().ConvertFrom("#33009DF7"));
-            r.IsHitTestVisible = false;
+            LocationControl newLocation = new LocationControl();
             
-            g.Children.Add(r);
+            contentControl.Height = 50;
+            contentControl.Width = 50;
+            contentControl.Content = newLocation;
 
-            c.Height = 50;
-            c.Width = 50;
-            c.Content = g;
+            LocationCanvus.Children.Add(contentControl);
+            Canvas.SetTop(contentControl, 360);
+            Canvas.SetLeft(contentControl, 648);
+        }
 
-            LocationCanvus.Children.Add(c);
-            Canvas.SetTop(c, 360);
-            Canvas.SetLeft(c, 648);
+        private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
+        {
+            
         }
     }
 }

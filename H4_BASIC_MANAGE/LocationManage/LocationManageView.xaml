@@ -48,8 +48,14 @@
         <!-- Designer Item Template-->
         <ControlTemplate x:Key="DesignerItemTemplate" TargetType="ContentControl">
             <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                <s:MoveThumb x:Name="MoveThumb" Template="{StaticResource MoveThumbTemplate}" Cursor="SizeAll"/>
-                <Control Template="{StaticResource ResizeDecoratorTemplate}">
+                <s:MoveThumb x:Name="MoveThumb" Template="{StaticResource MoveThumbTemplate}" Cursor="SizeAll">
+                    <s:MoveThumb.Style>
+                        <Style TargetType="s:MoveThumb">
+                            <EventSetter Event="MouseDoubleClick" Handler="ShowLocationDetail"/>
+                        </Style>
+                    </s:MoveThumb.Style>
+                </s:MoveThumb>
+                    <Control Template="{StaticResource ResizeDecoratorTemplate}">
                     <Control.Style>
                         <Style TargetType="Control">
                             <Setter Property="Visibility" Value="Collapsed"/>
