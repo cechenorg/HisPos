@@ -59,11 +59,13 @@ namespace His_Pos.LocationManage
             }
 
         }
-        public void InitLocation() {
+        public void InitLocation()
+        {
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetLocation(this);
             loadingWindow.Topmost = true;
             loadingWindow.Show();
+        }
         private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
         {
             
