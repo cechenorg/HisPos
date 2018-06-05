@@ -76,7 +76,8 @@ namespace His_Pos.LocationManage
         }
         private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
         {
-            
+            LocationDetailWindow locationDetailWindow = new LocationDetailWindow();
+            locationDetailWindow.Show();
         }
 
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
