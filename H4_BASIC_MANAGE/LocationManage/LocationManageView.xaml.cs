@@ -68,7 +68,8 @@ namespace His_Pos.LocationManage
         }
         private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
         {
-            
+            LocationDetailWindow locationDetailWindow = new LocationDetailWindow();
+            locationDetailWindow.ShowDialog();
         }
 
     }

@@ -51,8 +51,7 @@ namespace His_Pos.InventoryManagement
 
             Title = "商品詳細資料管理";
            // WindowState = WindowState.Maximized;
-
-            
+           
             Instance = this;
         }
         

@@ -187,7 +187,7 @@
                                         <controls:AutoCompleteBox x:Name="Id" Width="110" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}" MinimumPrefixLength="4"
-                                                              Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed" ItemFilter="{Binding Source=ProductPurchaseView, Path=ProductFilter}"
+                                                              Populating="ProductAuto_Populating" DropDownClosed="AutoCompleteBox_DropDownClosed"
                                                               IsEnabled="{Binding Id, Converter={StaticResource AutoCompleteIsEnableConverter}}">
                                         <controls:AutoCompleteBox.ItemTemplate>
                                             <DataTemplate>

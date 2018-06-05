@@ -352,8 +352,8 @@ namespace His_Pos.ProductPurchase
             get
             {
                 return (searchText, obj) =>
-                    ((obj as NewItemProduct).Product.Id is null) ? true : (obj as NewItemProduct).Product.Id.Contains(searchText)
-                    || (obj as NewItemProduct).Product.ChiName.Contains(searchText) || (obj as NewItemProduct).Product.EngName.Contains(searchText);
+                    ((obj as Product).Id is null) ? false : (obj as Product).Id.ToLower().Contains(searchText.ToLower())
+                    || (obj as Product).ChiName.ToLower().Contains(searchText.ToLower()) || (obj as Product).EngName.ToLower().Contains(searchText.ToLower());
             }
         }
         private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
@@ -362,10 +362,11 @@ namespace His_Pos.ProductPurchase
 
             if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || Products is null) return;
 
-            var result = Products.Where(x => (((NewItemProduct)x).Product.Id.Contains(productAuto.Text) || ((NewItemProduct)x).Product.Name.ToLower().Contains(productAuto.Text.ToLower())) && ((IProductPurchase)((NewItemProduct)x).Product).Status).Take(50).Select(x => ((NewItemProduct)x).Product);
+            var result = Products.Where(x => (((NewItemProduct)x).Product.Id.ToLower().Contains(productAuto.Text.ToLower()) || ((NewItemProduct)x).Product.ChiName.ToLower().Contains(productAuto.Text.ToLower()) || ((NewItemProduct)x).Product.EngName.ToLower().Contains(productAuto.Text.ToLower())) && ((IProductPurchase)((NewItemProduct)x).Product).Status).Take(50).Select(x => ((NewItemProduct)x).Product);
             ProductAutoCompleteCollection = new ObservableCollection<object>(result.ToList());
 
             productAuto.ItemsSource = ProductAutoCompleteCollection;
+            productAuto.ItemFilter = ProductFilter;
             productAuto.PopulateComplete();
         }
 
