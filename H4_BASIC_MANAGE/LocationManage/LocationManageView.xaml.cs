@@ -36,7 +36,6 @@ namespace His_Pos.LocationManage
         }
         public void NewLocation(double height = 0,double width = 0,double top = 0,double left = 0) {
         
-
             ContentControl contentControl = new ContentControl();
             contentControl.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
 
@@ -45,17 +44,15 @@ namespace His_Pos.LocationManage
             contentControl.Height = (height == 0) ? 50 : height;
             contentControl.Width = (width == 0) ? 50 : width;
             contentControl.Content = newLocation;
-
+            contentControl.Foreground = Brushes.Red;
             LocationCanvus.Children.Add(contentControl);
             Canvas.SetTop(contentControl, top == 0 ? 360 : top);
             Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
-
-
-
         }
         public void SaveLocation() {
-            foreach (var location in LocationCanvus.Children) {
-
+            locationCollection.Clear();
+            foreach (ContentControl location in LocationCanvus.Children) {
+                locationCollection.Add(new Location(location.Name, Canvas.GetLeft(location), Canvas.GetTop(location),location.Width,location.Height));
             }
 
         }

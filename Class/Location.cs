@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.H4_BASIC_MANAGE.LocationManage;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -10,7 +11,7 @@ namespace His_Pos.Class
 {
     public class Location
     {
-      public  Location(DataRow row) {
+        public Location(DataRow row) {
             id = row["LOC_ID"].ToString();
             name = row["LOC_NAME"].ToString();
             pathX = Convert.ToDouble(row["LOC_X"].ToString());
@@ -18,12 +19,20 @@ namespace His_Pos.Class
             width = Convert.ToDouble(row["LOC_WIDTH"].ToString());
             heigh = Convert.ToDouble(row["LOC_HEIGHT"].ToString());
         }
-        public string id;
-        public string name;
-        public double pathX;
-        public double pathY;
-        public double width;
-        public double heigh;
+        public Location(string locName,double locpathX, double locpathY, double locWidth, double locHeigh) {
+            name = locName;
+            pathX = locpathX;
+            pathY = locpathY;
+            width = locWidth;
+            heigh = locHeigh;
+        }
+       
+        public string id{ get; }
+        public string name { get; }
+        public double pathX{ get; }
+        public double pathY{ get; }
+        public double width{ get; }
+        public double heigh { get; }
         public ObservableCollection<LocationDetail> locationDetailCollection = new ObservableCollection<LocationDetail>();
     }
 }
