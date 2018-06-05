@@ -35,23 +35,23 @@ namespace His_Pos.LocationManage
             NewLocation();
         }
         public void NewLocation(double height = 0,double width = 0,double top = 0,double left = 0) {
-            ContentControl c = new ContentControl();
-            c.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
+        
 
-            Grid g = new Grid();
+            ContentControl contentControl = new ContentControl();
+            contentControl.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
 
-            Rectangle r = new Rectangle();
-            r.Fill = (SolidColorBrush)(new BrushConverter().ConvertFrom("#33009DF7"));
-            r.IsHitTestVisible = false;
+            LocationControl newLocation = new LocationControl();
 
-            g.Children.Add(r);
+            contentControl.Height = (height == 0) ? 50 : height;
+            contentControl.Width = (width == 0) ? 50 : width;
+            contentControl.Content = newLocation;
 
-            c.Height = height == 0? 50 : height;
-            c.Width = width == 0 ? 50 : width;
-            c.Content = g;
-            LocationCanvus.Children.Add(c);
-            Canvas.SetTop(c,top == 0 ? 360 : top);
-            Canvas.SetLeft(c, left == 0 ? 648 : left );
+            LocationCanvus.Children.Add(contentControl);
+            Canvas.SetTop(contentControl, top == 0 ? 360 : top);
+            Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
+
+
+
         }
         public void SaveLocation() {
             foreach (var location in LocationCanvus.Children) {
