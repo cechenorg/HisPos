@@ -281,6 +281,9 @@
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationControl.xaml.cs">
+      <DependentUpon>LocationControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\MoveThumb.cs" />
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
     <Compile Include="HisApi\HisApiFunction.cs" />
@@ -392,6 +395,10 @@
     <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ViewModel\Win32.cs" />
     <Page Include="DockingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\LocationManage\LocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

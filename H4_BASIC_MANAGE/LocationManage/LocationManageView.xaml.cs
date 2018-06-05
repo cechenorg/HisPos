@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.H4_BASIC_MANAGE.LocationManage;
 
 namespace His_Pos.LocationManage
 {
@@ -63,6 +64,9 @@ namespace His_Pos.LocationManage
             loadingWindow.GetLocation(this);
             loadingWindow.Topmost = true;
             loadingWindow.Show();
+        private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
+        {
+            
         }
 
     }
