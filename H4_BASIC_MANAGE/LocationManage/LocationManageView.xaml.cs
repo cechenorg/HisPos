@@ -24,6 +24,7 @@ namespace His_Pos.LocationManage
     public partial class LocationManageView : UserControl
     {
         public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();
+        public int id = 0;
         public LocationManageView()
         {
             InitializeComponent();
@@ -34,27 +35,37 @@ namespace His_Pos.LocationManage
         {
             NewLocation();
         }
-        public void NewLocation(double height = 0,double width = 0,double top = 0,double left = 0) {
+        public void NewLocation(string locid = null,string locname = null,double height = 0,double width = 0,double top = 0,double left = 0) {
         
             ContentControl contentControl = new ContentControl();
             contentControl.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
-
-            LocationControl newLocation = new LocationControl();
-
+            LocationControl newLocation = null;
+            if (locid != null)
+            {
+                newLocation = new LocationControl(Convert.ToInt32(locid));
+                newLocation.Name = locname;
+                id = Convert.ToInt32(locid);
+                id++;
+            }
+            else {
+                newLocation = new LocationControl(id);
+                newLocation.Name = "new" + id.ToString();
+                id++;
+            }
             contentControl.Height = (height == 0) ? 50 : height;
             contentControl.Width = (width == 0) ? 50 : width;
             contentControl.Content = newLocation;
-            contentControl.Foreground = Brushes.Red;
             LocationCanvus.Children.Add(contentControl);
             Canvas.SetTop(contentControl, top == 0 ? 360 : top);
             Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
         }
         public void SaveLocation() {
             locationCollection.Clear();
-            foreach (ContentControl location in LocationCanvus.Children) {
-                locationCollection.Add(new Location(location.Name, Canvas.GetLeft(location), Canvas.GetTop(location),location.Width,location.Height));
+            foreach (ContentControl contentControl in LocationCanvus.Children) {
+                LocationControl locationControl = (LocationControl)contentControl.Content;
+                locationCollection.Add(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(contentControl), Canvas.GetTop(contentControl), contentControl.Width, contentControl.Height));
             }
-
+            LocationDb.SaveLocationData(locationCollection);
         }
         public void InitLocation()
         {
@@ -68,5 +79,9 @@ namespace His_Pos.LocationManage
             
         }
 
+        private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
+        {
+            SaveLocation();
+        }
     }
 }

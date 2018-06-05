@@ -19,7 +19,8 @@ namespace His_Pos.Class
             width = Convert.ToDouble(row["LOC_WIDTH"].ToString());
             heigh = Convert.ToDouble(row["LOC_HEIGHT"].ToString());
         }
-        public Location(string locName,double locpathX, double locpathY, double locWidth, double locHeigh) {
+        public Location(int locId,string locName,double locpathX, double locpathY, double locWidth, double locHeigh) {
+            id = locId.ToString();
             name = locName;
             pathX = locpathX;
             pathY = locpathY;

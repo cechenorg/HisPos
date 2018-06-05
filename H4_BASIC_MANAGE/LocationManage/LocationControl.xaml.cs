@@ -20,9 +20,11 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
     /// </summary>
     public partial class LocationControl : UserControl
     {
-        public LocationControl()
+        public int id;
+        public LocationControl(int locId)
         {
             InitializeComponent();
+            id = locId;
         }
     }
 }
