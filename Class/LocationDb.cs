@@ -34,5 +34,12 @@ namespace His_Pos.Class
             }
           
         }
+        internal static DataTable GetLocationDetail(string id)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("LOC_ID", id));
+            return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationDetail]", parameters);
+        }
     }
 }

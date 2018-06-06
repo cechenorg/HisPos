@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Class;
 using MahApps.Metro.Controls;
 
 namespace His_Pos.H4_BASIC_MANAGE.LocationManage
@@ -20,9 +22,16 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
     /// </summary>
     public partial class LocationDetailWindow : Window
     {
-        public LocationDetailWindow()
+        public Location locationDetail;
+        public LocationDetailWindow(Location location)
         {
             InitializeComponent();
+
+            locationDetail = location;
+            foreach (DataRow row in LocationDb.GetLocationDetail(location.id).Rows) {
+                locationDetail.locationDetailCollection.Add(new LocationDetail(row));
+            }
+
         }
 
         private void AddColumns(object sender, RoutedEventArgs e)
@@ -51,7 +60,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
 
             if (parent.ColumnDefinitions.Count == 11) (sender as Button).IsEnabled = false;
         }
-
+        
         private void AddRows(object sender, RoutedEventArgs e)
         {
             Grid parent = (sender as Button).TryFindParent<Grid>();

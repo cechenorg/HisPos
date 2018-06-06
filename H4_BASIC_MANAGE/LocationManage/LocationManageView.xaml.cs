@@ -76,8 +76,14 @@ namespace His_Pos.LocationManage
         }
         private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
         {
-            LocationDetailWindow locationDetailWindow = new LocationDetailWindow();
-            locationDetailWindow.Show();
+            var control = (MoveThumb)sender;
+            foreach (ContentControl item in LocationCanvus.Children) {
+                if (item.Width == control.ActualWidth && item.Height == control.ActualHeight) {
+                    LocationControl locationControl = (LocationControl)item.Content;
+                    LocationDetailWindow locationDetailWindow = new LocationDetailWindow(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(item), Canvas.GetTop(item), item.Width, item.Height));
+                    locationDetailWindow.Show();
+                }
+            }
         }
 
         private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)

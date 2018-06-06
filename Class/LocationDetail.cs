@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,17 @@ namespace His_Pos.Class
 {
    public class LocationDetail
     {
+       public LocationDetail(DataRow row) {
+            id = row["LOC_ID"].ToString();
+            name = row["LOCD_NAME"].ToString();
+            locdrow = row["LOCD_ROW"].ToString();
+            locdcolumn = row["LOCD_COLUMN"].ToString();
+            isExist = row["IsExist"].ToString();
+        }
         public string id;
-        public string width;
-        public double row;
-        public double column;
+        public string name;
+        public string locdrow;
+        public string locdcolumn;
+        public string isExist;
     }
 }
