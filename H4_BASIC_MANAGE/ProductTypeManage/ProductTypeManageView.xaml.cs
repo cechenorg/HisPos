@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +20,15 @@ namespace His_Pos.ProductTypeManage
     /// <summary>
     /// ProductTypeManageView.xaml 的互動邏輯
     /// </summary>
-    public partial class ProductTypeManageView : UserControl
+    public partial class ProductTypeManageView : UserControl, INotifyPropertyChanged
     {
+        //public ObservableCollection<>
+
         public ProductTypeManageView()
         {
             InitializeComponent();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
