@@ -12,18 +12,10 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
-            <Grid Tag="1" Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Margin="5" Background="{StaticResource GridSelected}">
-                    <Label Content="1-1" FontSize="30" Foreground="DimGray" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold"/>
-                </StackPanel>
-                <Button Grid.Column="1" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddColumns"/>
-            </Grid>
-            <Button Name="ButtonAddRow" Grid.Row="2" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddRows"/>
+            <Button Name="ButtonAddRow" Grid.Row="1" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddRows"/>
+            <Button Name="ButtonUpdate" Grid.Row="2" Content="更新" Width="200" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="ButtonUpdate_Click"/>
         </Grid>
     </Viewbox>
 </Window>

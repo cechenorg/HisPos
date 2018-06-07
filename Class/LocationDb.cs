@@ -41,5 +41,29 @@ namespace His_Pos.Class
             parameters.Add(new SqlParameter("LOC_ID", id));
             return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationDetail]", parameters);
         }
+        internal static void UpdateLocationDetail(LocationDetail location)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+          
+                parameters.Add(new SqlParameter("LOC_ID", location.id));
+                parameters.Add(new SqlParameter("LOCD_NAME", location.name));
+                parameters.Add(new SqlParameter("LOCD_ROW", location.locdrow));
+                parameters.Add(new SqlParameter("LOCD_COLUMN", location.locdcolumn));
+                dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[UpdateLocatiobDetail]", parameters);
+            
+        }
+        internal static void DeleteLocationDetail(LocationDetail location)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+          
+                parameters.Add(new SqlParameter("LOC_ID", location.id));
+                parameters.Add(new SqlParameter("LOCD_NAME", location.name));
+                parameters.Add(new SqlParameter("LOCD_ROW", location.locdrow));
+                parameters.Add(new SqlParameter("LOCD_COLUMN", location.locdcolumn));
+                dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[DeleteLocatiobDetail]", parameters);
+           
+        }
     }
 }

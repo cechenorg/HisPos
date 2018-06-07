@@ -16,6 +16,13 @@ namespace His_Pos.Class
             locdcolumn = row["LOCD_COLUMN"].ToString();
             isExist = row["IsExist"].ToString();
         }
+        public LocationDetail(string locid,string locdname,string row,string column,string locdisExist) {
+            id = locid;
+            name = locdname;
+            locdrow = row;
+            locdcolumn = column;
+            isExist = locdisExist;
+        }
         public string id;
         public string name;
         public string locdrow;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
     public partial class LocationDetailWindow : Window
     {
         public Location locationDetail;
+        public ObservableCollection<LocationDetail> deleteLocationDetails = new ObservableCollection<LocationDetail>();
         public LocationDetailWindow(Location location)
         {
             InitializeComponent();
@@ -31,19 +33,33 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             foreach (DataRow row in LocationDb.GetLocationDetail(location.id).Rows) {
                 locationDetail.locationDetailCollection.Add(new LocationDetail(row));
             }
-            Grid newrow = FunctionAddRow((locationDetail.locationDetailCollection[0].name)); ;
-
-            for (int i = 0; i < locationDetail.locationDetailCollection.Count; i++) {
-                if (locationDetail.locationDetailCollection[i].locdrow != locationDetail.locationDetailCollection[i].locdrow && i != 0)
+            if (locationDetail.locationDetailCollection.Count != 0) {
+                Grid newrow = FunctionAddRow(locationDetail.locationDetailCollection[0].name, locationDetail.locationDetailCollection[0].isExist);
+                for (int i = 1; i < locationDetail.locationDetailCollection.Count; i++)
                 {
-                    newrow = FunctionAddRow((locationDetail.locationDetailCollection[i].name));
-                }
-                else {
-                    FunctionAddColumn(newrow, locationDetail.locationDetailCollection[i].name);
+                    if (locationDetail.locationDetailCollection[i].locdrow != locationDetail.locationDetailCollection[i - 1].locdrow)
+                    {
+                        newrow = FunctionAddRow(locationDetail.locationDetailCollection[i].name, locationDetail.locationDetailCollection[i].isExist);
+                    }
+                    else
+                    {
+                        FunctionAddColumn(newrow, locationDetail.locationDetailCollection[i].name);
+                    }
                 }
             }
+           
         }
-      
+        private void MinusColumns(object sender, RoutedEventArgs e)
+        {
+            Grid parent = (sender as Button).TryFindParent<Grid>();
+           string name = locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 1).ToString();
+            parent.Children.Remove(((StackPanel)parent.FindName(name)));
+            Grid.SetColumn((sender as Button), parent.ColumnDefinitions.Count);
+
+            if (parent.ColumnDefinitions.Count == 10) (sender as Button).IsEnabled = false;
+            LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
+            LocationDb.DeleteLocationDetail(newlocationDetail);
+        }
         private void AddColumns(object sender, RoutedEventArgs e)
         {
             Grid parent = (sender as Button).TryFindParent<Grid>();
@@ -64,6 +80,8 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             Grid.SetColumn((sender as Button), parent.ColumnDefinitions.Count - 1);
 
             if (parent.ColumnDefinitions.Count == 11) (sender as Button).IsEnabled = false;
+            LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(),"N");
+            LocationDb.UpdateLocationDetail(newlocationDetail);
         }
         private void FunctionAddColumn(Grid parent,string name) {
             parent.ColumnDefinitions.Add(new ColumnDefinition());
@@ -83,7 +101,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 }
             }
         }
-        private Grid FunctionAddRow(string name = null)
+        private Grid FunctionAddRow(string name = null,string isExist = "")
         {
             LocationDetails.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(60) });
 
@@ -97,6 +115,13 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             newStackPanel.Margin = new Thickness(5);
 
             Label newLabel = NewLabel();
+            if (isExist == "Y")
+            {
+
+                newLabel.Foreground = Brushes.Yellow;
+            }
+            else
+                newLabel.Foreground = Brushes.DimGray;
 
             newLabel.Content = name == null ? locationDetail.name + "-" + newGrid.Tag.ToString() + "-" + (newGrid.ColumnDefinitions.Count - 1).ToString() : name;
             newStackPanel.Children.Add(newLabel);
@@ -104,15 +129,24 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             Grid.SetColumn(newStackPanel, newGrid.ColumnDefinitions.Count - 2);
             newGrid.Children.Add(newStackPanel);
 
-            Button newButton = NewButton();
-            Grid.SetColumn(newButton, newGrid.ColumnDefinitions.Count - 1);
-            newGrid.Children.Add(newButton);
+            Button minusButton = NewButton("-");
+            Grid.SetColumn(minusButton, newGrid.ColumnDefinitions.Count - 1);
+            newGrid.Children.Add(minusButton);
 
-            Grid.SetRow(newGrid, LocationDetails.RowDefinitions.Count - 2);
+            //Button newButton = NewButton("+");
+            //Grid.SetColumn(newButton, newGrid.ColumnDefinitions.Count - 1);
+            //newGrid.Children.Add(newButton);
+
+            Grid.SetRow(newGrid, LocationDetails.RowDefinitions.Count - 3);
             LocationDetails.Children.Add(newGrid);
 
-            Grid.SetRow(ButtonAddRow, LocationDetails.RowDefinitions.Count - 1);
+            Grid.SetRow(ButtonAddRow, LocationDetails.RowDefinitions.Count - 2); 
+            Grid.SetRow(ButtonUpdate, LocationDetails.RowDefinitions.Count - 1);
             if (LocationDetails.RowDefinitions.Count == 12) ButtonAddRow.IsEnabled = false;
+            if (name == null) {
+                LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 1).ToString(), "N");
+                LocationDb.UpdateLocationDetail(newlocationDetail);
+            }
             return newGrid;
         }
         private void AddRows(object sender, RoutedEventArgs e)
@@ -121,24 +155,32 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         }
         private Label NewLabel() {
             Label newLabel = new Label();
-            newLabel.Foreground = Brushes.DimGray;
             newLabel.FontFamily = new FontFamily("Segoe UI Semibold");
             newLabel.FontSize = 30;
             newLabel.HorizontalAlignment = HorizontalAlignment.Center;
             newLabel.VerticalAlignment = VerticalAlignment.Center;
             return newLabel;
         }
-        private Button NewButton() {
+        private Button NewButton(string content) {
             Button newButton = new Button();
-            newButton.Content = "+";
+            newButton.Content = content;
             newButton.FontSize = 30;
             newButton.Height = 50;
             newButton.Background = (Brush)FindResource("Shadow");
             newButton.Foreground = Brushes.DimGray;
             newButton.BorderThickness = new Thickness(0);
             newButton.Margin = new Thickness(5);
-            newButton.Click += AddColumns;
+            if (content == "+")
+                newButton.Click += AddColumns;
+            else if (content == "-")
+                newButton.Click += MinusColumns;
             return newButton;
+        }
+
+        private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            //LocationDb.DeleteLocationDetail(deleteLocationDetails);
+           // LocationDb.UpdateLocationDetail(locationDetail.locationDetailCollection);
         }
     }
 }
