@@ -62,7 +62,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         }
         private void AddColumns(object sender, RoutedEventArgs e)
         {
-            Grid parent = (sender as Button).TryFindParent<Grid>();
+            Grid parent = (sender as Button).TryFindParent<Grid> ();
             parent.ColumnDefinitions.Add(new ColumnDefinition());
 
             StackPanel newStackPanel = new StackPanel();
@@ -141,7 +141,6 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             LocationDetails.Children.Add(newGrid);
 
             Grid.SetRow(ButtonAddRow, LocationDetails.RowDefinitions.Count - 2); 
-            Grid.SetRow(ButtonUpdate, LocationDetails.RowDefinitions.Count - 1);
             if (LocationDetails.RowDefinitions.Count == 12) ButtonAddRow.IsEnabled = false;
             if (name == null) {
                 LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 1).ToString(), "N");
@@ -177,10 +176,6 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             return newButton;
         }
 
-        private void ButtonUpdate_Click(object sender, RoutedEventArgs e)
-        {
-            //LocationDb.DeleteLocationDetail(deleteLocationDetails);
-           // LocationDb.UpdateLocationDetail(locationDetail.locationDetailCollection);
-        }
+        
     }
 }
