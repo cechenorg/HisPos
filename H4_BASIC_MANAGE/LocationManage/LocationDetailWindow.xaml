@@ -9,8 +9,6 @@
     <Viewbox Stretch="Fill">
         <Grid Name="LocationDetails" Height="710" Width="1000">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>

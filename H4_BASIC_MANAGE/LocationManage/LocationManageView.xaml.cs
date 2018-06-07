@@ -76,6 +76,7 @@ namespace His_Pos.LocationManage
         }
         private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
         {
+            SaveLocation();
             var control = (MoveThumb)sender;
             foreach (ContentControl item in LocationCanvus.Children) {
                 if (item.Width == control.ActualWidth && item.Height == control.ActualHeight) {
@@ -85,10 +86,6 @@ namespace His_Pos.LocationManage
                 }
             }
         }
-
-        private void ButtonUpdateSubmmit_Click(object sender, RoutedEventArgs e)
-        {
-            SaveLocation();
-        }
+        
     }
 }
