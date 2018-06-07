@@ -23,7 +23,7 @@
                 </StackPanel>
                 <Button Grid.Column="1" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddColumns"/>
             </Grid>
-            <Button Grid.Row="2" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddRows"/>
+            <Button Name="ButtonAddRow" Grid.Row="2" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddRows"/>
         </Grid>
     </Viewbox>
 </Window>
