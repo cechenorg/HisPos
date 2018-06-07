@@ -254,6 +254,8 @@
     <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\Product\ProductPurchaseMedicine.cs" />
     <Compile Include="Class\Product\ProductPurchaseOTC.cs" />
+    <Compile Include="Class\Product\ProductTypeMedicine.cs" />
+    <Compile Include="Class\Product\ProductTypeOTC.cs" />
     <Compile Include="Class\Product\StockTakingMedicine.cs" />
     <Compile Include="Class\Product\StockTakingOTC.cs" />
     <Compile Include="Class\Product\ProductType.cs" />
@@ -296,6 +298,7 @@
     <Compile Include="Interface\IDeletable.cs" />
     <Compile Include="Interface\IInventory.cs" />
     <Compile Include="Interface\IProductPurchase.cs" />
+    <Compile Include="Interface\IProductType.cs" />
     <Compile Include="Interface\IStockTaking.cs" />
     <Compile Include="Interface\ISelection.cs" />
     <Compile Include="Interface\IStockTakingRecord.cs" />

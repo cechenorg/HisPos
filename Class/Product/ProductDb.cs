@@ -134,10 +134,10 @@ namespace His_Pos.Class.Product
             List<ProductType> productTypes = new List<ProductType>();
             var dd = new DbConnection(Settings.Default.SQL_global);
             var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetProductType]");
-            productTypes.Add(new ProductType("","","無"));
+            productTypes.Add(new ProductType());
             foreach (DataRow row in table.Rows)
             {
-                productTypes.Add(new ProductType(row["PROTYP_ID"].ToString(), row["PROTYP_PARENT"].ToString(), row["PROTYP_CHINAME"].ToString()));
+                productTypes.Add(new ProductType(row));
             }
             ListCollectionView collection = new ListCollectionView(productTypes);
             collection.GroupDescriptions.Add(new PropertyGroupDescription("Rank"));
