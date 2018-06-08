@@ -23,17 +23,20 @@ namespace His_Pos.LocationManage
     /// </summary>
     public partial class LocationManageView : UserControl
     {
+        public static LocationManageView Instance;
         public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();
-        public int id = 0;
+        public static int id = 0;
         public LocationManageView()
         {
             InitializeComponent();
             InitLocation();
+            Instance = this;
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            NewLocation();
+            NewLocationView newLocationView = new NewLocationView();
+            newLocationView.ShowDialog();
         }
         public void NewLocation(string locid = null,string locname = null,double height = 0,double width = 0,double top = 0,double left = 0) {
         
@@ -49,7 +52,7 @@ namespace His_Pos.LocationManage
             }
             else {
                 newLocation = new LocationControl(id);
-                newLocation.Name = "new" + id.ToString();
+                newLocation.Name = locname;
                 id++;
             }
             contentControl.Height = (height == 0) ? 50 : height;
@@ -82,7 +85,8 @@ namespace His_Pos.LocationManage
                 if (item.Width == control.ActualWidth && item.Height == control.ActualHeight) {
                     LocationControl locationControl = (LocationControl)item.Content;
                     LocationDetailWindow locationDetailWindow = new LocationDetailWindow(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(item), Canvas.GetTop(item), item.Width, item.Height));
-                    locationDetailWindow.Show();
+                   locationDetailWindow.Show();
+                    locationDetailWindow.Focus();
                 }
             }
         }

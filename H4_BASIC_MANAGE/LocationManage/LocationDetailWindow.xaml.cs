@@ -34,12 +34,12 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 locationDetail.locationDetailCollection.Add(new LocationDetail(row));
             }
             if (locationDetail.locationDetailCollection.Count != 0) {
-                Grid newrow = FunctionAddRow(locationDetail.locationDetailCollection[0].name, locationDetail.locationDetailCollection[0].isExist);
+                Grid newrow = FunctionAddRow(locationDetail.locationDetailCollection[0].name, locationDetail.locationDetailCollection[0].status);
                 for (int i = 1; i < locationDetail.locationDetailCollection.Count; i++)
                 {
                     if (locationDetail.locationDetailCollection[i].locdrow != locationDetail.locationDetailCollection[i - 1].locdrow)
                     {
-                        newrow = FunctionAddRow(locationDetail.locationDetailCollection[i].name, locationDetail.locationDetailCollection[i].isExist);
+                        newrow = FunctionAddRow(locationDetail.locationDetailCollection[i].name, locationDetail.locationDetailCollection[i].status);
                     }
                     else
                     {
@@ -84,42 +84,29 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         }
         private void AddColumns(object sender, RoutedEventArgs e)
         {
-            Grid parent = (sender as Button).TryFindParent<Grid> ();
-            parent.ColumnDefinitions.Add(new ColumnDefinition());
+            FunctionAddColumn(null,"",sender);
+        }
+        private void FunctionAddColumn(Grid parent = null,string name = "",object sender = null) {
+            if(parent == null) parent = (sender as Button).TryFindParent<Grid>();
 
+            parent.ColumnDefinitions.Add(new ColumnDefinition());
             StackPanel newStackPanel = new StackPanel();
             newStackPanel.Background = (Brush)FindResource("GridSelected");
             newStackPanel.Margin = new Thickness(5);
 
             Label newLabel = NewLabel();
-            newLabel.Content = locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
-            
-            newStackPanel.Children.Add(newLabel);
-
-            Grid.SetColumn(newStackPanel, parent.ColumnDefinitions.Count - 3);
-            parent.Children.Add(newStackPanel);
-
-            foreach( var btn in parent.Children)
-            {
-                if( btn is Button )
-                {
-                    Grid.SetColumn((btn as Button), ((btn as Button).Content.Equals("+")) ? parent.ColumnDefinitions.Count - 1 : parent.ColumnDefinitions.Count - 2);
+            newLabel.Content = name == "" ? locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString() : name;
+            foreach (var locationDetail in locationDetail.locationDetailCollection) {
+                if (locationDetail.name == newLabel.Content.ToString() && locationDetail.status == "Y") {
+                    newLabel.Foreground = Brushes.Yellow;
+                    break;
+                }
+                else {
+                    newLabel.Foreground = Brushes.DimGray;
                 }
             }
-
-            if (parent.ColumnDefinitions.Count == 11) (sender as Button).IsEnabled = false;
-            LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(),"N");
-            LocationDb.UpdateLocationDetail(newlocationDetail);
-        }
-        private void FunctionAddColumn(Grid parent,string name) {
-            parent.ColumnDefinitions.Add(new ColumnDefinition());
-            StackPanel newStackPanel = new StackPanel();
-            newStackPanel.Background = (Brush)FindResource("GridSelected");
-            newStackPanel.Margin = new Thickness(5);
-
-            Label newLabel = NewLabel();
-            newLabel.Content = name;
             newStackPanel.Children.Add(newLabel);
+
             Grid.SetColumn(newStackPanel, parent.ColumnDefinitions.Count - 3);
             parent.Children.Add(newStackPanel);
             foreach (var btn in parent.Children) {
@@ -128,7 +115,8 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                     if (parent.ColumnDefinitions.Count == 11) ((Button)btn).IsEnabled = false;
                 }
             }
-          
+            LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
+            LocationDb.UpdateLocationDetail(newlocationDetail);
         }
         private Grid FunctionAddRow(string name = null,string isExist = "")
         {
@@ -206,6 +194,9 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             return newButton;
         }
 
-        
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

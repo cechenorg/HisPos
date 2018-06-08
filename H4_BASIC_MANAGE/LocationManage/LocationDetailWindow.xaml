@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.LocationManage"
         mc:Ignorable="d"
-        Title="LocationDetailWindow" Height="710" Width="1000" WindowStartupLocation="CenterScreen" WindowStyle="None">
+        Title="LocationDetailWindow" Height="710" Width="1000" WindowStartupLocation="CenterScreen" WindowStyle="None" Deactivated="Window_Deactivated">
     <Viewbox Stretch="Fill">
         <Grid Name="LocationDetails" Height="710" Width="1000">
             <Grid.RowDefinitions>

@@ -13,6 +13,7 @@ using His_Pos.Class;
 using System.Windows;
 using System.Windows.Controls;
 using His_Pos.InventoryManagement;
+using His_Pos.LocationManage;
 
 namespace His_Pos.ViewModel
 {
@@ -141,6 +142,7 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.供應商管理):
                     break;
                 case nameof(FeatureItem.櫃位管理):
+                    LocationManageView.Instance.SaveLocation();
                     break;
                 default:
                     return;
