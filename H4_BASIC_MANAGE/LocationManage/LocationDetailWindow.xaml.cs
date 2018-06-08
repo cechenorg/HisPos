@@ -23,6 +23,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
     /// </summary>
     public partial class LocationDetailWindow : Window
     {
+        public static bool deactivate = true;
         public Location locationDetail;
         public ObservableCollection<LocationDetail> deleteLocationDetails = new ObservableCollection<LocationDetail>();
         public LocationDetailWindow(Location location)
@@ -53,15 +54,15 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         {
             Grid parent = (sender as Button).TryFindParent<Grid>();
            string name = locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
-            parent.ColumnDefinitions.RemoveAt(0);
+            
 
             StackPanel removeItem = null;
-
+            List<Button> buttons = new List<Button>();
             foreach (var obj in parent.Children)
             {
                 if (obj is Button)
                 {
-                    Grid.SetColumn((obj as Button), ((obj as Button).Content.Equals("+")) ? parent.ColumnDefinitions.Count - 1 : parent.ColumnDefinitions.Count - 2);
+                    buttons.Add(obj as Button);
                 }
                 else if (obj is StackPanel )
                 {
@@ -75,7 +76,17 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                     }
                 }
             }
-
+            foreach (var label in removeItem.Children) {
+                if (label is Label) {
+                    if (((Label)label).Foreground == Brushes.Yellow) {
+                        return;
+                    }
+                }
+            }
+            parent.ColumnDefinitions.RemoveAt(0);
+            foreach (Button button in buttons) {
+                Grid.SetColumn(button, (button.Content.Equals("+")) ? parent.ColumnDefinitions.Count - 1 : parent.ColumnDefinitions.Count - 2);
+            }
             parent.Children.Remove(removeItem);
 
             if (parent.ColumnDefinitions.Count == 10) (sender as Button).IsEnabled = false;
@@ -93,8 +104,14 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             StackPanel newStackPanel = new StackPanel();
             newStackPanel.Background = (Brush)FindResource("GridSelected");
             newStackPanel.Margin = new Thickness(5);
+            MenuItem propertyMenu = new MenuItem();
+            propertyMenu.Header = "換櫃";
+            propertyMenu.Click += newLabelPropertyMenu_Click;
+            newStackPanel.ContextMenu = new ContextMenu();
+            newStackPanel.ContextMenu.Items.Add(propertyMenu);
 
             Label newLabel = NewLabel();
+            
             newLabel.Content = name == "" ? locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString() : name;
             foreach (var locationDetail in locationDetail.locationDetailCollection) {
                 if (locationDetail.name == newLabel.Content.ToString() && locationDetail.status == "Y") {
@@ -118,6 +135,11 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
             LocationDb.UpdateLocationDetail(newlocationDetail);
         }
+        public void newLabelPropertyMenu_Click(object sender, RoutedEventArgs e)
+        {
+            deactivate = false;
+            MessageBox.Show("6666");
+        }
         private Grid FunctionAddRow(string name = null,string isExist = "")
         {
             LocationDetails.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(60) });
@@ -131,6 +153,11 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             StackPanel newStackPanel = new StackPanel();
             newStackPanel.Background = (Brush)FindResource("GridSelected");
             newStackPanel.Margin = new Thickness(5);
+            MenuItem propertyMenu = new MenuItem();
+            propertyMenu.Header = "換櫃";
+            propertyMenu.Click += newLabelPropertyMenu_Click;
+            newStackPanel.ContextMenu = new ContextMenu();
+            newStackPanel.ContextMenu.Items.Add(propertyMenu);
 
             Label newLabel = NewLabel();
             if (isExist == "Y")
@@ -196,7 +223,8 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            Close();
+            if(deactivate) Close();
+
         }
     }
 }
