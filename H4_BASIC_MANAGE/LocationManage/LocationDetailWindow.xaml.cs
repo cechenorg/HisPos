@@ -52,9 +52,31 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         private void MinusColumns(object sender, RoutedEventArgs e)
         {
             Grid parent = (sender as Button).TryFindParent<Grid>();
-           string name = locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 1).ToString();
-            parent.Children.Remove(((StackPanel)parent.FindName(name)));
-            Grid.SetColumn((sender as Button), parent.ColumnDefinitions.Count);
+           string name = locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
+            parent.ColumnDefinitions.RemoveAt(0);
+
+            StackPanel removeItem = null;
+
+            foreach (var obj in parent.Children)
+            {
+                if (obj is Button)
+                {
+                    Grid.SetColumn((obj as Button), ((obj as Button).Content.Equals("+")) ? parent.ColumnDefinitions.Count - 1 : parent.ColumnDefinitions.Count - 2);
+                }
+                else if (obj is StackPanel )
+                {
+                    foreach( var lab in (obj as StackPanel).FindChildren<Label>())
+                    {
+                        if((lab as Label).Content.Equals(name))
+                        {
+                            removeItem = obj as StackPanel;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            parent.Children.Remove(removeItem);
 
             if (parent.ColumnDefinitions.Count == 10) (sender as Button).IsEnabled = false;
             LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
@@ -70,14 +92,20 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             newStackPanel.Margin = new Thickness(5);
 
             Label newLabel = NewLabel();
-            newLabel.Content = locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 1).ToString();
+            newLabel.Content = locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
             
             newStackPanel.Children.Add(newLabel);
 
-            Grid.SetColumn(newStackPanel, parent.ColumnDefinitions.Count - 2);
+            Grid.SetColumn(newStackPanel, parent.ColumnDefinitions.Count - 3);
             parent.Children.Add(newStackPanel);
 
-            Grid.SetColumn((sender as Button), parent.ColumnDefinitions.Count - 1);
+            foreach( var btn in parent.Children)
+            {
+                if( btn is Button )
+                {
+                    Grid.SetColumn((btn as Button), ((btn as Button).Content.Equals("+")) ? parent.ColumnDefinitions.Count - 1 : parent.ColumnDefinitions.Count - 2);
+                }
+            }
 
             if (parent.ColumnDefinitions.Count == 11) (sender as Button).IsEnabled = false;
             LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(),"N");
@@ -92,20 +120,22 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             Label newLabel = NewLabel();
             newLabel.Content = name;
             newStackPanel.Children.Add(newLabel);
-            Grid.SetColumn(newStackPanel, parent.ColumnDefinitions.Count - 2);
+            Grid.SetColumn(newStackPanel, parent.ColumnDefinitions.Count - 3);
             parent.Children.Add(newStackPanel);
             foreach (var btn in parent.Children) {
                 if (btn is Button) {
-                    Grid.SetColumn((Button)btn, parent.ColumnDefinitions.Count - 1);
+                    Grid.SetColumn((btn as Button), ((btn as Button).Content.Equals("+")) ? parent.ColumnDefinitions.Count - 1 : parent.ColumnDefinitions.Count - 2);
                     if (parent.ColumnDefinitions.Count == 11) ((Button)btn).IsEnabled = false;
                 }
             }
+          
         }
         private Grid FunctionAddRow(string name = null,string isExist = "")
         {
             LocationDetails.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(60) });
 
             Grid newGrid = new Grid();
+            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
             newGrid.ColumnDefinitions.Add(new ColumnDefinition());
             newGrid.ColumnDefinitions.Add(new ColumnDefinition());
             newGrid.Tag = LocationDetails.RowDefinitions.Count - 2;
@@ -123,24 +153,24 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             else
                 newLabel.Foreground = Brushes.DimGray;
 
-            newLabel.Content = name == null ? locationDetail.name + "-" + newGrid.Tag.ToString() + "-" + (newGrid.ColumnDefinitions.Count - 1).ToString() : name;
+            newLabel.Content = name == null ? locationDetail.name + "-" + newGrid.Tag.ToString() + "-" + (newGrid.ColumnDefinitions.Count - 2).ToString() : name;
             newStackPanel.Children.Add(newLabel);
 
-            Grid.SetColumn(newStackPanel, newGrid.ColumnDefinitions.Count - 2);
+            Grid.SetColumn(newStackPanel, newGrid.ColumnDefinitions.Count - 3);
             newGrid.Children.Add(newStackPanel);
 
             Button minusButton = NewButton("-");
-            Grid.SetColumn(minusButton, newGrid.ColumnDefinitions.Count - 1);
+            Grid.SetColumn(minusButton, newGrid.ColumnDefinitions.Count - 2);
             newGrid.Children.Add(minusButton);
 
-            //Button newButton = NewButton("+");
-            //Grid.SetColumn(newButton, newGrid.ColumnDefinitions.Count - 1);
-            //newGrid.Children.Add(newButton);
+            Button newButton = NewButton("+");
+            Grid.SetColumn(newButton, newGrid.ColumnDefinitions.Count - 1);
+            newGrid.Children.Add(newButton);
 
-            Grid.SetRow(newGrid, LocationDetails.RowDefinitions.Count - 3);
+            Grid.SetRow(newGrid, LocationDetails.RowDefinitions.Count - 2);
             LocationDetails.Children.Add(newGrid);
 
-            Grid.SetRow(ButtonAddRow, LocationDetails.RowDefinitions.Count - 2); 
+            Grid.SetRow(ButtonAddRow, LocationDetails.RowDefinitions.Count - 1); 
             if (LocationDetails.RowDefinitions.Count == 12) ButtonAddRow.IsEnabled = false;
             if (name == null) {
                 LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 1).ToString(), "N");
