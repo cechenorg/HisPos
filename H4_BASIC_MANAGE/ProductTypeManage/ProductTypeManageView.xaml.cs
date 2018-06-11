@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
 using His_Pos.Class.ProductType;
+using His_Pos.Interface;
 
 namespace His_Pos.ProductTypeManage
 {
@@ -69,6 +70,9 @@ namespace His_Pos.ProductTypeManage
 
             InitTypes();
             InitProducts();
+            TypeMaster.ItemsSource = TypeManageMasters;
+            TypeDetail.ItemsSource = TypeManageDetails;
+            TypeMaster.SelectedIndex = 0;
         }
 
         private void InitProducts()
@@ -91,6 +95,23 @@ namespace His_Pos.ProductTypeManage
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
+        }
+
+        private void TypeMaster_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if((sender as DataGrid) is null || (sender as DataGrid).SelectedItem is null) return;
+
+            TypeDetail.Items.Filter = item => ((ProductTypeManageDetail)item).Rank == ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id;
+
+            if (TypeDetail.Items.Count != 0)
+                TypeDetail.SelectedIndex = 0;
+        }
+
+        private void TypeDetail_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as DataGrid) is null || (sender as DataGrid).SelectedItem is null) return;
+
+            ProductsGrid.Items.Filter = item => ((IProductType)item).TypeId == ((ProductTypeManageDetail)(sender as DataGrid).SelectedItem).Id;
         }
     }
 }
