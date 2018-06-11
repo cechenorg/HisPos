@@ -166,7 +166,7 @@ namespace His_Pos.ProductTypeManage
             foreach (PieSeries pieSeries in StockValuePieSeries)
             {
                 if (pieSeries.Title.Equals(((ProductTypeManageMaster) TypeMaster.SelectedItem).Name))
-                    pieSeries.PushOut = 10;
+                    pieSeries.PushOut = 20;
                 else
                 {
                     pieSeries.PushOut = 0;
@@ -176,7 +176,7 @@ namespace His_Pos.ProductTypeManage
             foreach (PieSeries pieSeries in SalesPieSeries)
             {
                 if (pieSeries.Title.Equals(((ProductTypeManageMaster)TypeMaster.SelectedItem).Name))
-                    pieSeries.PushOut = 10;
+                    pieSeries.PushOut = 20;
                 else
                 {
                     pieSeries.PushOut = 0;
