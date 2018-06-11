@@ -155,8 +155,33 @@ namespace His_Pos.ProductTypeManage
 
             TypeDetail.Items.Filter = item => ((ProductTypeManageDetail)item).Rank == ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id;
 
+            PieChartPushOut();
+
             if (TypeDetail.Items.Count != 0)
                 TypeDetail.SelectedIndex = 0;
+        }
+
+        private void PieChartPushOut()
+        {
+            foreach (PieSeries pieSeries in StockValuePieSeries)
+            {
+                if (pieSeries.Title.Equals(((ProductTypeManageMaster) TypeMaster.SelectedItem).Name))
+                    pieSeries.PushOut = 10;
+                else
+                {
+                    pieSeries.PushOut = 0;
+                }
+            }
+
+            foreach (PieSeries pieSeries in SalesPieSeries)
+            {
+                if (pieSeries.Title.Equals(((ProductTypeManageMaster)TypeMaster.SelectedItem).Name))
+                    pieSeries.PushOut = 10;
+                else
+                {
+                    pieSeries.PushOut = 0;
+                }
+            }
         }
 
         private void TypeDetail_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

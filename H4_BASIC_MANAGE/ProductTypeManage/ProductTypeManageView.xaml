@@ -115,8 +115,15 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <lvc:PieChart LegendLocation="Bottom" Hoverable="True" Width="250" Series="{Binding StockValuePieSeries, UpdateSourceTrigger=PropertyChanged}"/>
-                    <lvc:PieChart Grid.Column="1" LegendLocation="Bottom" Hoverable="True" Width="250" Series="{Binding SalesPieSeries, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Grid.Column="0">
+                        <Label Content="庫存現值占比" FontSize="25" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                        <lvc:PieChart LegendLocation="Bottom" Hoverable="False" Width="250" Height="310" Series="{Binding StockValuePieSeries, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <Label Content="今日營業額占比" FontSize="25" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                        <lvc:PieChart LegendLocation="Bottom" Hoverable="False" Width="250" Height="310" Series="{Binding SalesPieSeries, UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    
                 </Grid>
             </Grid>
             <Grid Grid.Row="1" Margin="10,0,10,10">
