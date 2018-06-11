@@ -24,6 +24,7 @@ namespace His_Pos.LocationManage
     public partial class LocationManageView : UserControl
     {
         public static LocationManageView Instance;
+        public LocationControl selectItem;
         public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();
         public static int id = 0;
         public LocationManageView()
@@ -90,6 +91,41 @@ namespace His_Pos.LocationManage
                 }
             }
         }
-        
+
+        private void MoveThumb_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            foreach (ContentControl contentcontrol in LocationCanvus.Children) {
+                var child = VisualTreeHelper.GetChild(contentcontrol,0);
+                var thumb = VisualTreeHelper.GetChild(child, 1);
+                ((Control)thumb).Visibility = Visibility.Collapsed;
+            }
+            (((Grid)(sender as MoveThumb).Parent).Children.OfType<Control>().ToList())[1].Visibility = Visibility.Visible;
+           
+            var grid = VisualTreeHelper.GetChild(((Grid)(sender as MoveThumb).Parent),2);
+            var locationcontrol = VisualTreeHelper.GetChild(grid,0);
+            selectItem = (LocationControl)locationcontrol;
+        }
+
+        private void ButtonDeleteLocation_Click(object sender, RoutedEventArgs e)
+        {
+            ContentControl deleteControl = null;
+           foreach (ContentControl contentcontrol in LocationCanvus.Children){
+                if ((LocationControl)contentcontrol.Content == selectItem)
+                     deleteControl = contentcontrol;
+            }
+
+            LocationCanvus.Children.Remove(deleteControl);
+        }
+
+        private void ButtonCopyLocation_Click(object sender, RoutedEventArgs e)
+        {
+            ContentControl copyControl = null;
+            foreach (ContentControl contentcontrol in LocationCanvus.Children)
+            {
+                if ((LocationControl)contentcontrol.Content == selectItem)
+                    copyControl = contentcontrol;
+            }
+            NewLocation(null, "copy"+ id + selectItem.Name, copyControl.Height, copyControl.Width, Canvas.GetTop(copyControl)+30, Canvas.GetLeft(copyControl)+30);
+        }
     }
 }

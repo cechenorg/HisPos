@@ -223,8 +223,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            if(deactivate) Close();
-
+             Close();
         }
     }
 }

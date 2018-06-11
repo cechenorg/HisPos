@@ -51,22 +51,16 @@
                 <s:MoveThumb x:Name="MoveThumb" Template="{StaticResource MoveThumbTemplate}" Cursor="SizeAll">
                     <s:MoveThumb.Style>
                         <Style TargetType="s:MoveThumb">
+                            <EventSetter Event="PreviewMouseLeftButtonDown"  Handler="MoveThumb_MouseLeftButtonDown"/>
                             <EventSetter Event="MouseDoubleClick" Handler="ShowLocationDetail"/>
                         </Style>
                     </s:MoveThumb.Style>
                 </s:MoveThumb>
-                    <Control Template="{StaticResource ResizeDecoratorTemplate}">
+                <Control Template="{StaticResource ResizeDecoratorTemplate}">
                     <Control.Style>
                         <Style TargetType="Control">
                             <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=MoveThumb}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </Trigger>
-                            </Style.Triggers>
+                            
                         </Style>
                     </Control.Style>
                 </Control>
@@ -88,9 +82,9 @@
             </Canvas>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}">
                 <Button Content="+ 新增櫃位" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,9,0,0" Click="ButtonBase_OnClick" VerticalAlignment="Top"/>
-                <Rectangle Width="830"/>
-                <Label Name="IsChangedLabel" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0,0,5,0"/>
-                </StackPanel>
+                <Button Content="- 刪除櫃位" Name="ButtonDeleteLocation" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,9,0,0" Click="ButtonDeleteLocation_Click" VerticalAlignment="Top"/>
+                <Button Content="複製櫃位" Name="ButtonCopyLocation" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,9,0,0" Click="ButtonCopyLocation_Click"  VerticalAlignment="Top"/>
+            </StackPanel>
         </Grid>
     </Viewbox>
 </UserControl>
