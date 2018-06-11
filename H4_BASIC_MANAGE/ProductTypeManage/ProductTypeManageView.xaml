@@ -23,21 +23,21 @@
                     <RowDefinition/>
                     <RowDefinition Height="60"/>
                 </Grid.RowDefinitions>
-                <DataGrid Grid.Column="0" Grid.Row="0" Margin="10,10,0,0" HeadersVisibility="None" Background="{StaticResource GridDarkerBackGround}"
-                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                <DataGrid Grid.Column="0" Grid.Row="0" Margin="10,10,0,0" HeadersVisibility="None" Background="{StaticResource GridDarkerBackGround}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden"
+                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding TypeManageMasters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="300">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Grid Height="80">
+                                    <Grid Height="77">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="50"/>
+                                            <RowDefinition Height="43"/>
                                             <RowDefinition Height="30"/>
                                         </Grid.RowDefinitions>
-                                        <Label Content="{Binding }" FontSize="20" FontFamily="Segoe UI SemiBold" Grid.Row="0" HorizontalAlignment="Left"/>
-                                        <StackPanel Grid.Row="1" HorizontalAlignment="Right">
-                                            <Label Content="{Binding }" FontSize="16" FontFamily="Segoe UI Semi"/>
-                                            <Label Content="個小類別" FontSize="16" FontFamily="Segoe UI Semi"/>
+                                        <Label Content="{Binding Name}" FontSize="28" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="20,0,0,0"/>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
+                                            <Label Content="{Binding TypeCount}" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                            <Label Content="個小類別" FontSize="18" FontFamily="Segoe UI Semi"/>
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>
@@ -45,21 +45,21 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid Grid.Column="1" Grid.Row="0" Margin="0,10,10,0" HeadersVisibility="None" Background="{StaticResource GridDarkestBackGround}"
-                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
+                <DataGrid Grid.Column="1" Grid.Row="0" Margin="0,10,10,0" HeadersVisibility="None" Background="{StaticResource GridDarkestBackGround}" AutoGenerateColumns="False"
+                      CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding TypeManageDetails, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="300">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Grid Height="80">
+                                    <Grid Height="77">
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="50"/>
+                                            <RowDefinition Height="43"/>
                                             <RowDefinition Height="30"/>
                                         </Grid.RowDefinitions>
-                                        <Label Content="{Binding }" FontSize="20" FontFamily="Segoe UI SemiBold" Grid.Row="0" HorizontalAlignment="Left"/>
-                                        <StackPanel Grid.Row="1" HorizontalAlignment="Right">
+                                        <Label Content="{Binding Name}" FontSize="25" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="20,0,0,0"/>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
                                             <Label Content="共" FontSize="16" FontFamily="Segoe UI Semi"/>
-                                            <Label Content="{Binding }" FontSize="16" FontFamily="Segoe UI Semi"/>
+                                            <Label Content="{Binding ItemCount}" FontSize="16" FontFamily="Segoe UI Semi"/>
                                             <Label Content="個商品" FontSize="16" FontFamily="Segoe UI Semi"/>
                                         </StackPanel>
                                     </Grid>
@@ -93,10 +93,10 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-                        <Label Content="{Binding}" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
+                        <Label Content="" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
                         <Label Content="-" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
-                        <Label Content="{Binding}" FontSize="25" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
-                        <Label Content="{Binding}" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <Label Content="" FontSize="25" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
+                        <Label Content="" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="20,0,0,0"/>
                         <Rectangle Width="50"/>
                         <Button Margin="0,0,20,0" Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"/>
                         <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0"/>
@@ -111,18 +111,7 @@
                         <CheckBox Content="今年" Margin="10,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
                         <CheckBox Content="去年同期" Margin="20,0,0,0" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                     </StackPanel>
-                    <lvc:CartesianChart Series="{Binding SalesCollection}" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}">
-                        <lvc:CartesianChart.AxisY>
-                            <lvc:Axis ShowLabels="False"/>
-                        </lvc:CartesianChart.AxisY>
-                        <lvc:CartesianChart.AxisX>
-                            <lvc:Axis Labels="{Binding Months}" IsMerged="True" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="12">
-                                <lvc:Axis.Separator>
-                                    <lvc:Separator IsEnabled="False" Step="2"></lvc:Separator>
-                                </lvc:Axis.Separator>
-                            </lvc:Axis>
-                        </lvc:CartesianChart.AxisX>
-                    </lvc:CartesianChart>
+                    
                 </Grid>
                 <DataGrid Grid.Column="1" Background="{StaticResource GridDarkerBackGround}"
                       CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">

@@ -14,6 +14,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
+using His_Pos.Class.Product;
+using His_Pos.Class.ProductType;
 
 namespace His_Pos.ProductTypeManage
 {
@@ -22,13 +25,72 @@ namespace His_Pos.ProductTypeManage
     /// </summary>
     public partial class ProductTypeManageView : UserControl, INotifyPropertyChanged
     {
-        //public ObservableCollection<>
+        private ObservableCollection<ProductTypeManageMaster> typeManageMasters = new ObservableCollection<ProductTypeManageMaster>();
+
+        public ObservableCollection<ProductTypeManageMaster> TypeManageMasters
+        {
+            get { return typeManageMasters; }
+            set
+            {
+                typeManageMasters = value;
+                NotifyPropertyChanged("TypeManageMasters");
+            }
+        }
+
+        private ObservableCollection<ProductTypeManageDetail> typeManageDetails = new ObservableCollection<ProductTypeManageDetail>();
+
+        public ObservableCollection<ProductTypeManageDetail> TypeManageDetails
+        {
+            get { return typeManageDetails; }
+            set
+            {
+                typeManageDetails = value;
+                NotifyPropertyChanged("TypeManageDetails");
+            }
+        }
+
+        private ObservableCollection<Product> products;
+
+        public ObservableCollection<Product> Products
+        {
+            get { return products; }
+            set
+            {
+                products = value;
+                NotifyPropertyChanged("Products");
+            }
+        }
 
         public ProductTypeManageView()
         {
             InitializeComponent();
+
+            DataContext = this;
+
+            InitTypes();
+            InitProducts();
+        }
+
+        private void InitProducts()
+        {
+            Products = ProductDb.GetProductTypeManageProducts();
+        }
+
+        private void InitTypes()
+        {
+            TypeManageMasters.Clear();
+            TypeManageDetails.Clear();
+
+            ProductDb.GetProductTypeManage(TypeManageMasters, TypeManageDetails);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 }
