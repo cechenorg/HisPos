@@ -18,6 +18,8 @@ using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
 using His_Pos.Class.ProductType;
 using His_Pos.Interface;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace His_Pos.ProductTypeManage
 {
@@ -62,6 +64,30 @@ namespace His_Pos.ProductTypeManage
             }
         }
 
+        public SeriesCollection stockValuePieSeries = new SeriesCollection();
+
+        public SeriesCollection StockValuePieSeries
+        {
+            get { return stockValuePieSeries; }
+            set
+            {
+                stockValuePieSeries = value;
+                NotifyPropertyChanged("StockValuePieSeries");
+            }
+        }
+
+        public SeriesCollection salesPieSeries = new SeriesCollection();
+
+        public SeriesCollection SalesPieSeries
+        {
+            get { return salesPieSeries; }
+            set
+            {
+                salesPieSeries = value;
+                NotifyPropertyChanged("SalesPieSeries");
+            }
+        }
+
         public ProductTypeManageView()
         {
             InitializeComponent();
@@ -70,9 +96,35 @@ namespace His_Pos.ProductTypeManage
 
             InitTypes();
             InitProducts();
+            InitPieCharts();
+
             TypeMaster.ItemsSource = TypeManageMasters;
             TypeDetail.ItemsSource = TypeManageDetails;
             TypeMaster.SelectedIndex = 0;
+        }
+
+        private void InitPieCharts()
+        {
+            foreach (var productType in TypeManageMasters)
+            {
+                PieSeries newStockPieSeries = new PieSeries()
+                {
+                    Title = productType.Name,
+                    Values = new ChartValues<double> { productType.StockValue },
+                    DataLabels = true
+                };
+
+                StockValuePieSeries.Add(newStockPieSeries);
+
+                PieSeries newSalesPieSeries = new PieSeries()
+                {
+                    Title = productType.Name,
+                    Values = new ChartValues<double> { productType.Sales },
+                    DataLabels = true
+                };
+
+                SalesPieSeries.Add(newSalesPieSeries);
+            }
         }
 
         private void InitProducts()

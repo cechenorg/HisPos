@@ -115,8 +115,8 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Ellipse Width="250" Height="250" Fill="LightBlue" Grid.Column="0"/>
-                    <Ellipse Width="250" Height="250" Fill="LightBlue" Grid.Column="1"/>
+                    <lvc:PieChart LegendLocation="Bottom" Hoverable="True" Width="250" Series="{Binding StockValuePieSeries, UpdateSourceTrigger=PropertyChanged}"/>
+                    <lvc:PieChart Grid.Column="1" LegendLocation="Bottom" Hoverable="True" Width="250" Series="{Binding SalesPieSeries, UpdateSourceTrigger=PropertyChanged}"/>
                 </Grid>
             </Grid>
             <Grid Grid.Row="1" Margin="10,0,10,10">
