@@ -14,6 +14,7 @@ using System.Windows.Data;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductPurchase;
 using His_Pos.Interface;
+using His_Pos.Class.ProductType;
 
 namespace His_Pos.Class.Product
 {
@@ -34,6 +35,50 @@ namespace His_Pos.Class.Product
             foreach (DataRow row in table.Rows)
             {
                 collection.Add(new ProductUnit(Int32.Parse(row["PRO_BASETYPE_STATUS"].ToString()), row["PROUNI_TYPE"].ToString(), row["PROUNI_QTY"].ToString(), row["PRO_SELL_PRICE"].ToString(), row["PRO_VIP_PRICE"].ToString(), row["PRO_EMP_PRICE"].ToString()));
+            }
+
+            return collection;
+        }
+
+        internal static void GetProductTypeManage(ObservableCollection<ProductTypeManageMaster> typeManageMasters, ObservableCollection<ProductTypeManageDetail> typeManageDetails)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetProductType]");
+            
+            foreach (DataRow row in table.Rows)
+            {
+                switch (row["PROTYP_RANK"].ToString())
+                {
+                    case "1":
+                        typeManageMasters.Add(new ProductTypeManageMaster(row));
+                        break;
+                    case "2":
+                        typeManageDetails.Add(new ProductTypeManageDetail(row));
+                        break;
+                }
+            }
+        }
+
+        internal static ObservableCollection<AbstractClass.Product> GetProductTypeManageProducts()
+        {
+            ObservableCollection<AbstractClass.Product> collection = new ObservableCollection<AbstractClass.Product>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetProducts]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                switch (row["PROTYP_ID"].ToString())
+                {
+                    case "MED":
+                        collection.Add(new ProductTypeMedicine(row));
+                        break;
+                    default:
+                        collection.Add(new ProductTypeOTC(row));
+                        break;
+                }
             }
 
             return collection;
@@ -131,13 +176,13 @@ namespace His_Pos.Class.Product
 
         internal static ListCollectionView GetProductType() {
             
-            List<ProductType> productTypes = new List<ProductType>();
+            List<ProductType.ProductType> productTypes = new List<ProductType.ProductType>();
             var dd = new DbConnection(Settings.Default.SQL_global);
             var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetProductType]");
-            productTypes.Add(new ProductType("","","無"));
+            productTypes.Add(new ProductType.ProductType());
             foreach (DataRow row in table.Rows)
             {
-                productTypes.Add(new ProductType(row["PROTYP_ID"].ToString(), row["PROTYP_PARENT"].ToString(), row["PROTYP_CHINAME"].ToString()));
+                productTypes.Add(new ProductType.ProductType(row));
             }
             ListCollectionView collection = new ListCollectionView(productTypes);
             collection.GroupDescriptions.Add(new PropertyGroupDescription("Rank"));

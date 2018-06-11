@@ -28,9 +28,9 @@
             <Label Content="類別" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="57,0,0,0"/>
             <Label Content="批號" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="63,0,0,0"/>
             <Label Content="庫存" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="60,0,0,0"/>
-            <Label Content="結果" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="8,0,0,0"/>
-            <Label Content="效期" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="25,0,0,0"/>
-            <Label Content="櫃位" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
+            <Label Content="盤點量" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="8,0,0,0"/>
+            <Label Content="效期" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="櫃位" FontSize="18" VerticalAlignment="Bottom" FontFamily="Segoe UI Semibold" Margin="25,0,0,0"/>
         </StackPanel>
         <DataGrid Grid.Row="2" Name="PrintData" Background="Transparent" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" ItemsSource="{Binding PrintCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   AutoGenerateColumns="False" CanUserAddRows="False" FontFamily="Segoe UI Semibold" HeadersVisibility="None">
