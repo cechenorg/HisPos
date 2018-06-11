@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -21,39 +22,61 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
     /// <summary>
     /// LocationDetailWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class LocationDetailWindow : Window
+    public partial class LocationDetailWindow : Window, INotifyPropertyChanged
     {
         public static bool deactivate = true;
         public Location locationDetail;
+        public Location LocationDetail {
+            get
+            {
+                return locationDetail;
+            }
+            set
+            {
+                locationDetail = value;
+                NotifyPropertyChanged("LocationDetail");
+            }
+        }
+
         public ObservableCollection<LocationDetail> deleteLocationDetails = new ObservableCollection<LocationDetail>();
+        
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public LocationDetailWindow(Location location)
         {
             InitializeComponent();
 
-            locationDetail = location;
+            LocationDetail = location;
+            LocationName.Content = LocationDetail.name;
             foreach (DataRow row in LocationDb.GetLocationDetail(location.id).Rows) {
-                locationDetail.locationDetailCollection.Add(new LocationDetail(row));
+                LocationDetail.locationDetailCollection.Add(new LocationDetail(row));
             }
-            if (locationDetail.locationDetailCollection.Count != 0) {
-                Grid newrow = FunctionAddRow(locationDetail.locationDetailCollection[0].name, locationDetail.locationDetailCollection[0].status);
-                for (int i = 1; i < locationDetail.locationDetailCollection.Count; i++)
+            if (LocationDetail.locationDetailCollection.Count != 0) {
+                Grid newrow = FunctionAddRow(LocationDetail.locationDetailCollection[0].name, LocationDetail.locationDetailCollection[0].status);
+                for (int i = 1; i < LocationDetail.locationDetailCollection.Count; i++)
                 {
-                    if (locationDetail.locationDetailCollection[i].locdrow != locationDetail.locationDetailCollection[i - 1].locdrow)
+                    if (LocationDetail.locationDetailCollection[i].locdrow != LocationDetail.locationDetailCollection[i - 1].locdrow)
                     {
-                        newrow = FunctionAddRow(locationDetail.locationDetailCollection[i].name, locationDetail.locationDetailCollection[i].status);
+                        newrow = FunctionAddRow(LocationDetail.locationDetailCollection[i].name, LocationDetail.locationDetailCollection[i].status);
                     }
                     else
                     {
-                        FunctionAddColumn(newrow, locationDetail.locationDetailCollection[i].name);
+                        FunctionAddColumn(newrow, LocationDetail.locationDetailCollection[i].name);
                     }
                 }
             }
-           
+            DataContext = this;
         }
         private void MinusColumns(object sender, RoutedEventArgs e)
         {
             Grid parent = (sender as Button).TryFindParent<Grid>();
-           string name = locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
+           string name = LocationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
             
 
             StackPanel removeItem = null;
@@ -90,7 +113,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             parent.Children.Remove(removeItem);
 
             if (parent.ColumnDefinitions.Count == 10) (sender as Button).IsEnabled = false;
-            LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
+            LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
             LocationDb.DeleteLocationDetail(newlocationDetail);
         }
         private void AddColumns(object sender, RoutedEventArgs e)
@@ -113,7 +136,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             Label newLabel = NewLabel();
             
             newLabel.Content = name == "" ? locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString() : name;
-            foreach (var locationDetail in locationDetail.locationDetailCollection) {
+            foreach (var locationDetail in LocationDetail.locationDetailCollection) {
                 if (locationDetail.name == newLabel.Content.ToString() && locationDetail.status == "Y") {
                     newLabel.Foreground = Brushes.Yellow;
                     break;
@@ -132,7 +155,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                     if (parent.ColumnDefinitions.Count == 11) ((Button)btn).IsEnabled = false;
                 }
             }
-            LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
+            LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
             LocationDb.UpdateLocationDetail(newlocationDetail);
         }
         public void newLabelPropertyMenu_Click(object sender, RoutedEventArgs e)
@@ -168,7 +191,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             else
                 newLabel.Foreground = Brushes.DimGray;
 
-            newLabel.Content = name == null ? locationDetail.name + "-" + newGrid.Tag.ToString() + "-" + (newGrid.ColumnDefinitions.Count - 2).ToString() : name;
+            newLabel.Content = name == null ? LocationDetail.name + "-" + newGrid.Tag.ToString() + "-" + (newGrid.ColumnDefinitions.Count - 2).ToString() : name;
             newStackPanel.Children.Add(newLabel);
 
             Grid.SetColumn(newStackPanel, newGrid.ColumnDefinitions.Count - 3);
@@ -188,7 +211,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             Grid.SetRow(ButtonAddRow, LocationDetails.RowDefinitions.Count - 1); 
             if (LocationDetails.RowDefinitions.Count == 12) ButtonAddRow.IsEnabled = false;
             if (name == null) {
-                LocationDetail newlocationDetail = new LocationDetail(locationDetail.id, newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 1).ToString(), "N");
+                LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 1).ToString(), "N");
                 LocationDb.UpdateLocationDetail(newlocationDetail);
             }
             return newGrid;

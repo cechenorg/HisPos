@@ -11,8 +11,10 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
-            <Button Name="ButtonAddRow" Grid.Row="1" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddRows"/>
+            <Label Name="LocationName" Content="{Binding }" FontSize="30" Grid.Row="0"  Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5"/>
+            <Button Name="ButtonAddRow" Grid.Row="2" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddRows"/>
         </Grid>
     </Viewbox>
 </Window>
