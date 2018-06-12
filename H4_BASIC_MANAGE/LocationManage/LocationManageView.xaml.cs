@@ -86,7 +86,8 @@ namespace His_Pos.LocationManage
             SaveLocation();
             var control = (MoveThumb)sender;
             foreach (ContentControl item in LocationCanvus.Children) {
-                if (item.Width == control.ActualWidth && item.Height == control.ActualHeight) {
+                if ((LocationControl)item.Content == selectItem)
+                {
                     LocationControl locationControl = (LocationControl)item.Content;
                     selectItem = locationControl;
                     LocationDetailWindow locationDetailWindow = new LocationDetailWindow(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(item), Canvas.GetTop(item), item.Width, item.Height));

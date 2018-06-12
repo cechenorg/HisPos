@@ -266,7 +266,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             if (reply == "") { 
                 LocationDb.UpdateLocationName(LocationDetail.id, LocationName.Text);
             LocationManageView.Instance.InitLocation();
-            //Close();
+            Close();
             }
             else{
                 MessageWindow messageWindow = new MessageWindow(reply,MessageType.ERROR);
