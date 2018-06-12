@@ -18,6 +18,7 @@ using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Class.ProductType;
+using His_Pos.H4_BASIC_MANAGE.ProductTypeManage;
 using His_Pos.Interface;
 using His_Pos.InventoryManagement;
 using LiveCharts;
@@ -296,6 +297,15 @@ namespace His_Pos.ProductTypeManage
                 MessageWindow messageWindow = new MessageWindow("修改成功!", MessageType.SUCCESS);
                 messageWindow.ShowDialog();
             }
+        }
+
+        private void DeleteTypeClick(object sender, MouseButtonEventArgs e)
+        {
+            if ((ProductTypeManageMaster)TypeMaster.SelectedItem is null) return;
+
+            DeleteTypeWindow deleteTypeWindow = new DeleteTypeWindow((ProductTypeManageMaster)TypeMaster.SelectedItem, (ProductTypeManageDetail)TypeDetail.SelectedItem);
+            deleteTypeWindow.ShowDialog();
+
         }
     }
 }
