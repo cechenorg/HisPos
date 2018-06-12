@@ -263,6 +263,18 @@ namespace His_Pos.Class.Product
             collection.GroupDescriptions.Add(new PropertyGroupDescription("Rank"));
             return collection;
         }
+
+        internal static void UpdateProductType(string typeId, string newTypeName)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("TYPE_ID", typeId));
+            parameters.Add(new SqlParameter("TYPE_NAME", newTypeName));
+
+            dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[UpdateTypeName]", parameters);
+        }
+
         internal static void UpdateProductManufactory(string productId,string manId,int orderId) {
             
         var dd = new DbConnection(Settings.Default.SQL_global);

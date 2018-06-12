@@ -94,17 +94,13 @@ namespace His_Pos.ProductTypeManage
 
             DataContext = this;
 
-            InitTypes();
-            InitProducts();
-            InitPieCharts();
-            InitMonthsAndDays();
-
-            TypeMaster.ItemsSource = TypeManageMasters;
-            TypeDetail.ItemsSource = TypeManageDetails;
-            TypeMaster.SelectedIndex = 0;
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.InitProductType(this);
+            loadingWindow.Show();
+            loadingWindow.Topmost = true;
         }
 
-        private void InitMonthsAndDays()
+        public void InitMonthsAndDays()
         {
             DateTime today = DateTime.Today.Date;
 
@@ -123,7 +119,7 @@ namespace His_Pos.ProductTypeManage
             }
         }
 
-        private void InitPieCharts()
+        public void InitPieCharts()
         {
             foreach (var productType in TypeManageMasters)
             {
@@ -153,12 +149,7 @@ namespace His_Pos.ProductTypeManage
             }
         }
 
-        private void InitProducts()
-        {
-            Products = ProductDb.GetProductTypeManageProducts();
-        }
-
-        private void InitTypes()
+        public void InitTypes()
         {
             TypeManageMasters.Clear();
             TypeManageDetails.Clear();
@@ -181,11 +172,18 @@ namespace His_Pos.ProductTypeManage
 
             TypeDetail.Items.Filter = item => ((ProductTypeManageDetail)item).Rank == ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id;
 
+            BigType.Content = ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Name;
+
             PieChartPushOut();
             InitLineChart(((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id);
 
             if (TypeDetail.Items.Count != 0)
                 TypeDetail.SelectedIndex = 0;
+        }
+
+        private void InitTypeTextBox(string bigTypeName)
+        {
+            
         }
 
         private void InitLineChart(string typeId)
@@ -256,6 +254,8 @@ namespace His_Pos.ProductTypeManage
             if ((sender as DataGrid) is null || (sender as DataGrid).SelectedItem is null) return;
 
             ProductsGrid.Items.Filter = item => ((IProductType)item).TypeId == ((ProductTypeManageDetail)(sender as DataGrid).SelectedItem).Id;
+
+            SmallType.Text = ((ProductTypeManageDetail) (sender as DataGrid).SelectedItem).Name;
         }
 
         private void LineChartRange_OnClick(object sender, RoutedEventArgs e)
@@ -275,6 +275,23 @@ namespace His_Pos.ProductTypeManage
 
             ProductDetail.Instance.AddNewTab(newProduct);
             ProductDetail.Instance.Focus();
+        }
+
+        private void CancelTypeChange(object sender, RoutedEventArgs e)
+        {
+            if (TypeDetail.SelectedItem != null)
+            {
+                SmallType.Text = ((ProductTypeManageDetail)TypeDetail.SelectedItem).Name;
+            }
+        }
+
+        private void ConfirmTypeChange(object sender, RoutedEventArgs e)
+        {
+            if (TypeDetail.SelectedItem != null)
+            {
+                ((ProductTypeManageDetail)TypeDetail.SelectedItem).Name = SmallType.Text;
+                ProductDb.UpdateProductType(((ProductTypeManageDetail)TypeDetail.SelectedItem).Id, SmallType.Text);
+            }
         }
     }
 }

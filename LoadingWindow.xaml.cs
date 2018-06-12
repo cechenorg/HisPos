@@ -17,6 +17,7 @@ using His_Pos.Interface;
 using His_Pos.StockTaking;
 using His_Pos.StockTakingRecord;
 using His_Pos.Class.StockTakingOrder;
+using His_Pos.ProductTypeManage;
 
 namespace His_Pos
 {
@@ -103,7 +104,37 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-        
+
+        internal void InitProductType(ProductTypeManageView productTypeManageView)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("處理類別資料...");
+
+                ObservableCollection<Product> newProducts = ProductDb.GetProductTypeManageProducts();
+                
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    productTypeManageView.InitTypes();
+                    productTypeManageView.Products = newProducts;
+                    productTypeManageView.InitPieCharts();
+                    productTypeManageView.InitMonthsAndDays();
+                }));
+            };
+
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    productTypeManageView.TypeMaster.ItemsSource = productTypeManageView.TypeManageMasters;
+                    productTypeManageView.TypeDetail.ItemsSource = productTypeManageView.TypeManageDetails;
+                    productTypeManageView.TypeMaster.SelectedIndex = 0;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
         public void MergeProductInventory(InventoryManagementView inventoryManagementView)
         {
             backgroundWorker.DoWork += (s, o) =>
