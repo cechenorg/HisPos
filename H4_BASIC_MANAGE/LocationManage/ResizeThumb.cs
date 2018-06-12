@@ -54,7 +54,8 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                         break;
                 }
             }
-
+            designerItem.Height = designerItem.Height < 50 ? 50 : designerItem.Height;
+            designerItem.Width = designerItem.Width < 50 ? 50 : designerItem.Width;
             e.Handled = true;
         }
     }

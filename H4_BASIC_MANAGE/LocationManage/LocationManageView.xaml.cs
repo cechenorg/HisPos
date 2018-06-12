@@ -48,12 +48,14 @@ namespace His_Pos.LocationManage
             {
                 newLocation = new LocationControl(Convert.ToInt32(locid));
                 newLocation.Name = locname;
+                newLocation.locationName.Content = locname;
                 id = Convert.ToInt32(locid);
                 id++;
             }
             else {
                 newLocation = new LocationControl(id);
                 newLocation.Name = locname;
+                newLocation.locationName.Content = locname;
                 id++;
             }
             contentControl.Height = (height == 0) ? 50 : height;

@@ -76,9 +76,8 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         private void MinusColumns(object sender, RoutedEventArgs e)
         {
             Grid parent = (sender as Button).TryFindParent<Grid>();
-           string name = LocationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
+           string name =  parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
             
-
             StackPanel removeItem = null;
             List<Button> buttons = new List<Button>();
             foreach (var obj in parent.Children)
@@ -113,7 +112,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             parent.Children.Remove(removeItem);
 
             if (parent.ColumnDefinitions.Count == 10) (sender as Button).IsEnabled = false;
-            LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
+            LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
             LocationDb.DeleteLocationDetail(newlocationDetail);
         }
         private void AddColumns(object sender, RoutedEventArgs e)
@@ -135,7 +134,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
 
             Label newLabel = NewLabel();
             
-            newLabel.Content = name == "" ? locationDetail.name + "-" + parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString() : name;
+            newLabel.Content = name == "" ?  parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString() : name.Replace(LocationDetail.name + "-" ,"");
             foreach (var locationDetail in LocationDetail.locationDetailCollection) {
                 if (locationDetail.name == newLabel.Content.ToString() && locationDetail.status == "Y") {
                     newLabel.Foreground = Brushes.Yellow;
@@ -155,7 +154,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                     if (parent.ColumnDefinitions.Count == 11) ((Button)btn).IsEnabled = false;
                 }
             }
-            LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
+            LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
             LocationDb.UpdateLocationDetail(newlocationDetail);
         }
         public void newLabelPropertyMenu_Click(object sender, RoutedEventArgs e)
@@ -191,7 +190,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             else
                 newLabel.Foreground = Brushes.DimGray;
 
-            newLabel.Content = name == null ? LocationDetail.name + "-" + newGrid.Tag.ToString() + "-" + (newGrid.ColumnDefinitions.Count - 2).ToString() : name;
+            newLabel.Content = name == null ? newGrid.Tag.ToString() + "-" + (newGrid.ColumnDefinitions.Count - 2).ToString() : name.Replace(LocationDetail.name + "-","");
             newStackPanel.Children.Add(newLabel);
 
             Grid.SetColumn(newStackPanel, newGrid.ColumnDefinitions.Count - 3);
@@ -211,7 +210,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             Grid.SetRow(ButtonAddRow, LocationDetails.RowDefinitions.Count - 1); 
             if (LocationDetails.RowDefinitions.Count == 12) ButtonAddRow.IsEnabled = false;
             if (name == null) {
-                LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 1).ToString(), "N");
+                LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 1).ToString(), "N");
                 LocationDb.UpdateLocationDetail(newlocationDetail);
             }
             return newGrid;

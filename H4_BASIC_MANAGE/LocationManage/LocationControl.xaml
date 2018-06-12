@@ -6,6 +6,6 @@
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.LocationManage"
              mc:Ignorable="d">
     <Grid Background="{StaticResource GridSelected}" IsHitTestVisible="False">
-        <Label FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <Label Name="locationName" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>
