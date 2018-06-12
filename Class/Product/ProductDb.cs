@@ -15,6 +15,8 @@ using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductPurchase;
 using His_Pos.Interface;
 using His_Pos.Class.ProductType;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace His_Pos.Class.Product
 {
@@ -153,6 +155,56 @@ namespace His_Pos.Class.Product
             }
 
             return collection;
+        }
+
+        internal static void GetProductTypeLineSeries(LineSeries yearSalesLineSeries, LineSeries lastYearSalesLineSeries, LineSeries monthSalesLineSeries, LineSeries lastMonthSalesLineSeries, string typeId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PROTYP_ID", typeId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetTypeSalesByYears]", parameters);
+
+            string thisYear = DateTime.Today.Year.ToString();
+            ChartValues <double> thisYearSales = new ChartValues<double>();
+            ChartValues<double> lastYearSales = new ChartValues<double>();
+
+            foreach (DataRow row in table.Rows)
+            {
+                if (row["MONTH"].ToString().Contains(thisYear))
+                {
+                    thisYearSales.Add(Double.Parse(row["TOTAL"].ToString()));
+                }
+                else
+                {
+                    lastYearSales.Add(Double.Parse(row["TOTAL"].ToString()));
+                }
+            }
+            yearSalesLineSeries.Values = thisYearSales;
+            lastYearSalesLineSeries.Values = lastYearSales;
+
+            parameters.Clear();
+            parameters.Add(new SqlParameter("PROTYP_ID", typeId));
+
+            table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetTypeSalesByMonths]", parameters);
+            
+            ChartValues<double> thisMonthSales = new ChartValues<double>();
+            ChartValues<double> lastYearMonthSales = new ChartValues<double>();
+
+            foreach (DataRow row in table.Rows)
+            {
+                if (row["DAY"].ToString().Contains(thisYear))
+                {
+                    thisMonthSales.Add(Double.Parse(row["TOTAL"].ToString()));
+                }
+                else
+                {
+                    lastYearMonthSales.Add(Double.Parse(row["TOTAL"].ToString()));
+                }
+            }
+            monthSalesLineSeries.Values = thisMonthSales;
+            lastMonthSalesLineSeries.Values = lastYearMonthSales;
         }
 
         internal static ObservableCollection<StockTakingOverview> GetProductStockTakingDate(string proId)
