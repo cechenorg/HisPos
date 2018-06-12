@@ -162,6 +162,7 @@ namespace His_Pos
                 
                 Dispatcher.Invoke((Action)(() =>
                 {
+                    locationManageView.LocationCanvus.Children.Clear();
                     foreach (DataRow row in location.Rows) {
                         locationManageView.NewLocation(row["LOC_ID"].ToString(), row["LOC_NAME"].ToString(), Convert.ToDouble(row["LOC_HEIGHT"].ToString()), Convert.ToDouble(row["LOC_WIDTH"].ToString()), Convert.ToDouble(row["LOC_Y"].ToString()), Convert.ToDouble(row["LOC_X"].ToString()));
                     }

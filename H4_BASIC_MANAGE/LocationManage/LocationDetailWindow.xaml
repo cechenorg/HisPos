@@ -12,7 +12,7 @@
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
-            <Label Name="LocationName" Content="{Binding }" FontSize="30" Grid.Row="0"  Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5"/>
+            <TextBox Name="LocationName"  FontSize="30" Grid.Row="0"  Height="50" Background="{StaticResource Shadow}" Foreground="DimGray"  Margin="5"/>
             <Button Name="ButtonAddRow" Grid.Row="1" Content="+" FontSize="30" Height="50" Background="{StaticResource Shadow}" Foreground="DimGray" BorderThickness="0" Margin="5" Click="AddRows"/>
         </Grid>
     </Viewbox>

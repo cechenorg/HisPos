@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.Class;
+using His_Pos.LocationManage;
 using MahApps.Metro.Controls;
 
 namespace His_Pos.H4_BASIC_MANAGE.LocationManage
@@ -53,8 +54,9 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             InitializeComponent();
 
             LocationDetail = location;
-            LocationName.Content = LocationDetail.name;
-            foreach (DataRow row in LocationDb.GetLocationDetail(location.id).Rows) {
+            LocationName.Text = LocationDetail.name;
+            DataTable table = LocationDb.GetLocationDetail(location.id);
+            foreach (DataRow row in table.Rows) {
                 LocationDetail.locationDetailCollection.Add(new LocationDetail(row));
             }
             if (LocationDetail.locationDetailCollection.Count != 0) {
@@ -136,7 +138,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             
             newLabel.Content = name == "" ?  parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString() : name.Replace(LocationDetail.name + "-" ,"");
             foreach (var locationDetail in LocationDetail.locationDetailCollection) {
-                if (locationDetail.name == newLabel.Content.ToString() && locationDetail.status == "Y") {
+                if (locationDetail.name.Split('-')[1] + "-" + locationDetail.name.Split('-')[2] == newLabel.Content.ToString() && locationDetail.status == "Y") {
                     newLabel.Foreground = Brushes.Yellow;
                     break;
                 }
@@ -154,7 +156,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                     if (parent.ColumnDefinitions.Count == 11) ((Button)btn).IsEnabled = false;
                 }
             }
-            LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
+            LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 2).ToString(), "N");
             LocationDb.UpdateLocationDetail(newlocationDetail);
         }
         public void newLabelPropertyMenu_Click(object sender, RoutedEventArgs e)
@@ -210,7 +212,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             Grid.SetRow(ButtonAddRow, LocationDetails.RowDefinitions.Count - 1); 
             if (LocationDetails.RowDefinitions.Count == 12) ButtonAddRow.IsEnabled = false;
             if (name == null) {
-                LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 1).ToString(), "N");
+                LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 2).ToString(), "N");
                 LocationDb.UpdateLocationDetail(newlocationDetail);
             }
             return newGrid;
@@ -242,10 +244,34 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 newButton.Click += MinusColumns;
             return newButton;
         }
+        private string IsCheck()
+        {
+            int number = 0;
+            bool canConvert = int.TryParse(LocationName.Text.Substring(0, 1), out number);
+            if (canConvert)
+            {
+                return "第一個字不可以為數字";
+            }
+            foreach (ContentControl contentControl in LocationManageView.Instance.LocationCanvus.Children)
+            {
+                LocationControl locationControl = (LocationControl)contentControl.Content;
+                if (locationControl.Name == LocationName.Text && LocationDetail.name != LocationName.Text) return "已有同名櫃位";
+            }
 
+            return "";
+        }
         private void Window_Deactivated(object sender, EventArgs e)
         {
-             Close();
+            string reply = IsCheck();
+            if (reply == "") { 
+                LocationDb.UpdateLocationName(LocationDetail.id, LocationName.Text);
+            LocationManageView.Instance.InitLocation();
+            //Close();
+            }
+            else{
+                MessageWindow messageWindow = new MessageWindow(reply,MessageType.ERROR);
+                messageWindow.ShowDialog();
+            }
         }
     }
 }

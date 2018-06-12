@@ -63,7 +63,33 @@ namespace His_Pos.Class
                 parameters.Add(new SqlParameter("LOCD_ROW", location.locdrow));
                 parameters.Add(new SqlParameter("LOCD_COLUMN", location.locdcolumn));
                 dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[DeleteLocatiobDetail]", parameters);
-           
+
+        }
+        internal static void UpdateLocationName(string locId,string name)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("LOC_ID", locId));
+            parameters.Add(new SqlParameter("NAME", name));
+            dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[UpdateLocationName]", parameters);
+        }
+        internal static bool CheckProductExist(string locId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("LOC_ID", locId));
+           DataTable table = dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[CheckProductExist]", parameters);
+            if (table.Rows[0][0].ToString() == "0")
+                return true;
+            else
+                return false;
+        }
+        internal static void DeleteLocation(string locId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("LOC_ID", locId));
+            dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[DeleteLocation]", parameters);
         }
     }
 }

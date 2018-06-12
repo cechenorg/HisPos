@@ -64,6 +64,7 @@ namespace His_Pos.LocationManage
             LocationCanvus.Children.Add(contentControl);
             Canvas.SetTop(contentControl, top == 0 ? 360 : top);
             Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
+            SaveLocation();
         }
         public void SaveLocation() {
             locationCollection.Clear();
@@ -87,13 +88,15 @@ namespace His_Pos.LocationManage
             foreach (ContentControl item in LocationCanvus.Children) {
                 if (item.Width == control.ActualWidth && item.Height == control.ActualHeight) {
                     LocationControl locationControl = (LocationControl)item.Content;
+                    selectItem = locationControl;
                     LocationDetailWindow locationDetailWindow = new LocationDetailWindow(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(item), Canvas.GetTop(item), item.Width, item.Height));
                    locationDetailWindow.Show();
                     locationDetailWindow.Focus();
+                    return;
                 }
             }
         }
-
+       
         private void MoveThumb_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             foreach (ContentControl contentcontrol in LocationCanvus.Children) {
@@ -115,8 +118,16 @@ namespace His_Pos.LocationManage
                 if ((LocationControl)contentcontrol.Content == selectItem)
                      deleteControl = contentcontrol;
             }
-
-            LocationCanvus.Children.Remove(deleteControl);
+            if (LocationDb.CheckProductExist(selectItem.id.ToString()))
+            {
+                LocationCanvus.Children.Remove(deleteControl);
+                LocationDb.DeleteLocation(selectItem.id.ToString());
+            }
+            else {
+                MessageWindow messageWindow = new MessageWindow("此櫃位尚有商品，無法刪除",MessageType.ERROR);
+                messageWindow.ShowDialog();
+            }
+           
         }
 
         private void ButtonCopyLocation_Click(object sender, RoutedEventArgs e)
@@ -127,7 +138,7 @@ namespace His_Pos.LocationManage
                 if ((LocationControl)contentcontrol.Content == selectItem)
                     copyControl = contentcontrol;
             }
-            NewLocation(null, "copy"+ id + selectItem.Name, copyControl.Height, copyControl.Width, Canvas.GetTop(copyControl)+30, Canvas.GetLeft(copyControl)+30);
+            NewLocation(null, selectItem.Name + "_new" + id, copyControl.Height, copyControl.Width, Canvas.GetTop(copyControl)+30, Canvas.GetLeft(copyControl)+30);
         }
     }
 }
