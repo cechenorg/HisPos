@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.AbstractClass;
+using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Class.ProductType;
 using His_Pos.Interface;
@@ -291,6 +292,9 @@ namespace His_Pos.ProductTypeManage
             {
                 ((ProductTypeManageDetail)TypeDetail.SelectedItem).Name = SmallType.Text;
                 ProductDb.UpdateProductType(((ProductTypeManageDetail)TypeDetail.SelectedItem).Id, SmallType.Text);
+
+                MessageWindow messageWindow = new MessageWindow("修改成功!", MessageType.SUCCESS);
+                messageWindow.ShowDialog();
             }
         }
     }

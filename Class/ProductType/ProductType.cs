@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.ProductType
 {
-    public class ProductType
+    public class ProductType : INotifyPropertyChanged
     {
         public ProductType() {
             Id = "";
@@ -22,6 +23,24 @@ namespace His_Pos.Class.ProductType
 
         public string Id { get; set; }
         public string Rank { get; set; }
-        public string Name { get; set; }
+        private string name;
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                name = value;
+                NotifyPropertyChanged("Name");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 }
