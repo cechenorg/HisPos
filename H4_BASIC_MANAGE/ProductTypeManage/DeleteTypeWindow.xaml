@@ -20,6 +20,6 @@
         <RadioButton Grid.Row="0" Grid.Column="1" Content="小類別" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Bottom" VerticalContentAlignment="Center" IsChecked="True"/>
         <Label Name="BigType" Grid.Row="1" Grid.Column="0" FontSize="20" Foreground="DimGray" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <Label Name="SmallType" Grid.Row="1" Grid.Column="1" FontSize="20" Foreground="DimGray" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="50" Content="確認刪除" FontFamily="Segoe UI Semibold" FontSize="25" Background="Red" BorderThickness="0" VerticalAlignment="Bottom"/>
+        <Button Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="250" Height="50" Content="確認刪除" FontFamily="Segoe UI Semibold" FontSize="25" Background="Red" BorderThickness="0" VerticalAlignment="Bottom" Click="DeleteClick"/>
     </Grid>
 </Window>

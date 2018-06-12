@@ -37,5 +37,18 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
                 SmallType.Content = detail.Name;
             }
         }
+
+        private void DeleteClick(object sender, RoutedEventArgs e)
+        {
+            if (CheckDeletable())
+            {
+                
+            }
+        }
+
+        private bool CheckDeletable()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
