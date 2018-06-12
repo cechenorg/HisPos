@@ -198,6 +198,7 @@
                                     <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                                 </Trigger>
                             </Style.Triggers>
+                            <EventSetter Event="MouseDoubleClick" Handler="ShowProductDetail"/>
                             <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="Height" Value="40"/>
                         </Style>

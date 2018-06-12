@@ -30,7 +30,6 @@ namespace His_Pos.InventoryManagement
         public double searchCount = 0;
         public ListCollectionView ProductTypeCollection;
         private ObservableCollection<Product> _dataList = new ObservableCollection<Product>();
-        public static ProductDetail productDetail = null;
         public ObservableCollection<Product> _DataList 
         {
             get { return _dataList; }
@@ -151,14 +150,14 @@ namespace His_Pos.InventoryManagement
             if (!Search.IsEnabled) return;
             var selectedItem = (sender as DataGridRow).Item;
 
-            if (productDetail is null)
+            if (ProductDetail.Instance is null)
             {
-                productDetail = new ProductDetail();
-                productDetail.Show();
+                ProductDetail newProductDetail = new ProductDetail();
+                newProductDetail.Show();
             }
 
-            productDetail.AddNewTab((Product)selectedItem);
-            productDetail.Focus();
+            ProductDetail.Instance.AddNewTab((Product)selectedItem);
+            ProductDetail.Instance.Focus();
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)

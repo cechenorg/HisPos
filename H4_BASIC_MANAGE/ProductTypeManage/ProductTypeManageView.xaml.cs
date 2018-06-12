@@ -18,6 +18,7 @@ using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
 using His_Pos.Class.ProductType;
 using His_Pos.Interface;
+using His_Pos.InventoryManagement;
 using LiveCharts;
 using LiveCharts.Wpf;
 
@@ -260,6 +261,20 @@ namespace His_Pos.ProductTypeManage
         private void LineChartRange_OnClick(object sender, RoutedEventArgs e)
         {
             UpdateLineChartUi();
+        }
+
+        private void ShowProductDetail(object sender, MouseButtonEventArgs e)
+        {
+            Product newProduct = ProductDb.GetProductById(((Product) ProductsGrid.SelectedItem).Id);
+
+            if (ProductDetail.Instance is null)
+            {
+                ProductDetail newProductDetail = new ProductDetail();
+                newProductDetail.Show();
+            }
+
+            ProductDetail.Instance.AddNewTab(newProduct);
+            ProductDetail.Instance.Focus();
         }
     }
 }

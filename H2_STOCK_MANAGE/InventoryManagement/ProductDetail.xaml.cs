@@ -64,7 +64,7 @@ namespace His_Pos.InventoryManagement
 
         private void ProductDetail_OnClosed(object sender, EventArgs e)
         {
-            InventoryManagementView.productDetail = null;
+            Instance = null;
             ((ViewModelProductDetailWindow)DataContext).ItemCollection.Clear();
         }
     }

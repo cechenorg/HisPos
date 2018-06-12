@@ -226,6 +226,29 @@ namespace His_Pos.Class.Product
             return collection;
         }
 
+        internal static AbstractClass.Product GetProductById(string id)
+        {
+            AbstractClass.Product product;
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetTypeProductDetail]", parameters);
+
+            if (table.Rows[0]["PROTYP_ID"].ToString().Equals("MED"))
+            {
+                product = new InventoryMedicine(table.Rows[0]);
+            }
+            else
+            {
+                product = new InventoryOtc(table.Rows[0]);
+            }
+
+            return product;
+        }
+
         internal static ListCollectionView GetProductType() {
             
             List<ProductType.ProductType> productTypes = new List<ProductType.ProductType>();
