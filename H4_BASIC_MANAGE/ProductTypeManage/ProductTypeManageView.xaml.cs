@@ -306,6 +306,54 @@ namespace His_Pos.ProductTypeManage
             DeleteTypeWindow deleteTypeWindow = new DeleteTypeWindow((ProductTypeManageMaster)TypeMaster.SelectedItem, (ProductTypeManageDetail)TypeDetail.SelectedItem);
             deleteTypeWindow.ShowDialog();
 
+            if(CheckDeletable(deleteTypeWindow.DeleteType))
+            {
+                if(deleteTypeWindow.DeleteType is ProductTypeManageMaster)
+                {
+                    TypeManageMasters.Remove((ProductTypeManageMaster)deleteTypeWindow.DeleteType);
+                    
+                    foreach(ProductTypeManageDetail type in TypeManageDetails)
+                    {
+                        if( type.Id == deleteTypeWindow.DeleteType.Id)
+                            TypeManageDetails.Remove(type);
+                    }
+                }
+                else
+                {
+                    TypeManageDetails.Remove((ProductTypeManageDetail)deleteTypeWindow.DeleteType);
+                }
+            }
+            
+        }
+
+        private bool CheckDeletable(ProductType deleteType)
+        {
+            if (deleteType != null)
+            {
+                if (deleteType is ProductTypeManageMaster)
+                {
+                    foreach (ProductTypeManageDetail detail in TypeDetail.Items)
+                    {
+                        if (detail.ItemCount != 0)
+                        {
+                            MessageWindow messageWindow = new MessageWindow((deleteType as ProductTypeManageMaster).Name + "以下類別之商品數須為0!", MessageType.ERROR);
+                            messageWindow.ShowDialog();
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    if ((deleteType as ProductTypeManageDetail).ItemCount != 0)
+                    {
+                        MessageWindow messageWindow = new MessageWindow((deleteType as ProductTypeManageDetail).Name + "之商品數須為0!", MessageType.ERROR);
+                        messageWindow.ShowDialog();
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -20,6 +20,11 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
     /// </summary>
     public partial class DeleteTypeWindow : Window
     {
+        public ProductType DeleteType;
+
+        private ProductTypeManageMaster Master;
+        private ProductTypeManageDetail Detail;
+
         public DeleteTypeWindow(ProductTypeManageMaster master, ProductTypeManageDetail detail = null)
         {
             InitializeComponent();
@@ -28,27 +33,22 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
 
             if (detail is null)
             {
-
-                SmallType.IsEnabled = false;
+                SmallTypeRadioButton.IsEnabled = false;
                 BigTypeRadioButton.IsChecked = true;
             }
             else
             {
                 SmallType.Content = detail.Name;
             }
+
+            Master = master;
+            Detail = detail;
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
         {
-            if (CheckDeletable())
-            {
-                
-            }
-        }
-
-        private bool CheckDeletable()
-        {
-            throw new NotImplementedException();
+            DeleteType = ((bool)BigTypeRadioButton.IsChecked) ? (ProductType)Master : (ProductType)Detail;
+            Close();
         }
     }
 }
