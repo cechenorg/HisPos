@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.ProductTypeManage"
         mc:Ignorable="d"
-        Title="DeleteTypeWindow" MinHeight="200" MaxHeight="200" MinWidth="400" MaxWidth="400" WindowStartupLocation="CenterScreen">
-    <Grid Height="150" Width="380" VerticalAlignment="Top" HorizontalAlignment="Left">
+        Title="DeleteTypeWindow" MinHeight="200" Height="200" MaxHeight="200" MinWidth="400" Width="400" MaxWidth="400" WindowStartupLocation="CenterScreen">
+    <Grid Height="160" Width="390" VerticalAlignment="Top" HorizontalAlignment="Left">
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
             <RowDefinition Height="40"/>

@@ -355,5 +355,12 @@ namespace His_Pos.ProductTypeManage
             }
             return false;
         }
+
+        private void AddTypeClick(object sender, MouseButtonEventArgs e)
+        {
+            AddTypeWindow addTypeWindow = new AddTypeWindow(TypeManageMasters);
+
+            addTypeWindow.ShowDialog();
+        }
     }
 }

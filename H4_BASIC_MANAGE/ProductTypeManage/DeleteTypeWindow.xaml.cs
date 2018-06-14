@@ -25,7 +25,7 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
         private ProductTypeManageMaster Master;
         private ProductTypeManageDetail Detail;
 
-        public DeleteTypeWindow(ProductTypeManageMaster master, ProductTypeManageDetail detail = null)
+        public DeleteTypeWindow(ProductTypeManageMaster master, ProductTypeManageDetail detail)
         {
             InitializeComponent();
 
