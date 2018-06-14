@@ -418,7 +418,7 @@ namespace His_Pos.ProductTypeManage
 
         private void AddTypeClick(object sender, MouseButtonEventArgs e)
         {
-            AddTypeWindow addTypeWindow = new AddTypeWindow(TypeManageMasters);
+            AddTypeWindow addTypeWindow = new AddTypeWindow(TypeManageMasters, (TypeMaster.SelectedItem as ProductTypeManageMaster));
 
             addTypeWindow.ShowDialog();
 

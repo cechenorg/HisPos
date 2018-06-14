@@ -25,7 +25,7 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
 
         public ProductType newProductType;
 
-        public AddTypeWindow(ObservableCollection<ProductTypeManageMaster> typeManageMasters)
+        public AddTypeWindow(ObservableCollection<ProductTypeManageMaster> typeManageMasters, ProductTypeManageMaster selected)
         {
             InitializeComponent();
 
@@ -33,7 +33,7 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
 
             TypeManageMasters = typeManageMasters;
             UpdateUi();
-            BigTypeCombo.SelectedIndex = 0;
+            BigTypeCombo.SelectedItem = selected;
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
