@@ -139,7 +139,7 @@ namespace His_Pos.LocationManage
                 if ((LocationControl)contentcontrol.Content == selectItem)
                     copyControl = contentcontrol;
             }
-            NewLocation(null, selectItem.Name + "_new" + id, copyControl.Height, copyControl.Width, Canvas.GetTop(copyControl)+30, Canvas.GetLeft(copyControl)+30);
+            NewLocation(null, selectItem.Name + "new" + id, copyControl.Height, copyControl.Width, Canvas.GetTop(copyControl)+30, Canvas.GetLeft(copyControl)+30);
         }
     }
 }

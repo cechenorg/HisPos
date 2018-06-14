@@ -26,6 +26,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
     public partial class LocationDetailWindow : Window, INotifyPropertyChanged
     {
         public static bool deactivate = true;
+        
         public Location locationDetail;
         public Location LocationDetail {
             get
@@ -73,13 +74,25 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                     }
                 }
             }
+            CheckColumnRule();
             DataContext = this;
+        }
+        private void CheckColumnRule() {
+            foreach (var grid in LocationDetails.Children)
+                if(grid is Grid)
+                {
+                    if (((Grid)grid).ColumnDefinitions.Count - 2 == 1 && ((Grid)grid).Tag.ToString() != (LocationDetails.RowDefinitions.Count - 2).ToString())
+                        (((Grid)grid).Children.OfType<Button>().ToList())[0].IsEnabled = false;
+                    else
+                        (((Grid)grid).Children.OfType<Button>().ToList())[0].IsEnabled = true;
+                }
         }
         private void MinusColumns(object sender, RoutedEventArgs e)
         {
             Grid parent = (sender as Button).TryFindParent<Grid>();
            string name =  parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
-            
+            if (parent.ColumnDefinitions.Count - 3 == 1 && parent.Tag.ToString() != (LocationDetails.RowDefinitions.Count - 2).ToString())
+                (sender as Button).IsEnabled = false;
             StackPanel removeItem = null;
             List<Button> buttons = new List<Button>();
             foreach (var obj in parent.Children)
@@ -92,7 +105,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 {
                     foreach( var lab in (obj as StackPanel).FindChildren<Label>())
                     {
-                        if((lab as Label).Content.Equals(name))
+                        if((lab as Label).Content.ToString().Contains(name))
                         {
                             removeItem = obj as StackPanel;
                             break;
@@ -103,6 +116,11 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             foreach (var label in removeItem.Children) {
                 if (label is Label) {
                     if (((Label)label).Foreground == Brushes.Yellow) {
+                        deactivate = false;
+                        MessageWindow messageWindow = new MessageWindow("此櫃位尚有商品 不可刪除",MessageType.ERROR);
+                        messageWindow.ShowDialog();
+                        deactivate = true;
+                        CheckColumnRule();
                         return;
                     }
                 }
@@ -116,6 +134,11 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             if (parent.ColumnDefinitions.Count == 10) (sender as Button).IsEnabled = false;
             LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
             LocationDb.DeleteLocationDetail(newlocationDetail);
+            if (parent.ColumnDefinitions.Count - 2 == 0) {
+                LocationDetails.RowDefinitions.RemoveAt(0);
+                LocationDetails.Children.Remove(parent);
+                CheckColumnRule();
+            }
         }
         private void AddColumns(object sender, RoutedEventArgs e)
         {
@@ -123,6 +146,9 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         }
         private void FunctionAddColumn(Grid parent = null,string name = "",object sender = null) {
             if(parent == null) parent = (sender as Button).TryFindParent<Grid>();
+            foreach (var btn in parent.Children) {
+                if (btn is Button) ((Button)btn).IsEnabled = true;
+            }
 
             parent.ColumnDefinitions.Add(new ColumnDefinition());
             StackPanel newStackPanel = new StackPanel();
@@ -162,7 +188,6 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         public void newLabelPropertyMenu_Click(object sender, RoutedEventArgs e)
         {
             deactivate = false;
-            MessageBox.Show("6666");
         }
         private Grid FunctionAddRow(string name = null,string isExist = "")
         {
@@ -215,6 +240,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 2).ToString(), "N");
                 LocationDb.UpdateLocationDetail(newlocationDetail);
             }
+            CheckColumnRule();
             return newGrid;
         }
         private void AddRows(object sender, RoutedEventArgs e)
@@ -262,15 +288,20 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         }
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            string reply = IsCheck();
-            if (reply == "") { 
-                LocationDb.UpdateLocationName(LocationDetail.id, LocationName.Text);
-            LocationManageView.Instance.InitLocation();
-            Close();
-            }
-            else{
-                MessageWindow messageWindow = new MessageWindow(reply,MessageType.ERROR);
-                messageWindow.ShowDialog();
+            if (deactivate)
+            {
+                string reply = IsCheck();
+                if (reply == "")
+                {
+                    LocationDb.UpdateLocationName(LocationDetail.id, LocationName.Text);
+                    LocationManageView.Instance.InitLocation();
+                    Close();
+                }
+                else
+                {
+                    MessageWindow messageWindow = new MessageWindow(reply, MessageType.ERROR);
+                    messageWindow.ShowDialog();
+                }
             }
         }
     }
