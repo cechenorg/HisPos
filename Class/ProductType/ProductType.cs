@@ -57,7 +57,7 @@ namespace His_Pos.Class.ProductType
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string info)
+        protected void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
             {

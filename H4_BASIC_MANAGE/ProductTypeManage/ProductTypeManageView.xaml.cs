@@ -363,10 +363,12 @@ namespace His_Pos.ProductTypeManage
             {
                 if(deleteTypeWindow.DeleteType is ProductTypeManageMaster)
                 {
+                    ProductDb.DeleteProductType(((ProductTypeManageMaster)deleteTypeWindow.DeleteType).Id);
                     TypeManageMasters.Remove((ProductTypeManageMaster)deleteTypeWindow.DeleteType);
                     
                     for( int x = 0; x < TypeDetail.Items.Count; x++ )
                     {
+                        ProductDb.DeleteProductType((TypeDetail.Items[x] as ProductTypeManageDetail).Id);
                         TypeManageDetails.Remove(TypeDetail.Items[x] as ProductTypeManageDetail);
                     }
 
@@ -376,6 +378,7 @@ namespace His_Pos.ProductTypeManage
                 else
                 {
                     ((ProductTypeManageMaster)TypeMaster.SelectedItem).TypeCount--;
+                    ProductDb.DeleteProductType(((ProductTypeManageDetail)deleteTypeWindow.DeleteType).Id);
                     TypeManageDetails.Remove((ProductTypeManageDetail)deleteTypeWindow.DeleteType);
                     UpdateDetailUi();
                 }
@@ -424,10 +427,16 @@ namespace His_Pos.ProductTypeManage
                 if(addTypeWindow.newProductType is ProductTypeManageMaster)
                 {
                     TypeManageMasters.Add(addTypeWindow.newProductType as ProductTypeManageMaster);
+                    TypeMaster.SelectedItem = addTypeWindow.newProductType;
+                    TypeMaster.ScrollIntoView(TypeMaster.SelectedItem);
                 }
                 else
                 {
+                    (TypeMaster.SelectedItem as ProductTypeManageMaster).TypeCount++;
+
                     TypeManageDetails.Add(addTypeWindow.newProductType as ProductTypeManageDetail);
+                    UpdateDetailUi();
+                    TypeDetail.SelectedItem = addTypeWindow.newProductType;
                 }
             }
         }

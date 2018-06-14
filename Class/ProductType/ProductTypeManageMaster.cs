@@ -37,14 +37,5 @@ namespace His_Pos.Class.ProductType
                 NotifyPropertyChanged("TypeCount");
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
     }
 }
