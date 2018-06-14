@@ -17,6 +17,13 @@ namespace His_Pos.Class.ProductType
             TypeCount = Int32.Parse(dataRow["COUNT"].ToString());
         }
 
+        public ProductTypeManageMaster() : base()
+        {
+            StockValue = 0;
+            Sales = 0;
+            TypeCount = 0;
+        }
+
         public double StockValue { get; set; }
         public double Sales { get; set; }
         public int TypeCount { get; set; }

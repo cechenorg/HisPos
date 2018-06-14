@@ -45,8 +45,9 @@
                                             <RowDefinition Height="30"/>
                                         </Grid.RowDefinitions>
                                         <Label Content="{Binding Name}" FontSize="28" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="20,0,0,0"/>
-                                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
-                                            <Label Content="{Binding TypeCount}" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,10,0">
+                                            <Label Content="{Binding EngName}" FontSize="18" FontFamily="Segoe UI Semi" Margin="25,0,0,0" Foreground="Red" Width="150"/>
+                                            <Label Content="{Binding TypeCount}" FontSize="18" FontFamily="Segoe UI Semi" Width="30" HorizontalContentAlignment="Right"/>
                                             <Label Content="個小類別" FontSize="18" FontFamily="Segoe UI Semi"/>
                                         </StackPanel>
                                     </Grid>
@@ -96,9 +97,10 @@
                                             <RowDefinition Height="30"/>
                                         </Grid.RowDefinitions>
                                         <Label Content="{Binding Name}" FontSize="25" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="20,0,0,0"/>
-                                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                            <Label Content="{Binding EngName}" FontSize="18" FontFamily="Segoe UI Semi" Margin="25,0,0,0" Foreground="Red" Width="120"/>
                                             <Label Content="共" FontSize="16" FontFamily="Segoe UI Semi"/>
-                                            <Label Content="{Binding ItemCount}" FontSize="16" FontFamily="Segoe UI Semi"/>
+                                            <Label Content="{Binding ItemCount}" FontSize="16" FontFamily="Segoe UI Semi" Width="50" HorizontalContentAlignment="Center"/>
                                             <Label Content="個商品" FontSize="16" FontFamily="Segoe UI Semi"/>
                                         </StackPanel>
                                     </Grid>
@@ -143,9 +145,10 @@
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
                         <StackPanel Orientation="Horizontal" Width="670">
                             <Label Name="BigType" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="20,0,0,0"/>
-                            <Label Content="-" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
+                            <TextBox Name="BigTypeEngName" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Foreground="Red" Margin="10,0,0,0"/>
+                            <Label Content="-" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,0,10,0"/>
                             <TextBox Name="SmallType" FontSize="25" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
-                            <Label Content="" FontSize="25" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                            <TextBox Name="SmallTypeEngName" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Foreground="Red" Margin="10,0,0,0"/>
                         </StackPanel>
                         <Button Margin="0,0,20,0" Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="CancelTypeChange"/>
                         <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ConfirmTypeChange"/>

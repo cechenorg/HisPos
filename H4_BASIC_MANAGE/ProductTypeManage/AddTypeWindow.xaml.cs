@@ -23,6 +23,8 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
     {
         public ObservableCollection<ProductTypeManageMaster> TypeManageMasters { get; set; }
 
+        ProductType newProductType;
+
         public AddTypeWindow(ObservableCollection<ProductTypeManageMaster> typeManageMasters)
         {
             InitializeComponent();
@@ -59,7 +61,20 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
         {
             if(CheckEmptyData())
             {
-                //if(  )
+                //if ((bool)BigTypeRadioButton.IsChecked)
+                //{
+                //    ProductTypeManageMaster productTypeManageMaster = new ProductTypeManageMaster();
+
+                //    newProductType = productTypeManageMaster;
+                //}
+                //else
+                //{
+                //    ProductTypeManageDetail productTypeManageDetail = new ProductTypeManageDetail();
+
+                //    newProductType = productTypeManageDetail;
+                //}
+
+                Close();
             }
         }
 

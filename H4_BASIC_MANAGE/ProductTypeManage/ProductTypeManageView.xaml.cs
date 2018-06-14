@@ -175,6 +175,7 @@ namespace His_Pos.ProductTypeManage
             TypeDetail.Items.Filter = item => ((ProductTypeManageDetail)item).Rank == ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id;
 
             BigType.Content = ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Name;
+            BigTypeEngName.Text = ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).EngName;
 
             PieChartPushOut();
             InitLineChart(((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id);
@@ -258,6 +259,7 @@ namespace His_Pos.ProductTypeManage
             ProductsGrid.Items.Filter = item => ((IProductType)item).TypeId == ((ProductTypeManageDetail)(sender as DataGrid).SelectedItem).Id;
 
             SmallType.Text = ((ProductTypeManageDetail) (sender as DataGrid).SelectedItem).Name;
+            SmallTypeEngName.Text = ((ProductTypeManageDetail)(sender as DataGrid).SelectedItem).EngName;
         }
 
         private void LineChartRange_OnClick(object sender, RoutedEventArgs e)

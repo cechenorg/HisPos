@@ -19,6 +19,15 @@ namespace His_Pos.Class.ProductType
             Id = row["PROTYP_ID"].ToString();
             Rank = row["PROTYP_PARENT"].ToString();
             Name = row["PROTYP_CHINAME"].ToString();
+            EngName = row["PROTYP_ENGNAME"].ToString();
+            
+        }
+
+        protected ProductType(string id, string rank, string name)
+        {
+            Id = id;
+            Rank = rank;
+            Name = name;
         }
 
         public string Id { get; set; }
@@ -31,6 +40,17 @@ namespace His_Pos.Class.ProductType
             {
                 name = value;
                 NotifyPropertyChanged("Name");
+            }
+        }
+
+        private string engName;
+        public string EngName
+        {
+            get { return engName; }
+            set
+            {
+                engName = value;
+                NotifyPropertyChanged("EngName");
             }
         }
 
