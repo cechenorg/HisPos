@@ -42,6 +42,23 @@ namespace His_Pos.Class.Product
             return collection;
         }
 
+        internal static string AddNewType(string parent, string name, string engName)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            if(parent.Equals(""))
+                parameters.Add(new SqlParameter("PARENT", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("PARENT", parent));
+            parameters.Add(new SqlParameter("CHINAME", name));
+            parameters.Add(new SqlParameter("ENGNAME", engName));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[AddNewType]", parameters);
+
+            return table.Rows[0]["ID"].ToString();
+        }
+
         internal static void GetProductTypeManage(ObservableCollection<ProductTypeManageMaster> typeManageMasters, ObservableCollection<ProductTypeManageDetail> typeManageDetails)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
@@ -264,13 +281,14 @@ namespace His_Pos.Class.Product
             return collection;
         }
 
-        internal static void UpdateProductType(string typeId, string newTypeName)
+        internal static void UpdateProductType(string typeId, string newTypeName, string newEngName)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE_ID", typeId));
             parameters.Add(new SqlParameter("TYPE_NAME", newTypeName));
+            parameters.Add(new SqlParameter("ENG_NAME", newEngName));
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[UpdateTypeName]", parameters);
         }

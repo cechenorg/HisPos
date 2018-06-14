@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.Class.Product;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,26 +13,27 @@ namespace His_Pos.Class.ProductType
     {
         public ProductType() {
             Id = "";
-            Rank = "";
+            Parent = "";
             Name = "無";
         }
         public ProductType(DataRow row) {
             Id = row["PROTYP_ID"].ToString();
-            Rank = row["PROTYP_PARENT"].ToString();
+            Parent = row["PROTYP_PARENT"].ToString();
             Name = row["PROTYP_CHINAME"].ToString();
             EngName = row["PROTYP_ENGNAME"].ToString();
             
         }
 
-        protected ProductType(string id, string rank, string name)
+        protected ProductType(string parent, string name, string engName)
         {
-            Id = id;
-            Rank = rank;
+            Id = ProductDb.AddNewType(parent, name, engName);
+            Parent = parent;
             Name = name;
+            EngName = engName;
         }
 
         public string Id { get; set; }
-        public string Rank { get; set; }
+        public string Parent { get; set; }
         private string name;
         public string Name
         {

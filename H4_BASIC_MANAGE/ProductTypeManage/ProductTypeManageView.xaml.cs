@@ -170,18 +170,35 @@ namespace His_Pos.ProductTypeManage
 
         private void TypeMaster_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if((sender as DataGrid) is null || (sender as DataGrid).SelectedItem is null) return;
+            if ((sender as DataGrid) is null || (sender as DataGrid).SelectedItem is null) return;
 
-            TypeDetail.Items.Filter = item => ((ProductTypeManageDetail)item).Rank == ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id;
+            TypeDetail.Items.Filter = item => ((ProductTypeManageDetail)item).Parent == ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id;
 
-            BigType.Content = ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Name;
+            BigType.Text = ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Name;
             BigTypeEngName.Text = ((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).EngName;
 
             PieChartPushOut();
             InitLineChart(((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id);
+            UpdateDetailUi();
+        }
 
+        private void UpdateDetailUi()
+        {
             if (TypeDetail.Items.Count != 0)
+            {
                 TypeDetail.SelectedIndex = 0;
+
+                SmallType.IsEnabled = true;
+                SmallTypeEngName.IsEnabled = true;
+            }
+            else
+            {
+                SmallType.Text = "";
+                SmallTypeEngName.Text = "";
+
+                SmallType.IsEnabled = false;
+                SmallTypeEngName.IsEnabled = false;
+            }
         }
 
         private void InitTypeTextBox(string bigTypeName)
@@ -291,13 +308,47 @@ namespace His_Pos.ProductTypeManage
 
         private void ConfirmTypeChange(object sender, RoutedEventArgs e)
         {
-            if (TypeDetail.SelectedItem != null)
+            if(CheckValidChange())
             {
-                ((ProductTypeManageDetail)TypeDetail.SelectedItem).Name = SmallType.Text;
-                ProductDb.UpdateProductType(((ProductTypeManageDetail)TypeDetail.SelectedItem).Id, SmallType.Text);
+                ((ProductTypeManageMaster)TypeMaster.SelectedItem).Name = BigType.Text;
+                ((ProductTypeManageMaster)TypeMaster.SelectedItem).EngName = BigTypeEngName.Text;
+                
+                ProductDb.UpdateProductType(((ProductTypeManageMaster)TypeMaster.SelectedItem).Id, BigType.Text, BigTypeEngName.Text);
 
+                if (TypeDetail.Items.Count != 0)
+                {
+                    ((ProductTypeManageDetail)TypeDetail.SelectedItem).Name = SmallType.Text;
+                    ((ProductTypeManageDetail)TypeDetail.SelectedItem).EngName = SmallTypeEngName.Text;
+
+                    ProductDb.UpdateProductType(((ProductTypeManageDetail)TypeDetail.SelectedItem).Id, SmallType.Text, SmallTypeEngName.Text);
+                }
+                
                 MessageWindow messageWindow = new MessageWindow("修改成功!", MessageType.SUCCESS);
                 messageWindow.ShowDialog();
+            }
+        }
+
+        private bool CheckValidChange()
+        {
+            string error = "";
+
+            if (BigTypeEngName.Text.Length != 2 || (SmallTypeEngName.Text.Length != 2 && TypeDetail.Items.Count != 0))
+                error += "英文簡碼須為2碼!";
+
+            if (BigTypeEngName.Text.Equals("") || (SmallTypeEngName.Text.Equals("") && TypeDetail.Items.Count != 0))
+                error += "名稱不可為空!";
+
+            if (BigType.Text.Equals("") || (SmallType.Text.Equals("") && TypeDetail.Items.Count != 0))
+                error += "名稱不可為空!";
+
+            if (error.Length == 0)
+                return true;
+            else
+            {
+                MessageWindow messageWindow = new MessageWindow(error, MessageType.ERROR);
+                messageWindow.ShowDialog();
+
+                return false;
             }
         }
 
@@ -314,15 +365,19 @@ namespace His_Pos.ProductTypeManage
                 {
                     TypeManageMasters.Remove((ProductTypeManageMaster)deleteTypeWindow.DeleteType);
                     
-                    foreach(ProductTypeManageDetail type in TypeManageDetails)
+                    for( int x = 0; x < TypeDetail.Items.Count; x++ )
                     {
-                        if( type.Id == deleteTypeWindow.DeleteType.Id)
-                            TypeManageDetails.Remove(type);
+                        TypeManageDetails.Remove(TypeDetail.Items[x] as ProductTypeManageDetail);
                     }
+
+                    TypeMaster.SelectedIndex = 0;
+                    TypeMaster.ScrollIntoView(TypeMaster.SelectedItem);
                 }
                 else
                 {
+                    ((ProductTypeManageMaster)TypeMaster.SelectedItem).TypeCount--;
                     TypeManageDetails.Remove((ProductTypeManageDetail)deleteTypeWindow.DeleteType);
+                    UpdateDetailUi();
                 }
             }
             
@@ -363,6 +418,18 @@ namespace His_Pos.ProductTypeManage
             AddTypeWindow addTypeWindow = new AddTypeWindow(TypeManageMasters);
 
             addTypeWindow.ShowDialog();
+
+            if(addTypeWindow.newProductType != null)
+            {
+                if(addTypeWindow.newProductType is ProductTypeManageMaster)
+                {
+                    TypeManageMasters.Add(addTypeWindow.newProductType as ProductTypeManageMaster);
+                }
+                else
+                {
+                    TypeManageDetails.Add(addTypeWindow.newProductType as ProductTypeManageDetail);
+                }
+            }
         }
     }
 }
