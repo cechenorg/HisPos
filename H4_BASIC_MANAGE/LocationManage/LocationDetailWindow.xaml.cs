@@ -90,7 +90,10 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         private void MinusColumns(object sender, RoutedEventArgs e)
         {
             Grid parent = (sender as Button).TryFindParent<Grid>();
-           string name =  parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
+            foreach (var btn in parent.Children) {
+                if (btn is Button) ((Button)btn).IsEnabled = true;
+            }
+            string name =  parent.Tag.ToString() + "-" + (parent.ColumnDefinitions.Count - 2).ToString();
             if (parent.ColumnDefinitions.Count - 3 == 1 && parent.Tag.ToString() != (LocationDetails.RowDefinitions.Count - 2).ToString())
                 (sender as Button).IsEnabled = false;
             StackPanel removeItem = null;
@@ -131,7 +134,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             }
             parent.Children.Remove(removeItem);
 
-            if (parent.ColumnDefinitions.Count == 10) (sender as Button).IsEnabled = false;
+           // if (parent.ColumnDefinitions.Count == 11) (sender as Button).IsEnabled = false;
             LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
             LocationDb.DeleteLocationDetail(newlocationDetail);
             if (parent.ColumnDefinitions.Count - 2 == 0) {
@@ -179,7 +182,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             foreach (var btn in parent.Children) {
                 if (btn is Button) {
                     Grid.SetColumn((btn as Button), ((btn as Button).Content.Equals("+")) ? parent.ColumnDefinitions.Count - 1 : parent.ColumnDefinitions.Count - 2);
-                    if (parent.ColumnDefinitions.Count == 11) ((Button)btn).IsEnabled = false;
+                    if (parent.ColumnDefinitions.Count == 11 && ((btn as Button).Content.Equals("+"))) ((Button)btn).IsEnabled = false;
                 }
             }
             LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 2).ToString(), "N");
