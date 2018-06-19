@@ -144,6 +144,8 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.櫃位管理):
                     LocationManageView.Instance.SaveLocation();
                     break;
+                case nameof(FeatureItem.員工管理):
+                    break;
                 default:
                     return;
             }
@@ -189,6 +191,9 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.供應商管理):
                     newTab = new ManufactoryManage.ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+                case nameof(FeatureItem.員工管理):
+                    newTab = new H4_BASIC_MANAGE.EmployeeManage.EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
                 default:
                     return;

@@ -222,4 +222,7 @@
   <data name="ProductTypeManage" xml:space="preserve">
     <value>商品類別管理</value>
   </data>
+  <data name="EmployeeManage" xml:space="preserve">
+    <value>員工管理</value>
+  </data>
 </root>

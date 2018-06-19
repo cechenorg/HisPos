@@ -142,6 +142,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 員工管理 的當地語系化字串。
+        /// </summary>
+        internal static string EmployeeManage {
+            get {
+                return ResourceManager.GetString("EmployeeManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 處方作業 的當地語系化字串。
         /// </summary>
         internal static string hisPrescription {

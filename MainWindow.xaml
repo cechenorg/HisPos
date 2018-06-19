@@ -17,6 +17,7 @@
     xmlns:ProductTypeManage="clr-namespace:His_Pos.ProductTypeManage"
     xmlns:ManufactoryManage="clr-namespace:His_Pos.ManufactoryManage"
     xmlns:LocationManage="clr-namespace:His_Pos.LocationManage"
+    xmlns:EmployeeManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.EmployeeManage"
     x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"   Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}" 
@@ -54,6 +55,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type ManufactoryManage:ManufactoryManage}">
             <ManufactoryManage:ManufactoryManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type EmployeeManage:EmployeeManage}">
+            <EmployeeManage:EmployeeManageView/>
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">
