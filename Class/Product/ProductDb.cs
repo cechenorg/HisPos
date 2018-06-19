@@ -15,6 +15,8 @@ using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductPurchase;
 using His_Pos.Interface;
 using His_Pos.Class.ProductType;
+using LiveCharts;
+using LiveCharts.Wpf;
 
 namespace His_Pos.Class.Product
 {
@@ -38,6 +40,23 @@ namespace His_Pos.Class.Product
             }
 
             return collection;
+        }
+
+        internal static string AddNewType(string parent, string name, string engName)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            if(parent.Equals(""))
+                parameters.Add(new SqlParameter("PARENT", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("PARENT", parent));
+            parameters.Add(new SqlParameter("CHINAME", name));
+            parameters.Add(new SqlParameter("ENGNAME", engName));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[AddNewType]", parameters);
+
+            return table.Rows[0]["ID"].ToString();
         }
 
         internal static void GetProductTypeManage(ObservableCollection<ProductTypeManageMaster> typeManageMasters, ObservableCollection<ProductTypeManageDetail> typeManageDetails)
@@ -155,6 +174,56 @@ namespace His_Pos.Class.Product
             return collection;
         }
 
+        internal static void GetProductTypeLineSeries(LineSeries yearSalesLineSeries, LineSeries lastYearSalesLineSeries, LineSeries monthSalesLineSeries, LineSeries lastMonthSalesLineSeries, string typeId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PROTYP_ID", typeId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetTypeSalesByYears]", parameters);
+
+            string thisYear = DateTime.Today.Year.ToString();
+            ChartValues <double> thisYearSales = new ChartValues<double>();
+            ChartValues<double> lastYearSales = new ChartValues<double>();
+
+            foreach (DataRow row in table.Rows)
+            {
+                if (row["MONTH"].ToString().Contains(thisYear))
+                {
+                    thisYearSales.Add(Double.Parse(row["TOTAL"].ToString()));
+                }
+                else
+                {
+                    lastYearSales.Add(Double.Parse(row["TOTAL"].ToString()));
+                }
+            }
+            yearSalesLineSeries.Values = thisYearSales;
+            lastYearSalesLineSeries.Values = lastYearSales;
+
+            parameters.Clear();
+            parameters.Add(new SqlParameter("PROTYP_ID", typeId));
+
+            table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetTypeSalesByMonths]", parameters);
+            
+            ChartValues<double> thisMonthSales = new ChartValues<double>();
+            ChartValues<double> lastYearMonthSales = new ChartValues<double>();
+
+            foreach (DataRow row in table.Rows)
+            {
+                if (row["DAY"].ToString().Contains(thisYear))
+                {
+                    thisMonthSales.Add(Double.Parse(row["TOTAL"].ToString()));
+                }
+                else
+                {
+                    lastYearMonthSales.Add(Double.Parse(row["TOTAL"].ToString()));
+                }
+            }
+            monthSalesLineSeries.Values = thisMonthSales;
+            lastMonthSalesLineSeries.Values = lastYearMonthSales;
+        }
+
         internal static ObservableCollection<StockTakingOverview> GetProductStockTakingDate(string proId)
         {
             ObservableCollection<StockTakingOverview> collection = new ObservableCollection<StockTakingOverview>();
@@ -174,6 +243,29 @@ namespace His_Pos.Class.Product
             return collection;
         }
 
+        internal static AbstractClass.Product GetProductById(string id)
+        {
+            AbstractClass.Product product;
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetTypeProductDetail]", parameters);
+
+            if (table.Rows[0]["PROTYP_ID"].ToString().Equals("MED"))
+            {
+                product = new InventoryMedicine(table.Rows[0]);
+            }
+            else
+            {
+                product = new InventoryOtc(table.Rows[0]);
+            }
+
+            return product;
+        }
+
         internal static ListCollectionView GetProductType() {
             
             List<ProductType.ProductType> productTypes = new List<ProductType.ProductType>();
@@ -188,6 +280,19 @@ namespace His_Pos.Class.Product
             collection.GroupDescriptions.Add(new PropertyGroupDescription("Rank"));
             return collection;
         }
+
+        internal static void UpdateProductType(string typeId, string newTypeName, string newEngName)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("TYPE_ID", typeId));
+            parameters.Add(new SqlParameter("TYPE_NAME", newTypeName));
+            parameters.Add(new SqlParameter("ENG_NAME", newEngName));
+
+            dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[UpdateTypeName]", parameters);
+        }
+
         internal static void UpdateProductManufactory(string productId,string manId,int orderId) {
             
         var dd = new DbConnection(Settings.Default.SQL_global);
@@ -223,6 +328,16 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("ISCOMPLETE", isComplete));
             dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[SaveStockTakingProducts]", parameters);
     }
+
+        internal static void DeleteProductType(string id)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("TYPE_ID", id));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[DeleteType]", parameters);
+        }
 
         public static void UpdateOtcDataDetail(AbstractClass.Product product,string type)
         {

@@ -299,6 +299,12 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
+    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
+      <DependentUpon>AddTypeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
+      <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HisApi\HisApiFunction.cs" />
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
@@ -425,6 +431,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\LocationManage\NewLocationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\AddTypeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
