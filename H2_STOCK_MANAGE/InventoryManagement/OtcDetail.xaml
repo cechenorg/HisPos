@@ -87,7 +87,7 @@
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Name="OtcSafeAmount" Width="95" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OtcData_TextChanged"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" >
+                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Height="49" VerticalAlignment="Top" >
                         <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Name="OtcBasicAmount" Width="95" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OtcData_TextChanged"/>
                     </StackPanel>
