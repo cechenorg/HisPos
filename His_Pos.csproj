@@ -213,9 +213,11 @@
     <Compile Include="Class\Location.cs" />
     <Compile Include="Class\LocationDb.cs" />
     <Compile Include="Class\LocationDetail.cs" />
+    <Compile Include="Class\Manufactory\ManageManufactory.cs" />
     <Compile Include="Class\Manufactory\Manufactory.cs" />
     <Compile Include="Class\Manufactory\ManufactoryChanged.cs" />
     <Compile Include="Class\Manufactory\ManufactoryDb.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryPrincipal.cs" />
     <Compile Include="Class\Manufactory\ProductDetailManufactory.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
     <Compile Include="Class\Copayment\Copayment.cs" />
