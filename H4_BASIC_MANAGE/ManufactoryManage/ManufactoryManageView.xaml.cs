@@ -59,6 +59,9 @@ namespace His_Pos.ManufactoryManage
                 PrincipalDataGrid.SelectedIndex = 0;
             else
                 PrincipalDetail.DataContext = null;
+
+            if (CurrentManufactory.ManufactoryStoreOrderOverviews is null)
+                CurrentManufactory.ManufactoryStoreOrderOverviews = ManufactoryDb.GetManufactoryStoreOrderOverview(CurrentManufactory.Id);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

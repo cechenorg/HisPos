@@ -62,6 +62,24 @@ namespace His_Pos.Class.Manufactory
             return collection;
         }
 
+        internal static ObservableCollection<ManufactoryStoreOrderOverview> GetManufactoryStoreOrderOverview(string manId)
+        {
+            ObservableCollection<ManufactoryStoreOrderOverview> collection = new ObservableCollection<ManufactoryStoreOrderOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManufactoryStoreOrderOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new ManufactoryStoreOrderOverview(row));
+            }
+
+            return collection;
+        }
+
         internal static ObservableCollection<ProductDetailManufactory> GetManufactoryCollection(string proId)
         {
             ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();

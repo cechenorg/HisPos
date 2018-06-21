@@ -28,5 +28,6 @@ namespace His_Pos.Class.Manufactory
         public string MedicalID { get; set; }
         public string Note { get; set; }
         public ObservableCollection<ManufactoryPrincipal> ManufactoryPrincipals { get; set; }
+        public ObservableCollection<ManufactoryStoreOrderOverview> ManufactoryStoreOrderOverviews { get; set; }
     }
 }

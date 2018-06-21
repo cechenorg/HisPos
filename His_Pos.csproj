@@ -218,6 +218,7 @@
     <Compile Include="Class\Manufactory\ManufactoryChanged.cs" />
     <Compile Include="Class\Manufactory\ManufactoryDb.cs" />
     <Compile Include="Class\Manufactory\ManufactoryPrincipal.cs" />
+    <Compile Include="Class\Manufactory\ManufactoryStoreOrderOverview.cs" />
     <Compile Include="Class\Manufactory\ProductDetailManufactory.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
     <Compile Include="Class\Copayment\Copayment.cs" />
