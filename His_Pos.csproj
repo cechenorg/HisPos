@@ -205,6 +205,8 @@
     <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
+    <Compile Include="Class\Employee\Employee.cs" />
+    <Compile Include="Class\Employee\EmployeeDb.cs" />
     <Compile Include="Class\HisUpload\HisUploadData.cs" />
     <Compile Include="Class\HisUpload\HisUploadDb.cs" />
     <Compile Include="Class\IcCardPay.cs" />

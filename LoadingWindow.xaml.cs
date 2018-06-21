@@ -18,6 +18,8 @@ using His_Pos.StockTaking;
 using His_Pos.StockTakingRecord;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductTypeManage;
+using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
+using His_Pos.Class.Employee;
 
 namespace His_Pos
 {
@@ -210,7 +212,32 @@ namespace His_Pos
 
 
         }
+        public void GetEmployeeData(EmployeeManageView employeeManage)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得員工資料...");
 
+                var table = EmployeeDb.GetEmployeeData();
+                
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    foreach (DataRow row in table.Rows) {
+                        employeeManage.EmployeeCollection.Add(new Employee(row));
+                    }
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    employeeManage.DataGridEmployee.SelectedIndex = 0;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+        
         public void GetStockTakingRecord(StockTakingRecordView stockTakingRecord) {
             backgroundWorker.DoWork += (s, o) =>
             {
