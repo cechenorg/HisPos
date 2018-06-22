@@ -36,6 +36,50 @@ namespace His_Pos.Class.Manufactory
             dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProMan]", parameters);
         }
 
+        internal static ObservableCollection<ManageManufactory> GetManageManufactory()
+        {
+            ObservableCollection<ManageManufactory> collection = new ObservableCollection<ManageManufactory>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManageManufactory]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                string parent = row["MAN_PARENT"].ToString();
+
+                if (parent.Equals(String.Empty) )
+                {
+                    collection.Add(new ManageManufactory(row));
+                }
+                else
+                {
+                    ManageManufactory man = collection.Where(m => m.Id.Equals(parent)).ToList()[0];
+
+                    man.ManufactoryPrincipals.Add(new ManufactoryPrincipal(row));
+                }
+            }
+
+            return collection;
+        }
+
+        internal static ObservableCollection<ManufactoryStoreOrderOverview> GetManufactoryStoreOrderOverview(string manId)
+        {
+            ObservableCollection<ManufactoryStoreOrderOverview> collection = new ObservableCollection<ManufactoryStoreOrderOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManufactoryStoreOrderOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new ManufactoryStoreOrderOverview(row));
+            }
+
+            return collection;
+        }
+
         internal static ObservableCollection<ProductDetailManufactory> GetManufactoryCollection(string proId)
         {
             ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();

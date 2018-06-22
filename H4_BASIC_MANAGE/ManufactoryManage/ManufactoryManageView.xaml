@@ -20,10 +20,11 @@
                 <Rectangle Width="1250"/>
                 <Button Content="查詢" Name="Search" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
             </StackPanel>
-            <DataGrid Grid.Column="0" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
-                      VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridBackGround}" Margin="10,10,0,10">
+            <DataGrid Name="ManageManufactoryDataGrid" Grid.Column="0" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
+                      VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridBackGround}" Margin="10,0,0,10"
+                      ItemsSource="{Binding ManageManufactories}" SelectionChanged="Manufactory_SelectionChanged">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="190">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Setter Property="Background" Value="Transparent"/>
@@ -38,19 +39,239 @@
                         </DataGridTemplateColumn.CellStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Height="70">
+                                <Grid Height="80">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
+                                    <Label Content="{Binding Name}" FontSize="25" FontFamily="Segoe UI SemiBold" Grid.Row="0" Margin="5,0,0,0"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+                                        <Label Content="{Binding Path=ManufactoryPrincipals.Count}" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                        <Label Content="位聯絡人" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                    </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <Grid Grid.Row="1" Grid.Column="1" Margin="0,10,10,10" Background="{StaticResource GridDarkerBackGround}">
-                
+            <Grid Grid.Row="1" Grid.Column="1" Margin="0,0,10,10" Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding CurrentManufactory, UpdateSourceTrigger=PropertyChanged}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="110"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="150"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <TextBox Text="{Binding Name}" FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
+                    <TextBox Text="{Binding NickName}" FontSize="30" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
+                </StackPanel>
+                <Grid Grid.Row="1" Margin="0,0,0,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
+                        <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Telphone}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
+                        <Label Content="傳真" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Fax}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
+                        <Label Content="統一編號" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding UniformNumber}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
+                        <Label Content="E-mail" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Email}" FontSize="20" Width="360" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
+                        <Label Content="健保代碼" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding MedicalID}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
+                        <Label Content="管藥證號" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding ControlMedicineID}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Margin="8">
+                        <Label Content="地址" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Address}" FontSize="20" Width="610" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                </Grid>
+                <DataGrid Name="PrincipalDataGrid" Grid.Row="2" HeadersVisibility="None" Background="{StaticResource Shadow}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"
+                          Margin="10,0,10,0" ItemsSource="{Binding ManufactoryPrincipals}" SelectionChanged="Principals_SelectionChanged">
+                    <DataGrid.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </DataGrid.ItemsPanel>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="120" Header="聯絡人" FontFamily="Segoe UI Semibold" FontSize="18" IsReadOnly="True" Binding="{Binding Name}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Name="PrincipalDetail" Grid.Row="3" Margin="10,0,10,0" Background="{StaticResource DarkShadow}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5">
+                        <TextBox Text="{Binding Name}" FontSize="35" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
+                        <TextBox Text="{Binding NickName}" FontSize="25" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
+                        <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Telphone}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
+                        <Label Content="傳真" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Fax}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="8">
+                        <Label Content="負責對象" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding ResponsibleDepartment}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
+                        <Label Content="E-mail" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Email}" FontSize="20" Width="360" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
+                        <Label Content="付款方式" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <RadioButton Content="預收" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
+                        <RadioButton Content="月結" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="貨到收" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="4" Margin="10,0,10,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label Content="備註" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                    <StackPanel Grid.Row="1" Grid.Column="0" Background="{StaticResource Shadow}">
+                        <RichTextBox Height="270" FontFamily="Segoe UI Semi" FontSize="18" VerticalScrollBarVisibility="Visible" Margin="10"/>
+                    </StackPanel>
+                    <Label Content="訂單紀錄" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                    <DataGrid Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False"
+                              Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" ItemsSource="{Binding ManufactoryStoreOrderOverviews}">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                <Setter Property="Width" Value="100"/>
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15"/>
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Height" Value="40"/>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="130" Header="訂單號" Binding="{Binding OrderId}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="150" Header="訂貨日期" Binding="{Binding OrdDate}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="100" Header="訂貨人" Binding="{Binding OrdEmp}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="150" Header="收貨日期" Binding="{Binding RecDate}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="100" Header="收貨人" Binding="{Binding RecEmp}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="100" Header="總金額" Binding="{Binding Total}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource DarkShadow}">
+                    <Rectangle Width="750"/>
+                    <Label Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                    <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0"/>
+                    <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0"/>
+                </StackPanel>
             </Grid>
         </Grid>
     </Viewbox>
