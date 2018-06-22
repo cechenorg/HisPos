@@ -109,7 +109,7 @@
                         <TextBox Text="{Binding Address}" FontSize="20" Width="610" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
                     </StackPanel>
                 </Grid>
-                <DataGrid Name="PrincipalDataGrid" Grid.Row="2" HeadersVisibility="None" Background="{StaticResource Shadow}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"
+                <DataGrid Name="PrincipalDataGrid" Grid.Row="2" HeadersVisibility="None" Background="{StaticResource DarkShadow}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"
                           Margin="10,0,10,0" ItemsSource="{Binding ManufactoryPrincipals}" SelectionChanged="Principals_SelectionChanged">
                     <DataGrid.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -127,7 +127,7 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Name="PrincipalDetail" Grid.Row="3" Margin="10,0,10,0" Background="{StaticResource DarkShadow}">
+                <Grid Name="PrincipalDetail" Grid.Row="3" Margin="10,0,10,0" Background="{StaticResource Shadow}">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -266,7 +266,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-                <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource DarkShadow}">
+                <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource Shadow}">
                     <Rectangle Width="750"/>
                     <Label Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
                     <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0"/>
