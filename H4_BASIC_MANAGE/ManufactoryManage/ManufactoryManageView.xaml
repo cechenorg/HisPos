@@ -93,8 +93,8 @@
                         <TextBox Text="{Binding UniformNumber}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
-                        <Label Content="E-mail" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Email}" FontSize="20" Width="360" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                        <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Email}" FontSize="20" Width="340" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="健保代碼" FontSize="20" FontFamily="Segoe UI Semibold"/>
@@ -117,7 +117,7 @@
                         </ItemsPanelTemplate>
                     </DataGrid.ItemsPanel>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Width="120" Header="聯絡人" FontFamily="Segoe UI Semibold" FontSize="18" IsReadOnly="True" Binding="{Binding Name}">
+                        <DataGridTextColumn Width="120" Header="負責對象" FontFamily="Segoe UI Semibold" FontSize="18" IsReadOnly="True" Binding="{Binding ResponsibleDepartment}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -142,7 +142,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5">
                         <TextBox Text="{Binding Name}" FontSize="35" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
-                        <TextBox Text="{Binding NickName}" FontSize="25" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0"/>
+                        <TextBox Text="{Binding ResponsibleDepartment}" FontSize="25" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
@@ -153,18 +153,28 @@
                         <TextBox Text="{Binding Fax}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="8">
-                        <Label Content="負責對象" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding ResponsibleDepartment}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                        <Label Content="LINE" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Line}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
-                        <Label Content="E-mail" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Email}" FontSize="20" Width="360" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
+                        <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Email}" FontSize="20" Width="335" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
+                        <Label Content="付款條件" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <RadioButton Content="預收" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
+                        <RadioButton Content="月結" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="貨到收" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="3" Margin="8">
                         <Label Content="付款方式" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <RadioButton Content="預收" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
-                        <RadioButton Content="月結" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <RadioButton Content="貨到收" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="現金" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
+                        <RadioButton Content="匯款" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="刷卡" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="支票" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <Label Content=": 票期" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Email}" FontSize="18" Width="50" FontFamily="Segoe UI Semi"/>
+                        <Label Content="個月" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="4" Margin="10,0,10,10">
@@ -269,7 +279,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource Shadow}">
                     <Rectangle Width="750"/>
                     <Label Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                    <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0"/>
+                    <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0" Click="Cancel_OnClick"/>
                     <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0"/>
                 </StackPanel>
             </Grid>

@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.Manufactory
 {
-    public class ManufactoryPrincipal
+    public class ManufactoryPrincipal : ICloneable
     {
+        private ManufactoryPrincipal() { }
+
         public ManufactoryPrincipal(DataRow row)
         {
             Id = row["MAN_ID"].ToString();
@@ -28,5 +30,22 @@ namespace His_Pos.Class.Manufactory
         public string Email { get; set; }
         public string PayType { get; set; }
         public string ResponsibleDepartment { get; set; }
+
+        public object Clone()
+        {
+            ManufactoryPrincipal newManufactoryPrincipal = new ManufactoryPrincipal
+            {
+                Id = Id,
+                Name = Name,
+                Telphone = Telphone,
+                Fax = Fax,
+                NickName = NickName,
+                Email = Email,
+                PayType = PayType,
+                ResponsibleDepartment = ResponsibleDepartment
+            };
+
+            return newManufactoryPrincipal;
+        }
     }
 }

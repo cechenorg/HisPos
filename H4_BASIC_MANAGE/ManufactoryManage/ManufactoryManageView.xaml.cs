@@ -53,8 +53,12 @@ namespace His_Pos.ManufactoryManage
 
         private void Manufactory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CurrentManufactory = (sender as DataGrid).SelectedItem as ManageManufactory;
+            CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
+            UpdateUi();
+        }
 
+        private void UpdateUi()
+        {
             if (CurrentManufactory.ManufactoryPrincipals.Count > 0)
                 PrincipalDataGrid.SelectedIndex = 0;
             else
@@ -76,6 +80,14 @@ namespace His_Pos.ManufactoryManage
         private void Principals_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PrincipalDetail.DataContext = (sender as DataGrid).SelectedItem;
+        }
+
+        private void Cancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            if(ManageManufactoryDataGrid.SelectedItem is null) return;
+
+            CurrentManufactory = (ManageManufactoryDataGrid.SelectedItem as ManageManufactory).Clone() as ManageManufactory;
+            UpdateUi();
         }
     }
 }

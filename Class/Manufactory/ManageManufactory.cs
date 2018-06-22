@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.Manufactory
 {
-    public class ManageManufactory : Manufactory
+    public class ManageManufactory : Manufactory, ICloneable
     {
+        private ManageManufactory() { }
+
         public ManageManufactory(DataRow row) : base(row, DataSource.MANUFACTORY)
         {
             NickName = row["MAN_NICKNAME"].ToString();
@@ -29,5 +31,33 @@ namespace His_Pos.Class.Manufactory
         public string Note { get; set; }
         public ObservableCollection<ManufactoryPrincipal> ManufactoryPrincipals { get; set; }
         public ObservableCollection<ManufactoryStoreOrderOverview> ManufactoryStoreOrderOverviews { get; set; }
+
+        public object Clone()
+        {
+            ManageManufactory newManageManufactory = new ManageManufactory
+            {
+                Id = Id,
+                Name = Name,
+                Address = Address,
+                Telphone = Telphone,
+                Fax = Fax,
+                NickName = NickName,
+                UniformNumber = UniformNumber,
+                Email = Email,
+                ControlMedicineID = ControlMedicineID,
+                MedicalID = MedicalID,
+                Note = Note,
+                ManufactoryStoreOrderOverviews = ManufactoryStoreOrderOverviews
+            };
+
+            newManageManufactory.ManufactoryPrincipals = new ObservableCollection<ManufactoryPrincipal>();
+
+            foreach (ManufactoryPrincipal manufactoryPrincipal in ManufactoryPrincipals)
+            {
+                newManageManufactory.ManufactoryPrincipals.Add(manufactoryPrincipal.Clone() as ManufactoryPrincipal);
+            }
+
+            return newManageManufactory;
+        }
     }
 }
