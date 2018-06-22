@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.Employee
 {
-    public class Employee
+    public class Employee : ICloneable
     {
-        public Employee(Employee employee) {
+        private Employee(Employee employee) {
             Id = employee.Id;
             Qname = employee.Qname;
             Name = employee.Name;
@@ -21,6 +21,9 @@ namespace His_Pos.Class.Employee
             Tel = employee.Tel;
             Email = employee.Email;
             StartDate = employee.StartDate;
+            UrgentContactPerson = employee.UrgentContactPerson;
+            UrgentContactPhone = employee.UrgentContactPhone;
+            PurchaseLimit = employee.PurchaseLimit;
         }
         public Employee(DataRow row)
         {
@@ -35,6 +38,9 @@ namespace His_Pos.Class.Employee
             Tel = row["EMP_TEL"].ToString();
             Email = row["EMP_EMAIL"].ToString();
             StartDate = row["EMP_STARTDATE"].ToString();
+            UrgentContactPerson = row["EMP_URGENTPERSON"].ToString();
+            UrgentContactPhone = row["EMP_URGENTPHONE"].ToString();
+            PurchaseLimit = row["EMP_PURCHASELIMIT"].ToString();
         }
         public string Id { get; set; }
         public string Qname { get; set; }
@@ -46,6 +52,14 @@ namespace His_Pos.Class.Employee
         public string Address { get; set; }
         public string Tel { get; set; }
         public string Email { get; set; }
+        public string UrgentContactPerson { get; set; }
+        public string UrgentContactPhone { get; set; }
+        public string PurchaseLimit { get; set; }
         public string StartDate { get; set; }
+
+        public object Clone()
+        {
+            return new Employee(this);
+        }
     }
 }

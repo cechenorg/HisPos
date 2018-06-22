@@ -65,7 +65,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
         public bool Checked { get; set; }
         public ObservableCollection<CustomItem> Children { get; set; }
     }
-    public Employee originEmployee;
+   
         public Employee employee;
         public Employee Employee
         {
@@ -149,14 +149,13 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
         private void DataGridEmployee_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((sender as DataGrid).SelectedItem == null) return;
-            originEmployee = new Employee((Employee)(sender as DataGrid).SelectedItem);
-            Employee = new Employee((Employee)(sender as DataGrid).SelectedItem);
+            Employee = (Employee)((Employee)(sender as DataGrid).SelectedItem).Clone();
             //richtextbox.AppendText(Employee.);
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            Employee = originEmployee;
+            Employee = EmployeeCollection.Where(emp => emp.Id == Employee.Id).ToList()[0];
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)

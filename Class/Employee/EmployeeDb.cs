@@ -33,6 +33,9 @@ namespace His_Pos.Class.Employee
             parameters.Add(new SqlParameter("EMP_TEL", employee.Tel));
             parameters.Add(new SqlParameter("EMP_EMAIL", employee.Email));
             parameters.Add(new SqlParameter("EMP_STARTDATE", Convert.ToDateTime(employee.StartDate)));
+            parameters.Add(new SqlParameter("EMP_URGENTPERSON", employee.UrgentContactPerson));
+            parameters.Add(new SqlParameter("EMP_URGENTPHONE", employee.UrgentContactPhone));
+            parameters.Add(new SqlParameter("EMP_PURCHASELIMIT", Convert.ToInt32(employee.PurchaseLimit)));
             dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[SaveEmployeeData]", parameters);
         }
     }
