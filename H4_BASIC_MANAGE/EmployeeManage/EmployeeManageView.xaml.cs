@@ -79,7 +79,6 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
                 NotifyPropertyChanged("Employee");
             }
         }
-
         public ObservableCollection<Employee> employeeCollection = new ObservableCollection<Employee>();
         public ObservableCollection<Employee> EmployeeCollection
         {
@@ -106,6 +105,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             InitializeComponent();
             GetEmployeeData();
             DataContext = this;
+            
             OC = new ObservableCollection<CustomItem>()
         {
         new CustomItem(){Name="DI", Checked=true,
@@ -150,7 +150,8 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
         {
             if ((sender as DataGrid).SelectedItem == null) return;
             Employee = (Employee)((Employee)(sender as DataGrid).SelectedItem).Clone();
-            //richtextbox.AppendText(Employee.);
+            richtextbox.Document.Blocks.Clear();
+            richtextbox.AppendText(Employee.Description);
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
@@ -163,6 +164,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             for (int i = 0; i < EmployeeCollection.Count; i++) {
                 if (EmployeeCollection[i].Id == Employee.Id) {
                     EmployeeCollection[i] = Employee;
+                    EmployeeCollection[i].Description = new TextRange(richtextbox.Document.ContentStart, richtextbox.Document.ContentEnd).Text;
                     EmployeeDb.SaveEmployeeData(Employee);
                     break;
                 }

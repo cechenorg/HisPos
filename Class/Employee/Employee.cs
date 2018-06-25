@@ -15,6 +15,7 @@ namespace His_Pos.Class.Employee
             Name = employee.Name;
             Gender = employee.Gender;
             IdNum = employee.IdNum;
+            Department = employee.Department;
             Position = employee.Position;
             Birth = employee.Birth;
             Address = employee.Address;
@@ -24,6 +25,7 @@ namespace His_Pos.Class.Employee
             UrgentContactPerson = employee.UrgentContactPerson;
             UrgentContactPhone = employee.UrgentContactPhone;
             PurchaseLimit = employee.PurchaseLimit;
+            Description = employee.Description;
         }
         public Employee(DataRow row)
         {
@@ -32,6 +34,7 @@ namespace His_Pos.Class.Employee
             Name = row["EMP_NAME"].ToString();
             Gender = row["EMP_GENDER"].ToString();
             IdNum = row["EMP_IDNUM"].ToString();
+            Department = row["EMP_DEPARTMENT"].ToString();
             Position = row["EMP_POSITION"].ToString();
             Birth = row["EMP_BIRTH"].ToString();
             Address = row["EMP_ADDR"].ToString();
@@ -41,12 +44,14 @@ namespace His_Pos.Class.Employee
             UrgentContactPerson = row["EMP_URGENTPERSON"].ToString();
             UrgentContactPhone = row["EMP_URGENTPHONE"].ToString();
             PurchaseLimit = row["EMP_PURCHASELIMIT"].ToString();
+            Description = row["EMP_DESCRIPTION"].ToString();
         }
         public string Id { get; set; }
         public string Qname { get; set; }
         public string Name { get; set; }
         public string Gender { get; set; }
         public string IdNum { get; set; }
+        public string Department { get; set; }
         public string Position { get; set; }
         public string Birth { get; set; }
         public string Address { get; set; }
@@ -56,6 +61,7 @@ namespace His_Pos.Class.Employee
         public string UrgentContactPhone { get; set; }
         public string PurchaseLimit { get; set; }
         public string StartDate { get; set; }
+        public string Description { get; set; }
 
         public object Clone()
         {

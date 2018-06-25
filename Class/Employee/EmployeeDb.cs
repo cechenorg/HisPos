@@ -27,6 +27,7 @@ namespace His_Pos.Class.Employee
             parameters.Add(new SqlParameter("EMP_QNAME", employee.Qname));
             parameters.Add(new SqlParameter("EMP_GENDER", employee.Gender));
             parameters.Add(new SqlParameter("EMP_IDNUM", employee.IdNum));
+            parameters.Add(new SqlParameter("EMP_DEPARTMENT", employee.Department));
             parameters.Add(new SqlParameter("EMP_POSITION", employee.Position));
             parameters.Add(new SqlParameter("EMP_BIRTH", Convert.ToDateTime(employee.Birth)));
             parameters.Add(new SqlParameter("EMP_ADDR", employee.Address));
@@ -36,6 +37,8 @@ namespace His_Pos.Class.Employee
             parameters.Add(new SqlParameter("EMP_URGENTPERSON", employee.UrgentContactPerson));
             parameters.Add(new SqlParameter("EMP_URGENTPHONE", employee.UrgentContactPhone));
             parameters.Add(new SqlParameter("EMP_PURCHASELIMIT", Convert.ToInt32(employee.PurchaseLimit)));
+            parameters.Add(new SqlParameter("@EMP_DESCRIPTION", employee.Description));
+            
             dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[SaveEmployeeData]", parameters);
         }
     }
