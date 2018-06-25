@@ -9,7 +9,17 @@ namespace His_Pos.Class.Manufactory
 {
     public class ManufactoryPrincipal : ICloneable
     {
-        private ManufactoryPrincipal() { }
+        public ManufactoryPrincipal()
+        {
+            Id = "";
+            Name = "";
+            NickName = "";
+            Telphone = "";
+            Fax = "";
+            Email = "";
+            PayType = "";
+            ResponsibleDepartment = "";
+        }
 
         public ManufactoryPrincipal(DataRow row)
         {

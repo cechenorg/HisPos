@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.Manufactory
 {
-    public class ManageManufactory : Manufactory, ICloneable
+    public class ManageManufactory : Manufactory, ICloneable, INotifyPropertyChanged
     {
         private ManageManufactory() { }
 
@@ -29,7 +30,16 @@ namespace His_Pos.Class.Manufactory
         public string ControlMedicineID { get; set; }
         public string MedicalID { get; set; }
         public string Note { get; set; }
-        public ObservableCollection<ManufactoryPrincipal> ManufactoryPrincipals { get; set; }
+        private ObservableCollection<ManufactoryPrincipal> manufactoryPrincipals;
+        public ObservableCollection<ManufactoryPrincipal> ManufactoryPrincipals
+        {
+            get { return manufactoryPrincipals; }
+            set
+            {
+                manufactoryPrincipals = value;
+                NotifyPropertyChanged("ManufactoryPrincipals");
+            }
+        }
         public ObservableCollection<ManufactoryStoreOrderOverview> ManufactoryStoreOrderOverviews { get; set; }
 
         public object Clone()
@@ -58,6 +68,15 @@ namespace His_Pos.Class.Manufactory
             }
 
             return newManageManufactory;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
         }
     }
 }

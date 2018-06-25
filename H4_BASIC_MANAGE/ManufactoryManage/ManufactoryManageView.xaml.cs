@@ -53,6 +53,9 @@ namespace His_Pos.ManufactoryManage
 
         private void Manufactory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews is null)
+                ((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews = ManufactoryDb.GetManufactoryStoreOrderOverview(((sender as DataGrid).SelectedItem as ManageManufactory).Id);
+            
             CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
             UpdateUi();
         }
@@ -60,12 +63,15 @@ namespace His_Pos.ManufactoryManage
         private void UpdateUi()
         {
             if (CurrentManufactory.ManufactoryPrincipals.Count > 0)
+            {
+                DelPrincipalBtn.IsEnabled = true;
                 PrincipalDataGrid.SelectedIndex = 0;
+            }
             else
+            {
+                DelPrincipalBtn.IsEnabled = false;
                 PrincipalDetail.DataContext = null;
-
-            if (CurrentManufactory.ManufactoryStoreOrderOverviews is null)
-                CurrentManufactory.ManufactoryStoreOrderOverviews = ManufactoryDb.GetManufactoryStoreOrderOverview(CurrentManufactory.Id);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -87,6 +93,22 @@ namespace His_Pos.ManufactoryManage
             if(ManageManufactoryDataGrid.SelectedItem is null) return;
 
             CurrentManufactory = (ManageManufactoryDataGrid.SelectedItem as ManageManufactory).Clone() as ManageManufactory;
+            UpdateUi();
+        }
+
+        private void AddPrincipal_OnClick(object sender, RoutedEventArgs e)
+        {
+            ManufactoryPrincipal newPrincipal = new ManufactoryPrincipal();
+
+            CurrentManufactory.ManufactoryPrincipals.Add(newPrincipal);
+            PrincipalDataGrid.SelectedItem = newPrincipal;
+            PrincipalDataGrid.ScrollIntoView(newPrincipal);
+            DelPrincipalBtn.IsEnabled = true;
+        }
+
+        private void DeletePrincipal_OnClick(object sender, RoutedEventArgs e)
+        {
+            CurrentManufactory.ManufactoryPrincipals.Remove(PrincipalDetail.DataContext as ManufactoryPrincipal);
             UpdateUi();
         }
     }

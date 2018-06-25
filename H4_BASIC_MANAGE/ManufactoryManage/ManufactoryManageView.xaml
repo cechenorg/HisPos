@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.ManufactoryManage"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <Viewbox Stretch="Fill">
@@ -65,8 +66,8 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <TextBox Text="{Binding Name}" FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
-                    <TextBox Text="{Binding NickName}" FontSize="30" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
+                    <TextBox Text="{Binding Name}" FontSize="50" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="廠商名稱" Margin="20,0,0,0" BorderThickness="0"/>
+                    <TextBox Text="{Binding NickName}" FontSize="30" Foreground="{StaticResource ForeGround}" materialDesign:HintAssist.Hint="簡稱" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="0,0,0,10">
                     <Grid.RowDefinitions>
@@ -109,24 +110,46 @@
                         <TextBox Text="{Binding Address}" FontSize="20" Width="610" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
                     </StackPanel>
                 </Grid>
-                <DataGrid Name="PrincipalDataGrid" Grid.Row="2" HeadersVisibility="None" Background="{StaticResource DarkShadow}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"
-                          Margin="10,0,10,0" ItemsSource="{Binding ManufactoryPrincipals}" SelectionChanged="Principals_SelectionChanged">
-                    <DataGrid.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </DataGrid.ItemsPanel>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="120" Header="負責對象" FontFamily="Segoe UI Semibold" FontSize="18" IsReadOnly="True" Binding="{Binding ResponsibleDepartment}">
-                            <DataGridTextColumn.ElementStyle>
-                                <Style TargetType="{x:Type TextBlock}">
-                                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                                    <Setter Property="VerticalAlignment" Value="Center"/>
-                                </Style>
-                            </DataGridTextColumn.ElementStyle>
-                        </DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource DarkShadow}" Margin="10,0,10,0">
+                    <DataGrid Name="PrincipalDataGrid" HeadersVisibility="None" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"
+                              ItemsSource="{Binding ManufactoryPrincipals}" SelectionChanged="Principals_SelectionChanged" Width="965">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                <Setter Property="Width" Value="100"/>
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="10" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15"/>
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </DataGrid.ItemsPanel>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="120" Header="負責對象" FontFamily="Segoe UI Semibold" FontSize="18" IsReadOnly="True" Binding="{Binding ResponsibleDepartment}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Width="150" Margin="10,0,0,0" Content="+ 新增負責人" FontFamily="Segoe UI Semibold" FontSize="16" Background="Gray" BorderThickness="0" Click="AddPrincipal_OnClick"/>
+                </StackPanel>
                 <Grid Name="PrincipalDetail" Grid.Row="3" Margin="10,0,10,0" Background="{StaticResource Shadow}">
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -141,8 +164,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5">
-                        <TextBox Text="{Binding Name}" FontSize="35" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
-                        <TextBox Text="{Binding ResponsibleDepartment}" FontSize="25" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0"/>
+                        <TextBox Text="{Binding Name}" FontSize="35" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="負責人姓名" Margin="20,0,0,0" BorderThickness="0"/>
+                        <TextBox Text="{Binding ResponsibleDepartment}" FontSize="25" Foreground="{StaticResource ForeGround}" materialDesign:HintAssist.Hint="負責對象" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
@@ -176,6 +199,7 @@
                         <TextBox Text="{Binding Email}" FontSize="18" Width="50" FontFamily="Segoe UI Semi"/>
                         <Label Content="個月" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     </StackPanel>
+                    <Button Name="DelPrincipalBtn" Grid.Row="0" Grid.Column="4" Width="150" Content="刪除負責人" Margin="0,0,10,0" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" HorizontalAlignment="Right" Click="DeletePrincipal_OnClick"/>
                 </Grid>
                 <Grid Grid.Row="4" Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
