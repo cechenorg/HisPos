@@ -24,6 +24,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
     /// </summary>
     public partial class EmployeeManageView : UserControl, INotifyPropertyChanged
     {
+        private bool isFirst = true;
         public ObservableCollection<CustomItem> oc;
         public ObservableCollection<CustomItem> OC
         {
@@ -152,13 +153,15 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             Employee = (Employee)((Employee)(sender as DataGrid).SelectedItem).Clone();
             richtextbox.Document.Blocks.Clear();
             richtextbox.AppendText(Employee.Description);
+            InitDataChanged();
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            Employee = EmployeeCollection.Where(emp => emp.Id == Employee.Id).ToList()[0];
+            Employee newemployee = EmployeeCollection.Where(emp => emp.Id == Employee.Id).ToList()[0];
+            Employee = (Employee)newemployee.Clone();
+            InitDataChanged();
         }
-
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 0; i < EmployeeCollection.Count; i++) {
@@ -166,6 +169,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
                     EmployeeCollection[i] = Employee;
                     EmployeeCollection[i].Description = new TextRange(richtextbox.Document.ContentStart, richtextbox.Document.ContentEnd).Text;
                     EmployeeDb.SaveEmployeeData(Employee);
+                    InitDataChanged();
                     break;
                 }
             }
@@ -192,12 +196,36 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
 
         private void Text_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Changed.Content = "ggg";
+            DataChanged();
+        }
+        private void DataChanged()
+        {
+            if (isFirst) return;
+
+            Changed.Content = "已修改";
+            Changed.Foreground = Brushes.Red;
+
+            ButtonCancel.IsEnabled = true;
+            ButtonSubmit.IsEnabled = true;
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void InitDataChanged()
         {
-            e.Handled = true;
+            Changed.Content = "未修改";
+            Changed.Foreground = Brushes.Black;
+
+            ButtonCancel.IsEnabled = false;
+            ButtonSubmit.IsEnabled = false;
+        }
+       
+        private void UserControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            isFirst = false;
+        }
+
+        private void birth_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataChanged();
         }
     }
 }
