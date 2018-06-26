@@ -113,5 +113,14 @@ namespace His_Pos.Class.Manufactory
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddNewOrderBySafeOrBasic]", parameters);
         }
+
+        internal static ManageManufactory AddNewManageManufactory()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[AddNewManageManufactory]");
+
+            return new ManageManufactory(table.Rows[0]);
+        }
     }
 }

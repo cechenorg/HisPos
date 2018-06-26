@@ -51,7 +51,9 @@ namespace His_Pos.ManufactoryManage
 
         private void Manufactory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews is null)
+            if((sender as DataGrid).SelectedItem is null) return;
+
+            if (((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews is null)
                 ((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews = ManufactoryDb.GetManufactoryStoreOrderOverview(((sender as DataGrid).SelectedItem as ManageManufactory).Id);
             
             CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
@@ -64,12 +66,12 @@ namespace His_Pos.ManufactoryManage
         {
             if (CurrentManufactory.ManufactoryPrincipals.Count > 0)
             {
-                DelPrincipalBtn.IsEnabled = true;
+                PrincipalDetail.IsEnabled = true;
                 PrincipalDataGrid.SelectedIndex = 0;
             }
             else
             {
-                DelPrincipalBtn.IsEnabled = false;
+                PrincipalDetail.IsEnabled = false;
                 PrincipalDetail.DataContext = null;
             }
         }
@@ -104,7 +106,7 @@ namespace His_Pos.ManufactoryManage
             CurrentManufactory.ManufactoryPrincipals.Add(newPrincipal);
             PrincipalDataGrid.SelectedItem = newPrincipal;
             PrincipalDataGrid.ScrollIntoView(newPrincipal);
-            DelPrincipalBtn.IsEnabled = true;
+            PrincipalDetail.IsEnabled = true;
             DataChanged();
         }
 
@@ -130,6 +132,25 @@ namespace His_Pos.ManufactoryManage
         private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             DataChanged();
+        }
+
+        private void AddManufactory_Click(object sender, MouseButtonEventArgs e)
+        {
+            ManageManufactory newManageManufactory = ManufactoryDb.AddNewManageManufactory();
+            
+            ManageManufactories.Add(newManageManufactory);
+
+            ManageManufactoryDataGrid.SelectedItem = newManageManufactory;
+            ManageManufactoryDataGrid.ScrollIntoView(newManageManufactory);
+        }
+
+        private void ConfirmChanged_OnClick(object sender, RoutedEventArgs e)
+        {
+            int index = ManageManufactoryDataGrid.SelectedIndex;
+
+            ManageManufactories[index] = CurrentManufactory;
+
+            ManageManufactoryDataGrid.SelectedIndex = index;
         }
     }
 }
