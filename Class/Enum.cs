@@ -22,7 +22,9 @@ namespace His_Pos.Class
         商品類別管理 = 7,
         櫃位管理 = 8,
         供應商管理 = 9,
-        員工管理 = 10
+        員工管理 = 10,
+        上下班打卡 = 11,
+        請假申請 = 12
     }
 
     public enum ItemType

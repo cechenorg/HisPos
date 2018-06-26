@@ -113,5 +113,71 @@ namespace His_Pos.Class.Manufactory
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddNewOrderBySafeOrBasic]", parameters);
         }
+
+        internal static ManageManufactory AddNewManageManufactory()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[AddNewManageManufactory]");
+
+            return new ManageManufactory(table.Rows[0]);
+        }
+
+        internal static void DeleteManageManufactory(string manId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manId));
+
+            dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[DeleteManageManufactory]", parameters);
+        }
+
+        internal static void UpdateManageManufactory(ManageManufactory manufactory)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ID", manufactory.Id));
+            parameters.Add(new SqlParameter("NAME", manufactory.Name));
+            parameters.Add(new SqlParameter("NICKNAME", manufactory.NickName));
+            parameters.Add(new SqlParameter("ADDR", manufactory.Address));
+            parameters.Add(new SqlParameter("TEL", manufactory.Telphone));
+            parameters.Add(new SqlParameter("FAX", manufactory.Fax));
+            parameters.Add(new SqlParameter("EIN", manufactory.UniformNumber));
+            parameters.Add(new SqlParameter("EMAIL", manufactory.Email));
+            parameters.Add(new SqlParameter("CONTROL", manufactory.ControlMedicineID));
+            parameters.Add(new SqlParameter("MEDICAL", manufactory.MedicalID));
+            parameters.Add(new SqlParameter("NOTE", manufactory.Note));
+            parameters.Add(new SqlParameter("PARENT", DBNull.Value));
+            parameters.Add(new SqlParameter("RESDEP", DBNull.Value));
+            parameters.Add(new SqlParameter("LINE", DBNull.Value));
+
+            dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
+
+            foreach (var principal in manufactory.ManufactoryPrincipals)
+            {
+                parameters.Clear();
+                if( principal.Id.Equals("") )
+                    parameters.Add(new SqlParameter("ID", DBNull.Value));
+                else
+                    parameters.Add(new SqlParameter("ID", principal.Id));
+                parameters.Add(new SqlParameter("NAME", principal.Name));
+                parameters.Add(new SqlParameter("NICKNAME", principal.NickName));
+                parameters.Add(new SqlParameter("ADDR", DBNull.Value));
+                parameters.Add(new SqlParameter("TEL", principal.Telphone));
+                parameters.Add(new SqlParameter("FAX", principal.Fax));
+                parameters.Add(new SqlParameter("EIN", DBNull.Value));
+                parameters.Add(new SqlParameter("EMAIL", principal.Email));
+                parameters.Add(new SqlParameter("CONTROL", DBNull.Value));
+                parameters.Add(new SqlParameter("MEDICAL", DBNull.Value));
+                parameters.Add(new SqlParameter("NOTE", DBNull.Value));
+                parameters.Add(new SqlParameter("PARENT", manufactory.Id));
+                parameters.Add(new SqlParameter("RESDEP", principal.ResponsibleDepartment));
+                parameters.Add(new SqlParameter("LINE", DBNull.Value));
+
+                dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
+            }
+        }
     }
 }
