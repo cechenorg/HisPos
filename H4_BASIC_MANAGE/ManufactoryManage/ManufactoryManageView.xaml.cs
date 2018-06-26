@@ -23,6 +23,8 @@ namespace His_Pos.ManufactoryManage
     /// </summary>
     public partial class ManufactoryManageView : UserControl, INotifyPropertyChanged
     {
+        private bool isFirst = true;
+
         public ManageManufactory currentManufactory;
         public ManageManufactory CurrentManufactory
         {
@@ -40,7 +42,6 @@ namespace His_Pos.ManufactoryManage
             InitializeComponent();
             DataContext = this;
             InitManufactory();
-            
         }
 
         private void InitManufactory()
@@ -52,14 +53,13 @@ namespace His_Pos.ManufactoryManage
         private void Manufactory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if((sender as DataGrid).SelectedItem is null) return;
-
+            
             if (((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews is null)
                 ((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews = ManufactoryDb.GetManufactoryStoreOrderOverview(((sender as DataGrid).SelectedItem as ManageManufactory).Id);
             
             CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
             UpdateUi();
             InitDataChanged();
-
         }
 
         private void UpdateUi()
@@ -87,7 +87,11 @@ namespace His_Pos.ManufactoryManage
 
         private void Principals_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            bool isChanged = IsChangedLbl.Content.Equals("已修改");
+
             PrincipalDetail.DataContext = (sender as DataGrid).SelectedItem;
+
+            if (!isChanged) InitDataChanged();
         }
 
         private void Cancel_OnClick(object sender, RoutedEventArgs e)
@@ -119,14 +123,22 @@ namespace His_Pos.ManufactoryManage
 
         private void DataChanged()
         {
+            if (isFirst) return;
+
             IsChangedLbl.Content = "已修改";
             IsChangedLbl.Foreground = Brushes.Red;
+
+            ConfirmBtn.IsEnabled = true;
+            CancelBtn.IsEnabled = true;
         }
 
         private void InitDataChanged()
         {
             IsChangedLbl.Content = "未修改";
             IsChangedLbl.Foreground = Brushes.Black;
+
+            ConfirmBtn.IsEnabled = false;
+            CancelBtn.IsEnabled = false;
         }
 
         private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -165,6 +177,11 @@ namespace His_Pos.ManufactoryManage
 
             ManageManufactoryDataGrid.SelectedIndex = 0;
             ManageManufactoryDataGrid.ScrollIntoView(ManageManufactoryDataGrid.SelectedItem);
+        }
+
+        private void ManufactoryManageView_GotFocus(object sender, RoutedEventArgs e)
+        {
+            isFirst = false;
         }
     }
 }

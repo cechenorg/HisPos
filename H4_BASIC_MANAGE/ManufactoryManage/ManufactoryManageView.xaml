@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.ManufactoryManage"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365">
+             d:DesignHeight="839" d:DesignWidth="1365" GotFocus="ManufactoryManageView_GotFocus">
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
@@ -310,8 +310,8 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource Shadow}">
                     <Rectangle Width="750"/>
                     <Label Name="IsChangedLbl" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                    <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0" Click="Cancel_OnClick"/>
-                    <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ConfirmChanged_OnClick"/>
+                    <Button Name="CancelBtn" Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0" Click="Cancel_OnClick"/>
+                    <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ConfirmChanged_OnClick"/>
                 </StackPanel>
             </Grid>
         </Grid>
