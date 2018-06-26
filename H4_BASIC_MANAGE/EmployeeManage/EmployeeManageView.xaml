@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.EmployeeManage"
              mc:Ignorable="d" 
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
+             Loaded="UserControl_Loaded"
              d:DesignHeight="839" d:DesignWidth="1365">
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
@@ -58,8 +59,8 @@
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                         <Image Source="/Images/Plus.png" Margin="10,0,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
-                        <Rectangle Width="200"/>
-                        <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif"  Visibility="Hidden"/>
+                        <Rectangle Width="190"/>
+                        <Image Source="/Images/Delete.png" Margin="10,0,0,0" Name="ButtonDelete" MouseLeftButtonDown="ButtonDelete_MouseLeftButtonDown"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Column="1" Background="{StaticResource GridDarkerBackGround}" Margin="0,0,10,10">
@@ -99,7 +100,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" >
                             <Label  Content="姓名:" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
-                            <TextBox Name="OtcBasicAmount" Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="95" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,25,10"/>
+                            <TextBox  Name="EmployeeName" Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=Explicit}" Width="95" Foreground="Black" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,25,10"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" >
                             <Label  Content="生日" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
@@ -146,9 +147,13 @@
                             <Label  Content="緊急聯絡人電話" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
                             <TextBox Width="180" Text="{Binding Employee.UrgentContactPhone,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,15,10"/>
                         </StackPanel>
-                        <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="5" Grid.Row="3" Grid.Column="0" Margin="0,0,10,10">
+                        <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="3" Grid.Row="3" Grid.Column="0" Margin="0,0,10,10">
                             <Label  Content="住址" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
                             <TextBox Width="500" Text="{Binding Employee.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="0,0,25,10"/>
+                        </StackPanel>
+                        <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="5" Grid.Row="3" Grid.Column="4" Margin="0,0,10,10">
+                            <Rectangle Width="80"/>
+                            <Label  Name="Changed" Content="未修改" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="5" Grid.Row="4" Grid.Column="0" Margin="10,0,10,10">
                             <RichTextBox Name="richtextbox" FontSize="15" Width="880">

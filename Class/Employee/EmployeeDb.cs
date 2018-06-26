@@ -17,7 +17,7 @@ namespace His_Pos.Class.Employee
             var dd = new DbConnection(Settings.Default.SQL_global);
             return dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetEmployeeData]");
         }
-        internal static void SaveEmployeeData(Employee employee)
+        internal static DataTable SaveEmployeeData(Employee employee)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
@@ -39,7 +39,14 @@ namespace His_Pos.Class.Employee
             parameters.Add(new SqlParameter("EMP_PURCHASELIMIT", Convert.ToInt32(employee.PurchaseLimit)));
             parameters.Add(new SqlParameter("@EMP_DESCRIPTION", employee.Description));
             
-            dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[SaveEmployeeData]", parameters);
+           return dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[SaveEmployeeData]", parameters);
+        }
+        internal static void DeleteEmployeeData(Employee employee)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMP_ID", employee.Id));
+            dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[DeleteEmployeeData]", parameters);
         }
     }
 }

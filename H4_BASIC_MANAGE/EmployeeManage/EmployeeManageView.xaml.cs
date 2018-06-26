@@ -174,8 +174,30 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int count = EmployeeCollection.Count;
-            EmployeeCollection.Add(new Employee(++count));
-            DataGridEmployee.SelectedIndex = count-1;
+            Employee employee = new Employee();
+           var table = EmployeeDb.SaveEmployeeData(employee);
+            employee.Id = table.Rows[0][0].ToString();
+            EmployeeCollection.Add(employee);
+
+            DataGridEmployee.SelectedIndex = count;
+        }
+
+        private void ButtonDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DataGridEmployee.SelectedItem == null) return;
+            EmployeeDb.DeleteEmployeeData((Employee)DataGridEmployee.SelectedItem);
+            EmployeeCollection.Remove((Employee)DataGridEmployee.SelectedItem);
+            DataGridEmployee.SelectedIndex = EmployeeCollection.Count-1;
+        }
+
+        private void Text_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Changed.Content = "ggg";
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }
