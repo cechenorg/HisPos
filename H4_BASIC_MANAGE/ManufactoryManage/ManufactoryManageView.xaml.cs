@@ -151,6 +151,8 @@ namespace His_Pos.ManufactoryManage
             ManageManufactories[index] = CurrentManufactory;
 
             ManageManufactoryDataGrid.SelectedIndex = index;
+
+            ManufactoryDb.UpdateManageManufactory(CurrentManufactory);
         }
 
         private void DeleteManufactory_Click(object sender, MouseButtonEventArgs e)

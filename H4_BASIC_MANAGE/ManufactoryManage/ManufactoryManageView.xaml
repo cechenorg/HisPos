@@ -21,9 +21,9 @@
                 <Rectangle Width="1250"/>
                 <Button Content="查詢" Name="Search" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
+            <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                 <DataGrid Name="ManageManufactoryDataGrid" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
-                      VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridBackGround}" Margin="10,0,0,0"
+                      VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="Transparent"
                       ItemsSource="{Binding ManageManufactories}" SelectionChanged="Manufactory_SelectionChanged" Height="729">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="190">
@@ -57,7 +57,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Height="50" Margin="10,0,0,0">
+                <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Height="50">
                     <Image Source="/Images/Plus.png" Width="35" Margin="5,0,0,0" HorizontalAlignment="Left" MouseLeftButtonDown="AddManufactory_Click"/>
                     <Rectangle Width="115"/>
                     <Image Source="/Images/Delete.png" Width="30" MouseLeftButtonDown="DeleteManufactory_Click"/>
