@@ -152,5 +152,17 @@ namespace His_Pos.ManufactoryManage
 
             ManageManufactoryDataGrid.SelectedIndex = index;
         }
+
+        private void DeleteManufactory_Click(object sender, MouseButtonEventArgs e)
+        {
+            ManageManufactory manufactory = ManageManufactoryDataGrid.SelectedItem as ManageManufactory;
+
+            ManufactoryDb.DeleteManageManufactory(manufactory.Id);
+
+            ManageManufactories.Remove(manufactory);
+
+            ManageManufactoryDataGrid.SelectedIndex = 0;
+            ManageManufactoryDataGrid.ScrollIntoView(ManageManufactoryDataGrid.SelectedItem);
+        }
     }
 }

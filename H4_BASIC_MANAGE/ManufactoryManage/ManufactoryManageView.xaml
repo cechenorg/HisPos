@@ -57,8 +57,10 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Background="{StaticResource GridDarkerBackGround}" Height="50" Margin="10,0,0,0">
-                    <Image Source="/Images/Plus.png" Width="35" Margin="5,8,0,0" HorizontalAlignment="Left" MouseLeftButtonDown="AddManufactory_Click"/>
+                <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Height="50" Margin="10,0,0,0">
+                    <Image Source="/Images/Plus.png" Width="35" Margin="5,0,0,0" HorizontalAlignment="Left" MouseLeftButtonDown="AddManufactory_Click"/>
+                    <Rectangle Width="115"/>
+                    <Image Source="/Images/Delete.png" Width="30" MouseLeftButtonDown="DeleteManufactory_Click"/>
                 </StackPanel>
             </StackPanel>
             <Grid Grid.Row="1" Grid.Column="1" Margin="0,0,10,10" Background="{StaticResource GridDarkerBackGround}" DataContext="{Binding CurrentManufactory, UpdateSourceTrigger=PropertyChanged}">

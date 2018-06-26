@@ -122,5 +122,15 @@ namespace His_Pos.Class.Manufactory
 
             return new ManageManufactory(table.Rows[0]);
         }
+
+        internal static void DeleteManageManufactory(string manId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manId));
+
+            dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[DeleteManageManufactory]", parameters);
+        }
     }
 }
