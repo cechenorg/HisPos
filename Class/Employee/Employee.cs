@@ -9,6 +9,24 @@ namespace His_Pos.Class.Employee
 {
     public class Employee : ICloneable
     {
+        public Employee(int id) {
+            Id = id.ToString();
+            Qname = "";
+            Name = "新人";
+            Gender = "";
+            IdNum = "";
+            Department = "";
+            Position = "";
+            Birth = DateTime.Now.ToString();
+            Address = "";
+            Tel = "";
+            Email = "";
+            StartDate = DateTime.Now.ToString();
+            UrgentContactPerson = "";
+            UrgentContactPhone = "";
+            PurchaseLimit = "3000";
+            Description = "";
+        }
         private Employee(Employee employee) {
             Id = employee.Id;
             Qname = employee.Qname;

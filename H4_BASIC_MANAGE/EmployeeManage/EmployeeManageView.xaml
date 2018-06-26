@@ -57,7 +57,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
-                        <Image Source="/Images/Plus.png" Margin="10,0,0,0"/>
+                        <Image Source="/Images/Plus.png" Margin="10,0,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
                         <Rectangle Width="200"/>
                         <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif"  Visibility="Hidden"/>
                     </StackPanel>

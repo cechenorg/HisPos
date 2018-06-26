@@ -170,5 +170,12 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
                 }
             }
         }
+
+        private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int count = EmployeeCollection.Count;
+            EmployeeCollection.Add(new Employee(++count));
+            DataGridEmployee.SelectedIndex = count-1;
+        }
     }
 }
