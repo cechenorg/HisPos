@@ -225,4 +225,13 @@
   <data name="EmployeeManage" xml:space="preserve">
     <value>員工管理</value>
   </data>
+  <data name="Attend" xml:space="preserve">
+    <value>打卡及請假</value>
+  </data>
+  <data name="ClockIn" xml:space="preserve">
+    <value>上下班打卡</value>
+  </data>
+  <data name="Leave" xml:space="preserve">
+    <value>請假申請</value>
+  </data>
 </root>

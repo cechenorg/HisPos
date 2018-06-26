@@ -18,6 +18,8 @@
     xmlns:ManufactoryManage="clr-namespace:His_Pos.ManufactoryManage"
     xmlns:LocationManage="clr-namespace:His_Pos.LocationManage"
     xmlns:EmployeeManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.EmployeeManage"
+    xmlns:ClockIn="clr-namespace:His_Pos.H5_ATTEND.ClockIn"
+    xmlns:Leave="clr-namespace:His_Pos.H5_ATTEND.Leave"
     x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"   Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}" 
@@ -59,6 +61,12 @@
         <DataTemplate DataType="{x:Type EmployeeManage:EmployeeManage}">
             <EmployeeManage:EmployeeManageView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type ClockIn:ClockIn}">
+            <ClockIn:ClockInView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type Leave:Leave}">
+            <Leave:LeaveView/>
+        </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid Name="MainGrid">
@@ -78,6 +86,7 @@
                         <menuusercontrol:UserControl1 Name="HisFeature2" MouseDown="FeatureMouseDown"/>
                         <menuusercontrol:UserControl1 Name="HisFeature3" MouseDown="FeatureMouseDown"/>
                         <menuusercontrol:UserControl1 Name="HisFeature4" MouseDown="FeatureMouseDown"/>
+                        <menuusercontrol:UserControl1 Name="HisFeature5" MouseDown="FeatureMouseDown"/>
                     </StackPanel>
                 </ScrollViewer>
                 <ScrollViewer Name="PosMenu" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">

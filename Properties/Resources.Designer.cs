@@ -61,6 +61,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 打卡及請假 的當地語系化字串。
+        /// </summary>
+        internal static string Attend {
+            get {
+                return ResourceManager.GetString("Attend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 請選擇調劑案件(案件分類) 的當地語系化字串。
         /// </summary>
         internal static string CaseCategoryNull {
@@ -93,6 +102,15 @@ namespace His_Pos.Properties {
         internal static string ChronicSequenceNull {
             get {
                 return ResourceManager.GetString("ChronicSequenceNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 上下班打卡 的當地語系化字串。
+        /// </summary>
+        internal static string ClockIn {
+            get {
+                return ResourceManager.GetString("ClockIn", resourceCulture);
             }
         }
         
@@ -192,6 +210,15 @@ namespace His_Pos.Properties {
         internal static string InstitutionIdError {
             get {
                 return ResourceManager.GetString("InstitutionIdError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 請假申請 的當地語系化字串。
+        /// </summary>
+        internal static string Leave {
+            get {
+                return ResourceManager.GetString("Leave", resourceCulture);
             }
         }
         
