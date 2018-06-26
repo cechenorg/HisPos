@@ -38,11 +38,9 @@ namespace His_Pos.ManufactoryManage
         public ManufactoryManageView()
         {
             InitializeComponent();
-
-            InitManufactory();
-
-
             DataContext = this;
+            InitManufactory();
+            
         }
 
         private void InitManufactory()
@@ -58,6 +56,8 @@ namespace His_Pos.ManufactoryManage
             
             CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
             UpdateUi();
+            InitDataChanged();
+
         }
 
         private void UpdateUi()
@@ -94,6 +94,7 @@ namespace His_Pos.ManufactoryManage
 
             CurrentManufactory = (ManageManufactoryDataGrid.SelectedItem as ManageManufactory).Clone() as ManageManufactory;
             UpdateUi();
+            InitDataChanged();
         }
 
         private void AddPrincipal_OnClick(object sender, RoutedEventArgs e)
@@ -104,12 +105,31 @@ namespace His_Pos.ManufactoryManage
             PrincipalDataGrid.SelectedItem = newPrincipal;
             PrincipalDataGrid.ScrollIntoView(newPrincipal);
             DelPrincipalBtn.IsEnabled = true;
+            DataChanged();
         }
 
         private void DeletePrincipal_OnClick(object sender, RoutedEventArgs e)
         {
             CurrentManufactory.ManufactoryPrincipals.Remove(PrincipalDetail.DataContext as ManufactoryPrincipal);
             UpdateUi();
+            DataChanged();
+        }
+
+        private void DataChanged()
+        {
+            IsChangedLbl.Content = "已修改";
+            IsChangedLbl.Foreground = Brushes.Red;
+        }
+
+        private void InitDataChanged()
+        {
+            IsChangedLbl.Content = "未修改";
+            IsChangedLbl.Foreground = Brushes.Black;
+        }
+
+        private void TextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            DataChanged();
         }
     }
 }
