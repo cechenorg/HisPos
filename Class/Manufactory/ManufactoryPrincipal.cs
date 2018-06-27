@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -40,6 +41,8 @@ namespace His_Pos.Class.Manufactory
         public string Email { get; set; }
         public string PayType { get; set; }
         public string ResponsibleDepartment { get; set; }
+        public ObservableCollection<ManufactoryGetOverview> ManufactoryGetOverviews { get; set; }
+        public ObservableCollection<ManufactoryPayOverview> ManufactoryPayOverviews { get; set; }
 
         public object Clone()
         {
@@ -52,7 +55,9 @@ namespace His_Pos.Class.Manufactory
                 NickName = NickName,
                 Email = Email,
                 PayType = PayType,
-                ResponsibleDepartment = ResponsibleDepartment
+                ResponsibleDepartment = ResponsibleDepartment,
+                ManufactoryGetOverviews = ManufactoryGetOverviews,
+                ManufactoryPayOverviews = ManufactoryPayOverviews
             };
 
             return newManufactoryPrincipal;

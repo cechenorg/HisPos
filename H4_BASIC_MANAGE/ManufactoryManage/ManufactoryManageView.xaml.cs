@@ -54,9 +54,6 @@ namespace His_Pos.ManufactoryManage
         {
             if((sender as DataGrid).SelectedItem is null) return;
             
-            if (((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews is null)
-                ((sender as DataGrid).SelectedItem as ManageManufactory).ManufactoryStoreOrderOverviews = ManufactoryDb.GetManufactoryStoreOrderOverview(((sender as DataGrid).SelectedItem as ManageManufactory).Id);
-            
             CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
             UpdateUi();
             InitDataChanged();
@@ -87,7 +84,15 @@ namespace His_Pos.ManufactoryManage
 
         private void Principals_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if ((sender as DataGrid).SelectedItem is null) return;
+
             bool isChanged = IsChangedLbl.Content.Equals("已修改");
+
+            if (((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryGetOverviews is null)
+                ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryGetOverviews = ManufactoryDb.GetManufactoryGetOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
+
+            if (((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews is null)
+                ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews = ManufactoryDb.GetManufactoryPayOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
 
             PrincipalDetail.DataContext = (sender as DataGrid).SelectedItem;
 

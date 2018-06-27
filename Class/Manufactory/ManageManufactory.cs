@@ -40,7 +40,6 @@ namespace His_Pos.Class.Manufactory
                 NotifyPropertyChanged("ManufactoryPrincipals");
             }
         }
-        public ObservableCollection<ManufactoryStoreOrderOverview> ManufactoryStoreOrderOverviews { get; set; }
 
         public object Clone()
         {
@@ -56,8 +55,7 @@ namespace His_Pos.Class.Manufactory
                 Email = Email,
                 ControlMedicineID = ControlMedicineID,
                 MedicalID = MedicalID,
-                Note = Note,
-                ManufactoryStoreOrderOverviews = ManufactoryStoreOrderOverviews
+                Note = Note
             };
 
             newManageManufactory.ManufactoryPrincipals = new ObservableCollection<ManufactoryPrincipal>();

@@ -62,19 +62,37 @@ namespace His_Pos.Class.Manufactory
             return collection;
         }
 
-        internal static ObservableCollection<ManufactoryStoreOrderOverview> GetManufactoryStoreOrderOverview(string manId)
+        internal static ObservableCollection<ManufactoryPayOverview> GetManufactoryPayOverview(string manId)
         {
-            ObservableCollection<ManufactoryStoreOrderOverview> collection = new ObservableCollection<ManufactoryStoreOrderOverview>();
+            ObservableCollection<ManufactoryPayOverview> collection = new ObservableCollection<ManufactoryPayOverview>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", manId));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManufactoryStoreOrderOverview]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManufactoryPayOverview]", parameters);
 
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new ManufactoryStoreOrderOverview(row));
+                collection.Add(new ManufactoryPayOverview(row));
+            }
+
+            return collection;
+        }
+
+        internal static ObservableCollection<ManufactoryGetOverview> GetManufactoryGetOverview(string manId)
+        {
+            ObservableCollection<ManufactoryGetOverview> collection = new ObservableCollection<ManufactoryGetOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManufactoryGetOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new ManufactoryGetOverview(row));
             }
 
             return collection;
