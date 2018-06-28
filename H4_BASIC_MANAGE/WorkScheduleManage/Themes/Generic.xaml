@@ -8,10 +8,10 @@
     <Converters:DateConverter x:Key="DateConverter"></Converters:DateConverter>
     <Converters:DayBorderColorConverter x:Key="DayBorderColorConverter"></Converters:DayBorderColorConverter> 
            
-    <Style TargetType="{x:Type Jarloo:Calendar}">
+    <Style TargetType="{x:Type Calendar}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Jarloo:Calendar}">
+                <ControlTemplate TargetType="{x:Type Calendar}">
 
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"

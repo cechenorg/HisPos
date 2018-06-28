@@ -169,7 +169,8 @@
                     <Brush x:Key="LightForeGround">#B2EEEEEE</Brush>
                     <Brush x:Key="ForeGround">#FF424040</Brush>
                     <Brush x:Key="GridSelected">#33009DF7</Brush>
-          </ResourceDictionary>
+                </ResourceDictionary>
+                <ResourceDictionary Source="C:\Users\PC\Source\Repos\HisPos\H4_BASIC_MANAGE\WorkScheduleManage\Themes\Generic.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>
