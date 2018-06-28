@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.EmployeeManage"
              mc:Ignorable="d" 
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
-             d:DesignHeight="839" d:DesignWidth="1365">
+             d:DesignHeight="839" d:DesignWidth="1365" GotFocus="UserControl_GotFocus">
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
@@ -58,8 +58,8 @@
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}">
                         <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
-                        <Rectangle Width="200"/>
-                        <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif"  Visibility="Hidden"/>
+                        <Rectangle Width="190"/>
+                        <Image Source="/Images/Delete.png" Margin="10,0,0,0" Name="ButtonDelete" MouseLeftButtonDown="ButtonDelete_MouseLeftButtonDown"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Column="1" Background="{StaticResource GridDarkerBackGround}" Margin="0,0,10,10">
