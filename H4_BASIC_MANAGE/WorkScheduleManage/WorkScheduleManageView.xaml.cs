@@ -20,42 +20,86 @@ namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
     /// </summary>
     public partial class WorkScheduleManageView : UserControl
     {
+        class Time
+        {
+           public Time(DateTime date)
+            {
+                Year = date.Year;
+                Month = date.Month;
+                Day = date.Day;
+            }
+            public  int Year;
+            public int Month;
+            public int Day;
+        }
+        private Time selectDateTime = new Time(DateTime.Now);
         public WorkScheduleManageView()
         {
             InitializeComponent();
-            List<string> months = new List<string> { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
-            cboMonth.ItemsSource = months;
-
-            for (int i = -50; i < 50; i++)
+            InitBasicData();
+            InitCalendar(selectDateTime);
+        }
+        private void InitBasicData() {
+            List<string> days = new List<string> { "禮拜日", "禮拜一", "禮拜二", "禮拜三", "禮拜四", "禮拜五", "禮拜六" };
+            List<string> months = new List<string> { "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
+            List<string> years = new List<string>();
+            int thisyear = DateTime.Now.Year;
+            thisyear -= 50;
+            for (int i = 0; i < 100; i++)
             {
-                cboYear.Items.Add(DateTime.Today.AddYears(i).Year);
+                years.Add(thisyear.ToString());
+                thisyear++;
             }
-
-            cboMonth.SelectedItem = months.FirstOrDefault(w => w == DateTime.Today.ToString("MMMM"));
-            cboYear.SelectedItem = DateTime.Today.Year;
-
-            cboMonth.SelectionChanged += (o, e) => RefreshCalendar();
-            cboYear.SelectionChanged += (o, e) => RefreshCalendar();
+            WeekHeader.ItemsSource = days;
+            comboMonth.ItemsSource = months;
+            comboYear.ItemsSource = years;
         }
-        private void RefreshCalendar()
+        private void InitCalendar(Time selectDateTime) {
+            GridCalendar.Children.Clear();
+            DateTime TheMonthStart = new DateTime(selectDateTime.Year, selectDateTime.Month, 1);
+            DateTime TheMonthEnd = new DateTime(selectDateTime.Year, selectDateTime.Month, DateTime.DaysInMonth(selectDateTime.Year, selectDateTime.Month));
+            int wcount = 1;
+            Grid week = NewRow("0");
+            GridCalendar.Children.Add(week);
+            Grid.SetRow(week,0);
+            Day day;
+            while (TheMonthStart != TheMonthEnd.AddDays(1)) {
+                string today = TheMonthStart.DayOfWeek.ToString("d");
+                if (today == "0" && TheMonthStart.Day.ToString() != "1")
+                {
+                    week = NewRow(wcount.ToString());
+                    GridCalendar.Children.Add(week);
+                    Grid.SetRow(week,wcount);
+                    wcount++;
+                }
+                day = NewDay(TheMonthStart.Day.ToString());
+                week.Children.Add(day);
+                Grid.SetColumn(day,Convert.ToInt32(today));
+                TheMonthStart = TheMonthStart.AddDays(1);
+            }
+        }
+        private Day NewDay(string id) {
+           Day day = new Day(id);
+            return day;
+        }
+        private Grid NewRow(string id) {
+            Grid newGrid = new Grid();
+            newGrid.Name = "row" + id;
+            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            return newGrid;
+        }
+
+        private void comboMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cboYear.SelectedItem == null) return;
-            if (cboMonth.SelectedItem == null) return;
-
-            int year = (int)cboYear.SelectedItem;
-
-            int month = cboMonth.SelectedIndex + 1;
-
-            DateTime targetDate = new DateTime(year, month, 1);
-
-            Calendar.BuildCalendar(targetDate);
+            if (comboMonth.SelectedItem == null) return;
+            selectDateTime.Month = Convert.ToInt32(comboMonth.SelectedValue.ToString().Split('月')[0]);
+            InitCalendar(selectDateTime);
         }
-
-        private void Calendar_DayChanged(object sender, DayChangedEventArgs e)
-        {
-            //save the text edits to persistant storage
-        }
-
-        
     }
 }
