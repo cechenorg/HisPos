@@ -169,6 +169,8 @@ namespace His_Pos.ManufactoryManage
         {
             int index = ManageManufactoryDataGrid.SelectedIndex;
 
+            CurrentManufactory.Note = new TextRange(Notes.Document.ContentStart, Notes.Document.ContentEnd).Text;
+
             ManageManufactories[index] = CurrentManufactory;
 
             ManageManufactoryDataGrid.SelectedIndex = index;
