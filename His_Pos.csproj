@@ -314,6 +314,14 @@
     <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
       <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\Calendar.cs" />
+    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\Converters\DateConverter.cs" />
+    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\Converters\DayBorderColorConverter.cs" />
+    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\Day.cs" />
+    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\WorkScheduleManage.cs" />
+    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\WorkScheduleManageView.xaml.cs">
+      <DependentUpon>WorkScheduleManageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H5_ATTEND\ClockIn\ClockIn.cs" />
     <Compile Include="H5_ATTEND\ClockIn\ClockInView.xaml.cs">
       <DependentUpon>ClockInView.xaml</DependentUpon>
@@ -460,6 +468,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\WorkScheduleManage\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\WorkScheduleManage\WorkScheduleManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -676,6 +692,8 @@
     <Resource Include="Images\Management.png" />
     <Resource Include="Images\blueprint.png" />
     <Resource Include="Images\ClockIn.png" />
+    <Resource Include="H4_BASIC_MANAGE\WorkScheduleManage\Images\move_next.png" />
+    <Resource Include="H4_BASIC_MANAGE\WorkScheduleManage\Images\move_prev.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -410,5 +410,14 @@ namespace His_Pos.Properties {
                 return ResourceManager.GetString("TreatmentCodeNull", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查詢類似 排班管理 的當地語系化字串。
+        /// </summary>
+        internal static string WorkScheduleManage {
+            get {
+                return ResourceManager.GetString("WorkScheduleManage", resourceCulture);
+            }
+        }
     }
 }
