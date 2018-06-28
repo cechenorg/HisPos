@@ -90,31 +90,31 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
                         <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Telphone}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Telphone}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
                         <Label Content="傳真" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Fax}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Fax}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
                         <Label Content="統一編號" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding UniformNumber}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding UniformNumber}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
                         <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Email}" FontSize="20" Width="340" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Email}" FontSize="18" Width="340" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="健保代碼" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding MedicalID}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding MedicalID}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                         <Label Content="管藥證號" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding ControlMedicineID}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding ControlMedicineID}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Margin="8">
                         <Label Content="地址" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Address}" FontSize="20" Width="610" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Address}" FontSize="18" Width="610" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                 </Grid>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource DarkShadow}" Margin="10,0,10,0">
@@ -180,19 +180,19 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Telphone}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Telphone}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                         <Label Content="傳真" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Fax}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Fax}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="8">
                         <Label Content="LINE" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Line}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Line}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
                         <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Email}" FontSize="20" Width="335" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Email}" FontSize="18" Width="335" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
                         <Label Content="預設付款條件" FontSize="20" FontFamily="Segoe UI Semibold"/>
@@ -336,7 +336,7 @@
                 </Grid>
                 <StackPanel Orientation="Horizontal" Grid.Row="4">
                     <Label Content="備註" Grid.Row="0" Grid.Column="2" Margin="20,0,10,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                    <RichTextBox Height="130" Width="1055" FontFamily="Segoe UI Semi" FontSize="18" VerticalScrollBarVisibility="Visible" Margin="10"/>
+                    <RichTextBox Name="Notes" Height="130" Width="1055" FontFamily="Segoe UI Semi" FontSize="18" VerticalScrollBarVisibility="Visible" Margin="10" TextChanged="TextBox_OnTextChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource Shadow}">
                     <Rectangle Width="750"/>

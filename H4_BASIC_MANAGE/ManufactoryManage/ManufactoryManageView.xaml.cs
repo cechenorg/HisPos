@@ -55,6 +55,10 @@ namespace His_Pos.ManufactoryManage
             if((sender as DataGrid).SelectedItem is null) return;
             
             CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
+
+            Notes.Document.Blocks.Clear();
+            Notes.AppendText(CurrentManufactory.Note);
+
             UpdateUi();
             InitDataChanged();
         }

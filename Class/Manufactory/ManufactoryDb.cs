@@ -192,7 +192,7 @@ namespace His_Pos.Class.Manufactory
                 parameters.Add(new SqlParameter("NOTE", DBNull.Value));
                 parameters.Add(new SqlParameter("PARENT", manufactory.Id));
                 parameters.Add(new SqlParameter("RESDEP", principal.ResponsibleDepartment));
-                parameters.Add(new SqlParameter("LINE", DBNull.Value));
+                parameters.Add(new SqlParameter("LINE", principal.Line));
 
                 dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
             }

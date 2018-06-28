@@ -18,6 +18,7 @@ namespace His_Pos.Class.Manufactory
             Telphone = "";
             Fax = "";
             Email = "";
+            Line = "";
             PayType = "";
             ResponsibleDepartment = "";
         }
@@ -30,6 +31,7 @@ namespace His_Pos.Class.Manufactory
             Telphone = row["MAN_TEL"].ToString();
             Fax = row["MAN_FAX"].ToString();
             Email = row["MAN_EMAIL"].ToString();
+            Line = row["MAN_LINE"].ToString();
             PayType = "";
             ResponsibleDepartment = row["MAN_RESPONSIBLEDEP"].ToString();
         }
@@ -40,6 +42,7 @@ namespace His_Pos.Class.Manufactory
         public string Fax { get; set; }
         public string Email { get; set; }
         public string PayType { get; set; }
+        public string Line { get; set; }
         public string ResponsibleDepartment { get; set; }
         public ObservableCollection<ManufactoryGetOverview> ManufactoryGetOverviews { get; set; }
         public ObservableCollection<ManufactoryPayOverview> ManufactoryPayOverviews { get; set; }
@@ -54,6 +57,7 @@ namespace His_Pos.Class.Manufactory
                 Fax = Fax,
                 NickName = NickName,
                 Email = Email,
+                Line = Line,
                 PayType = PayType,
                 ResponsibleDepartment = ResponsibleDepartment,
                 ManufactoryGetOverviews = ManufactoryGetOverviews,
