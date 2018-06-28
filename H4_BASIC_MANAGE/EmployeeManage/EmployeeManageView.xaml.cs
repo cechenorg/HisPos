@@ -160,6 +160,8 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
         {
             Employee newemployee = EmployeeCollection.Where(emp => emp.Id == Employee.Id).ToList()[0];
             Employee = (Employee)newemployee.Clone();
+            richtextbox.Document.Blocks.Clear();
+            richtextbox.AppendText(Employee.Description);
             InitDataChanged();
         }
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
