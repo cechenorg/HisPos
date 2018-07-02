@@ -5,8 +5,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.WorkScheduleManage"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="100">
-    <Grid>
-        <Label Name="labelDay" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-    </Grid>
+             d:DesignHeight="105" d:DesignWidth="150">
+    <Viewbox Stretch="Fill" Margin="2">
+        <Grid Width="150" Height="105" Background="{StaticResource Shadow}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Name="labelDay" Grid.Row="0" Grid.Column="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+            <CheckBox Name="Morning"  Grid.Row="1" Grid.Column="0" Checked="Morning_Checked" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" Margin="0,-5,0,0"/>
+            <CheckBox Name="Noon"  Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"/>
+            <Label Grid.Row="2" Grid.Column="1" Content="午" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" Margin="0,-5,0,0"/>
+            <CheckBox Name="Evening"  Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center"/>
+            <Label Grid.Row="3" Grid.Column="1" Content="晚" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" Margin="0,-5,0,0"/>
+
+        </Grid>
+    </Viewbox>
 </UserControl>
