@@ -40,19 +40,19 @@ namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
             InitCalendar(selectDateTime);
         }
         private void InitBasicData() {
-            List<string> days = new List<string> { "禮拜日", "禮拜一", "禮拜二", "禮拜三", "禮拜四", "禮拜五", "禮拜六" };
             List<string> months = new List<string> { "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
             List<string> years = new List<string>();
             int thisyear = DateTime.Now.Year;
             thisyear -= 50;
             for (int i = 0; i < 100; i++)
             {
-                years.Add(thisyear.ToString());
+                years.Add(thisyear.ToString() + "年");
                 thisyear++;
             }
-            WeekHeader.ItemsSource = days;
-            comboMonth.ItemsSource = months;
+            comboMonth.ItemsSource = months; 
+            comboMonth.Text = DateTime.Now.Month + "月";
             comboYear.ItemsSource = years;
+            comboYear.Text = DateTime.Now.Year + "年";
         }
         private void InitCalendar(Time selectDateTime) {
             GridCalendar.Children.Clear();
@@ -77,6 +77,7 @@ namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
                 Grid.SetColumn(day,Convert.ToInt32(today));
                 TheMonthStart = TheMonthStart.AddDays(1);
             }
+            labelSelectDate.Content = selectDateTime.Year + "年" + selectDateTime.Month + "月";
         }
         private Day NewDay(string id) {
            Day day = new Day(id);
@@ -99,6 +100,13 @@ namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
         {
             if (comboMonth.SelectedItem == null) return;
             selectDateTime.Month = Convert.ToInt32(comboMonth.SelectedValue.ToString().Split('月')[0]);
+            InitCalendar(selectDateTime);
+        }
+
+        private void comboYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboYear.SelectedItem == null) return;
+            selectDateTime.Year = Convert.ToInt32(comboYear.SelectedValue.ToString().Split('年')[0]);
             InitCalendar(selectDateTime);
         }
     }

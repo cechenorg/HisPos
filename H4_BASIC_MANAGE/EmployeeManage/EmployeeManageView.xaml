@@ -69,7 +69,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <Label Content="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="280" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                        <TextBox Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" Width="280" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <Label Content="{Binding Employee.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical"  Background="{StaticResource GridBackGround}" Grid.Row="0" Margin="10,10,10,10" Width="150">
@@ -103,11 +103,14 @@
                         </StackPanel>-->
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
                             <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox Width="150" Text="{Binding Employee.Gender,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" TextChanged="Text_TextChanged" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                            <ComboBox Width="150" Text="{Binding Employee.Gender,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" SelectionChanged="Text_TextChanged" HorizontalContentAlignment="Center" Margin="10,0,0,0">
+                                <ComboBoxItem Name="cbi1">男</ComboBoxItem>
+                                <ComboBoxItem >女</ComboBoxItem>
+                            </ComboBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
                             <Label  Content="生日" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                            <DatePicker  Width="145" Text="{Binding Employee.Birth,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Name="birth" SelectedDateFormat="Short" SelectedDateChanged="birth_SelectedDateChanged" FontFamily="Segoe UI Semi" FontSize="18"  Margin="10,0,0,0"/>
+                            <DatePicker  Width="145" Text="{Binding Employee.Birth,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Name="birth" SelectedDateFormat="Short" SelectedDateChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18"  Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
                             <Label  Content="部門" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
@@ -119,7 +122,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="4" Margin="8">
                             <Label  Content="到職日" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <DatePicker  Width="125" Text="{Binding Employee.StartDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="birth_SelectedDateChanged" Name="StartDate" SelectedDateFormat="Short" FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0"/>
+                            <DatePicker  Width="125" Text="{Binding Employee.StartDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="Text_TextChanged" Name="StartDate" SelectedDateFormat="Short" FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                             <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>

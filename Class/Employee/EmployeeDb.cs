@@ -25,7 +25,7 @@ namespace His_Pos.Class.Employee
             parameters.Add(new SqlParameter("EMP_ID",employee.Id));
             parameters.Add(new SqlParameter("EMP_NAME",employee.Name));
             parameters.Add(new SqlParameter("EMP_QNAME", employee.Qname));
-            parameters.Add(new SqlParameter("EMP_GENDER", employee.Gender));
+            parameters.Add(new SqlParameter("EMP_GENDER", employee.Gender == "男" ? "True" : "False"));
             parameters.Add(new SqlParameter("EMP_IDNUM", employee.IdNum));
             parameters.Add(new SqlParameter("EMP_DEPARTMENT", employee.Department));
             parameters.Add(new SqlParameter("EMP_POSITION", employee.Position));
