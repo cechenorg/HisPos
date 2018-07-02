@@ -154,7 +154,6 @@
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
                         </Style.Triggers>
-                        <EventSetter Event="MouseEnter"/>
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="FontSize" Value="14"/>
                         <Setter Property="Height" Value="40"/>
@@ -247,7 +246,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="60" Header="健保價格" Binding="{Binding HcPrice}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold">
+                    <DataGridTextColumn MinWidth="60" Header="健保價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

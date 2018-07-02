@@ -71,7 +71,7 @@ namespace His_Pos.Class.Declare
                 {"D1", declareData.Prescription.Treatment.AdjustCase.Id},{"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
                 {"D14",d.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate)},{"D15", declareData.Prescription.Treatment.Copayment.Id},
                 {"D23",d.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate)},{"D25",declareData.Prescription.Treatment.MedicalPersonId},
-                {"D30",declareData.Prescription.Treatment.MedicineDays},{"CUS_ID",declareData.Prescription.Treatment.Customer.Id}
+                {"D30",declareData.Prescription.Treatment.MedicineDays},{"CUS_ID",declareData.Prescription.Customer.Id}
             };
             foreach (var tag in tagsDictionary)
             {
@@ -180,7 +180,7 @@ namespace His_Pos.Class.Declare
         {
             double percent = 0;
             var dateTimeExtensions = new DateTimeExtensions();
-            var cusBirth = declareData.Prescription.Treatment.Customer.Birthday;
+            var cusBirth = declareData.Prescription.Customer.Birthday;
             var month = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(cusBirth));
             if (month < 0.5) percent = 160;
             if (month > 0.5 && month <= 2) percent = 130;
@@ -305,13 +305,13 @@ namespace His_Pos.Class.Declare
             }
             return new Dictionary<string, string>
             {
-                {"d1",treatment.AdjustCase.Id},{"d2",string.Empty},{"d3",treatment.Customer.IcNumber},
+                {"d1",treatment.AdjustCase.Id},{"d2",string.Empty},{"d3",declareData.Prescription.Customer.IcNumber},
                 {"d4",CheckXmlDbNullValue(declareData.DeclareMakeUp)},{"d5",CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
-                {"d6",d.ToSimpleTaiwanDate(Convert.ToDateTime(treatment.Customer.Birthday))},{"d7",declareData.Prescription.Customer.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
+                {"d6",d.ToSimpleTaiwanDate(Convert.ToDateTime(declareData.Prescription.Customer.Birthday))},{"d7",declareData.Prescription.Customer.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
                 {"d13",CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},{"d14",CheckXmlDbNullValue(d.ToSimpleTaiwanDate(treatment.TreatmentDate))},
                 {"d15",treatment.Copayment.Id},{"d16",declareData.DeclarePoint.ToString()},
                 {"d17",treatment.Copayment.Point.ToString()},{"d18",declareData.TotalPoint.ToString()},
-                {"d19",CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString())},{"d20",treatment.Customer.Name},
+                {"d19",CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString())},{"d20",declareData.Prescription.Customer.Name},
                 {"d21",medicalInfo.Hospital.Id},{"d22",medicalInfo.TreatmentCase.Id},{"d23",d.ToSimpleTaiwanDate(treatment.AdjustDate)},
                 {"d24",medicalInfo.Hospital.Doctor.Id},{"d25",treatment.MedicalPersonId},
                 {"d26",CheckXmlDbNullValue(medicalInfo.SpecialCode.Id)},{"d30",CheckXmlDbNullValue(treatment.MedicineDays)},

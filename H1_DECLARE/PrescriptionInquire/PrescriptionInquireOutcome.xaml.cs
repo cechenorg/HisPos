@@ -105,7 +105,7 @@ namespace His_Pos.PrescriptionInquire
          */
         private void SetPatientData()
         {
-            var patient = _inquiredPrescription.Prescription.Treatment.Customer;
+            var patient = _inquiredPrescription.Prescription.Customer;
             var patientGenderIcon = new BitmapImage(new Uri(@"..\..\Images\Male.png", UriKind.Relative));
             var patientIdIcon = new BitmapImage(new Uri(@"..\..\Images\ID_Card.png", UriKind.Relative));
             var patientBirthIcon = new BitmapImage(new Uri(@"..\..\Images\birthday.png", UriKind.Relative));

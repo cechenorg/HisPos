@@ -72,9 +72,9 @@ namespace His_Pos.PrescriptionInquire
          */
         private void LoadHospitalData()
         {
-            var institutions = new Institutions();
+            var institutions = new Hospitals();
             institutions.GetData();
-            ReleasePalace.ItemsSource = institutions.InstitutionsCollection;
+            ReleasePalace.ItemsSource = institutions.HospitalsCollection;
         }
 
         private void SearchButtonClick(object sender, RoutedEventArgs e)

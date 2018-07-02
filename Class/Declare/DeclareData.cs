@@ -58,7 +58,7 @@ namespace His_Pos.Class.Declare
         private void CountDeclareDeatailPoint()
         {
             var dateTimeExtensions = new DateTimeExtensions();
-            var cusAge = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(Prescription.Treatment.Customer.Birthday));
+            var cusAge = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(Prescription.Customer.Birthday));
             var medFormCount = CountOralLiquidAgent();
             var dayPay = CountDayPayAmount(cusAge,medFormCount);
             SetMedicalServiceCode(dayPay);//判斷藥事服務費項目代碼

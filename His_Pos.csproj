@@ -238,7 +238,7 @@
     <Compile Include="Class\Hospital.cs" />
     <Compile Include="Class\IcCard.cs" />
     <Compile Include="Class\IcMarks.cs" />
-    <Compile Include="Class\Institutions.cs" />
+    <Compile Include="Class\Hospitals.cs" />
     <Compile Include="Class\MedicalInfo.cs" />
     <Compile Include="Class\Person\CustomerDb.cs" />
     <Compile Include="Class\Person\MedicalPersonnel.cs" />
@@ -279,7 +279,6 @@
     <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCaseDb.cs" />
     <Compile Include="Class\Treatment.cs" />
-    <Compile Include="AbstractClass\Instution.cs" />
     <Compile Include="Class\Person\Person.cs" />
     <Compile Include="AbstractClass\Product.cs" />
     <Compile Include="Class\Selection.cs" />

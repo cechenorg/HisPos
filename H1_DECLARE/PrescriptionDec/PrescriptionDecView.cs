@@ -61,9 +61,9 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadHospitalData()
         {
-            var institutions = new Institutions();
+            var institutions = new Hospitals();
             institutions.GetData();
-            ReleaseInstitution.ItemsSource = institutions.InstitutionsCollection;
+            ReleaseInstitution.ItemsSource = institutions.HospitalsCollection;
             LoadDivisionsData();
         }
         /*
@@ -266,7 +266,7 @@ namespace His_Pos.PrescriptionDec
         */
         private Treatment GetTreatment()
         {
-            return new Treatment(GetMedicalInfo(), CheckPaymentCategory(), CheckCopayment(), CheckAdjustCase(),GetTreatDate(),GetAdjustDate(), GetMedicineDays(), MainWindow.CurrentUser.IcNumber,_currentCustomer);
+            return new Treatment(GetMedicalInfo(), CheckPaymentCategory(), CheckCopayment(), CheckAdjustCase(),GetTreatDate(),GetAdjustDate(), GetMedicineDays(), MainWindow.CurrentUser.IcNumber);
             
             
             //;
