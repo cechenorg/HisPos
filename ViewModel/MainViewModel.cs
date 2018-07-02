@@ -122,6 +122,8 @@ namespace His_Pos.ViewModel
             {
                 case nameof(FeatureItem.處方登錄):
                     break;
+                case nameof(FeatureItem.測試啦):
+                    break;
                 case nameof(FeatureItem.處方查詢):
                     break;
                 case nameof(FeatureItem.庫存查詢):
@@ -154,6 +156,7 @@ namespace His_Pos.ViewModel
                     break; 
                 case nameof(FeatureItem.排班管理):
                     break;
+
                 default:
                     return;
             }
@@ -172,6 +175,9 @@ namespace His_Pos.ViewModel
             {
                 case nameof(FeatureItem.處方登錄):
                     newTab = new PrescriptionDec.PrescriptionDec() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
+                    break;
+                case nameof(FeatureItem.測試啦):
+                    newTab = new H1_DECLARE.PrescriptionDec2.PrescriptionDec2() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
                 case nameof(FeatureItem.處方查詢):
                     newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };

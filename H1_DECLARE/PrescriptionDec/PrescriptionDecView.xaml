@@ -74,7 +74,7 @@
                     <Label Content="釋出院所" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                     <controls:AutoCompleteBox x:Name="ReleaseInstitution" Background="Transparent" Width="100" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center" SelectedItem="{Binding Path=Prescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                       BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" ValueMemberPath="Id" 
-                                                      MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
+                                                      MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" DropDownClosed="ReleaseInstitution_DropDownClosed">
                         <controls:AutoCompleteBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -84,7 +84,7 @@
                             </DataTemplate>
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
-                    <Label Content="{Binding Path=Prescription.Treatment.MedicalInfo.Hospital.Name, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                    <Label Content="{Binding Prescription.Treatment.MedicalInfo.Hospital.Name, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
                     <Label Content="就醫科別" Width="auto" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>

@@ -49,7 +49,7 @@ namespace His_Pos
         private void FeatureFactory()
         {
             HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription,
-                            new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire }));
+                            new string[] { Properties.Resources.hisPrescriptionDeclare,Properties.Resources.PrescriptionDec2, Properties.Resources.hisPrescriptionInquire }));
             HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", Properties.Resources.StockManage,
                             new string[] { Properties.Resources.StockSearch, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord }));
             HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.StockTaking,

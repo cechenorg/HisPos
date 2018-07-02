@@ -291,6 +291,10 @@
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
+      <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
       <DependentUpon>EmployeeManageView.xaml</DependentUpon>
@@ -440,6 +444,10 @@
     <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ViewModel\Win32.cs" />
     <Page Include="DockingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

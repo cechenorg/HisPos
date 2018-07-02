@@ -474,5 +474,11 @@ namespace His_Pos.PrescriptionDec
         {
             PrescriptionMedicines.SelectedItem = (sender as DataGridRow).Item;
         }
+
+        private void ReleaseInstitution_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            if (ReleaseInstitution.SelectedItem == null) return;
+           // Prescription.Treatment.MedicalInfo.Hospital.Name;
+        }
     }
 }
