@@ -196,7 +196,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             DataGridEmployee.SelectedIndex = EmployeeCollection.Count-1;
         }
 
-        private void Text_TextChanged(object sender, TextChangedEventArgs e)
+        private void Text_TextChanged(object sender, EventArgs e)
         {
             DataChanged();
         }
@@ -225,9 +225,8 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             isFirst = false;
         }
 
-        private void birth_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            DataChanged();
-        }
+      
+
+     
     }
 }

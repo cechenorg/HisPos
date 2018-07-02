@@ -50,7 +50,7 @@ namespace His_Pos.Class.Employee
             Id = row["EMP_ID"].ToString();
             Qname = row["EMP_QNAME"].ToString();
             Name = row["EMP_NAME"].ToString();
-            Gender = row["EMP_GENDER"].ToString();
+            Gender = row["EMP_GENDER"].ToString() == "True" ? "男" : "女";
             IdNum = row["EMP_IDNUM"].ToString();
             Department = row["EMP_DEPARTMENT"].ToString();
             Position = row["EMP_POSITION"].ToString();
