@@ -194,18 +194,18 @@
                         <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
                         <TextBox Text="{Binding Email}" FontSize="18" Width="335" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
+                    <StackPanel Name="PayC" Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
                         <Label Content="預設付款條件" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <RadioButton Content="預收" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
-                        <RadioButton Content="月結" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <RadioButton Content="貨到收" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="預收" Tag="D" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="PayCondition_CheckedChanged"/>
+                        <RadioButton Content="月結" Tag="M" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayCondition_CheckedChanged"/>
+                        <RadioButton Content="貨到收" Tag="A" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayCondition_CheckedChanged"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
+                    <StackPanel Name="PayT" Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
                         <Label Content="預設付款方式" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <RadioButton Content="現金" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
-                        <RadioButton Content="匯款" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <RadioButton Content="刷卡" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <RadioButton Content="支票" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="現金" Tag="M" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="PayType_CheckedChanged"/>
+                        <RadioButton Content="匯款" Tag="T" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayType_CheckedChanged"/>
+                        <RadioButton Content="刷卡" Tag="C" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayType_CheckedChanged"/>
+                        <RadioButton Content="支票" Tag="B" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayType_CheckedChanged"/>
                     </StackPanel>
                     <Button Name="DelPrincipalBtn" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Width="400" Content="刪除負責人" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="DeletePrincipal_OnClick"/>
                     <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="7" Grid.ColumnSpan="2" Margin="10" Background="{StaticResource Shadow}" Width="300" HorizontalAlignment="Left">

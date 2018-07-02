@@ -32,7 +32,8 @@ namespace His_Pos.Class.Manufactory
             Fax = row["MAN_FAX"].ToString();
             Email = row["MAN_EMAIL"].ToString();
             Line = row["MAN_LINE"].ToString();
-            PayType = "";
+            PayCondition = row["MAN_PAYCONDITION"].ToString();
+            PayType = row["MAN_PAYTYPE"].ToString();
             ResponsibleDepartment = row["MAN_RESPONSIBLEDEP"].ToString();
         }
         public string Id { get; set; }
@@ -44,6 +45,7 @@ namespace His_Pos.Class.Manufactory
         public string PayType { get; set; }
         public string Line { get; set; }
         public string ResponsibleDepartment { get; set; }
+        public string PayCondition { get; set; }
         public ObservableCollection<ManufactoryGetOverview> ManufactoryGetOverviews { get; set; }
         public ObservableCollection<ManufactoryPayOverview> ManufactoryPayOverviews { get; set; }
 
@@ -61,7 +63,8 @@ namespace His_Pos.Class.Manufactory
                 PayType = PayType,
                 ResponsibleDepartment = ResponsibleDepartment,
                 ManufactoryGetOverviews = ManufactoryGetOverviews,
-                ManufactoryPayOverviews = ManufactoryPayOverviews
+                ManufactoryPayOverviews = ManufactoryPayOverviews,
+                PayCondition = PayCondition
             };
 
             return newManufactoryPrincipal;

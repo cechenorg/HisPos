@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.ManufactoryManage
 {
@@ -99,6 +100,12 @@ namespace His_Pos.ManufactoryManage
                 ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews = ManufactoryDb.GetManufactoryPayOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
 
             PrincipalDetail.DataContext = (sender as DataGrid).SelectedItem;
+
+            PayC.Children.OfType<RadioButton>().Single(r =>
+                r.Tag.Equals((PrincipalDetail.DataContext as ManufactoryPrincipal).PayCondition)).IsChecked = true;
+
+            PayT.Children.OfType<RadioButton>().Single(r =>
+                r.Tag.Equals((PrincipalDetail.DataContext as ManufactoryPrincipal).PayType)).IsChecked = true;
 
             if (!isChanged) InitDataChanged();
         }
@@ -193,6 +200,24 @@ namespace His_Pos.ManufactoryManage
         private void ManufactoryManageView_GotFocus(object sender, RoutedEventArgs e)
         {
             isFirst = false;
+        }
+
+        private void PayCondition_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            if(PrincipalDetail.DataContext is null) return;
+
+            DataChanged();
+
+            (PrincipalDetail.DataContext as ManufactoryPrincipal).PayCondition = (sender as RadioButton).Tag.ToString();
+        }
+
+        private void PayType_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            if (PrincipalDetail.DataContext is null) return;
+
+            DataChanged();
+
+            (PrincipalDetail.DataContext as ManufactoryPrincipal).PayType = (sender as RadioButton).Tag.ToString();
         }
     }
 }
