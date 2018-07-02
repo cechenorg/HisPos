@@ -25,7 +25,7 @@ namespace His_Pos.ManufactoryManage
     {
         private bool isFirst = true;
 
-        public ManageManufactory currentManufactory;
+        private ManageManufactory currentManufactory;
         public ManageManufactory CurrentManufactory
         {
             get { return currentManufactory; }
@@ -55,6 +55,10 @@ namespace His_Pos.ManufactoryManage
             if((sender as DataGrid).SelectedItem is null) return;
             
             CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
+
+            Notes.Document.Blocks.Clear();
+            Notes.AppendText(CurrentManufactory.Note);
+
             UpdateUi();
             InitDataChanged();
         }
@@ -164,6 +168,8 @@ namespace His_Pos.ManufactoryManage
         private void ConfirmChanged_OnClick(object sender, RoutedEventArgs e)
         {
             int index = ManageManufactoryDataGrid.SelectedIndex;
+
+            CurrentManufactory.Note = new TextRange(Notes.Document.ContentStart, Notes.Document.ContentEnd).Text;
 
             ManageManufactories[index] = CurrentManufactory;
 

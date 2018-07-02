@@ -58,42 +58,23 @@ namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
             GridCalendar.Children.Clear();
             DateTime TheMonthStart = new DateTime(selectDateTime.Year, selectDateTime.Month, 1);
             DateTime TheMonthEnd = new DateTime(selectDateTime.Year, selectDateTime.Month, DateTime.DaysInMonth(selectDateTime.Year, selectDateTime.Month));
-            int wcount = 1;
-            Grid week = NewRow("0");
-            GridCalendar.Children.Add(week);
-            Grid.SetRow(week,0);
-            Day day;
+            int wcount = 0;
+            
             while (TheMonthStart != TheMonthEnd.AddDays(1)) {
+                
                 string today = TheMonthStart.DayOfWeek.ToString("d");
-                if (today == "0" && TheMonthStart.Day.ToString() != "1")
-                {
-                    week = NewRow(wcount.ToString());
-                    GridCalendar.Children.Add(week);
-                    Grid.SetRow(week,wcount);
-                    wcount++;
-                }
-                day = NewDay(TheMonthStart.Day.ToString());
-                week.Children.Add(day);
-                Grid.SetColumn(day,Convert.ToInt32(today));
+                if (today == "0" && TheMonthStart.Day.ToString() != "1") wcount++;
+
+                Day day = new Day(TheMonthStart.Day.ToString());
+
+                Grid.SetRow(day, wcount);
+                Grid.SetColumn(day, Convert.ToInt32(today));
+
                 TheMonthStart = TheMonthStart.AddDays(1);
+
+                GridCalendar.Children.Add(day);
             }
             labelSelectDate.Content = selectDateTime.Year + "年" + selectDateTime.Month + "月";
-        }
-        private Day NewDay(string id) {
-           Day day = new Day(id);
-            return day;
-        }
-        private Grid NewRow(string id) {
-            Grid newGrid = new Grid();
-            newGrid.Name = "row" + id;
-            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            newGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            return newGrid;
         }
 
         private void comboMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
