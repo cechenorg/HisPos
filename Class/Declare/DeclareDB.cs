@@ -39,7 +39,7 @@ namespace His_Pos.Class.Declare
             //4補報註記 7就醫序號 16申請點數 17部分負擔點數 18合計點數 19行政協助部分負擔點數 31特殊材料明細點數小計 32診療明細點數小計 33用藥明細點數小計 38藥事服務費點數
             var tagsDictionary = new Dictionary<string, string>
             {
-                {"D4", declareData.DeclareMakeUp}, {"D7", declareData.Prescription.IcCard.MedicalNumber},
+                {"D4", declareData.DeclareMakeUp}, {"D7", declareData.Prescription.Customer.IcCard.MedicalNumber},
                 {"D16", declareData.DeclarePoint.ToString()}, {"D17", declareData.CopaymentPoint.ToString()},
                 {"D18", declareData.TotalPoint.ToString()},{"D19", declareData.AssistProjectCopaymentPoint.ToString()},
                 {"D31",declareData.SpecailMaterialPoint.ToString()},{"D32",declareData.DiagnosisPoint.ToString()},
@@ -286,7 +286,7 @@ namespace His_Pos.Class.Declare
                     dData += function.XmlTagCreator("d43",declareData.Prescription.OriginalMedicalNumber);
             }
             if (treatment.Copayment.Id == "903")
-                dData += function.XmlTagCreator("d44",CheckXmlDbNullValue(declareData.Prescription.IcCard.IcMarks.NewbornsData.Birthday));//新生兒註記就醫
+                dData += function.XmlTagCreator("d44",CheckXmlDbNullValue(declareData.Prescription.Customer.IcCard.IcMarks.NewbornsData.Birthday));//新生兒註記就醫
             dData += "</dhead>";
             return dData;
         }
@@ -307,7 +307,7 @@ namespace His_Pos.Class.Declare
             {
                 {"d1",treatment.AdjustCase.Id},{"d2",string.Empty},{"d3",treatment.Customer.IcNumber},
                 {"d4",CheckXmlDbNullValue(declareData.DeclareMakeUp)},{"d5",CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
-                {"d6",d.ToSimpleTaiwanDate(Convert.ToDateTime(treatment.Customer.Birthday))},{"d7",declareData.Prescription.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
+                {"d6",d.ToSimpleTaiwanDate(Convert.ToDateTime(treatment.Customer.Birthday))},{"d7",declareData.Prescription.Customer.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
                 {"d13",CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},{"d14",CheckXmlDbNullValue(d.ToSimpleTaiwanDate(treatment.TreatmentDate))},
                 {"d15",treatment.Copayment.Id},{"d16",declareData.DeclarePoint.ToString()},
                 {"d17",treatment.Copayment.Point.ToString()},{"d18",declareData.TotalPoint.ToString()},

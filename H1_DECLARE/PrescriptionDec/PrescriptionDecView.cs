@@ -411,16 +411,16 @@ namespace His_Pos.PrescriptionDec
             if (!ChronicSequence.Text.Equals(string.Empty))
             {
                 if (int.Parse(ChronicSequence.Text) > 1)
-                    Prescription.IcCard.MedicalNumber = "IC0" + ChronicSequence.Text;
+                    Prescription.Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence.Text;
             }
             if (CheckHomeCareAndSmokingCessation())
-                Prescription.IcCard.MedicalNumber = "N";
+                Prescription.Customer.IcCard.MedicalNumber = "N";
             if (!medicalNumber.Contains("IC") && medicalNumber != "N")
             {
                 if (Function.IsNumeric(medicalNumber) == false)
                     AddError("就醫序號輸入格式錯誤");
             }
-            Prescription.IcCard.MedicalNumber = medicalNumber;
+            Prescription.Customer.IcCard.MedicalNumber = medicalNumber;
         }
         /*
          * 確認就醫日期D14
@@ -532,7 +532,7 @@ namespace His_Pos.PrescriptionDec
             if (copayment.Id == "903")
             {
                 var dateTimeExtensions = new DateTimeExtensions();
-                var newBornBirth = dateTimeExtensions.ToUsDate(Prescription.IcCard.IcMarks.NewbornsData.Birthday);
+                var newBornBirth = dateTimeExtensions.ToUsDate(Prescription.Customer.IcCard.IcMarks.NewbornsData.Birthday);
                 var newBornAge = DateTime.Now - newBornBirth;
                 CheckNewBornAge(newBornAge);
             }

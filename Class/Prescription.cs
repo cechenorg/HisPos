@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 
 namespace His_Pos.Class
@@ -9,7 +10,6 @@ namespace His_Pos.Class
     {
         public Prescription()
         {
-            IcCard = new IcCard();
             Pharmacy = new Pharmacy();
             Treatment = new Treatment();
             Medicines = new ObservableCollection<Medicine>();
@@ -21,8 +21,8 @@ namespace His_Pos.Class
             Treatment = treatment;
             Medicines = medicines;
         }
-        
-        public IcCard IcCard { get; set; }
+
+        public Customer Customer { get; set; }
         public Pharmacy Pharmacy { get; set; }
         public Treatment Treatment { get; set; }
         public ObservableCollection<Medicine> Medicines { get; set; }

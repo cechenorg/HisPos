@@ -86,17 +86,17 @@ namespace His_Pos.PrescriptionDec
             _currentCustomer.Birthday = "37/10/01";
             _currentCustomer.IcNumber = "S88824769A";
             _currentCustomer.Gender = true;
-            _prescription.IcCard.Customer = _currentCustomer;
-            _prescription.IcCard.AvailableTimes = 5;
-            _prescription.IcCard.ICNumber = "900000000720";
-            _prescription.IcCard.IcMarks.LogOutMark = "1";
-            _prescription.IcCard.SendDate = "91/07/25";
-            _prescription.IcCard.ValidityPeriod = "108/01/01";
-            _prescription.IcCard.IcMarks.InsuranceMark = "3";
+            _prescription.Customer = _currentCustomer;
+            _prescription.Customer.IcCard.AvailableTimes = 5;
+            _prescription.Customer.IcCard.ICNumber = "900000000720";
+            _prescription.Customer.IcCard.IcMarks.LogOutMark = "1";
+            _prescription.Customer.IcCard.SendDate = "91/07/25";
+            _prescription.Customer.IcCard.ValidityPeriod = "108/01/01";
+            _prescription.Customer.IcCard.IcMarks.InsuranceMark = "3";
             _currentCustomer.Id = "1";
-            PatientName.Text = _prescription.IcCard.Customer.Name;
-            PatientId.Text = _prescription.IcCard.Customer.IcNumber;
-            PatientBirthday.Text = _prescription.IcCard.Customer.Birthday;
+            PatientName.Text = _prescription.Customer.Name;
+            PatientId.Text = _prescription.Customer.IcNumber;
+            PatientBirthday.Text = _prescription.Customer.Birthday;
         }
         /*
          *取得病人基本資料
@@ -115,10 +115,10 @@ namespace His_Pos.PrescriptionDec
          */
         private void SetBasicData()
         {
-            _prescription.IcCard.ICNumber = _hisApiFunction.GetIcData(_pBuffer, 0, 12);
+            _prescription.Customer.IcCard.ICNumber = _hisApiFunction.GetIcData(_pBuffer, 0, 12);
             SetCustomerData();
-            _prescription.IcCard.SendDate = _hisApiFunction.GetIcData(_pBuffer, 50, 7);
-            _prescription.IcCard.IcMarks.LogOutMark = _hisApiFunction.GetIcData(_pBuffer, 57, 1);
+            _prescription.Customer.IcCard.SendDate = _hisApiFunction.GetIcData(_pBuffer, 50, 7);
+            _prescription.Customer.IcCard.IcMarks.LogOutMark = _hisApiFunction.GetIcData(_pBuffer, 57, 1);
         }
         /*
          * 設定健保卡資料(顧客姓名.身分證字號.生日.性別)
@@ -132,7 +132,7 @@ namespace His_Pos.PrescriptionDec
             if (_hisApiFunction.GetIcData(_pBuffer, 49, 1) == "M")
                 _currentCustomer.Gender = true;
             _currentCustomer.Gender = false;
-            _prescription.IcCard.Customer = _currentCustomer;
+            _prescription.Customer = _currentCustomer;
         }
         /*
          *慢箋領藥DataRow Click事件
