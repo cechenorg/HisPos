@@ -7,18 +7,17 @@
              mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
-            <ColumnDefinition  Width="3*"/>
-            <ColumnDefinition  Width="2*"/>
-            <ColumnDefinition  Width="2*"/>
+            <ColumnDefinition Width="1070"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="0" Grid.Column="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -32,25 +31,17 @@
                 <ComboBox Width="70" Name="comboYear" SelectionChanged="comboYear_SelectionChanged" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="1"  Grid.ColumnSpan="2" Width="700" >
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Vertical"  Grid.Row="0" VerticalAlignment="Center" >
-                <Label Name="labelSelectDate" Foreground="{StaticResource ForeGround}" Width="100" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Center" >
-                <Label Content="禮拜日"  Foreground="{StaticResource ForeGround}" Width="100" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <Label Content="禮拜一"  Foreground="{StaticResource ForeGround}" Width="100" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <Label Content="禮拜二"  Foreground="{StaticResource ForeGround}" Width="100" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <Label Content="禮拜三"  Foreground="{StaticResource ForeGround}" Width="100" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <Label Content="禮拜四"  Foreground="{StaticResource ForeGround}" Width="100" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <Label Content="禮拜五"  Foreground="{StaticResource ForeGround}" Width="100" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <Label Content="禮拜六"  Foreground="{StaticResource ForeGround}" Width="100" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
-            </StackPanel>
-        </Grid>
-        <Grid Name="GridCalendar" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="2"  Width="700">
+        <Label Name="labelSelectDate" Grid.Row="1" Grid.Column="0" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="25" FontFamily="Segoe UI Semibold"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="10,0,10,0" Background="{StaticResource GridDarkerBackGround}">
+            <Label Content="禮拜日" Foreground="{StaticResource ForeGround}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="禮拜一" Foreground="{StaticResource ForeGround}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="禮拜二" Foreground="{StaticResource ForeGround}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="禮拜三" Foreground="{StaticResource ForeGround}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="禮拜四" Foreground="{StaticResource ForeGround}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="禮拜五" Foreground="{StaticResource ForeGround}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Label Content="禮拜六" Foreground="{StaticResource ForeGround}" Width="150" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+        </StackPanel>
+        <Grid Name="GridCalendar" Grid.Row="3" Grid.Column="0" Margin="10,0,10,10" Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -65,8 +56,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
         </Grid>
-
     </Grid>
 </UserControl>
