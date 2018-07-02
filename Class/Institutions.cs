@@ -9,17 +9,17 @@ namespace His_Pos.Class
 {
     public class Institutions:ISelection
     {
-        public readonly ObservableCollection<string> InstitutionsCollection = new ObservableCollection<string>();
+        public readonly ObservableCollection<Institution> InstitutionsCollection = new ObservableCollection<Institution>();
         public void GetData()
         {
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var institutionTable = dbConnection.SetProcName("[HIS_POS_DB].[GET].[INSTITUTION]",dbConnection);
-            foreach (DataRow institution in institutionTable.Rows)
+            var institutionTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetInstitution]", dbConnection);
+            foreach (DataRow row in institutionTable.Rows)
             {
-                var i = new Institution(institution["INS_ID"].ToString(), institution["INS_NAME"].ToString());
-                InstitutionsCollection.Add(i.Id + " " + i.Name);
+                InstitutionsCollection.Add(new Institution(row));
             }
-            InstitutionsCollection.Add("N" + "  " + "藥事居家照護/協助辦理門診戒菸計畫且直接交付指示用藥/提供「戒菸個案追蹤」/「戒菸衛教暨個案管理」");
+
+            InstitutionsCollection.Add(new Institution("N","藥事居家照護/協助辦理門診戒菸計畫且直接交付指示用藥/提供「戒菸個案追蹤」/「戒菸衛教暨個案管理」"));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using His_Pos.Class;
+﻿using System.Data;
+using His_Pos.Class;
 
 namespace His_Pos.AbstractClass
 {
@@ -8,11 +9,18 @@ namespace His_Pos.AbstractClass
         {
             Id = id;
             Name = name;
+            FullName = id + " " + name;
+        }
+
+        public Institution(DataRow dataRow)
+        {
+            Id = dataRow["INS_ID"].ToString();
+            Name = dataRow["INS_NAME"].ToString();
+            FullName = Id + " " + Name;
         }
 
         public Institution()
         {
-            
         }
     }
 }

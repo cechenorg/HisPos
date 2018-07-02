@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
@@ -28,26 +29,37 @@ namespace His_Pos.PrescriptionDec
     /// <summary>
     /// 處方資料登錄
     /// </summary>
-    public partial class PrescriptionDecView
+    public partial class PrescriptionDecView : INotifyPropertyChanged
     {
         private int _res = -1;
-        private IcCard _icCard = new IcCard();
         private SystemType cusHhistoryFilterCondition = SystemType.ALL;
         private Customer _currentCustomer = new Customer();
         //private Prescription prescription = new Prescription();
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
-        private ObservableCollection<Medicine> PrescriptionList { get; set; }
         private ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
 
         private CustomerHistory customerHistory;
         private List<string> _errorList = new List<string>();
 
+        private Prescription _prescription = new Prescription();
+        public Prescription Prescription
+        {
+            get
+            {
+                return _prescription;
+            }
+            set
+            {
+                _prescription = value;
+                NotifyPropertyChanged("Prescription");
+            }
+        }
+
         public PrescriptionDecView()
         {
             InitializeComponent();
-            DataContext = this;
             InitializeLists();
             InitializeUiElementData();
             CultureInfo cag = new CultureInfo("zh-TW");
@@ -74,17 +86,17 @@ namespace His_Pos.PrescriptionDec
             _currentCustomer.Birthday = "37/10/01";
             _currentCustomer.IcNumber = "S88824769A";
             _currentCustomer.Gender = true;
-            _icCard.Customer = _currentCustomer;
-            _icCard.AvailableTimes = 5;
-            _icCard.ICNumber = "900000000720";
-            _icCard.IcMarks.LogOutMark = "1";
-            _icCard.SendDate = "91/07/25";
-            _icCard.ValidityPeriod = "108/01/01";
-            _icCard.IcMarks.InsuranceMark = "3";
+            _prescription.IcCard.Customer = _currentCustomer;
+            _prescription.IcCard.AvailableTimes = 5;
+            _prescription.IcCard.ICNumber = "900000000720";
+            _prescription.IcCard.IcMarks.LogOutMark = "1";
+            _prescription.IcCard.SendDate = "91/07/25";
+            _prescription.IcCard.ValidityPeriod = "108/01/01";
+            _prescription.IcCard.IcMarks.InsuranceMark = "3";
             _currentCustomer.Id = "1";
-            PatientName.Text = _icCard.Customer.Name;
-            PatientId.Text = _icCard.Customer.IcNumber;
-            PatientBirthday.Text = _icCard.Customer.Birthday;
+            PatientName.Text = _prescription.IcCard.Customer.Name;
+            PatientId.Text = _prescription.IcCard.Customer.IcNumber;
+            PatientBirthday.Text = _prescription.IcCard.Customer.Birthday;
         }
         /*
          *取得病人基本資料
@@ -103,10 +115,10 @@ namespace His_Pos.PrescriptionDec
          */
         private void SetBasicData()
         {
-            _icCard.ICNumber = _hisApiFunction.GetIcData(_pBuffer, 0, 12);
+            _prescription.IcCard.ICNumber = _hisApiFunction.GetIcData(_pBuffer, 0, 12);
             SetCustomerData();
-            _icCard.SendDate = _hisApiFunction.GetIcData(_pBuffer, 50, 7);
-            _icCard.IcMarks.LogOutMark = _hisApiFunction.GetIcData(_pBuffer, 57, 1);
+            _prescription.IcCard.SendDate = _hisApiFunction.GetIcData(_pBuffer, 50, 7);
+            _prescription.IcCard.IcMarks.LogOutMark = _hisApiFunction.GetIcData(_pBuffer, 57, 1);
         }
         /*
          * 設定健保卡資料(顧客姓名.身分證字號.生日.性別)
@@ -120,7 +132,7 @@ namespace His_Pos.PrescriptionDec
             if (_hisApiFunction.GetIcData(_pBuffer, 49, 1) == "M")
                 _currentCustomer.Gender = true;
             _currentCustomer.Gender = false;
-            _icCard.Customer = _currentCustomer;
+            _prescription.IcCard.Customer = _currentCustomer;
         }
         /*
          *慢箋領藥DataRow Click事件
@@ -136,9 +148,20 @@ namespace His_Pos.PrescriptionDec
          * 慢箋領藥顯示對話框 Command
          */
         private ICommand _insertChronicDataCommand;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
         /*
-         *_insertChronicDataCommand Implement
-         */
+*_insertChronicDataCommand Implement
+*/
         private ICommand InsertChronicDataCommand
         {
             get
@@ -174,14 +197,14 @@ namespace His_Pos.PrescriptionDec
             //if (table.Rows.Count > 0)
             //{
             //    ChronicList.ItemsSource = null;
-            //    ChronicPrescriptionList.Clear();
+            //    ChronicPrescription.Medicines.Clear();
             //    button.Command = DialogHost.OpenDialogCommand;
             //    foreach (DataRow d in table.Rows)
             //    {
             //        ChronicPrescription c = new ChronicPrescription(d["CHRONICING_ID"].ToString(), d["HISDECMAS_ID"].ToString(), d["USER_IDNUM"].ToString(), d["HISDIV_ID"].ToString(), d["PRESCRIPTION_DATE"].ToString(), Parse(d["COUNT"].ToString()), d["INS_NAME"].ToString(), d["HISDIV_NAME"].ToString());
-            //        ChronicPrescriptionList.Add(c);
+            //        ChronicPrescription.Medicines.Add(c);
             //    }
-            //    ChronicList.ItemsSource = ChronicPrescriptionList;
+            //    ChronicList.ItemsSource = ChronicPrescription.Medicines;
             //    ChronicDialog.DataContext = this;
             //}
             //else
@@ -230,10 +253,9 @@ namespace His_Pos.PrescriptionDec
          */
         private void InitializeLists()
         {
-            PrescriptionList = new ObservableCollection<Medicine>();
             MedicineList = new ObservableCollection<Medicine>();
             CustomerHistoryList = new ObservableCollection<CustomerHistory>();
-            PrescriptionMedicines.ItemsSource = PrescriptionList;
+            PrescriptionMedicines.ItemsSource = Prescription.Medicines;
         }
         private void MedicineCodeAuto_DropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
         {
@@ -246,11 +268,11 @@ namespace His_Pos.PrescriptionDec
         {
             Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
             if (medicineAuto.SelectedItem is null) return;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex)
-                PrescriptionList.Add((Medicine)medicineAuto.SelectedItem);
+            if (Prescription.Medicines.Count <= PrescriptionMedicines.SelectedIndex)
+                Prescription.Medicines.Add((Medicine)medicineAuto.SelectedItem);
             else
             {
-                PrescriptionList[PrescriptionMedicines.SelectedIndex] = (Medicine)medicineAuto.SelectedItem;
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex] = (Medicine)medicineAuto.SelectedItem;
                 return;
             }
             medicineAuto.Text = "";
@@ -261,8 +283,8 @@ namespace His_Pos.PrescriptionDec
         private void PaySelf_CheckedEvent(object sender, RoutedEventArgs e)
         {
             if (!(sender is CheckBox selfPay)) return;
-            //if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex || PrescriptionList[PrescriptionMedicines.SelectedIndex].Amount.ToString(CultureInfo.InvariantCulture).Equals(string.Empty)) return;
-            var medicine = PrescriptionList[PrescriptionMedicines.SelectedIndex];
+            //if (Prescription.Medicines.Count <= PrescriptionMedicines.SelectedIndex || Prescription.Medicines[PrescriptionMedicines.SelectedIndex].Amount.ToString(CultureInfo.InvariantCulture).Equals(string.Empty)) return;
+            var medicine = Prescription.Medicines[PrescriptionMedicines.SelectedIndex];
             //var selfCost = medicine.Price * medicine.Amount;
             if (selfPay.IsChecked == true)
             {
@@ -283,9 +305,9 @@ namespace His_Pos.PrescriptionDec
          */
         private void MedicineTotal_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (PrescriptionMedicines.SelectedIndex >= PrescriptionList.Count || !(sender is TextBox medicineTotal)) return;
+            if (PrescriptionMedicines.SelectedIndex >= Prescription.Medicines.Count || !(sender is TextBox medicineTotal)) return;
             if (medicineTotal.Text.Equals(string.Empty)) return;
-            var medicine = PrescriptionList[PrescriptionMedicines.SelectedIndex];
+            var medicine = Prescription.Medicines[PrescriptionMedicines.SelectedIndex];
             //medicine.Amount = double.Parse(medicineTotal.Text);
             CountMedicineTotalPrice(medicine);
             CountMedicinesCost();
@@ -337,7 +359,7 @@ namespace His_Pos.PrescriptionDec
         private void Dosage_TextChanged(object sender, TextChangedEventArgs e)
         {
             var dosage = sender as TextBox;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            if (Prescription.Medicines.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
             {
                 MessageBox.Show("請選擇藥品");
                 return;
@@ -348,7 +370,7 @@ namespace His_Pos.PrescriptionDec
             var matchDouble = Regex.Match(dosage.Text, regexDouble);
             var matchInt = Regex.Match(dosage.Text, regexInt);
             if(matchDouble.Success || matchInt.Success)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = dosage.Text;
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Dosage = dosage.Text;
         }
         /*
          * 設定藥品用法
@@ -356,13 +378,13 @@ namespace His_Pos.PrescriptionDec
         private void Usage_TextChanged(object sender, TextChangedEventArgs e)
         {
             var usage = sender as TextBox;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            if (Prescription.Medicines.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
             {
                 MessageBox.Show("請選擇藥品");
                 return;
             }
             if (usage != null)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Usage = usage.Text;
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Usage = usage.Text;
         }
         /*
          * 設定藥品天數
@@ -370,7 +392,7 @@ namespace His_Pos.PrescriptionDec
         private void MedicineDays_TextChanged(object sender, TextChangedEventArgs e)
         {
             var days = sender as TextBox;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            if (Prescription.Medicines.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
             {
                 MessageBox.Show("請選擇藥品");
                 return;
@@ -379,7 +401,7 @@ namespace His_Pos.PrescriptionDec
             const string regex = "^[0-9]*[1-9][0-9]*$";
             var match = Regex.Match(days.Text, regex);
             if(match.Success)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Days = Convert.ToInt32(days.Text);
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Days = Convert.ToInt32(days.Text);
         }
         /*
          * 設定藥品用藥途徑
@@ -387,13 +409,13 @@ namespace His_Pos.PrescriptionDec
         private void PositionAuto_TextChanged(object sender, RoutedEventArgs e)
         {
             var position = sender as AutoCompleteBox;
-            if (PrescriptionList.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
+            if (Prescription.Medicines.Count <= PrescriptionMedicines.SelectedIndex && PrescriptionMedicines.SelectedIndex != 0)
             {
                 MessageBox.Show("請選擇藥品");
                 return;
             }
             if (position != null)
-                PrescriptionList[PrescriptionMedicines.SelectedIndex].MedicalCategory.Position = position.Text;
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Position = position.Text;
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)

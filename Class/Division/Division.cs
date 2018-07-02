@@ -10,6 +10,7 @@
         {
             Id = id;
             Name = name;
+            FullName = id + " " + name;
         }
     }
 }

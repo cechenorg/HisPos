@@ -50,8 +50,8 @@ namespace His_Pos.PrescriptionInquire
          */
         private void SetMedicalInfoData()
         {
-            ReleasePalace.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.GetFullHospitalData();//釋出院所
-            Division.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.GetFullDivisonData();//就醫科別
+            ReleasePalace.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//釋出院所
+            Division.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//就醫科別
             SetDiseaseCode();//診斷代碼
         }
 

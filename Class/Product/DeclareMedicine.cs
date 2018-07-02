@@ -12,13 +12,7 @@ namespace His_Pos.Class.Product
     {
         public DeclareMedicine(DataRow dataRow, DataSource dataSource): base(dataRow)
         {
-            Stock = new InStock()
-            {
-                BasicAmount = dataRow["PRO_BASICQTY"].ToString(),
-                SafeAmount = dataRow["PRO_SAFEQTY"].ToString(),
-                Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "")
-                    ? "0" : dataRow["PRO_INVENTORY"].ToString())
-            };
+            Stock = new InStock(dataRow);
 
             Price = dataRow["STOORDDET_PRICE"].ToString();
             TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
