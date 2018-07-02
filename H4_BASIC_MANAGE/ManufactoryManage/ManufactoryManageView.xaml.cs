@@ -25,7 +25,7 @@ namespace His_Pos.ManufactoryManage
     {
         private bool isFirst = true;
 
-        public ManageManufactory currentManufactory;
+        private ManageManufactory currentManufactory;
         public ManageManufactory CurrentManufactory
         {
             get { return currentManufactory; }
