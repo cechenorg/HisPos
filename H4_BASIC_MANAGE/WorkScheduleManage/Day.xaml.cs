@@ -26,5 +26,10 @@ namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
 
             labelDay.Content = id;
         }
+
+        private void Morning_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

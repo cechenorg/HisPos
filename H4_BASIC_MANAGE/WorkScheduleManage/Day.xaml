@@ -6,29 +6,28 @@
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.WorkScheduleManage"
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="150">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="8*"/>
-        </Grid.ColumnDefinitions>
-                <Label Name="labelDay" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-        <CheckBox Name="morning"  Grid.Row="1" Grid.Column="0" >
-            <Style TargetType="CheckBox">
-                <Setter Property="FlowDirection" Value="RightToLeft" />
-                <Setter Property="ContentTemplate">
-                    <Setter.Value>
-                        <DataTemplate>
-                            <ContentControl FlowDirection="LeftToRight" Content="{Binding}" />
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </CheckBox>
-    </Grid>
+    <Viewbox Stretch="Fill">
+        <Grid Width="150" Height="150">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Label Name="labelDay" Grid.Row="0" Grid.Column="2" VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <CheckBox Name="Morning"  Grid.Row="1" Grid.Column="0" Checked="Morning_Checked"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" />
+            <TextBox Name="TextBoxMorning"/>
+            <CheckBox Name="Noon"  Grid.Row="2" Grid.Column="0"/>
+            <Label Grid.Row="2" Grid.Column="1" Content="午" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" />
+            <CheckBox Name="Evening"  Grid.Row="3" Grid.Column="0"/>
+            <Label Grid.Row="3" Grid.Column="1" Content="晚" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" />
+
+        </Grid>
+    </Viewbox>
 </UserControl>
