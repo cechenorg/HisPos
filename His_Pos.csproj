@@ -321,6 +321,9 @@
     <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\Day.xaml.cs">
       <DependentUpon>Day.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\UserIcon.xaml.cs">
+      <DependentUpon>UserIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\WorkScheduleManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\WorkScheduleManageView.xaml.cs">
       <DependentUpon>WorkScheduleManageView.xaml</DependentUpon>
@@ -479,6 +482,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\WorkScheduleManage\Day.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\WorkScheduleManage\UserIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

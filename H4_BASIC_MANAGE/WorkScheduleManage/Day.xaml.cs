@@ -27,9 +27,46 @@ namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
             labelDay.Content = id;
         }
 
-        private void Morning_Checked(object sender, RoutedEventArgs e)
+        private void Morning_OnClick(object sender, RoutedEventArgs e)
         {
+            if ((bool)(sender as CheckBox).IsChecked)
+            {
+                UserIcon newUser = new UserIcon("測");
 
+                MorningStack.Children.Add(newUser);
+            }
+            else
+            {
+                //MorningStack.Children.Clear();
+            }
+        }
+
+        private void Noon_OnClick(object sender, RoutedEventArgs e)
+        {
+            if ((bool)(sender as CheckBox).IsChecked)
+            {
+                UserIcon newUser = new UserIcon("測");
+
+                NoonStack.Children.Add(newUser);
+            }
+            else
+            {
+                NoonStack.Children.Clear();
+            }
+        }
+
+        private void Evening_OnClick(object sender, RoutedEventArgs e)
+        {
+            if ((bool)(sender as CheckBox).IsChecked)
+            {
+                UserIcon newUser = new UserIcon("測");
+
+                EveningStack.Children.Add(newUser);
+            }
+            else
+            {
+                EveningStack.Children.Clear();
+            }
         }
     }
 }

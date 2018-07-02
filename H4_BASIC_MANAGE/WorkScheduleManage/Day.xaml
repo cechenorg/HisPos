@@ -20,12 +20,21 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Label Name="labelDay" Grid.Row="0" Grid.Column="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
-            <CheckBox Name="Morning"  Grid.Row="1" Grid.Column="0" Checked="Morning_Checked" HorizontalAlignment="Center"/>
+            <CheckBox Name="Morning" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <Label Grid.Row="1" Grid.Column="1" Content="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" Margin="0,-5,0,0"/>
-            <CheckBox Name="Noon"  Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center"/>
+            <StackPanel Name="MorningStack" Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
+                
+            </StackPanel>
+            <CheckBox Name="Noon"  Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Click="Noon_OnClick"/>
             <Label Grid.Row="2" Grid.Column="1" Content="午" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" Margin="0,-5,0,0"/>
-            <CheckBox Name="Evening"  Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center"/>
+            <StackPanel Name="NoonStack" Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
+
+            </StackPanel>
+            <CheckBox Name="Evening"  Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Click="Evening_OnClick"/>
             <Label Grid.Row="3" Grid.Column="1" Content="晚" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" Margin="0,-5,0,0"/>
+            <StackPanel Name="EveningStack" Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
+
+            </StackPanel>
 
         </Grid>
     </Viewbox>
