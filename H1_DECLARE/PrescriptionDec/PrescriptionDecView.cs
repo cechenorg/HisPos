@@ -61,7 +61,7 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadHospitalData()
         {
-            var institutions = new Hospitals();
+            var institutions = new HospitalDb();
             institutions.GetData();
             ReleaseInstitution.ItemsSource = institutions.HospitalsCollection;
             LoadDivisionsData();
@@ -71,18 +71,19 @@ namespace His_Pos.PrescriptionDec
          */
         private void LoadDivisionsData()
         {
-            foreach (var division in DivisionDb.DivisionsList)
-            {
-                DivisionCombo.Items.Add(division.Id + ". " + division.Name);
-            }
+            //foreach (var division in DivisionDb.Divisions)
+            //{
+            //    DivisionCombo.Items.Add(division.Id + ". " + division.Name);
+            //}
         }
         /*
          *載入給付類別
          */
         private void LoadPaymentCategories()
         {
-            PaymentCategroyDb.GetData();
-            foreach (var paymentCategory in PaymentCategroyDb.PaymentCategoryList)
+            PaymentCategroyDb p = new PaymentCategroyDb();
+            p.GetData();
+            foreach (var paymentCategory in p.PaymentCategories)
             {
                 PaymentCategoryCombo.Items.Add(paymentCategory.Id + ". " + paymentCategory.Name);
             }
@@ -105,7 +106,7 @@ namespace His_Pos.PrescriptionDec
         {
             var treatmentCases = new TreatmentCaseDb();
             treatmentCases.GetData();
-            foreach (var treatmentCase in treatmentCases.TreatmentCaseList)
+            foreach (var treatmentCase in treatmentCases.TreatmentCases)
             {
                 TreatmentCaseCombo.Items.Add(treatmentCase.Id + ". " + treatmentCase.Name);
             }
@@ -218,7 +219,7 @@ namespace His_Pos.PrescriptionDec
         private Prescription CheckPrescriptionInfo()
         {
             CheckMedicalNumber();
-            return new Prescription(MainWindow.CurrentUser.Pharmacy, GetTreatment(), GetMedcines());
+            return new Prescription(Prescription.Customer,MainWindow.CurrentUser.Pharmacy, GetTreatment(), GetMedcines());
         }
         /*
          * 將藥品加入處方
@@ -456,9 +457,9 @@ namespace His_Pos.PrescriptionDec
         /*
          * 確認國際疾病代碼D8.D9
          */
-        private List<DiseaseCode> CheckDiseaseCodes()
+        private ObservableCollection<DiseaseCode> CheckDiseaseCodes()
         {
-            List<DiseaseCode> diseaseCodes = new List<DiseaseCode>();
+            ObservableCollection<DiseaseCode> diseaseCodes = new ObservableCollection<DiseaseCode>();
             var mainDiagnosis = new DiseaseCode();
             if (MainDiagnosis.Text == string.Empty)
             {

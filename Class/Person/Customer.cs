@@ -4,6 +4,7 @@
     {
         public Customer()
         {
+            IcCard = new IcCard();
         }
         public Customer(IcCard icCard)
         {

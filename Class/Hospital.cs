@@ -11,20 +11,14 @@ namespace His_Pos.Class
             Doctor = new MedicalPersonnel();
             Division = new Division.Division();
         }
-        public Hospital(string id, string name)
-        {
-            Id = id;
-            Name = name;
-            FullName = id + " " + name;
-            Doctor = new MedicalPersonnel();
-            Division = new Division.Division();
-        }
 
         public Hospital(DataRow dataRow)
         {
             Id = dataRow["INS_ID"].ToString();
             Name = dataRow["INS_NAME"].ToString();
-            FullName = Id + " " + Name;
+            FullName = dataRow["FULLNAME"].ToString();
+            Doctor = new MedicalPersonnel();
+            Division = new Division.Division();
         }
 
         public MedicalPersonnel Doctor { get; set; }

@@ -1,38 +1,37 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using His_Pos.Interface;
+using His_Pos.Properties;
+using His_Pos.Service;
 
 namespace His_Pos.Class.PaymentCategory
 {
-    public static class PaymentCategroyDb
+    public class PaymentCategroyDb : ISelection
     {
-        public static List<PaymentCategory> PaymentCategoryList { get; } = new List<PaymentCategory>();
+        public readonly ObservableCollection<PaymentCategory> PaymentCategories = new ObservableCollection<PaymentCategory>();
 
-        private static readonly Dictionary<string, string> PaymentCategoryDictionary = new Dictionary<string, string>
+        public void GetData()
         {
-            {"1", "職業傷害"}, {"2", "職業病"},
-            {"3", "普通傷害"}, {"4", "普通疾病"},
-            {"9", "呼吸照護"},{"A", "天然災害 - 巡迴"},
-            {"B","天然災害 - 非巡迴"},{"Z","高雄市氣爆事件"}
-        };
-
-        public static void GetData()
-        {
-            foreach (var paymentCategory in PaymentCategoryDictionary)
+            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var paymentCategories = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetPaymentCategoriesData]", dbConnection);
+            foreach (DataRow paymentCategory in paymentCategories.Rows)
             {
-                var p = new PaymentCategory(paymentCategory.Key,paymentCategory.Value);
-                PaymentCategoryList.Add(p);
+                var d = new PaymentCategory(paymentCategory);
+                PaymentCategories.Add(d);
             }
         }
         /*
          *回傳對應給付類別之id + name string
          */
-        public static string GetPaymentCategory(string tag)
+        public string GetPaymentCategory(string tag)
         {
             var result = string.Empty;
-            foreach (var payment in PaymentCategoryDictionary)
+            foreach (var payment in PaymentCategories)
             {
-                if (payment.Key == tag)
+                if (payment.Id == tag)
                 {
-                    result = payment.Key + ". " + payment.Value;
+                    result = payment.FullName;
                 }
             }
             return result;

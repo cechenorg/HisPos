@@ -39,8 +39,10 @@ namespace His_Pos.PrescriptionInquire
          */
         private void SetTreatmentData()
         {
+            var p = new PaymentCategroyDb();
+            p.GetData();
             /*AdjustCase.Content = AdjustCaseDb.GetAdjustCase(_inquiredPrescription.Prescription.Treatment.AdjustCase.Id);*///調劑案件
-            PaymentCategory.Content = PaymentCategroyDb.GetPaymentCategory(_inquiredPrescription.Prescription.Treatment.PaymentCategory.Id);//給付類別
+            PaymentCategory.Content = p.GetPaymentCategory(_inquiredPrescription.Prescription.Treatment.PaymentCategory.Id);//給付類別
             CopaymentCode.Content = CopaymentDb.GetCopayment(_inquiredPrescription.Prescription.Treatment.Copayment.Id);
             SetTreatmentCaseContent();//原處方案件
             SetMedicalInfoData();//MedicalInfo資料

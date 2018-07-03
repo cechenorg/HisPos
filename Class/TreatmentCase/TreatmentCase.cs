@@ -1,11 +1,14 @@
-﻿namespace His_Pos.Class.TreatmentCase
+﻿using System.Data;
+
+namespace His_Pos.Class.TreatmentCase
 {
     public class TreatmentCase : Selection
     {
-        public TreatmentCase(string id,string name)
+        public TreatmentCase(DataRow dataRow)
         {
-            Id = id;
-            Name = name;
+            Id = dataRow["HISMEDCAS_ID"].ToString();
+            Name = dataRow["HISMEDCAS_NAME"].ToString();
+            FullName = dataRow["FULLNAME"].ToString();
         }
 
         public TreatmentCase()

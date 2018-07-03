@@ -10,13 +10,15 @@ namespace His_Pos.Class
     {
         public Prescription()
         {
+            Customer = new Customer();
             Pharmacy = new Pharmacy();
             Treatment = new Treatment();
             Medicines = new ObservableCollection<Medicine>();
         }
 
-        public Prescription(Pharmacy pharmacy, Treatment treatment, ObservableCollection<Medicine> medicines)
+        public Prescription(Customer customer,Pharmacy pharmacy, Treatment treatment, ObservableCollection<Medicine> medicines)
         {
+            Customer = customer;
             Pharmacy = pharmacy;
             Treatment = treatment;
             Medicines = medicines;

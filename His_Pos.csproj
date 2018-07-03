@@ -238,7 +238,7 @@
     <Compile Include="Class\Hospital.cs" />
     <Compile Include="Class\IcCard.cs" />
     <Compile Include="Class\IcMarks.cs" />
-    <Compile Include="Class\Hospitals.cs" />
+    <Compile Include="Class\HospitalDb.cs" />
     <Compile Include="Class\MedicalInfo.cs" />
     <Compile Include="Class\Person\CustomerDb.cs" />
     <Compile Include="Class\Person\MedicalPersonnel.cs" />
@@ -699,6 +699,8 @@
     <Resource Include="Images\Management.png" />
     <Resource Include="Images\blueprint.png" />
     <Resource Include="Images\ClockIn.png" />
+    <Resource Include="Images\Genders.png" />
+    <Resource Include="Images\User_48px.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

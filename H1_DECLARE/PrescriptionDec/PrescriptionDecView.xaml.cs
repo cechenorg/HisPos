@@ -34,7 +34,6 @@ namespace His_Pos.PrescriptionDec
         private int _res = -1;
         private SystemType cusHhistoryFilterCondition = SystemType.ALL;
         private Customer _currentCustomer = new Customer();
-        //private Prescription prescription = new Prescription();
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<Medicine> MedicineList { get; set; }
@@ -87,6 +86,7 @@ namespace His_Pos.PrescriptionDec
             _currentCustomer.IcNumber = "S88824769A";
             _currentCustomer.Gender = true;
             _prescription.Customer = _currentCustomer;
+            _prescription.Customer.IcCard = new IcCard();
             _prescription.Customer.IcCard.AvailableTimes = 5;
             _prescription.Customer.IcCard.ICNumber = "900000000720";
             _prescription.Customer.IcCard.IcMarks.LogOutMark = "1";

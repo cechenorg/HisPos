@@ -1,4 +1,6 @@
-﻿namespace His_Pos.Class.Division
+﻿using System.Data;
+
+namespace His_Pos.Class.Division
 {
     public class Division : Selection
     {
@@ -6,11 +8,11 @@
         {
         }
 
-        public Division(string id,string name)
+        public Division(DataRow dataRow)
         {
-            Id = id;
-            Name = name;
-            FullName = id + " " + name;
+            Id = dataRow["HISDIV_ID"].ToString();
+            Name = dataRow["HISDIV_NAME"].ToString();
+            FullName = dataRow["FULLNAME"].ToString();
         }
     }
 }

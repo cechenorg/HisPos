@@ -1,4 +1,6 @@
-﻿namespace His_Pos.Class.PaymentCategory
+﻿using System.Data;
+
+namespace His_Pos.Class.PaymentCategory
 {
     public class PaymentCategory : Selection
     {
@@ -6,10 +8,11 @@
         {
         }
 
-        public PaymentCategory(string id,string name)
+        public PaymentCategory(DataRow dataRow)
         {
-            Id = id;
-            Name = name;
+            Id = dataRow["HISPAYCAT_ID"].ToString();
+            Name = dataRow["HISPAYCAT_NAME"].ToString();
+            FullName = dataRow["FULLNAME"].ToString();
         }
     }
 }

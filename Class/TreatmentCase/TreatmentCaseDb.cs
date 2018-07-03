@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using His_Pos.Interface;
 using His_Pos.Properties;
@@ -8,16 +9,16 @@ namespace His_Pos.Class.TreatmentCase
 {
     public class TreatmentCaseDb : ISelection
     {
-        public List<TreatmentCase> TreatmentCaseList { get;} = new List<TreatmentCase>();
+        public ObservableCollection<TreatmentCase> TreatmentCases { get;} = new ObservableCollection<TreatmentCase>();
 
         public void GetData()
         {
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var prescriptionCaseTable = dbConnection.SetProcName("[HIS_POS_DB].[GET].[MEDICALCASE]", dbConnection);
+            var prescriptionCaseTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetTreatmentCasesData]", dbConnection);
             foreach (DataRow treatmentCase in prescriptionCaseTable.Rows)
             {
-                var t = new TreatmentCase(treatmentCase["HISMEDCAS_ID"].ToString(), treatmentCase["HISMEDCAS_NAME"].ToString());
-                TreatmentCaseList.Add(t);
+                var t = new TreatmentCase(treatmentCase);
+                TreatmentCases.Add(t);
             }
         }
         /*
@@ -27,11 +28,11 @@ namespace His_Pos.Class.TreatmentCase
         {
             GetData();
             var result = string.Empty;
-            foreach (var treatment in TreatmentCaseList)
+            foreach (var treatment in TreatmentCases)
             {
                 if (treatment.Id == tag)
                 {
-                    result = treatment.Id + ". " + treatment.Name;
+                    result = treatment.FullName;
                 }
             }
             return result;
