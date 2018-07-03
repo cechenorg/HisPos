@@ -221,5 +221,22 @@ namespace His_Pos.ManufactoryManage
 
             (PrincipalDetail.DataContext as ManufactoryPrincipal).PayType = (sender as RadioButton).Tag.ToString();
         }
+
+        private void Search_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (SearchName.Text.Equals(""))
+            {
+                ManageManufactoryDataGrid.Items.Filter = null;
+                return;
+            }
+
+            ManageManufactoryDataGrid.Items.Filter = m => (m as ManageManufactory).Name.Contains(SearchName.Text)
+                                                          || (m as ManageManufactory).NickName.Contains(SearchName.Text)
+                                                          || (m as ManageManufactory).ManufactoryPrincipals.Count(p => p.Name.Contains(SearchName.Text)) > 0
+                                                          || (m as ManageManufactory).ManufactoryPrincipals.Count(p => p.ResponsibleDepartment.Contains(SearchName.Text)) > 0;
+
+
+            ManageManufactoryDataGrid.SelectedIndex = 0;
+        }
     }
 }

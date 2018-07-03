@@ -18,8 +18,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <Rectangle Width="1250"/>
-                <Button Content="查詢" Name="Search" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+                <TextBox Name="SearchName" materialDesign:HintAssist.Hint="廠商及負責人 名稱 簡稱 負責對象" Margin="20,0,0,5" Width="380" FontSize="25"/>
+                <Rectangle Width="850"/>
+                <Button Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Click="Search_OnClick"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                 <DataGrid Name="ManageManufactoryDataGrid" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
