@@ -288,6 +288,9 @@
     <Compile Include="Class\Product\Medicine.cs" />
     <Compile Include="Class\Product\OTC.cs" />
     <Compile Include="Class\Vaccination.cs" />
+    <Compile Include="Class\WorkSchedule\UserIconData.cs" />
+    <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
+    <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
     <Compile Include="Confirm.xaml.cs">
       <DependentUpon>Confirm.xaml</DependentUpon>
     </Compile>

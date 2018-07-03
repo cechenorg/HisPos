@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.WorkSchedule;
 
 namespace His_Pos.H5_ATTEND.WorkScheduleManage
 {
@@ -21,10 +22,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class UserIcon : UserControl
     {
-        public UserIcon(string name)
+        public string Id { get; }
+
+        public UserIcon(UserIconData userIconData)
         {
             InitializeComponent();
-            UserName.Content = name;
+            Id = userIconData.Id;
+            UserName.Text = userIconData.Name.Substring(0,1);
+            Back.Background = userIconData.BackBrush;
         }
     }
 }
