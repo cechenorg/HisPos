@@ -54,9 +54,31 @@ namespace His_Pos.Class.WorkSchedule
             return collection;
         }
 
-        internal static void InsertWorkSchedules(ObservableCollection<WorkSchedule> workSchedules)
+        internal static void InsertWorkSchedules(ObservableCollection<WorkSchedule> workSchedules, string year, string month)
         {
-            
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            DataTable workSchedule = new DataTable();
+            workSchedule.Columns.Add("EMP_ID", typeof(string));
+            workSchedule.Columns.Add("EMPSCH_DATE", typeof(DateTime));
+            workSchedule.Columns.Add("EMPSCH_PERIOD", typeof(string));
+
+            int selectedYear = Int32.Parse(year);
+            int selectedMonth = Int32.Parse(month);
+
+            foreach (var ws in workSchedules)
+            {
+                var newRow = workSchedule.NewRow();
+                newRow["EMP_ID"] = ws.Id;
+                newRow["EMPSCH_DATE"] = new DateTime(selectedYear, selectedMonth, Int32.Parse(ws.Day));
+                newRow["EMPSCH_PERIOD"] = ws.Period;
+                workSchedule.Rows.Add(newRow);
+            }
+            parameters.Add(new SqlParameter("WORKSCHEDULE", workSchedule));
+            parameters.Add(new SqlParameter("YEAR", year));
+            parameters.Add(new SqlParameter("MONTH", month));
+
+            dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[InsertWorkSchedules]", parameters);
         }
     }
 }

@@ -172,7 +172,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         {
             UpdateWorkSchedules();
 
-            WorkScheduleDb.InsertWorkSchedules(WorkSchedules);
+            WorkScheduleDb.InsertWorkSchedules(WorkSchedules, selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
 
             UpdateEndEditUi();
         }
