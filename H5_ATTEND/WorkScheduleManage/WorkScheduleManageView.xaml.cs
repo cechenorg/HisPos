@@ -141,30 +141,52 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             if (comboBox is null || comboBox.SelectedItem is null) return;
 
             CurrentUserIconData = comboBox.SelectedItem as UserIconData;
-            UpdateEditUi();
+            UpdateStartEditUi();
         }
 
         private void StartSchedule_Click(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-
-            if (button is null) return;
-
-            UserCombo.IsEnabled = true;
-            button.IsEnabled = false;
-
             CurrentUserIconData = UserCombo.SelectedItem as UserIconData;
 
-            UpdateEditUi();
+            UpdateStartEditUi();
         }
 
-        private void UpdateEditUi()
+        private void UpdateStartEditUi()
         {
+            UserCombo.IsEnabled = true;
+            FinishScheduleBtn.IsEnabled = true;
+            ComboYear.IsEnabled = false;
+            ComboMonth.IsEnabled = false;
+            StartScheduleBtn.IsEnabled = false;
+
             List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
 
             foreach (var d in days)
             {
                 d.StartEdit();
+            }
+        }
+
+        private void FinishSchedule_Click(object sender, RoutedEventArgs e)
+        {
+
+
+            UpdateEndEditUi();
+        }
+
+        private void UpdateEndEditUi()
+        {
+            UserCombo.IsEnabled = false;
+            FinishScheduleBtn.IsEnabled = false;
+            ComboYear.IsEnabled = true;
+            ComboMonth.IsEnabled = true;
+            StartScheduleBtn.IsEnabled = true;
+
+            List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
+
+            foreach (var d in days)
+            {
+                d.EndEdit();
             }
         }
     }

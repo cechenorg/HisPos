@@ -79,21 +79,21 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
             else
             {
-                //switch (checkBox.Name)
-                //{
-                //    case "Morning":
-                //        MorningStack.Children.Remove();
-                //        break;
-                //    case "Noon":
-                //        NoonStack.Children.Add(newUser);
-                //        break;
-                //    case "Evening":
-                //        EveningStack.Children.Add(newUser);
-                //        break;
-                //}
+                switch (checkBox.Name)
+                {
+                    case "Morning":
+                        RemoveUserIcon(MorningStack);
+                        break;
+                    case "Noon":
+                        RemoveUserIcon(NoonStack);
+                        break;
+                    case "Evening":
+                        RemoveUserIcon(EveningStack);
+                        break;
+                }
             }
         }
-
+        
         public void AddUserToStack(UserIconData userIconData, string period)
         {
             switch (period)
@@ -145,6 +145,25 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
 
             return false;
+        }
+
+        private void RemoveUserIcon(StackPanel stack)
+        {
+            List<UserIcon> userIcons = stack.Children.OfType<UserIcon>().ToList();
+
+            foreach (var userIcon in userIcons)
+            {
+                if (userIcon.Id.Equals(WorkScheduleManageView.CurrentUserIconData.Id))
+                {
+                    stack.Children.Remove(userIcon);
+                    return;
+                }
+            }
+        }
+
+        internal void EndEdit()
+        {
+            IsEditMode = false ;
         }
     }
 
