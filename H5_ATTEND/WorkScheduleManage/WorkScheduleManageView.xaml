@@ -45,10 +45,10 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <StackPanel Name="UserPreview" Orientation="Horizontal" Grid.Row="3">
+        <StackPanel Name="UserPreview" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Margin="0,0,20,0">
             
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="4">
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
             <Button Name="StartScheduleBtn" Width="100" Content="排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Margin="10,0,0,0" Click="StartSchedule_Click"/>
             <ComboBox Name="UserCombo" DisplayMemberPath="Name" Width="200" Margin="20,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" IsEnabled="False" SelectionChanged="UserCombo_SelectionChanged"/>
             <Rectangle Width="860"/>
