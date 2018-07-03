@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace His_Pos.Class.Manufactory
@@ -19,7 +20,8 @@ namespace His_Pos.Class.Manufactory
             Fax = "";
             Email = "";
             Line = "";
-            PayType = "";
+            PayCondition = "D";
+            PayType = "M";
             ResponsibleDepartment = "";
         }
 
@@ -35,7 +37,11 @@ namespace His_Pos.Class.Manufactory
             PayCondition = row["MAN_PAYCONDITION"].ToString();
             PayType = row["MAN_PAYTYPE"].ToString();
             ResponsibleDepartment = row["MAN_RESPONSIBLEDEP"].ToString();
+            IsEnable = Boolean.Parse(row["MAN_ENABLE"].ToString()); 
         }
+
+        private ObservableCollection<ManufactoryGetOverview> manufactoryGetOverviews;
+
         public string Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
@@ -46,7 +52,29 @@ namespace His_Pos.Class.Manufactory
         public string Line { get; set; }
         public string ResponsibleDepartment { get; set; }
         public string PayCondition { get; set; }
-        public ObservableCollection<ManufactoryGetOverview> ManufactoryGetOverviews { get; set; }
+        public double GetTotal { get; set; }
+        public bool IsEnable { get; set; } = true;
+
+        public ObservableCollection<ManufactoryGetOverview> ManufactoryGetOverviews
+        {
+            get { return manufactoryGetOverviews; }
+            set
+            {
+                manufactoryGetOverviews = value;
+                CountTotal();
+            }
+        }
+
+        private void CountTotal()
+        {
+            if(ManufactoryGetOverviews is null) return;
+
+            foreach (var manufactoryGetOverview in ManufactoryGetOverviews)
+            {
+                GetTotal += Double.Parse(manufactoryGetOverview.Money);
+            }
+        }
+
         public ObservableCollection<ManufactoryPayOverview> ManufactoryPayOverviews { get; set; }
 
         public object Clone()
@@ -64,7 +92,9 @@ namespace His_Pos.Class.Manufactory
                 ResponsibleDepartment = ResponsibleDepartment,
                 ManufactoryGetOverviews = ManufactoryGetOverviews,
                 ManufactoryPayOverviews = ManufactoryPayOverviews,
-                PayCondition = PayCondition
+                PayCondition = PayCondition,
+                GetTotal = GetTotal,
+                IsEnable = IsEnable
             };
 
             return newManufactoryPrincipal;

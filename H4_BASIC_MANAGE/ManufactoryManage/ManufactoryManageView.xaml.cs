@@ -70,6 +70,8 @@ namespace His_Pos.ManufactoryManage
             {
                 PrincipalDetail.IsEnabled = true;
                 PrincipalDataGrid.SelectedIndex = 0;
+
+                PrincipalDataGrid.Items.Filter = p => (p as ManufactoryPrincipal).IsEnable;
             }
             else
             {
@@ -132,7 +134,7 @@ namespace His_Pos.ManufactoryManage
 
         private void DeletePrincipal_OnClick(object sender, RoutedEventArgs e)
         {
-            CurrentManufactory.ManufactoryPrincipals.Remove(PrincipalDetail.DataContext as ManufactoryPrincipal);
+            (PrincipalDetail.DataContext as ManufactoryPrincipal).IsEnable = false;
             UpdateUi();
             DataChanged();
         }

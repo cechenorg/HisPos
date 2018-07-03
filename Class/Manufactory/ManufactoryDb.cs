@@ -172,6 +172,7 @@ namespace His_Pos.Class.Manufactory
             parameters.Add(new SqlParameter("LINE", DBNull.Value));
             parameters.Add(new SqlParameter("PAYCONDITION", DBNull.Value));
             parameters.Add(new SqlParameter("PAYTYPE", DBNull.Value));
+            parameters.Add(new SqlParameter("ISENABLE", 1));
 
             dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
 
@@ -197,6 +198,7 @@ namespace His_Pos.Class.Manufactory
                 parameters.Add(new SqlParameter("LINE", principal.Line));
                 parameters.Add(new SqlParameter("PAYCONDITION", principal.PayCondition));
                 parameters.Add(new SqlParameter("PAYTYPE", principal.PayType));
+                parameters.Add(new SqlParameter("ISENABLE", principal.IsEnable));
 
                 dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
             }
