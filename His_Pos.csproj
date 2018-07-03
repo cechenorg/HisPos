@@ -327,6 +327,9 @@
     <Compile Include="H5_ATTEND\WorkScheduleManage\UserIcon.xaml.cs">
       <DependentUpon>UserIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H5_ATTEND\WorkScheduleManage\UserIconPreview.xaml.cs">
+      <DependentUpon>UserIconPreview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H5_ATTEND\WorkScheduleManage\WorkScheduleManage.cs" />
     <Compile Include="H5_ATTEND\WorkScheduleManage\WorkScheduleManageView.xaml.cs">
       <DependentUpon>WorkScheduleManageView.xaml</DependentUpon>
@@ -489,6 +492,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H5_ATTEND\WorkScheduleManage\UserIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H5_ATTEND\WorkScheduleManage\UserIconPreview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

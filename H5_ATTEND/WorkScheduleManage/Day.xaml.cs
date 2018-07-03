@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +21,37 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// <summary>
     /// Day.xaml 的互動邏輯
     /// </summary>
-    public partial class Day : UserControl
+    public partial class Day : UserControl, INotifyPropertyChanged
     {
+        private bool isEditMode = false;
+        public bool IsEditMode
+        {
+            get
+            {
+                return isEditMode;
+            }
+            set
+            {
+                isEditMode = value;
+                NotifyPropertyChanged("IsEditMode");
+            }
+        }
+
         public Day(string id)
         {
             InitializeComponent();
+            DataContext = this;
 
             labelDay.Content = id;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
         }
 
         private void Morning_OnClick(object sender, RoutedEventArgs e)
@@ -98,6 +124,45 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             //        EveningStack.Children.Add(new UserIcon(userIconData));
             //        break;
             //}
+        }
+
+        public void StartEdit()
+        {
+            IsEditMode = true;
+
+            Morning.IsChecked = HasCurrentUser(MorningStack);
+            Noon.IsChecked = HasCurrentUser(NoonStack);
+            Evening.IsChecked = HasCurrentUser(EveningStack);
+        }
+
+        private bool? HasCurrentUser(StackPanel stack)
+        {
+            List<UserIcon> userIcons = stack.Children.OfType<UserIcon>().ToList();
+
+            foreach(var userIcon in userIcons)
+            {
+                if (userIcon.Id.Equals(WorkScheduleManageView.CurrentUserIconData.Id)) return true;
+            }
+
+            return false;
+        }
+    }
+
+    public class IsEditableConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if((bool)value)
+            {
+                return 20;
+            }
+
+            return 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
         }
     }
 }

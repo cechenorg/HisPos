@@ -53,6 +53,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         private void InitUserIconData()
         {
             UserIconDatas = WorkScheduleDb.GetUserIconDatas();
+
+            foreach(var userIconData in UserIconDatas)
+            {
+                UserPreview.Children.Add(new UserIconPreview(userIconData));
+            }
+
+            UserCombo.ItemsSource = UserIconDatas;
+            UserCombo.SelectedIndex = 0;
         }
 
         private void InitWorkSchedule()
@@ -124,6 +132,40 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             selectDateTime.Year = Convert.ToInt32(ComboYear.SelectedValue.ToString().Split('年')[0]);
             InitCalendar(selectDateTime);
 
+        }
+
+        private void UserCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+
+            if (comboBox is null || comboBox.SelectedItem is null) return;
+
+            CurrentUserIconData = comboBox.SelectedItem as UserIconData;
+            UpdateEditUi();
+        }
+
+        private void StartSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            if (button is null) return;
+
+            UserCombo.IsEnabled = true;
+            button.IsEnabled = false;
+
+            CurrentUserIconData = UserCombo.SelectedItem as UserIconData;
+
+            UpdateEditUi();
+        }
+
+        private void UpdateEditUi()
+        {
+            List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
+
+            foreach (var d in days)
+            {
+                d.StartEdit();
+            }
         }
     }
 }

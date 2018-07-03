@@ -14,7 +14,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
-            <ComboBox Width="70" Name="ComboYear" SelectionChanged="comboYear_SelectionChanged" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <ComboBox Width="75" Name="ComboYear" SelectionChanged="comboYear_SelectionChanged" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <ComboBox Width="50" SelectionChanged="comboMonth_SelectionChanged"  Name="ComboMonth" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0" Background="{StaticResource GridDarkerBackGround}">
@@ -45,13 +45,13 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <StackPanel Orientation="Horizontal" Grid.Row="3">
+        <StackPanel Name="UserPreview" Orientation="Horizontal" Grid.Row="3">
             
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="4">
-            <Button Width="100" Content="排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Margin="10,0,0,0"/>
-            <ComboBox/>
-            <Rectangle Width="1000"/>
+            <Button Width="100" Content="排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Margin="10,0,0,0" Click="StartSchedule_Click"/>
+            <ComboBox Name="UserCombo" DisplayMemberPath="Name" Width="200" Margin="20,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" IsEnabled="False" SelectionChanged="UserCombo_SelectionChanged"/>
+            <Rectangle Width="860"/>
             <Button Width="150" Content="完成排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Margin="10,0,0,0"/>
         </StackPanel>
         

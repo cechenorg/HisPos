@@ -40,7 +40,7 @@ namespace His_Pos.Class.WorkSchedule
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[GetUserIconData]");
 
-            string[] hexs = {"#99FF0000", "#99FF8B00", "#99E8FF00", "#995DFF00", "#9900FF97", "#9900A2FF", "#990000FF", "#998B00FF", "#99FF00FF"};
+            string[] hexs = { "#4CFF0000", "#4CFF8B00", "#4CE8FF00", "#4C5DFF00", "#4C00FF97", "#4C00A2FF", "#4C0000FF", "#4C8B00FF", "#4CFF00FF" };
 
             int index = 0;
 
