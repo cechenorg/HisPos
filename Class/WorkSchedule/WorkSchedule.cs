@@ -16,6 +16,13 @@ namespace His_Pos.Class.WorkSchedule
             Period = dataRow["EMPSCH_PERIOD"].ToString();
         }
 
+        public WorkSchedule(string id, string day, string period)
+        {
+            Id = id;
+            Day = day;
+            Period = period;
+        }
+
         public string Id { get; set; }
         public string Day { get; set; }
         public string Period { get; set; }

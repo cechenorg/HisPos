@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -164,6 +165,28 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         internal void EndEdit()
         {
             IsEditMode = false ;
+        }
+
+        internal ObservableCollection<WorkSchedule> GetWorkSchedules(ObservableCollection<WorkSchedule> workSchedules)
+        {
+            AddWorkSchedules(MorningStack,ref workSchedules);
+            AddWorkSchedules(NoonStack, ref workSchedules);
+            AddWorkSchedules(EveningStack, ref workSchedules);
+
+            return workSchedules;
+        }
+
+        private void AddWorkSchedules(StackPanel stack, ref ObservableCollection<WorkSchedule> workSchedules)
+        {
+            string day = labelDay.Content.ToString();
+            string period = stack.Name.Substring(0,1);
+
+            List<UserIcon> userIcons = stack.Children.OfType<UserIcon>().ToList();
+
+            foreach (var userIcon in userIcons)
+            {
+                workSchedules.Add(new WorkSchedule(userIcon.Id, day, period));
+            }
         }
     }
 

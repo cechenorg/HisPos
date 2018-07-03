@@ -53,5 +53,10 @@ namespace His_Pos.Class.WorkSchedule
 
             return collection;
         }
+
+        internal static void InsertWorkSchedules(ObservableCollection<WorkSchedule> workSchedules)
+        {
+            
+        }
     }
 }

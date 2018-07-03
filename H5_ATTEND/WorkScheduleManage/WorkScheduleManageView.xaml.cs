@@ -48,6 +48,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             InitUserIconData();
             InitBasicData();
             InitCalendar(selectDateTime);
+            UpdateEndEditUi();
         }
 
         private void InitUserIconData()
@@ -169,9 +170,23 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void FinishSchedule_Click(object sender, RoutedEventArgs e)
         {
+            UpdateWorkSchedules();
 
+            WorkScheduleDb.InsertWorkSchedules(WorkSchedules);
 
             UpdateEndEditUi();
+        }
+
+        private void UpdateWorkSchedules()
+        {
+            WorkSchedules.Clear();
+
+            List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
+
+            foreach (var d in days)
+            {
+                d.GetWorkSchedules(WorkSchedules);
+            }
         }
 
         private void UpdateEndEditUi()
