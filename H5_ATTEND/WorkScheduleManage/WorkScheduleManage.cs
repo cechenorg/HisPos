@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
+namespace His_Pos.H5_ATTEND.WorkScheduleManage
 {
     class WorkScheduleManage : TabBase
     {

@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="His_Pos.H4_BASIC_MANAGE.WorkScheduleManage.Day"
+﻿<UserControl x:Class="His_Pos.H5_ATTEND.WorkScheduleManage.Day"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.WorkScheduleManage"
+             xmlns:local="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
              mc:Ignorable="d" 
              d:DesignHeight="105" d:DesignWidth="150">
     <Viewbox Stretch="Fill" Margin="2">

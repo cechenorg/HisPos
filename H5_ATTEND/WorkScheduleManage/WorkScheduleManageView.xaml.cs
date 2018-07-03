@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
+namespace His_Pos.H5_ATTEND.WorkScheduleManage
 {
     /// <summary>
     /// WorkScheduleManageView.xaml 的互動邏輯
