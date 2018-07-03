@@ -212,9 +212,9 @@
     <Compile Include="Class\IcCardPay.cs" />
     <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\InStock.cs" />
-    <Compile Include="Class\Location.cs" />
-    <Compile Include="Class\LocationDb.cs" />
-    <Compile Include="Class\LocationDetail.cs" />
+    <Compile Include="Class\Location\Location.cs" />
+    <Compile Include="Class\Location\LocationDb.cs" />
+    <Compile Include="Class\Location\LocationDetail.cs" />
     <Compile Include="Class\Manufactory\ManageManufactory.cs" />
     <Compile Include="Class\Manufactory\Manufactory.cs" />
     <Compile Include="Class\Manufactory\ManufactoryChanged.cs" />
@@ -297,6 +297,9 @@
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
       <DependentUpon>EmployeeManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H4_BASIC_MANAGE\LocationManage\ItemChangeWindow.xaml.cs">
+      <DependentUpon>ItemChangeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationChangeView.xaml.cs">
       <DependentUpon>LocationChangeView.xaml</DependentUpon>
@@ -454,6 +457,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\LocationManage\ItemChangeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

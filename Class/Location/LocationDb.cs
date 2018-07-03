@@ -13,6 +13,17 @@ namespace His_Pos.Class
 {
     public static class LocationDb
     {
+        internal static ObservableCollection<string> ObservableGetLocationData()
+        {
+            ObservableCollection<string> sourceBig = new ObservableCollection<string>();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationData]");
+            foreach (DataRow row in table.Rows)
+            {
+                sourceBig.Add(row["LOC_NAME"].ToString());
+            }
+            return sourceBig;
+        }
         internal static DataTable GetLocationData()
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
@@ -38,8 +49,20 @@ namespace His_Pos.Class
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("LOC_ID", id));
+                parameters.Add(new SqlParameter("LOC_ID", id));
             return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationDetail]", parameters);
+        }
+        internal static ObservableCollection<string> ObservableGetLocationDetail() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("LOC_ID", DBNull.Value));
+           var table = dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationDetail]", parameters);
+            ObservableCollection<string> sourceSmall = new ObservableCollection<string>();
+            foreach (DataRow row in table.Rows)
+            {
+                sourceSmall.Add(row["LOCD_NAME"].ToString());
+            }
+            return sourceSmall;
         }
         internal static void UpdateLocationDetail(LocationDetail location)
         {
@@ -91,5 +114,10 @@ namespace His_Pos.Class
             parameters.Add(new SqlParameter("LOC_ID", locId));
             dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[DeleteLocation]", parameters);
         }
+        internal static DataTable GetProductLocation() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetProductLocation]");
+        }
+      
     }
 }
