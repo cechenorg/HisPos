@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.WorkSchedule;
 
 namespace His_Pos.H5_ATTEND.WorkScheduleManage
 {
@@ -33,12 +36,42 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             public int Day;
         }
         private Time selectDateTime = new Time(DateTime.Now);
+
+        public static UserIconData CurrentUserIconData;
+
+        public ObservableCollection<WorkSchedule> WorkSchedules { get; set; }
+        public ObservableCollection<UserIconData> UserIconDatas { get; set; }
+
         public WorkScheduleManageView()
         {
             InitializeComponent();
+            InitUserIconData();
             InitBasicData();
             InitCalendar(selectDateTime);
         }
+
+        private void InitUserIconData()
+        {
+            UserIconDatas = WorkScheduleDb.GetUserIconDatas();
+        }
+
+        private void InitWorkSchedule()
+        {
+            WorkSchedules = WorkScheduleDb.GetWorkSchedules(selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
+
+            if(WorkSchedules.Count == 0) return;
+
+            CurrentUserIconData = UserIconDatas.Single(u => u.Id.Equals(WorkSchedules[0].Id));
+
+            foreach (var workSchedule in WorkSchedules)
+            {
+                if( !workSchedule.Id.Equals(CurrentUserIconData.Id) )
+                    CurrentUserIconData = UserIconDatas.Single(u => u.Id.Equals(workSchedule.Id));
+
+                (GridCalendar.Children[Int32.Parse(workSchedule.Day) - 1] as Day).AddUserToStack(CurrentUserIconData, workSchedule.Period);
+            }
+        }
+
         private void InitBasicData() {
             List<string> months = new List<string> { "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
             List<string> years = new List<string>();
@@ -49,11 +82,12 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 years.Add(thisyear.ToString() + "年");
                 thisyear++;
             }
-            comboMonth.ItemsSource = months; 
-            comboMonth.Text = DateTime.Now.Month + "月";
-            comboYear.ItemsSource = years;
-            comboYear.Text = DateTime.Now.Year + "年";
+            ComboMonth.ItemsSource = months; 
+            ComboMonth.Text = DateTime.Now.Month + "月";
+            ComboYear.ItemsSource = years;
+            ComboYear.Text = DateTime.Now.Year + "年";
         }
+
         private void InitCalendar(Time selectDateTime) {
             GridCalendar.Children.Clear();
             DateTime TheMonthStart = new DateTime(selectDateTime.Year, selectDateTime.Month, 1);
@@ -69,26 +103,27 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
                 Grid.SetRow(day, wcount);
                 Grid.SetColumn(day, Convert.ToInt32(today));
+                GridCalendar.Children.Add(day);
 
                 TheMonthStart = TheMonthStart.AddDays(1);
-
-                GridCalendar.Children.Add(day);
             }
-            labelSelectDate.Content = selectDateTime.Year + "年" + selectDateTime.Month + "月";
+
+            InitWorkSchedule();
         }
 
         private void comboMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (comboMonth.SelectedItem == null) return;
-            selectDateTime.Month = Convert.ToInt32(comboMonth.SelectedValue.ToString().Split('月')[0]);
+            if (ComboMonth.SelectedItem == null) return;
+            selectDateTime.Month = Convert.ToInt32(ComboMonth.SelectedValue.ToString().Split('月')[0]);
             InitCalendar(selectDateTime);
         }
 
         private void comboYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (comboYear.SelectedItem == null) return;
-            selectDateTime.Year = Convert.ToInt32(comboYear.SelectedValue.ToString().Split('年')[0]);
+            if (ComboYear.SelectedItem == null) return;
+            selectDateTime.Year = Convert.ToInt32(ComboYear.SelectedValue.ToString().Split('年')[0]);
             InitCalendar(selectDateTime);
+
         }
     }
 }

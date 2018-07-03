@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.WorkSchedule;
 
 namespace His_Pos.H5_ATTEND.WorkScheduleManage
 {
@@ -29,44 +30,74 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void Morning_OnClick(object sender, RoutedEventArgs e)
         {
-            if ((bool)(sender as CheckBox).IsChecked)
-            {
-                UserIcon newUser = new UserIcon("測");
+            CheckBox checkBox = sender as CheckBox;
 
-                MorningStack.Children.Add(newUser);
+            if(checkBox is null) return;
+
+            if ((bool)checkBox.IsChecked)
+            {
+                UserIcon newUser = new UserIcon(WorkScheduleManageView.CurrentUserIconData);
+
+                switch (checkBox.Name)
+                {
+                    case "Morning":
+                        MorningStack.Children.Add(newUser);
+                        break;
+                    case "Noon":
+                        NoonStack.Children.Add(newUser);
+                        break;
+                    case "Evening":
+                        EveningStack.Children.Add(newUser);
+                        break;
+                }
             }
             else
             {
-                //MorningStack.Children.Clear();
+                //switch (checkBox.Name)
+                //{
+                //    case "Morning":
+                //        MorningStack.Children.Remove();
+                //        break;
+                //    case "Noon":
+                //        NoonStack.Children.Add(newUser);
+                //        break;
+                //    case "Evening":
+                //        EveningStack.Children.Add(newUser);
+                //        break;
+                //}
             }
         }
 
-        private void Noon_OnClick(object sender, RoutedEventArgs e)
+        public void AddUserToStack(UserIconData userIconData, string period)
         {
-            if ((bool)(sender as CheckBox).IsChecked)
+            switch (period)
             {
-                UserIcon newUser = new UserIcon("測");
-
-                NoonStack.Children.Add(newUser);
-            }
-            else
-            {
-                NoonStack.Children.Clear();
+                case "M":
+                    MorningStack.Children.Add(new UserIcon(userIconData));
+                    break;
+                case "N":
+                    NoonStack.Children.Add(new UserIcon(userIconData));
+                    break;
+                case "E":
+                    EveningStack.Children.Add(new UserIcon(userIconData));
+                    break;
             }
         }
 
-        private void Evening_OnClick(object sender, RoutedEventArgs e)
+        public void DeleteUserFromStack(string id, string period)
         {
-            if ((bool)(sender as CheckBox).IsChecked)
-            {
-                UserIcon newUser = new UserIcon("測");
-
-                EveningStack.Children.Add(newUser);
-            }
-            else
-            {
-                EveningStack.Children.Clear();
-            }
+            //switch (period)
+            //{
+            //    case "M":
+            //        MorningStack.Children.Add(new UserIcon(userIconData));
+            //        break;
+            //    case "N":
+            //        NoonStack.Children.Add(new UserIcon(userIconData));
+            //        break;
+            //    case "E":
+            //        EveningStack.Children.Add(new UserIcon(userIconData));
+            //        break;
+            //}
         }
     }
 }

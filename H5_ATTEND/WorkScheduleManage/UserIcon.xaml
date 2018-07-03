@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
              mc:Ignorable="d" 
-             d:DesignHeight="18">
-    <Border BorderThickness="1" CornerRadius="5" BorderBrush="Red" Margin="0,0,2,0">
-        <Label Name="UserName" FontSize="12" FontFamily="Segoe UI Semi" Margin="0,-4,0,0"/>
+             d:DesignHeight="18" d:DesignWidth="25">
+    <Border Name="Back" CornerRadius="6" Margin="0,0,2,0" Width="25" Background="{StaticResource Shadow}">
+        <TextBlock Name="UserName" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Border>
 </UserControl>
