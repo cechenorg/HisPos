@@ -222,12 +222,8 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string log = string.Empty;
-            foreach (var item in changeItems) {
-                log = item.name + "     " + item.oldvalue + " => " + item.newvalue;
-            }
-            MessageWindow messageWindow = new MessageWindow(log,MessageType.SUCCESS);
-            messageWindow.ShowDialog();
+            ChangeResultWindow changeResultWindow = new ChangeResultWindow(changeItems);
+            changeResultWindow.ShowDialog();
         }
     }
 }
