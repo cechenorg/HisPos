@@ -42,20 +42,32 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             public string proname { get; set; }
             public string locdName { get; set; }
         }
-        private ObservableCollection<LocationbData> locationbDatas = new ObservableCollection<LocationbData>();
-        public ObservableCollection<LocationbData> LocationbDatas
+        private ObservableCollection<LocationbData> locationSourceDatas = new ObservableCollection<LocationbData>();
+        public ObservableCollection<LocationbData> LocationSourceDatas
         {
             get
             {
-                return locationbDatas;
+                return locationSourceDatas;
             }
             set
             {
-                locationbDatas = value;
-                NotifyPropertyChanged("LocationbDatas");
+                locationSourceDatas = value;
+                NotifyPropertyChanged("LocationSourceDatas");
             }
         }
-
+        private ObservableCollection<LocationbData> locationTargetDatas = new ObservableCollection<LocationbData>();
+        public ObservableCollection<LocationbData> LocationTargetDatas
+        {
+            get
+            {
+                return locationTargetDatas;
+            }
+            set
+            {
+                locationTargetDatas = value;
+                NotifyPropertyChanged("LocationTargetDatas");
+            }
+        }
         private ObservableCollection<string> sourceBig = new ObservableCollection<string>();
         private ObservableCollection<string> sourceSmall = new ObservableCollection<string>();
         public ItemChangeWindow(string view)
@@ -66,40 +78,128 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 case "Location":
                     ComboBoxSourceBig.ItemsSource = LocationDb.ObservableGetLocationData();
                     ComboBoxSourceSmall.ItemsSource = LocationDb.ObservableGetLocationDetail();
+                    ComboBoxTargetBig.ItemsSource = LocationDb.ObservableGetLocationData();
+                    ComboBoxTargetSmall.ItemsSource = LocationDb.ObservableGetLocationDetail();
                     foreach (DataRow row in LocationDb.GetProductLocation().Rows)
                     {
-                        LocationbDatas.Add(new LocationbData(row));
+                        LocationSourceDatas.Add(new LocationbData(row));
+                        LocationTargetDatas.Add(new LocationbData(row));
                     }
+                    DataGridTarget.Items.Filter = ProductLocationTargetFilter;
+                    DataGridSource.Items.Filter = ProductLocationSourceFilter;
                     break;
             }
         }
-        public bool ProductLocationFilter(object item)
+   
+        private void ComboBoxSourceBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (ComboBoxSourceBig.SelectedValue is null) return;
+            ComboBoxSourceSmall.SelectedItem = null;
+            ComboBoxSourceSmall.Items.Filter = LocationDetailSourceFilter;
+            
+        }
+
+        private void ComboBoxSourceSmall_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((ComboBoxSourceBig.SelectedValue is null)) 
+                 ComboBoxSourceBig.Text = ComboBoxSourceSmall.SelectedValue.ToString().Split('-')[0];
+            DataGridSource.Items.Filter = ProductLocationSourceFilter;
+           
+        }
+        private void ComboBoxTargetBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ComboBoxTargetBig.SelectedValue is null) return;
+            ComboBoxTargetSmall.SelectedItem = null;
+            ComboBoxTargetSmall.Items.Filter = LocationDetailTargetFilter;
+        }
+
+        private void ComboBoxTargetSmall_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((ComboBoxTargetBig.SelectedValue is null))
+                ComboBoxTargetBig.Text = ComboBoxTargetSmall.SelectedValue.ToString().Split('-')[0];
+            DataGridTarget.Items.Filter = ProductLocationTargetFilter;
+        }
+        private void ButtonPlus_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DataGridSource.SelectedItem is null) {
+                MessageWindow messageWindow = new MessageWindow("請選擇項目",MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
+            if (ComboBoxSourceSmall.SelectedItem is null) {
+                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
+            if (ComboBoxTargetSmall.SelectedItem is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
+            (DataGridSource.SelectedItem as LocationbData).locdName = ComboBoxTargetSmall.SelectedValue.ToString();
+            LocationTargetDatas.Single(product => product.proname == (DataGridSource.SelectedItem as LocationbData).proname).locdName = ComboBoxTargetSmall.SelectedValue.ToString();
+            DataGridTarget.Items.Filter = ProductLocationTargetFilter;
+            DataGridSource.Items.Filter = ProductLocationSourceFilter;
+        }
+
+        private void ButtonBalance_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (DataGridTarget.SelectedItem is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("請選擇項目", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
+            if (ComboBoxTargetSmall.SelectedItem is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
+            if (ComboBoxSourceSmall.SelectedItem is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
+              (DataGridTarget.SelectedItem as LocationbData).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
+            LocationSourceDatas.Single(product => product.proname == (DataGridTarget.SelectedItem as LocationbData).proname).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
+            DataGridTarget.Items.Filter = ProductLocationTargetFilter;
+            DataGridSource.Items.Filter = ProductLocationSourceFilter;
+            DataGridTarget.SelectedIndex = 0;
+            DataGridSource.SelectedIndex = 0;
+        }
+        public bool ProductLocationSourceFilter(object item)
+        {
+            if (ComboBoxSourceSmall.SelectedItem is null) return false;
             if (((LocationbData)item).locdName.Equals(ComboBoxSourceSmall.SelectedValue.ToString()))
                 return true;
             else
                 return false;
         }
-        public bool LocationDetailFilter(object item)
+        public bool ProductLocationTargetFilter(object item)
+        {
+            if (ComboBoxTargetSmall.SelectedItem is null) return false;
+            if (((LocationbData)item).locdName.Equals(ComboBoxTargetSmall.SelectedValue.ToString()))
+                return true;
+            else
+                return false;
+        }
+        public bool LocationDetailSourceFilter(object item)
         {
             if (item.ToString().Split('-')[0].Equals(ComboBoxSourceBig.SelectedValue.ToString()))
                 return true;
             else
                 return false;
         }
-        private void ComboBoxSourceBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public bool LocationDetailTargetFilter(object item)
         {
-            if (ComboBoxSourceBig.SelectedValue is null) return;
-            ComboBoxSourceSmall.Items.Filter = LocationDetailFilter;
-            
+            if (item.ToString().Split('-')[0].Equals(ComboBoxTargetBig.SelectedValue.ToString()))
+                return true;
+            else
+                return false;
         }
 
-        private void ComboBoxSourceSmall_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ComboBoxSourceSmall.SelectedItem is null) return;
-            if ((ComboBoxSourceBig.SelectedValue is null)) 
-            ComboBoxSourceBig.Text = ComboBoxSourceSmall.SelectedValue.ToString().Split('-')[0];
-            DataGridSource.Items.Filter = ProductLocationFilter;
-        }
     }
 }

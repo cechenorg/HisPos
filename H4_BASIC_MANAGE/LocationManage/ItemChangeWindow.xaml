@@ -23,11 +23,11 @@
                 <ComboBox Name="ComboBoxSourceSmall" SelectionChanged="ComboBoxSourceSmall_SelectionChanged" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Column="2" Grid.Row="0">
-                <ComboBox Name="ComboBoxTargetBig" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" Margin="30,0,10,0"/>
-                <ComboBox Name="ComboBoxTargetSmall"  Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center"/>
+                <ComboBox Name="ComboBoxTargetBig" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" Margin="30,0,10,0" SelectionChanged="ComboBoxTargetBig_SelectionChanged"/>
+                <ComboBox Name="ComboBoxTargetSmall"  Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" SelectionChanged="ComboBoxTargetSmall_SelectionChanged"/>
             </StackPanel>
             <DataGrid  Name="DataGridSource" Margin="10,10,10,10" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                ItemsSource="{Binding LocationbDatas,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  Grid.Row="1" Grid.Column="0">
+                                ItemsSource="{Binding LocationSourceDatas,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  Grid.Row="1" Grid.Column="0">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -41,7 +41,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="110" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proname}">
+                    <DataGridTextColumn Width="110" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -49,7 +49,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn  Width="110"  Header="目前櫃位" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding locdName}">
+                    <DataGridTextColumn  Width="110"  Header="目前櫃位" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding locdName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -60,7 +60,7 @@
                 </DataGrid.Columns>
             </DataGrid>
             <DataGrid  Name="DataGridTarget" Margin="10,10,10,10" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                ItemsSource="{Binding LocationbDatas,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  Grid.Row="1" Grid.Column="2">
+                                ItemsSource="{Binding LocationTargetDatas,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  Grid.Row="1" Grid.Column="2">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -92,6 +92,10 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            <StackPanel Orientation="Vertical"  Grid.Column="1" Grid.Row="1" Background="{StaticResource GridBackGround}" >
+                <Image Source="/Images/Plus.png" Width="35" Name="ButtonPlus" MouseLeftButtonDown="ButtonPlus_MouseLeftButtonDown"/>
+                <Image Source="/Images/Balance.png" Width="30" Name="ButtonBalance" MouseLeftButtonDown="ButtonBalance_MouseLeftButtonDown"/>
+            </StackPanel>
         </Grid>
     </Viewbox>
 </Window>
