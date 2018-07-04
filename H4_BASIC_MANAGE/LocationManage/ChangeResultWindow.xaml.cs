@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.Class;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -50,7 +51,12 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-
+            foreach (var item in changeItems) {
+                LocationDb.UpdateLocationDetail(item.id,item.newvalue);
+            }
+            MessageWindow messageWindow = new MessageWindow("更新成功!",MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+            Close();
         }
     }
 }

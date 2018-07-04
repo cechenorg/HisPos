@@ -118,6 +118,14 @@ namespace His_Pos.Class
             var dd = new DbConnection(Settings.Default.SQL_global);
             return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetProductLocation]");
         }
-      
+        internal static DataTable UpdateLocationDetail(string id,string newvalue)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("NEW_VALUE", newvalue));
+            return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[UpdateLocationDetail]", parameters);
+        }
+       
     }
 }
