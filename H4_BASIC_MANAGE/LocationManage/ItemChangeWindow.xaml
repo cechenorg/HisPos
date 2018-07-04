@@ -96,6 +96,7 @@
                 <Image Source="/Images/Plus.png" Width="35" Name="ButtonPlus" MouseLeftButtonDown="ButtonPlus_MouseLeftButtonDown"/>
                 <Image Source="/Images/Balance.png" Width="30" Name="ButtonBalance" MouseLeftButtonDown="ButtonBalance_MouseLeftButtonDown"/>
             </StackPanel>
+            <Button Grid.Row="2" Grid.Column="1" Margin="10,0,10,10" Content="確定" Click="Button_Click"/>
         </Grid>
     </Viewbox>
 </Window>

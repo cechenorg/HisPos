@@ -31,8 +31,20 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-
-       public class LocationbData {
+        public class ChangeItem
+        {
+            public ChangeItem(string cid,string cname,string coldvalue,string cnewvalue) {
+                id = cid;
+                name = cname;
+                oldvalue = coldvalue;
+                newvalue = cnewvalue;
+            }
+            public string id { get; set; }
+            public string name { get; set; }
+            public string oldvalue { get; set; }
+            public string newvalue { get; set; }
+        }
+        public class LocationbData {
            public LocationbData(DataRow row) {
                 proid = row["PRO_ID"].ToString();
                 proname = row["PRO_NAME"].ToString();
@@ -42,6 +54,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             public string proname { get; set; }
             public string locdName { get; set; }
         }
+        private ObservableCollection<ChangeItem> changeItems = new ObservableCollection<ChangeItem>();
         private ObservableCollection<LocationbData> locationSourceDatas = new ObservableCollection<LocationbData>();
         public ObservableCollection<LocationbData> LocationSourceDatas
         {
@@ -94,7 +107,6 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         private void ComboBoxSourceBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ComboBoxSourceBig.SelectedValue is null) return;
-            ComboBoxSourceSmall.SelectedItem = null;
             ComboBoxSourceSmall.Items.Filter = LocationDetailSourceFilter;
             
         }
@@ -109,7 +121,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         private void ComboBoxTargetBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ComboBoxTargetBig.SelectedValue is null) return;
-            ComboBoxTargetSmall.SelectedItem = null;
+            
             ComboBoxTargetSmall.Items.Filter = LocationDetailTargetFilter;
         }
 
@@ -137,10 +149,14 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 messageWindow.ShowDialog();
                 return;
             }
+            var item = (DataGridSource.SelectedItem as LocationbData);
+            changeItems.Add(new ChangeItem(item.proid, item.proname,item.locdName, ComboBoxTargetSmall.SelectedValue.ToString()));
             (DataGridSource.SelectedItem as LocationbData).locdName = ComboBoxTargetSmall.SelectedValue.ToString();
-            LocationTargetDatas.Single(product => product.proname == (DataGridSource.SelectedItem as LocationbData).proname).locdName = ComboBoxTargetSmall.SelectedValue.ToString();
+            LocationTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as LocationbData).proid).locdName = ComboBoxTargetSmall.SelectedValue.ToString();
             DataGridTarget.Items.Filter = ProductLocationTargetFilter;
             DataGridSource.Items.Filter = ProductLocationSourceFilter;
+            DataGridTarget.SelectedIndex = 0;
+            DataGridSource.SelectedIndex = 0;
         }
 
         private void ButtonBalance_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -163,8 +179,11 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 messageWindow.ShowDialog();
                 return;
             }
-              (DataGridTarget.SelectedItem as LocationbData).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
-            LocationSourceDatas.Single(product => product.proname == (DataGridTarget.SelectedItem as LocationbData).proname).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
+            var item = (DataGridTarget.SelectedItem as LocationbData);
+            changeItems.Add(new ChangeItem(item.proid, item.proname, item.locdName, ComboBoxSourceSmall.SelectedValue.ToString()));
+
+            (DataGridTarget.SelectedItem as LocationbData).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
+            LocationSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as LocationbData).proid).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
             DataGridTarget.Items.Filter = ProductLocationTargetFilter;
             DataGridSource.Items.Filter = ProductLocationSourceFilter;
             DataGridTarget.SelectedIndex = 0;
@@ -201,5 +220,14 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 return false;
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            string log = string.Empty;
+            foreach (var item in changeItems) {
+                log = item.name + "     " + item.oldvalue + " => " + item.newvalue;
+            }
+            MessageWindow messageWindow = new MessageWindow(log,MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+        }
     }
 }
