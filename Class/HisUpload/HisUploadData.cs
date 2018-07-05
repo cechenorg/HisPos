@@ -4,7 +4,7 @@ using His_Pos.Class.Declare;
 
 namespace His_Pos.Class
 {
-    class HisUploadData
+    internal class HisUploadData
     {
         public List<DeclareDetail> DeclareDetails { get; set; }
         public Prescription Prescription { get; set; }
@@ -12,6 +12,7 @@ namespace His_Pos.Class
         public string DeclareMakeUp { get; set; } //補報註記
         public string RsaNum { get; set; } //安全簽章
         public string DataFormat { get; set; } //資料格式 1:正常上傳 2:異常上傳 3.補正上傳(正常資料) 4.補正上傳(異常資料)
+
         public XmlDocument CreateToXml()
         {
             string msh, mb1, mb2;
@@ -27,7 +28,7 @@ namespace His_Pos.Class
             //mb1 健保資料段
 
             mb1 = "<MB1>";
-            mb1 += "<A11>" + Prescription.Customer.IcCard.ICNumber + "</A11>";
+            mb1 += "<A11>" + Prescription.Customer.IcCard.IcNumber + "</A11>";
             mb1 += "<A12>" + Prescription.Customer.IcNumber + "</A12>";
             mb1 += "<A13>" + Prescription.Customer.Birthday + "</A13>";
             mb1 += "<A14>" + "30" + "</A14>";
@@ -41,30 +42,28 @@ namespace His_Pos.Class
             mb1 += "<A22>" + RsaNum + "</A22>";
             mb1 += "<A23>" + Prescription.Treatment.MedicalInfo.Hospital.Division + "</A23>";
             if (Prescription.Customer.IcCard.IcMarks.NewbornsData.TreatMark != string.Empty) mb1 += "<A24>" + Prescription.Customer.IcCard.IcMarks.NewbornsData.TreatMark + "</A24>";
-            int diseasecodecount = 25;
-            foreach (var diseasecode in Prescription.Treatment.MedicalInfo.DiseaseCodes)
+            if (Prescription.Treatment.MedicalInfo.MainDiseaseCode != null)
             {
-                mb1 += "<A" + diseasecodecount + ">" + diseasecode.Id + "</A" + diseasecodecount + ">";
-                diseasecodecount++;
+                mb1 += "<A" + "25" + ">" + Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id + "</A" + "25" + ">";
+                if (Prescription.Treatment.MedicalInfo.SecondDiseaseCode != null)
+                    mb1 += "<A" + "26" + ">" + Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id + "</A" + "26" + ">";
             }
-
-                
             if (Prescription.Customer.IcCard.IcCardPay.MedicalPay != string.Empty) mb1 += "<A31>" + Prescription.Customer.IcCard.IcCardPay.MedicalPay + "</A31>";
             if (Prescription.Customer.IcCard.IcCardPay.MedicalCopay != string.Empty) mb1 += "<A32>" + Prescription.Customer.IcCard.IcCardPay.MedicalCopay + "</A32>";
             if (Prescription.Customer.IcCard.IcCardPay.HospitalPay != string.Empty) mb1 += "<A33>" + Prescription.Customer.IcCard.IcCardPay.HospitalPay + "</A33>";
             if (Prescription.Customer.IcCard.IcCardPay.HospitalCopay1 != string.Empty) mb1 += "<A34>" + Prescription.Customer.IcCard.IcCardPay.HospitalCopay1 + "</A34>";
             if (Prescription.Customer.IcCard.IcCardPay.HospitalCopay2 != string.Empty) mb1 += "<A35>" + Prescription.Customer.IcCard.IcCardPay.HospitalCopay2 + "</A35>";
-            //預防保健       
+            //預防保健
             if (Prescription.Customer.IcCard.IcCardPrediction.HisServiceMark != string.Empty) mb1 += "<A41>" + Prescription.Customer.IcCard.IcCardPrediction.HisServiceMark + "</A41>";
             if (Prescription.Customer.IcCard.IcCardPrediction.PredictionDate != string.Empty) mb1 += "<A42>" + Prescription.Customer.IcCard.IcCardPrediction.PredictionDate + "</A42>";
             if (Prescription.Customer.IcCard.IcCardPrediction.PredictionMedicalCode != string.Empty) mb1 += "<A43>" + Prescription.Customer.IcCard.IcCardPrediction.PredictionMedicalCode + "</A43>";
             if (Prescription.Customer.IcCard.IcCardPrediction.PredictionCheckCode != string.Empty) mb1 += "<A44>" + Prescription.Customer.IcCard.IcCardPrediction.PredictionCheckCode + "</A44>";
-            //孕婦          
+            //孕婦
             if (Prescription.Customer.IcCard.Pregnant.PregnantCheckDate != string.Empty) mb1 += "<A51>" + Prescription.Customer.IcCard.Pregnant.PregnantCheckDate + "</A51>";
             if (Prescription.Customer.IcCard.Pregnant.PregnantMedicalCode != string.Empty) mb1 += "<A52>" + Prescription.Customer.IcCard.Pregnant.PregnantMedicalCode + "</A52>";
             if (Prescription.Customer.IcCard.Pregnant.PregnantCheckCode != string.Empty) mb1 += "<A53>" + Prescription.Customer.IcCard.Pregnant.PregnantCheckCode + "</A53>";
             if (Prescription.Customer.IcCard.Pregnant.PregnantActualTreatDate != string.Empty) mb1 += "<A54>" + Prescription.Customer.IcCard.Pregnant.PregnantActualTreatDate + "</A54>";
-            //預防接種       
+            //預防接種
             if (Prescription.Customer.IcCard.Vaccination.VaccinationCategory != string.Empty) mb1 += "<A61>" + Prescription.Customer.IcCard.Vaccination.VaccinationCategory + "</A61>";
             if (Prescription.Customer.IcCard.Vaccination.VaccinationDate != string.Empty) mb1 += "<A62>" + Prescription.Customer.IcCard.Vaccination.VaccinationDate + "</A62>";
             if (Prescription.Customer.IcCard.Vaccination.VaccinationMedicalCode != string.Empty) mb1 += "<A63>" + Prescription.Customer.IcCard.Vaccination.VaccinationMedicalCode + "</A63>";
@@ -88,6 +87,5 @@ namespace His_Pos.Class
             xml.LoadXml("<REC>" + msh + "<MB>" + mb1 + mb2 + "</MB></REC>");
             return xml;
         }
-        
     }
 }

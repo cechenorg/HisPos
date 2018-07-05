@@ -1,4 +1,6 @@
-﻿namespace His_Pos.Class.AdjustCase
+﻿using System.Data;
+
+namespace His_Pos.Class.AdjustCase
 {
     public class AdjustCase : Selection
     {
@@ -6,10 +8,11 @@
         {
         }
 
-        public AdjustCase(string id, string name)
+        public AdjustCase(DataRow dataRow)
         {
-            Id = id;
-            Name = name;
+            Id = dataRow["ADJUSTCASE_ID"].ToString();
+            Name = dataRow["ADJUSTCASE_NAME"].ToString();
+            FullName = dataRow["FULLNAME"].ToString();
         }
     }
 }

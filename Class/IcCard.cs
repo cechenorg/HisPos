@@ -9,7 +9,7 @@ namespace His_Pos.Class
             IcMarks = new IcMarks();
         }
 
-        public string ICNumber { get; set; }//卡片號碼
+        public string IcNumber { get; set; }//卡片號碼
         public IcMarks IcMarks { get; set; } = new IcMarks();//卡片註銷註記.保險對象身分註記.新生兒出生日期.新生兒胞胎註記
         public string SendDate { get; set; }//發卡日期
         public string ValidityPeriod { get; set; }//卡片有效期限

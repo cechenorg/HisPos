@@ -26,12 +26,12 @@ using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.PrescriptionInquire
 {
-
     public partial class PrescriptionInquireView : UserControl
     {
         public ObservableCollection<PrescriptionOverview> prescriptionOverview = new ObservableCollection<PrescriptionOverview>();
-        
+
         private Function f = new Function();
+
         public PrescriptionInquireView()
         {
             InitializeComponent();
@@ -59,17 +59,18 @@ namespace His_Pos.PrescriptionInquire
         /*
         *載入原處方案件類別
         */
+
         private void LoadAdjustCases()
         {
-            foreach (var adjustCase in AdjustCaseDb.AdjustCaseList)
-            {
-                AdjustCaseCombo.Items.Add(adjustCase.Id + ". " + adjustCase.Name);
-            }
+            var adjustCaseDb = new AdjustCaseDb();
+            adjustCaseDb.GetData();
+            AdjustCaseCombo.ItemsSource = adjustCaseDb.AdjustCases;
         }
 
         /*
          *載入醫療院所資料
          */
+
         private void LoadHospitalData()
         {
             var institutions = new HospitalDb();
@@ -88,7 +89,7 @@ namespace His_Pos.PrescriptionInquire
 
             if (AdjustCaseCombo.Text != String.Empty)
                 adjustId = AdjustCaseCombo.Text.Substring(0, 1);
-            
+
             prescriptionOverview = PrescriptionDB.GetPrescriptionOverviewBySearchCondition(sDate, eDate, patientName, adjustId);
             PrescriptionSet.ItemsSource = prescriptionOverview;
         }

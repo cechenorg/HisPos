@@ -17,23 +17,26 @@ namespace His_Pos.Class.Declare
         /*
          * 新增DeclareData至資料庫
          */
+
         public void InsertDb(DeclareData declareData, string type = null, string id = null)
         {
             var parameters = new List<SqlParameter>();
-            AddParameterDData(parameters,declareData);//加入DData sqlparameters
+            AddParameterDData(parameters, declareData);//加入DData sqlparameters
             var pDataTable = SetPDataTable();//設定PData datatable columns
-            AddPData(declareData,pDataTable);//加入PData sqlparameters
+            AddPData(declareData, pDataTable);//加入PData sqlparameters
             parameters.Add(new SqlParameter("DETAIL", pDataTable));
             parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
             {
                 Value = new SqlXml(new XmlTextReader(CreateToXml(declareData).InnerXml, XmlNodeType.Document, null))
             });
-            CheckInsertDbTypeUpdate(parameters,id, type);
+            CheckInsertDbTypeUpdate(parameters, id, type);
         }
+
         /*
          * 加入DData資料之parameters
          */
-        private void AddParameterDData(ICollection<SqlParameter> parameters,DeclareData declareData)
+
+        private void AddParameterDData(ICollection<SqlParameter> parameters, DeclareData declareData)
         {
             AddParameterTreatment(parameters, declareData);
             //4補報註記 7就醫序號 16申請點數 17部分負擔點數 18合計點數 19行政協助部分負擔點數 31特殊材料明細點數小計 32診療明細點數小計 33用藥明細點數小計 38藥事服務費點數
@@ -48,23 +51,25 @@ namespace His_Pos.Class.Declare
             };
             foreach (var tag in tagsDictionary)
             {
-                if(tag.Key == "D4" || tag.Key == "D19" || tag.Key == "D31" || tag.Key == "D32" || tag.Key == "D33")
+                if (tag.Key == "D4" || tag.Key == "D19" || tag.Key == "D31" || tag.Key == "D32" || tag.Key == "D33")
                     CheckDbNullValue(parameters, tag.Value, tag.Key);
                 else
                 {
-                    parameters.Add(new SqlParameter(tag.Key,tag.Value));
+                    parameters.Add(new SqlParameter(tag.Key, tag.Value));
                 }
             }
             AddUnusedParameters(parameters);//設定免填欄位Parameters D10 D11 D12 D27 D28 D29
-            CheckChronicAdjust(declareData,parameters);//判斷慢箋調劑欄位D35 D36
+            CheckChronicAdjust(declareData, parameters);//判斷慢箋調劑欄位D35 D36
         }
+
         /*
          * 加入DeclareData.Treatment資料之parameters
          */
+
         private void AddParameterTreatment(ICollection<SqlParameter> parameters, DeclareData declareData)
         {
             AddParameterMedicalInfo(parameters, declareData);
-            
+
             DateTimeExtensions d = new DateTimeExtensions();
             var tagsDictionary = new Dictionary<string, string>
             {
@@ -83,21 +88,23 @@ namespace His_Pos.Class.Declare
                 }
             }
         }
+
         /*
          * 加入DeclareData.Treatment.MedicalInfo資料之parameters
          */
+
         private void AddParameterMedicalInfo(ICollection<SqlParameter> parameters, DeclareData declareData)
         {
             var med = declareData.Prescription.Treatment.MedicalInfo;
             var tagsDictionary = new Dictionary<string, string>
             {
-                {"D8", med.DiseaseCodes[0].Id}, {"D9", med.DiseaseCodes[1].Id},
+                {"D8", med.MainDiseaseCode.Id}, {"D9", med.SecondDiseaseCode.Id},
                 {"D13", med.Hospital.Division.Id}, {"D22", med.TreatmentCase.Id},
                 {"D24", med.Hospital.Doctor.Id},{"D26",med.SpecialCode.Id},{"D21",declareData.Prescription.Treatment.MedicalInfo.Hospital.Id}
             };
             foreach (var tag in tagsDictionary)
             {
-                if(tag.Key == "D21")
+                if (tag.Key == "D21")
                     parameters.Add(new SqlParameter(tag.Key, tag.Value));
                 else
                 {
@@ -124,7 +131,7 @@ namespace His_Pos.Class.Declare
             return pDataTable;
         }
 
-        private void AddPData(DeclareData declareData,DataTable pDataTable)
+        private void AddPData(DeclareData declareData, DataTable pDataTable)
         {
             for (var i = 0; i < declareData.DeclareDetails.Count; i++)
             {
@@ -147,11 +154,13 @@ namespace His_Pos.Class.Declare
                         case "P10":
                             row[tag.Key] = Convert.ToInt32(tag.Value);
                             break;
+
                         case "PAY_BY_YOURSELF":
                             row[tag.Key] = tag.Value;
                             break;
+
                         default:
-                            CheckEmptyDataRow(pDataTable, tag.Value,ref row, tag.Key);
+                            CheckEmptyDataRow(pDataTable, tag.Value, ref row, tag.Key);
                             break;
                     }
                 }
@@ -159,23 +168,27 @@ namespace His_Pos.Class.Declare
             }
             AddMedicalServiceCostPData(declareData, pDataTable);
         }
+
         /*
          * 加入藥事服務費之PData
          */
-        private void AddMedicalServiceCostPData(DeclareData declareData,DataTable pDataTable)
+
+        private void AddMedicalServiceCostPData(DeclareData declareData, DataTable pDataTable)
         {
             var dateTimeExtensions = new DateTimeExtensions();
             var percent = CountAdditionPercent(declareData);
             var currentDate = dateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             var detail = new DeclareDetail(declareData.MedicalServiceCode, percent, declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate, currentDate);
             var pData = pDataTable.NewRow();
-            SetMedicalServiceCostDataRow(pData, declareData,detail);
+            SetMedicalServiceCostDataRow(pData, declareData, detail);
             declareData.DeclareDetails.Add(detail);
             pDataTable.Rows.Add(pData);
         }
+
         /*
          * 計算支付成數
          */
+
         private double CountAdditionPercent(DeclareData declareData)
         {
             double percent = 0;
@@ -187,10 +200,12 @@ namespace His_Pos.Class.Declare
             if (month > 2 && month <= 6) percent = 120;
             return percent;
         }
+
         /*
          * 設定藥事服務費PData之DataRow
          */
-        private void SetMedicalServiceCostDataRow(DataRow pData,DeclareData declareData,DeclareDetail detail)
+
+        private void SetMedicalServiceCostDataRow(DataRow pData, DeclareData declareData, DeclareDetail detail)
         {
             var declarecount = declareData.DeclareDetails.Count + 1;//藥事服務醫令序
             var tagsDictionary = new Dictionary<string, object>
@@ -205,10 +220,12 @@ namespace His_Pos.Class.Declare
                 pData[tag.Key] = tag.Value;
             }
         }
+
         /*
          * 判斷慢箋調劑
          */
-        private void CheckChronicAdjust(DeclareData declareData,ICollection<SqlParameter> parameters)
+
+        private void CheckChronicAdjust(DeclareData declareData, ICollection<SqlParameter> parameters)
         {
             if (!declareData.Prescription.Treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))//判斷是否為慢箋調劑
             {
@@ -227,20 +244,24 @@ namespace His_Pos.Class.Declare
                 parameters.Add(new SqlParameter("D43", DBNull.Value));
             }
         }
+
         /*
          * 加入免填欄位Parameters
          */
+
         private void AddUnusedParameters(ICollection<SqlParameter> parameters)
         {
-            var tagList = new List<string>(){ "D10", "D11", "D12" ,"D27", "D28", "D29" };
+            var tagList = new List<string>() { "D10", "D11", "D12", "D27", "D28", "D29" };
             foreach (var tag in tagList)
             {
                 parameters.Add(new SqlParameter(tag, DBNull.Value));
             }
         }
+
         /*
          * 判斷InsertDb type為Update
          */
+
         private void CheckInsertDbTypeUpdate(List<SqlParameter> parameters, string id, string type = null)
         {
             var conn = new DbConnection(Settings.Default.SQL_global);
@@ -261,7 +282,7 @@ namespace His_Pos.Class.Declare
             var dData = SetDheadXml(declareData);
             foreach (var detail in declareData.DeclareDetails)
             {
-                dData += SetPDataXmlStr(detail,declareData);
+                dData += SetPDataXmlStr(detail, declareData);
             }
             dData += "</ddata>";
             xml.LoadXml(dData);
@@ -273,7 +294,7 @@ namespace His_Pos.Class.Declare
             var dData = "<ddata><dhead>";
             var treatment = declareData.Prescription.Treatment;
             var medicalInfo = treatment.MedicalInfo;
-            var dDataDictionary = SetDheadDictionary(declareData,treatment,medicalInfo);
+            var dDataDictionary = SetDheadDictionary(declareData, treatment, medicalInfo);
             foreach (var tag in dDataDictionary)
             {
                 if (tag.Value != string.Empty)
@@ -283,25 +304,27 @@ namespace His_Pos.Class.Declare
             if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
             {
                 if (Convert.ToDecimal(declareData.ChronicSequence) >= 2)
-                    dData += function.XmlTagCreator("d43",declareData.Prescription.OriginalMedicalNumber);
+                    dData += function.XmlTagCreator("d43", declareData.Prescription.OriginalMedicalNumber);
             }
             if (treatment.Copayment.Id == "903")
-                dData += function.XmlTagCreator("d44",CheckXmlDbNullValue(declareData.Prescription.Customer.IcCard.IcMarks.NewbornsData.Birthday));//新生兒註記就醫
+                dData += function.XmlTagCreator("d44", CheckXmlDbNullValue(declareData.Prescription.Customer.IcCard.IcMarks.NewbornsData.Birthday));//新生兒註記就醫
             dData += "</dhead>";
             return dData;
         }
+
         /*
          * 設定DData dhead資料並以Dictionary結構回傳
          */
-        private Dictionary<string, string> SetDheadDictionary(DeclareData declareData,Treatment treatment,MedicalInfo medicalInfo)
+
+        private Dictionary<string, string> SetDheadDictionary(DeclareData declareData, Treatment treatment, MedicalInfo medicalInfo)
         {
             string d8 = string.Empty, d9 = string.Empty, d35 = declareData.ChronicSequence, d36 = declareData.ChronicTotal;
             DateTimeExtensions d = new DateTimeExtensions();
-            if (medicalInfo.DiseaseCodes.Count > 0)
+            if (medicalInfo.MainDiseaseCode != null)
             {
-                if (medicalInfo.DiseaseCodes.Count == 2)
-                    d9 = medicalInfo.DiseaseCodes[1].Id;
-                d8 = medicalInfo.DiseaseCodes[0].Id;
+                d8 = medicalInfo.MainDiseaseCode.Id;
+                if (medicalInfo.SecondDiseaseCode != null)
+                    d9 = medicalInfo.SecondDiseaseCode.Id;
             }
             return new Dictionary<string, string>
             {
@@ -322,14 +345,14 @@ namespace His_Pos.Class.Declare
             };
         }
 
-        private string SetPDataXmlStr(DeclareDetail detail,DeclareData declareData)
+        private string SetPDataXmlStr(DeclareDetail detail, DeclareData declareData)
         {
             var pData = "<pdata>";
             var pDataDictionary = SetPDataDictionary(detail);
             foreach (var tag in pDataDictionary)
             {
                 if (tag.Value != string.Empty)
-                    pData += function.XmlTagCreator(tag.Key,tag.Value);
+                    pData += function.XmlTagCreator(tag.Key, tag.Value);
             }
             if (detail.Days.ToString() != string.Empty)
             {
@@ -339,9 +362,11 @@ namespace His_Pos.Class.Declare
             pData += "</pdata>";
             return pData;
         }
+
         /*
          * 設定PData資料並以Dictionary結構回傳
          */
+
         private Dictionary<string, string> SetPDataDictionary(DeclareDetail detail)
         {
             return new Dictionary<string, string>
@@ -352,6 +377,7 @@ namespace His_Pos.Class.Declare
                 {"p10",detail.Sequence.ToString()},{"p11",CheckXmlDbNullValue(detail.Days.ToString())}
             };
         }
+
         public void ExportSortDeclareData(string sdate, string edate)
         {
             Function function = new Function();
@@ -366,7 +392,7 @@ namespace His_Pos.Class.Declare
             var medpertable = conn.ExecuteProc("[HIS_POS_DB].[GET].[MEDCALPERSON]", param);//取得現有藥師
             var table = new DataTable();
             var xml = new XmlDocument();
-            int casid1, casid2, casid3,totalcasid;
+            int casid1, casid2, casid3, totalcasid;
             var ncount = 0; //一般處方件數
             var npoint = 0; //一般處方點數
             var scount = 0; //慢性處方件數
@@ -415,18 +441,21 @@ namespace His_Pos.Class.Declare
                         d16 = xml.SelectSingleNode("ddata/dhead/d16").InnerText;
                         d18 = xml.SelectSingleNode("ddata/dhead/d18").InnerText;
                         d38 = xml.SelectSingleNode("ddata/dhead/d38").InnerText;
-                        switch (d1) {
+                        switch (d1)
+                        {
                             case "1":
                                 casid1++;
                                 break;
+
                             case "2":
                                 casid2++;
                                 break;
+
                             case "3":
                                 casid3++;
                                 break;
                         }
-                      
+
                         if (totalcasid > 80 && totalcasid <= 100)
                         {
                             xml.SelectSingleNode("ddata/dhead/d18").InnerText = (Convert.ToInt32(d18) - Convert.ToInt32(d38) + 18).ToString();
@@ -435,7 +464,6 @@ namespace His_Pos.Class.Declare
                             gpoint += Convert.ToInt32(d38) - 18;
                             xml.SelectSingleNode("ddata/dhead/d37").InnerText = "05234D";
                             xml.SelectSingleNode("ddata/dhead/d38").InnerText = "18";
-                            
                         }
                         if (totalcasid > 100)
                         {
@@ -509,33 +537,39 @@ namespace His_Pos.Class.Declare
             xmlsumx.LoadXml(xmlsum);
 
             //匯出xml檔案
-            function.ExportXml(xmlsumx,"匯出申報XML檔案");
+            function.ExportXml(xmlsumx, "匯出申報XML檔案");
         }
+
         /*
          * 檢查SQLparameter是否為DBNull
          */
-        private void CheckDbNullValue(ICollection<SqlParameter> parameters,string value,string paraName)
+
+        private void CheckDbNullValue(ICollection<SqlParameter> parameters, string value, string paraName)
         {
-            if(value == null)
+            if (value == null)
                 parameters.Add(new SqlParameter(paraName, DBNull.Value));
             else
             {
                 parameters.Add(value.Equals(string.Empty) || value.Equals("0") ? new SqlParameter(paraName, DBNull.Value) : new SqlParameter(paraName, value));
             }
         }
+
         /*
          * 檢查XmlTag是否為空值
          */
+
         private string CheckXmlDbNullValue(string value)
         {
             if (value != string.Empty || value != "0")
-               return value;
+                return value;
             return string.Empty;
         }
+
         /*
          *檢查DataRow是否為空值
          */
-        private void CheckEmptyDataRow(DataTable dataTable,string value ,ref DataRow row,string rowName)
+
+        private void CheckEmptyDataRow(DataTable dataTable, string value, ref DataRow row, string rowName)
         {
             if (value != string.Empty)
             {
@@ -544,16 +578,16 @@ namespace His_Pos.Class.Declare
                     case "String":
                         row[rowName] = value;
                         break;
+
                     case "Int32":
                         row[rowName] = Convert.ToInt32(value);
                         break;
+
                     case "Double":
                         row[rowName] = Convert.ToDouble(value);
                         break;
                 }
             }
         }
-
-        
     }
 }
