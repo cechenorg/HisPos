@@ -68,13 +68,13 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 switch (checkBox.Name)
                 {
                     case "Morning":
-                        MorningStack.Children.Add(newUser);
+                        MorningStack.Children.Insert(0,newUser);
                         break;
                     case "Noon":
-                        NoonStack.Children.Add(newUser);
+                        NoonStack.Children.Insert(0, newUser);
                         break;
                     case "Evening":
-                        EveningStack.Children.Add(newUser);
+                        EveningStack.Children.Insert(0, newUser);
                         break;
                 }
             }
