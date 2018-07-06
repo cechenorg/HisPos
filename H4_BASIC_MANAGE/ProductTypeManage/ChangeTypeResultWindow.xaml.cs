@@ -1,5 +1,5 @@
 ﻿using His_Pos.Class;
-using His_Pos.H4_BASIC_MANAGE.ProductTypeManage;
+using His_Pos.Class.Product;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,12 +16,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace His_Pos.H4_BASIC_MANAGE.LocationManage
+namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
 {
     /// <summary>
-    /// ChangeResultWindow.xaml 的互動邏輯
+    /// ChangeTypeResultWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class ChangeResultWindow : Window, INotifyPropertyChanged
+    public partial class ChangeTypeResultWindow : Window,INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
@@ -31,10 +31,10 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        private ObservableCollection<ItemChangeWindow.ChangeItem> changeItems = new ObservableCollection<ItemChangeWindow.ChangeItem>();
-        private ObservableCollection<ItemChangeTypeWindow.ChangeItem> changeItems1;
+        private ObservableCollection<ItemChangeTypeWindow.ChangeItem> changeItems = new ObservableCollection<ItemChangeTypeWindow.ChangeItem>();
 
-        public ObservableCollection<ItemChangeWindow.ChangeItem> ChangeItems {
+        public ObservableCollection<ItemChangeTypeWindow.ChangeItem> ChangeItems
+        {
             get
             {
                 return changeItems;
@@ -45,24 +45,21 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 NotifyPropertyChanged("ChangeItems");
             }
         }
-        public ChangeResultWindow(ObservableCollection<ItemChangeWindow.ChangeItem> tempchangeItems)
+        public ChangeTypeResultWindow(ObservableCollection<ItemChangeTypeWindow.ChangeItem> tempchangeItems)
         {
             InitializeComponent();
             DataContext = this;
             ChangeItems = tempchangeItems;
         }
 
-        public ChangeResultWindow(ObservableCollection<ItemChangeTypeWindow.ChangeItem> changeItems1)
-        {
-            this.changeItems1 = changeItems1;
-        }
-
+   
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var item in changeItems) {
-                LocationDb.UpdateLocationDetail(item.id,item.newvalue);
+            foreach (var item in changeItems)
+            {
+            ProductDb.ChangeProductType(item.id, item.newvalue);
             }
-            MessageWindow messageWindow = new MessageWindow("更新成功!",MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("更新成功!", MessageType.SUCCESS);
             messageWindow.ShowDialog();
             Close();
         }

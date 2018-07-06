@@ -444,8 +444,8 @@ namespace His_Pos.ProductTypeManage
 
         private void ButtonTypeChange_Click(object sender, RoutedEventArgs e)
         {
-            ItemChangeWindow itemChangeWindow = new ItemChangeWindow("ProductType");
-            itemChangeWindow.ShowDialog();
+            ItemChangeTypeWindow itemChangeTypeWindow = new ItemChangeTypeWindow();
+            itemChangeTypeWindow.ShowDialog();
         }
     }
 }

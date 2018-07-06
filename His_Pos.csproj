@@ -324,8 +324,14 @@
     <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
       <DependentUpon>AddTypeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml.cs">
+      <DependentUpon>ChangeTypeResultWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
       <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml.cs">
+      <DependentUpon>ItemChangeTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H5_ATTEND\WorkScheduleManage\Day.xaml.cs">
       <DependentUpon>Day.xaml</DependentUpon>
@@ -494,7 +500,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

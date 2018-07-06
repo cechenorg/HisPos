@@ -338,7 +338,15 @@ namespace His_Pos.Class.Product
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[DeleteType]", parameters);
         }
-
+        internal static void ChangeProductType(string id,string newvalue)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id)); 
+              parameters.Add(new SqlParameter("NEW_VALUE", newvalue));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[ChangeProductType]", parameters);
+        }
+        
         public static void UpdateOtcDataDetail(AbstractClass.Product product,string type)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
