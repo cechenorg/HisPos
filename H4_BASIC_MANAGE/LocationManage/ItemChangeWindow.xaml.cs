@@ -106,29 +106,29 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
    
         private void ComboBoxSourceBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBoxSourceBig.SelectedValue is null) return;
+            if (ComboBoxSourceBig.SelectedItem is null) return;
             ComboBoxSourceSmall.Items.Filter = LocationDetailSourceFilter;
             
         }
 
         private void ComboBoxSourceSmall_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((ComboBoxSourceBig.SelectedValue is null)) 
-                 ComboBoxSourceBig.Text = ComboBoxSourceSmall.SelectedValue.ToString().Split('-')[0];
+            if ((ComboBoxSourceBig.SelectedItem is null)) 
+                 ComboBoxSourceBig.Text = ComboBoxSourceSmall.SelectedItem.ToString().Split('-')[0];
             DataGridSource.Items.Filter = ProductLocationSourceFilter;
            
         }
         private void ComboBoxTargetBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ComboBoxTargetBig.SelectedValue is null) return;
+            if (ComboBoxTargetBig.SelectedItem is null) return;
             
             ComboBoxTargetSmall.Items.Filter = LocationDetailTargetFilter;
         }
 
         private void ComboBoxTargetSmall_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if ((ComboBoxTargetBig.SelectedValue is null))
-                ComboBoxTargetBig.Text = ComboBoxTargetSmall.SelectedValue.ToString().Split('-')[0];
+            if ((ComboBoxTargetBig.SelectedItem is null))
+                ComboBoxTargetBig.Text = ComboBoxTargetSmall.SelectedItem.ToString().Split('-')[0];
             DataGridTarget.Items.Filter = ProductLocationTargetFilter;
         }
         private void ButtonPlus_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -152,7 +152,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             var item = (DataGridSource.SelectedItem as LocationbData);
             changeItems.Add(new ChangeItem(item.proid, item.proname,item.locdName, ComboBoxTargetSmall.SelectedValue.ToString()));
             (DataGridSource.SelectedItem as LocationbData).locdName = ComboBoxTargetSmall.SelectedValue.ToString();
-            LocationTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as LocationbData).proid).locdName = ComboBoxTargetSmall.SelectedValue.ToString();
+            LocationTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as LocationbData).proid).locdName = ComboBoxTargetSmall.SelectedItem.ToString();
             DataGridTarget.Items.Filter = ProductLocationTargetFilter;
             DataGridSource.Items.Filter = ProductLocationSourceFilter;
             DataGridTarget.SelectedIndex = 0;
@@ -183,7 +183,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             changeItems.Add(new ChangeItem(item.proid, item.proname, item.locdName, ComboBoxSourceSmall.SelectedValue.ToString()));
 
             (DataGridTarget.SelectedItem as LocationbData).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
-            LocationSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as LocationbData).proid).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
+            LocationSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as LocationbData).proid).locdName = ComboBoxSourceSmall.SelectedItem.ToString();
             DataGridTarget.Items.Filter = ProductLocationTargetFilter;
             DataGridSource.Items.Filter = ProductLocationSourceFilter;
             DataGridTarget.SelectedIndex = 0;
@@ -192,7 +192,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         public bool ProductLocationSourceFilter(object item)
         {
             if (ComboBoxSourceSmall.SelectedItem is null) return false;
-            if (((LocationbData)item).locdName.Equals(ComboBoxSourceSmall.SelectedValue.ToString()))
+            if (((LocationbData)item).locdName.Equals(ComboBoxSourceSmall.SelectedItem.ToString()))
                 return true;
             else
                 return false;
@@ -200,21 +200,21 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         public bool ProductLocationTargetFilter(object item)
         {
             if (ComboBoxTargetSmall.SelectedItem is null) return false;
-            if (((LocationbData)item).locdName.Equals(ComboBoxTargetSmall.SelectedValue.ToString()))
+            if (((LocationbData)item).locdName.Equals(ComboBoxTargetSmall.SelectedItem.ToString()))
                 return true;
             else
                 return false;
         }
         public bool LocationDetailSourceFilter(object item)
         {
-            if (item.ToString().Split('-')[0].Equals(ComboBoxSourceBig.SelectedValue.ToString()))
+            if (item.ToString().Split('-')[0].Equals(ComboBoxSourceBig.SelectedItem.ToString()))
                 return true;
             else
                 return false;
         }
         public bool LocationDetailTargetFilter(object item)
         {
-            if (item.ToString().Split('-')[0].Equals(ComboBoxTargetBig.SelectedValue.ToString()))
+            if (item.ToString().Split('-')[0].Equals(ComboBoxTargetBig.SelectedItem.ToString()))
                 return true;
             else
                 return false;
