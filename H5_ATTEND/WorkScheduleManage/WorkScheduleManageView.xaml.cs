@@ -158,6 +158,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             FinishScheduleBtn.IsEnabled = true;
             ComboYear.IsEnabled = false;
             ComboMonth.IsEnabled = false;
+            CancelScheduleBtn.IsEnabled = true;
             StartScheduleBtn.IsEnabled = false;
 
             List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
@@ -195,6 +196,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             FinishScheduleBtn.IsEnabled = false;
             ComboYear.IsEnabled = true;
             ComboMonth.IsEnabled = true;
+            CancelScheduleBtn.IsEnabled = false;
             StartScheduleBtn.IsEnabled = true;
 
             List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
@@ -203,6 +205,12 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             {
                 d.EndEdit();
             }
+        }
+
+        private void CancelSchedule_Click(object sender, RoutedEventArgs e)
+        {
+            InitCalendar(selectDateTime);
+            UpdateEndEditUi();
         }
     }
 }

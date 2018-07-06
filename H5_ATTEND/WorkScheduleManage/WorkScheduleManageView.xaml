@@ -9,15 +9,22 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
             <RowDefinition Height="50"/>
-            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
+            <Button Name="StartScheduleBtn" Width="100" Content="排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Margin="10,0,0,0" Click="StartSchedule_Click"/>
+            <ComboBox Name="UserCombo" DisplayMemberPath="Name" Width="200" Margin="20,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" IsEnabled="False" SelectionChanged="UserCombo_SelectionChanged"/>
+            <Rectangle Width="755"/>
+            <Button Name="CancelScheduleBtn" Width="100" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="Gray" IsEnabled="False" BorderThickness="0" Margin="10,0,0,0" Click="CancelSchedule_Click"/>
+            <Button Name="FinishScheduleBtn" Width="150" Content="完成排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" IsEnabled="False" BorderThickness="0" Margin="10,0,0,0" Click="FinishSchedule_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
             <ComboBox Width="75" Name="ComboYear" SelectionChanged="comboYear_SelectionChanged" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <ComboBox Width="50" SelectionChanged="comboMonth_SelectionChanged"  Name="ComboMonth" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0" Background="{StaticResource GridDarkerBackGround}">
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="10,0,10,0" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="禮拜日" Foreground="{StaticResource ForeGround}" Width="192" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <Label Content="禮拜一" Foreground="{StaticResource ForeGround}" Width="192" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <Label Content="禮拜二" Foreground="{StaticResource ForeGround}" Width="192" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
@@ -26,7 +33,7 @@
             <Label Content="禮拜五" Foreground="{StaticResource ForeGround}" Width="192" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <Label Content="禮拜六" Foreground="{StaticResource ForeGround}" Width="192" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
         </StackPanel>
-        <Grid Name="GridCalendar" Grid.Row="2" Margin="10,0,10,10">
+        <Grid Name="GridCalendar" Grid.Row="3" Margin="10,0,10,10">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -45,15 +52,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <StackPanel Name="UserPreview" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Margin="0,0,20,0">
-            
+        <StackPanel Name="UserPreview" Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="4" Margin="0,0,20,0">
+
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
-            <Button Name="StartScheduleBtn" Width="100" Content="排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Margin="10,0,0,0" Click="StartSchedule_Click"/>
-            <ComboBox Name="UserCombo" DisplayMemberPath="Name" Width="200" Margin="20,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" IsEnabled="False" SelectionChanged="UserCombo_SelectionChanged"/>
-            <Rectangle Width="860"/>
-            <Button Name="FinishScheduleBtn" Width="150" Content="完成排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" IsEnabled="False" BorderThickness="0" Margin="10,0,0,0" Click="FinishSchedule_Click"/>
-        </StackPanel>
-        
     </Grid>
 </UserControl>
