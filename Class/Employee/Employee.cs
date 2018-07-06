@@ -13,6 +13,7 @@ namespace His_Pos.Class.Employee
             Id = "";
             Qname = "";
             Name = "新人";
+            NickName = "新人";
             Gender = "";
             IdNum = "";
             Department = "";
@@ -31,6 +32,7 @@ namespace His_Pos.Class.Employee
             Id = employee.Id;
             Qname = employee.Qname;
             Name = employee.Name;
+            NickName = employee.NickName;
             Gender = employee.Gender;
             IdNum = employee.IdNum;
             Department = employee.Department;
@@ -50,6 +52,7 @@ namespace His_Pos.Class.Employee
             Id = row["EMP_ID"].ToString();
             Qname = row["EMP_QNAME"].ToString();
             Name = row["EMP_NAME"].ToString();
+            NickName = row["EMP_NICKNAME"].ToString();
             Gender = row["EMP_GENDER"].ToString() == "True" ? "男" : "女";
             IdNum = row["EMP_IDNUM"].ToString();
             Department = row["EMP_DEPARTMENT"].ToString();
@@ -67,6 +70,7 @@ namespace His_Pos.Class.Employee
         public string Id { get; set; }
         public string Qname { get; set; }
         public string Name { get; set; }
+        public string NickName { get; set; }
         public string Gender { get; set; }
         public string IdNum { get; set; }
         public string Department { get; set; }
