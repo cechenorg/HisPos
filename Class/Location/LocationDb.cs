@@ -16,6 +16,7 @@ namespace His_Pos.Class
         internal static ObservableCollection<string> ObservableGetLocationData()
         {
             ObservableCollection<string> sourceBig = new ObservableCollection<string>();
+            sourceBig.Add("尚未有櫃位產品");
             var dd = new DbConnection(Settings.Default.SQL_global);
             var table = dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationData]");
             foreach (DataRow row in table.Rows)
