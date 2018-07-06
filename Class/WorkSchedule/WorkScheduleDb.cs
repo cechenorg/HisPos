@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.WorkSchedule
 {
-    public static class WorkScheduleDb
+    public class WorkScheduleDb
     {
         internal static ObservableCollection<WorkSchedule> GetWorkSchedules(string year, string month)
         {
@@ -27,6 +27,22 @@ namespace His_Pos.Class.WorkSchedule
             foreach (DataRow row in table.Rows)
             {
                 collection.Add(new WorkSchedule(row));
+            }
+
+            return collection;
+        }
+
+        internal static ObservableCollection<UserIconData> GetTodayUsers()
+        {
+            ObservableCollection<UserIconData> collection = new ObservableCollection<UserIconData>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ClockInView].[GetTodayUserData]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new UserIconData(row));
             }
 
             return collection;
@@ -52,6 +68,23 @@ namespace His_Pos.Class.WorkSchedule
             }
 
             return collection;
+        }
+
+        internal static bool UserClockIn(string id, string password, string inout)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+
+            parameters.Add(new SqlParameter("EMP_ID", id));
+            parameters.Add(new SqlParameter("EMP_PASSWORD", password));
+            parameters.Add(new SqlParameter("INOUT", inout));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ClockInView].[ClockIn]", parameters);
+
+            string result = table.Rows[0]["RESULT"].ToString();
+
+            return Convert.ToBoolean(Convert.ToInt16(result));
         }
 
         internal static void InsertWorkSchedules(ObservableCollection<WorkSchedule> workSchedules, string year, string month)

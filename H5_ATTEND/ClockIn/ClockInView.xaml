@@ -19,8 +19,8 @@
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="今日上班人員" FontSize="25" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-
+            <StackPanel Name="UserIconStack" Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
+                
             </StackPanel>
             <Border Grid.Row="2" Grid.Column="0" Height="480" Width="450" Margin="0,0,0,50" BorderThickness="1,1,3,3" BorderBrush="{StaticResource DarkShadow}">
                 <Grid Height="480" Width="450" Background="{StaticResource GridBackGround}">
@@ -34,13 +34,13 @@
                         <RowDefinition Height="5*"/>
                     </Grid.RowDefinitions>
                     <Label Grid.Row="1" Grid.Column="0" Content="上下班打卡" FontSize="35" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center">
-                        <RadioButton Content="上班" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
-                        <RadioButton Content="下班" Margin="100,0,0,0" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                    <StackPanel Name="InOutStack" Orientation="Horizontal" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center">
+                        <RadioButton Content="上班" Tag="I" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
+                        <RadioButton Content="下班" Tag="O" Margin="100,0,0,0" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                     </StackPanel>
-                    <TextBox Grid.Row="3" Grid.Column="0" materialDesign:HintAssist.Hint="員工編號" Width="200" FontSize="25" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center"/>
-                    <PasswordBox Grid.Row="4" Grid.Column="0" materialDesign:HintAssist.Hint="員工密碼" Width="200" FontSize="25" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center"/>
-                    <Button Grid.Row="5" Grid.Column="0" Width="150" Content="登入" FontFamily="Segoe UI Semibold" FontSize="25" Background="DeepSkyBlue" BorderThickness="0" Height="40"/>
+                    <TextBox Name="UserId" Grid.Row="3" Grid.Column="0" materialDesign:HintAssist.Hint="員工編號" Width="200" FontSize="25" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" KeyDown="UserId_KeyDown"/>
+                    <PasswordBox Name="UserPassword" Grid.Row="4" Grid.Column="0" materialDesign:HintAssist.Hint="員工密碼" Width="200" FontSize="25" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" KeyDown="UserPassword_KeyDown"/>
+                    <Button Grid.Row="5" Grid.Column="0" Width="150" Content="打卡" FontFamily="Segoe UI Semibold" FontSize="25" Background="DeepSkyBlue" BorderThickness="0" Height="40" Click="ClockIn_Click"/>
                 </Grid>
             </Border>
             <DataGrid Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Background="{StaticResource GridBackGround}" CanUserAddRows="False"

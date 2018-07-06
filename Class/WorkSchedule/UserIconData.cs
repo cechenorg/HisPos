@@ -10,11 +10,15 @@ namespace His_Pos.Class.WorkSchedule
 {
     public class UserIconData
     {
-        public UserIconData(DataRow dataRow, string hex)
+        public UserIconData(DataRow dataRow, string hex = null)
         {
             Id = dataRow["EMP_ID"].ToString();
             Name = dataRow["EMP_NAME"].ToString();
-            BackBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom(hex));
+
+            if (hex is null)
+                BackBrush = (SolidColorBrush) (new BrushConverter().ConvertFrom("#4CFF0000"));
+            else
+                BackBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom(hex));
         }
 
         public string Id { get; set; }
