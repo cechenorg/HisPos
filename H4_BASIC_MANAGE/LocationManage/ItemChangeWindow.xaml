@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.LocationManage"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="ItemChangeWindow" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
+        Title="換櫃" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
     <Viewbox  Stretch="Fill">
         <Grid Height="450" Width="1000">
             <Grid.ColumnDefinitions>

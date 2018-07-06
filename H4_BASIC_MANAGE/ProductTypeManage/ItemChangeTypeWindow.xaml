@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.ProductTypeManage"
         mc:Ignorable="d"
-        Title="ItemChangeTypeWindow" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
+        Title="換類別" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
     <Viewbox  Stretch="Fill">
         <Grid Height="450" Width="1000">
             <Grid.ColumnDefinitions>
