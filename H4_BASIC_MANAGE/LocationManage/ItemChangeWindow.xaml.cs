@@ -107,10 +107,20 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         private void ComboBoxSourceBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ComboBoxSourceBig.SelectedItem is null) return;
+            if (ComboBoxSourceBig.SelectedItem.ToString() == "尚未有櫃位產品") {
+                DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;
+                return;
+            }
             ComboBoxSourceSmall.Items.Filter = LocationDetailSourceFilter;
             
         }
-
+        public bool LocationDetailEmptySourceFilter(object item)
+        {
+            if (((LocationbData)item).locdName == string.Empty)
+                return true;
+            else
+                return false;
+        }
         private void ComboBoxSourceSmall_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((ComboBoxSourceBig.SelectedItem is null)) 
@@ -121,10 +131,20 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         private void ComboBoxTargetBig_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ComboBoxTargetBig.SelectedItem is null) return;
-            
+            if (ComboBoxTargetBig.SelectedItem.ToString() == "尚未有櫃位產品")
+            {
+                DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;
+                return;
+            }
             ComboBoxTargetSmall.Items.Filter = LocationDetailTargetFilter;
         }
-
+        public bool LocationDetailEmptyTargetFilter(object item)
+        {
+            if (((LocationbData)item).locdName == string.Empty)
+                return true;
+            else
+                return false;
+        }
         private void ComboBoxTargetSmall_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((ComboBoxTargetBig.SelectedItem is null))
