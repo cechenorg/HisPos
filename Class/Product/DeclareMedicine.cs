@@ -10,6 +10,10 @@ namespace His_Pos.Class.Product
 {
     public class DeclareMedicine : Medicine, ITrade
     {
+        public DeclareMedicine()
+        {
+        }
+
         public DeclareMedicine(DataRow dataRow): base(dataRow)
         {
             IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "") ? "False" : dataRow["HISMED_CONTROL"].ToString());

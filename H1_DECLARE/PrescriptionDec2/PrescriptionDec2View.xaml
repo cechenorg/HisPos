@@ -139,7 +139,7 @@
                 </StackPanel>
             </Grid>
             <DataGrid Name="PrescriptionMedicines" Grid.Row="2"  Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                      AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding Medicines}">
+                      AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*" />
                 </DataGrid.Columns>
