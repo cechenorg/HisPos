@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.LocationManage"
         mc:Ignorable="d"
-        Title="ItemChangeWindow" Height="450" Width="800">
+        WindowStartupLocation="CenterScreen"
+        Title="ItemChangeWindow" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
     <Viewbox  Stretch="Fill">
-        <Grid Height="450" Width="800">
+        <Grid Height="450" Width="1000">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="2*"/>
@@ -41,6 +42,14 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
+                    <DataGridTextColumn Width="110" Header="商品ID" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proid,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Width="110" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -74,6 +83,14 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
+                    <DataGridTextColumn Width="110" Header="商品ID" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proid,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Width="110" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proname}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
