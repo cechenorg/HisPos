@@ -250,9 +250,9 @@ namespace His_Pos.PrescriptionDec
          * 將藥品加入處方
          */
 
-        private ObservableCollection<Medicine> GetMedcines()
+        private ObservableCollection<DeclareMedicine> GetMedcines()
         {
-            ObservableCollection<Medicine> medicines = new ObservableCollection<Medicine>();
+            ObservableCollection<DeclareMedicine> medicines = new ObservableCollection<DeclareMedicine>();
 
             if (Prescription.Medicines.Count == 0)
             {

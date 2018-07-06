@@ -19,7 +19,9 @@ using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
+using His_Pos.Interface;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -29,6 +31,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
         private Prescription _prescription = new Prescription();
+
+        public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -67,6 +71,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             LoadPaymentCategories();
             LoadCopayments();
             LoadAdjustCases();
+            MergingData();
+        }
+
+        private void MergingData()
+        {
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.GetMedicinesData(this);
+            loadingWindow.Show();
+            loadingWindow.Topmost = true;
+            
         }
 
         /*
@@ -139,6 +153,49 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is IDeletable)
+            {
+                if (Prescription.Medicines.Contains(selectedItem))
+                {
+                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+                }
+
+                PrescriptionMedicines.SelectedItem = selectedItem;
+                return;
+            }
+
+            PrescriptionMedicines.SelectedIndex = Prescription.Medicines.Count;
+        }
+
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var leaveItem = (sender as DataGridRow).Item;
+
+            if (leaveItem is IDeletable)
+            {
+                (leaveItem as IDeletable).Source = string.Empty;
+            }
+        }
+
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Prescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
+        }
+
+        private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            return;
+        }
+
+        private void MedicineAuto_Populating(object sender, PopulatingEventArgs e)
+        {
+            return;
         }
     }
 }

@@ -234,10 +234,10 @@ namespace His_Pos.Class.Declare
             }
             else
             {
-                parameters.Add(new SqlParameter("D35", declareData.ChronicSequence));
-                parameters.Add(new SqlParameter("D36", declareData.ChronicTotal));
+                parameters.Add(new SqlParameter("D35", declareData.Prescription.ChronicSequence));
+                parameters.Add(new SqlParameter("D36", declareData.Prescription.ChronicTotal));
             }
-            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId) && Convert.ToInt32(declareData.ChronicSequence) > 1)
+            if (declareData.Prescription.Treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId) && Convert.ToInt32(declareData.Prescription.ChronicSequence) > 1)
                 parameters.Add(new SqlParameter("D43", declareData.Prescription.OriginalMedicalNumber));
             else
             {
@@ -303,7 +303,7 @@ namespace His_Pos.Class.Declare
 
             if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
             {
-                if (Convert.ToDecimal(declareData.ChronicSequence) >= 2)
+                if (Convert.ToDecimal(declareData.Prescription.ChronicSequence) >= 2)
                     dData += function.XmlTagCreator("d43", declareData.Prescription.OriginalMedicalNumber);
             }
             if (treatment.Copayment.Id == "903")
@@ -318,7 +318,7 @@ namespace His_Pos.Class.Declare
 
         private Dictionary<string, string> SetDheadDictionary(DeclareData declareData, Treatment treatment, MedicalInfo medicalInfo)
         {
-            string d8 = string.Empty, d9 = string.Empty, d35 = declareData.ChronicSequence, d36 = declareData.ChronicTotal;
+            string d8 = string.Empty, d9 = string.Empty, d35 = declareData.Prescription.ChronicSequence, d36 = declareData.Prescription.ChronicTotal;
             DateTimeExtensions d = new DateTimeExtensions();
             if (medicalInfo.MainDiseaseCode != null)
             {

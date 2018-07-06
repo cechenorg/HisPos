@@ -8,14 +8,19 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    class DeclareMedicine : Medicine, ITrade
+    public class DeclareMedicine : Medicine, ITrade
     {
-        public DeclareMedicine(DataRow dataRow, DataSource dataSource): base(dataRow)
+        public DeclareMedicine(DataRow dataRow): base(dataRow)
         {
+            IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "") ? "False" : dataRow["HISMED_CONTROL"].ToString());
+            IsFrozMed = Boolean.Parse((dataRow["HISMED_FROZ"].ToString() == "") ? "False" : dataRow["HISMED_FROZ"].ToString());
+            PaySelf = false;
+            HcPrice = double.Parse(dataRow["HISMED_PRICE"].ToString());
+            Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
+            MedicalCategory = new Medicate(dataRow);
             Stock = new InStock(dataRow);
-
-            Price = dataRow["STOORDDET_PRICE"].ToString();
-            TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+            Price = dataRow["PRO_SELL_PRICE"].ToString();
+            TotalPrice = 0;
         }
 
         public InStock Stock { get; set; }

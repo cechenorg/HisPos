@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -37,6 +38,20 @@ namespace His_Pos.Class.Product
             return dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[GetInventoryMedicine]");
         }
 
-        
+        internal static ObservableCollection<DeclareMedicine> GetDeclareMedicine()
+        {
+            ObservableCollection<DeclareMedicine> collection = new ObservableCollection<DeclareMedicine>();
+
+           var dd = new DbConnection(Settings.Default.SQL_global);
+            
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetMedicinesData]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new DeclareMedicine(row));
+            }
+
+            return collection;
+        }
     }
 }

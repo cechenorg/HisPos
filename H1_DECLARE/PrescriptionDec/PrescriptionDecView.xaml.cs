@@ -290,10 +290,10 @@ namespace His_Pos.PrescriptionDec
             Debug.Assert(medicineAuto != null, nameof(medicineAuto) + " != null");
             if (medicineAuto.SelectedItem is null) return;
             if (Prescription.Medicines.Count <= PrescriptionMedicines.SelectedIndex)
-                Prescription.Medicines.Add((Medicine)medicineAuto.SelectedItem);
+                Prescription.Medicines.Add((DeclareMedicine)medicineAuto.SelectedItem);
             else
             {
-                Prescription.Medicines[PrescriptionMedicines.SelectedIndex] = (Medicine)medicineAuto.SelectedItem;
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex] = (DeclareMedicine)medicineAuto.SelectedItem;
                 return;
             }
             medicineAuto.Text = "";
