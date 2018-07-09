@@ -43,7 +43,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             InitializeComponent();
             DataContext = this;
 
-            labelDay.Content = id;
+            LabelDay.Content = id;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -68,13 +68,16 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 switch (checkBox.Name)
                 {
                     case "Morning":
-                        MorningStack.Children.Insert(0,newUser);
+                        AddUserToCorrectOrder(MorningStack, newUser);
                         break;
                     case "Noon":
-                        NoonStack.Children.Insert(0, newUser);
+                        AddUserToCorrectOrder(NoonStack, newUser);
                         break;
                     case "Evening":
-                        EveningStack.Children.Insert(0, newUser);
+                        AddUserToCorrectOrder(EveningStack, newUser);
+                        break;
+                    case "Sleep":
+                        AddUserToCorrectOrder(SleepStack, newUser);
                         break;
                 }
             }
@@ -91,40 +94,49 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                     case "Evening":
                         RemoveUserIcon(EveningStack);
                         break;
+                    case "Sleep":
+                        RemoveUserIcon(SleepStack);
+                        break;
                 }
             }
         }
-        
+
+        private void AddUserToCorrectOrder(StackPanel stack, UserIcon newUser)
+        {
+            if (stack.Children.Count == 0)
+            {
+                stack.Children.Add(newUser);
+                return;
+            }
+
+            for (int x = 0; x < stack.Children.Count; x++)
+            {
+                if (Int32.Parse((stack.Children[x] as UserIcon).Id) < Int32.Parse(newUser.Id)) continue;
+
+                stack.Children.Insert(x, newUser);
+                return;
+            }
+
+            stack.Children.Add(newUser);
+        }
+
         public void AddUserToStack(UserIconData userIconData, string period)
         {
             switch (period)
             {
                 case "M":
-                    MorningStack.Children.Add(new UserIcon(userIconData));
+                    AddUserToCorrectOrder(MorningStack, new UserIcon(userIconData));
                     break;
                 case "N":
-                    NoonStack.Children.Add(new UserIcon(userIconData));
+                    AddUserToCorrectOrder(NoonStack, new UserIcon(userIconData));
                     break;
                 case "E":
-                    EveningStack.Children.Add(new UserIcon(userIconData));
+                    AddUserToCorrectOrder(EveningStack, new UserIcon(userIconData));
+                    break;
+                case "S":
+                    AddUserToCorrectOrder(SleepStack, new UserIcon(userIconData));
                     break;
             }
-        }
-
-        public void DeleteUserFromStack(string id, string period)
-        {
-            //switch (period)
-            //{
-            //    case "M":
-            //        MorningStack.Children.Add(new UserIcon(userIconData));
-            //        break;
-            //    case "N":
-            //        NoonStack.Children.Add(new UserIcon(userIconData));
-            //        break;
-            //    case "E":
-            //        EveningStack.Children.Add(new UserIcon(userIconData));
-            //        break;
-            //}
         }
 
         public void StartEdit()
@@ -134,6 +146,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             Morning.IsChecked = HasCurrentUser(MorningStack);
             Noon.IsChecked = HasCurrentUser(NoonStack);
             Evening.IsChecked = HasCurrentUser(EveningStack);
+            Sleep.IsChecked = HasCurrentUser(SleepStack);
         }
 
         private bool? HasCurrentUser(StackPanel stack)
@@ -172,13 +185,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             AddWorkSchedules(MorningStack,ref workSchedules);
             AddWorkSchedules(NoonStack, ref workSchedules);
             AddWorkSchedules(EveningStack, ref workSchedules);
+            AddWorkSchedules(SleepStack, ref workSchedules);
 
             return workSchedules;
         }
 
         private void AddWorkSchedules(StackPanel stack, ref ObservableCollection<WorkSchedule> workSchedules)
         {
-            string day = labelDay.Content.ToString();
+            string day = LabelDay.Content.ToString();
             string period = stack.Name.Substring(0,1);
 
             List<UserIcon> userIcons = stack.Children.OfType<UserIcon>().ToList();

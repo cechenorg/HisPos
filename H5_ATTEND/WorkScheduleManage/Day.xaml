@@ -12,7 +12,8 @@
     <Viewbox Stretch="Fill" Margin="2">
         <Grid Width="192" Height="105" Background="{StaticResource Shadow}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
+                <RowDefinition/>
+                <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -21,8 +22,9 @@
                 <ColumnDefinition Width="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsEditableConverter}}"/>
                 <ColumnDefinition Width="25"/>
                 <ColumnDefinition />
+                <ColumnDefinition Width="40"/>
             </Grid.ColumnDefinitions>
-            <Label Name="labelDay" Grid.Row="0" Grid.Column="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+            <Label Name="LabelDay" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
             <CheckBox Name="Morning" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
             <StackPanel Name="MorningStack" Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
@@ -38,7 +40,13 @@
             <StackPanel Name="EveningStack" Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
 
             </StackPanel>
+            <CheckBox Name="Sleep" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="夜" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
+            <StackPanel Name="SleepStack" Grid.Row="4" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
 
+            </StackPanel>
+            
+            
         </Grid>
     </Viewbox>
 </UserControl>
