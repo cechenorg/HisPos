@@ -56,15 +56,9 @@ namespace His_Pos.Class.WorkSchedule
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[GetUserIconData]");
 
-            string[] hexs = { "#4CFF0000", "#4CFF8B00", "#4CE8FF00", "#4C5DFF00", "#4C00FF97", "#4C00A2FF", "#4C0000FF", "#4C8B00FF", "#4CFF00FF" };
-
-            int index = 0;
-
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new UserIconData(row, hexs[index]));
-
-                index = (index + 1) % 9;
+                collection.Add(new UserIconData(row));
             }
 
             return collection;

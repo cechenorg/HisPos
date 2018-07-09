@@ -20,9 +20,11 @@
             <Button Name="CancelScheduleBtn" Width="100" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="Gray" IsEnabled="False" BorderThickness="0" Margin="10,0,0,0" Click="CancelSchedule_Click"/>
             <Button Name="FinishScheduleBtn" Width="150" Content="完成排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" IsEnabled="False" BorderThickness="0" Margin="10,0,0,0" Click="FinishSchedule_Click"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Rectangle Width="600"/>
             <ComboBox Width="75" Name="ComboYear" SelectionChanged="comboYear_SelectionChanged" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
             <ComboBox Width="50" SelectionChanged="comboMonth_SelectionChanged"  Name="ComboMonth" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="10,0,10,0" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="禮拜日" Foreground="{StaticResource ForeGround}" Width="192" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>

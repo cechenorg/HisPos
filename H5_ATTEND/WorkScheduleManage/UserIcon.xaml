@@ -6,7 +6,10 @@
              xmlns:local="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
              mc:Ignorable="d" 
              d:DesignHeight="18" d:DesignWidth="25">
-    <Border Name="Back" CornerRadius="6" Margin="0,0,2,0" Width="25" Background="{StaticResource Shadow}">
+    <UserControl.Resources>
+        <local:IsMedConverter x:Key="IsMedConverter"/>
+    </UserControl.Resources>
+    <Border Name="Back" CornerRadius="6" Margin="0,0,2,0" Width="25" Background="{StaticResource Shadow}" BorderBrush="Red" BorderThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}">
         <TextBlock Name="UserName" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Border>
 </UserControl>

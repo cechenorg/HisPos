@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,16 +21,59 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// <summary>
     /// UserIcon.xaml 的互動邏輯
     /// </summary>
-    public partial class UserIcon : UserControl
+    public partial class UserIcon : UserControl, INotifyPropertyChanged
     {
         public string Id { get; }
+
+        private bool isMed;
+        public bool IsMed
+        {
+            get
+            {
+                return isMed;
+            }
+            set
+            {
+                isMed = value;
+                NotifyPropertyChanged("IsMed");
+            }
+        }
 
         public UserIcon(UserIconData userIconData)
         {
             InitializeComponent();
+            DataContext = this;
             Id = userIconData.Id;
+            IsMed = userIconData.IsMed;
             UserName.Text = userIconData.Name.Substring(0,1);
             Back.Background = userIconData.BackBrush;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+    }
+
+    public class IsMedConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
         }
     }
 }
