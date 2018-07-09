@@ -109,7 +109,6 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             if (ComboBoxSourceBig.SelectedItem is null) return;
             if (ComboBoxSourceBig.SelectedItem.ToString() == "尚未有櫃位產品") {
                 DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;
-                return;
             }
             ComboBoxSourceSmall.Items.Filter = LocationDetailSourceFilter;
             
@@ -134,7 +133,6 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             if (ComboBoxTargetBig.SelectedItem.ToString() == "尚未有櫃位產品")
             {
                 DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;
-                return;
             }
             ComboBoxTargetSmall.Items.Filter = LocationDetailTargetFilter;
         }
