@@ -8,8 +8,10 @@
              d:DesignHeight="18" d:DesignWidth="25">
     <UserControl.Resources>
         <local:IsMedConverter x:Key="IsMedConverter"/>
+        <local:BorderShowConverter x:Key="ShowConverter"/>
+        <local:MarginShowConverter x:Key="MarginShowConverter"/>
     </UserControl.Resources>
-    <Border Name="Back" CornerRadius="6" Margin="0,0,2,0" Width="25" Background="{StaticResource Shadow}" BorderBrush="Red" BorderThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}">
+    <Border Name="Back" CornerRadius="6" Margin="{Binding Show, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MarginShowConverter}}" Width="{Binding Show, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ShowConverter}}" Background="{StaticResource Shadow}" BorderBrush="Red" BorderThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}">
         <TextBlock Name="UserName" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Border>
 </UserControl>

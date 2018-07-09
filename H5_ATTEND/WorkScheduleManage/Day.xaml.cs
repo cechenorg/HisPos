@@ -101,6 +101,33 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
+        internal void ShowSelectedIcon(string id)
+        {
+            ShowSelectedInStack(MorningStack, id);
+            ShowSelectedInStack(NoonStack, id);
+            ShowSelectedInStack(EveningStack, id);
+            ShowSelectedInStack(SleepStack, id);
+        }
+
+        private void ShowSelectedInStack(StackPanel stack, string id)
+        {
+            List<UserIcon> userIcons = stack.Children.OfType<UserIcon>().ToList();
+
+            foreach (var userIcon in userIcons)
+            {
+                if (id is null)
+                {
+                    userIcon.ShowIcon();
+                    continue;
+                }
+
+                if (userIcon.Id.Equals(id))
+                    userIcon.ShowIcon();
+                else
+                    userIcon.HideIcon();
+            }
+        }
+
         private void AddUserToCorrectOrder(StackPanel stack, UserIcon newUser)
         {
             if (stack.Children.Count == 0)

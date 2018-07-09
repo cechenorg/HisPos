@@ -39,14 +39,39 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
+        private bool show;
+        public bool Show
+        {
+            get
+            {
+                return show;
+            }
+            set
+            {
+                show = value;
+                NotifyPropertyChanged("Show");
+            }
+        }
+
         public UserIcon(UserIconData userIconData)
         {
             InitializeComponent();
             DataContext = this;
             Id = userIconData.Id;
             IsMed = userIconData.IsMed;
+            Show = true;
             UserName.Text = userIconData.Name.Substring(0,1);
             Back.Background = userIconData.BackBrush;
+        }
+
+        public void HideIcon()
+        {
+            Show = false;
+        }
+
+        public void ShowIcon()
+        {
+            Show = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -69,6 +94,41 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
 
             return 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class BorderShowConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return 25;
+            }
+
+            return 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+    public class MarginShowConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return new Thickness(0,0,2,0);
+            }
+
+            return new Thickness(0);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

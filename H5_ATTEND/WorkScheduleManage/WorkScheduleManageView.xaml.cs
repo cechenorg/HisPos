@@ -53,15 +53,65 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void InitUserIconData()
         {
+            UserIconPreview allUserIconPreview = new UserIconPreview(new UserIconData());
+
+            allUserIconPreview.MouseLeftButtonDown += UserIconPreviewFilterButtonDown;
+
+            UserPreview.Children.Add(allUserIconPreview);
+
+            allUserIconPreview.IsSelected = true;
+
             UserIconDatas = WorkScheduleDb.GetUserIconDatas();
 
             foreach(var userIconData in UserIconDatas)
             {
-                UserPreview.Children.Add(new UserIconPreview(userIconData));
+                UserIconPreview newUserIconPreview = new UserIconPreview(userIconData);
+
+                newUserIconPreview.MouseLeftButtonDown += UserIconPreviewFilterButtonDown;
+
+                UserPreview.Children.Add(newUserIconPreview);
             }
 
             UserCombo.ItemsSource = UserIconDatas;
             UserCombo.SelectedIndex = 0;
+        }
+
+        private void UserIconPreviewFilterButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
+        {
+            if(StartEdit()) return;
+
+            UserIconPreview userIconPreview = sender as UserIconPreview;
+
+            ClearSelectedUserIcon();
+            
+            userIconPreview.IsSelected = true;
+
+            ShowSelectedUserIcon(userIconPreview.Id);
+        }
+
+        private void ShowSelectedUserIcon(string id = null)
+        {
+            List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
+
+            foreach (var d in days)
+            {
+                d.ShowSelectedIcon(id);
+            }
+        }
+
+        private bool StartEdit()
+        {
+            return UserCombo.IsEnabled;
+        }
+
+        private void ClearSelectedUserIcon()
+        {
+            List<UserIconPreview> userIconPreviews = UserPreview.Children.OfType<UserIconPreview>().ToList();
+
+            foreach (var u in userIconPreviews)
+            {
+                u.IsSelected = false;
+            }
         }
 
         private void InitWorkSchedule()
@@ -160,6 +210,11 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             ComboMonth.IsEnabled = false;
             CancelScheduleBtn.IsEnabled = true;
             StartScheduleBtn.IsEnabled = false;
+
+            ClearSelectedUserIcon();
+            (UserPreview.Children[0] as UserIconPreview).IsSelected = true;
+
+            ShowSelectedUserIcon();
 
             List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
 
