@@ -229,6 +229,20 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 workSchedules.Add(new WorkSchedule(userIcon.Id, day, period));
             }
         }
+
+        private void Day_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            ScrollViewer scrollViewer = sender as ScrollViewer;
+
+            if(scrollViewer is null) return;
+
+            if (e.Delta < 0)
+                scrollViewer.LineRight();
+            else
+                scrollViewer.LineLeft();
+
+            e.Handled = true;
+        }
     }
 
     public class IsEditableConverter : IValueConverter
