@@ -156,23 +156,34 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 messageWindow.ShowDialog();
                 return;
             }
-            if (ComboBoxSourceSmall.SelectedItem is null) {
+            if (ComboBoxSourceSmall.SelectedItem is null && ComboBoxSourceBig.SelectedItem.ToString() != "尚未有櫃位產品") {
                 MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR);
                 messageWindow.ShowDialog();
                 return;
             }
-            if (ComboBoxTargetSmall.SelectedItem is null)
+            if (ComboBoxTargetSmall.SelectedItem is null && ComboBoxTargetBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
                 MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR);
                 messageWindow.ShowDialog();
                 return;
             }
             var item = (DataGridSource.SelectedItem as LocationbData);
-            changeItems.Add(new ChangeItem(item.proid, item.proname,item.locdName, ComboBoxTargetSmall.SelectedValue.ToString()));
-            (DataGridSource.SelectedItem as LocationbData).locdName = ComboBoxTargetSmall.SelectedValue.ToString();
-            LocationTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as LocationbData).proid).locdName = ComboBoxTargetSmall.SelectedItem.ToString();
-            DataGridTarget.Items.Filter = ProductLocationTargetFilter;
-            DataGridSource.Items.Filter = ProductLocationSourceFilter;
+            var goal = ComboBoxTargetSmall.SelectedItem == null ? "" : ComboBoxTargetSmall.SelectedItem;
+            changeItems.Add(new ChangeItem(item.proid, item.proname,item.locdName, goal.ToString()));
+            (DataGridSource.SelectedItem as LocationbData).locdName = goal.ToString();
+            LocationTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as LocationbData).proid).locdName = goal.ToString();
+
+            if (goal.ToString() == "")
+            {
+                DataGridTarget.Items.Filter = LocationDetailEmptyTargetFilter;
+                DataGridSource.Items.Filter = ProductLocationSourceFilter;
+            }
+
+            else {
+                DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;
+                DataGridTarget.Items.Filter = ProductLocationTargetFilter;
+            }
+            
             DataGridTarget.SelectedIndex = 0;
             DataGridSource.SelectedIndex = 0;
         }
@@ -185,25 +196,35 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 messageWindow.ShowDialog();
                 return;
             }
-            if (ComboBoxTargetSmall.SelectedItem is null)
+            if (ComboBoxTargetSmall.SelectedItem is null && ComboBoxTargetBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
                 MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR);
                 messageWindow.ShowDialog();
                 return;
             }
-            if (ComboBoxSourceSmall.SelectedItem is null)
+            if (ComboBoxSourceSmall.SelectedItem is null && ComboBoxSourceBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
                 MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR);
                 messageWindow.ShowDialog();
                 return;
             }
             var item = (DataGridTarget.SelectedItem as LocationbData);
-            changeItems.Add(new ChangeItem(item.proid, item.proname, item.locdName, ComboBoxSourceSmall.SelectedValue.ToString()));
+            var goal = ComboBoxSourceSmall.SelectedItem == null ? "" : ComboBoxSourceSmall.SelectedItem;
+            changeItems.Add(new ChangeItem(item.proid, item.proname, item.locdName, goal.ToString()));
 
-            (DataGridTarget.SelectedItem as LocationbData).locdName = ComboBoxSourceSmall.SelectedValue.ToString();
-            LocationSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as LocationbData).proid).locdName = ComboBoxSourceSmall.SelectedItem.ToString();
-            DataGridTarget.Items.Filter = ProductLocationTargetFilter;
-            DataGridSource.Items.Filter = ProductLocationSourceFilter;
+            (DataGridTarget.SelectedItem as LocationbData).locdName = goal.ToString();
+            LocationSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as LocationbData).proid).locdName = goal.ToString();
+
+            if (goal.ToString() == "")
+            {
+                DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;
+                DataGridTarget.Items.Filter = ProductLocationTargetFilter;
+            }
+            else
+            {
+                DataGridTarget.Items.Filter = LocationDetailEmptyTargetFilter;
+                DataGridSource.Items.Filter = ProductLocationSourceFilter;
+            }
             DataGridTarget.SelectedIndex = 0;
             DataGridSource.SelectedIndex = 0;
         }
