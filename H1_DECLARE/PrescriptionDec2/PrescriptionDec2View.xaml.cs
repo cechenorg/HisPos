@@ -23,6 +23,7 @@ using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
+using His_Pos.ProductPurchase;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -34,6 +35,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private Prescription _prescription = new Prescription();
 
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
+        public ObservableCollection<object> Medicines;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public PrescriptionDec2View()
@@ -76,11 +78,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void GetPrescriptionData()
         {
+            DeclareMedicines = new ObservableCollection<DeclareMedicine>();
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(this);
-            LoadPrescriptionData();
             loadingWindow.Show();
             loadingWindow.Topmost = true;
+            LoadPrescriptionData();
             PrescriptionMedicines.ItemsSource = Prescription.Medicines;
         }
 
@@ -186,17 +189,62 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            SetChanged();
             Prescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
         }
 
-        private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        private bool IsFirst = true;
+        private bool IsChanged = false;
+        private void SetChanged()
         {
-            return;
+            if (IsFirst == true) return;
+            IsChanged = true;
+        }
+        private void SetIsChanged(object sender, EventArgs e)
+        {
+            SetChanged();
         }
 
-        private void MedicineAuto_Populating(object sender, PopulatingEventArgs e)
+        public AutoCompleteFilterPredicate<object> MedicineFilter
         {
-            return;
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as DeclareMedicine).Id is null) ? false : (obj as DeclareMedicine).Id.ToLower().Contains(searchText.ToLower())
+                                                            || (obj as DeclareMedicine).ChiName.ToLower().Contains(searchText.ToLower()) || (obj as DeclareMedicine).EngName.ToLower().Contains(searchText.ToLower());
+            }
+        }
+
+        private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
+        {
+            var medicineCodeAuto = sender as AutoCompleteBox;
+
+            if (medicineCodeAuto is null) return;
+
+            var result = DeclareMedicines.Where(x => x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) || x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) || x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
+            Medicines = new ObservableCollection<object>(result.ToList());
+
+            medicineCodeAuto.ItemsSource = Medicines;
+            medicineCodeAuto.ItemFilter = MedicineFilter;
+            medicineCodeAuto.PopulateComplete();
+        }
+
+        private void MedicineCodeAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            var medicineCodeAuto = sender as AutoCompleteBox;
+            SetChanged();
+            if (medicineCodeAuto is null) return;
+            if (medicineCodeAuto.SelectedItem is null)
+            {
+                if (medicineCodeAuto.Text != string.Empty && (medicineCodeAuto.ItemsSource as ObservableCollection<object>).Count != 0 && medicineCodeAuto.Text.Length >= 4)
+                    medicineCodeAuto.SelectedItem = (medicineCodeAuto.ItemsSource as ObservableCollection<object>)[0];
+                else
+                    return;
+            }
+
+            Prescription.Medicines.Add(medicineCodeAuto.SelectedItem as DeclareMedicine);
+
+            medicineCodeAuto.Text = "";
         }
     }
 }

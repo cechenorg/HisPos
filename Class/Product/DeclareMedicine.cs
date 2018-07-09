@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class DeclareMedicine : Medicine, ITrade
+    public class DeclareMedicine : Medicine, ITrade, IDeletable
     {
         public DeclareMedicine()
         {
@@ -38,6 +39,20 @@ namespace His_Pos.Class.Product
         public void CalculateData(string inputSource)
         {
             throw new NotImplementedException();
+        }
+
+        private string source;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string Source
+        {
+            get { return source; }
+            set
+            {
+                source = value;
+                NotifyPropertyChanged("Source");
+            }
         }
     }
 }

@@ -309,12 +309,11 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得藥品資料...");
-
-                ObservableCollection<DeclareMedicine> medicines = MedicineDb.GetDeclareMedicine();
+                
 
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionDec2View.DeclareMedicines = medicines;
+                    prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
