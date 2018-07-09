@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.EmployeeManage"
              mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
              d:DesignHeight="839" d:DesignWidth="1365" GotFocus="UserControl_GotFocus">
     <Viewbox Stretch="Fill">
@@ -69,7 +70,8 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <TextBox Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" Width="280" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                        <TextBox Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名" TextChanged="Text_TextChanged" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                        <TextBox Text="{Binding Employee.NickName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱" TextChanged="Text_TextChanged" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <Label Content="{Binding Employee.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical"  Background="{StaticResource GridBackGround}" Grid.Row="0" Margin="10,10,10,10" Width="150">

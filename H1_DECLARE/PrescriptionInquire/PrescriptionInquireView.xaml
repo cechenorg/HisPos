@@ -33,8 +33,8 @@
                     <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
                     <DatePicker Width="100" Height="30" Name="end" SelectedDateFormat="Short"/>
                     <Label Content="病患姓名" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <controls:AutoCompleteBox Background="Transparent" x:Name="PatientName" Width="auto" MinWidth="120" Height="30"  FontSize="14" FontStretch="ExtraExpanded" 
-                                              BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" Padding="0,8,0,0" MinimumPrefixLength="4" MaxHeight="50" FontFamily="Segoe UI Semibold"
+                    <controls:AutoCompleteBox Background="Transparent" x:Name="PatientName" Width="120" Height="30"  FontSize="14" FontStretch="ExtraExpanded" 
+                                               VerticalContentAlignment="Stretch" Padding="0,8,0,0" MinimumPrefixLength="4" MaxHeight="50" FontFamily="Segoe UI Semibold"
                                               ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"/>
                     <Label Content="調劑藥師" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <controls:AutoCompleteBox Background="Transparent" x:Name="PharmacistName" Width="auto" MinWidth="120" Height="30"  FontSize="14" FontStretch="ExtraExpanded" 
@@ -81,7 +81,8 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
-                <Label Content="已選擇" VerticalContentAlignment="Center" FontSize="20" Margin="20,0,0,0" FontFamily="Segoe UI Semibold"/>
+                <Label Content
+                       ="已選擇" VerticalContentAlignment="Center" FontSize="20" Margin="20,0,0,0" FontFamily="Segoe UI Semibold"/>
                 <Label Content="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="50" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="筆" VerticalContentAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Rectangle Width="1030"/>

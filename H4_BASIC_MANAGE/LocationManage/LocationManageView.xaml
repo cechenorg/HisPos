@@ -84,6 +84,7 @@
                 <Button Content="+ 新增櫃位" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,9,0,0" Click="ButtonBase_OnClick" VerticalAlignment="Top"/>
                 <Button Content="- 刪除櫃位" Name="ButtonDeleteLocation" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,9,0,0" Click="ButtonDeleteLocation_Click" VerticalAlignment="Top"/>
                 <Button Content="複製櫃位" Name="ButtonCopyLocation" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,9,0,0" Click="ButtonCopyLocation_Click"  VerticalAlignment="Top"/>
+                <Button Content="換櫃" Name="ButtonChangeLocation" Width="120" Background="{StaticResource Shadow}" Foreground="Black" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,9,0,0" Click="ButtonChangeLocation_Click"  VerticalAlignment="Top"/>
             </StackPanel>
         </Grid>
     </Viewbox>

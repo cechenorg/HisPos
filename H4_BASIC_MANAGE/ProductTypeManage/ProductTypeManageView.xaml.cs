@@ -18,6 +18,7 @@ using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Class.ProductType;
+using His_Pos.H4_BASIC_MANAGE.LocationManage;
 using His_Pos.H4_BASIC_MANAGE.ProductTypeManage;
 using His_Pos.Interface;
 using His_Pos.InventoryManagement;
@@ -352,7 +353,7 @@ namespace His_Pos.ProductTypeManage
             }
         }
 
-        private void DeleteTypeClick(object sender, MouseButtonEventArgs e)
+        private void DeleteTypeClick(object sender, RoutedEventArgs e)
         {
             if ((ProductTypeManageMaster)TypeMaster.SelectedItem is null) return;
 
@@ -416,7 +417,7 @@ namespace His_Pos.ProductTypeManage
             return false;
         }
 
-        private void AddTypeClick(object sender, MouseButtonEventArgs e)
+        private void AddTypeClick(object sender, RoutedEventArgs e)
         {
             AddTypeWindow addTypeWindow = new AddTypeWindow(TypeManageMasters, (TypeMaster.SelectedItem as ProductTypeManageMaster));
 
@@ -439,6 +440,12 @@ namespace His_Pos.ProductTypeManage
                     TypeDetail.SelectedItem = addTypeWindow.newProductType;
                 }
             }
+        }
+
+        private void ButtonTypeChange_Click(object sender, RoutedEventArgs e)
+        {
+            ItemChangeTypeWindow itemChangeTypeWindow = new ItemChangeTypeWindow();
+            itemChangeTypeWindow.ShowDialog();
         }
     }
 }
