@@ -24,8 +24,8 @@
         </Style>
         <DataTemplate x:Key="MedcineCodeAutoComplete">
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="Promid" Width="100" />
-                <Label x:Name="PromName" Width="350" />
+                <Label x:Name="Promid" Width="100" Content="{Binding Id}"/>
+                <Label x:Name="PromName" Width="350" Content="{Binding Name}"/>
             </StackPanel>
         </DataTemplate>
         <local:GenderConverter x:Key="GenderConverter" />
@@ -145,9 +145,12 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineCodeDataTemplate">
                                 <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"
-                                                                 VerticalContentAlignment="Stretch" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent"
-                                                                 MaxHeight="50" MinimumPrefixLength="2" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                                 FilterMode="Contains"  IsTextCompletionEnabled="False" ValueMemberPath="Id">
+                                                                 VerticalContentAlignment="Stretch" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent" MaxHeight="50"
+                                                                 ItemsSource="{Binding DeclareMedicines, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" MinimumPrefixLength="2" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
+                                                                 FilterMode="Contains"  IsTextCompletionEnabled="False" SelectedItem="{Binding Prescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay}">
+                                    <controls:AutoCompleteBox.DataContext>
+                                        <local:PrescriptionDec2/>
+                                    </controls:AutoCompleteBox.DataContext>
                                 </controls:AutoCompleteBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -184,7 +187,7 @@
                     <DataGridTemplateColumn MinWidth="40" Header="自費">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="PaysDataTemplate">
-                                <CheckBox x:Name="PaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" />
+                                <CheckBox x:Name="PaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -227,14 +230,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="60" Header="健保價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold">
+                    <DataGridTextColumn MinWidth="60" Header="健保價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" Binding="{Binding HcPrice}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="60" Header="自費價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold">
+                    <DataGridTextColumn MinWidth="60" Header="自費價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" Binding="{Binding Price}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

@@ -34,15 +34,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private Prescription _prescription = new Prescription();
 
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
-        public ObservableCollection<DeclareMedicine> Medicines { get; set; } = new ObservableCollection<DeclareMedicine>();
         public event PropertyChangedEventHandler PropertyChanged;
 
         public PrescriptionDec2View()
         {
             InitializeComponent();
             DataContext = this;
-            PrescriptionMedicines.ItemsSource = Medicines;
-            LoadPrescriptionData();
+            GetPrescriptionData();
+            //LoadPrescriptionData();
         }
 
         public Prescription Prescription
@@ -75,12 +74,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             LoadAdjustCases();
         }
 
-        private void MergingData()
+        private void GetPrescriptionData()
         {
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(this);
+            LoadPrescriptionData();
             loadingWindow.Show();
             loadingWindow.Topmost = true;
+            PrescriptionMedicines.ItemsSource = Prescription.Medicines;
         }
 
         /*
