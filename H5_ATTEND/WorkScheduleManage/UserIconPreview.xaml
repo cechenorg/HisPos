@@ -6,8 +6,11 @@
              xmlns:local="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
              mc:Ignorable="d" 
              d:DesignHeight="45" d:DesignWidth="100">
+    <UserControl.Resources>
+        <local:IsMedConverter x:Key="IsMedConverter"/>
+    </UserControl.Resources>
     <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-        <Ellipse Name="UserColor" Width="20" Height="20"/>
+        <Ellipse Name="UserColor" Width="20" Height="20" Stroke="Red" StrokeThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}"/>
         <TextBlock Name="UserName" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold" Margin="5,0,0,0"/>
     </StackPanel>
 </UserControl>
