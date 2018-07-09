@@ -24,8 +24,8 @@
         </Style>
         <DataTemplate x:Key="MedcineCodeAutoComplete">
             <StackPanel Orientation="Horizontal">
-                <Label x:Name="Promid" Width="100" Content="{Binding Id}"/>
-                <Label x:Name="PromName" Width="350" Content="{Binding Name}"/>
+                <Label x:Name="Promid" Width="100" Content="{Binding Id}" />
+                <Label x:Name="PromName" Width="350" Content="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
         <local:GenderConverter x:Key="GenderConverter" />
@@ -142,9 +142,9 @@
                       AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Width" Value="100"/>
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
                         <Style.Triggers>
                             <Trigger Property="Orientation" Value="Horizontal">
                                 <Setter Property="Width" Value="Auto" />
@@ -152,7 +152,7 @@
                                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
                             </Trigger>
                             <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Width" Value="15" />
                                 <Setter Property="Height" Value="Auto" />
                                 <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
                             </Trigger>
@@ -163,22 +163,22 @@
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
+                                <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                             </Trigger>
                         </Style.Triggers>
-                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
-                        <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="FontSize" Value="16"/>
-                        <Setter Property="Height" Value="40"/>
+                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter" />
+                        <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="Height" Value="40" />
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="30">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown"/>
+                                <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -188,19 +188,19 @@
                                 <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"
                                                                  VerticalContentAlignment="Stretch" HorizontalAlignment="Center" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent" MaxHeight="50" Text="{Binding Id,Mode=TwoWay}"
                                                                  ValueMemberPath="Id" MinimumPrefixLength="2" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
-                                                                 FilterMode="Contains" IsTextCompletionEnabled="False"  Populating="MedicineCodeAuto_Populating" DropDownClosed="MedicineCodeAuto_DropDownClosed"/>
+                                                                 FilterMode="Contains" IsTextCompletionEnabled="False"  Populating="MedicineCodeAuto_Populating" DropDownClosed="MedicineCodeAuto_DropDownClosed" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn MinWidth="400" Header="藥品名稱" FontSize="14"  FontWeight="Bold"  FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                            <DataGridTemplateColumn MinWidth="60" Header="用量">
+                    <DataGridTemplateColumn MinWidth="60" Header="用量">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="DosageDataTemplate">
                                 <TextBox x:Name="Dosage"  MinWidth="60" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Dosage}" />
@@ -210,7 +210,7 @@
                     <DataGridTemplateColumn MinWidth="40" Header="用法">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="UsageDataTemplate">
-                                <TextBox x:Name="Usage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Usage}" />
+                                <TextBox x:Name="Usage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Usage}" TextChanged="Usage_TextChanged" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -231,7 +231,7 @@
                     <DataGridTemplateColumn MinWidth="40" Header="自費">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="PaysDataTemplate">
-                                <CheckBox x:Name="PaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf}"/>
+                                <CheckBox x:Name="PaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -277,16 +277,16 @@
                     <DataGridTextColumn MinWidth="60" Header="健保價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" Binding="{Binding HcPrice}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn MinWidth="60" Header="自費價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" Binding="{Binding Price}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>

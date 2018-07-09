@@ -36,6 +36,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
         public ObservableCollection<object> Medicines;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public PrescriptionDec2View()
@@ -195,11 +196,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private bool IsFirst = true;
         private bool IsChanged = false;
+
         private void SetChanged()
         {
             if (IsFirst == true) return;
             IsChanged = true;
         }
+
         private void SetIsChanged(object sender, EventArgs e)
         {
             SetChanged();
@@ -245,6 +248,64 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             Prescription.Medicines.Add(medicineCodeAuto.SelectedItem as DeclareMedicine);
 
             medicineCodeAuto.Text = "";
+        }
+
+        private void Usage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+            if (!string.IsNullOrEmpty(textBox.Text))
+            {
+                var usage = textBox.Text;
+                CheckUsage(usage);
+            }
+        }
+
+        public int CheckUsage(string str)
+        {
+            int count = CheckStableUsage(str);
+            if (count == 0)
+            {
+                if (str.StartsWith("QW"))
+                    count = str.Length - 2;
+                //
+            }
+            return count;
+        }
+
+        public int CheckStableUsage(string str)
+        {
+            int count;
+            switch (str)
+            {
+                case "QDAM":
+                case "QDPM":
+                case "QDHS":
+                case "QN":
+                case "HS":
+                    count = 1;
+                    break;
+
+                case "BID":
+                case "QAM&HS":
+                case "QPM&HS":
+                case "QAM&PM":
+                    count = 2;
+                    break;
+
+                case "TID":
+                case "BID&HS":
+                    count = 3;
+                    break;
+
+                case "QID":
+                    count = 4;
+                    break;
+
+                default:
+                    count = 0;
+                    break;
+            }
+            return count;
         }
     }
 }
