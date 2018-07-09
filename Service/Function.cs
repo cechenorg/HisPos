@@ -284,11 +284,12 @@ namespace His_Pos
         public void GetLastYearlyHoliday() { //撈每年國定假日
            var jsondata = HttpGetJson("http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000077-002");
             if (jsondata != string.Empty) {
-                var year = DateTime.Now.AddYears(1).Year;
+                var year = DateTime.Now.Year;
                 string data = JObject.Parse(jsondata)["result"]["records"].ToString();
                 Collection<Holiday> tempCollection = JsonConvert.DeserializeObject<Collection<Holiday>>(data);
                 Collection<Holiday> holidayCollection = new Collection<Holiday>(tempCollection.Where(x => x.date.Year == year).ToList());
                 foreach (Holiday day in holidayCollection) {
+                    if (day.name == "軍人節") continue;
                     if (day.isHoliday == "是")
                         FunctionDb.UpdateLastYearlyHoliday(day);
                 }

@@ -72,9 +72,12 @@ namespace His_Pos
                 ChangeLoadingMessage("取得廠商資料...");
                 MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
 
-                ChangeLoadingMessage("更新假日資料...");
-                Function function = new Function();
-                function.GetLastYearlyHoliday();
+                if (FunctionDb.CheckYearlyHoliday()) {
+                    ChangeLoadingMessage("更新假日資料...");
+                    Function function = new Function();
+                    function.GetLastYearlyHoliday();
+                }
+                
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

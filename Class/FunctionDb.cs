@@ -13,6 +13,14 @@ namespace His_Pos.Class
 {
     public static class FunctionDb
     {
+        internal static bool CheckYearlyHoliday() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+          var table =  dd.ExecuteProc("[HIS_POS_DB].[FunctionView].[CheckYearlyHoliday]");
+            if (table.Rows[0][0].ToString() == "0")
+                return true;
+            else
+                return false;
+        }
         internal static void UpdateLastYearlyHoliday(Holiday holiday)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
