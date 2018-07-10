@@ -8,9 +8,12 @@
              d:DesignHeight="45" d:DesignWidth="100">
     <UserControl.Resources>
         <local:IsMedConverter x:Key="IsMedConverter"/>
+        <local:IsSelectedConverter x:Key="IsSelectedConverter"/>
     </UserControl.Resources>
-    <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-        <Ellipse Name="UserColor" Width="20" Height="20" Stroke="Red" StrokeThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}"/>
-        <TextBlock Name="UserName" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold" Margin="5,0,0,0"/>
-    </StackPanel>
+    <Border Margin="20,0,0,8" CornerRadius="22" Background="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsSelectedConverter}}">
+        <StackPanel Orientation="Horizontal">
+            <Ellipse Name="UserColor" Width="20" Height="20" Stroke="Red" StrokeThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}" Margin="10,0,5,0"/>
+            <TextBlock Name="UserName" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold" Margin="5,0,10,0"/>
+        </StackPanel>
+    </Border>
 </UserControl>

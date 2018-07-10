@@ -8,6 +8,67 @@
              d:DesignHeight="105" d:DesignWidth="192">
     <UserControl.Resources>
         <local:IsEditableConverter x:Key="IsEditableConverter"/>
+        <local:IsAllDayShowConverter x:Key="IsAllDayShowConverter"/>
+        <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border Background="Transparent" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="IsTabStop" Value="false"/>
+            <Setter Property="Focusable" Value="false"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border 
+                                        Background="Black"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="HorizontalScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="0"/>
+                </Grid.ColumnDefinitions>
+                <Border
+                                Grid.ColumnSpan="3"
+                                Background="White" />
+                <Track 
+                                Name="PART_Track"
+                                Grid.Column="1"
+                                IsDirectionReversed="False">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton 
+                                        Style="{DynamicResource ScrollBarPageButton}"
+                                        Command="ScrollBar.PageLeftCommand" />
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb 
+                                        Style="{DynamicResource ScrollBarThumb}" 
+                                        Margin="0"
+                                        Height="2"/>
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton 
+                                        Style="{DynamicResource ScrollBarPageButton}"
+                                        Command="ScrollBar.PageRightCommand" />
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
     </UserControl.Resources>
     <Viewbox Stretch="Fill" Margin="2">
         <Grid Width="192" Height="105" Background="{StaticResource Shadow}">
@@ -22,31 +83,51 @@
                 <ColumnDefinition Width="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsEditableConverter}}"/>
                 <ColumnDefinition Width="25"/>
                 <ColumnDefinition />
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="43"/>
             </Grid.ColumnDefinitions>
             <Label Name="LabelDay" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+            <TextBlock Name="SpecialDay" Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" Foreground="Red" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" TextWrapping="WrapWithOverflow"/>
             <CheckBox Name="Morning" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-            <StackPanel Name="MorningStack" Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
-                
-            </StackPanel>
             <CheckBox Name="Noon" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <TextBlock Grid.Row="2" Grid.Column="1" Text="午" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-            <StackPanel Name="NoonStack" Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
-
-            </StackPanel>
             <CheckBox Name="Evening" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <TextBlock Grid.Row="3" Grid.Column="1" Text="晚" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-            <StackPanel Name="EveningStack" Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
-
-            </StackPanel>
             <CheckBox Name="Sleep" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <TextBlock Grid.Row="4" Grid.Column="1" Text="夜" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-            <StackPanel Name="SleepStack" Grid.Row="4" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,2">
+            <ScrollViewer Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="Day_PreviewMouseWheel">
+                <ScrollViewer.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="Width" Value="100"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="2" />
+                                <Setter Property="Template" Value="{DynamicResource HorizontalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ScrollViewer.Resources>
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Name="MorningStack" Orientation="Horizontal" Margin="0,0,0,2" Height="19">
 
-            </StackPanel>
-            
-            
+                    </StackPanel>
+                    <StackPanel Name="NoonStack" Orientation="Horizontal" Margin="0,0,0,2" Height="19">
+
+                    </StackPanel>
+                    <StackPanel Name="EveningStack" Orientation="Horizontal" Margin="0,0,0,2" Height="19">
+
+                    </StackPanel>
+                    <StackPanel Name="SleepStack" Orientation="Horizontal" Margin="0,0,0,2" Height="19">
+
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+            <Border Name="AllDayBtn" Grid.Row="4" Grid.Column="3" CornerRadius="8" Background="DeepSkyBlue" Margin="2" MouseLeftButtonDown="AllDayBtn_OnMouseLeftButtonDown" Visibility="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsAllDayShowConverter}}">
+                <TextBlock Text="全天" Foreground="{StaticResource ForeGround}" FontSize="12" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
         </Grid>
     </Viewbox>
 </UserControl>

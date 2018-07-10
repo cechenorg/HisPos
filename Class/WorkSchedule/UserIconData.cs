@@ -18,6 +18,14 @@ namespace His_Pos.Class.WorkSchedule
             IsMed = Boolean.Parse(dataRow["ISMED"].ToString());
         }
 
+        public UserIconData()
+        {
+            Id = null;
+            Name = "全部";
+            BackBrush = Brushes.Black;
+            IsMed = false;
+        }
+
         public string Id { get; set; }
         public string Name { get; set; }
         public Brush BackBrush { get; set; }

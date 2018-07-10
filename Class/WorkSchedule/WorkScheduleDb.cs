@@ -1,8 +1,10 @@
-﻿using His_Pos.Properties;
+﻿using His_Pos.H5_ATTEND.WorkScheduleManage;
+using His_Pos.Properties;
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -103,6 +105,27 @@ namespace His_Pos.Class.WorkSchedule
             parameters.Add(new SqlParameter("MONTH", month));
 
             dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[InsertWorkSchedules]", parameters);
+        }
+
+        internal static Collection<WorkScheduleManageView.SpecialDate> GetSpecialDate(int year, int month)
+        {
+            Collection<WorkScheduleManageView.SpecialDate> collection = new BindingList<WorkScheduleManageView.SpecialDate>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+
+            parameters.Add(new SqlParameter("YEAR", year));
+            parameters.Add(new SqlParameter("MONTH", month));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[GetSpecialDate]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new WorkScheduleManageView.SpecialDate(row));
+            }
+
+            return collection;
         }
     }
 }
