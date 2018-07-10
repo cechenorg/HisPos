@@ -35,6 +35,7 @@ namespace His_Pos.Class.Product
         public string Price { get; set; }
         public string CountStatus { get; set; }
         public string FocusColumn { get;set; }
+        public int Days { get; set; }
 
         public void CalculateData(string inputSource)
         {
