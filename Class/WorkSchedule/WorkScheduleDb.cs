@@ -64,7 +64,7 @@ namespace His_Pos.Class.WorkSchedule
             return collection;
         }
 
-        internal static bool UserClockIn(string id, string password, string inout)
+        internal static string UserClockIn(string id, string password, string inout)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
@@ -75,10 +75,7 @@ namespace His_Pos.Class.WorkSchedule
             parameters.Add(new SqlParameter("INOUT", inout));
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ClockInView].[ClockIn]", parameters);
-
-            string result = table.Rows[0]["RESULT"].ToString();
-
-            return Convert.ToBoolean(Convert.ToInt16(result));
+            return table.Rows[0]["RESULT"].ToString();
         }
 
         internal static void InsertWorkSchedules(ObservableCollection<WorkSchedule> workSchedules, string year, string month)

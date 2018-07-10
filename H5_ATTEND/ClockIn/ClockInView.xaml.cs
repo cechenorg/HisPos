@@ -80,21 +80,38 @@ namespace His_Pos.H5_ATTEND.ClockIn
 
             string inout = InOutStack.Children.OfType<RadioButton>().Single(r => (bool) r.IsChecked).Tag.ToString();
 
-            if (WorkScheduleDb.UserClockIn(UserId.Text, UserPassword.Password, inout))
-            {
-                MessageWindow messageWindow = new MessageWindow("打卡成功!", MessageType.SUCCESS);
-                messageWindow.ShowDialog();
+            switch (WorkScheduleDb.UserClockIn(UserId.Text, UserPassword.Password, inout)) {
+                case "上班打卡成功":
+                    MessageWindow messageWindow = new MessageWindow("上班打卡成功!", MessageType.SUCCESS);
+                    messageWindow.ShowDialog();
+                    ClearUi();
+                    break;
+                case "您已經打過上班卡":
+                    messageWindow = new MessageWindow("您已經打過上班卡", MessageType.ERROR);
+                    messageWindow.ShowDialog();
+                    UserId.Text = string.Empty;
+                    UserPassword.Password = string.Empty;
+                    break;
+                case "您已經下班 無法打卡上班 已通知主管":
+                    messageWindow = new MessageWindow("您已經下班 無法打卡上班 已通知主管", MessageType.ERROR);
+                    messageWindow.ShowDialog();
+                    UserId.Text = string.Empty;
+                    UserPassword.Password = string.Empty;
+                    break;
+                case "下班打卡成功":
+                    messageWindow = new MessageWindow("下班打卡成功!", MessageType.SUCCESS);
+                    messageWindow.ShowDialog();
+                    ClearUi();
+                    break;
+                case "打卡失敗":
+                    messageWindow = new MessageWindow("帳號或密碼錯誤!", MessageType.ERROR);
+                    messageWindow.ShowDialog();
 
-                ClearUi();
+                    UserPassword.Password = "";
+                    UserPassword.Focus();
+                    break;
             }
-            else
-            {
-                MessageWindow messageWindow = new MessageWindow("帳號或密碼錯誤!", MessageType.ERROR);
-                messageWindow.ShowDialog();
-
-                UserPassword.Password = "";
-                UserPassword.Focus();
-            }
+         
         }
 
         private void ClearUi()
