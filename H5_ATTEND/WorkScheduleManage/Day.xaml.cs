@@ -38,12 +38,18 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        public Day(string id)
+        public Day(string id, string specialDate)
         {
             InitializeComponent();
             DataContext = this;
 
             LabelDay.Content = id;
+
+            if (specialDate != null)
+            {
+                LabelDay.Foreground = Brushes.Red;
+                SpecialDay.Text = specialDate;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

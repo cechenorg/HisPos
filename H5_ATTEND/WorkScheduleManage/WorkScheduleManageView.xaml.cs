@@ -23,6 +23,18 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class WorkScheduleManageView : UserControl
     {
+        public class SpecialDate
+        {
+            public SpecialDate(DataRow dataRow)
+            {
+                Day = dataRow["DAY"].ToString();
+                Name = dataRow["NAME"].ToString();
+            }
+
+            public string Day { get; }
+            public string Name { get; }
+        }
+
         class Time
         {
            public Time(DateTime date)
@@ -152,13 +164,17 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             DateTime TheMonthStart = new DateTime(selectDateTime.Year, selectDateTime.Month, 1);
             DateTime TheMonthEnd = new DateTime(selectDateTime.Year, selectDateTime.Month, DateTime.DaysInMonth(selectDateTime.Year, selectDateTime.Month));
             int wcount = 0;
+
+            Collection<SpecialDate> specialDates = WorkScheduleDb.GetSpecialDate(selectDateTime.Year, selectDateTime.Month);
             
             while (TheMonthStart != TheMonthEnd.AddDays(1)) {
                 
                 string today = TheMonthStart.DayOfWeek.ToString("d");
                 if (today == "0" && TheMonthStart.Day.ToString() != "1") wcount++;
 
-                Day day = new Day(TheMonthStart.Day.ToString());
+                SpecialDate special = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
+
+                Day day = new Day(TheMonthStart.Day.ToString(), (special is null)? null : special.Name);
 
                 Grid.SetRow(day, wcount);
                 Grid.SetColumn(day, Convert.ToInt32(today));

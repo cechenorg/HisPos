@@ -85,6 +85,7 @@
                 <ColumnDefinition Width="43"/>
             </Grid.ColumnDefinitions>
             <Label Name="LabelDay" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+            <TextBlock Name="SpecialDay" Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" Foreground="Red" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" TextWrapping="WrapWithOverflow"/>
             <CheckBox Name="Morning" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
             <CheckBox Name="Noon" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
