@@ -8,6 +8,7 @@
              d:DesignHeight="105" d:DesignWidth="192">
     <UserControl.Resources>
         <local:IsEditableConverter x:Key="IsEditableConverter"/>
+        <local:IsAllDayShowConverter x:Key="IsAllDayShowConverter"/>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -92,10 +93,8 @@
             <TextBlock Grid.Row="2" Grid.Column="1" Text="午" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
             <CheckBox Name="Evening" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <TextBlock Grid.Row="3" Grid.Column="1" Text="晚" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-            
             <CheckBox Name="Sleep" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
             <TextBlock Grid.Row="4" Grid.Column="1" Text="夜" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-
             <ScrollViewer Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="Day_PreviewMouseWheel">
                 <ScrollViewer.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -126,7 +125,9 @@
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
-            
+            <Border Name="AllDayBtn" Grid.Row="4" Grid.Column="3" CornerRadius="8" Background="DeepSkyBlue" Margin="2" MouseLeftButtonDown="AllDayBtn_OnMouseLeftButtonDown" Visibility="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsAllDayShowConverter}}">
+                <TextBlock Text="全天" Foreground="{StaticResource ForeGround}" FontSize="12" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
         </Grid>
     </Viewbox>
 </UserControl>

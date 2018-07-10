@@ -24,6 +24,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class Day : UserControl, INotifyPropertyChanged
     {
+        private short WorkScheduleCount { get; set; } = 0;
         private bool isEditMode = false;
         public bool IsEditMode
         {
@@ -86,6 +87,8 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                         AddUserToCorrectOrder(SleepStack, newUser);
                         break;
                 }
+                WorkScheduleCount++;
+                CheckAllDay();
             }
             else
             {
@@ -104,6 +107,8 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                         RemoveUserIcon(SleepStack);
                         break;
                 }
+                WorkScheduleCount--;
+                CheckAllDay();
             }
         }
 
@@ -176,10 +181,31 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         {
             IsEditMode = true;
 
+            WorkScheduleCount = 0;
+
             Morning.IsChecked = HasCurrentUser(MorningStack);
             Noon.IsChecked = HasCurrentUser(NoonStack);
             Evening.IsChecked = HasCurrentUser(EveningStack);
             Sleep.IsChecked = HasCurrentUser(SleepStack);
+            CheckAllDay();
+        }
+
+        private void CheckAllDay()
+        {
+            if (WorkScheduleCount == 4)
+                AllDayChecked();
+            else
+                NotAllDayChecked();
+        }
+
+        private void AllDayChecked()
+        {
+            AllDayBtn.Background = Brushes.DeepSkyBlue;
+        }
+
+        private void NotAllDayChecked()
+        {
+            AllDayBtn.Background = (Brush)FindResource("Shadow");
         }
 
         private bool? HasCurrentUser(StackPanel stack)
@@ -188,7 +214,11 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             foreach(var userIcon in userIcons)
             {
-                if (userIcon.Id.Equals(WorkScheduleManageView.CurrentUserIconData.Id)) return true;
+                if (userIcon.Id.Equals(WorkScheduleManageView.CurrentUserIconData.Id))
+                {
+                    WorkScheduleCount++;
+                    return true;
+                }
             }
 
             return false;
@@ -210,7 +240,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         internal void EndEdit()
         {
-            IsEditMode = false ;
+            IsEditMode = false;
         }
 
         internal ObservableCollection<WorkSchedule> GetWorkSchedules(ObservableCollection<WorkSchedule> workSchedules)
@@ -249,6 +279,59 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             e.Handled = true;
         }
+
+        private void AllDayBtn_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (WorkScheduleCount < 4)
+            {
+                UserIcon newUser;
+
+                if (!(bool) Morning.IsChecked)
+                {
+                    newUser = new UserIcon(WorkScheduleManageView.CurrentUserIconData);
+                    AddUserToCorrectOrder(MorningStack, newUser);
+                    Morning.IsChecked = true;
+                }
+
+                if (!(bool) Noon.IsChecked)
+                {
+                    newUser = new UserIcon(WorkScheduleManageView.CurrentUserIconData);
+                    AddUserToCorrectOrder(NoonStack, newUser);
+                    Noon.IsChecked = true;
+                }
+
+                if (!(bool) Evening.IsChecked)
+                {
+                    newUser = new UserIcon(WorkScheduleManageView.CurrentUserIconData);
+                    AddUserToCorrectOrder(EveningStack, newUser);
+                    Evening.IsChecked = true;
+                }
+
+                if (!(bool) Sleep.IsChecked)
+                {
+                    newUser = new UserIcon(WorkScheduleManageView.CurrentUserIconData);
+                    AddUserToCorrectOrder(SleepStack, newUser);
+                    Sleep.IsChecked = true;
+                }
+
+                WorkScheduleCount = 4;
+                CheckAllDay();
+            }
+            else
+            {
+                Morning.IsChecked = false;
+                Noon.IsChecked = false;
+                Evening.IsChecked = false;
+                Sleep.IsChecked = false;
+
+                RemoveUserIcon(MorningStack);
+                RemoveUserIcon(NoonStack);
+                RemoveUserIcon(EveningStack);
+                RemoveUserIcon(SleepStack);
+                WorkScheduleCount = 0;
+                CheckAllDay();
+            }
+        }
     }
 
     public class IsEditableConverter : IValueConverter
@@ -261,6 +344,24 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
 
             return 0;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class IsAllDayShowConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return Visibility.Visible;
+            }
+
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
