@@ -286,6 +286,7 @@
     <Compile Include="Class\Medicate.cs" />
     <Compile Include="Class\Product\Medicine.cs" />
     <Compile Include="Class\Product\OTC.cs" />
+    <Compile Include="Class\Usage.cs" />
     <Compile Include="Class\Vaccination.cs" />
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>

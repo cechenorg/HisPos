@@ -14,7 +14,7 @@ namespace His_Pos.Class
             Form = dataRow["HISMED_FORM"].ToString();
         }
 
-        public Medicate(string dosage, string usage, int days, string position)
+        public Medicate(string dosage, Usage usage, int days, string position)
         {
             Dosage = dosage;
             Usage = usage;
@@ -23,7 +23,7 @@ namespace His_Pos.Class
         }
 
         public string Dosage { get; set; }
-        public string Usage { get; set; }
+        public Usage Usage { get; set; }
         public int Days { get; set; }
         public string Position { get; set; }
         public string Form { get; set; }
