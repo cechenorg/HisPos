@@ -80,24 +80,6 @@ namespace His_Pos.Class.Manufactory
             return collection;
         }
 
-        internal static ObservableCollection<ManufactoryGetOverview> GetManufactoryGetOverview(string manId)
-        {
-            ObservableCollection<ManufactoryGetOverview> collection = new ObservableCollection<ManufactoryGetOverview>();
-
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MAN_ID", manId));
-
-            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManufactoryGetOverview]", parameters);
-
-            foreach (DataRow row in table.Rows)
-            {
-                collection.Add(new ManufactoryGetOverview(row));
-            }
-
-            return collection;
-        }
-
         internal static ObservableCollection<ProductDetailManufactory> GetManufactoryCollection(string proId)
         {
             ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();

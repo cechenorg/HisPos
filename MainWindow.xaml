@@ -21,6 +21,7 @@
     xmlns:WorkScheduleManage ="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
     xmlns:ClockIn="clr-namespace:His_Pos.H5_ATTEND.ClockIn"
     xmlns:Leave="clr-namespace:His_Pos.H5_ATTEND.Leave"
+    xmlns:PharmacyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.PharmacyManage"
     x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"   Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}" 
@@ -58,6 +59,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type ManufactoryManage:ManufactoryManage}">
             <ManufactoryManage:ManufactoryManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type PharmacyManage:PharmacyManage}">
+            <PharmacyManage:PharmacyManageView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type EmployeeManage:EmployeeManage}">
             <EmployeeManage:EmployeeManageView/>

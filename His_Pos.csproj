@@ -325,6 +325,10 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
+    <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
+    <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
+      <DependentUpon>PharmacyManageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
       <DependentUpon>AddTypeWindow.xaml</DependentUpon>
     </Compile>
@@ -506,6 +510,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\LocationManage\NewLocationView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

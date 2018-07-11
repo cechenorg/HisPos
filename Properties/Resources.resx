@@ -237,4 +237,7 @@
   <data name="WorkScheduleManage" xml:space="preserve">
     <value>排班管理</value>
   </data>
+  <data name="PharmacyManage" xml:space="preserve">
+    <value>藥局管理</value>
+  </data>
 </root>
