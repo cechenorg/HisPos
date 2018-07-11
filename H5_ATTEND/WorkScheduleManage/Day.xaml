@@ -9,6 +9,7 @@
     <UserControl.Resources>
         <local:IsEditableConverter x:Key="IsEditableConverter"/>
         <local:IsAllDayShowConverter x:Key="IsAllDayShowConverter"/>
+        <local:HasMessageConverter x:Key="HasMessageConverter"/>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -71,7 +72,7 @@
         </ControlTemplate>
     </UserControl.Resources>
     <Viewbox Stretch="Fill" Margin="2">
-        <Border BorderBrush="Red">
+        <Border BorderBrush="Red" BorderThickness="{Binding ImportantMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource HasMessageConverter}}">
             <Grid Name="DayGrid" Width="192" Height="105" Background="{StaticResource Shadow}">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -86,15 +87,21 @@
                     <ColumnDefinition />
                     <ColumnDefinition Width="43"/>
                 </Grid.ColumnDefinitions>
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="修改備註" Click="ChangeMessage_Click"/>
+                    </ContextMenu>
+                </Grid.ContextMenu>
                 <Label Name="LabelDay" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
                 <TextBlock Name="SpecialDay" Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" Foreground="Red" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" TextWrapping="WrapWithOverflow"/>
-                <CheckBox Name="Morning" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding ImportantMessage, UpdateSourceTrigger=PropertyChanged}" Foreground="Red" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                <CheckBox Name="Morning" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-                <CheckBox Name="Noon" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
+                <CheckBox Name="Noon" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
                 <TextBlock Grid.Row="2" Grid.Column="1" Text="午" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-                <CheckBox Name="Evening" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
+                <CheckBox Name="Evening" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
                 <TextBlock Grid.Row="3" Grid.Column="1" Text="晚" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-                <CheckBox Name="Sleep" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Click="Morning_OnClick"/>
+                <CheckBox Name="Sleep" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
                 <TextBlock Grid.Row="4" Grid.Column="1" Text="夜" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
                 <ScrollViewer Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="Day_PreviewMouseWheel">
                     <ScrollViewer.Resources>

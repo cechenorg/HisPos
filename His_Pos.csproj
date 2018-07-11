@@ -343,6 +343,9 @@
     <Compile Include="H5_ATTEND\WorkScheduleManage\Day.xaml.cs">
       <DependentUpon>Day.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H5_ATTEND\WorkScheduleManage\EditMessageWindow.xaml.cs">
+      <DependentUpon>EditMessageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H5_ATTEND\WorkScheduleManage\UserIcon.xaml.cs">
       <DependentUpon>UserIcon.xaml</DependentUpon>
     </Compile>
@@ -527,6 +530,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="H5_ATTEND\WorkScheduleManage\Day.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H5_ATTEND\WorkScheduleManage\EditMessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -39,6 +39,20 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
+        private string importantMessage = "";
+        public string ImportantMessage
+        {
+            get
+            {
+                return importantMessage;
+            }
+            set
+            {
+                importantMessage = value;
+                NotifyPropertyChanged("ImportantMessage");
+            }
+        }
+
         public Day(string id, string specialDate)
         {
             InitializeComponent();
@@ -62,7 +76,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        private void Morning_OnClick(object sender, RoutedEventArgs e)
+        private void CheckBox_OnClick(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = sender as CheckBox;
 
@@ -332,6 +346,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 CheckAllDay();
             }
         }
+
+        private void ChangeMessage_Click(object sender, RoutedEventArgs e)
+        {
+            EditMessageWindow editMessageWindow = new EditMessageWindow(ImportantMessage);
+            editMessageWindow.ShowDialog();
+
+            ImportantMessage = editMessageWindow.Message;
+        }
     }
 
     public class IsEditableConverter : IValueConverter
@@ -362,6 +384,24 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
 
             return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class HasMessageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value.ToString().Equals(String.Empty))
+            {
+                return 0;
+            }
+
+            return 1;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
