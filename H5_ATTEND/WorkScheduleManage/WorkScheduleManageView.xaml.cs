@@ -165,15 +165,16 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             GridCalendar.Children.Clear();
             DateTime TheMonthStart = new DateTime(selectDateTime.Year, selectDateTime.Month, 1);
             DateTime TheMonthEnd = new DateTime(selectDateTime.Year, selectDateTime.Month, DateTime.DaysInMonth(selectDateTime.Year, selectDateTime.Month));
+            int beginDayCount = Int16.Parse(TheMonthStart.DayOfWeek.ToString("d"));
+            int endDayCount = 6 - Int16.Parse(TheMonthEnd.DayOfWeek.ToString("d"));
             int wcount = 0;
 
             Collection<SpecialDate> specialDates = WorkScheduleDb.GetSpecialDate(selectDateTime.Year, selectDateTime.Month);
 
             while (TheMonthStart != TheMonthEnd.AddDays(1))
             {
-
                 string today = TheMonthStart.DayOfWeek.ToString("d");
-                if (today == "0" && TheMonthStart.Day.ToString() != "1") wcount++;
+                if (today == "0") wcount++;
 
                 SpecialDate special = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
 
@@ -186,9 +187,57 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 TheMonthStart = TheMonthStart.AddDays(1);
             }
 
+            FillBlankDay(beginDayCount, endDayCount);
+
             HighlightToday();
 
             InitWorkSchedule();
+        }
+
+        private void FillBlankDay(int beginDayCount, int endDayCount)
+        {
+            if (beginDayCount == 0) beginDayCount = 7;
+
+            for(int x = 0; x < beginDayCount; x++)
+            {
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Margin = new Thickness(2);
+                stackPanel.Background = (Brush)FindResource("DarkShadow");
+
+                Grid.SetRow(stackPanel, 0);
+                Grid.SetColumn(stackPanel, x);
+                GridCalendar.Children.Add(stackPanel);
+            }
+
+            int lastRow = 5;
+
+            if (beginDayCount <= 4)
+                lastRow = 4;
+
+            for (int x = 0; x < endDayCount; x++)
+            {
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Margin = new Thickness(2);
+                stackPanel.Background = (Brush)FindResource("DarkShadow");
+
+                Grid.SetRow(stackPanel, lastRow);
+                Grid.SetColumn(stackPanel, 6 - x);
+                GridCalendar.Children.Add(stackPanel);
+            }
+
+            if(lastRow == 4 || endDayCount == 0)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    StackPanel stackPanel = new StackPanel();
+                    stackPanel.Margin = new Thickness(2);
+                    stackPanel.Background = (Brush)FindResource("DarkShadow");
+
+                    Grid.SetRow(stackPanel, 5);
+                    Grid.SetColumn(stackPanel, x);
+                    GridCalendar.Children.Add(stackPanel);
+                }
+            }
         }
 
         private void HighlightToday()
