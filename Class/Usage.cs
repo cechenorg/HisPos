@@ -22,7 +22,7 @@ namespace His_Pos.Class
             Reg = dataRow["USAGE_REG"].ToString();
             Days = int.Parse(dataRow["USAGE_DAY"].ToString());
             Times = int.Parse(dataRow["USAGE_TIMES"].ToString());
-            PreDefault = bool.Parse(dataRow["HISPRE_DEFAULT"].ToString());
+            PreDefault = bool.Parse(dataRow["USAGE_DEFAULT"].ToString());
         }
 
         public string QuickName { get; set; }//快速輸入用代號

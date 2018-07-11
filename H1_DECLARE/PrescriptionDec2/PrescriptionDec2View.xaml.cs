@@ -27,13 +27,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private readonly bool IsFirst = true;
         public ObservableCollection<object> Medicines;
+        private ObservableCollection<Usage> usages = new ObservableCollection<Usage>();
 
         public PrescriptionDec2View()
         {
             InitializeComponent();
             DataContext = this;
             GetPrescriptionData();
-            //LoadPrescriptionData();
+            LoadPrescriptionData();
         }
 
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
@@ -75,6 +76,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             LoadPaymentCategories();
             LoadCopayments();
             LoadAdjustCases();
+            usages = UsageDb.GetUsages();
         }
 
         private void GetPrescriptionData()
@@ -84,7 +86,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             loadingWindow.GetMedicinesData(this);
             loadingWindow.Show();
             loadingWindow.Topmost = true;
-            LoadPrescriptionData();
             PrescriptionMedicines.ItemsSource = Prescription.Medicines;
         }
 
@@ -248,20 +249,20 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public int CheckUsage(string str,int days)
+        public int CheckUsage(string str, int days)
         {
-            Regex reg_yWzD = new Regex(@"\d+[Ww]\d+[Dd]");
-            Regex reg_MCDxDy = new Regex(@"[Mm][Cc][Dd]\d+[Dd]\d+");
-            Regex reg_QxD = new Regex(@"[Qq]\d+[Dd]");
-            Regex reg_QxW = new Regex(@"[Qq]\d+[Ww]");
-            Regex reg_QxM = new Regex(@"[Qq]\d+[Mm]");
+            Regex reg_yWzD = new Regex(@"\d+W\d+D");
+            Regex reg_MCDxDy = new Regex(@"MCD\d+D\d+");
+            Regex reg_QxD = new Regex(@"Q\d+D");
+            Regex reg_QxW = new Regex(@"Q\d+W");
+            Regex reg_QxM = new Regex(@"Q\d+M");
             var count = CheckStableUsage(str, days);
             if (count == 0)
             {
                 if (str.StartsWith("QW"))//QW(x,y,z…)：每星期 x，y，z…使用(x,y,z... = 1~7)
                     count = str.Length - 2;
                 else if (reg_yWzD.IsMatch(str))//每 y 星期使用 z 天(y、z > 0)
-                    count = Case_yWzD(str,days);
+                    count = Case_yWzD(str, days);
                 else if (reg_MCDxDy.IsMatch(str))//月經第 x 天至第 y 天使用(x、y > 0,x < y)
                     count = Case_MCDxDy(str);
                 else if (reg_QxD.IsMatch(str))//每 x 日 1 次(x >= 2)
@@ -306,7 +307,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             return days / 2;
         }
 
-        private int CheckStableUsage(string str,int days)
+        private int CheckStableUsage(string str, int days)
         {
             int count;
             switch (str)
@@ -319,33 +320,41 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case "HS"://睡前 1 次
                     count = days;
                     break;
+
                 case "BID"://每日 2 次
                 case "QAM&HS"://上午使用 1 次且睡前 1 次
                 case "QPM&HS"://下午使用 1 次且睡前 1 次
                 case "QAM&PM"://每日上下午各使用 1 次
                 case "BID&HS"://每日 2 次且睡前 1 次
-                    count = days*2;
+                    count = days * 2;
                     break;
+
                 case "TID"://每日三次
                 case "TID&HS"://每日 3 次且睡前 1 次
-                    count = days*3;
+                    count = days * 3;
                     break;
+
                 case "QID":
                     count = days * 4;
                     break;
+
                 case "STAT"://立刻使用
                 case "ASORDER"://依照醫師指示使用
                     count = -1;
                     break;
+
                 case "OQD"://隔日使用 1 次
                     count = Case_QOD(days);
                     break;
+
                 case "QW"://每星期 1 次
                     count = Case_QW(days);
                     break;
+
                 case "BIW"://每星期2次
                     count = Case_BIW(days);
                     break;
+
                 default:
                     count = 0;
                     break;
@@ -367,7 +376,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             return days / 7;
         }
 
-        private int Case_yWzD(string str,int days)
+        private int Case_yWzD(string str, int days)
         {
             int count;
             int[] values = FindNumberInString(str);

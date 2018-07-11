@@ -4,7 +4,7 @@ namespace His_Pos.Class.Declare
 {
     public class DeclareDetail
     {
-        public DeclareDetail(string medicalId, double percent,double price,int sequence,string start,string end)
+        public DeclareDetail(string medicalId, double percent, double price, int sequence, string start, string end)
         {
             MedicalOrder = "9";
             MedicalId = medicalId;
@@ -14,12 +14,12 @@ namespace His_Pos.Class.Declare
             Percent = percent;
             CountPoint();
             Sequence = sequence;
-            SetDate(start,end);
+            SetDate(start, end);
         }
 
-        public DeclareDetail(Medicine medicine,AdjustCase.AdjustCase adjustCase,int sequence)
+        public DeclareDetail(Medicine medicine, AdjustCase.AdjustCase adjustCase, int sequence)
         {
-            if(!medicine.PaySelf || adjustCase.Id == "3")//p1
+            if (!medicine.PaySelf || adjustCase.Id == "3")//p1
                 MedicalOrder = "1";
             else
                 MedicalOrder = "4";
@@ -53,25 +53,29 @@ namespace His_Pos.Class.Declare
         private void SetMedicate(Medicine medicine)
         {
             Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
-            Usage = medicine.MedicalCategory.Usage;//p4
+            Usage = medicine.MedicalCategory.Usage.Id;//p4
             Position = medicine.MedicalCategory.Position;//p5
             Days = medicine.MedicalCategory.Days;//p11
         }
+
         private void SetMedicine(Medicine medicine)
         {
             MedicalId = medicine.Id;//p2
             //Total = medicine.Amount;//p7
             Price = medicine.HcPrice;//p8
         }
-        private void SetDate(string start,string end)
+
+        private void SetDate(string start, string end)
         {
             StartDate = start;//p12
             EndDate = end;//p13
         }
+
         private void SetMedicalPersonnelId(string Id)
         {
             MedicalPersonnelId = Id;
         }
+
         private void CountPoint()//p9
         {
             if (MedicalOrder == "1")
@@ -81,6 +85,5 @@ namespace His_Pos.Class.Declare
                 Point = Price * Total * Percent;
             }
         }
-      
-    }   
+    }
 }

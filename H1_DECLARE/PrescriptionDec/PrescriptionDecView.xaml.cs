@@ -418,7 +418,7 @@ namespace His_Pos.PrescriptionDec
                 return;
             }
             if (usage != null)
-                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Usage = usage.Text;
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Usage.Id = usage.Text;
         }
 
         /*
