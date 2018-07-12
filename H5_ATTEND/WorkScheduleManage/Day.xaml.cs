@@ -364,9 +364,22 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             WorkScheduleDb.SaveCalendarRemark(ThisDay, ImportantMessage);
         }
 
-        private void Polygon_MouseEnter(object sender, MouseEventArgs e)
+        private void ShowRemark(object sender, MouseEventArgs e)
         {
-            
+            DayRemark dayRemark = new DayRemark(ImportantMessage);
+
+            Grid.SetRow(dayRemark, 0);
+            Grid.SetColumn(dayRemark, 0);
+
+            Grid.SetRowSpan(dayRemark, 5);
+            Grid.SetColumnSpan(dayRemark, 3);
+
+            DayGrid.Children.Add(dayRemark);
+        }
+
+        private void HideRemark(object sender, MouseEventArgs e)
+        {
+            DayGrid.Children.Remove(DayGrid.Children.OfType<DayRemark>().ToList()[0]);
         }
     }
 
