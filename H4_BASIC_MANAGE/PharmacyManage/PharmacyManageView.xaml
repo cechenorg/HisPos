@@ -74,7 +74,7 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
-                    <TextBox  FontSize="50" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="廠商名稱" Margin="20,0,0,0" BorderThickness="0" />
+                    <TextBox  FontSize="50" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="藥局名稱" Margin="20,0,0,0" BorderThickness="0" />
                     <TextBox  FontSize="30" Foreground="{StaticResource ForeGround}" materialDesign:HintAssist.Hint="簡稱" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0" />
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="0,0,0,10">
