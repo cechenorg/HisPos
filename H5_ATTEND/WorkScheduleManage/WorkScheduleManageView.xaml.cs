@@ -23,9 +23,9 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class WorkScheduleManageView : UserControl
     {
-        public class SpecialDate
+        public class SpecialData
         {
-            public SpecialDate(DataRow dataRow)
+            public SpecialData(DataRow dataRow)
             {
                 Day = dataRow["DAY"].ToString();
                 Name = dataRow["NAME"].ToString();
@@ -53,6 +53,8 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         public ObservableCollection<WorkSchedule> WorkSchedules { get; set; }
         public ObservableCollection<UserIconData> UserIconDatas { get; set; }
+
+        private bool IsFirst { get; set; } = true;
 
         public WorkScheduleManageView()
         {
@@ -158,10 +160,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             ComboMonth.Text = DateTime.Now.Month + "月";
             ComboYear.ItemsSource = years;
             ComboYear.Text = DateTime.Now.Year + "年";
+            
+            IsFirst = false;
         }
 
         private void InitCalendar(Time selectDateTime)
         {
+            if (IsFirst) return;
+
             GridCalendar.Children.Clear();
             DateTime TheMonthStart = new DateTime(selectDateTime.Year, selectDateTime.Month, 1);
             DateTime TheMonthEnd = new DateTime(selectDateTime.Year, selectDateTime.Month, DateTime.DaysInMonth(selectDateTime.Year, selectDateTime.Month));
@@ -169,16 +175,20 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             int endDayCount = 6 - Int16.Parse(TheMonthEnd.DayOfWeek.ToString("d"));
             int wcount = 0;
 
-            Collection<SpecialDate> specialDates = WorkScheduleDb.GetSpecialDate(selectDateTime.Year, selectDateTime.Month);
+            Collection<SpecialData> specialDates = new Collection<SpecialData>();
+            Collection<SpecialData> dateRemarks = new Collection<SpecialData>();
+
+            WorkScheduleDb.GetSpecialData(selectDateTime.Year, selectDateTime.Month, specialDates, dateRemarks);
 
             while (TheMonthStart != TheMonthEnd.AddDays(1))
             {
                 string today = TheMonthStart.DayOfWeek.ToString("d");
                 if (today == "0") wcount++;
 
-                SpecialDate special = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
+                SpecialData holiday = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
+                SpecialData remark = dateRemarks.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
 
-                Day day = new Day(TheMonthStart.Day.ToString(), (special is null) ? null : special.Name);
+                Day day = new Day(TheMonthStart, (holiday is null) ? null : holiday.Name, (remark is null) ? null : remark.Name);
 
                 Grid.SetRow(day, wcount);
                 Grid.SetColumn(day, Convert.ToInt32(today));

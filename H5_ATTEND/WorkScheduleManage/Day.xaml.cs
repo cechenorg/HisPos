@@ -24,6 +24,8 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class Day : UserControl, INotifyPropertyChanged
     {
+        private DateTime ThisDay { get; }
+
         private short WorkScheduleCount { get; set; } = 0;
         private bool isEditMode = false;
         public bool IsEditMode
@@ -53,17 +55,22 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        public Day(string id, string specialDate)
+        public Day(DateTime date, string specialDate, string remark)
         {
             InitializeComponent();
             DataContext = this;
-
-            LabelDay.Content = id;
+            ThisDay = date;
+            LabelDay.Content = date.Day.ToString();
 
             if (specialDate != null)
             {
                 LabelDay.Foreground = Brushes.Red;
                 SpecialDay.Text = specialDate;
+            }
+
+            if (remark != null)
+            {
+                ImportantMessage = remark;
             }
         }
 
@@ -353,6 +360,8 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             editMessageWindow.ShowDialog();
 
             ImportantMessage = editMessageWindow.Message;
+
+            WorkScheduleDb.SaveCalendarRemark(ThisDay, ImportantMessage);
         }
     }
 
