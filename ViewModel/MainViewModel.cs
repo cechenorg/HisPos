@@ -148,6 +148,8 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.員工管理):
                     break;
+                case nameof(FeatureItem.藥品頻率管理):
+                    break;
                 case nameof(FeatureItem.上下班打卡):
                     break;
                 case nameof(FeatureItem.請假申請):
@@ -202,6 +204,9 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.員工管理):
                     newTab = new H4_BASIC_MANAGE.EmployeeManage.EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+                case nameof(FeatureItem.藥品頻率管理):
+                    newTab = new H4_BASIC_MANAGE.MedFrequencyManage.MedFrequencyManage() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
                 case nameof(FeatureItem.上下班打卡):
                     newTab = new H5_ATTEND.ClockIn.ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };

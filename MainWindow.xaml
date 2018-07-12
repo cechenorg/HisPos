@@ -18,6 +18,7 @@
     xmlns:ManufactoryManage="clr-namespace:His_Pos.ManufactoryManage"
     xmlns:LocationManage="clr-namespace:His_Pos.LocationManage"
     xmlns:EmployeeManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.EmployeeManage"
+    xmlns:MedFrequencyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedFrequencyManage"
     xmlns:WorkScheduleManage ="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
     xmlns:ClockIn="clr-namespace:His_Pos.H5_ATTEND.ClockIn"
     xmlns:Leave="clr-namespace:His_Pos.H5_ATTEND.Leave"
@@ -61,6 +62,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type EmployeeManage:EmployeeManage}">
             <EmployeeManage:EmployeeManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type  MedFrequencyManage:MedFrequencyManage}">
+            <MedFrequencyManage:MedFrequencyManageView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type WorkScheduleManage:WorkScheduleManage}">
             <WorkScheduleManage:WorkScheduleManageView/>
