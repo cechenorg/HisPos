@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,6 +33,16 @@ namespace His_Pos.Class
         }
 
         private string basicAmount;
+
+        public InStock(DataRow dataRow)
+        {
+            BasicAmount = dataRow["PRO_BASICQTY"].ToString();
+            SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
+            Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "")
+                ? "0"
+                : dataRow["PRO_INVENTORY"].ToString());
+        }
+
         public string BasicAmount
         {
             get { return basicAmount; }

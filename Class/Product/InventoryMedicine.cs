@@ -19,12 +19,7 @@ namespace His_Pos.Class.Product
             StockValue = dataRow["TOTAL"].ToString();
             Location = dataRow["PRO_LOCATION"].ToString();
             Note = dataRow["PRO_DESCRIPTION"].ToString();
-            Stock = new InStock()
-            {
-                Inventory = double.Parse(dataRow["PRO_INVENTORY"].ToString()),
-                SafeAmount = dataRow["PRO_SAFEQTY"].ToString(),
-                BasicAmount = dataRow["PRO_BASICQTY"].ToString()
-            };
+            Stock = new InStock(dataRow);
             Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
             Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
             Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");

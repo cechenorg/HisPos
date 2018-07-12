@@ -18,8 +18,6 @@ namespace His_Pos.Class.Declare
             SetDeclareDetail();
             SetCopaymentPoint();
             CountDeclareDeatailPoint();
-            ChronicSequence = string.Empty;
-            ChronicTotal = string.Empty;
         }
 
         public DeclareData()
@@ -36,8 +34,6 @@ namespace His_Pos.Class.Declare
         public int SpecailMaterialPoint { get; set; }//D31特殊材料明細點數小計
         public int DiagnosisPoint { get; set; }//D32診療明細點數小計
         public int DrugsPoint { get; set; }//D33用藥明細點數小計
-        public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
-        public string ChronicTotal { get; set; }//D36連續處方可調劑次數
         public string MedicalServiceCode { get; set; }//D37藥事服務費項目代號
         public int MedicalServicePoint { get; set; }//D38藥事服務費點數
         public string StatusFlag { get; set; }
@@ -58,7 +54,7 @@ namespace His_Pos.Class.Declare
         private void CountDeclareDeatailPoint()
         {
             var dateTimeExtensions = new DateTimeExtensions();
-            var cusAge = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(Prescription.Treatment.Customer.Birthday));
+            var cusAge = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(Prescription.Customer.Birthday));
             var medFormCount = CountOralLiquidAgent();
             var dayPay = CountDayPayAmount(cusAge,medFormCount);
             SetMedicalServiceCode(dayPay);//判斷藥事服務費項目代碼

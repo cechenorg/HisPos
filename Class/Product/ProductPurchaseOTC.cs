@@ -19,12 +19,7 @@ namespace His_Pos.Class.Product
 
             LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
 
-            Stock = new InStock()
-            {
-                Inventory = double.Parse(dataRow["PRO_INVENTORY"].ToString()),
-                SafeAmount = dataRow["PRO_SAFEQTY"].ToString(),
-                BasicAmount = dataRow["PRO_BASICQTY"].ToString()
-            };
+            Stock = new InStock(dataRow);
 
             switch (dataSource)
             {

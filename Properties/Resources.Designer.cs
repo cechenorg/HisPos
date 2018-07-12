@@ -340,6 +340,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 測試啦 的當地語系化字串。
+        /// </summary>
+        internal static string PrescriptionDec2 {
+            get {
+                return ResourceManager.GetString("PrescriptionDec2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 處理單管理 的當地語系化字串。
         /// </summary>
         internal static string ProductPurchase {

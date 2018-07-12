@@ -8,6 +8,10 @@ namespace His_Pos.Class.Product
 {
     public class Medicine : AbstractClass.Product
     {
+        public Medicine()
+        {
+        }
+
         public Medicine(DataRow dataRow) : base(dataRow)
         {
             IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "") ? "False" : dataRow["HISMED_CONTROL"].ToString());

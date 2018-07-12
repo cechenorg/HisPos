@@ -72,10 +72,19 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
                     <Label Content="釋出院所" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                    <controls:AutoCompleteBox x:Name="ReleaseInstitution" Background="Transparent" Width="440" FontSize="16" FontStretch="ExtraExpanded" 
-                                                      BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold"
-                                                      MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
+                    <controls:AutoCompleteBox x:Name="ReleaseInstitution" Background="Transparent" Width="100" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center" SelectedItem="{Binding Path=Prescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                      BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" ValueMemberPath="Id" 
+                                                      MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" DropDownClosed="ReleaseInstitution_DropDownClosed">
+                        <controls:AutoCompleteBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Width="120" Content="{Binding Id}"/>
+                                    <Label Width="350" Content="{Binding Name}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
+                    <Label Content="{Binding Prescription.Treatment.MedicalInfo.Hospital.Name, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
                     <Label Content="就醫科別" Width="auto" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
@@ -91,7 +100,15 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                     <Label Content="處方案件" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <ComboBox x:Name="TreatmentCaseCombo" Width="170" FontSize="14" IsEditable="True" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed"/>
+                    <ComboBox x:Name="TreatmentCaseCombo" Width="170" FontSize="14" IsEditable="True" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" DropDownOpened="Combo_DropDownOpened" DropDownClosed="Combo_DropDownClosed">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <Label Content="{Binding}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                     <Label Content="就醫日期" Width="auto" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>

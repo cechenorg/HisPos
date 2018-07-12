@@ -21,6 +21,7 @@ namespace His_Pos.PrescriptionInquire
     {
         private static DeclareData _inquiredPrescription;
         private static ObservableCollection<DeclareDetail> medicineList = new ObservableCollection<DeclareDetail>();
+
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
             InitializeComponent();
@@ -28,36 +29,45 @@ namespace His_Pos.PrescriptionInquire
             DataContext = _inquiredPrescription;
             InitialItemSource();
         }
+
         private void InitialItemSource()
         {
             SetPatientData();
             SetTreatmentData();
             GetMedicinesNameFromDb();
         }
+
         /*
          * 設定處方Treatment
          */
+
         private void SetTreatmentData()
         {
+            var p = new PaymentCategroyDb();
+            var c = new CopaymentDb();
+            p.GetData();
             /*AdjustCase.Content = AdjustCaseDb.GetAdjustCase(_inquiredPrescription.Prescription.Treatment.AdjustCase.Id);*///調劑案件
-            PaymentCategory.Content = PaymentCategroyDb.GetPaymentCategory(_inquiredPrescription.Prescription.Treatment.PaymentCategory.Id);//給付類別
-            CopaymentCode.Content = CopaymentDb.GetCopayment(_inquiredPrescription.Prescription.Treatment.Copayment.Id);
+            PaymentCategory.Content = p.GetPaymentCategory(_inquiredPrescription.Prescription.Treatment.PaymentCategory.Id);//給付類別
+            CopaymentCode.Content = c.GetCopayment(_inquiredPrescription.Prescription.Treatment.Copayment.Id);
             SetTreatmentCaseContent();//原處方案件
             SetMedicalInfoData();//MedicalInfo資料
         }
+
         /*
          * 設定處方MedicalInfo
          */
+
         private void SetMedicalInfoData()
         {
-            ReleasePalace.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.GetFullHospitalData();//釋出院所
-            Division.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.GetFullDivisonData();//就醫科別
+            ReleasePalace.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//釋出院所
+            Division.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//就醫科別
             SetDiseaseCode();//診斷代碼
         }
 
         /*
          * 取得藥品名稱
-         */ 
+         */
+
         private void GetMedicinesNameFromDb()
         {
             var connection = new DbConnection(Settings.Default.SQL_global);
@@ -74,38 +84,37 @@ namespace His_Pos.PrescriptionInquire
             }
             PrescriptionSet.ItemsSource = medicineList;
         }
+
         /*
          * 設定原處方案件類別
          */
+
         private void SetTreatmentCaseContent()
         {
             var t = new TreatmentCaseDb();
             TreatmentCase.Content = t.GetTreatmentCase(_inquiredPrescription.Prescription.Treatment.MedicalInfo
                 .TreatmentCase.Id);
         }
+
         /*
          * 設定診斷代碼
          */
+
         private void SetDiseaseCode()
         {
-            var diseaseCodeCount = _inquiredPrescription.Prescription.Treatment.MedicalInfo.DiseaseCodes.Count;
-            switch (diseaseCodeCount)
-            {
-                case 1:
-                    MainDiagnosis.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.DiseaseCodes[0].Id;
-                    break;
-                case 2:
-                    MainDiagnosis.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.DiseaseCodes[0].Id;
-                    SeconDiagnosis.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.DiseaseCodes[1].Id;
-                    break;
-            }
+            if (_inquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode == null) return;
+            MainDiagnosis.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
+            if (_inquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode != null)
+                SeconDiagnosis.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
         }
+
         /*
          * 設定病患基本資料
          */
+
         private void SetPatientData()
         {
-            var patient = _inquiredPrescription.Prescription.Treatment.Customer;
+            var patient = _inquiredPrescription.Prescription.Customer;
             var patientGenderIcon = new BitmapImage(new Uri(@"..\..\Images\Male.png", UriKind.Relative));
             var patientIdIcon = new BitmapImage(new Uri(@"..\..\Images\ID_Card.png", UriKind.Relative));
             var patientBirthIcon = new BitmapImage(new Uri(@"..\..\Images\birthday.png", UriKind.Relative));

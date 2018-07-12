@@ -242,7 +242,7 @@
     <Compile Include="Class\Hospital.cs" />
     <Compile Include="Class\IcCard.cs" />
     <Compile Include="Class\IcMarks.cs" />
-    <Compile Include="Class\Institutions.cs" />
+    <Compile Include="Class\HospitalDb.cs" />
     <Compile Include="Class\MedicalInfo.cs" />
     <Compile Include="Class\Person\CustomerDb.cs" />
     <Compile Include="Class\Person\MedicalPersonnel.cs" />
@@ -283,7 +283,6 @@
     <Compile Include="Class\TreatmentCase\TreatmentCase.cs" />
     <Compile Include="Class\TreatmentCase\TreatmentCaseDb.cs" />
     <Compile Include="Class\Treatment.cs" />
-    <Compile Include="AbstractClass\Instution.cs" />
     <Compile Include="Class\Person\Person.cs" />
     <Compile Include="AbstractClass\Product.cs" />
     <Compile Include="Class\Selection.cs" />
@@ -291,6 +290,8 @@
     <Compile Include="Class\Medicate.cs" />
     <Compile Include="Class\Product\Medicine.cs" />
     <Compile Include="Class\Product\OTC.cs" />
+    <Compile Include="Class\Usage.cs" />
+    <Compile Include="Class\UsageDb.cs" />
     <Compile Include="Class\Vaccination.cs" />
     <Compile Include="Class\WorkSchedule\UserIconData.cs" />
     <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
@@ -300,6 +301,11 @@
     </Compile>
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionDec2\GenderConverter.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
+      <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
@@ -479,6 +485,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DockingWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -763,6 +773,8 @@
     <Resource Include="Images\Management.png" />
     <Resource Include="Images\blueprint.png" />
     <Resource Include="Images\ClockIn.png" />
+    <Resource Include="Images\Genders.png" />
+    <Resource Include="Images\User_48px.png" />
     <Content Include="MenuUserControl.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

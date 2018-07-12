@@ -20,6 +20,7 @@ using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductTypeManage;
 using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.Class.Employee;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 
 namespace His_Pos
 {
@@ -310,7 +311,30 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-       
+        public void GetMedicinesData(PrescriptionDec2View prescriptionDec2View)
+        {
+            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得藥品資料...");
+                
+
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
         public void MergeProductStockTaking(StockTakingView stockTakingView)
         {
             stockTakingView.AddItems.IsEnabled = false;

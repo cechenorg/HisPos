@@ -27,12 +27,14 @@ namespace His_Pos.PrescriptionDec
     /*
      *初始化元件
      */
+
     public partial class PrescriptionDecView
     {
         private ObservableCollection<BitmapImage> _genderIcons = new ObservableCollection<BitmapImage>();
         /*
          *初始化UI元件資料
          */
+
         private void InitializeUiElementData()
         {
             DataContext = this;
@@ -43,6 +45,7 @@ namespace His_Pos.PrescriptionDec
             LoadPaymentCategories();
             InitializeUiElementResource();
         }
+
         private void InitializeUiElementResource()
         {
             _genderIcons.Add(new BitmapImage(new Uri(@"..\..\Images\Male.png", UriKind.Relative)));
@@ -56,73 +59,85 @@ namespace His_Pos.PrescriptionDec
             CustomPay.Text = "0";
             Change.Content = "0";
         }
+
         /*
          *載入醫療院所資料
          */
+
         private void LoadHospitalData()
         {
-            var institutions = new Institutions();
+            var institutions = new HospitalDb();
             institutions.GetData();
-            ReleaseInstitution.ItemsSource = institutions.InstitutionsCollection;
+            ReleaseInstitution.ItemsSource = institutions.HospitalsCollection;
             LoadDivisionsData();
         }
+
         /*
          * 載入科別資料
          */
+
         private void LoadDivisionsData()
         {
-            foreach (var division in DivisionDb.DivisionsList)
-            {
-                DivisionCombo.Items.Add(division.Id + ". " + division.Name);
-            }
+            //foreach (var division in DivisionDb.Divisions)
+            //{
+            //    DivisionCombo.Items.Add(division.Id + ". " + division.Name);
+            //}
         }
+
         /*
          *載入給付類別
          */
+
         private void LoadPaymentCategories()
         {
-            PaymentCategroyDb.GetData();
-            foreach (var paymentCategory in PaymentCategroyDb.PaymentCategoryList)
+            PaymentCategroyDb p = new PaymentCategroyDb();
+            p.GetData();
+            foreach (var paymentCategory in p.PaymentCategories)
             {
                 PaymentCategoryCombo.Items.Add(paymentCategory.Id + ". " + paymentCategory.Name);
             }
         }
+
         /*
          *載入部分負擔
          */
+
         private void LoadCopayments()
         {
-            CopaymentDb.GetData();
-            foreach (var copayment in CopaymentDb.CopaymentList)
-            {
-                CopaymentCombo.Items.Add(copayment.Id + ". " + copayment.Name);
-            }
+            CopaymentDb copaymentDb = new CopaymentDb();
+            copaymentDb.GetData();
+            CopaymentCombo.ItemsSource = copaymentDb.Copayments;
         }
+
         /*
          *載入原處方案件類別
          */
+
         private void LoadTreatmentCases()
         {
             var treatmentCases = new TreatmentCaseDb();
             treatmentCases.GetData();
-            foreach (var treatmentCase in treatmentCases.TreatmentCaseList)
+            foreach (var treatmentCase in treatmentCases.TreatmentCases)
             {
                 TreatmentCaseCombo.Items.Add(treatmentCase.Id + ". " + treatmentCase.Name);
             }
         }
+
         /*
          *載入原處方案件類別
          */
+
         private void LoadAdjustCases()
         {
-            foreach (var adjustCase in AdjustCaseDb.AdjustCaseList)
-            {
-                AdjustCaseCombo.Items.Add(adjustCase.Id + ". " + adjustCase.Name);
-            }
+            var adjustCaseDb = new AdjustCaseDb();
+            adjustCaseDb.GetData();
+            AdjustCaseCombo.ItemsSource = adjustCaseDb.AdjustCases;
         }
+
         /*
          * 藥品Autocomplete like by Id
          */
+
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
             var medicineAuto = sender as AutoCompleteBox;
@@ -136,31 +151,37 @@ namespace His_Pos.PrescriptionDec
             medicineAuto.ItemsSource = MedicineList;
             medicineAuto.PopulateComplete();
         }
+
         /*
          * 價格無條件進位
          */
+
         private int PriceConvert(double price)
         {
             return Convert.ToInt16(Math.Ceiling(price));
         }
+
         /*
          * 計算單一藥品總價
          */
+
         private void CountMedicineTotalPrice(Medicine medicine)
         {
             //if (medicine.PaySelf)
             //    medicine.TotalPrice = medicine.Price * medicine.Amount;
             //medicine.TotalPrice = medicine.HcPrice * medicine.Amount;
         }
+
         /*
          * 計算處方總藥價
          */
+
         private void CountMedicinesCost()
         {
             double medicinesHcCost = 0;//健保給付總藥價
             double medicinesSelfCost = 0;//自費藥總藥價
             double purchaseCosts = 0;//藥品總進貨成本
-            foreach (var medicine in PrescriptionList)
+            foreach (var medicine in Prescription.Medicines)
             {
                 //if (!medicine.PaySelf)
                 //    medicinesHcCost += medicine.TotalPrice;
@@ -174,9 +195,11 @@ namespace His_Pos.PrescriptionDec
             Copayment.Text = CountCopaymentCost(medicinesHcCost);//部分負擔
             PrescriptionProfit.Content = (medicinesHcCost + medicinesSelfCost - purchaseCosts).ToString(CultureInfo.InvariantCulture);//藥品毛利
         }
+
         /*
          * 藥費部分負擔
          */
+
         private static string CountCopaymentCost(double medicinesHcCost)
         {
             const string free = "0";
@@ -184,7 +207,7 @@ namespace His_Pos.PrescriptionDec
             if (medicinesHcCost >= 1001)
                 return max;
             var times = medicinesHcCost / 100;
-            if (times<=1)
+            if (times <= 1)
                 return free;
             const int grades = 20;
             return (Convert.ToInt16(Math.Floor(times) * grades)).ToString();
@@ -193,7 +216,7 @@ namespace His_Pos.PrescriptionDec
         private void CostTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (!(sender is TextBox costTextBox) || costTextBox.Text.Length <= 0 || TotalPrice == null) return;
-            if(Copayment.Text.Equals(string.Empty) || SelfCost.Text.Equals(string.Empty) || Deposit.Text.Equals(string.Empty)) return;
+            if (Copayment.Text.Equals(string.Empty) || SelfCost.Text.Equals(string.Empty) || Deposit.Text.Equals(string.Empty)) return;
             TotalPrice.Text = (PriceConvert(double.Parse(Copayment.Text) + double.Parse(SelfCost.Text) + double.Parse(Deposit.Text))).ToString();
         }
 
@@ -209,31 +232,35 @@ namespace His_Pos.PrescriptionDec
                 }
                 TraverseVisualTree(visualChild);
             }
-            PrescriptionList.Clear();
+            Prescription.Medicines.Clear();
             InitializeUiElementResource();
         }
+
         /*
          *確認輸入
          */
+
         private Prescription CheckPrescriptionInfo()
         {
             CheckMedicalNumber();
-            return new Prescription(_icCard, MainWindow.CurrentUser.Pharmacy, GetTreatment(), GetMedcines());
+            return new Prescription(Prescription.Customer, MainWindow.CurrentUser.Pharmacy, GetTreatment(), GetMedcines());
         }
+
         /*
          * 將藥品加入處方
          */
-        private List<Medicine> GetMedcines()
-        {
-            List<Medicine> medicines = new List<Medicine>();
 
-            if (PrescriptionList.Count == 0)
+        private ObservableCollection<DeclareMedicine> GetMedcines()
+        {
+            ObservableCollection<DeclareMedicine> medicines = new ObservableCollection<DeclareMedicine>();
+
+            if (Prescription.Medicines.Count == 0)
             {
                 AddError("請填寫藥品");
                 return medicines;
             }
 
-            foreach (var med in PrescriptionList)
+            foreach (var med in Prescription.Medicines)
             {
                 if (CheckMedicine(med))
                     medicines.Add(med);
@@ -250,6 +277,7 @@ namespace His_Pos.PrescriptionDec
         /*
         * 檢查藥品規則
         */
+
         private bool CheckMedicine(Medicine med)
         {
             //*********************************************
@@ -264,11 +292,11 @@ namespace His_Pos.PrescriptionDec
         /*
         *確認輸入
         */
+
         private Treatment GetTreatment()
         {
-            return new Treatment(GetMedicalInfo(), CheckPaymentCategory(), CheckCopayment(), CheckAdjustCase(),GetTreatDate(),GetAdjustDate(), GetMedicineDays(), MainWindow.CurrentUser.IcNumber,_currentCustomer);
-            
-            
+            return new Treatment(GetMedicalInfo(), CheckPaymentCategory(), CheckCopayment(), CheckAdjustCase(), GetTreatDate(), GetAdjustDate(), GetMedicineDays(), MainWindow.CurrentUser.IcNumber);
+
             //;
             //CheckMedicalNumber();
             //;
@@ -279,23 +307,27 @@ namespace His_Pos.PrescriptionDec
         private string GetMedicineDays()
         {
             int days = 0;
-            foreach (var med in PrescriptionList)
+            foreach (var med in Prescription.Medicines)
             {
                 if (med.MedicalCategory.Days > days)
                     days = med.MedicalCategory.Days;
             }
             return days.ToString();
         }
+
         /*
          * 設定調劑日期
          */
+
         private DateTime GetAdjustDate()
         {
             return CheckAdjustDate();
         }
+
         /*
          * 設定就醫日期
          */
+
         private DateTime GetTreatDate()
         {
             return CheckTreatDate();
@@ -309,6 +341,7 @@ namespace His_Pos.PrescriptionDec
         /*
          *確認調劑案件D1
          */
+
         private AdjustCase CheckAdjustCase()
         {
             AdjustCase adjustCase = new AdjustCase();
@@ -326,33 +359,36 @@ namespace His_Pos.PrescriptionDec
         /*
          * 確認釋出院所D21
          */
+
         private Hospital GetReleaseInstitution()
         {
             Hospital hospital = new Hospital();
-            var releaseInstitution = ReleaseInstitution.Text;
-            if(releaseInstitution == string.Empty)
+            hospital.FullName = ReleaseInstitution.Text;
+            if (hospital.FullName == string.Empty)
             {
                 AddError("請選擇釋出院所");
                 return hospital;
             }
-            if (ReleaseInstitution.Text.StartsWith("N"))
+            if (hospital.FullName.StartsWith("N"))
             {
                 if (CheckHomeCareAndSmokingCessation() == false)
                     AddError("非藥事居家照護(調劑案件:D).協助辦理門診戒菸計畫(調劑案件:5)者，釋出院所不可為\"N\"");
-                hospital.Id = ReleaseInstitution.Text.Substring(0, 1);
+                hospital.Id = hospital.FullName.Substring(0, 1);
             }
             else
             {
-                hospital.Id = ReleaseInstitution.Text.Substring(0, 10);
-                hospital.Name = ReleaseInstitution.Text.Substring(ReleaseInstitution.Text.IndexOf(" ") + 1);
+                hospital.Id = hospital.FullName.Substring(0, 10);
+                hospital.Name = hospital.FullName.Substring(hospital.FullName.IndexOf(" ") + 1);
                 hospital.Division = CheckDivision();
                 hospital.Doctor = CheckDoctor();
             }
             return hospital;
         }
+
         /*
          * 判斷調劑案件為藥是居家照護及協助戒菸計畫
          */
+
         private bool CheckHomeCareAndSmokingCessation()
         {
             if (AdjustCaseCombo.Text == string.Empty)
@@ -360,20 +396,22 @@ namespace His_Pos.PrescriptionDec
                 AddError("請選擇調劑案件");
                 return false;
             }
-            
+
             return AdjustCaseCombo.Text.StartsWith("D") || AdjustCaseCombo.Text.StartsWith("5");
         }
+
         /*
          * 確認就醫科別D13
          */
+
         private Division CheckDivision()
         {
             Division division = new Division();
-            var divisionStr = DivisionCombo.Text;
+            division.FullName = DivisionCombo.Text;
             if (DivisionCombo.Text != string.Empty)
             {
-                division.Id = divisionStr.Substring(0, 2);
-                division.Name = divisionStr.Substring(divisionStr.IndexOf(" ") + 1);
+                division.Id = division.FullName.Substring(0, 2);
+                division.Name = division.FullName.Substring(division.FullName.IndexOf(" ") + 1);
             }
             else
             {
@@ -382,9 +420,11 @@ namespace His_Pos.PrescriptionDec
             }
             return division;
         }
+
         /*
          * 確認診治醫生D24
          */
+
         private MedicalPersonnel CheckDoctor()
         {
             MedicalPersonnel doctor = new MedicalPersonnel();
@@ -397,9 +437,11 @@ namespace His_Pos.PrescriptionDec
             doctor.Id = DoctorId.Text;
             return doctor;
         }
+
         /*
          * 確認就醫序號D7
          */
+
         private void CheckMedicalNumber()
         {
             var medicalNumber = MedicalNumber.Text;
@@ -411,20 +453,22 @@ namespace His_Pos.PrescriptionDec
             if (!ChronicSequence.Text.Equals(string.Empty))
             {
                 if (int.Parse(ChronicSequence.Text) > 1)
-                    _icCard.MedicalNumber = "IC0" + ChronicSequence.Text;
+                    Prescription.Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence.Text;
             }
             if (CheckHomeCareAndSmokingCessation())
-                _icCard.MedicalNumber = "N";
+                Prescription.Customer.IcCard.MedicalNumber = "N";
             if (!medicalNumber.Contains("IC") && medicalNumber != "N")
             {
                 if (Function.IsNumeric(medicalNumber) == false)
                     AddError("就醫序號輸入格式錯誤");
             }
-            _icCard.MedicalNumber = medicalNumber;
+            Prescription.Customer.IcCard.MedicalNumber = medicalNumber;
         }
+
         /*
          * 確認就醫日期D14
          */
+
         private DateTime CheckTreatDate()
         {
             var treatDate = new DateTime();
@@ -439,9 +483,11 @@ namespace His_Pos.PrescriptionDec
             treatDate = Convert.ToDateTime(TreatmentDate.SelectedDate);
             return treatDate;
         }
+
         /*
          * 確認調劑日期D23
          */
+
         private DateTime CheckAdjustDate()
         {
             var adjustDate = new DateTime();
@@ -453,9 +499,11 @@ namespace His_Pos.PrescriptionDec
             adjustDate = Convert.ToDateTime(AdjustDate.SelectedDate);
             return adjustDate;
         }
+
         /*
          * 確認國際疾病代碼D8.D9
          */
+
         private List<DiseaseCode> CheckDiseaseCodes()
         {
             List<DiseaseCode> diseaseCodes = new List<DiseaseCode>();
@@ -472,14 +520,15 @@ namespace His_Pos.PrescriptionDec
             diseaseCodes.Add(mainDiagnosis);
             if (SeconDiagnosis.Text == string.Empty)
                 return diseaseCodes;
-            var secondDiagnosis = new DiseaseCode();
-            secondDiagnosis.Id = SeconDiagnosis.Text;
+            var secondDiagnosis = new DiseaseCode { Id = SeconDiagnosis.Text };
             diseaseCodes.Add(secondDiagnosis);
             return diseaseCodes;
         }
+
         /*
          *確認處方案件D22
          */
+
         private TreatmentCase CheckTreatmentCase()
         {
             TreatmentCase treatmentCase = new TreatmentCase();
@@ -494,9 +543,11 @@ namespace His_Pos.PrescriptionDec
             treatmentCase.Name = treatmentCaseStr.Substring(treatmentCaseStr.IndexOf(" ") + 1);
             return treatmentCase;
         }
+
         /*
          * 確認給付類別D5
          */
+
         private PaymentCategory CheckPaymentCategory()
         {
             PaymentCategory payment = new PaymentCategory();
@@ -513,9 +564,11 @@ namespace His_Pos.PrescriptionDec
             payment.Name = paymentCategory.Substring(2);
             return payment;
         }
+
         /*
          * 確認部分負擔代碼D15
          */
+
         private Copayment CheckCopayment()
         {
             Copayment copayment = new Copayment();
@@ -525,22 +578,24 @@ namespace His_Pos.PrescriptionDec
                 AddError("請選擇部分負擔");
                 return copayment;
             }
-            
+
             copayment.Id = copaymentStr.Substring(0, 3);
             copayment.Name = copaymentStr.Substring(4);
             copayment.Point = Convert.ToInt32(Copayment.Text);
             if (copayment.Id == "903")
             {
                 var dateTimeExtensions = new DateTimeExtensions();
-                var newBornBirth = dateTimeExtensions.ToUsDate(_icCard.IcMarks.NewbornsData.Birthday);
+                var newBornBirth = dateTimeExtensions.ToUsDate(Prescription.Customer.IcCard.IcMarks.NewbornsData.Birthday);
                 var newBornAge = DateTime.Now - newBornBirth;
                 CheckNewBornAge(newBornAge);
             }
             return copayment;
         }
+
         /*
          * 確認新生兒就醫
          */
+
         private void CheckNewBornAge(TimeSpan newBornAge)
         {
             if (newBornAge.Days <= 60) return;
@@ -550,15 +605,18 @@ namespace His_Pos.PrescriptionDec
         /*
          * 確認慢箋領藥次數D35.36
          */
+
         private void CheckChronicTimes()
         {
             if (!AdjustCaseCombo.Text.StartsWith("2")) return;
             if (ChronicSequence.Text == string.Empty || ChronicTotal.Text == string.Empty)
                 MessageBox.Show("請填寫領藥次數(調劑序號/可調劑次數)");
         }
+
         /*
          * 確認原處方服務機構之特定治療項目代號D26
          */
+
         private SpecialCode CheckSpecialCode()
         {
             SpecialCode special = new SpecialCode();

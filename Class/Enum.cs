@@ -26,7 +26,8 @@ namespace His_Pos.Class
         上下班打卡 = 11,
         請假申請 = 12,
         排班管理 = 13,
-        藥品頻率管理 = 14
+        藥品頻率管理 = 14,
+        測試啦 = 15
     }
 
     public enum ItemType

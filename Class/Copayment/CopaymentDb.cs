@@ -1,36 +1,39 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using His_Pos.Properties;
 using His_Pos.Service;
 
 namespace His_Pos.Class.Copayment
 {
-    public static class CopaymentDb
+    public class CopaymentDb
     {
-        public static List<Copayment> CopaymentList { get;} = new List<Copayment>();
+        public ObservableCollection<Copayment> Copayments { get; } = new ObservableCollection<Copayment>();
 
-        public static void GetData()
+        public void GetData()
         {
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var divisionTable = dbConnection.SetProcName("[HIS_POS_DB].[GET].[COPAYMENT]", dbConnection);
+            var divisionTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetCopaymentsData]", dbConnection);
             foreach (DataRow copayment in divisionTable.Rows)
             {
-                var c = new Copayment(copayment["HISCOP_ID"].ToString(), copayment["HISCOP_NAME"].ToString());
-                CopaymentList.Add(c);
+                var c = new Copayment(copayment);
+                Copayments.Add(c);
             }
         }
+
         /*
          *回傳對應部分負擔之id + name string
          */
-        public static string GetCopayment(string tag)
+
+        public string GetCopayment(string tag)
         {
             string result = string.Empty;
             GetData();
-            foreach (var copayment in CopaymentList)
+            foreach (var copayment in Copayments)
             {
                 if (copayment.Id == tag)
                 {
-                    result = copayment.Id + ". " + copayment.Name;
+                    result = copayment.FullName;
                 }
             }
             return result;

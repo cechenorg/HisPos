@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -8,20 +9,23 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    class DeclareMedicine : Medicine, ITrade
+    public class DeclareMedicine : Medicine, ITrade, IDeletable
     {
-        public DeclareMedicine(DataRow dataRow, DataSource dataSource): base(dataRow)
+        public DeclareMedicine()
         {
-            Stock = new InStock()
-            {
-                BasicAmount = dataRow["PRO_BASICQTY"].ToString(),
-                SafeAmount = dataRow["PRO_SAFEQTY"].ToString(),
-                Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "")
-                    ? "0" : dataRow["PRO_INVENTORY"].ToString())
-            };
+        }
 
-            Price = dataRow["STOORDDET_PRICE"].ToString();
-            TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+        public DeclareMedicine(DataRow dataRow): base(dataRow)
+        {
+            IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "") ? "False" : dataRow["HISMED_CONTROL"].ToString());
+            IsFrozMed = Boolean.Parse((dataRow["HISMED_FROZ"].ToString() == "") ? "False" : dataRow["HISMED_FROZ"].ToString());
+            PaySelf = false;
+            HcPrice = double.Parse(dataRow["HISMED_PRICE"].ToString());
+            Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
+            MedicalCategory = new Medicate(dataRow);
+            Stock = new InStock(dataRow);
+            Price = dataRow["PRO_SELL_PRICE"].ToString();
+            TotalPrice = 0;
         }
 
         public InStock Stock { get; set; }
@@ -29,12 +33,27 @@ namespace His_Pos.Class.Product
         public double TotalPrice { get; set; }
         public double Amount { get; set; }
         public string Price { get; set; }
-        public string CountStatus { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string FocusColumn { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string CountStatus { get; set; }
+        public string FocusColumn { get;set; }
+        public int Days { get; set; }
 
         public void CalculateData(string inputSource)
         {
             throw new NotImplementedException();
+        }
+
+        private string source;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public string Source
+        {
+            get { return source; }
+            set
+            {
+                source = value;
+                NotifyPropertyChanged("Source");
+            }
         }
     }
 }
