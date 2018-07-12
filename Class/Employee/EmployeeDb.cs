@@ -2,11 +2,13 @@
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static His_Pos.H5_ATTEND.ClockIn.ClockInView;
 
 namespace His_Pos.Class.Employee
 {
@@ -16,6 +18,25 @@ namespace His_Pos.Class.Employee
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
             return dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetEmployeeData]");
+        }
+        public static ObservableCollection<EmpClockIn> GetEmpClockIn()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+           var table = dd.ExecuteProc("[HIS_POS_DB].[ClockInView].[GetEmpClockIn]");
+            ObservableCollection<EmpClockIn> empClockIns = new ObservableCollection<EmpClockIn>();
+            foreach (DataRow row in table.Rows) {
+                if (row["EMPATT_STIME"].ToString() != string.Empty && row["EMPATT_ETIME"].ToString() != string.Empty)
+                {
+                    empClockIns.Add(new EmpClockIn(row["EMP_NAME"].ToString(), "下班",row["EMPATT_DATE"].ToString(), row["EMPATT_ETIME"].ToString()));
+                    empClockIns.Add(new EmpClockIn(row["EMP_NAME"].ToString(), "上班", row["EMPATT_DATE"].ToString(), row["EMPATT_STIME"].ToString()));
+                }
+                else {
+                    empClockIns.Add(new EmpClockIn(row["EMP_NAME"].ToString(), row["EMPATT_STIME"].ToString() != string.Empty? "上班":"下班", row["EMPATT_DATE"].ToString(),
+                        row["EMPATT_STIME"].ToString() != string.Empty ? row["EMPATT_STIME"].ToString() : row["EMPATT_ETIME"].ToString()));
+                }
+
+            }
+            return empClockIns;
         }
         internal static DataTable SaveEmployeeData(Employee employee)
         {
