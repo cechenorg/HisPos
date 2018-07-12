@@ -55,6 +55,16 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
+        public bool HasDayOff
+        {
+            get
+            {
+                if (DayOffStack.Children.OfType<UserIcon>().Count() == 0)
+                    return false;
+                return true;
+            }
+        }
+
         public Day(DateTime date, string specialDate, string remark)
         {
             InitializeComponent();
@@ -287,7 +297,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        private void Day_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void HorizontalScroll(object sender, MouseWheelEventArgs e)
         {
             ScrollViewer scrollViewer = sender as ScrollViewer;
 
@@ -429,6 +439,24 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
 
             return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class HasDayOffConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return Visibility.Visible;
+            }
+
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -10,6 +10,7 @@
         <local:IsEditableConverter x:Key="IsEditableConverter"/>
         <local:IsAllDayShowConverter x:Key="IsAllDayShowConverter"/>
         <local:HasMessageConverter x:Key="HasMessageConverter"/>
+        <local:HasDayOffConverter x:Key="HasDayOffConverter"/>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -73,36 +74,56 @@
     </UserControl.Resources>
     <Viewbox Stretch="Fill" Margin="2">
         <Grid Name="DayGrid" Width="192" Height="105" Background="{StaticResource Shadow}">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsEditableConverter}}"/>
-                    <ColumnDefinition Width="25"/>
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="43"/>
-                </Grid.ColumnDefinitions>
-                <Grid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="編輯備註" Click="ChangeMessage_Click"/>
-                    </ContextMenu>
-                </Grid.ContextMenu>
-                <Polygon Points="25,0 45,0, 45,18" Fill="Red" Grid.Row="0" Grid.Column="3" Panel.ZIndex="1" Visibility="{Binding ImportantMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource HasMessageConverter}}" MouseEnter="ShowRemark" MouseLeave="HideRemark"/>
-                <Label Name="LabelDay" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
-                <TextBlock Name="SpecialDay" Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" Foreground="Red" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" TextWrapping="WrapWithOverflow"/>
-                <CheckBox Name="Morning" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-                <CheckBox Name="Noon" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
-                <TextBlock Grid.Row="2" Grid.Column="1" Text="午" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-                <CheckBox Name="Evening" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
-                <TextBlock Grid.Row="3" Grid.Column="1" Text="晚" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-                <CheckBox Name="Sleep" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
-                <TextBlock Grid.Row="4" Grid.Column="1" Text="夜" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
-                <ScrollViewer Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="Day_PreviewMouseWheel">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsEditableConverter}}"/>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition />
+                <ColumnDefinition Width="43"/>
+            </Grid.ColumnDefinitions>
+            <Grid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="編輯備註" Click="ChangeMessage_Click"/>
+                </ContextMenu>
+            </Grid.ContextMenu>
+            <ScrollViewer Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" PreviewMouseWheel="HorizontalScroll" Visibility="{Binding HasDayOff, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource HasDayOffConverter}}">
+                <ScrollViewer.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="Width" Value="100"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="2" />
+                                <Setter Property="Template" Value="{DynamicResource HorizontalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ScrollViewer.Resources>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="假" Foreground="Red" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" Margin="5,0,5,0"/>
+                    <StackPanel Name="DayOffStack" Orientation="Horizontal" Margin="0,1,0,0" Height="15"/>
+                </StackPanel>
+            </ScrollViewer>
+            <Polygon Points="25,0 45,0, 45,18" Fill="Red" Grid.Row="0" Grid.Column="3" Panel.ZIndex="1" Visibility="{Binding ImportantMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource HasMessageConverter}}" MouseEnter="ShowRemark" MouseLeave="HideRemark"/>
+            <Label Name="LabelDay" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+            <TextBlock Name="SpecialDay" Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" Foreground="Red" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" TextWrapping="WrapWithOverflow"/>
+            <CheckBox Name="Morning" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="早" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
+            <CheckBox Name="Noon" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="午" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
+            <CheckBox Name="Evening" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="晚" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
+            <CheckBox Name="Sleep" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="夜" Foreground="{StaticResource ForeGround}" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center"/>
+            <ScrollViewer Grid.Row="1" Grid.Column="2" Grid.RowSpan="4" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Auto" PreviewMouseWheel="HorizontalScroll">
                     <ScrollViewer.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -132,9 +153,9 @@
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
-                <Border Name="AllDayBtn" Grid.Row="4" Grid.Column="3" CornerRadius="8" Background="DeepSkyBlue" Margin="2" MouseLeftButtonDown="AllDayBtn_OnMouseLeftButtonDown" Visibility="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsAllDayShowConverter}}">
-                    <TextBlock Text="全天" Foreground="{StaticResource ForeGround}" FontSize="12" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
+            <Border Name="AllDayBtn" Grid.Row="4" Grid.Column="3" CornerRadius="8" Background="DeepSkyBlue" Margin="2" MouseLeftButtonDown="AllDayBtn_OnMouseLeftButtonDown" Visibility="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsAllDayShowConverter}}">
+                <TextBlock Text="全天" Foreground="{StaticResource ForeGround}" FontSize="12" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
             </Grid>
     </Viewbox>
 </UserControl>
