@@ -363,6 +363,11 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             WorkScheduleDb.SaveCalendarRemark(ThisDay, ImportantMessage);
         }
+
+        private void Polygon_MouseEnter(object sender, MouseEventArgs e)
+        {
+            
+        }
     }
 
     public class IsEditableConverter : IValueConverter
@@ -407,10 +412,10 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         {
             if (value.ToString().Equals(String.Empty))
             {
-                return 0;
+                return Visibility.Collapsed;
             }
 
-            return 1;
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

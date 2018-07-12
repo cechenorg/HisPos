@@ -12,6 +12,6 @@
         <local:MarginShowConverter x:Key="MarginShowConverter"/>
     </UserControl.Resources>
     <Border Name="Back" CornerRadius="6" Margin="{Binding Show, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MarginShowConverter}}" Width="{Binding Show, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ShowConverter}}" Background="{StaticResource Shadow}" BorderBrush="Red" BorderThickness="{Binding IsMed, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsMedConverter}}">
-        <TextBlock Name="UserName" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Name="UserName" FontSize="12" Width="24" FontFamily="Segoe UI Semi" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5,0,0,0"/>
     </Border>
 </UserControl>

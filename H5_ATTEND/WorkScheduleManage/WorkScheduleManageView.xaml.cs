@@ -306,11 +306,10 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void UpdateStartEditUi()
         {
-            UserCombo.IsEnabled = true;
-            FinishScheduleBtn.IsEnabled = true;
+            ScheduleStack.Visibility = Visibility.Visible;
+
             ComboYear.IsEnabled = false;
             ComboMonth.IsEnabled = false;
-            CancelScheduleBtn.IsEnabled = true;
             StartScheduleBtn.IsEnabled = false;
 
             ClearSelectedUserIcon();
@@ -360,11 +359,10 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void UpdateEndEditUi()
         {
-            UserCombo.IsEnabled = false;
-            FinishScheduleBtn.IsEnabled = false;
+            ScheduleStack.Visibility = Visibility.Collapsed;
+
             ComboYear.IsEnabled = true;
             ComboMonth.IsEnabled = true;
-            CancelScheduleBtn.IsEnabled = false;
             StartScheduleBtn.IsEnabled = true;
 
             List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
