@@ -1,5 +1,7 @@
-﻿using System;
+﻿using His_Pos.Class;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -21,6 +23,33 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
     /// </summary>
     public partial class MedFrequencyManageView : UserControl, INotifyPropertyChanged
     {
+        private bool isFirst = true;
+        private Usage usageDetail = new Usage();
+        public Usage UsageDetail
+        {
+            get
+            {
+                return usageDetail;
+            }
+            set
+            {
+                usageDetail = value;
+                NotifyPropertyChanged("UsageDetail");
+            }
+        }
+        private ObservableCollection<Usage> usageCollection;
+
+        public ObservableCollection<Usage> UsageCollection {
+            get
+            {
+                return usageCollection;
+            }
+            set
+            {
+                usageCollection = value;
+                NotifyPropertyChanged("UsageCollection");
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -33,7 +62,9 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
         public MedFrequencyManageView()
         {
             InitializeComponent();
+            UsageCollection = UsageDb.GetUsages();
             DataContext = this;
+            DataGridMedFrequency.SelectedIndex = 0;
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -44,6 +75,55 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
         private void ButtonDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
+        }
+        private void Text_TextChanged(object sender, EventArgs e)
+        {
+            DataChanged();
+        }
+        private void DataChanged()
+        {
+            if (isFirst) return;
+
+            Changed.Content = "已修改";
+            Changed.Foreground = Brushes.Red;
+
+            ButtonCancel.IsEnabled = true;
+            ButtonSubmit.IsEnabled = true;
+        }
+        private void InitDataChanged()
+        {
+            Changed.Content = "未修改";
+            Changed.Foreground = Brushes.Black;
+
+            ButtonCancel.IsEnabled = false;
+            ButtonSubmit.IsEnabled = false;
+        }
+        private void UserControl_GotFocus(object sender, RoutedEventArgs e)
+        {
+            isFirst = false;
+        }
+
+        private void DataGridMedFrequency_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as DataGrid).SelectedItem == null) return;
+            UsageDetail = (Usage)((Usage)(sender as DataGrid).SelectedItem).Clone();
+            InitDataChanged();
+        }
+
+        private void ButtonSearch_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            InitDataChanged();
+        }
+
+        private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
+        {
+            UsageDb.SaveUsage(UsageDetail);
+            InitDataChanged();
         }
     }
 }

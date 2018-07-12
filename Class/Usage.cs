@@ -8,20 +8,29 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class
 {
-    public class Usage : Selection
+    public class Usage : Selection ,ICloneable
     {
         public Usage()
         {
         }
-
+        public Usage(Usage usage)
+        {
+            Id = usage.Id;
+            Name = usage.Name;
+            QuickName = usage.QuickName;
+            Reg = usage.Reg;
+            Days = usage.Days;
+            Times = usage.Times;
+            PreDefault = usage.PreDefault;
+        }
         public Usage(DataRow dataRow)
         {
             Id = dataRow["USAGE_ID"].ToString();
             Name = dataRow["USAGE_NAME"].ToString();
             QuickName = dataRow["USAGE_QNAME"].ToString();
             Reg = dataRow["USAGE_REG"].ToString();
-            Days = int.Parse(dataRow["USAGE_DAY"].ToString());
-            Times = int.Parse(dataRow["USAGE_TIMES"].ToString());
+            Days = (dataRow["USAGE_DAY"].ToString());
+            Times = (dataRow["USAGE_TIMES"].ToString());
             PreDefault = bool.Parse(dataRow["USAGE_DEFAULT"].ToString());
         }
 
@@ -30,10 +39,15 @@ namespace His_Pos.Class
         public string Reg { get; set; }//Regular Expression規則
 
         //ex : x Days y Times = > x天吃y次
-        public int Days { get; set; }
+        public string Days { get; set; }
 
-        public int Times { get; set; }
+        public string Times { get; set; }
 
         public bool PreDefault { get; set; }
+
+        public object Clone()
+        {
+            return new Usage(this);
+        }
     }
 }
