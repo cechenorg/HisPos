@@ -23,9 +23,9 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class WorkScheduleManageView : UserControl
     {
-        public class SpecialDate
+        public class SpecialData
         {
-            public SpecialDate(DataRow dataRow)
+            public SpecialData(DataRow dataRow)
             {
                 Day = dataRow["DAY"].ToString();
                 Name = dataRow["NAME"].ToString();
@@ -37,13 +37,13 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         class Time
         {
-           public Time(DateTime date)
+            public Time(DateTime date)
             {
                 Year = date.Year;
                 Month = date.Month;
                 Day = date.Day;
             }
-            public  int Year;
+            public int Year;
             public int Month;
             public int Day;
         }
@@ -53,6 +53,8 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         public ObservableCollection<WorkSchedule> WorkSchedules { get; set; }
         public ObservableCollection<UserIconData> UserIconDatas { get; set; }
+
+        private bool IsFirst { get; set; } = true;
 
         public WorkScheduleManageView()
         {
@@ -75,7 +77,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             UserIconDatas = WorkScheduleDb.GetUserIconDatas();
 
-            foreach(var userIconData in UserIconDatas)
+            foreach (var userIconData in UserIconDatas)
             {
                 UserIconPreview newUserIconPreview = new UserIconPreview(userIconData);
 
@@ -90,12 +92,12 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void UserIconPreviewFilterButtonDown(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            if(StartEdit()) return;
+            if (StartEdit()) return;
 
             UserIconPreview userIconPreview = sender as UserIconPreview;
 
             ClearSelectedUserIcon();
-            
+
             userIconPreview.IsSelected = true;
 
             ShowSelectedUserIcon(userIconPreview.Id);
@@ -130,21 +132,22 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         {
             WorkSchedules = WorkScheduleDb.GetWorkSchedules(selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
 
-            if(WorkSchedules.Count == 0) return;
+            if (WorkSchedules.Count == 0) return;
 
             CurrentUserIconData = UserIconDatas.Single(u => u.Id.Equals(WorkSchedules[0].Id));
 
             foreach (var workSchedule in WorkSchedules)
             {
-                if( !workSchedule.Id.Equals(CurrentUserIconData.Id) )
+                if (!workSchedule.Id.Equals(CurrentUserIconData.Id))
                     CurrentUserIconData = UserIconDatas.Single(u => u.Id.Equals(workSchedule.Id));
 
                 (GridCalendar.Children[Int32.Parse(workSchedule.Day) - 1] as Day).AddUserToStack(CurrentUserIconData, workSchedule.Period);
             }
         }
 
-        private void InitBasicData() {
-            List<string> months = new List<string> { "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"};
+        private void InitBasicData()
+        {
+            List<string> months = new List<string> { "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" };
             List<string> years = new List<string>();
             int thisyear = DateTime.Now.Year;
             thisyear -= 50;
@@ -153,28 +156,39 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 years.Add(thisyear.ToString() + "年");
                 thisyear++;
             }
-            ComboMonth.ItemsSource = months; 
+            ComboMonth.ItemsSource = months;
             ComboMonth.Text = DateTime.Now.Month + "月";
             ComboYear.ItemsSource = years;
             ComboYear.Text = DateTime.Now.Year + "年";
+            
+            IsFirst = false;
         }
 
-        private void InitCalendar(Time selectDateTime) {
+        private void InitCalendar(Time selectDateTime)
+        {
+            if (IsFirst) return;
+
             GridCalendar.Children.Clear();
             DateTime TheMonthStart = new DateTime(selectDateTime.Year, selectDateTime.Month, 1);
             DateTime TheMonthEnd = new DateTime(selectDateTime.Year, selectDateTime.Month, DateTime.DaysInMonth(selectDateTime.Year, selectDateTime.Month));
+            int beginDayCount = Int16.Parse(TheMonthStart.DayOfWeek.ToString("d"));
+            int endDayCount = 6 - Int16.Parse(TheMonthEnd.DayOfWeek.ToString("d"));
             int wcount = 0;
 
-            Collection<SpecialDate> specialDates = WorkScheduleDb.GetSpecialDate(selectDateTime.Year, selectDateTime.Month);
-            
-            while (TheMonthStart != TheMonthEnd.AddDays(1)) {
-                
+            Collection<SpecialData> specialDates = new Collection<SpecialData>();
+            Collection<SpecialData> dateRemarks = new Collection<SpecialData>();
+
+            WorkScheduleDb.GetSpecialData(selectDateTime.Year, selectDateTime.Month, specialDates, dateRemarks);
+
+            while (TheMonthStart != TheMonthEnd.AddDays(1))
+            {
                 string today = TheMonthStart.DayOfWeek.ToString("d");
-                if (today == "0" && TheMonthStart.Day.ToString() != "1") wcount++;
+                if (today == "0") wcount++;
 
-                SpecialDate special = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
+                SpecialData holiday = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
+                SpecialData remark = dateRemarks.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
 
-                Day day = new Day(TheMonthStart.Day.ToString(), (special is null)? null : special.Name);
+                Day day = new Day(TheMonthStart, (holiday is null) ? null : holiday.Name, (remark is null) ? null : remark.Name);
 
                 Grid.SetRow(day, wcount);
                 Grid.SetColumn(day, Convert.ToInt32(today));
@@ -183,7 +197,67 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 TheMonthStart = TheMonthStart.AddDays(1);
             }
 
+            FillBlankDay(beginDayCount, endDayCount);
+
+            HighlightToday();
+
             InitWorkSchedule();
+        }
+
+        private void FillBlankDay(int beginDayCount, int endDayCount)
+        {
+            if (beginDayCount == 0) beginDayCount = 7;
+
+            for(int x = 0; x < beginDayCount; x++)
+            {
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Margin = new Thickness(2);
+                stackPanel.Background = (Brush)FindResource("DarkShadow");
+
+                Grid.SetRow(stackPanel, 0);
+                Grid.SetColumn(stackPanel, x);
+                GridCalendar.Children.Add(stackPanel);
+            }
+
+            int lastRow = 5;
+
+            if (beginDayCount <= 4)
+                lastRow = 4;
+
+            for (int x = 0; x < endDayCount; x++)
+            {
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Margin = new Thickness(2);
+                stackPanel.Background = (Brush)FindResource("DarkShadow");
+
+                Grid.SetRow(stackPanel, lastRow);
+                Grid.SetColumn(stackPanel, 6 - x);
+                GridCalendar.Children.Add(stackPanel);
+            }
+
+            if(lastRow == 4 || endDayCount == 0)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    StackPanel stackPanel = new StackPanel();
+                    stackPanel.Margin = new Thickness(2);
+                    stackPanel.Background = (Brush)FindResource("DarkShadow");
+
+                    Grid.SetRow(stackPanel, 5);
+                    Grid.SetColumn(stackPanel, x);
+                    GridCalendar.Children.Add(stackPanel);
+                }
+            }
+        }
+
+        private void HighlightToday()
+        {
+            DateTime today = DateTime.Now;
+
+            if (today.Year == selectDateTime.Year && today.Month == selectDateTime.Month)
+            {
+                (GridCalendar.Children[today.Day - 1] as Day).DayGrid.Background = (Brush)FindResource("GridSelected");
+            }
         }
 
         private void comboMonth_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -215,16 +289,27 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         {
             CurrentUserIconData = UserCombo.SelectedItem as UserIconData;
 
-            UpdateStartEditUi();
+            DateTime today = DateTime.Now;
+
+            if (today.Year == selectDateTime.Year && today.Month <= selectDateTime.Month)
+                UpdateStartEditUi();
+            else if (today.Year < selectDateTime.Year)
+                UpdateStartEditUi();
+            else if (today.Year == selectDateTime.Year && today.Month == selectDateTime.Month && today.Day != DateTime.DaysInMonth(selectDateTime.Year, selectDateTime.Month))
+                UpdateStartEditUi();
+            else
+            {
+                MessageWindow messageWindow = new MessageWindow("日期已過 無法排班!", Class.MessageType.ERROR);
+                messageWindow.ShowDialog();
+            }
         }
 
         private void UpdateStartEditUi()
         {
-            UserCombo.IsEnabled = true;
-            FinishScheduleBtn.IsEnabled = true;
+            ScheduleStack.Visibility = Visibility.Visible;
+
             ComboYear.IsEnabled = false;
             ComboMonth.IsEnabled = false;
-            CancelScheduleBtn.IsEnabled = true;
             StartScheduleBtn.IsEnabled = false;
 
             ClearSelectedUserIcon();
@@ -232,7 +317,18 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             ShowSelectedUserIcon();
 
-            List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
+            DateTime today = DateTime.Now;
+
+            List<Day> days;
+
+            if (today.Year == selectDateTime.Year && today.Month == selectDateTime.Month)
+            {
+                days = GridCalendar.Children.OfType<Day>().Where(d => Int16.Parse(d.LabelDay.Content.ToString()) > today.Day).ToList();
+            }
+            else
+            {
+                days = GridCalendar.Children.OfType<Day>().ToList();
+            }
 
             foreach (var d in days)
             {
@@ -263,11 +359,10 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void UpdateEndEditUi()
         {
-            UserCombo.IsEnabled = false;
-            FinishScheduleBtn.IsEnabled = false;
+            ScheduleStack.Visibility = Visibility.Collapsed;
+
             ComboYear.IsEnabled = true;
             ComboMonth.IsEnabled = true;
-            CancelScheduleBtn.IsEnabled = false;
             StartScheduleBtn.IsEnabled = true;
 
             List<Day> days = GridCalendar.Children.OfType<Day>().ToList();

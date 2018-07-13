@@ -95,9 +95,6 @@ namespace His_Pos.ManufactoryManage
 
             bool isChanged = IsChangedLbl.Content.Equals("已修改");
 
-            if (((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryGetOverviews is null)
-                ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryGetOverviews = ManufactoryDb.GetManufactoryGetOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
-
             if (((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews is null)
                 ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews = ManufactoryDb.GetManufactoryPayOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
 

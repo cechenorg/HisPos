@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.Manufactory
 {
-    public class ManufactoryGetOverview
+    public class PharmacyGetOverview
     {
-        public ManufactoryGetOverview(DataRow row)
+        public PharmacyGetOverview(DataRow row)
         {
             Money = row["MAN_MONEY"].ToString();
             Type = row["MAN_TYPE"].ToString();

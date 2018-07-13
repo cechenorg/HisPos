@@ -331,6 +331,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 藥局管理 的當地語系化字串。
+        /// </summary>
+        internal static string PharmacyManage {
+            get {
+                return ResourceManager.GetString("PharmacyManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 非藥事居家照護者，需填寫就醫日期 的當地語系化字串。
         /// </summary>
         internal static string PrescriptionDateNull {

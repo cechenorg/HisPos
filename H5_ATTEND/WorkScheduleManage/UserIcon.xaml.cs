@@ -60,7 +60,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             Id = userIconData.Id;
             IsMed = userIconData.IsMed;
             Show = true;
-            UserName.Text = userIconData.Name.Substring(0,1);
+            UserName.Text = userIconData.Name;
             Back.Background = userIconData.BackBrush;
         }
 
@@ -108,7 +108,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         {
             if ((bool)value)
             {
-                return 25;
+                return 33;
             }
 
             return 0;

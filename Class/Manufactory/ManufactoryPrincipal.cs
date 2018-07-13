@@ -39,9 +39,7 @@ namespace His_Pos.Class.Manufactory
             ResponsibleDepartment = row["MAN_RESPONSIBLEDEP"].ToString();
             IsEnable = Boolean.Parse(row["MAN_ENABLE"].ToString()); 
         }
-
-        private ObservableCollection<ManufactoryGetOverview> manufactoryGetOverviews;
-
+        
         public string Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
@@ -54,26 +52,7 @@ namespace His_Pos.Class.Manufactory
         public string PayCondition { get; set; }
         public double GetTotal { get; set; }
         public bool IsEnable { get; set; } = true;
-
-        public ObservableCollection<ManufactoryGetOverview> ManufactoryGetOverviews
-        {
-            get { return manufactoryGetOverviews; }
-            set
-            {
-                manufactoryGetOverviews = value;
-                CountTotal();
-            }
-        }
-
-        private void CountTotal()
-        {
-            if(ManufactoryGetOverviews is null) return;
-
-            foreach (var manufactoryGetOverview in ManufactoryGetOverviews)
-            {
-                GetTotal += Double.Parse(manufactoryGetOverview.Money);
-            }
-        }
+        
 
         public ObservableCollection<ManufactoryPayOverview> ManufactoryPayOverviews { get; set; }
 
@@ -90,10 +69,8 @@ namespace His_Pos.Class.Manufactory
                 Line = Line,
                 PayType = PayType,
                 ResponsibleDepartment = ResponsibleDepartment,
-                ManufactoryGetOverviews = ManufactoryGetOverviews,
                 ManufactoryPayOverviews = ManufactoryPayOverviews,
                 PayCondition = PayCondition,
-                GetTotal = GetTotal,
                 IsEnable = IsEnable
             };
 

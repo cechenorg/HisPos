@@ -24,6 +24,8 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class Day : UserControl, INotifyPropertyChanged
     {
+        private DateTime ThisDay { get; }
+
         private short WorkScheduleCount { get; set; } = 0;
         private bool isEditMode = false;
         public bool IsEditMode
@@ -39,17 +41,46 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        public Day(string id, string specialDate)
+        private string importantMessage = "";
+        public string ImportantMessage
+        {
+            get
+            {
+                return importantMessage;
+            }
+            set
+            {
+                importantMessage = value;
+                NotifyPropertyChanged("ImportantMessage");
+            }
+        }
+
+        public bool HasDayOff
+        {
+            get
+            {
+                if (DayOffStack.Children.OfType<UserIcon>().Count() == 0)
+                    return false;
+                return true;
+            }
+        }
+
+        public Day(DateTime date, string specialDate, string remark)
         {
             InitializeComponent();
             DataContext = this;
-
-            LabelDay.Content = id;
+            ThisDay = date;
+            LabelDay.Content = date.Day.ToString();
 
             if (specialDate != null)
             {
                 LabelDay.Foreground = Brushes.Red;
                 SpecialDay.Text = specialDate;
+            }
+
+            if (remark != null)
+            {
+                ImportantMessage = remark;
             }
         }
 
@@ -62,7 +93,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        private void Morning_OnClick(object sender, RoutedEventArgs e)
+        private void CheckBox_OnClick(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = sender as CheckBox;
 
@@ -266,7 +297,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        private void Day_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void HorizontalScroll(object sender, MouseWheelEventArgs e)
         {
             ScrollViewer scrollViewer = sender as ScrollViewer;
 
@@ -332,6 +363,34 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 CheckAllDay();
             }
         }
+
+        private void ChangeMessage_Click(object sender, RoutedEventArgs e)
+        {
+            EditMessageWindow editMessageWindow = new EditMessageWindow(ImportantMessage);
+            editMessageWindow.ShowDialog();
+
+            ImportantMessage = editMessageWindow.Message;
+
+            WorkScheduleDb.SaveCalendarRemark(ThisDay, ImportantMessage);
+        }
+
+        private void ShowRemark(object sender, MouseEventArgs e)
+        {
+            DayRemark dayRemark = new DayRemark(ImportantMessage);
+
+            Grid.SetRow(dayRemark, 0);
+            Grid.SetColumn(dayRemark, 0);
+
+            Grid.SetRowSpan(dayRemark, 5);
+            Grid.SetColumnSpan(dayRemark, 3);
+
+            DayGrid.Children.Add(dayRemark);
+        }
+
+        private void HideRemark(object sender, MouseEventArgs e)
+        {
+            DayGrid.Children.Remove(DayGrid.Children.OfType<DayRemark>().ToList()[0]);
+        }
     }
 
     public class IsEditableConverter : IValueConverter
@@ -353,6 +412,42 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     }
 
     public class IsAllDayShowConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                return Visibility.Visible;
+            }
+
+            return Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class HasMessageConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value.ToString().Equals(String.Empty))
+            {
+                return Visibility.Collapsed;
+            }
+
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    public class HasDayOffConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
