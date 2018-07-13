@@ -18,8 +18,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <Rectangle Width="1250"/>
-                <Button Content="查詢" Name="Search" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+                <TextBox Name="SearchName" materialDesign:HintAssist.Hint="廠商及負責人 名稱 簡稱 負責對象" Margin="20,0,0,5" Width="380" FontSize="25"/>
+                <Rectangle Width="850"/>
+                <Button Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Click="Search_OnClick"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                 <DataGrid Name="ManageManufactoryDataGrid" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
@@ -90,31 +91,31 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
                         <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Telphone}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Telphone}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
                         <Label Content="傳真" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Fax}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Fax}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
                         <Label Content="統一編號" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding UniformNumber}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding UniformNumber}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
                         <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Email}" FontSize="20" Width="340" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Email}" FontSize="18" Width="340" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="健保代碼" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding MedicalID}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding MedicalID}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                         <Label Content="管藥證號" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding ControlMedicineID}" FontSize="20" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding ControlMedicineID}" FontSize="18" Width="110" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Margin="8">
                         <Label Content="地址" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Address}" FontSize="20" Width="610" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Address}" FontSize="18" Width="610" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                 </Grid>
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource DarkShadow}" Margin="10,0,10,0">
@@ -180,102 +181,43 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Telphone}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Telphone}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                         <Label Content="傳真" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Fax}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Fax}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="8">
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="8">
                         <Label Content="LINE" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Line}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Line}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
+                        <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Email}" FontSize="18" Width="335" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
-                        <Label Content="電子信箱" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Email}" FontSize="20" Width="335" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <Label Content="匯款帳號" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                        <TextBox Text="{Binding Email}" FontSize="18" Width="335" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
+                    <StackPanel Name="PayC" Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
                         <Label Content="預設付款條件" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <RadioButton Content="預收" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
-                        <RadioButton Content="月結" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <RadioButton Content="貨到收" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="預收" Tag="D" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="PayCondition_CheckedChanged"/>
+                        <RadioButton Content="月結" Tag="M" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayCondition_CheckedChanged"/>
+                        <RadioButton Content="貨到收" Tag="A" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayCondition_CheckedChanged"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
+                    <StackPanel Name="PayT" Orientation="Horizontal" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="8">
                         <Label Content="預設付款方式" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <RadioButton Content="現金" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
-                        <RadioButton Content="匯款" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <RadioButton Content="刷卡" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <RadioButton Content="支票" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                        <RadioButton Content="現金" Tag="M" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="PayType_CheckedChanged"/>
+                        <RadioButton Content="匯款" Tag="T" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayType_CheckedChanged"/>
+                        <RadioButton Content="刷卡" Tag="C" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayType_CheckedChanged"/>
+                        <RadioButton Content="支票" Tag="B" Margin="15,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Background="Blue" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="PayType_CheckedChanged"/>
                     </StackPanel>
                     <Button Name="DelPrincipalBtn" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Width="400" Content="刪除負責人" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="DeletePrincipal_OnClick"/>
-                    <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Grid.RowSpan="7" Grid.ColumnSpan="2" Margin="10" Background="{StaticResource Shadow}" Width="300" HorizontalAlignment="Left">
-                        <Label Content="目前餘額" FontFamily="Segoe UI Semibold" FontSize="25" Margin="10,0,0,0" />
-                        <Label Content="100000" FontFamily="Segoe UI Semi" FontSize="30" HorizontalAlignment="Center"/>
-                        <DataGrid Background="{StaticResource Shadow}" ItemsSource="{Binding ManufactoryGetOverviews}" CanUserAddRows="False"
-                                  CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled"
-                                  AutoGenerateColumns="False" HeadersVisibility="None" Height="240">
-                            <DataGrid.Resources>
-                                <Style TargetType="{x:Type ScrollBar}">
-                                    <Setter Property="SnapsToDevicePixels" Value="True"/>
-                                    <Setter Property="OverridesDefaultStyle" Value="true"/>
-                                    <Setter Property="Width" Value="100"/>
-                                    <Style.Triggers>
-                                        <Trigger Property="Orientation" Value="Horizontal">
-                                            <Setter Property="Width" Value="Auto" />
-                                            <Setter Property="Height" Value="15" />
-                                            <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                                        </Trigger>
-                                        <Trigger Property="Orientation" Value="Vertical">
-                                            <Setter Property="Width" Value="15"/>
-                                            <Setter Property="Height" Value="Auto" />
-                                            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.Resources>
-                            <DataGrid.RowStyle>
-                                <Style TargetType="{x:Type DataGridRow}">
-                                    <Style.Triggers>
-                                        <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                        </Trigger>
-                                    </Style.Triggers>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <Setter Property="Height" Value="40"/>
-                                </Style>
-                            </DataGrid.RowStyle>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn MinWidth="60" MaxWidth="60" Header="方式" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Type}">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn MinWidth="120" MaxWidth="120" Header="日期" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Date}">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                                <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="金額" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Money}">
-                                    <DataGridTextColumn.ElementStyle>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                            <Setter Property="VerticalAlignment" Value="Center"/>
-                                        </Style>
-                                    </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                    <Label Content="付款紀錄" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" Margin="95,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                    
+                    <Label Content="付款紀錄" Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
                     <DataGrid Background="{StaticResource Shadow}" ItemsSource="{Binding ManufactoryPayOverviews}" CanUserAddRows="False"
                                   CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled"
-                                  AutoGenerateColumns="False" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Margin="95,0,10,10">
+                                  AutoGenerateColumns="False" Grid.Column="3" Grid.Row="1" Grid.ColumnSpan="2" Grid.RowSpan="6" Margin="10,0,10,10">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -336,7 +278,7 @@
                 </Grid>
                 <StackPanel Orientation="Horizontal" Grid.Row="4">
                     <Label Content="備註" Grid.Row="0" Grid.Column="2" Margin="20,0,10,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                    <RichTextBox Height="130" Width="1055" FontFamily="Segoe UI Semi" FontSize="18" VerticalScrollBarVisibility="Visible" Margin="10"/>
+                    <RichTextBox Name="Notes" Height="130" Width="1055" FontFamily="Segoe UI Semi" FontSize="18" VerticalScrollBarVisibility="Visible" Margin="10" TextChanged="TextBox_OnTextChanged"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource Shadow}">
                     <Rectangle Width="750"/>

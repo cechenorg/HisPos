@@ -157,6 +157,9 @@
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -207,19 +210,20 @@
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
+    <Compile Include="Class\FunctionDb.cs" />
     <Compile Include="Class\HisUpload\HisUploadData.cs" />
     <Compile Include="Class\HisUpload\HisUploadDb.cs" />
     <Compile Include="Class\IcCardPay.cs" />
     <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\InStock.cs" />
-    <Compile Include="Class\Location.cs" />
-    <Compile Include="Class\LocationDb.cs" />
-    <Compile Include="Class\LocationDetail.cs" />
+    <Compile Include="Class\Location\Location.cs" />
+    <Compile Include="Class\Location\LocationDb.cs" />
+    <Compile Include="Class\Location\LocationDetail.cs" />
     <Compile Include="Class\Manufactory\ManageManufactory.cs" />
     <Compile Include="Class\Manufactory\Manufactory.cs" />
     <Compile Include="Class\Manufactory\ManufactoryChanged.cs" />
     <Compile Include="Class\Manufactory\ManufactoryDb.cs" />
-    <Compile Include="Class\Manufactory\ManufactoryGetOverview.cs" />
+    <Compile Include="Class\Manufactory\PharmacyGetOverview.cs" />
     <Compile Include="Class\Manufactory\ManufactoryPayOverview.cs" />
     <Compile Include="Class\Manufactory\ManufactoryPrincipal.cs" />
     <Compile Include="Class\Manufactory\ProductDetailManufactory.cs" />
@@ -289,6 +293,12 @@
     <Compile Include="Class\Usage.cs" />
     <Compile Include="Class\UsageDb.cs" />
     <Compile Include="Class\Vaccination.cs" />
+    <Compile Include="Class\WorkSchedule\UserIconData.cs" />
+    <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
+    <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
+    <Compile Include="Confirm.xaml.cs">
+      <DependentUpon>Confirm.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
     </Compile>
@@ -300,6 +310,12 @@
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
       <DependentUpon>EmployeeManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H4_BASIC_MANAGE\LocationManage\ChangeResultWindow.xaml.cs">
+      <DependentUpon>ChangeResultWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H4_BASIC_MANAGE\LocationManage\ItemChangeWindow.xaml.cs">
+      <DependentUpon>ItemChangeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationChangeView.xaml.cs">
       <DependentUpon>LocationChangeView.xaml</DependentUpon>
@@ -315,17 +331,46 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
+    <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManage.cs" />
+    <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
+      <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
+    <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
+      <DependentUpon>PharmacyManageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
       <DependentUpon>AddTypeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml.cs">
+      <DependentUpon>ChangeTypeResultWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
       <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\Day.xaml.cs">
+    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml.cs">
+      <DependentUpon>ItemChangeTypeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H5_ATTEND\ClockIn\ClockInUserIcon.xaml.cs">
+      <DependentUpon>ClockInUserIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H5_ATTEND\WorkScheduleManage\Day.xaml.cs">
       <DependentUpon>Day.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\WorkScheduleManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\WorkScheduleManage\WorkScheduleManageView.xaml.cs">
+    <Compile Include="H5_ATTEND\WorkScheduleManage\DayRemark.xaml.cs">
+      <DependentUpon>DayRemark.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H5_ATTEND\WorkScheduleManage\EditMessageWindow.xaml.cs">
+      <DependentUpon>EditMessageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H5_ATTEND\WorkScheduleManage\UserIcon.xaml.cs">
+      <DependentUpon>UserIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H5_ATTEND\WorkScheduleManage\UserIconPreview.xaml.cs">
+      <DependentUpon>UserIconPreview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H5_ATTEND\WorkScheduleManage\WorkScheduleManage.cs" />
+    <Compile Include="H5_ATTEND\WorkScheduleManage\WorkScheduleManageView.xaml.cs">
       <DependentUpon>WorkScheduleManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H5_ATTEND\ClockIn\ClockIn.cs" />
@@ -448,6 +493,10 @@
     <Compile Include="ViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ViewModel\Win32.cs" />
+    <Page Include="Confirm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DockingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -457,6 +506,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\LocationManage\ChangeResultWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\LocationManage\ItemChangeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -476,7 +533,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H4_BASIC_MANAGE\ProductTypeManage\AddTypeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -484,11 +553,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\WorkScheduleManage\Day.xaml">
+    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\WorkScheduleManage\WorkScheduleManageView.xaml">
+    <Page Include="H5_ATTEND\ClockIn\ClockInUserIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="H5_ATTEND\WorkScheduleManage\Day.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H5_ATTEND\WorkScheduleManage\DayRemark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H5_ATTEND\WorkScheduleManage\EditMessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H5_ATTEND\WorkScheduleManage\UserIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H5_ATTEND\WorkScheduleManage\UserIconPreview.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="H5_ATTEND\WorkScheduleManage\WorkScheduleManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -631,7 +724,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="His_Pos_TemporaryKey.pfx" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

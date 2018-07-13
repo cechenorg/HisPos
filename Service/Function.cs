@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,24 +18,26 @@ using His_Pos.Class;
 using His_Pos.Properties;
 using His_Pos.Service;
 using ImeLib;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace His_Pos
 {
-    
+
     public class Function
     {
 
         //用途:將中文字轉成注音符號再轉成英文字母
         //輸入:中文字串
         //輸出:英文字串
-        public string ChangeNameToEnglish( string txtInput)
+        public string ChangeNameToEnglish(string txtInput)
         {
             string[] result;
             string resultOutput = string.Empty;
             using (MsImeFacade ime = new MsImeFacade(ImeClass.Taiwan))
             {
 
-                 result = ime.GetBopomofo(txtInput);
+                result = ime.GetBopomofo(txtInput);
                 for (int i = 0; i < result.Length; i++)
                 {
                     resultOutput += result[i].Substring(0, 1);
@@ -86,7 +91,7 @@ namespace His_Pos
             {
                 day = selectedDate.Day.ToString();
             }
-            
+
             string date = (int.Parse(selectedDate.Year.ToString()) - 1911) + month + day;
             return date;
         }
@@ -133,12 +138,12 @@ namespace His_Pos
                 }
             }
         }
-        public string GetDateFormat( string date) {
+        public string GetDateFormat(string date) {
             if (date.Length == 1) date = "0" + date;
             return date;
         }
 
-        public string ExportXml(XmlDocument xml,string FileTypeName) {
+        public string ExportXml(XmlDocument xml, string FileTypeName) {
             Function function = new Function();
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
@@ -151,7 +156,7 @@ namespace His_Pos
                 path += "\\" + pathsplit[i];
                 if (pathsplit[i] == "System") break;
             }
-            
+
             path += "\\" + FileTypeName; // "匯出健保資料XML檔案"  "匯出申報XML檔案"
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
@@ -193,7 +198,7 @@ namespace His_Pos
          * 判斷輸入是否為數字
          */
 
-     
+
         public static bool IsNumeric(string input)
         {
             try
@@ -209,7 +214,7 @@ namespace His_Pos
         /*
          * 判斷輸入空值
          */
-        public static string CheckEmptyInput(string input,string message)
+        public static string CheckEmptyInput(string input, string message)
         {
             return input == string.Empty ? message : string.Empty;
         }
@@ -236,17 +241,59 @@ namespace His_Pos
         /*
          * 取得xml node資料
          */
-        public string GetXmlNodeData(XmlDocument xml,string node)
+        public string GetXmlNodeData(XmlDocument xml, string node)
         {
             return xml.SelectSingleNode(node)?.InnerText;
         }
         /*
          * 取得Procedure資料並以DataTable回傳
          */
-        public DataTable GetDataFromProc(string procName,List<SqlParameter> param = null)
+        public DataTable GetDataFromProc(string procName, List<SqlParameter> param = null)
         {
             var conn = new DbConnection(Settings.Default.SQL_local);
             return conn.ExecuteProc(procName, param);
+        }
+        public string HttpGetJson(string url) {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Method = WebRequestMethods.Http.Get;
+            request.ContentType = "application/json";
+            using (var response = (HttpWebResponse)request.GetResponse())
+            {
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        using (StreamReader responseReader = new StreamReader(responseStream))
+                        {
+                            return responseReader.ReadToEnd();
+                        }
+                    }
+                }
+                else
+                    return string.Empty;
+            }
+       
+        }
+        public class Holiday{
+          public  DateTime date { get; set; }
+          public  string name { get; set; }
+          public string isHoliday { get; set; }
+          public  string holidayCategory { get; set; }
+          public string description { get; set; }
+        }
+        public void GetLastYearlyHoliday() { //撈每年國定假日
+           var jsondata = HttpGetJson("http://data.ntpc.gov.tw/api/v1/rest/datastore/382000000A-000077-002");
+            if (jsondata != string.Empty) {
+                var year = DateTime.Now.Year;
+                string data = JObject.Parse(jsondata)["result"]["records"].ToString();
+                Collection<Holiday> tempCollection = JsonConvert.DeserializeObject<Collection<Holiday>>(data);
+                Collection<Holiday> holidayCollection = new Collection<Holiday>(tempCollection.Where(x => x.date.Year == year).ToList());
+                foreach (Holiday day in holidayCollection) {
+                    if (day.name == "軍人節") continue;
+                    if (day.isHoliday == "是")
+                        FunctionDb.UpdateLastYearlyHoliday(day);
+                }
+            }
         }
     }
 }

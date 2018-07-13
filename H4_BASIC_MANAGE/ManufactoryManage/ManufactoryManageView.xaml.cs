@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.ManufactoryManage
 {
@@ -25,7 +26,7 @@ namespace His_Pos.ManufactoryManage
     {
         private bool isFirst = true;
 
-        public ManageManufactory currentManufactory;
+        private ManageManufactory currentManufactory;
         public ManageManufactory CurrentManufactory
         {
             get { return currentManufactory; }
@@ -55,6 +56,10 @@ namespace His_Pos.ManufactoryManage
             if((sender as DataGrid).SelectedItem is null) return;
             
             CurrentManufactory = ((sender as DataGrid).SelectedItem as ManageManufactory).Clone() as ManageManufactory;
+
+            Notes.Document.Blocks.Clear();
+            Notes.AppendText(CurrentManufactory.Note);
+
             UpdateUi();
             InitDataChanged();
         }
@@ -65,6 +70,8 @@ namespace His_Pos.ManufactoryManage
             {
                 PrincipalDetail.IsEnabled = true;
                 PrincipalDataGrid.SelectedIndex = 0;
+
+                PrincipalDataGrid.Items.Filter = p => (p as ManufactoryPrincipal).IsEnable;
             }
             else
             {
@@ -88,13 +95,16 @@ namespace His_Pos.ManufactoryManage
 
             bool isChanged = IsChangedLbl.Content.Equals("已修改");
 
-            if (((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryGetOverviews is null)
-                ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryGetOverviews = ManufactoryDb.GetManufactoryGetOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
-
             if (((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews is null)
                 ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews = ManufactoryDb.GetManufactoryPayOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
 
             PrincipalDetail.DataContext = (sender as DataGrid).SelectedItem;
+
+            PayC.Children.OfType<RadioButton>().Single(r =>
+                r.Tag.Equals((PrincipalDetail.DataContext as ManufactoryPrincipal).PayCondition)).IsChecked = true;
+
+            PayT.Children.OfType<RadioButton>().Single(r =>
+                r.Tag.Equals((PrincipalDetail.DataContext as ManufactoryPrincipal).PayType)).IsChecked = true;
 
             if (!isChanged) InitDataChanged();
         }
@@ -121,7 +131,7 @@ namespace His_Pos.ManufactoryManage
 
         private void DeletePrincipal_OnClick(object sender, RoutedEventArgs e)
         {
-            CurrentManufactory.ManufactoryPrincipals.Remove(PrincipalDetail.DataContext as ManufactoryPrincipal);
+            (PrincipalDetail.DataContext as ManufactoryPrincipal).IsEnable = false;
             UpdateUi();
             DataChanged();
         }
@@ -165,6 +175,8 @@ namespace His_Pos.ManufactoryManage
         {
             int index = ManageManufactoryDataGrid.SelectedIndex;
 
+            CurrentManufactory.Note = new TextRange(Notes.Document.ContentStart, Notes.Document.ContentEnd).Text;
+
             ManageManufactories[index] = CurrentManufactory;
 
             ManageManufactoryDataGrid.SelectedIndex = index;
@@ -187,6 +199,41 @@ namespace His_Pos.ManufactoryManage
         private void ManufactoryManageView_GotFocus(object sender, RoutedEventArgs e)
         {
             isFirst = false;
+        }
+
+        private void PayCondition_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            if(PrincipalDetail.DataContext is null) return;
+
+            DataChanged();
+
+            (PrincipalDetail.DataContext as ManufactoryPrincipal).PayCondition = (sender as RadioButton).Tag.ToString();
+        }
+
+        private void PayType_CheckedChanged(object sender, RoutedEventArgs e)
+        {
+            if (PrincipalDetail.DataContext is null) return;
+
+            DataChanged();
+
+            (PrincipalDetail.DataContext as ManufactoryPrincipal).PayType = (sender as RadioButton).Tag.ToString();
+        }
+
+        private void Search_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (SearchName.Text.Equals(""))
+            {
+                ManageManufactoryDataGrid.Items.Filter = null;
+                return;
+            }
+
+            ManageManufactoryDataGrid.Items.Filter = m => (m as ManageManufactory).Name.Contains(SearchName.Text)
+                                                          || (m as ManageManufactory).NickName.Contains(SearchName.Text)
+                                                          || (m as ManageManufactory).ManufactoryPrincipals.Count(p => p.Name.Contains(SearchName.Text)) > 0
+                                                          || (m as ManageManufactory).ManufactoryPrincipals.Count(p => p.ResponsibleDepartment.Contains(SearchName.Text)) > 0;
+
+
+            ManageManufactoryDataGrid.SelectedIndex = 0;
         }
     }
 }

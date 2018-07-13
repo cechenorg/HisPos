@@ -55,7 +55,8 @@ namespace His_Pos
         //    Show();
         //    backgroundWorker.RunWorkerAsync();
         //}
-
+      
+           
         public void GetNecessaryData(User userLogin)
         {
             MainWindow mainWindow = new MainWindow(userLogin);
@@ -71,6 +72,13 @@ namespace His_Pos
 
                 ChangeLoadingMessage("取得廠商資料...");
                 MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
+
+                if (FunctionDb.CheckYearlyHoliday()) {
+                    ChangeLoadingMessage("更新假日資料...");
+                    Function function = new Function();
+                    function.GetLastYearlyHoliday();
+                }
+                
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
+namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
 {
-    class WorkScheduleManage : TabBase
+    class MedFrequencyManage: TabBase
     {
         public override TabBase getTab()
         {
             return this;
         }
+    
     }
 }

@@ -141,5 +141,11 @@ namespace His_Pos.LocationManage
             }
             NewLocation(null, selectItem.Name + "new" + id, copyControl.Height, copyControl.Width, Canvas.GetTop(copyControl)+30, Canvas.GetLeft(copyControl)+30);
         }
+
+        private void ButtonChangeLocation_Click(object sender, RoutedEventArgs e)
+        {
+            ItemChangeWindow itemChangeWindow = new ItemChangeWindow("Location");
+            itemChangeWindow.ShowDialog();
+        }
     }
 }

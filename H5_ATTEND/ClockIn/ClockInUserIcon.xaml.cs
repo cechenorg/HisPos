@@ -12,19 +12,23 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.WorkSchedule;
 
-namespace His_Pos.H4_BASIC_MANAGE.WorkScheduleManage
+namespace His_Pos.H5_ATTEND.ClockIn
 {
     /// <summary>
-    /// Day.xaml 的互動邏輯
+    /// ClockInUserIcon.xaml 的互動邏輯
     /// </summary>
-    public partial class Day : UserControl
+    public partial class ClockInUserIcon : UserControl
     {
-        public Day(string id)
+        public string Id { get; set; }
+
+        public ClockInUserIcon(UserIconData userIconData)
         {
             InitializeComponent();
 
-            labelDay.Content = id;
+            UserName.Text = userIconData.Name;
+            Id = userIconData.Id;
         }
     }
 }

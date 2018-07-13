@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="His_Pos.H5_ATTEND.WorkScheduleManage.DayRemark"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
+             mc:Ignorable="d">
+    <Grid Background="LightGray">
+        <TextBlock Name="Remark" Margin="5" TextWrapping="Wrap" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semi"/>
+    </Grid>
+</UserControl>

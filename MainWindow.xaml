@@ -17,9 +17,11 @@
     xmlns:ManufactoryManage="clr-namespace:His_Pos.ManufactoryManage"
     xmlns:LocationManage="clr-namespace:His_Pos.LocationManage"
     xmlns:EmployeeManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.EmployeeManage"
-    xmlns:WorkScheduleManage ="clr-namespace:His_Pos.H4_BASIC_MANAGE.WorkScheduleManage"
+    xmlns:MedFrequencyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedFrequencyManage"
+    xmlns:WorkScheduleManage ="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
     xmlns:ClockIn="clr-namespace:His_Pos.H5_ATTEND.ClockIn"
     xmlns:Leave="clr-namespace:His_Pos.H5_ATTEND.Leave"
+    xmlns:PharmacyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.PharmacyManage"
     xmlns:prescriptionDec2="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
     xmlns:resource="clr-namespace:His_Pos.Resource"
     x:Class="His_Pos.MainWindow"
@@ -63,8 +65,14 @@
         <DataTemplate DataType="{x:Type ManufactoryManage:ManufactoryManage}">
             <ManufactoryManage:ManufactoryManageView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type PharmacyManage:PharmacyManage}">
+            <PharmacyManage:PharmacyManageView/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type EmployeeManage:EmployeeManage}">
             <EmployeeManage:EmployeeManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type  MedFrequencyManage:MedFrequencyManage}">
+            <MedFrequencyManage:MedFrequencyManageView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type WorkScheduleManage:WorkScheduleManage}">
             <WorkScheduleManage:WorkScheduleManageView/>
