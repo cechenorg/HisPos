@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.Class;
+using His_Pos.Class.Person;
 using His_Pos.Class.WorkSchedule;
 
 namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
@@ -29,6 +30,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
             DataContext = this;
 
             UserIconDatas = users;
+            UserName.SelectedIndex = 0;
         }
 
         private void CloseWindow(object sender, RoutedEventArgs e)
@@ -54,8 +56,17 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
         private string CheckInputData()
         {
             string error = "";
-            
 
+            if (PersonDb.CheckUserPassword((UserName.SelectedItem as UserIconData).Id, UserPass.Password).Id is null)
+                error += "帳號密碼錯誤!\n";
+
+            if (DayOffType.SelectedItem is null)
+                error += "假別未填寫!\n";
+
+            if (StartDate.Text.Equals(""))
+                error += "日期未填寫!\n";
+            else if(StartDate.SelectedDate < DateTime.Today)
+                error += "所選日期已過!\n";
 
             return error;
         }
