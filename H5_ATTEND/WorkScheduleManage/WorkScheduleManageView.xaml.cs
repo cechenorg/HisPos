@@ -115,7 +115,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private bool StartEdit()
         {
-            return UserCombo.IsEnabled;
+            return !StartScheduleBtn.IsEnabled;
         }
 
         private void ClearSelectedUserIcon()
