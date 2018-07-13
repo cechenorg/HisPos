@@ -39,7 +39,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="120" Header="頻率代號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn Width="120" Header="頻率代號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -47,7 +47,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="190" Header="頻率名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn Width="190" Header="頻率名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PrintName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -72,8 +72,8 @@
                 </Grid.ColumnDefinitions>
                
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3">
-                    <TextBox Text="{Binding UsageDetail.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="代號" TextChanged="Text_TextChanged" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,40,0"/>
-                    <TextBox Text="{Binding UsageDetail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="名稱" TextChanged="Text_TextChanged" Width="600" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                    <TextBox Text="{Binding UsageDetail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="代號" TextChanged="Text_TextChanged" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,40,0"/>
+                    <TextBox Text="{Binding UsageDetail.PrintName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="名稱" TextChanged="Text_TextChanged" Width="600" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                     <Label  Content="使用天數" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>

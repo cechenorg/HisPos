@@ -18,6 +18,7 @@ namespace His_Pos.Class
             Id = usage.Id;
             Name = usage.Name;
             QuickName = usage.QuickName;
+            PrintName = usage.PrintName;
             Reg = usage.Reg;
             Days = usage.Days;
             Times = usage.Times;
@@ -28,12 +29,13 @@ namespace His_Pos.Class
             Id = dataRow["USAGE_ID"].ToString();
             Name = dataRow["USAGE_NAME"].ToString();
             QuickName = dataRow["USAGE_QNAME"].ToString();
+            PrintName = dataRow["USAGE_PRINTNAME"].ToString();
             Reg = dataRow["USAGE_REG"].ToString();
             Days = (dataRow["USAGE_DAY"].ToString());
             Times = (dataRow["USAGE_TIMES"].ToString());
             PreDefault = bool.Parse(dataRow["USAGE_DEFAULT"].ToString());
         }
-
+        public string PrintName { get; set; }
         public string QuickName { get; set; }//快速輸入用代號
 
         public string Reg { get; set; }//Regular Expression規則

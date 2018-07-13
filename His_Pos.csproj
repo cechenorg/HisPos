@@ -332,7 +332,9 @@
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
     <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml.cs" />
+    <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
+      <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
       <DependentUpon>PharmacyManageView.xaml</DependentUpon>
@@ -715,7 +717,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="His_Pos_TemporaryKey.pfx" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
