@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Class;
 using His_Pos.Class.WorkSchedule;
 
 namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
@@ -21,7 +22,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
     /// </summary>
     public partial class LeaveWindow : Window
     {
-        public ObservableCollection<UserIconData> UserIconDatas { get; set; }
+        public ObservableCollection<UserIconData> UserIconDatas { get; }
         public LeaveWindow(ObservableCollection<UserIconData> users)
         {
             InitializeComponent();
@@ -33,6 +34,30 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
         private void CloseWindow(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            string errors = CheckInputData();
+
+            if (!errors.Equals(""))
+            {
+                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR);
+                messageWindow.ShowDialog();
+
+                return;
+            }
+
+
+        }
+
+        private string CheckInputData()
+        {
+            string error = "";
+            
+
+
+            return error;
         }
     }
 }
