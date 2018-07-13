@@ -13,7 +13,6 @@ using His_Pos.Class;
 using System.Windows;
 using System.Windows.Controls;
 using His_Pos.H5_ATTEND.ClockIn;
-using His_Pos.H5_ATTEND.Leave;
 using His_Pos.InventoryManagement;
 using His_Pos.LocationManage;
 using His_Pos.H4_BASIC_MANAGE.PharmacyManage;
@@ -155,8 +154,6 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.上下班打卡):
                     break;
-                case nameof(FeatureItem.請假申請):
-                    break; 
                 case nameof(FeatureItem.排班管理):
                     break;
 
@@ -221,11 +218,8 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.上下班打卡):
                     newTab = new H5_ATTEND.ClockIn.ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
-                case nameof(FeatureItem.請假申請):
-                    newTab = new H5_ATTEND.Leave.Leave() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
-                    break;
                 case nameof(FeatureItem.排班管理):
-                    newTab = new H5_ATTEND.WorkScheduleManage.WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[2], Icon = MainWindow.HisFeatures[4].Icon };
+                    newTab = new H5_ATTEND.WorkScheduleManage.WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
                 default:
                     return;

@@ -377,10 +377,6 @@
     <Compile Include="H5_ATTEND\ClockIn\ClockInView.xaml.cs">
       <DependentUpon>ClockInView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\Leave\Leave.cs" />
-    <Compile Include="H5_ATTEND\Leave\LeaveView.xaml.cs">
-      <DependentUpon>LeaveView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="HisApi\HisApiFunction.cs" />
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
@@ -586,10 +582,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H5_ATTEND\ClockIn\ClockInView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H5_ATTEND\Leave\LeaveView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
