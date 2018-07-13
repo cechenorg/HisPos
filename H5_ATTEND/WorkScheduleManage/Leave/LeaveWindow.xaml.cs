@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using His_Pos.Class.WorkSchedule;
 
 namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
 {
@@ -19,9 +21,18 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
     /// </summary>
     public partial class LeaveWindow : Window
     {
-        public LeaveWindow()
+        public ObservableCollection<UserIconData> UserIconDatas { get; set; }
+        public LeaveWindow(ObservableCollection<UserIconData> users)
         {
             InitializeComponent();
+            DataContext = this;
+
+            UserIconDatas = users;
+        }
+
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

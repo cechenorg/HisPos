@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.Class.WorkSchedule;
+using His_Pos.H5_ATTEND.WorkScheduleManage.Leave;
 
 namespace His_Pos.H5_ATTEND.WorkScheduleManage
 {
@@ -377,6 +378,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         {
             InitCalendar(selectDateTime);
             UpdateEndEditUi();
+        }
+
+        private void DayOff_OnClick(object sender, RoutedEventArgs e)
+        {
+            LeaveWindow leaveWindow = new LeaveWindow(UserIconDatas);
+
+            leaveWindow.ShowDialog();
+
         }
     }
 }

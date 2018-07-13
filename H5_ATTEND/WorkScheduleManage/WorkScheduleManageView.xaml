@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Button Name="StartScheduleBtn" Width="100" Content="排班" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Margin="10,0,0,0" Click="StartSchedule_Click"/>
-            <Button Name="DayOffBtn" Width="100" Content="請假" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Margin="10,0,0,0"/>
+            <Button Name="DayOffBtn" Width="100" Content="請假" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Margin="10,0,0,0" Click="DayOff_OnClick"/>
             <StackPanel Orientation="Horizontal" Name="ScheduleStack" Visibility="Collapsed">
                 <Rectangle Width="630"/>
                 <ComboBox Name="UserCombo" DisplayMemberPath="Name" Width="200" Margin="20,0,0,0" FontFamily="Segoe UI Semibold" FontSize="20" SelectionChanged="UserCombo_SelectionChanged"/>
