@@ -28,17 +28,33 @@ namespace His_Pos.H5_ATTEND.ClockIn
     /// </summary>
     public partial class ClockInView : UserControl, INotifyPropertyChanged
     {
+        private int typeFilterCondition = 0;
         public class EmpClockIn {
             public EmpClockIn(string name,string type,string date,string time) {
                 empName = name;
                 clocckType = type;
+                typeIcon = type == "上班" ? new BitmapImage(new Uri(@"..\..\Images\DarkerHisDot.png", UriKind.Relative)) : new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
                 clocckDate = date;
                 clockTime = time;
             }
+            public BitmapImage typeIcon { get; set; }
             public string empName { get; set;}
             public string clocckType { get; set; }
             public string clocckDate { get; set; }
             public string clockTime { get; set; }
+        }
+        private ObservableCollection<Employee> employees = new ObservableCollection<Employee>();
+        public ObservableCollection<Employee> Employees
+        {
+            get
+            {
+                return employees;
+            }
+            set
+            {
+                employees = value;
+                NotifyPropertyChanged("Employees");
+            }
         }
         private ObservableCollection<EmpClockIn> empClockIns = new ObservableCollection<EmpClockIn>();
 
@@ -70,6 +86,7 @@ namespace His_Pos.H5_ATTEND.ClockIn
             EmpClockIns = EmployeeDb.GetEmpClockIn();
             StratClock();
             InitTodayUser();
+            InitEmployee();
         }
 
         private void InitTodayUser()
@@ -84,7 +101,14 @@ namespace His_Pos.H5_ATTEND.ClockIn
                 UserIconStack.Children.Add(clockInUserIcon);
             }
         }
-
+        private void InitEmployee() {
+            Employee employee = new Employee();
+            employee.Name = "";
+            Employees.Add(employee);
+            foreach (DataRow row in EmployeeDb.GetEmployeeData().Rows) {
+                Employees.Add(new Employee(row));
+            }
+        }
         private void UserIcon_Click(object sender, RoutedEventArgs e)
         {
             UserId.Text = (sender as ClockInUserIcon).Id;
@@ -180,6 +204,57 @@ namespace His_Pos.H5_ATTEND.ClockIn
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+
+            typeFilterCondition = Int16.Parse(radioButton.Tag.ToString());
+
+            if (DataGridClockIn is null) return;
+            DataGridClockIn.Items.Filter = ClockInTypeFilter;
+            DataGridClockIn.SelectedIndex = 0;
+        }
+        private bool ClockInTypeFilter(object item)
+        {
+            string date = start.Text == "" ? "" : Convert.ToDateTime(start.Text).ToString("yyyy/MM/dd");
+            switch (typeFilterCondition) {
+                case 0:
+                    if ( (((EmpClockIn)item).clocckType == "上班")
+                        && (((EmpClockIn)item).empName.Contains(((Employee)comboboxEmployee.SelectedItem).Name) || ((Employee)comboboxEmployee.SelectedItem).Name == "")
+                        && (((EmpClockIn)item).clocckDate.Equals(date) || start.Text == "")
+                        )
+                        return true;
+                    else
+                        return false;
+                case 1:
+                    if ((((EmpClockIn)item).clocckType == "下班")
+                        && (((EmpClockIn)item).empName.Contains(((Employee)comboboxEmployee.SelectedItem).Name) || ((Employee)comboboxEmployee.SelectedItem).Name == "")
+                        && (((EmpClockIn)item).clocckDate.Equals(date) || start.Text == "")
+                        )
+                        return true;
+                    else
+                        return false;
+                case 2:
+                    if ((((EmpClockIn)item).empName.Contains(((Employee)comboboxEmployee.SelectedItem).Name) || ((Employee)comboboxEmployee.SelectedItem).Name == "")
+                        && (((EmpClockIn)item).clocckDate.Equals(date) || start.Text == "")
+                        )
+                        return true;
+                    else
+                        return false;
+                default:
+                    return false;
+            }
+        }
+        
+        private void start_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGridClockIn.Items.Filter = ClockInTypeFilter;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGridClockIn.Items.Filter = ClockInTypeFilter;
         }
     }
 }
