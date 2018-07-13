@@ -22,7 +22,7 @@ namespace His_Pos.Resource
     public partial class MenuListItem : UserControl
     {
         public Timer ListMenuTimer = new Timer();
-        private double _listMenuHeight = 0;
+        private double _listMenuHeight;
         private double _listMaxMenuHeight = 0;
         private bool _listMenuHided = true;
         public MenuListItem()
@@ -30,7 +30,7 @@ namespace His_Pos.Resource
             InitializeComponent();
             ListMenu.Height = 0;
             ListMenuTimer.Interval = 1;
-            ListMenuTimer.Tick += new EventHandler(ListMenuTimerTick);
+            ListMenuTimer.Tick += ListMenuTimerTick;
         }
 
         public ICommand SomeCommand

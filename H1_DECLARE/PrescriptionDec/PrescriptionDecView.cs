@@ -165,7 +165,7 @@ namespace His_Pos.PrescriptionDec
          * 計算單一藥品總價
          */
 
-        private void CountMedicineTotalPrice(Medicine medicine)
+        private void CountMedicineTotalPrice(DeclareMedicine medicine)
         {
             //if (medicine.PaySelf)
             //    medicine.TotalPrice = medicine.Price * medicine.Amount;
@@ -278,7 +278,7 @@ namespace His_Pos.PrescriptionDec
         * 檢查藥品規則
         */
 
-        private bool CheckMedicine(Medicine med)
+        private bool CheckMedicine(DeclareMedicine med)
         {
             //*********************************************
             //add check med rule
@@ -309,8 +309,8 @@ namespace His_Pos.PrescriptionDec
             int days = 0;
             foreach (var med in Prescription.Medicines)
             {
-                if (med.MedicalCategory.Days > days)
-                    days = med.MedicalCategory.Days;
+                if (int.Parse(med.Days) > days)
+                    days = int.Parse(med.Days);
             }
             return days.ToString();
         }

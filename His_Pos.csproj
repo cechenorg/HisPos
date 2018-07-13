@@ -288,7 +288,6 @@
     <Compile Include="Class\Selection.cs" />
     <Compile Include="Class\Leave.cs" />
     <Compile Include="Class\Medicate.cs" />
-    <Compile Include="Class\Product\Medicine.cs" />
     <Compile Include="Class\Product\OTC.cs" />
     <Compile Include="Class\Usage.cs" />
     <Compile Include="Class\UsageDb.cs" />
@@ -483,6 +482,7 @@
     <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
     <Compile Include="ViewModel\ProductDetailViewModel.cs" />

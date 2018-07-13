@@ -36,7 +36,7 @@ namespace His_Pos.PrescriptionDec
         private Customer _currentCustomer = new Customer();
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
-        private ObservableCollection<Medicine> MedicineList { get; set; }
+        private ObservableCollection<DeclareMedicine> MedicineList { get; set; }
         private ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
 
         private CustomerHistory customerHistory;
@@ -271,7 +271,7 @@ namespace His_Pos.PrescriptionDec
 
         private void InitializeLists()
         {
-            MedicineList = new ObservableCollection<Medicine>();
+            MedicineList = new ObservableCollection<DeclareMedicine>();
             CustomerHistoryList = new ObservableCollection<CustomerHistory>();
             PrescriptionMedicines.ItemsSource = Prescription.Medicines;
         }
@@ -418,7 +418,7 @@ namespace His_Pos.PrescriptionDec
                 return;
             }
             if (usage != null)
-                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Usage.Id = usage.Text;
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].Usage.Id = usage.Text;
         }
 
         /*
@@ -437,7 +437,7 @@ namespace His_Pos.PrescriptionDec
             const string regex = "^[0-9]*[1-9][0-9]*$";
             var match = Regex.Match(days.Text, regex);
             if (match.Success)
-                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Days = Convert.ToInt32(days.Text);
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].Days = days.Text;
         }
 
         /*
@@ -453,7 +453,7 @@ namespace His_Pos.PrescriptionDec
                 return;
             }
             if (position != null)
-                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].MedicalCategory.Position = position.Text;
+                Prescription.Medicines[PrescriptionMedicines.SelectedIndex].Position = position.Text;
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)

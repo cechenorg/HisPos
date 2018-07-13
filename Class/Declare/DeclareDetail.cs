@@ -17,7 +17,7 @@ namespace His_Pos.Class.Declare
             SetDate(start, end);
         }
 
-        public DeclareDetail(Medicine medicine, AdjustCase.AdjustCase adjustCase, int sequence)
+        public DeclareDetail(DeclareMedicine medicine, AdjustCase.AdjustCase adjustCase, int sequence)
         {
             if (!medicine.PaySelf || adjustCase.Id == "3")//p1
                 MedicalOrder = "1";
@@ -50,15 +50,15 @@ namespace His_Pos.Class.Declare
         public string Form { get; set; }
         public string Name { get; set; }
 
-        private void SetMedicate(Medicine medicine)
+        private void SetMedicate(DeclareMedicine medicine)
         {
             Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
-            Usage = medicine.MedicalCategory.Usage.Id;//p4
-            Position = medicine.MedicalCategory.Position;//p5
-            Days = medicine.MedicalCategory.Days;//p11
+            Usage = medicine.Usage.Id;//p4
+            Position = medicine.Position;//p5
+            Days = int.Parse(medicine.Days);//p11
         }
 
-        private void SetMedicine(Medicine medicine)
+        private void SetMedicine(DeclareMedicine medicine)
         {
             MedicalId = medicine.Id;//p2
             //Total = medicine.Amount;//p7

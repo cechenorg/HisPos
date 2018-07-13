@@ -210,18 +210,18 @@
                     <DataGridTemplateColumn MinWidth="40" Header="用法">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="UsageDataTemplate">
-                                <TextBox x:Name="Usage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Usage}" TextChanged="Usage_TextChanged" />
+                                <TextBox x:Name="Usage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding UsageName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="Usage_TextChanged" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn MinWidth="40" Header="天數">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineDaysDataTemplate">
-                                <TextBox x:Name="MedicineDays" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Days}" />
+                                <TextBox x:Name="MedicineDays" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Days,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40" Header="總數">
+                    <DataGridTemplateColumn MinWidth="40" Header="總量">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineAmountDataTemplate">
                                 <TextBox x:Name="MedicineTotal" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Amount}" />

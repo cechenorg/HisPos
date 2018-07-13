@@ -11,6 +11,8 @@ namespace His_Pos.Class
     public class InStock : INotifyPropertyChanged
     {
         private double inventory;
+       
+
         public double Inventory
         {
             get { return inventory; }
