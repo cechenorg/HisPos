@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:menuusercontrol="clr-namespace:MenuUserControl;assembly=MenuUserControl"
         xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
         xmlns:prescriptionInquire="clr-namespace:His_Pos.PrescriptionInquire"
         xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
@@ -22,6 +21,7 @@
     xmlns:ClockIn="clr-namespace:His_Pos.H5_ATTEND.ClockIn"
     xmlns:Leave="clr-namespace:His_Pos.H5_ATTEND.Leave"
     xmlns:prescriptionDec2="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
+    xmlns:resource="clr-namespace:His_Pos.Resource"
     x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"   Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}" 
@@ -90,16 +90,16 @@
                 </StackPanel>
                 <ScrollViewer Name="HisMenu" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left">
                     <StackPanel Orientation="Vertical">
-                        <menuusercontrol:UserControl1 Name="HisFeature1" MouseDown="FeatureMouseDown"/>
-                        <menuusercontrol:UserControl1 Name="HisFeature2" MouseDown="FeatureMouseDown"/>
-                        <menuusercontrol:UserControl1 Name="HisFeature3" MouseDown="FeatureMouseDown"/>
-                        <menuusercontrol:UserControl1 Name="HisFeature4" MouseDown="FeatureMouseDown"/>
-                        <menuusercontrol:UserControl1 Name="HisFeature5" MouseDown="FeatureMouseDown"/>
+                        <resource:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown"/>
+                        <resource:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown"/>
+                        <resource:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown"/>
+                        <resource:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown"/>
+                        <resource:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown"/>
                     </StackPanel>
                 </ScrollViewer>
                 <ScrollViewer Name="PosMenu" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
                     <StackPanel Orientation="Vertical">
-                        <menuusercontrol:UserControl1 Name="PosFeature1" MouseDown="FeatureMouseDown"/>
+                        <resource:MenuListItem x:Name="PosFeature1" MouseDown="FeatureMouseDown"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>

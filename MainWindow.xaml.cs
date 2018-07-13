@@ -10,9 +10,9 @@ using System.Windows.Threading;
 using ChromeTabs;
 using His_Pos.Class;
 using His_Pos.Class.Person;
+using His_Pos.Resource;
 using His_Pos.Service;
 using His_Pos.ViewModel;
-using MenuUserControl;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 
@@ -73,9 +73,9 @@ namespace His_Pos
         {
             for (int i = 0; i < HisFeatures.Count; i++)
             {
-                (HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1).SetLabelText(HisFeatures[i].Title);
-                (HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1).SetLabelImage(HisFeatures[i].Icon);
-                SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as UserControl1), HisFeatures[i].Functions);
+                (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelText(HisFeatures[i].Title);
+                (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelImage(HisFeatures[i].Icon);
+                SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem), HisFeatures[i].Functions);
             }
         }
         private void MenuChange()
@@ -84,7 +84,7 @@ namespace His_Pos
             HisMenu.Visibility = (HisMenu.Visibility == Visibility.Visible) ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        private void SetFeaturesItem(UserControl1 features, string [] itemsName)
+        private void SetFeaturesItem(MenuListItem features, string [] itemsName)
         {
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
@@ -98,7 +98,7 @@ namespace His_Pos
 
         private void FeatureMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!(sender is UserControl1 feature)) throw new ArgumentNullException(nameof(feature));
+            if (!(sender is MenuListItem feature)) throw new ArgumentNullException(nameof(feature));
             feature.ListMenuTimer?.Start();
         }
 
