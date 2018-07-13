@@ -12,7 +12,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MenuItem = System.Windows.Controls.MenuItem;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.Resource
@@ -23,7 +22,6 @@ namespace His_Pos.Resource
     public partial class MenuListItem : UserControl
     {
         public Timer ListMenuTimer = new Timer();
-        public System.Windows.Controls.MenuItem Item = new System.Windows.Controls.MenuItem();
         private double _listMenuHeight = 0;
         private double _listMaxMenuHeight = 0;
         private bool _listMenuHided = true;
@@ -82,7 +80,7 @@ namespace His_Pos.Resource
             ListMenuImage.Margin = new Thickness(10, 10, 6, 0);
             ListMenuLabel.Margin = new Thickness(5, 10, 0, 0);
             ListMenu.Items.Add(newItem);
-            _listMenuHeight = ListMenu.Items.Count * 30;
+            _listMenuHeight = ListMenu.Items.Count * 31;
             SetListMenuVisibility(Visibility.Visible);
         }
 
