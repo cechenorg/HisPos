@@ -1,10 +1,20 @@
-﻿using MahApps.Metro.Controls;
+﻿using System.Data;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.Class.Person
 {
     public class User : Person
 	{
-	    public string Password { get; set; }
+	    public User() : base()
+	    {
+
+	    }
+
+        public User(DataRow dataRow) : base(dataRow)
+	    {
+	        
+	    }
+        
 	    public Pharmacy Pharmacy { get; set; }
         public string Position { get; set; }
         public Leave Leave { get; set; }= new Leave();
