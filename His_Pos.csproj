@@ -331,6 +331,8 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
+    <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManage.cs" />
+    <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml.cs" />
     <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
       <DependentUpon>PharmacyManageView.xaml</DependentUpon>
@@ -525,6 +527,10 @@
     <Page Include="H4_BASIC_MANAGE\LocationManage\NewLocationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml">
       <SubType>Designer</SubType>
