@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,26 +25,64 @@ namespace His_Pos.Service
             var count = CheckStableUsage(usage, days);
             if (count == -1)
             {
-                if (reg_QWxyz.IsMatch(usage.Name))//QW(x,y,z…)：每星期 x，y，z…使用(x,y,z... = 1~7)
-                    count = usage.Name.Length - 2;
+                if (reg_QWxyz.IsMatch(usage.Name)) //QW(x,y,z…)：每星期 x，y，z…使用(x,y,z... = 1~7)
+                    count = QWxyz(usage.Name, days);
                 else if (reg_QWxyzAM.IsMatch(usage.Name)) //QW(x，y，z)AM	每星期x，y，z早上使用
-                    count = usage.Name.Length - 4;
-                else if (reg_yWzD.IsMatch(usage.Name))//每 y 星期使用 z 天(y、z > 0)
+                    count = QWxyzAM(usage.Name, days);
+                else if (reg_yWzD.IsMatch(usage.Name)) //每 y 星期使用 z 天(y、z > 0)
                     count = yWzD(usage.Name, days);
-                else if (reg_MCDxDy.IsMatch(usage.Name))//月經第 x 天至第 y 天使用(x、y > 0,x < y)
+                else if (reg_MCDxDy.IsMatch(usage.Name)) //月經第 x 天至第 y 天使用(x、y > 0,x < y)
                     count = MCDxDy(usage.Name);
-                else if (reg_QxD.IsMatch(usage.Name))//每 x 日 1 次(x >= 2)
+                else if (reg_QxD.IsMatch(usage.Name)) //每 x 日 1 次(x >= 2)
                     count = QxD(usage.Name, days);
-                else if (reg_QxW.IsMatch(usage.Name))//每 x 星期 1 次(x > 0) 每 x 星期 1 次(針劑)(QxW.QxWI)
+                else if (reg_QxW.IsMatch(usage.Name)) //每 x 星期 1 次(x > 0) 每 x 星期 1 次(針劑)(QxW.QxWI)
                     count = QxW(usage.Name, days);
-                else if (reg_QxM.IsMatch(usage.Name))//每 x 月 1 次(x > 0)
+                else if (reg_QxM.IsMatch(usage.Name)) //每 x 月 1 次(x > 0)
                     count = QxM(usage.Name, days);
-                else if (reg_QxH.IsMatch(usage.Name))//每 x 小時使用 1 次 / 每 x 小時使用1次(針劑)  (QxH.QxI.QxHI)
+                else if (reg_QxH.IsMatch(usage.Name)) //每 x 小時使用 1 次 / 每 x 小時使用1次(針劑)  (QxH.QxI.QxHI)
                     count = QxH(usage.Name, days);
-                else if (reg_QxMN.IsMatch(usage.Name))//每 x 分鐘使用 1 次
+                else if (reg_QxMN.IsMatch(usage.Name)) //每 x 分鐘使用 1 次
                     count = QxMN(usage.Name, days);
+                else if (int.Parse(usage.Days) != 0 && int.Parse(usage.Times) != 0)
+                {
+                    int usageDays = int.Parse(usage.Days);
+                    int usageTimes = int.Parse(usage.Times);
+                    if (days % usageDays != 0)
+                        count = (days / usageDays) * usageTimes + 1;
+                    else
+                        count = (days / usageDays) * usageTimes;
+                }
+                else
+                    count = 0;
             }
             return count;
+        }
+
+        private static int QWxyzAM(string str, int days)
+        {
+            string replacedStr = str.Replace("AM", "");
+            return QWxyz(replacedStr, days);
+        }
+
+        private static int QWxyz(string str, int days)
+        {
+            ObservableCollection<int> values = new ObservableCollection<int>();
+            foreach (Match match in Regex.Matches(str, @"\d"))
+            {
+                values.Add(int.Parse(match.Value));
+            }
+            if (days % 7 != 0)
+            {
+                int redundantDays = days % 7;
+                for (int i = values.Count - 1; i >= 0; i--)
+                {
+                    if (days >= values[i])
+                        redundantDays = i + 1;
+                }
+
+                return days / 7 * (str.Length - 2) + redundantDays;
+            }
+            return days / 7 * (str.Length - 2);
         }
 
         private static int QxMN(string str, int days)
@@ -62,7 +101,7 @@ namespace His_Pos.Service
             return days * 24 / x;
         }
 
-        public static int QxM(string str, int days)
+        private static int QxM(string str, int days)
         {
             int x = MatchNumber(str);
             if (days % (30 * x) != 0)
@@ -70,7 +109,7 @@ namespace His_Pos.Service
             return days / (30 * x);
         }
 
-        public static int QxW(string str, int days)
+        private static int QxW(string str, int days)
         {
             int x = MatchNumber(str);
             if (days % (7 * x) != 0)
@@ -78,7 +117,7 @@ namespace His_Pos.Service
             return days / (7 * x);
         }
 
-        public static int QxD(string str, int days)
+        private static int QxD(string str, int days)
         {
             int x = MatchNumber(str);
             if (days % x != 0)
@@ -86,14 +125,14 @@ namespace His_Pos.Service
             return days / x;
         }
 
-        public static int QOD(int days)
+        private static int QOD(int days)
         {
             if (days % 2 != 0)
                 return -1;
             return days / 2;
         }
 
-        public static int CheckStableUsage(Usage usage, int days)
+        private static int CheckStableUsage(Usage usage, int days)
         {
             int count;
             switch (usage.Name)
@@ -208,21 +247,21 @@ namespace His_Pos.Service
             return days / 7 * 4;
         }
 
-        public static int BIW(int days)
+        private static int BIW(int days)
         {
             if (days % 7 != 0)
                 return days / 7 * 2 + 1;
             return days / 7 * 2;
         }
 
-        public static int QW(int days)
+        private static int QW(int days)
         {
             if (days % 7 != 0)
                 return days / 7 + 1;
             return days / 7;
         }
 
-        public static int yWzD(string str, int days)
+        private static int yWzD(string str, int days)
         {
             int count;
             int[] values = FindNumberInString(str);
@@ -230,7 +269,7 @@ namespace His_Pos.Service
             return count;
         }
 
-        public static int MCDxDy(string str)
+        private static int MCDxDy(string str)
         {
             int count;
             int[] values = FindNumberInString(str);
@@ -238,7 +277,7 @@ namespace His_Pos.Service
             return count;
         }
 
-        public static int[] FindNumberInString(string str)
+        private static int[] FindNumberInString(string str)
         {
             int[] values = new int[2];
             int i = 0;
@@ -250,7 +289,7 @@ namespace His_Pos.Service
             return values;
         }
 
-        public static int MatchNumber(string str)
+        private static int MatchNumber(string str)
         {
             Match match = Regex.Match(str, @"\d+");
             return int.Parse(match.Value);
