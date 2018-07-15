@@ -13,6 +13,7 @@ namespace His_Pos.Class
             Dosage = dataRow["HISMED_UNIT"].ToString();
             Form = dataRow["HISMED_FORM"].ToString();
         }
+
         public string Dosage { get; set; }
         public string Form { get; set; }
     }

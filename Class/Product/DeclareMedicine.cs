@@ -16,7 +16,7 @@ namespace His_Pos.Class.Product
         {
         }
 
-        public DeclareMedicine(DataRow dataRow): base(dataRow)
+        public DeclareMedicine(DataRow dataRow) : base(dataRow)
         {
             IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "") ? "False" : dataRow["HISMED_CONTROL"].ToString());
             IsFrozMed = Boolean.Parse((dataRow["HISMED_FROZ"].ToString() == "") ? "False" : dataRow["HISMED_FROZ"].ToString());
@@ -36,6 +36,7 @@ namespace His_Pos.Class.Product
             Position = "";
             source = "";
         }
+
         public bool IsControlMed { get; set; }
         public bool IsFrozMed { get; set; }
         public bool PaySelf { get; set; }
@@ -46,10 +47,22 @@ namespace His_Pos.Class.Product
         public double Cost { get; set; }
         public string Price { get; set; }
         public double TotalPrice { get; set; }
-        public double Amount { get; set; }
+        public double amount;
+
+        public double Amount
+        {
+            get { return amount; }
+            set
+            {
+                amount = value;
+                NotifyPropertyChanged("Amount");
+            }
+        }
+
         public string CountStatus { get; set; }
-        public string FocusColumn { get;set; }
+        public string FocusColumn { get; set; }
         public Usage Usage { get; set; }
+
         public string UsageName
         {
             get { return Usage.Name; }
@@ -61,20 +74,44 @@ namespace His_Pos.Class.Product
             }
         }
 
+        public string Dosage
+        {
+            get { return MedicalCategory.Dosage; }
+            set
+            {
+                MedicalCategory.Dosage = value;
+                if (double.TryParse(value, out _))
+                    CalculateTotalPrice();
+                NotifyPropertyChanged("Dosage");
+            }
+        }
+
         private string days;
 
         public string Days
         {
-            get { return days;}
+            get { return days; }
             set
             {
                 days = value;
-                CalculateTotalPrice();
+                if (int.TryParse(value, out _))
+                    CalculateTotalPrice();
                 NotifyPropertyChanged("Days");
             }
         }
 
-        public string Position { get; set; }
+        private string position;
+
+        public string Position
+        {
+            get { return position; }
+            set
+            {
+                position = value;
+                NotifyPropertyChanged("Position");
+            }
+        }
+
         public void CalculateData(string inputSource)
         {
             throw new NotImplementedException();
@@ -99,8 +136,18 @@ namespace His_Pos.Class.Product
                 Regex reg = new Regex(usage.Reg);
                 if (reg.IsMatch(UsageName))
                 {
-                    if(!string.IsNullOrEmpty(Days) && !string.IsNullOrEmpty(UsageName))
-                        UsagesFunction.CheckUsage(usage, int.Parse(Days));
+                    if (!string.IsNullOrEmpty(Days) && !string.IsNullOrEmpty(UsageName))
+                    {
+                        int total = UsagesFunction.CheckUsage(usage, int.Parse(Days));
+                        if (total > 0 && Dosage != string.Empty)
+                        {
+                            Amount = Math.Ceiling(double.Parse(Dosage) * total);
+                        }
+                        else
+                        {
+                            Amount = 0;
+                        }
+                    }
                 }
             }
         }

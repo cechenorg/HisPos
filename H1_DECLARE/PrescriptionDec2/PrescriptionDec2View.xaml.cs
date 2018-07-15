@@ -187,6 +187,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ClearMedicine(Prescription.Medicines[PrescriptionMedicines.SelectedIndex]);
             SetChanged();
             Prescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
         }
@@ -239,24 +240,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             medicineCodeAuto.Text = "";
         }
 
-        private void Usage_TextChanged(object sender, TextChangedEventArgs e)
+        public void ClearMedicine(DeclareMedicine med)
         {
-            //var textBox = sender as TextBox;
-            //var medicineDays = Prescription.Medicines[PrescriptionMedicines.SelectedIndex].Days;
-            //if (!string.IsNullOrEmpty(textBox.Text))
-            //{
-            //    var usageText = textBox.Text;
-            //    foreach (var usage in UsageDb.GetUsages())
-            //    {
-            //        Regex reg = new Regex(usage.Reg);
-            //        if (reg.IsMatch(usageText))
-            //        {
-            //            UsagesFunction.CheckUsage(usage, medicineDays);
-            //        }
-            //    }
-                
-            //}
+            med.PaySelf = false;
+            med.Cost = 0;
+            med.TotalPrice = 0;
+            med.Amount = 0;
+            med.CountStatus = "";
+            med.FocusColumn = "";
+            med.Usage = new Usage();
+            med.Days = "";
+            med.Position = "";
+            med.Source = "";
+            med.Dosage = "";
         }
-        
     }
 }
