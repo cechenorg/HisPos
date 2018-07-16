@@ -66,9 +66,7 @@ namespace His_Pos.PrescriptionDec
 
         private void LoadHospitalData()
         {
-            var institutions = new HospitalDb();
-            institutions.GetData();
-            ReleaseInstitution.ItemsSource = institutions.HospitalsCollection;
+            ReleaseInstitution.ItemsSource = HospitalDb.GetData();
             LoadDivisionsData();
         }
 
@@ -129,9 +127,7 @@ namespace His_Pos.PrescriptionDec
 
         private void LoadAdjustCases()
         {
-            var adjustCaseDb = new AdjustCaseDb();
-            adjustCaseDb.GetData();
-            AdjustCaseCombo.ItemsSource = adjustCaseDb.AdjustCases;
+            AdjustCaseCombo.ItemsSource = AdjustCaseDb.GetData();
         }
 
         /*

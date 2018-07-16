@@ -8,16 +8,16 @@ namespace His_Pos.Class.AdjustCase
 {
     public class AdjustCaseDb
     {
-        public readonly ObservableCollection<AdjustCase> AdjustCases = new ObservableCollection<AdjustCase>();
-
-        public void GetData()
+        internal static ObservableCollection<AdjustCase> GetData()
         {
+            ObservableCollection<AdjustCase> AdjustCases = new ObservableCollection<AdjustCase>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             var divisionTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetAdjustCasesData]", dbConnection);
             foreach (DataRow adjustcase in divisionTable.Rows)
             {
                 AdjustCases.Add(new AdjustCase(adjustcase));
             }
+            return AdjustCases;
         }
     }
 }

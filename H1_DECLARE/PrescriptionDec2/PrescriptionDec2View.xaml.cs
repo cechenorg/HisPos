@@ -99,9 +99,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadHospitalData()
         {
-            var hospitalDb = new HospitalDb();
-            hospitalDb.GetData();
-            ReleaseHospital.ItemsSource = hospitalDb.HospitalsCollection;
+            ReleaseHospital.ItemsSource = HospitalDb.GetData(); 
             LoadDivisionsData();
         }
 
@@ -155,9 +153,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadAdjustCases()
         {
-            var adjustCaseDb = new AdjustCaseDb();
-            adjustCaseDb.GetData();
-            AdjustCaseCombo.ItemsSource = adjustCaseDb.AdjustCases;
+            AdjustCaseCombo.ItemsSource = AdjustCaseDb.GetData();
         }
 
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
