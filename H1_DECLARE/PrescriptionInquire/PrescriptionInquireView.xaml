@@ -14,45 +14,42 @@
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1250"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                    <Label Width="auto" Content="調劑日期" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <DatePicker Width="100" Height="30" Name="start" SelectedDateFormat="Short"/>
-                    <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                    <DatePicker Width="100" Height="30" Name="end" SelectedDateFormat="Short"/>
-                    <Label Content="病患姓名" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <controls:AutoCompleteBox Background="Transparent" x:Name="PatientName" Width="120" Height="30"  FontSize="14" FontStretch="ExtraExpanded" 
-                                               VerticalContentAlignment="Stretch" Padding="0,8,0,0" MinimumPrefixLength="4" MaxHeight="50" FontFamily="Segoe UI Semibold"
-                                              ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"/>
-                    <Label Content="調劑藥師" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <controls:AutoCompleteBox Background="Transparent" x:Name="PharmacistName" Width="auto" MinWidth="120" Height="30"  FontSize="14" FontStretch="ExtraExpanded" 
-                                              BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" Padding="0,8,0,0" MinimumPrefixLength="4" MaxHeight="50" FontFamily="Segoe UI Semibold"
-                                              ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"/>
-                    <Label Content="調劑案件" Foreground="{StaticResource ForeGround}" Width="auto" Margin="10" FontSize="18" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                    <ComboBox x:Name="AdjustCaseCombo" Width="150" FontFamily="Segoe UI Semibold" FontSize="14" FontStretch="ExtraExpanded" IsEditable="True" HorizontalContentAlignment="Stretch"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0">
-                    <Label Content="釋出院所" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <controls:AutoCompleteBox x:Name="ReleasePalace" Background="{x:Null}" Width="auto" MinWidth="380" Height="30" FontSize="14" FontStretch="ExtraExpanded"  BorderBrush="DimGray"
-                                              BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Stretch" Padding="0,8,0,0" MinimumPrefixLength="4"
-                                              ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"/>
-                </StackPanel>
-                <Button Content="查詢" Grid.Column="1" Grid.RowSpan="2" Grid.Row="0"  Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Click="SearchButtonClick"/>
-            </Grid>
-            <DataGrid Grid.Row="1" Name="PrescriptionSet" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                  AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" CanUserAddRows="False" Margin="10">
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="9">
+                <Label Content="調劑日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <DatePicker  Width="100" Height="30" Name="start" SelectedDateFormat="Short"/>
+                <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
+                <DatePicker Width="100" Height="30" Name="end" SelectedDateFormat="Short"/>
+                <Label Content="病患姓名" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="PatientName" Margin="0,0,10,0" Width="130" FontSize="16"/>
+                <Label Content="調劑業師" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16"/>
+                <Label Content="調劑案件" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="250" FontSize="16"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="9">
+                <Label Content="釋出院所" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <controls:AutoCompleteBox Name="ReleasePalace" Background="Transparent" Width="450" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
+                                         Populating="ReleasePalace_Populating"    ValueMemberPath="FullName"    BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" 
+                                                      MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
+                    <controls:AutoCompleteBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Width="100" Content="{Binding Id}" />
+                                <Label Width="350" Content="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:AutoCompleteBox.ItemTemplate>
+                </controls:AutoCompleteBox>
+                <Rectangle Width="700"/>
+                <Button Name="ButtonSearch" Grid.Column="1" Grid.Row="0" Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Click="SearchButtonClick"/>
+            </StackPanel>
+            <DataGrid Name="DataPrescription" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                                 ItemsSource="{Binding PrescriptionOverview,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5,0,10,10" Grid.Row="2" Grid.Column="1">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -60,34 +57,72 @@
                                 <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                             </Trigger>
                         </Style.Triggers>
-                        <EventSetter Event="MouseDoubleClick" Handler="showInquireOutcome"/>
+                        <EventSetter Event="MouseDoubleClick" Handler="ShowInquireOutcome"/>
                         <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="FontSize" Value="14"/>
                         <Setter Property="Height" Value="40"/>
                     </Style>
                 </DataGrid.RowStyle>
-                <DataGrid.DataContext>
-                    <local:PrescriptionInquire/>
-                </DataGrid.DataContext>
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="100" Header="病患" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.Customer.Name}"/>
-                    <DataGridTextColumn MinWidth="100" Header="調劑日期" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.AdjustDate}"/>
-                    <DataGridTextColumn MinWidth="50" Header="點數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding TotalPoint}"/>
-                    <DataGridTextColumn MinWidth="100" Header="調劑藥師" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalPersonId}"/>
-                    <DataGridTextColumn MinWidth="200" Header="醫療院所" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalInfo.Hospital.Name}"/>
-                    <DataGridTextColumn MinWidth="50" Header="科別" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Prescription.Treatment.MedicalInfo.Hospital.Division.Name}"/>
-                    <DataGridTextColumn MinWidth="50" Header="慢箋狀態" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="120" Header="病患名稱" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding PatientName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="190" Header="調劑日期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="90" Header="點數" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OldValue}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="90" Header="調劑藥師" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedicalPersonnelName}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="220" Header="醫療院所" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding HospitalName}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="90" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivisionName}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="90" Header="慢箋狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ChronicStatus}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
-                <Label Content
-                       ="已選擇" VerticalContentAlignment="Center" FontSize="20" Margin="20,0,0,0" FontFamily="Segoe UI Semibold"/>
-                <Label Content="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="50" FontSize="20" FontFamily="Segoe UI Semi"/>
-                <Label Content="筆" VerticalContentAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                <Rectangle Width="1030"/>
-                <Button Background="Red" Width="150" Content="匯出申報檔案"/>
-            </StackPanel>
         </Grid>
     </Viewbox>
 </UserControl>

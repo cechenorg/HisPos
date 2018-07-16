@@ -7,17 +7,18 @@ using His_Pos.Service;
 
 namespace His_Pos.Class
 {
-    public class HospitalDb:ISelection
+    public class HospitalDb
     {
-        public readonly ObservableCollection<Hospital> HospitalsCollection = new ObservableCollection<Hospital>();
-        public void GetData()
+        internal static ObservableCollection<Hospital> GetData()
         {
+            ObservableCollection<Hospital> HospitalsCollection = new ObservableCollection<Hospital>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             var institutionTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetHospitalsData]", dbConnection);
             foreach (DataRow row in institutionTable.Rows)
             {
                 HospitalsCollection.Add(new Hospital(row));
             }
+            return HospitalsCollection;
         }
     }
 }
