@@ -14,6 +14,7 @@ using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
+using His_Pos.Service;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -182,6 +183,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            ClearMedicine(Prescription.Medicines[PrescriptionMedicines.SelectedIndex]);
             SetChanged();
             Prescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
         }
@@ -234,176 +236,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             medicineCodeAuto.Text = "";
         }
 
-        private void Usage_TextChanged(object sender, TextChangedEventArgs e)
+        public void ClearMedicine(DeclareMedicine med)
         {
-            var textBox = sender as TextBox;
-            var medicineDays = Prescription.Medicines[PrescriptionMedicines.SelectedIndex].Days;
-            if (!string.IsNullOrEmpty(textBox.Text))
-            {
-                var usage = textBox.Text;
-                CheckUsage(usage, medicineDays);
-            }
-        }
-
-        public int CheckUsage(string str, int days)
-        {
-            Regex reg_yWzD = new Regex(@"\d+W\d+D");
-            Regex reg_MCDxDy = new Regex(@"MCD\d+D\d+");
-            Regex reg_QxD = new Regex(@"Q\d+D");
-            Regex reg_QxW = new Regex(@"Q\d+W");
-            Regex reg_QxM = new Regex(@"Q\d+M");
-            var count = CheckStableUsage(str, days);
-            if (count == 0)
-            {
-                if (str.StartsWith("QW"))//QW(x,y,z…)：每星期 x，y，z…使用(x,y,z... = 1~7)
-                    count = str.Length - 2;
-                else if (reg_yWzD.IsMatch(str))//每 y 星期使用 z 天(y、z > 0)
-                    count = Case_yWzD(str, days);
-                else if (reg_MCDxDy.IsMatch(str))//月經第 x 天至第 y 天使用(x、y > 0,x < y)
-                    count = Case_MCDxDy(str);
-                else if (reg_QxD.IsMatch(str))//每 x 日 1 次(x >= 2)
-                    count = Case_QxD(str, days);
-                else if (reg_QxW.IsMatch(str))//每 x 星期 1 次(x > 0)
-                    count = Case_QxW(str, days);
-                else if (reg_QxM.IsMatch(str))//每 x 月 1 次(x > 0)
-                    count = Case_QxM(str, days);
-                //else if()
-            }
-            return count;
-        }
-
-        private int Case_QxM(string str, int days)
-        {
-            int x = MatchNumber(str);
-            if (days % (30 * x) != 0)
-                return -1;
-            return days / (30 * x);
-        }
-
-        private int Case_QxW(string str, int days)
-        {
-            int x = MatchNumber(str);
-            if (days % (7 * x) != 0)
-                return -1;
-            return days / (7 * x);
-        }
-
-        private int Case_QxD(string str, int days)
-        {
-            int x = MatchNumber(str);
-            if (days % x != 0)
-                return -1;
-            return days / x;
-        }
-
-        private int Case_QOD(int days)
-        {
-            if (days % 2 != 0)
-                return -1;
-            return days / 2;
-        }
-
-        private int CheckStableUsage(string str, int days)
-        {
-            int count;
-            switch (str)
-            {
-                case "QD"://每日 1 次
-                case "QDAM"://每日 1 次上午使用
-                case "QDPM"://每日 1 次下午使用
-                case "QDHS"://每日 1 次睡前使用
-                case "QN"://每晚使用 1 次
-                case "HS"://睡前 1 次
-                    count = days;
-                    break;
-
-                case "BID"://每日 2 次
-                case "QAM&HS"://上午使用 1 次且睡前 1 次
-                case "QPM&HS"://下午使用 1 次且睡前 1 次
-                case "QAM&PM"://每日上下午各使用 1 次
-                case "BID&HS"://每日 2 次且睡前 1 次
-                    count = days * 2;
-                    break;
-
-                case "TID"://每日三次
-                case "TID&HS"://每日 3 次且睡前 1 次
-                    count = days * 3;
-                    break;
-
-                case "QID":
-                    count = days * 4;
-                    break;
-
-                case "STAT"://立刻使用
-                case "ASORDER"://依照醫師指示使用
-                    count = -1;
-                    break;
-
-                case "OQD"://隔日使用 1 次
-                    count = Case_QOD(days);
-                    break;
-
-                case "QW"://每星期 1 次
-                    count = Case_QW(days);
-                    break;
-
-                case "BIW"://每星期2次
-                    count = Case_BIW(days);
-                    break;
-
-                default:
-                    count = 0;
-                    break;
-            }
-            return count;
-        }
-
-        private int Case_BIW(int days)
-        {
-            if (days % 7 != 0)
-                return -1;
-            return days / 7 * 2;
-        }
-
-        private int Case_QW(int days)
-        {
-            if (days % 7 != 0)
-                return -1;
-            return days / 7;
-        }
-
-        private int Case_yWzD(string str, int days)
-        {
-            int count;
-            int[] values = FindNumberInString(str);
-            count = days / 7 * values[0] * values[1];
-            return count;
-        }
-
-        private int Case_MCDxDy(string str)
-        {
-            int count;
-            int[] values = FindNumberInString(str);
-            count = values[1] - values[0] + 1;
-            return count;
-        }
-
-        private int[] FindNumberInString(string str)
-        {
-            int[] values = new int[2];
-            int i = 0;
-            foreach (Match match in Regex.Matches(str, @"\d+"))
-            {
-                values[i] = int.Parse(match.Value);
-                i++;
-            }
-            return values;
-        }
-
-        private int MatchNumber(string str)
-        {
-            Match match = Regex.Match(str, @"\d+");
-            return int.Parse(match.Value);
+            med.PaySelf = false;
+            med.Cost = 0;
+            med.TotalPrice = 0;
+            med.Amount = 0;
+            med.CountStatus = "";
+            med.FocusColumn = "";
+            med.Usage = new Usage();
+            med.Days = "";
+            med.Position = "";
+            med.Source = "";
+            med.Dosage = "";
         }
     }
 }

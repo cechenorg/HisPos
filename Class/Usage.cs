@@ -12,6 +12,7 @@ namespace His_Pos.Class
     {
         public Usage()
         {
+            Name = "";
         }
         public Usage(Usage usage)
         {
