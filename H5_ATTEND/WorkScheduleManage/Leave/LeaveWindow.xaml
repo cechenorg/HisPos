@@ -23,7 +23,7 @@
         <PasswordBox Name="UserPass" Grid.Row="0" Grid.Column="1" Width="200" Height="40" materialDesign:HintAssist.Hint="密碼"  FontSize="20" FontWeight="Bold" Margin="0,0,0,5"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Margin="4">
             <Label Content="假別" FontSize="20" FontFamily="Segoe UI Semibold"/>
-            <ComboBox Name="DayOffType" Width="160" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"/>
+            <ComboBox Name="DayOffType" Width="160" FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0" DisplayMemberPath="Name" ItemsSource="{Binding LeaveTypes}" HorizontalContentAlignment="Center"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="4">
             <Label Content="日期" FontSize="20" FontFamily="Segoe UI Semibold"/>

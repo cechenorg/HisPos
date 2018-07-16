@@ -216,6 +216,7 @@
     <Compile Include="Class\IcCardPay.cs" />
     <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\InStock.cs" />
+    <Compile Include="Class\Leave\LeaveDb.cs" />
     <Compile Include="Class\Location\Location.cs" />
     <Compile Include="Class\Location\LocationDb.cs" />
     <Compile Include="Class\Location\LocationDetail.cs" />
@@ -286,7 +287,7 @@
     <Compile Include="Class\Person\Person.cs" />
     <Compile Include="AbstractClass\Product.cs" />
     <Compile Include="Class\Selection.cs" />
-    <Compile Include="Class\Leave.cs" />
+    <Compile Include="Class\Leave\Leave.cs" />
     <Compile Include="Class\Medicate.cs" />
     <Compile Include="Class\Product\Medicine.cs" />
     <Compile Include="Class\Product\OTC.cs" />

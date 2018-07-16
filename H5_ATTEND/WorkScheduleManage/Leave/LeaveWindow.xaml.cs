@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.Class;
+using His_Pos.Class.Leave;
 using His_Pos.Class.Person;
 using His_Pos.Class.WorkSchedule;
 
@@ -24,11 +25,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
     public partial class LeaveWindow : Window
     {
         public ObservableCollection<UserIconData> UserIconDatas { get; }
+        public ObservableCollection<Class.Leave.Leave> LeaveTypes { get; }
+
         public LeaveWindow(ObservableCollection<UserIconData> users)
         {
             InitializeComponent();
             DataContext = this;
 
+            LeaveTypes = LeaveDb.GetLeaveType();
             UserIconDatas = users;
             UserName.SelectedIndex = 0;
         }
