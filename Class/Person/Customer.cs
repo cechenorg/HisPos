@@ -10,7 +10,6 @@
         {
             IcCard = icCard;
         }
-
         public string Qname { get; set; }
         public bool Gender { get; set; }
         public IcCard IcCard { get; set; }

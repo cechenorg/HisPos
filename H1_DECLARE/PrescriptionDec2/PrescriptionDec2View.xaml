@@ -48,11 +48,11 @@
                     <ListBoxItem Content="女" />
                 </ComboBox>
                 <Image Width="25" Name="IcPatientName" Source="../../Images/User_48px.png" Margin="20,0,15,0" />
-                <TextBox Name="PatientName" Width="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Margin="0,0,30,0" Text="{Binding Prescription.Customer.Name,Mode=TwoWay}" />
+                <TextBox Name="PatientName" Width="150" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" FontSize="18" Margin="0,0,30,0" Text="{Binding Prescription.Customer.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 <Image Name="IcPatientId" Width="30" Source="../../Images/ID_Card.png" />
-                <TextBox Name="PatientId" Width="150"  Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" FontSize="18" Margin="5,0,20,0" Text="{Binding Prescription.Customer.IcCard.IcNumber,Mode=TwoWay}" />
+                <TextBox Name="PatientId" Width="150"  Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" FontSize="18" Margin="5,0,20,0" Text="{Binding Prescription.Customer.IcCard.IcNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" />
-                <TextBox Name="PatientBirthday" Width="150" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" FontSize="18" Margin="5,0,20,0" Text="{Binding Prescription.Customer.Birthday,Mode=TwoWay}" />
+                <TextBox Name="PatientBirthday" Width="150" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" FontSize="18" Margin="5,0,20,0" Text="{Binding Prescription.Customer.Birthday,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 <Label Content="藥品毛利 : " FontSize="18" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" />
                 <Label x:Name="PrescriptionProfit" FontSize="16"  Foreground="#FF424040" HorizontalContentAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
                 <Rectangle Width="335" />
@@ -234,7 +234,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineAmountDataTemplate">
                                 <TextBox x:Name="MedicineTotal" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" 
-                                         Text="{Binding Amount,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" 
+                                         Text="{Binding Amount,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" 
                                          PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" MouseDoubleClick="PrescriptionMedicines_MouseDoubleClick"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
