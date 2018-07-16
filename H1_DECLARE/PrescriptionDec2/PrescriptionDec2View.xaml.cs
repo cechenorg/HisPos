@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using His_Pos.Class;
+﻿using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Division;
@@ -17,7 +7,15 @@ using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using His_Pos.Service;
-using MahApps.Metro.Controls;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -27,11 +25,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
         private Prescription _prescription = new Prescription();
-        private bool IsChanged;
+        private bool isChanged;
 
         private readonly bool IsFirst = true;
         public ObservableCollection<object> Medicines;
-        private ObservableCollection<Usage> usages = new ObservableCollection<Usage>();
+        public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
 
         public PrescriptionDec2View()
         {
@@ -40,8 +38,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             GetPrescriptionData();
             LoadPrescriptionData();
         }
-
-        public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
 
         public Prescription Prescription
         {
@@ -58,19 +54,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             get
             {
                 return (searchText, obj) =>
-                    (obj as DeclareMedicine).Id is null
+                    (obj as DeclareMedicine)?.Id is null
                         ? false
                         : (obj as DeclareMedicine).Id.ToLower().Contains(searchText.ToLower())
                           || (obj as DeclareMedicine).ChiName.ToLower().Contains(searchText.ToLower()) ||
                           (obj as DeclareMedicine).EngName.ToLower().Contains(searchText.ToLower());
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void LoadPrescriptionData()
@@ -80,17 +69,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             LoadPaymentCategories();
             LoadCopayments();
             LoadAdjustCases();
-            usages = UsageDb.GetUsages();
+            UsageDb.GetUsages();
         }
 
         private void GetPrescriptionData()
         {
             DeclareMedicines = new ObservableCollection<DeclareMedicine>();
             var loadingWindow = new LoadingWindow();
-            loadingWindow.GetMedicinesData(this);
             loadingWindow.Show();
             loadingWindow.Topmost = true;
-            PrescriptionMedicines.ItemsSource = Prescription.Medicines;
+            loadingWindow.GetMedicinesData(this);
         }
 
         /*
@@ -99,7 +87,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadHospitalData()
         {
-            ReleaseHospital.ItemsSource = HospitalDb.GetData(); 
+            ReleaseHospital.ItemsSource = HospitalDb.GetData();
             LoadDivisionsData();
         }
 
@@ -158,7 +146,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            CheckIcNumber(Prescription.Customer.IcCard.IcNumber);
+            CheckBirthDay(Prescription.Customer.Birthday);
+        }
+
+        private void CheckBirthDay(string customerBirthday)
+        {
+            Regex birth = new Regex(@"[0-9]{7}");
+            if (birth.IsMatch(customerBirthday))
+            {
+                string year = customerBirthday.Substring(0, 3);
+                string month = customerBirthday.Substring(3, 2);
+                string date = customerBirthday.Substring(5, 2);
+                Prescription.Customer.Birthday = year + "/" + month + "/" + date;
+            }
+            //error
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -194,12 +196,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void SetChanged()
         {
             if (IsFirst) return;
-            IsChanged = true;
-        }
-
-        private void SetIsChanged(object sender, EventArgs e)
-        {
-            SetChanged();
+            isChanged = true;
         }
 
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
@@ -272,15 +269,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     case "Dosage":
                         NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Usage", ref nextTextBox);
                         break;
+
                     case "Usage":
                         NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "MedicineDays", ref nextTextBox);
                         break;
+
                     case "MedicineDays":
                         NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "MedicineTotal", ref nextTextBox);
                         break;
+
                     case "MedicineTotal":
                         NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Position", ref nextTextBox);
                         break;
+
                     case "Position":
                         if (currentRowIndex == Prescription.Medicines.Count - 1)
                         {
@@ -320,6 +321,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 thisTextBox[newIndex].Focus();
             }
         }
+
         private int GetCurrentRowIndex(object sender)
         {
             if (sender is TextBox)
@@ -355,15 +357,58 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             return -1;
         }
 
-        private void PrescriptionMedicines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        //return 1 : 長度不足 2 : 性別碼錯誤 3 : 首碼錯誤 4 : 檢查碼錯誤
+        private string CheckIcNumber(string vid)
         {
-            return;
+            var firstEng = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "W", "Z", "I", "O" };
+            var aa = vid.ToUpper();
+            var chackFirstEnd = false;
+            if (aa.Trim().Length != 10) return "1";
+            var firstNo = Convert.ToByte(aa.Trim().Substring(1, 1));
+            if (firstNo > 2 || firstNo < 1)
+            {
+                return "性別碼(第一位數字)錯誤，男性為 1 女性為 2";
+            }
+            int x;
+            for (x = 0; x < firstEng.Count; x++)
+            {
+                if (aa.Substring(0, 1) == firstEng[x])
+                {
+                    aa = string.Format("{0}{1}", x + 10, aa.Substring(1, 9));
+                    chackFirstEnd = true;
+                    break;
+                }
+            }
+            if (!chackFirstEnd)
+                return "3";
+            int i = 1;
+            int ss = int.Parse(aa.Substring(0, 1));
+            while (aa.Length > i)
+            {
+                ss = ss + (int.Parse(aa.Substring(i, 1)) * (10 - i));
+                i++;
+            }
+            aa = ss.ToString();
+            if (vid.Substring(9, 1) == "0")
+            {
+                if (aa.Substring(aa.Length - 1, 1) == "0")
+                {
+                    return "0";
+                }
+                return "4";
+            }
+            if (vid.Substring(9, 1) == (10 - int.Parse(aa.Substring(aa.Length - 1, 1))).ToString())
+            {
+                return "0";
+            }
+            return "4";
         }
 
-        private void PrescriptionMedicines_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChanged(string propertyName)
         {
-            if(e.NewItem == null)
-                return;
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

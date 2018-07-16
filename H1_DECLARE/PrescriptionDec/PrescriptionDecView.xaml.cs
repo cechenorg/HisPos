@@ -133,10 +133,9 @@ namespace His_Pos.PrescriptionDec
 
         private void SetCustomerData()
         {
-            DateTimeExtensions dateTimeExtensions = new DateTimeExtensions();
             _currentCustomer.Name = _hisApiFunction.GetIcData(_pBuffer, 12, 20);
             _currentCustomer.IcNumber = _hisApiFunction.GetIcData(_pBuffer, 32, 10);
-            _currentCustomer.Birthday = dateTimeExtensions.BirthdayFormatConverter(_hisApiFunction.GetIcData(_pBuffer, 42, 7));
+            _currentCustomer.Birthday = DateTimeExtensions.BirthdayFormatConverter(_hisApiFunction.GetIcData(_pBuffer, 42, 7));
             if (_hisApiFunction.GetIcData(_pBuffer, 49, 1) == "M")
                 _currentCustomer.Gender = true;
             _currentCustomer.Gender = false;

@@ -580,8 +580,7 @@ namespace His_Pos.PrescriptionDec
             copayment.Point = Convert.ToInt32(Copayment.Text);
             if (copayment.Id == "903")
             {
-                var dateTimeExtensions = new DateTimeExtensions();
-                var newBornBirth = dateTimeExtensions.ToUsDate(Prescription.Customer.IcCard.IcMarks.NewbornsData.Birthday);
+                var newBornBirth = DateTimeExtensions.ToUsDate(Prescription.Customer.IcCard.IcMarks.NewbornsData.Birthday);
                 var newBornAge = DateTime.Now - newBornBirth;
                 CheckNewBornAge(newBornAge);
             }
