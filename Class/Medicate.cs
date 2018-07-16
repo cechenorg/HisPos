@@ -6,6 +6,8 @@ namespace His_Pos.Class
     {
         public Medicate()
         {
+            Dosage = "";
+            Form = "";
         }
 
         public Medicate(DataRow dataRow)

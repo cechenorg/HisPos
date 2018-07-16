@@ -6,13 +6,14 @@
              xmlns:local="clr-namespace:His_Pos.ProductPurchase"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
+             xmlns:hisPos="clr-namespace:His_Pos"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365" Unloaded="UserControl_Unloaded">
     <UserControl.Resources>
-        <local:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
-        <local:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
-        <local:TextBoxDateConverter x:Key="TextBoxDateConverter"/>
-        <local:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
+        <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
+        <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
+        <hisPos:TextBoxDateConverter x:Key="TextBoxDateConverter"/>
+        <hisPos:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
         <local:ProductPurchaseView x:Key="ProductPurchaseView"/>
     </UserControl.Resources>
     <Viewbox Stretch="Fill">

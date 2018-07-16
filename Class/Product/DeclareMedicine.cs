@@ -14,6 +14,7 @@ namespace His_Pos.Class.Product
     {
         public DeclareMedicine()
         {
+
         }
 
         public DeclareMedicine(DataRow dataRow) : base(dataRow)
@@ -65,7 +66,15 @@ namespace His_Pos.Class.Product
 
         public string UsageName
         {
-            get { return Usage.Name; }
+            get
+            {
+                if(Usage != null)
+                    return Usage.Name;
+                else
+                {
+                    return "";
+                }
+            }
             set
             {
                 Usage.Name = value;
@@ -76,7 +85,12 @@ namespace His_Pos.Class.Product
 
         public string Dosage
         {
-            get { return MedicalCategory.Dosage; }
+            get
+            {
+                if(MedicalCategory != null)
+                    return MedicalCategory.Dosage;
+                return "";
+            }
             set
             {
                 MedicalCategory.Dosage = value;

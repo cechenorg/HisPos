@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
+             xmlns:hisPos="clr-namespace:His_Pos"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              mc:Ignorable="d" x:Name="PreDec2"
              d:DesignHeight="839" d:DesignWidth="1365">
@@ -29,6 +30,8 @@
             </StackPanel>
         </DataTemplate>
         <local:GenderConverter x:Key="GenderConverter" />
+        <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
+        <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">
         <Grid Height="839" Width="1365">
@@ -139,7 +142,7 @@
                 </StackPanel>
             </Grid>
             <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                      AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True">
+                      AutoGenerateColumns="False" GridLinesVisibility="Horizontal" CanUserAddRows="True" MouseDoubleClick="PrescriptionMedicines_MouseDoubleClick" AddingNewItem="PrescriptionMedicines_AddingNewItem">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -187,7 +190,7 @@
                             <DataTemplate x:Name="MedicineCodeDataTemplate">
                                 <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"
                                                                  VerticalContentAlignment="Stretch" HorizontalAlignment="Center" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" Background="Transparent" MaxHeight="50" Text="{Binding Id,Mode=TwoWay}"
-                                                                 ValueMemberPath="Id" MinimumPrefixLength="2" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
+                                                                 ValueMemberPath="Id" MinimumPrefixLength="2" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" IsEnabled="{Binding Id, Converter={StaticResource AutoCompleteIsEnableConverter}}"
                                                                  FilterMode="Contains" IsTextCompletionEnabled="False"  Populating="MedicineCodeAuto_Populating" DropDownClosed="MedicineCodeAuto_DropDownClosed" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -200,77 +203,55 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="60" Header="用量">
+                    <DataGridTemplateColumn MinWidth="60" Header="用量" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="DosageDataTemplate">
-                                <TextBox x:Name="Dosage"  MinWidth="60" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Dosage,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox x:Name="Dosage"  MinWidth="60" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" 
+                                         BorderThickness="0,0,0,1" Text="{Binding Dosage,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" 
+                                         PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" MouseDoubleClick="PrescriptionMedicines_MouseDoubleClick"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40" Header="用法">
+                    <DataGridTemplateColumn MinWidth="40" Header="用法" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="UsageDataTemplate">
-                                <TextBox x:Name="Usage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding UsageName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox x:Name="Usage" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" 
+                                         Text="{Binding UsageName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" 
+                                         PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" MouseDoubleClick="PrescriptionMedicines_MouseDoubleClick"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40" Header="天數">
+                    <DataGridTemplateColumn MinWidth="40" Header="天數" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineDaysDataTemplate">
-                                <TextBox x:Name="MedicineDays" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Days,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox x:Name="MedicineDays" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" 
+                                         Text="{Binding Days,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
+                                         PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" MouseDoubleClick="PrescriptionMedicines_MouseDoubleClick"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40" Header="總量">
+                    <DataGridTemplateColumn MinWidth="40" Header="總量" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineAmountDataTemplate">
-                                <TextBox x:Name="MedicineTotal" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" Text="{Binding Amount,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox x:Name="MedicineTotal" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" 
+                                         Text="{Binding Amount,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="False" 
+                                         PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" MouseDoubleClick="PrescriptionMedicines_MouseDoubleClick"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40" Header="自費">
+                    <DataGridTemplateColumn MinWidth="40" Header="自費" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="PaysDataTemplate">
-                                <CheckBox x:Name="PaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                                <CheckBox x:Name="PaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="40" Header="途徑">
+                    <DataGridTemplateColumn MinWidth="40" Header="途徑" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="PositionDataTemplate">
-                                <controls:AutoCompleteBox x:Name="PositionAuto" MinWidth="40" Height="30" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1"
-                                                             VerticalContentAlignment="Stretch" Background="Transparent" MaxHeight="50" BorderBrush="DimGray" Text="{Binding Position,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                                    <controls:AutoCompleteBox.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ListBoxItem}">
-                                            <Setter Property="Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                        <Border x:Name="ContentBorder"
-                                                                   Background="GhostWhite" Padding="4">
-                                                            <ContentPresenter />
-                                                        </Border>
-                                                        <ControlTemplate.Triggers>
-                                                            <Trigger Property="IsMouseOver"
-                                                                        Value="True">
-                                                                <Setter Property="Background"
-                                                                           TargetName="ContentBorder"
-                                                                           Value="#FFB8BEC3" />
-                                                                <Setter Property="IsSelected"
-                                                                           Value="True" />
-                                                            </Trigger>
-                                                            <Trigger Property="IsSelected"
-                                                                        Value="True">
-                                                                <Setter Property="Background"
-                                                                           TargetName="ContentBorder"
-                                                                           Value="#FFB8BEC3" />
-                                                            </Trigger>
-                                                        </ControlTemplate.Triggers>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </controls:AutoCompleteBox.ItemContainerStyle>
-                                </controls:AutoCompleteBox>
+                                <TextBox x:Name="Position" MinWidth="40" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" 
+                                         Text="{Binding Position,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" 
+                                         PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" MouseDoubleClick="PrescriptionMedicines_MouseDoubleClick"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -282,7 +263,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="60" Header="自費價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" Binding="{Binding Price}" IsReadOnly="True">
+                    <DataGridTextColumn MinWidth="60" Header="自費價格" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" Binding="{Binding Price}" IsReadOnly="True" >
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center" />

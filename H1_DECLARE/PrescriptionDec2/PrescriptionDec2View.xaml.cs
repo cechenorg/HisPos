@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
@@ -15,6 +17,7 @@ using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using His_Pos.Service;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -253,6 +256,118 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             med.Position = "";
             med.Source = "";
             med.Dosage = "";
+        }
+
+        private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var objectName = (sender as Control).Name;
+
+            //按 Enter 下一欄
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                var nextTextBox = new List<TextBox>();
+                var currentRowIndex = GetCurrentRowIndex(sender);
+
+                if (currentRowIndex == -1) return;
+
+                switch (objectName)
+                {
+                    case "Dosage":
+                        NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Usage", ref nextTextBox);
+                        break;
+                    case "Usage":
+                        NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "MedicineDays", ref nextTextBox);
+                        break;
+                    case "MedicineDays":
+                        NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "MedicineTotal", ref nextTextBox);
+                        break;
+                    case "MedicineTotal":
+                        NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Position", ref nextTextBox);
+                        break;
+                    case "Position":
+                        if (currentRowIndex == Prescription.Medicines.Count - 1)
+                        {
+                            var autoList = new List<AutoCompleteBox>();
+                            NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref autoList);
+                            NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref nextTextBox);
+                            nextTextBox[0].Focus();
+                        }
+                        else
+                        {
+                            NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Dosage", ref nextTextBox);
+                            nextTextBox[currentRowIndex + 1].Focus();
+                        }
+                        return;
+                }
+                nextTextBox[currentRowIndex].Focus();
+            }
+
+            //按 Up Down
+            if (e.Key == Key.Up || e.Key == Key.Down)
+            {
+                e.Handled = true;
+                var thisTextBox = new List<TextBox>();
+                var currentRowIndex = GetCurrentRowIndex(sender);
+
+                if (currentRowIndex == -1) return;
+
+                NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, objectName, ref thisTextBox);
+
+                int newIndex = (e.Key == Key.Up) ? currentRowIndex - 1 : currentRowIndex + 1;
+
+                if (newIndex < 0)
+                    newIndex = 0;
+                else if (newIndex >= thisTextBox.Count)
+                    newIndex = thisTextBox.Count - 1;
+
+                thisTextBox[newIndex].Focus();
+            }
+        }
+        private int GetCurrentRowIndex(object sender)
+        {
+            if (sender is TextBox)
+            {
+                List<TextBox> temp = new List<TextBox>();
+                TextBox textBox = sender as TextBox;
+
+                NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, textBox.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
+            else if (sender is CheckBox)
+            {
+                List<CheckBox> temp = new List<CheckBox>();
+                CheckBox checkBox = sender as CheckBox;
+
+                NewFunction.FindChildGroup<CheckBox>(PrescriptionMedicines, checkBox.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
+            return -1;
+        }
+
+        private void PrescriptionMedicines_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            return;
+        }
+
+        private void PrescriptionMedicines_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            if(e.NewItem == null)
+                return;
         }
     }
 }
