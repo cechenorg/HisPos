@@ -189,7 +189,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             stack.Children.Add(newUser);
         }
 
-        public void AddUserToStack(UserIconData userIconData, string period)
+        public void AddUserToStack(UserIconData userIconData, string period = "")
         {
             switch (period)
             {
@@ -204,6 +204,9 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                     break;
                 case "S":
                     AddUserToCorrectOrder(SleepStack, new UserIcon(userIconData));
+                    break;
+                default:
+                    AddUserToCorrectOrder(DayOffStack, new UserIcon(userIconData));
                     break;
             }
         }

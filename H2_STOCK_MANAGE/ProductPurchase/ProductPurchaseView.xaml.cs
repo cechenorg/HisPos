@@ -392,7 +392,6 @@ namespace His_Pos.ProductPurchase
             }
             storeOrderData.TotalPrice = Math.Round(count, MidpointRounding.AwayFromZero).ToString();
         }
-
         private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             var productAuto = sender as AutoCompleteBox;

@@ -217,6 +217,7 @@
     <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\InStock.cs" />
     <Compile Include="Class\Leave\LeaveDb.cs" />
+    <Compile Include="Class\Leave\LeaveRecord.cs" />
     <Compile Include="Class\Location\Location.cs" />
     <Compile Include="Class\Location\LocationDb.cs" />
     <Compile Include="Class\Location\LocationDetail.cs" />

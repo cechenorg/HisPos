@@ -24,6 +24,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
     /// </summary>
     public partial class LeaveWindow : Window
     {
+        public bool LeaveComplete = false;
         public ObservableCollection<UserIconData> UserIconDatas { get; }
         public ObservableCollection<Class.Leave.Leave> LeaveTypes { get; }
 
@@ -54,7 +55,13 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
                 return;
             }
 
+            if (EndDate.Text.Equals(""))
+                EndDate.SelectedDate = StartDate.SelectedDate;
 
+            LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, StartDate.SelectedDate, EndDate.SelectedDate, Note.Text);
+
+            LeaveComplete = true;
+            Close();
         }
 
         private string CheckInputData()
@@ -69,8 +76,13 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
 
             if (StartDate.Text.Equals(""))
                 error += "日期未填寫!\n";
-            else if(StartDate.SelectedDate < DateTime.Today)
+            else if(StartDate.SelectedDate < DateTime.Today || EndDate.SelectedDate < DateTime.Today)
                 error += "所選日期已過!\n";
+            else if (EndDate.SelectedDate < StartDate.SelectedDate)
+                error += "結束日期小於起始日期!\n";
+
+            if(Note.Text.Equals(""))
+                error += "原因未填寫!\n";
 
             return error;
         }

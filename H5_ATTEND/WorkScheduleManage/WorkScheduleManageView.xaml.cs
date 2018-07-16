@@ -14,6 +14,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class;
+using His_Pos.Class.Leave;
 using His_Pos.Class.WorkSchedule;
 using His_Pos.H5_ATTEND.WorkScheduleManage.Leave;
 
@@ -203,6 +205,22 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             HighlightToday();
 
             InitWorkSchedule();
+            InitLeave();
+        }
+
+        private void InitLeave()
+        {
+            Collection<LeaveRecord> leaveRecords = LeaveDb.GetLeaveRecord(selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
+
+            if (leaveRecords.Count == 0) return;
+
+            foreach (var leaveRecord in leaveRecords)
+            {
+                if (!leaveRecord.Id.Equals(CurrentUserIconData.Id))
+                    CurrentUserIconData = UserIconDatas.Single(u => u.Id.Equals(leaveRecord.Id));
+
+                (GridCalendar.Children[Int32.Parse(leaveRecord.Day) - 1] as Day).AddUserToStack(CurrentUserIconData);
+            }
         }
 
         private void FillBlankDay(int beginDayCount, int endDayCount)
@@ -386,6 +404,13 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             leaveWindow.ShowDialog();
 
+            if (leaveWindow.LeaveComplete)
+            {
+                MessageWindow messageWindow = new MessageWindow("請假成功!", MessageType.SUCCESS);
+                messageWindow.ShowDialog();
+
+                InitCalendar(selectDateTime);
+            }
         }
     }
 }
