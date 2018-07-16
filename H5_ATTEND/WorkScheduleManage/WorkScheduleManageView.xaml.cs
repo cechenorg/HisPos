@@ -330,6 +330,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             ComboYear.IsEnabled = false;
             ComboMonth.IsEnabled = false;
             StartScheduleBtn.IsEnabled = false;
+            DayOffBtn.IsEnabled = false;
 
             ClearSelectedUserIcon();
             (UserPreview.Children[0] as UserIconPreview).IsSelected = true;
@@ -383,6 +384,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             ComboYear.IsEnabled = true;
             ComboMonth.IsEnabled = true;
             StartScheduleBtn.IsEnabled = true;
+            DayOffBtn.IsEnabled = true;
 
             List<Day> days = GridCalendar.Children.OfType<Day>().ToList();
 
