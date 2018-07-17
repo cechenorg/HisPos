@@ -10,13 +10,13 @@
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition />
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="9" Grid.ColumnSpan="2">
                 <Label Content="頻率代號" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
@@ -24,8 +24,10 @@
                 <Rectangle Width="985"/>
                 <Button Name="ButtonSearch" Grid.Column="1" Grid.Row="0" Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Click="ButtonSearch_Click"/>
             </StackPanel>
-            <DataGrid Name="DataGridMedFrequency" Grid.Row="1" Grid.Column="0" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                              SelectionChanged="DataGridMedFrequency_SelectionChanged"   ItemsSource="{Binding UsageCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5,0,10,10">
+            <DataGrid Name="DataGridMedFrequency" Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                           SelectionChanged="DataGridMedFrequency_SelectionChanged" ItemsSource="{Binding UsageCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                           CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,0,0" HeadersVisibility="None"
+                           HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
                         <Style.Triggers>
@@ -35,26 +37,24 @@
                         </Style.Triggers>
                         <Setter Property="Background" Value="Transparent"/>
                         <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="Height" Value="40"/>
+                        <Setter Property="Height" Value="80"/>
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="120" Header="頻率代號" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Width="190" Header="頻率名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding PrintName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Left"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="45"/>
+                                        <RowDefinition Height="35"/>
+                                    </Grid.RowDefinitions>
+                                    <Label FontSize="25" Grid.Row="0" FontFamily="Segoe UI Semibold" Content="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="10,0,0,0"/>
+                                    <Label FontSize="16" Grid.Row="1" FontFamily="Segoe UI Semi" Foreground="{StaticResource ForeGround}" Content="{Binding PrintName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="20,0,0,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Background="{StaticResource GridDarkerBackGround}" Margin="0,0,10,10">
@@ -90,9 +90,9 @@
                 </StackPanel>
                 <Label Name="Changed" Width="100"  Grid.Row="4" Grid.Column="1" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="30,0,0,0"/>
             </Grid>
-            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="5,0,10,10">
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                 <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
-                <Rectangle Width="300"/>
+                <Rectangle Width="210"/>
                 <Image Source="/Images/Delete.png" Width="30" Name="ButtonDelete" MouseLeftButtonDown="ButtonDelete_MouseLeftButtonDown"/>
             </StackPanel>
         </Grid>
