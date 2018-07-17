@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 
@@ -23,10 +24,15 @@ namespace His_Pos.Class
             Treatment = treatment;
             Medicines = medicines;
         }
-
+        public Prescription(DataRow row) {
+            Customer = new Customer(row);
+            Pharmacy = new Pharmacy(row);
+            Treatment = new Treatment(row);
+            Medicines = new ObservableCollection<DeclareMedicine>();
+        }
         public Customer Customer { get; set; }
-        public Pharmacy Pharmacy { get; set; }
-        public Treatment Treatment { get; set; }
+        public Pharmacy Pharmacy { get; set; } //藥局
+        public Treatment Treatment { get; set; } //在醫院拿到的資料
         public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
         public ObservableCollection<DeclareMedicine> Medicines { get; set; }

@@ -169,9 +169,11 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             }
             var item = (DataGridSource.SelectedItem as LocationbData);
             var goal = ComboBoxTargetSmall.SelectedItem == null ? "" : ComboBoxTargetSmall.SelectedItem;
-            changeItems.Add(new ChangeItem(item.proid, item.proname,item.locdName, goal.ToString()));
-            (DataGridSource.SelectedItem as LocationbData).locdName = goal.ToString();
-            LocationTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as LocationbData).proid).locdName = goal.ToString();
+            foreach (LocationbData row in DataGridSource.SelectedItems) {
+                changeItems.Add(new ChangeItem(item.proid, item.proname, item.locdName, goal.ToString()));
+                (DataGridSource.SelectedItem as LocationbData).locdName = goal.ToString();
+                LocationTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as LocationbData).proid).locdName = goal.ToString();
+            }
 
             if (goal.ToString() == "")
                 DataGridTarget.Items.Filter = LocationDetailEmptyTargetFilter;
@@ -206,10 +208,13 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             }
             var item = (DataGridTarget.SelectedItem as LocationbData);
             var goal = ComboBoxSourceSmall.SelectedItem == null ? "" : ComboBoxSourceSmall.SelectedItem;
-            changeItems.Add(new ChangeItem(item.proid, item.proname, item.locdName, goal.ToString()));
 
-            (DataGridTarget.SelectedItem as LocationbData).locdName = goal.ToString();
-            LocationSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as LocationbData).proid).locdName = goal.ToString();
+            foreach (LocationbData row in DataGridTarget.SelectedItems)
+            {
+                changeItems.Add(new ChangeItem(item.proid, item.proname, item.locdName, goal.ToString()));
+                (DataGridTarget.SelectedItem as LocationbData).locdName = goal.ToString();
+                LocationSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as LocationbData).proid).locdName = goal.ToString();
+            }
 
             if (goal.ToString() == "")
                 DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;

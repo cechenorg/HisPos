@@ -11,11 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using His_Pos.Service;
+using System.Data;
 
 namespace His_Pos.Class
 {
     public class Treatment : INotifyPropertyChanged
     {
+        public Treatment(DataRow row) {
+        }
         public Treatment()
         {
             MedicalInfo = new MedicalInfo();
