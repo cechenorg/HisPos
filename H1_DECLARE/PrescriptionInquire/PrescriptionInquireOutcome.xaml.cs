@@ -82,7 +82,7 @@ namespace His_Pos.PrescriptionInquire
                 _inquiredPrescription.DeclareDetails[i].Name = name.Rows[0]["PRO_NAME"].ToString();
                 medicineList.Add(_inquiredPrescription.DeclareDetails[i]);
             }
-            PrescriptionSet.ItemsSource = medicineList;
+          //  PrescriptionSet.ItemsSource = medicineList;
         }
 
         /*
