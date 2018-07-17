@@ -217,11 +217,12 @@ namespace His_Pos.H5_ATTEND.ClockIn
         }
         private bool ClockInTypeFilter(object item)
         {
+            string employee = comboboxEmployee.SelectedItem == null ? "" : ((Employee)comboboxEmployee.SelectedItem).Name;
             string date = start.Text == "" ? "" : Convert.ToDateTime(start.Text).ToString("yyyy/MM/dd");
             switch (typeFilterCondition) {
                 case 0:
                     if ( (((EmpClockIn)item).clocckType == "上班")
-                        && (((EmpClockIn)item).empName.Contains(((Employee)comboboxEmployee.SelectedItem).Name) || ((Employee)comboboxEmployee.SelectedItem).Name == "")
+                        && (((EmpClockIn)item).empName.Contains(employee) || employee == "")
                         && (((EmpClockIn)item).clocckDate.Equals(date) || start.Text == "")
                         )
                         return true;
@@ -229,14 +230,14 @@ namespace His_Pos.H5_ATTEND.ClockIn
                         return false;
                 case 1:
                     if ((((EmpClockIn)item).clocckType == "下班")
-                        && (((EmpClockIn)item).empName.Contains(((Employee)comboboxEmployee.SelectedItem).Name) || ((Employee)comboboxEmployee.SelectedItem).Name == "")
+                        && (((EmpClockIn)item).empName.Contains(employee) || employee == "")
                         && (((EmpClockIn)item).clocckDate.Equals(date) || start.Text == "")
                         )
                         return true;
                     else
                         return false;
                 case 2:
-                    if ((((EmpClockIn)item).empName.Contains(((Employee)comboboxEmployee.SelectedItem).Name) || ((Employee)comboboxEmployee.SelectedItem).Name == "")
+                    if ((((EmpClockIn)item).empName.Contains(employee) || employee == "")
                         && (((EmpClockIn)item).clocckDate.Equals(date) || start.Text == "")
                         )
                         return true;
