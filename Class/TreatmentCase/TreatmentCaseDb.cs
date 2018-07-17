@@ -7,28 +7,29 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.TreatmentCase
 {
-    public class TreatmentCaseDb : ISelection
+    public static class TreatmentCaseDb
     {
-        public ObservableCollection<TreatmentCase> TreatmentCases { get;} = new ObservableCollection<TreatmentCase>();
-
-        public void GetData()
+        public static ObservableCollection<TreatmentCase> GetData()
         {
+            ObservableCollection<TreatmentCase> treatmentCases = new ObservableCollection<TreatmentCase>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             var prescriptionCaseTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetTreatmentCasesData]", dbConnection);
             foreach (DataRow treatmentCase in prescriptionCaseTable.Rows)
             {
                 var t = new TreatmentCase(treatmentCase);
-                TreatmentCases.Add(t);
+                treatmentCases.Add(t);
             }
+
+            return treatmentCases;
         }
         /*
          *回傳對應處方案件之id + name string
          */
-        public string GetTreatmentCase(string tag)
+        public static string GetTreatmentCase(string tag)
         {
             GetData();
             var result = string.Empty;
-            foreach (var treatment in TreatmentCases)
+            foreach (var treatment in GetData())
             {
                 if (treatment.Id == tag)
                 {

@@ -28,15 +28,22 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private bool isChanged;
 
         private readonly bool IsFirst = true;
-        public ObservableCollection<object> Medicines;
+        private ObservableCollection<object> Medicines;
+        public ObservableCollection<Hospital> HosiHospitals { get; set; }
+        public ObservableCollection<Division> Divisions { get; set; }
+        public ObservableCollection<TreatmentCase> TreatmentCases { get; set; }
+        public ObservableCollection<PaymentCategory> PaymentCategories { get; set; }
+        public ObservableCollection<Copayment> Copayments { get; set; }
+        public ObservableCollection<AdjustCase> AdjustCases { get; set; }
+        public ObservableCollection<Usage> Usages { get; set; }
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
+        
 
         public PrescriptionDec2View()
         {
             InitializeComponent();
             DataContext = this;
             GetPrescriptionData();
-            LoadPrescriptionData();
         }
 
         public Prescription Prescription
@@ -62,66 +69,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void LoadPrescriptionData()
+        public void LoadPrescriptionData()
         {
-            LoadHospitalData();
-            LoadTreatmentCases();
-            LoadPaymentCategories();
-            LoadCopayments();
-            LoadAdjustCases();
             UsageDb.GetUsages();
         }
 
         private void GetPrescriptionData()
         {
             DeclareMedicines = new ObservableCollection<DeclareMedicine>();
+            TreatmentCases = new ObservableCollection<TreatmentCase>();
             var loadingWindow = new LoadingWindow();
-            loadingWindow.Show();
-            loadingWindow.Topmost = true;
             loadingWindow.GetMedicinesData(this);
-        }
-
-        /*
-         *載入醫療院所資料
-         */
-
-        private void LoadHospitalData()
-        {
-            ReleaseHospital.ItemsSource = HospitalDb.GetData();
-            LoadDivisionsData();
-        }
-
-        /*
-         * 載入科別資料
-         */
-
-        private void LoadDivisionsData()
-        {
-            var divisionDb = new DivisionDb();
-            divisionDb.GetData();
-            DivisionCombo.ItemsSource = divisionDb.Divisions;
-        }
-
-        /*
-         *載入給付類別
-         */
-
-        private void LoadPaymentCategories()
-        {
-            var paymentCategoryDb = new PaymentCategroyDb();
-            paymentCategoryDb.GetData();
-            PaymentCategoryCombo.ItemsSource = paymentCategoryDb.PaymentCategories;
-        }
-
-        /*
-         *載入部分負擔
-         */
-
-        private void LoadCopayments()
-        {
-            var copaymentDb = new CopaymentDb();
-            copaymentDb.GetData();
-            CopaymentCombo.ItemsSource = copaymentDb.Copayments;
+            loadingWindow.Show();
         }
 
         /*
@@ -130,9 +89,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadTreatmentCases()
         {
-            var treatmentCases = new TreatmentCaseDb();
-            treatmentCases.GetData();
-            TreatmentCaseCombo.ItemsSource = treatmentCases.TreatmentCases;
+            TreatmentCaseDb.GetData();
+            TreatmentCaseCombo.ItemsSource = TreatmentCaseDb.GetData();
         }
 
         /*
