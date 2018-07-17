@@ -106,6 +106,36 @@
                 <Label Content="/" FontSize="16" Width="auto" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" HorizontalContentAlignment="Stretch"/>
                 <Label Content="{Binding ChronicTotal}" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
             </StackPanel>
+            <DataGrid Name="PrescriptionSet" Grid.Row="5" Grid.ColumnSpan="5" Margin="10"   CanUserAddRows="True"
+                      AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"
+                      Grid.Column="0" IsReadOnly="True">
+                <DataGrid.HorizontalGridLinesBrush>
+                    <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
+                </DataGrid.HorizontalGridLinesBrush>
+                <DataGrid.Background>
+                    <SolidColorBrush Color="#FFEEEEEE" Opacity="0.5"/>
+                </DataGrid.Background>
+                <DataGrid.BorderBrush>
+                    <SolidColorBrush Color="Black" Opacity="0.9"/>
+                </DataGrid.BorderBrush>
+                <DataGrid.Columns>
+                    <DataGridTextColumn MinWidth="130" Header="健保代碼" Binding="{Binding MedicalId}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="320" Header="藥品名稱" Binding="{Binding Name}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="60" Header="用量" Binding="{Binding Dosage}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="40" Header="用法" Binding="{Binding Usage}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="40" Header="天數" Binding="{Binding Days}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="40" Header="總數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTemplateColumn MinWidth="40" Header="自費" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:Name="MedicinePaysDataTemplate">
+                                <CheckBox Name="ProductmPaySelf"  HorizontalAlignment="Center" HorizontalContentAlignment="Center" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn MinWidth="40" Header="途徑" Binding="{Binding Position}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn MinWidth="60" Header="健保價格" Binding="{Binding Price}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Viewbox>
 </Window>
