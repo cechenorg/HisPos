@@ -174,16 +174,12 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             LocationTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as LocationbData).proid).locdName = goal.ToString();
 
             if (goal.ToString() == "")
-            {
                 DataGridTarget.Items.Filter = LocationDetailEmptyTargetFilter;
-                DataGridSource.Items.Filter = ProductLocationSourceFilter;
-            }
-
-            else {
-                DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;
+            else 
                 DataGridTarget.Items.Filter = ProductLocationTargetFilter;
-            }
             
+            DataGridSource.Items.Filter = ProductLocationSourceFilter;
+
             DataGridTarget.SelectedIndex = 0;
             DataGridSource.SelectedIndex = 0;
         }
@@ -216,15 +212,11 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             LocationSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as LocationbData).proid).locdName = goal.ToString();
 
             if (goal.ToString() == "")
-            {
                 DataGridSource.Items.Filter = LocationDetailEmptySourceFilter;
-                DataGridTarget.Items.Filter = ProductLocationTargetFilter;
-            }
-            else
-            {
-                DataGridTarget.Items.Filter = LocationDetailEmptyTargetFilter;
+            else 
                 DataGridSource.Items.Filter = ProductLocationSourceFilter;
-            }
+            
+            DataGridTarget.Items.Filter = ProductLocationTargetFilter;
             DataGridTarget.SelectedIndex = 0;
             DataGridSource.SelectedIndex = 0;
         }
