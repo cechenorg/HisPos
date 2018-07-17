@@ -55,8 +55,7 @@ namespace His_Pos
         //    Show();
         //    backgroundWorker.RunWorkerAsync();
         //}
-      
-           
+
         public void GetNecessaryData(User userLogin)
         {
             MainWindow mainWindow = new MainWindow(userLogin);
@@ -66,19 +65,19 @@ namespace His_Pos
                 //ChangeLoadingMessage("取得藥品資料...");
                 //MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
                 //MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "PRO_ID" };
-                
+
                 //ChangeLoadingMessage("取得商品資料...");
                 //MainWindow.OtcDataTable = OTCDb.GetOtcData();
 
                 ChangeLoadingMessage("取得廠商資料...");
                 MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
 
-                if (FunctionDb.CheckYearlyHoliday()) {
+                if (FunctionDb.CheckYearlyHoliday())
+                {
                     ChangeLoadingMessage("更新假日資料...");
                     Function function = new Function();
                     function.GetLastYearlyHoliday();
                 }
-                
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -92,7 +91,7 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void AddNewOrders(ProductPurchase.ProductPurchaseView productPurchaseView,StoreOrderProductType type, Manufactory manufactory = null)
+        public void AddNewOrders(ProductPurchase.ProductPurchaseView productPurchaseView, StoreOrderProductType type, Manufactory manufactory = null)
         {
             backgroundWorker.DoWork += (s, o) =>
             {
@@ -123,7 +122,7 @@ namespace His_Pos
                 ChangeLoadingMessage("處理類別資料...");
 
                 ObservableCollection<Product> newProducts = ProductDb.GetProductTypeManageProducts();
-                
+
                 Dispatcher.Invoke((Action)(() =>
                 {
                     productTypeManageView.InitTypes();
@@ -155,7 +154,7 @@ namespace His_Pos
                 double stockValue = 0;
                 inventoryManagementView.InventoryMedicines = MedicineDb.GetInventoryMedicines();
                 inventoryManagementView.InventoryOtcs = OTCDb.GetInventoryOtcs();
-                
+
                 Dispatcher.Invoke((Action)(() =>
                 {
                     ObservableCollection<Product> products = new ObservableCollection<Product>();
@@ -195,17 +194,20 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void GetLocation(LocationManage.LocationManageView locationManageView) {
+
+        public void GetLocation(LocationManage.LocationManageView locationManageView)
+        {
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得櫃位資料...");
 
                 var location = LocationDb.GetLocationData();
-                
+
                 Dispatcher.Invoke((Action)(() =>
                 {
                     locationManageView.LocationCanvus.Children.Clear();
-                    foreach (DataRow row in location.Rows) {
+                    foreach (DataRow row in location.Rows)
+                    {
                         locationManageView.NewLocation(row["LOC_ID"].ToString(), row["LOC_NAME"].ToString(), Convert.ToDouble(row["LOC_HEIGHT"].ToString()), Convert.ToDouble(row["LOC_WIDTH"].ToString()), Convert.ToDouble(row["LOC_Y"].ToString()), Convert.ToDouble(row["LOC_X"].ToString()));
                     }
                 }));
@@ -218,9 +220,8 @@ namespace His_Pos
                 }));
             };
             backgroundWorker.RunWorkerAsync();
-
-
         }
+
         public void GetEmployeeData(EmployeeManageView employeeManage)
         {
             backgroundWorker.DoWork += (s, o) =>
@@ -228,10 +229,11 @@ namespace His_Pos
                 ChangeLoadingMessage("取得員工資料...");
 
                 var table = EmployeeDb.GetEmployeeData();
-                
+
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    foreach (DataRow row in table.Rows) {
+                    foreach (DataRow row in table.Rows)
+                    {
                         employeeManage.EmployeeCollection.Add(new Employee(row));
                     }
                 }));
@@ -246,14 +248,14 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-        
-        public void GetStockTakingRecord(StockTakingRecordView stockTakingRecord) {
+
+        public void GetStockTakingRecord(StockTakingRecordView stockTakingRecord)
+        {
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得盤點紀錄資料...");
 
                 var Products = StockTakingOrderDb.GetStockTakingRecord();
-
 
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -277,7 +279,8 @@ namespace His_Pos
                             stockTakingRecord.StocktakingCollection.Add(stockTakingOrder);
                             products.Clear();
                         }
-                        else if (count == Products.Rows.Count) {
+                        else if (count == Products.Rows.Count)
+                        {
                             StockTakingOrderProduct laststockTakingOrderProduct = new StockTakingOrderProduct(p);
                             products.Add(laststockTakingOrderProduct);
                             stockTakingOrder = new StockTakingOrder(lastProcheId);
@@ -317,11 +320,10 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得藥品資料...");
-                
-
+                prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
+                    prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.Prescription.Medicines;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -346,9 +348,8 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("處理商品資料...");
-                
-                var Products =  ProductDb.GetStockTakingProduct();
 
+                var Products = ProductDb.GetStockTakingProduct();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -356,31 +357,32 @@ namespace His_Pos
                     var lastProid = string.Empty;
                     foreach (DataRow p in Products.Rows)
                     {
-                       
                         switch (p["P_TYPE"].ToString())
                         {
                             case "O" when lastProid == p["PRO_ID"].ToString():
                                 BatchNumbers obatchnumber = new BatchNumbers(p);
                                 ((StockTakingOTC)products[products.Count - 1]).BatchNumbersCollection.Add(obatchnumber);
                                 break;
+
                             case "O":
                                 StockTakingOTC otc = new StockTakingOTC(p);
                                 products.Add(otc);
                                 break;
+
                             case "M" when lastProid == p["PRO_ID"].ToString():
                                 BatchNumbers mbatchnumber = new BatchNumbers(p);
                                 ((StockTakingMedicine)products[products.Count - 1]).BatchNumbersCollection.Add(mbatchnumber);
                                 break;
+
                             case "M":
                                 StockTakingMedicine medicine = new StockTakingMedicine(p);
                                 products.Add(medicine);
                                 break;
                         }
-                        
-                        
+
                         lastProid = p["PRO_ID"].ToString();
                     }
-                    
+
                     stockTakingView.ProductCollection = products;
                 }));
             };

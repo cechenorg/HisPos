@@ -24,7 +24,7 @@ namespace His_Pos.Class.Declare
         {
         }
 
-        public Prescription Prescription {get;set;}
+        public Prescription Prescription { get; set; }
         public List<DeclareDetail> DeclareDetails { get; set; } = new List<DeclareDetail>();
         public string DeclareMakeUp { get; set; }//D4補報註記
         public int DeclarePoint { get; set; }//D16申請點數
@@ -40,28 +40,29 @@ namespace His_Pos.Class.Declare
         public XmlDocument Xml { get; set; } = new XmlDocument();
         public string Id { get; set; }
         private int medFormCount = 0;
+
         private void SetCopaymentPoint()
         {
             var copaymentPoint = 0;
             var copaymentId = Prescription.Treatment.Copayment.Id;
             if (CheckCopaymentFreeProject())//免收部分負擔
                 copaymentPoint = 0;
-            if(copaymentId.Equals("I20") || copaymentId.Equals("Z00"))//I20:藥費大於100須收部分負擔 Z00:戒菸服務補助計畫加收部分負擔
+            if (copaymentId.Equals("I20") || copaymentId.Equals("Z00"))//I20:藥費大於100須收部分負擔 Z00:戒菸服務補助計畫加收部分負擔
                 copaymentPoint = Prescription.Treatment.Copayment.Point;
             SetAssistProjectCopaymentPoint(copaymentPoint);
         }
 
         private void CountDeclareDeatailPoint()
         {
-            var dateTimeExtensions = new DateTimeExtensions();
-            var cusAge = dateTimeExtensions.CalculateAge(dateTimeExtensions.ToUsDate(Prescription.Customer.Birthday));
+            var cusAge = DateTimeExtensions.CalculateAge(DateTimeExtensions.ToUsDate(Prescription.Customer.Birthday));
             var medFormCount = CountOralLiquidAgent();
-            var dayPay = CountDayPayAmount(cusAge,medFormCount);
+            var dayPay = CountDayPayAmount(cusAge, medFormCount);
             SetMedicalServiceCode(dayPay);//判斷藥事服務費項目代碼
             SetCopaymentPoint();//計算部分負擔點數
             TotalPoint = SpecailMaterialPoint + DiagnosisPoint + DrugsPoint + MedicalServicePoint;//計算總申報點數
             DeclarePoint = TotalPoint - CopaymentPoint;//申請點數 = 總申報點數 - 部分負擔點數
         }
+
         private int CountDayPayAmount(double cusAge, int medFormCount)
         {
             const int ma1 = 22, ma2 = 31, ma3 = 37, ma4 = 41;
@@ -70,6 +71,7 @@ namespace His_Pos.Class.Declare
             if (cusAge <= 12 && medFormCount == 3) return ma4;
             return ma1;
         }
+
         private int CountOralLiquidAgent()
         {
             var medFormCount = 0;
@@ -81,6 +83,7 @@ namespace His_Pos.Class.Declare
             }
             return medFormCount;
         }
+
         private void CheckDayPay(int dayPay)
         {
             DrugsPoint = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
@@ -90,17 +93,21 @@ namespace His_Pos.Class.Declare
                 case 22:
                     MedicalServiceCode = "MA1";
                     break;
+
                 case 31:
                     MedicalServiceCode = "MA2";
                     break;
+
                 case 37:
                     MedicalServiceCode = "MA3";
                     break;
+
                 case 41:
                     MedicalServiceCode = "MA4";
                     break;
             }
         }
+
         private void SetMedicalServiceCode(int dayPay)
         {
             var adjustCaseId = Prescription.Treatment.AdjustCase.Id;
@@ -117,18 +124,23 @@ namespace His_Pos.Class.Declare
                 case "1" when treatmentCaseId == westMedNormal && medicineDays <= daysLimit && DrugsPoint <= dayPay * medicineDays:
                     CheckDayPay(dayPay);
                     break;
+
                 case "1" when treatmentCaseId == westMedNormal && medicineDays <= normalDaysLimit && DrugsPoint > dayPay * medicineDays:
                     MedicalServiceCode = "05202B";
                     break;
+
                 case "2" when treatmentCaseId == chronic:
                     SetChronicMedicalServiceCode();
                     break;
             }
         }
+
         private bool CheckCopaymentFreeProject()
         {
             var copaymentId = Prescription.Treatment.Copayment.Id;
+
             #region 代碼對照
+
             /*
              * 001:重大傷病
              * 002:分娩
@@ -141,7 +153,9 @@ namespace His_Pos.Class.Declare
              * I21:藥費小於100免收
              * I22:符合本保險藥費免部分負擔範圍規定者，包括慢性病連續處方箋案件、牙醫案件、門診論病例計酬案件
              */
-            #endregion
+
+            #endregion 代碼對照
+
             var freeList = new List<string>() { "001", "002", "007", "008", "009", "801", "802", "905", "I21", "I22" };
             foreach (var id in freeList)
             {
@@ -154,7 +168,9 @@ namespace His_Pos.Class.Declare
         private void SetAssistProjectCopaymentPoint(int copaymentPoint)//部分負擔點數(個人/行政)
         {
             var copaymentId = Prescription.Treatment.Copayment.Id;
+
             #region 代碼對照
+
             /* 003:合於社會救助法規定之低收入戶之保險對象
              * 004:榮民、榮民遺眷之家戶代表
              * 005:經登記列管結核病患至衛生福利部疾病管制署公告指定之醫療院所就醫者
@@ -165,7 +181,9 @@ namespace His_Pos.Class.Declare
              * 904:行政協助愛滋病案件、愛滋防治替代治療計畫
              * 906:內政部役政署補助替代役役男全民健康保險自行負擔醫療費用
              */
-            #endregion
+
+            #endregion 代碼對照
+
             var assistProjectCopaymentList = new List<string>() { "003", "004", "005", "006", "901", "902", "903", "904", "906" };
             foreach (var id in assistProjectCopaymentList)
             {
@@ -176,10 +194,13 @@ namespace His_Pos.Class.Declare
             CopaymentPoint = copaymentPoint;
             AssistProjectCopaymentPoint = 0;
         }
-        private void SetDeclareDetail() {
+
+        private void SetDeclareDetail()
+        {
             var count = 1;
-            foreach (var medicine in Prescription.Medicines) {
-                var detail = new DeclareDetail(medicine,Prescription.Treatment.AdjustCase,count);
+            foreach (var medicine in Prescription.Medicines)
+            {
+                var detail = new DeclareDetail(medicine, Prescription.Treatment.AdjustCase, count);
                 CountDeclarePoint(detail);
                 DeclareDetails.Add(detail);
                 count++;
@@ -188,7 +209,7 @@ namespace His_Pos.Class.Declare
 
         private void CountDeclarePoint(DeclareDetail detail)
         {
-            double drugs = 0,diagnose = 0,special = 0,service = 0;
+            double drugs = 0, diagnose = 0, special = 0, service = 0;
             if (detail.MedicalOrder.Equals("1"))
                 drugs += detail.Point;
             else if (detail.MedicalOrder.Equals("2"))
@@ -210,7 +231,7 @@ namespace His_Pos.Class.Declare
             int days = int.Parse(Prescription.Treatment.MedicineDays);
             if (days <= daysLimit1)
                 MedicalServiceCode = "05224C";
-            else if(days > daysLimit1 && days <= daysLimit2)
+            else if (days > daysLimit1 && days <= daysLimit2)
                 MedicalServiceCode = "05207C";
             else
             {
