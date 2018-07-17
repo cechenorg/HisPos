@@ -20,7 +20,6 @@
     xmlns:MedFrequencyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedFrequencyManage"
     xmlns:WorkScheduleManage ="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
     xmlns:ClockIn="clr-namespace:His_Pos.H5_ATTEND.ClockIn"
-    xmlns:Leave="clr-namespace:His_Pos.H5_ATTEND.Leave"
     xmlns:PharmacyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.PharmacyManage"
     xmlns:prescriptionDec2="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
     xmlns:resource="clr-namespace:His_Pos.Resource"
@@ -79,9 +78,6 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type ClockIn:ClockIn}">
             <ClockIn:ClockInView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type Leave:Leave}">
-            <Leave:LeaveView/>
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">

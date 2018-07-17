@@ -189,7 +189,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             stack.Children.Add(newUser);
         }
 
-        public void AddUserToStack(UserIconData userIconData, string period)
+        public void AddUserToStack(UserIconData userIconData, string period = "")
         {
             switch (period)
             {
@@ -205,6 +205,9 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 case "S":
                     AddUserToCorrectOrder(SleepStack, new UserIcon(userIconData));
                     break;
+                default:
+                    AddUserToCorrectOrder(DayOffStack, new UserIcon(userIconData));
+                    break;
             }
         }
 
@@ -214,11 +217,33 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             WorkScheduleCount = 0;
 
+            if (IsCurrentUserLeave())
+            {
+                Morning.IsEnabled = false;
+                Noon.IsEnabled = false;
+                Evening.IsEnabled = false;
+                Sleep.IsEnabled = false;
+                AllDayBtn.IsEnabled = false;
+            }
+            else
+            {
+                Morning.IsEnabled = true;
+                Noon.IsEnabled = true;
+                Evening.IsEnabled = true;
+                Sleep.IsEnabled = true;
+                AllDayBtn.IsEnabled = true;
+            }
+
             Morning.IsChecked = HasCurrentUser(MorningStack);
             Noon.IsChecked = HasCurrentUser(NoonStack);
             Evening.IsChecked = HasCurrentUser(EveningStack);
             Sleep.IsChecked = HasCurrentUser(SleepStack);
             CheckAllDay();
+        }
+
+        private bool IsCurrentUserLeave()
+        {
+            return DayOffStack.Children.OfType<UserIcon>().Any(u => u.Id == WorkScheduleManageView.CurrentUserIconData.Id);
         }
 
         private void CheckAllDay()

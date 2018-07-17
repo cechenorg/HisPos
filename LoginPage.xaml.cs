@@ -26,16 +26,13 @@ namespace His_Pos
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            var userLogin = new User();
-            var auth = new string[2];
-            userLogin.Id = UserName.Text;
-            userLogin.Password = Password.Password;
-            if (CheckAccount(ref userLogin, ref auth))
+            User user = PersonDb.CheckUserPassword(UserName.Text, Password.Password);
+
+            if (user.Id != null)
             {
-                userLogin.Authority.HisFeatures = auth.ToList();
                 var loadingWindow = new LoadingWindow();
                 loadingWindow.Show();
-                loadingWindow.GetNecessaryData(userLogin);
+                loadingWindow.GetNecessaryData(user);
                 Close();
             }
             else
@@ -57,36 +54,6 @@ namespace His_Pos
             listparam.Add(sqlAuth);
             DbConnection dbConn = new DbConnection(Properties.Settings.Default.SQL_local);
             dbConn.ExecuteProc( "[POSHIS_Test].[DBO].[UPDATEUSERAUTH_POS]", listparam);
-        }
-
-        private bool CheckAccount(ref User Login, ref string[] authArray)
-        {
-            var isPass = false;
-            LoginAuth auth;
-            try
-            {
-                List<SqlParameter> listparam = new List<SqlParameter>();
-                SqlParameter sqlAccount = new SqlParameter("@ACCOUNT", Login.Id);
-                SqlParameter sqlPassword = new SqlParameter("@PASSWORD", Login.Password);
-                listparam.Add(sqlAccount);
-                listparam.Add(sqlPassword);
-                DbConnection dbConn = new DbConnection(Properties.Settings.Default.SQL_global);
-                DataTable table = dbConn.ExecuteProc("[HIS_POS_DB].[GET].[CHECKLOGIN]", listparam);
-                if (table.Rows.Count != 0){
-                    auth = (LoginAuth) table.Rows[0]["EMPAUT_POS"];
-                    authArray = auth.ToString().Split(',');
-                    Login.Id = table.Rows[0]["EMP_ID"].ToString();
-                    Login.IcNumber = table.Rows[0]["EMP_IDNUM"].ToString();
-                    Login.Name = table.Rows[0]["EMP_NAME"].ToString();
-                    isPass = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                DbConnection dbConn = new DbConnection(Properties.Settings.Default.SQL_local);
-                dbConn.Log("His", "CheckAccount", ex.Message);
-            }
-            return isPass;
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
