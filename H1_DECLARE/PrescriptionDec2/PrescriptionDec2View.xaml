@@ -286,7 +286,7 @@
                         FontFamily="Segoe UI Semibold"
                         VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Center"
-                        Text="{Binding Prescription.Treatment.TreatDateStr,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        Text="{Binding Prescription.Treatment.TreatDateStr,UpdateSourceTrigger=PropertyChanged}"/>
                         <DatePicker
                         x:Name="TreatmentDate"
                         Width="40"
@@ -544,7 +544,7 @@
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    IsEnabled="{Binding Id, Converter={StaticResource AutoCompleteIsEnableConverter}}"
+                                    IsEnabled="True"
                                     IsTextCompletionEnabled="False"
                                     ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                     ItemTemplate="{StaticResource MedcineCodeAutoComplete}"
@@ -587,7 +587,7 @@
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -606,6 +606,7 @@
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
+                                    CharacterCasing="Upper"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                     Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -656,20 +657,6 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn
                         MinWidth="40"
-                        Header="自費"
-                        IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="PaysDataTemplate">
-                                <CheckBox
-                                    x:Name="PaySelf"
-                                    HorizontalAlignment="Center"
-                                    HorizontalContentAlignment="Center"
-                                    IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn
-                        MinWidth="40"
                         Header="途徑"
                         IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
@@ -683,6 +670,7 @@
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
+                                    CharacterCasing="Upper"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                     Text="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -704,21 +692,40 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn
+                    <DataGridTemplateColumn
+                        MinWidth="40"
+                        Header="自費"
+                        IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:Name="PaysDataTemplate">
+                                <CheckBox
+                                    x:Name="PaySelf"
+                                    HorizontalAlignment="Center"
+                                    HorizontalContentAlignment="Center"
+                                    IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
                         MinWidth="60"
-                        Binding="{Binding Price}"
-                        FontFamily="Segoe UI Semibold"
-                        FontSize="14"
-                        FontWeight="Bold"
                         Header="自費價格"
                         IsReadOnly="True">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center" />
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:Name="MedicinePriceDataTemplate">
+                                <TextBox
+                                    x:Name="Price"
+                                    MinWidth="60"
+                                    HorizontalContentAlignment="Center"
+                                    BorderBrush="DimGray"
+                                    BorderThickness="0,0,0,1"
+                                    FontFamily="Segoe UI Semibold"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    IsEnabled="{Binding PaySelf,UpdateSourceTrigger=PropertyChanged}"
+                                    Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="3" Margin="10,0,10,10">

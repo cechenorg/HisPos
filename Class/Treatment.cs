@@ -83,7 +83,7 @@ namespace His_Pos.Class
             set
             {
                 adjustDate = value;
-                adjustDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
+                AdjustDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
                 NotifyPropertyChanged("AdjustDate");
             }
         }//d23 調劑日期

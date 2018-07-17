@@ -133,7 +133,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 PrescriptionMedicines.SelectedItem = selectedItem;
                 return;
             }
-
             PrescriptionMedicines.SelectedIndex = Prescription.Medicines.Count;
         }
 
@@ -189,9 +188,27 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     return;
             }
 
-            Prescription.Medicines.Add(medicineCodeAuto.SelectedItem as DeclareMedicine);
+            DeclareMedicine declareMedicine = (DeclareMedicine)(medicineCodeAuto.SelectedItem as DeclareMedicine).Clone();
+            int currentRow = GetCurrentRowIndex(sender);
 
-            medicineCodeAuto.Text = "";
+            if (Prescription.Medicines.Count > 0)
+            {
+                if (Prescription.Medicines.Count == currentRow)
+                {
+                    Prescription.Medicines.Add(declareMedicine);
+                    medicineCodeAuto.Text = "";
+                }
+                else
+                {
+                    Prescription.Medicines[currentRow] = declareMedicine;
+                }
+            }
+            else
+            {
+                Prescription.Medicines.Add(declareMedicine);
+                medicineCodeAuto.Text = "";
+            }
+            
         }
 
         public void ClearMedicine(DeclareMedicine med)
@@ -218,6 +235,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 e.Handled = true;
                 var nextTextBox = new List<TextBox>();
+                var nextAutoCompleteBox = new List<AutoCompleteBox>();
                 var currentRowIndex = GetCurrentRowIndex(sender);
 
                 if (currentRowIndex == -1) return;
@@ -241,21 +259,27 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         break;
 
                     case "Position":
-                        if (currentRowIndex == Prescription.Medicines.Count - 1)
+                        if (!Prescription.Medicines[currentRowIndex].PaySelf)
                         {
-                            var autoList = new List<AutoCompleteBox>();
-                            NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref autoList);
-                            NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref nextTextBox);
+                            NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
+                            NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
                             nextTextBox[0].Focus();
+                            return;
                         }
                         else
                         {
-                            NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Dosage", ref nextTextBox);
-                            nextTextBox[currentRowIndex + 1].Focus();
+                            NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Price", ref nextTextBox);
+                            nextTextBox[currentRowIndex].Focus();
                         }
+                        break;
+                    case "Price":
+                        NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
+                        NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
+                        nextTextBox[0].Focus();
                         return;
                 }
                 nextTextBox[currentRowIndex].Focus();
+                nextTextBox[currentRowIndex].CaretIndex = 0;
             }
 
             //按 Up Down
@@ -312,6 +336,20 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     }
                 }
             }
+            else if (sender is AutoCompleteBox)
+            {
+                List<AutoCompleteBox> temp = new List<AutoCompleteBox>();
+                AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
+                NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, autoCompleteBox.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
+
             return -1;
         }
 
@@ -368,5 +406,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        private void MedicineTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                textBox.SelectionStart = 0;
+                textBox.SelectionLength = textBox.Text.Length;
+            }
+        }
+        
     }
 }

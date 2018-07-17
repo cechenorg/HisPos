@@ -10,7 +10,7 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.Product
 {
-    public class DeclareMedicine : AbstractClass.Product, ITrade, IDeletable
+    public class DeclareMedicine : AbstractClass.Product, ITrade, IDeletable,ICloneable
     {
         public DeclareMedicine()
         {
@@ -40,7 +40,16 @@ namespace His_Pos.Class.Product
 
         public bool IsControlMed { get; set; }
         public bool IsFrozMed { get; set; }
-        public bool PaySelf { get; set; }
+        private bool payself;
+        public bool PaySelf
+        {
+            get { return payself; }
+            set
+            {
+                payself = value;
+                NotifyPropertyChanged("PaySelf");
+            }
+        }
         public double HcPrice { get; set; }
         public string Ingredient { get; set; }
         public Medicate MedicalCategory { get; set; }
@@ -164,6 +173,37 @@ namespace His_Pos.Class.Product
                     }
                 }
             }
+        }
+
+        public object Clone()
+        {
+            DeclareMedicine declareMedicine = new DeclareMedicine()
+            {
+                Id = Id,
+                Name = Name,
+                ChiName = ChiName,
+                EngName = EngName,
+                IsControlMed = IsControlMed,
+                IsFrozMed = IsFrozMed,
+                PaySelf = PaySelf,
+                HcPrice = HcPrice,
+                Ingredient = Ingredient,
+                MedicalCategory = MedicalCategory,
+                Stock = Stock,
+                Cost = Cost,
+                Price = Price,
+                TotalPrice = TotalPrice,
+                Amount = Amount,
+                CountStatus = CountStatus,
+                FocusColumn = FocusColumn,
+                Usage = Usage,
+                UsageName = UsageName,
+                Dosage = Dosage,
+                Days = Days,
+                Position = Position,
+                Source = Source,
+            };
+            return declareMedicine;
         }
     }
 }
