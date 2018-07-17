@@ -13,6 +13,9 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.AbstractClass;
 using System.Linq;
+using His_Pos.Class.AdjustCase;
+using His_Pos.Class.Copayment;
+using His_Pos.Class.Division;
 using His_Pos.Interface;
 using His_Pos.StockTaking;
 using His_Pos.StockTakingRecord;
@@ -20,6 +23,8 @@ using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductTypeManage;
 using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.Class.Employee;
+using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 
 namespace His_Pos
@@ -319,10 +324,22 @@ namespace His_Pos
             prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("取得藥品資料...");
+                ChangeLoadingMessage("取得處方資料...");
+                prescriptionDec2View.HosiHospitals = HospitalDb.GetData();
+                prescriptionDec2View.Divisions = DivisionDb.GetData();
                 prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
+                prescriptionDec2View.TreatmentCases = TreatmentCaseDb.GetData();
+                prescriptionDec2View.PaymentCategories = PaymentCategroyDb.GetData();
+                prescriptionDec2View.Copayments = CopaymentDb.GetData();
+                prescriptionDec2View.AdjustCases = AdjustCaseDb.GetData();
+                prescriptionDec2View.Usages = UsageDb.GetUsages();
                 Dispatcher.Invoke((Action)(() =>
                 {
+                    prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.HosiHospitals;
+                    prescriptionDec2View.DivisionCombo.ItemsSource = prescriptionDec2View.Divisions;
+                    prescriptionDec2View.TreatmentCaseCombo.ItemsSource = prescriptionDec2View.TreatmentCases;
+                    prescriptionDec2View.PaymentCategoryCombo.ItemsSource = prescriptionDec2View.PaymentCategories;
+                    prescriptionDec2View.AdjustCaseCombo.ItemsSource = prescriptionDec2View.AdjustCases;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.Prescription.Medicines;
                 }));
             };

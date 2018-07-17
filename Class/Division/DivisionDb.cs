@@ -7,18 +7,19 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.Division
 {
-    public class DivisionDb : ISelection
+    public static class DivisionDb
     {
-        public readonly ObservableCollection<Division> Divisions = new ObservableCollection<Division>();
-        public void GetData()
+        public static ObservableCollection<Division> GetData()
         {
+            ObservableCollection<Division> divisions = new ObservableCollection<Division>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             var divisionTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetDivisionsData]", dbConnection);
             foreach (DataRow division in divisionTable.Rows)
             {
                 var d = new Division(division);
-                Divisions.Add(d);
+                divisions.Add(d);
             }
+            return divisions;
         }
     }
 }

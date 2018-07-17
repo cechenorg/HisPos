@@ -88,9 +88,7 @@ namespace His_Pos.PrescriptionDec
 
         private void LoadPaymentCategories()
         {
-            PaymentCategroyDb p = new PaymentCategroyDb();
-            p.GetData();
-            foreach (var paymentCategory in p.PaymentCategories)
+            foreach (var paymentCategory in PaymentCategroyDb.GetData())
             {
                 PaymentCategoryCombo.Items.Add(paymentCategory.Id + ". " + paymentCategory.Name);
             }
@@ -102,9 +100,7 @@ namespace His_Pos.PrescriptionDec
 
         private void LoadCopayments()
         {
-            CopaymentDb copaymentDb = new CopaymentDb();
-            copaymentDb.GetData();
-            CopaymentCombo.ItemsSource = copaymentDb.Copayments;
+            CopaymentCombo.ItemsSource = CopaymentDb.GetData();
         }
 
         /*
@@ -113,9 +109,7 @@ namespace His_Pos.PrescriptionDec
 
         private void LoadTreatmentCases()
         {
-            var treatmentCases = new TreatmentCaseDb();
-            treatmentCases.GetData();
-            foreach (var treatmentCase in treatmentCases.TreatmentCases)
+            foreach (var treatmentCase in TreatmentCaseDb.GetData())
             {
                 TreatmentCaseCombo.Items.Add(treatmentCase.Id + ". " + treatmentCase.Name);
             }

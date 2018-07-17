@@ -280,13 +280,21 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
-                    <DatePicker
-                        x:Name="TreatmentDate"
-                        Width="170"
-                        HorizontalContentAlignment="Center"
-                        FontFamily="Segoe UI Semibold"
+                    <TextBox
+                        Width="130"
                         FontSize="14"
-                        SelectedDate="{Binding Prescription.Treatment.TreatmentDate, Mode=TwoWay, StringFormat={}{0:yyyy-mm-dd}}" />
+                        FontFamily="Segoe UI Semibold"
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        Text="{Binding Prescription.Treatment.TreatDateStr,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        <DatePicker
+                        x:Name="TreatmentDate"
+                        Width="40"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        Foreground="Transparent"
+                        SelectedDate="{Binding Prescription.Treatment.TreatmentDate, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" IsTodayHighlighted="False" IsHitTestVisible="True" Focusable="False" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -299,13 +307,20 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="18"
                         Foreground="{StaticResource ForeGround}" />
-                    <DatePicker
-                        x:Name="AdjustDate"
-                        Width="170"
-                        HorizontalContentAlignment="Center"
-                        FontFamily="Segoe UI Semibold"
+                    <TextBox
+                        Width="130"
                         FontSize="14"
-                        SelectedDate="{Binding Prescription.Treatment.AdjustDate, Mode=TwoWay, StringFormat={}{0:yyyy-mm-dd}}" />
+                        FontFamily="Segoe UI Semibold"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Text="{Binding Prescription.Treatment.AdjustDateStr,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <DatePicker
+                        Width="40"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        FontFamily="Segoe UI Semi"
+                        Foreground="Transparent"
+                        SelectedDate="{Binding Prescription.Treatment.AdjustDate, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
