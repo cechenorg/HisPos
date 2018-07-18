@@ -6,6 +6,11 @@
              xmlns:local="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
              mc:Ignorable="d">
     <Grid Background="LightGray">
-        <TextBlock Name="Remark" Margin="5" TextWrapping="Wrap" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semi"/>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TextBlock Name="Remark" Margin="5" Grid.Row="0" TextWrapping="Wrap" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
+        <TextBlock Name="LeaveRecord" Margin="5" Grid.Row="1" TextWrapping="Wrap" Foreground="{StaticResource ForeGround}" FontSize="12" FontFamily="Segoe UI Semi"/>
     </Grid>
 </UserControl>

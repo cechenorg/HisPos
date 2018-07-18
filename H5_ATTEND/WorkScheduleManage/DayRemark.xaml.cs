@@ -20,11 +20,12 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class DayRemark : UserControl
     {
-        public DayRemark(string message)
+        public DayRemark(string message, string leaveRecord)
         {
             InitializeComponent();
 
             Remark.Text = message;
+            LeaveRecord.Text = leaveRecord;
         }
     }
 }
