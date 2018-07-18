@@ -1,5 +1,6 @@
 ﻿using His_Pos.AbstractClass;
 using His_Pos.Class.Person;
+using System.Data;
 
 namespace His_Pos.Class
 {
@@ -9,7 +10,9 @@ namespace His_Pos.Class
         {
             MedicalPersonnel = new MedicalPersonnel();
         }
-
+        public Pharmacy(DataRow row) {
+            MedicalPersonnel = new MedicalPersonnel(row);
+        }
         public Pharmacy(string id, string name)
         {
             Id = id;

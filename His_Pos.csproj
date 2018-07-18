@@ -319,9 +319,6 @@
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ItemChangeWindow.xaml.cs">
       <DependentUpon>ItemChangeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationChangeView.xaml.cs">
-      <DependentUpon>LocationChangeView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationControl.xaml.cs">
       <DependentUpon>LocationControl.xaml</DependentUpon>
     </Compile>
@@ -516,10 +513,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\LocationManage\ItemChangeWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H4_BASIC_MANAGE\LocationManage\LocationChangeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -807,6 +800,10 @@
     <Resource Include="Images\ClockIn.png" />
     <Resource Include="Images\Genders.png" />
     <Resource Include="Images\User_48px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LeftArrow.png" />
+    <Resource Include="Images\RightArrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,7 +20,7 @@ namespace His_Pos.PrescriptionInquire
     public partial class PrescriptionInquireOutcome : Window
     {
         private static DeclareData _inquiredPrescription;
-        private static ObservableCollection<DeclareDetail> medicineList = new ObservableCollection<DeclareDetail>();
+        public  ObservableCollection<DeclareDetail> medicineList = new ObservableCollection<DeclareDetail>();
 
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
@@ -79,7 +79,7 @@ namespace His_Pos.PrescriptionInquire
                 _inquiredPrescription.DeclareDetails[i].Name = name.Rows[0]["PRO_NAME"].ToString();
                 medicineList.Add(_inquiredPrescription.DeclareDetails[i]);
             }
-            PrescriptionSet.ItemsSource = medicineList;
+           PrescriptionSet.ItemsSource = medicineList;
         }
 
         /*

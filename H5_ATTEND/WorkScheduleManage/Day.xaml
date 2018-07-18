@@ -108,7 +108,7 @@
                     </Style>
                 </ScrollViewer.Resources>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="假" Foreground="Red" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" Margin="5,0,5,0"/>
+                    <TextBlock Text="請假" Foreground="Blue" FontSize="15" FontFamily="Segoe UI Semi" HorizontalAlignment="Center" Margin="5,0,5,0"/>
                     <StackPanel Name="DayOffStack" Orientation="Horizontal" Margin="0,1,0,0" Height="15"/>
                 </StackPanel>
             </ScrollViewer>

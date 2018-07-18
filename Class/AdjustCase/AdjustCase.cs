@@ -12,7 +12,7 @@ namespace His_Pos.Class.AdjustCase
         {
             Id = dataRow["ADJUSTCASE_ID"].ToString();
             Name = dataRow["ADJUSTCASE_NAME"].ToString();
-            FullName = dataRow["FULLNAME"].ToString();
+            FullName = dataRow["ADJUSTCASE_FULLNAME"].ToString();
         }
     }
 }
