@@ -58,7 +58,23 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
             if (EndDate.Text.Equals(""))
                 EndDate.SelectedDate = StartDate.SelectedDate;
 
-            LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, StartDate.SelectedDate, EndDate.SelectedDate, Note.Text);
+            DateTime startDateTime = (DateTime)StartDate.SelectedDate;
+
+            if(StartTime.SelectedTime != null)
+            {
+                startDateTime = startDateTime.AddHours(((DateTime)StartTime.SelectedTime).Hour);
+                startDateTime = startDateTime.AddMinutes(((DateTime)StartTime.SelectedTime).Minute);
+            }
+            
+            DateTime endDateTime = (DateTime)EndDate.SelectedDate;
+
+            if (EndTime.SelectedTime != null)
+            {
+                endDateTime = endDateTime.AddHours(((DateTime)EndTime.SelectedTime).Hour);
+                endDateTime = endDateTime.AddMinutes(((DateTime)EndTime.SelectedTime).Minute);
+            }
+
+            LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, startDateTime, endDateTime, Note.Text);
 
             LeaveComplete = true;
             Close();
@@ -67,9 +83,6 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
         private string CheckInputData()
         {
             string error = "";
-
-            if (PersonDb.CheckUserPassword((UserName.SelectedItem as UserIconData).Id, UserPass.Password).Id is null)
-                error += "帳號密碼錯誤!\n";
 
             if (DayOffType.SelectedItem is null)
                 error += "假別未填寫!\n";
