@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hisPos="clr-namespace:His_Pos"
         mc:Ignorable="d"
-        Title="PrescriptionInquireOutcome" Height="595" Width="1014" WindowStartupLocation="CenterScreen">
+        Title="處方詳細資料" Height="595" Width="1014" WindowStartupLocation="CenterScreen">
     <Window.Background>
         <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
