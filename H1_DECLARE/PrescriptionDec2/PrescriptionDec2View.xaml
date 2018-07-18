@@ -106,13 +106,13 @@
                     Foreground="{StaticResource ForeGround}"
                     Text="{Binding Prescription.Customer.Birthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Label
+                    Margin="0,0,15,0"
                     VerticalAlignment="Bottom"
-                    VerticalContentAlignment="Bottom"
                     HorizontalContentAlignment="Left"
+                    VerticalContentAlignment="Bottom"
                     Content="格式範例:0990101"
                     FontFamily="Segoe UI Semi"
                     FontSize="15"
-                    Margin="0,0,15,0"
                     Foreground="{StaticResource ForeGround}" />
                 <Label
                     VerticalAlignment="Center"
@@ -282,19 +282,22 @@
                         Foreground="{StaticResource ForeGround}" />
                     <TextBox
                         Width="130"
-                        FontSize="14"
-                        FontFamily="Segoe UI Semibold"
-                        VerticalContentAlignment="Center"
                         HorizontalContentAlignment="Center"
-                        Text="{Binding Prescription.Treatment.TreatDateStr,UpdateSourceTrigger=PropertyChanged}"/>
-                        <DatePicker
+                        VerticalContentAlignment="Center"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="14"
+                        Text="{Binding Prescription.Treatment.TreatDateStr, UpdateSourceTrigger=PropertyChanged}" />
+                    <DatePicker
                         x:Name="TreatmentDate"
                         Width="40"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
+                        Focusable="False"
                         FontFamily="Segoe UI Semi"
                         Foreground="Transparent"
-                        SelectedDate="{Binding Prescription.Treatment.TreatmentDate, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" IsTodayHighlighted="False" IsHitTestVisible="True" Focusable="False" />
+                        IsHitTestVisible="True"
+                        IsTodayHighlighted="False"
+                        SelectedDate="{Binding Prescription.Treatment.TreatmentDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -309,18 +312,18 @@
                         Foreground="{StaticResource ForeGround}" />
                     <TextBox
                         Width="130"
-                        FontSize="14"
-                        FontFamily="Segoe UI Semibold"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
-                        Text="{Binding Prescription.Treatment.AdjustDateStr,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="14"
+                        Text="{Binding Prescription.Treatment.AdjustDateStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <DatePicker
                         Width="40"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         FontFamily="Segoe UI Semi"
                         Foreground="Transparent"
-                        SelectedDate="{Binding Prescription.Treatment.AdjustDate, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
+                        SelectedDate="{Binding Prescription.Treatment.AdjustDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -523,10 +526,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn
-                        x:Name="MedicineCode"
-                        Width="130"
-                        Header="健保代碼">
+                    <DataGridTemplateColumn Width="130" Header="健保代碼">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineCodeDataTemplate">
                                 <controls:AutoCompleteBox
@@ -587,7 +587,8 @@
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
+                                    PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
+                                    Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -603,10 +604,10 @@
                                     HorizontalContentAlignment="Center"
                                     BorderBrush="DimGray"
                                     BorderThickness="0,0,0,1"
+                                    CharacterCasing="Upper"
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    CharacterCasing="Upper"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                     Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -667,10 +668,10 @@
                                     HorizontalContentAlignment="Center"
                                     BorderBrush="DimGray"
                                     BorderThickness="0,0,0,1"
+                                    CharacterCasing="Upper"
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    CharacterCasing="Upper"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                     Text="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -702,7 +703,7 @@
                                     x:Name="PaySelf"
                                     HorizontalAlignment="Center"
                                     HorizontalContentAlignment="Center"
-                                    IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -721,8 +722,9 @@
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    IsEnabled="{Binding PaySelf,UpdateSourceTrigger=PropertyChanged}"
-                                    Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
+                                    IsEnabled="{Binding PaySelf, UpdateSourceTrigger=PropertyChanged}"
+                                    PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
+                                    Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

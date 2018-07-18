@@ -37,7 +37,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public ObservableCollection<AdjustCase> AdjustCases { get; set; }
         public ObservableCollection<Usage> Usages { get; set; }
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
-        
 
         public PrescriptionDec2View()
         {
@@ -69,11 +68,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public void LoadPrescriptionData()
-        {
-            UsageDb.GetUsages();
-        }
-
         private void GetPrescriptionData()
         {
             DeclareMedicines = new ObservableCollection<DeclareMedicine>();
@@ -83,42 +77,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             loadingWindow.Show();
         }
 
-        /*
-         *載入原處方案件類別
-         */
-
-        private void LoadTreatmentCases()
-        {
-            TreatmentCaseDb.GetData();
-            TreatmentCaseCombo.ItemsSource = TreatmentCaseDb.GetData();
-        }
-
-        /*
-         *載入原處方案件類別
-         */
-
-        private void LoadAdjustCases()
-        {
-            AdjustCaseCombo.ItemsSource = AdjustCaseDb.GetData();
-        }
-
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
-            CheckIcNumber(Prescription.Customer.IcCard.IcNumber);
-            CheckBirthDay(Prescription.Customer.Birthday);
-        }
-
-        private void CheckBirthDay(string customerBirthday)
-        {
-            Regex birth = new Regex(@"[0-9]{7}");
-            if (birth.IsMatch(customerBirthday))
-            {
-                string year = customerBirthday.Substring(0, 3);
-                string month = customerBirthday.Substring(3, 2);
-                string date = customerBirthday.Substring(5, 2);
-                Prescription.Customer.Birthday = year + "/" + month + "/" + date;
-            }
-            //error
+            Prescription.Customer.IcCard.CheckIcNumber(Prescription.Customer.IcCard.IcNumber);
+            Prescription.Customer.CheckBirthDay(Prescription.Customer.Birthday);
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -208,7 +170,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 Prescription.Medicines.Add(declareMedicine);
                 medicineCodeAuto.Text = "";
             }
-            
         }
 
         public void ClearMedicine(DeclareMedicine med)
@@ -229,7 +190,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var objectName = (sender as Control).Name;
-
             //按 Enter 下一欄
             if (e.Key == Key.Enter)
             {
@@ -272,6 +232,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             nextTextBox[currentRowIndex].Focus();
                         }
                         break;
+
                     case "Price":
                         NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
                         NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
@@ -281,7 +242,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 nextTextBox[currentRowIndex].Focus();
                 nextTextBox[currentRowIndex].CaretIndex = 0;
             }
-
             //按 Up Down
             if (e.Key == Key.Up || e.Key == Key.Down)
             {
@@ -353,58 +313,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             return -1;
         }
 
-        //return 1 : 長度不足 2 : 性別碼錯誤 3 : 首碼錯誤 4 : 檢查碼錯誤
-        private string CheckIcNumber(string vid)
-        {
-            var firstEng = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "W", "Z", "I", "O" };
-            var aa = vid.ToUpper();
-            var chackFirstEnd = false;
-            if (aa.Trim().Length != 10) return "1";
-            var firstNo = Convert.ToByte(aa.Trim().Substring(1, 1));
-            if (firstNo > 2 || firstNo < 1)
-            {
-                return "性別碼(第一位數字)錯誤，男性為 1 女性為 2";
-            }
-            int x;
-            for (x = 0; x < firstEng.Count; x++)
-            {
-                if (aa.Substring(0, 1) == firstEng[x])
-                {
-                    aa = string.Format("{0}{1}", x + 10, aa.Substring(1, 9));
-                    chackFirstEnd = true;
-                    break;
-                }
-            }
-            if (!chackFirstEnd)
-                return "3";
-            int i = 1;
-            int ss = int.Parse(aa.Substring(0, 1));
-            while (aa.Length > i)
-            {
-                ss = ss + (int.Parse(aa.Substring(i, 1)) * (10 - i));
-                i++;
-            }
-            aa = ss.ToString();
-            if (vid.Substring(9, 1) == "0")
-            {
-                if (aa.Substring(aa.Length - 1, 1) == "0")
-                {
-                    return "0";
-                }
-                return "4";
-            }
-            if (vid.Substring(9, 1) == (10 - int.Parse(aa.Substring(aa.Length - 1, 1))).ToString())
-            {
-                return "0";
-            }
-            return "4";
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void MedicineTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -416,6 +329,5 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 textBox.SelectionLength = textBox.Text.Length;
             }
         }
-        
     }
 }
