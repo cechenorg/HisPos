@@ -25,7 +25,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             InitializeComponent();
 
             Remark.Text = message;
-            LeaveRecord.Text = leaveRecord;
+            LeaveRecord.Text = leaveRecord.Replace('#','\n');
         }
     }
 }
