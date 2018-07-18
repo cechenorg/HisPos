@@ -12,7 +12,7 @@ namespace His_Pos.Class.Division
         {
             Id = dataRow["HISDIV_ID"].ToString();
             Name = dataRow["HISDIV_NAME"].ToString();
-            FullName = dataRow["FULLNAME"].ToString();
+            FullName = dataRow["HISDIV_FULLNAME"].ToString();
         }
     }
 }

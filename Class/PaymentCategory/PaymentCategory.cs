@@ -12,7 +12,7 @@ namespace His_Pos.Class.PaymentCategory
         {
             Id = dataRow["HISPAYCAT_ID"].ToString();
             Name = dataRow["HISPAYCAT_NAME"].ToString();
-            FullName = dataRow["FULLNAME"].ToString();
+            FullName = dataRow["HISPAYCAT_FULLNAME"].ToString();
         }
     }
 }

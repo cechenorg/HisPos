@@ -8,7 +8,7 @@ namespace His_Pos.Class.TreatmentCase
         {
             Id = dataRow["HISMEDCAS_ID"].ToString();
             Name = dataRow["HISMEDCAS_NAME"].ToString();
-            FullName = dataRow["FULLNAME"].ToString();
+            FullName = dataRow["HISMEDCAS_FULLNAME"].ToString();
         }
 
         public TreatmentCase()

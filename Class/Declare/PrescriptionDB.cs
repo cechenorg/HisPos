@@ -39,7 +39,7 @@ namespace His_Pos.Class.Declare
         {
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("DECMAS_ID", decMasId));
+            parameters.Add(new SqlParameter("MASID", decMasId));
             DeclareData declareData = null;
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[GetDeclareDataByMasId]", parameters);
             foreach (DataRow row in table.Rows) {

@@ -11,10 +11,10 @@ namespace His_Pos.Class.Person
         }
         public Person(DataRow dataRow)
         {
-            Id = dataRow["PERSON_ID"].ToString();
-            Name = dataRow["PERSON_NAME"].ToString();
-            IcNumber = dataRow["PERSON_IDNUM"].ToString();
-            Birthday = dataRow["PERSON_BIRTH"].ToString();
+            Id = dataRow["EMP_ID"].ToString();
+            Name = dataRow["EMP_NAME"].ToString();
+            IcNumber = dataRow["EMP_IDNUM"].ToString();
+            Birthday = dataRow["EMP_BIRTH"].ToString();
         }
         private string id;
         public string Id

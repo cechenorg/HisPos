@@ -10,7 +10,7 @@ namespace His_Pos.Class
             IcMarks = new IcMarks();
         }
         public IcCard(DataRow row) {
-            IcNumber = row["PERSON_IDNUM"].ToString();
+         
         }
         public string IcNumber { get; set; }//卡片號碼
         public IcMarks IcMarks { get; set; } = new IcMarks();//卡片註銷註記.保險對象身分註記.新生兒出生日期.新生兒胞胎註記

@@ -18,6 +18,12 @@ namespace His_Pos.Class
     public class Treatment : INotifyPropertyChanged
     {
         public Treatment(DataRow row) {
+            MedicalInfo = new MedicalInfo(row);
+            Copayment = new Copayment.Copayment();
+            AdjustCase = new AdjustCase.AdjustCase(row);
+            MedicineDays = "0";
+            TreatmentDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_TREATDATE"].ToString().Substring(1,9));
+            AdjustDate = DateTime.Today;
         }
         public Treatment()
         {

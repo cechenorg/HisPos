@@ -27,9 +27,9 @@ namespace His_Pos.Class.Declare
         public DeclareData(DataRow row)
         {
              Prescription = new Prescription(row);
-            DeclarePoint = Convert.ToInt32(row[""].ToString());
-            CopaymentPoint = Convert.ToInt32(row[""].ToString());
-            TotalPoint = Convert.ToInt32(row[""].ToString());
+            DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
+            CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
+            TotalPoint = Convert.ToInt32(row["HISDECMAS_TOTALPOINT"].ToString());
         }
         public DeclareData(XmlDocument xml) { //匯入處方申報檔用
             
