@@ -11,11 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -26,6 +28,94 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     {
         private Prescription _prescription = new Prescription();
         private bool isChanged;
+        private int selfCost;
+
+        public int SelfCost
+        {
+            get { return selfCost; }
+            set
+            {
+                selfCost = value;
+                CountCharge();
+                NotifyPropertyChanged("SelfCost");
+            }
+        }
+
+        private double medProfit;
+
+        public double MedProfit
+        {
+            get { return medProfit; }
+            set
+            {
+                medProfit = value;
+                NotifyPropertyChanged("MedProfit");
+            }
+        }
+
+        private int copayment;
+
+        public int Copayment
+        {
+            get { return copayment; }
+            set
+            {
+                copayment = value;
+                Prescription.Treatment.Copayment.Point = copayment;
+                CountCharge();
+                NotifyPropertyChanged("Copayment");
+            }
+        }
+
+        private int charge;
+
+        public int Charge
+        {
+            get { return charge; }
+            set
+            {
+                charge = value;
+                NotifyPropertyChanged("Charge");
+            }
+        }
+
+        private int deposit;
+
+        public int Deposit
+        {
+            get { return deposit; }
+            set
+            {
+                deposit = value;
+                CountCharge();
+                NotifyPropertyChanged("Deposit");
+            }
+        }
+
+        private int pay;
+
+        public int Pay
+        {
+            get { return pay; }
+            set
+            {
+                pay = value;
+                Change = pay - Charge;
+                NotifyPropertyChanged("Pay");
+            }
+        }
+
+        private int change;
+
+        public int Change
+        {
+            get { return change; }
+            set
+            {
+                change = value;
+                NotifyPropertyChanged("Change");
+            }
+        }
 
         private readonly bool IsFirst = true;
         private ObservableCollection<object> Medicines;
@@ -42,6 +132,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             InitializeComponent();
             DataContext = this;
+            SelfCost = 0;
+            Copayment = 0;
+            MedProfit = 0;
+            Deposit = 0;
+            Pay = 0;
+            Change = 0;
             GetPrescriptionData();
         }
 
@@ -79,8 +175,22 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
-            Prescription.Customer.IcCard.CheckIcNumber(Prescription.Customer.IcCard.IcNumber);
-            Prescription.Customer.CheckBirthDay(Prescription.Customer.Birthday);
+            MessageWindow m;
+            if (Prescription.CheckPrescriptionData().Equals(""))
+            {
+                var declareData = new DeclareData(Prescription);
+                var declareDb = new DeclareDb();
+                declareDb.InsertDb(declareData);
+                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+            }
+            else
+            {
+                m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
+                var declareData = new DeclareData(Prescription);
+                var declareDb = new DeclareDb();
+                declareDb.InsertDb(declareData);
+            }
+            m.Show();
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -328,6 +438,54 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 textBox.SelectionStart = 0;
                 textBox.SelectionLength = textBox.Text.Length;
             }
+        }
+
+        private void CountMedicinesCost()
+        {
+            double medicinesHcCost = 0;//健保給付總藥價
+            double medicinesSelfCost = 0;//自費藥總藥價
+            double purchaseCosts = 0;//藥品總進貨成本
+            foreach (var medicine in Prescription.Medicines)
+            {
+                if (!medicine.PaySelf)
+                    medicinesHcCost += medicine.TotalPrice;
+                else
+                {
+                    medicinesSelfCost += medicine.TotalPrice;
+                }
+                purchaseCosts += medicine.Cost * medicine.Amount;
+            }
+            SelfCost = Convert.ToInt16(Math.Ceiling(medicinesSelfCost));//自費金額
+            Copayment = CountCopaymentCost(medicinesHcCost);//部分負擔
+            MedProfit = (medicinesHcCost + medicinesSelfCost - purchaseCosts);//藥品毛利
+        }
+
+        private void CountCharge()
+        {
+            Charge = Deposit + SelfCost + Copayment;
+            Change = pay - Charge;
+        }
+
+        /*
+        * 藥費部分負擔
+        */
+
+        private int CountCopaymentCost(double medicinesHcCost)
+        {
+            const int free = 0;
+            const int max = 200;
+            if (medicinesHcCost >= 1001)
+                return max;
+            var times = medicinesHcCost / 100;
+            if (times <= 1)
+                return free;
+            const int grades = 20;
+            return Convert.ToInt16(Math.Floor(times) * grades);
+        }
+
+        private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CountMedicinesCost();
         }
     }
 }

@@ -8,6 +8,8 @@ namespace His_Pos.Class
     {
         public Hospital()
         {
+            Id = "";
+            Name = "";
             Doctor = new MedicalPersonnel();
             Division = new Division.Division();
         }

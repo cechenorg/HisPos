@@ -8,6 +8,10 @@ namespace His_Pos.Class.Person
     {
         public Person()
         {
+            id = "";
+            icNumber = "";
+            name = "";
+            birthday = "";
         }
 
         public Person(DataRow dataRow)
@@ -66,9 +70,10 @@ namespace His_Pos.Class.Person
             }
         }
 
-        public void CheckBirthDay(string customerBirthday)
+        public string CheckBirthDay(string customerBirthday)
         {
             Regex birth = new Regex(@"[0-9]{7}");
+            string errorMessage = "";
             if (birth.IsMatch(customerBirthday))
             {
                 string year = customerBirthday.Substring(0, 3);
@@ -78,8 +83,9 @@ namespace His_Pos.Class.Person
             }
             else
             {
-                //error
+                errorMessage += "生日格式錯誤\n";
             }
+            return errorMessage;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

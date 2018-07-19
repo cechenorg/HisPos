@@ -122,12 +122,15 @@
                     Foreground="{StaticResource ForeGround}" />
                 <Label
                     x:Name="PrescriptionProfit"
+                    Width="60"
+                    Height="30"
                     Margin="0,0,0,0"
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
+                    Content="{Binding MedProfit, UpdateSourceTrigger=PropertyChanged}"
                     FontSize="16"
                     Foreground="#FF424040" />
-                <Rectangle Width="230" />
+                <Rectangle Width="200" />
                 <Button
                     MinWidth="130"
                     Background="DeepSkyBlue"
@@ -228,6 +231,7 @@
                         VerticalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
+                        MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
                         Text="{Binding Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -247,7 +251,8 @@
                         HorizontalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
-                        Text="{Binding Prescription.Customer.IcCard.MedicalNumber, Mode=TwoWay}" />
+                        MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
+                        Text="{Binding Prescription.Customer.IcCard.MedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -341,6 +346,7 @@
                         HorizontalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
+                        MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
                         Text="{Binding Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -360,6 +366,7 @@
                         HorizontalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
+                        MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
                         Text="{Binding Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -438,6 +445,7 @@
                         HorizontalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
+                        MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
                         Text="{Binding Prescription.ChronicSequence, Mode=TwoWay}" />
                     <Label
                         Content=" / "
@@ -449,6 +457,7 @@
                         HorizontalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
+                        MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
                         Text="{Binding Prescription.ChronicTotal, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -467,6 +476,7 @@
                         HorizontalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
+                        MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
                         Text="{Binding Prescription.Treatment.MedicalInfo.SpecialCode.Id, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
@@ -728,6 +738,27 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
+                        MinWidth="60"
+                        Header="總價"
+                        IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:Name="MedicineTotalPriceDataTemplate">
+                                <TextBox
+                                    x:Name="MedTotalPrice"
+                                    MinWidth="60"
+                                    HorizontalContentAlignment="Center"
+                                    BorderBrush="DimGray"
+                                    BorderThickness="0,0,0,1"
+                                    FontFamily="Segoe UI Semibold"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    IsReadOnly="True"
+                                    Text="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextChanged="MedTotalPrice_TextChanged" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="3" Margin="10,0,10,10">
@@ -869,13 +900,13 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}" />
                         <TextBox
-                            Name="Deposit"
                             Width="120"
                             HorizontalContentAlignment="Center"
                             FontFamily="Segoe UI Semibold"
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
-                            Text="0" />
+                            MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
+                            Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="1"
@@ -888,13 +919,13 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}" />
                         <TextBox
-                            Name="SelfCost"
                             Width="120"
                             HorizontalContentAlignment="Center"
                             FontFamily="Segoe UI Semibold"
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
-                            Text="0" />
+                            MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
+                            Text="{Binding SelfCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="2"
@@ -907,13 +938,13 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}" />
                         <TextBox
-                            Name="Copayment"
                             Width="120"
                             HorizontalContentAlignment="Center"
                             FontFamily="Segoe UI Semibold"
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
-                            Text="0" />
+                            MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
+                            Text="{Binding Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
@@ -926,13 +957,13 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}" />
                         <TextBox
-                            Name="TotalPrice"
                             Width="120"
                             HorizontalContentAlignment="Center"
                             FontFamily="Segoe UI Semibold"
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
-                            Text="0" />
+                            MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
+                            Text="{Binding Charge, UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="4"
@@ -947,14 +978,14 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}" />
                         <TextBox
-                            Name="CustomPay"
                             Width="90"
                             Height="35"
                             HorizontalContentAlignment="Center"
                             FontFamily="Segoe UI Semibold"
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
-                            Text="0" />
+                            MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
+                            Text="{Binding Pay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         <Label
                             Width="60"
                             Margin="20,0,0,0"
@@ -964,11 +995,10 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}" />
                         <Label
-                            Name="Change"
                             Width="90"
                             Height="35"
                             HorizontalContentAlignment="Center"
-                            Content="0"
+                            Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}"
                             FontFamily="Segoe UI Semibold"
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}" />
