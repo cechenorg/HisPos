@@ -1,4 +1,6 @@
 ﻿using His_Pos.Class.Product;
+using System;
+using System.Data;
 
 namespace His_Pos.Class.Declare
 {
@@ -33,6 +35,14 @@ namespace His_Pos.Class.Declare
         {
         }
 
+        public DeclareDetail(DataRow row) {
+            MedicalOrder = row["HISDECDET_ID"].ToString();
+            MedicalId = row["HISMED_ID"].ToString();
+            Name = row["PRO_NAME"].ToString();
+            Dosage = row["HISDECDET_AMOUNT"].ToString() == "" ? 0 : Convert.ToDouble(row["HISDECDET_AMOUNT"].ToString());
+            Usage = row["HISWAY_ID"].ToString();
+            Days = row["HISDECDET_DRUGDAY"].ToString() == "" ? 0 : Convert.ToInt32(row["HISDECDET_DRUGDAY"].ToString());
+        }
         public string MedicalOrder { get; set; }//p1
         public string MedicalId { get; set; }//p2
         public double Dosage { get; set; }//p3

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -17,16 +18,37 @@ namespace His_Pos.PrescriptionInquire
     /// <summary>
     /// PrescriptionInquireOutcome.xaml 的互動邏輯
     /// </summary>
-    public partial class PrescriptionInquireOutcome : Window
+    public partial class PrescriptionInquireOutcome : Window, INotifyPropertyChanged
     {
-        private static DeclareData _inquiredPrescription;
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        private static DeclareData inquiredPrescription;
+        public DeclareData InquiredPrescription
+        {
+            get
+            {
+                return inquiredPrescription;
+            }
+            set
+            {
+                inquiredPrescription = value;
+                NotifyPropertyChanged("InquiredPrescription");
+            }
+        }
         public  ObservableCollection<DeclareDetail> medicineList = new ObservableCollection<DeclareDetail>();
 
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
             InitializeComponent();
-            _inquiredPrescription = inquired;
-            DataContext = _inquiredPrescription;
+            DataContext = this;
+            InquiredPrescription = inquired;
             InitialItemSource();
         }
 
@@ -44,8 +66,8 @@ namespace His_Pos.PrescriptionInquire
         private void SetTreatmentData()
         {
             /*AdjustCase.Content = AdjustCaseDb.GetAdjustCase(_inquiredPrescription.Prescription.Treatment.AdjustCase.Id);*///調劑案件
-            PaymentCategory.Content = PaymentCategroyDb.GetPaymentCategory(_inquiredPrescription.Prescription.Treatment.PaymentCategory.Id);//給付類別
-            CopaymentCode.Content = CopaymentDb.GetCopayment(_inquiredPrescription.Prescription.Treatment.Copayment.Id);
+            PaymentCategory.Content = PaymentCategroyDb.GetPaymentCategory(InquiredPrescription.Prescription.Treatment.PaymentCategory.Id);//給付類別
+            CopaymentCode.Content = CopaymentDb.GetCopayment(InquiredPrescription.Prescription.Treatment.Copayment.Id);
             SetTreatmentCaseContent();//原處方案件
             SetMedicalInfoData();//MedicalInfo資料
         }
@@ -56,8 +78,8 @@ namespace His_Pos.PrescriptionInquire
 
         private void SetMedicalInfoData()
         {
-            ReleasePalace.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//釋出院所
-            Division.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//就醫科別
+            ReleasePalace.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//釋出院所
+            Division.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//就醫科別
             SetDiseaseCode();//診斷代碼
         }
 
@@ -67,19 +89,19 @@ namespace His_Pos.PrescriptionInquire
 
         private void GetMedicinesNameFromDb()
         {
-            var connection = new DbConnection(Settings.Default.SQL_global);
-            var sqlParameters = new List<SqlParameter>();
-            for (var i = 0; i < _inquiredPrescription.DeclareDetails.Count - 1; i++)
-            {
-                sqlParameters.Clear();
-                if (_inquiredPrescription.DeclareDetails[i].MedicalId == string.Empty)
-                    break;
-                sqlParameters.Add(new SqlParameter("ID", _inquiredPrescription.DeclareDetails[i].MedicalId));
-                var name = connection.ExecuteProc("[HIS_POS_DB].[GET].[MEDICINEBYID]", sqlParameters);
-                _inquiredPrescription.DeclareDetails[i].Name = name.Rows[0]["PRO_NAME"].ToString();
-                medicineList.Add(_inquiredPrescription.DeclareDetails[i]);
-            }
-           PrescriptionSet.ItemsSource = medicineList;
+           // var connection = new DbConnection(Settings.Default.SQL_global);
+           // var sqlParameters = new List<SqlParameter>();
+           // for (var i = 0; i < _inquiredPrescription.DeclareDetails.Count - 1; i++)
+           // {
+           //     sqlParameters.Clear();
+           //     if (_inquiredPrescription.DeclareDetails[i].MedicalId == string.Empty)
+           //         break;
+           //     sqlParameters.Add(new SqlParameter("ID", _inquiredPrescription.DeclareDetails[i].MedicalId));
+           //     var name = connection.ExecuteProc("[HIS_POS_DB].[GET].[MEDICINEBYID]", sqlParameters);
+           //     _inquiredPrescription.DeclareDetails[i].Name = name.Rows[0]["PRO_NAME"].ToString();
+           //     medicineList.Add(_inquiredPrescription.DeclareDetails[i]);
+           // }
+           //PrescriptionSet.ItemsSource = medicineList;
         }
 
         /*
@@ -88,7 +110,7 @@ namespace His_Pos.PrescriptionInquire
 
         private void SetTreatmentCaseContent()
         {
-            TreatmentCase.Content = TreatmentCaseDb.GetTreatmentCase(_inquiredPrescription.Prescription.Treatment.MedicalInfo
+            TreatmentCase.Content = TreatmentCaseDb.GetTreatmentCase(InquiredPrescription.Prescription.Treatment.MedicalInfo
                 .TreatmentCase.Id);
         }
 
@@ -98,10 +120,10 @@ namespace His_Pos.PrescriptionInquire
 
         private void SetDiseaseCode()
         {
-            if (_inquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode == null) return;
-            MainDiagnosis.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
-            if (_inquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode != null)
-                SeconDiagnosis.Content = _inquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
+            if (InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode == null) return;
+            MainDiagnosis.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
+            if (InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode != null)
+                SeconDiagnosis.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
         }
 
         /*
@@ -110,7 +132,7 @@ namespace His_Pos.PrescriptionInquire
 
         private void SetPatientData()
         {
-            var patient = _inquiredPrescription.Prescription.Customer;
+            var patient = InquiredPrescription.Prescription.Customer;
             var patientGenderIcon = new BitmapImage(new Uri(@"..\..\Images\Male.png", UriKind.Relative));
             var patientIdIcon = new BitmapImage(new Uri(@"..\..\Images\ID_Card.png", UriKind.Relative));
             var patientBirthIcon = new BitmapImage(new Uri(@"..\..\Images\birthday.png", UriKind.Relative));

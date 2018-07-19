@@ -107,7 +107,7 @@
                 <Label Content="{Binding ChronicTotal}" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
             </StackPanel>
             <DataGrid Name="PrescriptionSet" Grid.Row="5" Grid.ColumnSpan="5" Margin="10"   CanUserAddRows="True"
-                      AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"
+                     ItemsSource="{Binding InquiredPrescription.DeclareDetails,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"
                       Grid.Column="0" IsReadOnly="True">
                 <DataGrid.HorizontalGridLinesBrush>
                     <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
