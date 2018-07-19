@@ -16,6 +16,7 @@ using His_Pos.H5_ATTEND.ClockIn;
 using His_Pos.InventoryManagement;
 using His_Pos.LocationManage;
 using His_Pos.H4_BASIC_MANAGE.PharmacyManage;
+using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
 
 namespace His_Pos.ViewModel
 {
@@ -156,7 +157,8 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.排班管理):
                     break;
-
+                case nameof(FeatureItem.審核管理):
+                    break;
                 default:
                     return;
             }
@@ -212,8 +214,11 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.員工管理):
                     newTab = new H4_BASIC_MANAGE.EmployeeManage.EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
+                case nameof(FeatureItem.審核管理):
+                    newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[3].Functions[6], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
                 case nameof(FeatureItem.藥品頻率管理):
-                    newTab = new H4_BASIC_MANAGE.MedFrequencyManage.MedFrequencyManage() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new H4_BASIC_MANAGE.MedFrequencyManage.MedFrequencyManage() { TabName = MainWindow.HisFeatures[3].Functions[5], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
                 case nameof(FeatureItem.上下班打卡):
                     newTab = new H5_ATTEND.ClockIn.ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
