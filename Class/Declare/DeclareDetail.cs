@@ -72,7 +72,7 @@ namespace His_Pos.Class.Declare
         {
             MedicalId = medicine.Id;//p2
             //Total = medicine.Amount;//p7
-            Price = medicine.HcPrice;//p8
+            Price = double.Parse(medicine.HcPrice);//p8
         }
 
         private void SetDate(string start, string end)

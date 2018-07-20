@@ -316,6 +316,8 @@ namespace His_Pos.Class.Declare
         private Dictionary<string, string> SetDheadDictionary(DeclareData declareData, Treatment treatment, MedicalInfo medicalInfo)
         {
             string d8 = string.Empty, d9 = string.Empty, d35 = declareData.Prescription.ChronicSequence, d36 = declareData.Prescription.ChronicTotal;
+            string year = (int.Parse(declareData.Prescription.Customer.Birthday.Substring(0, 3)) + 1911).ToString();
+            string cusBirth = year + declareData.Prescription.Customer.Birthday.Substring(3, 6);
             if (medicalInfo.MainDiseaseCode != null)
             {
                 d8 = medicalInfo.MainDiseaseCode.Id;
@@ -326,7 +328,7 @@ namespace His_Pos.Class.Declare
             {
                 {"d1",treatment.AdjustCase.Id},{"d2",string.Empty},{"d3",declareData.Prescription.Customer.IcNumber},
                 {"d4",CheckXmlDbNullValue(declareData.DeclareMakeUp)},{"d5",CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
-                {"d6",DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(declareData.Prescription.Customer.Birthday))},{"d7",declareData.Prescription.Customer.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
+                {"d6",DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth))},{"d7",declareData.Prescription.Customer.IcCard.MedicalNumber},{"d8",d8},{"d9",d9},
                 {"d13",CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},{"d14",CheckXmlDbNullValue(DateTimeExtensions.ToSimpleTaiwanDate(treatment.TreatmentDate))},
                 {"d15",treatment.Copayment.Id},{"d16",declareData.DeclarePoint.ToString()},
                 {"d17",treatment.Copayment.Point.ToString()},{"d18",declareData.TotalPoint.ToString()},

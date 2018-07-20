@@ -17,14 +17,16 @@ namespace His_Pos.Class
 {
     public class Treatment : INotifyPropertyChanged
     {
-        public Treatment(DataRow row) {
+        public Treatment(DataRow row)
+        {
             MedicalInfo = new MedicalInfo(row);
             Copayment = new Copayment.Copayment();
             AdjustCase = new AdjustCase.AdjustCase(row);
             MedicineDays = "0";
-            TreatmentDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_TREATDATE"].ToString().Substring(1,9));
+            TreatmentDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_TREATDATE"].ToString().Substring(1, 9));
             AdjustDate = DateTime.Today;
         }
+
         public Treatment()
         {
             MedicalInfo = new MedicalInfo();
@@ -49,6 +51,7 @@ namespace His_Pos.Class
 
         //d8 d9 國際疾病分類碼 d13就醫科別  d21原處方服務機構代號 d22原處方服務機構之案件分類 d24診治醫師代號 d26原處方服務機構之特定治療項目代號
         public MedicalInfo MedicalInfo { get; set; }
+
         public PaymentCategory.PaymentCategory PaymentCategory { get; set; } = new PaymentCategory.PaymentCategory();//d5 給付類別
         public Copayment.Copayment Copayment { get; set; } //d15 部分負擔代碼
         public AdjustCase.AdjustCase AdjustCase { get; set; } //d1 案件分類
@@ -63,21 +66,24 @@ namespace His_Pos.Class
                 NotifyPropertyChanged("AdjustDateStr");
             }
         }
+
         private string treatDateStr;
+
         public string TreatDateStr
         {
             get { return DateTimeExtensions.ToSimpleTaiwanDate(TreatmentDate); }
             set
             {
-                treatDateStr = value; 
+                treatDateStr = value;
                 NotifyPropertyChanged("TreatDateStr");
             }
         }
 
         private DateTime treatDate;
+
         public DateTime TreatmentDate//d14 就醫(處方)日期
         {
-            get { return treatDate;}
+            get { return treatDate; }
             set
             {
                 treatDate = value;
@@ -87,18 +93,23 @@ namespace His_Pos.Class
         }
 
         private DateTime adjustDate;
-        public DateTime AdjustDate {
+
+        public DateTime AdjustDate
+        {
             get { return adjustDate; }
             set
             {
                 adjustDate = value;
-                adjustDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
+                AdjustDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
                 NotifyPropertyChanged("AdjustDate");
             }
         }//d23 調劑日期
+
         public string MedicineDays { get; set; }//d30  給藥日份
         public string MedicalPersonId { get; set; }//d25 醫事人員代號
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)

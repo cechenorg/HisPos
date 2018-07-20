@@ -6,15 +6,26 @@ namespace His_Pos.Class
     {
         private string id;
         private string name;
+
+        protected Selection()
+        {
+            Id = "";
+            Name = "";
+        }
+
         public string Id
         {
-            get { return id; }
+            get
+            {
+                return id;
+            }
             set
             {
                 id = value;
                 NotifyPropertyChanged("Id");
             }
         }
+
         public string Name
         {
             get { return name; }
@@ -24,9 +35,11 @@ namespace His_Pos.Class
                 NotifyPropertyChanged("Name");
             }
         }
+
         public string FullName { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)

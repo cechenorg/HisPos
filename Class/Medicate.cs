@@ -12,10 +12,12 @@ namespace His_Pos.Class
 
         public Medicate(DataRow dataRow)
         {
-            Dosage = dataRow["HISMED_UNIT"].ToString();
+            Unit = dataRow["HISMED_UNIT"].ToString();
+            Dosage = "";
             Form = dataRow["HISMED_FORM"].ToString();
         }
 
+        public string Unit { get; set; }
         public string Dosage { get; set; }
         public string Form { get; set; }
     }
