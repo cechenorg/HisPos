@@ -70,6 +70,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 審核管理 的當地語系化字串。
+        /// </summary>
+        internal static string AuthenticationManage {
+            get {
+                return ResourceManager.GetString("AuthenticationManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 請選擇調劑案件(案件分類) 的當地語系化字串。
         /// </summary>
         internal static string CaseCategoryNull {

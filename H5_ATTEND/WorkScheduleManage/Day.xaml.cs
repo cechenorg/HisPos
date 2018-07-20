@@ -24,6 +24,10 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     /// </summary>
     public partial class Day : UserControl, INotifyPropertyChanged
     {
+        public bool HasMessage
+        {
+            get { return (!ImportantMessage.Equals("")) || (!LeaveRecord.Equals("")); }
+        }
         private DateTime ThisDay { get; }
 
         private short WorkScheduleCount { get; set; } = 0;
@@ -41,19 +45,9 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        private string importantMessage = "";
-        public string ImportantMessage
-        {
-            get
-            {
-                return importantMessage;
-            }
-            set
-            {
-                importantMessage = value;
-                NotifyPropertyChanged("ImportantMessage");
-            }
-        }
+        public string ImportantMessage { get; set; } = "";
+
+        public string LeaveRecord { get; set; } = "";
 
         public bool HasDayOff
         {
@@ -65,23 +59,23 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             }
         }
 
-        public Day(DateTime date, string specialDate, string remark)
+        public Day(DateTime date, WorkScheduleManageView.SpecialData specialData)
         {
             InitializeComponent();
             DataContext = this;
             ThisDay = date;
             LabelDay.Content = date.Day.ToString();
 
-            if (specialDate != null)
+            if (specialData != null)
             {
-                LabelDay.Foreground = Brushes.Red;
-                SpecialDay.Text = specialDate;
-            }
+                if(!specialData.Special.Equals(""))
+                    LabelDay.Foreground = Brushes.Red;
 
-            if (remark != null)
-            {
-                ImportantMessage = remark;
+                SpecialDay.Text = specialData.Special;
+                ImportantMessage = specialData.Remark;
+                LeaveRecord = specialData.Leave;
             }
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -401,7 +395,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void ShowRemark(object sender, MouseEventArgs e)
         {
-            DayRemark dayRemark = new DayRemark(ImportantMessage);
+            DayRemark dayRemark = new DayRemark(ImportantMessage, LeaveRecord);
 
             Grid.SetRow(dayRemark, 0);
             Grid.SetColumn(dayRemark, 0);
@@ -458,12 +452,12 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.ToString().Equals(String.Empty))
+            if ((bool)value)
             {
-                return Visibility.Collapsed;
+                return Visibility.Visible;
             }
 
-            return Visibility.Visible;
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

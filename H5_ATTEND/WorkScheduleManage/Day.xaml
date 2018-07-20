@@ -112,7 +112,7 @@
                     <StackPanel Name="DayOffStack" Orientation="Horizontal" Margin="0,1,0,0" Height="15"/>
                 </StackPanel>
             </ScrollViewer>
-            <Polygon Points="25,0 45,0, 45,18" Fill="Red" Grid.Row="0" Grid.Column="3" Panel.ZIndex="1" Visibility="{Binding ImportantMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource HasMessageConverter}}" MouseEnter="ShowRemark" MouseLeave="HideRemark"/>
+            <Polygon Points="25,0 45,0, 45,18" Fill="Red" Grid.Row="0" Grid.Column="3" Panel.ZIndex="1" Visibility="{Binding HasMessage, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource HasMessageConverter}}" MouseEnter="ShowRemark" MouseLeave="HideRemark"/>
             <Label Name="LabelDay" Grid.Row="0" Grid.Column="3" Grid.RowSpan="2" Foreground="{StaticResource ForeGround}" FontSize="25" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalAlignment="Right" Margin="0,0,5,0"/>
             <TextBlock Name="SpecialDay" Grid.Row="2" Grid.Column="3" Grid.RowSpan="2" Foreground="Red" FontSize="12" FontFamily="Segoe UI Semi" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" TextWrapping="WrapWithOverflow"/>
             <CheckBox Name="Morning" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Click="CheckBox_OnClick"/>
