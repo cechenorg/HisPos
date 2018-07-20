@@ -20,7 +20,7 @@ namespace His_Pos.PrescriptionInquire
     public partial class PrescriptionInquireOutcome : Window
     {
         private static DeclareData _inquiredPrescription;
-        private static ObservableCollection<DeclareDetail> medicineList = new ObservableCollection<DeclareDetail>();
+        public  ObservableCollection<DeclareDetail> medicineList = new ObservableCollection<DeclareDetail>();
 
         public PrescriptionInquireOutcome(DeclareData inquired)
         {

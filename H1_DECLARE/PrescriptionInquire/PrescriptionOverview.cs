@@ -12,6 +12,7 @@ namespace His_Pos.PrescriptionInquire
     public class PrescriptionOverview
     {
         public PrescriptionOverview(DataRow row) {
+            Decmas_Id = row["HISDECMAS_ID"].ToString();
             PatientName = row["CUS_NAME"].ToString();
             HospitalName = row["INS_NAME"].ToString();
             MedicalPersonnelName = row["EMP_NAME"].ToString();

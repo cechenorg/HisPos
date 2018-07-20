@@ -339,6 +339,7 @@ namespace His_Pos
                     prescriptionDec2View.DivisionCombo.ItemsSource = prescriptionDec2View.Divisions;
                     prescriptionDec2View.TreatmentCaseCombo.ItemsSource = prescriptionDec2View.TreatmentCases;
                     prescriptionDec2View.PaymentCategoryCombo.ItemsSource = prescriptionDec2View.PaymentCategories;
+                    prescriptionDec2View.CopaymentCombo.ItemsSource = prescriptionDec2View.Copayments;
                     prescriptionDec2View.AdjustCaseCombo.ItemsSource = prescriptionDec2View.AdjustCases;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.Prescription.Medicines;
                 }));

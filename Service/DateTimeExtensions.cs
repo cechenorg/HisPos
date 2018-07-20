@@ -37,7 +37,7 @@ namespace His_Pos.Service
             var dt = DateTime.ParseExact(datetime, "yyy/MM/dd", CultureInfo.InvariantCulture).AddYears(1911);
             return dt;
         }
-
+      
         /*
          * 計算年齡
          */

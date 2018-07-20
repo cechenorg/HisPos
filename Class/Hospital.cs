@@ -8,6 +8,8 @@ namespace His_Pos.Class
     {
         public Hospital()
         {
+            Id = "";
+            Name = "";
             Doctor = new MedicalPersonnel();
             Division = new Division.Division();
         }
@@ -16,7 +18,7 @@ namespace His_Pos.Class
         {
             Id = dataRow["INS_ID"].ToString();
             Name = dataRow["INS_NAME"].ToString();
-            FullName = dataRow["FULLNAME"].ToString();
+            FullName = dataRow["INS_FULLNAME"].ToString();
             Doctor = new MedicalPersonnel();
             Division = new Division.Division();
         }

@@ -11,11 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -26,6 +28,94 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     {
         private Prescription _prescription = new Prescription();
         private bool isChanged;
+        private int selfCost;
+
+        public int SelfCost
+        {
+            get { return selfCost; }
+            set
+            {
+                selfCost = value;
+                CountCharge();
+                NotifyPropertyChanged("SelfCost");
+            }
+        }
+
+        private double medProfit;
+
+        public double MedProfit
+        {
+            get { return medProfit; }
+            set
+            {
+                medProfit = value;
+                NotifyPropertyChanged("MedProfit");
+            }
+        }
+
+        private int copayment;
+
+        public int Copayment
+        {
+            get { return copayment; }
+            set
+            {
+                copayment = value;
+                Prescription.Treatment.Copayment.Point = copayment;
+                CountCharge();
+                NotifyPropertyChanged("Copayment");
+            }
+        }
+
+        private int charge;
+
+        public int Charge
+        {
+            get { return charge; }
+            set
+            {
+                charge = value;
+                NotifyPropertyChanged("Charge");
+            }
+        }
+
+        private int deposit;
+
+        public int Deposit
+        {
+            get { return deposit; }
+            set
+            {
+                deposit = value;
+                CountCharge();
+                NotifyPropertyChanged("Deposit");
+            }
+        }
+
+        private int pay;
+
+        public int Pay
+        {
+            get { return pay; }
+            set
+            {
+                pay = value;
+                Change = pay - Charge;
+                NotifyPropertyChanged("Pay");
+            }
+        }
+
+        private int change;
+
+        public int Change
+        {
+            get { return change; }
+            set
+            {
+                change = value;
+                NotifyPropertyChanged("Change");
+            }
+        }
 
         private readonly bool IsFirst = true;
         private ObservableCollection<object> Medicines;
@@ -37,12 +127,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public ObservableCollection<AdjustCase> AdjustCases { get; set; }
         public ObservableCollection<Usage> Usages { get; set; }
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
-        
 
         public PrescriptionDec2View()
         {
             InitializeComponent();
             DataContext = this;
+            SelfCost = 0;
+            Copayment = 0;
+            MedProfit = 0;
+            Deposit = 0;
+            Pay = 0;
+            Change = 0;
             GetPrescriptionData();
         }
 
@@ -69,11 +164,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public void LoadPrescriptionData()
-        {
-            UsageDb.GetUsages();
-        }
-
         private void GetPrescriptionData()
         {
             DeclareMedicines = new ObservableCollection<DeclareMedicine>();
@@ -83,42 +173,24 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             loadingWindow.Show();
         }
 
-        /*
-         *載入原處方案件類別
-         */
-
-        private void LoadTreatmentCases()
-        {
-            TreatmentCaseDb.GetData();
-            TreatmentCaseCombo.ItemsSource = TreatmentCaseDb.GetData();
-        }
-
-        /*
-         *載入原處方案件類別
-         */
-
-        private void LoadAdjustCases()
-        {
-            AdjustCaseCombo.ItemsSource = AdjustCaseDb.GetData();
-        }
-
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
-            CheckIcNumber(Prescription.Customer.IcCard.IcNumber);
-            CheckBirthDay(Prescription.Customer.Birthday);
-        }
-
-        private void CheckBirthDay(string customerBirthday)
-        {
-            Regex birth = new Regex(@"[0-9]{7}");
-            if (birth.IsMatch(customerBirthday))
+            MessageWindow m;
+            if (Prescription.CheckPrescriptionData().Equals(""))
             {
-                string year = customerBirthday.Substring(0, 3);
-                string month = customerBirthday.Substring(3, 2);
-                string date = customerBirthday.Substring(5, 2);
-                Prescription.Customer.Birthday = year + "/" + month + "/" + date;
+                var declareData = new DeclareData(Prescription);
+                var declareDb = new DeclareDb();
+                declareDb.InsertDb(declareData);
+                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
             }
-            //error
+            else
+            {
+                m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
+                var declareData = new DeclareData(Prescription);
+                var declareDb = new DeclareDb();
+                declareDb.InsertDb(declareData);
+            }
+            m.Show();
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -133,7 +205,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 PrescriptionMedicines.SelectedItem = selectedItem;
                 return;
             }
-
             PrescriptionMedicines.SelectedIndex = Prescription.Medicines.Count;
         }
 
@@ -189,9 +260,26 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     return;
             }
 
-            Prescription.Medicines.Add(medicineCodeAuto.SelectedItem as DeclareMedicine);
+            DeclareMedicine declareMedicine = (DeclareMedicine)(medicineCodeAuto.SelectedItem as DeclareMedicine).Clone();
+            int currentRow = GetCurrentRowIndex(sender);
 
-            medicineCodeAuto.Text = "";
+            if (Prescription.Medicines.Count > 0)
+            {
+                if (Prescription.Medicines.Count == currentRow)
+                {
+                    Prescription.Medicines.Add(declareMedicine);
+                    medicineCodeAuto.Text = "";
+                }
+                else
+                {
+                    Prescription.Medicines[currentRow] = declareMedicine;
+                }
+            }
+            else
+            {
+                Prescription.Medicines.Add(declareMedicine);
+                medicineCodeAuto.Text = "";
+            }
         }
 
         public void ClearMedicine(DeclareMedicine med)
@@ -212,12 +300,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var objectName = (sender as Control).Name;
-
             //按 Enter 下一欄
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
                 var nextTextBox = new List<TextBox>();
+                var nextAutoCompleteBox = new List<AutoCompleteBox>();
                 var currentRowIndex = GetCurrentRowIndex(sender);
 
                 if (currentRowIndex == -1) return;
@@ -241,23 +329,29 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         break;
 
                     case "Position":
-                        if (currentRowIndex == Prescription.Medicines.Count - 1)
+                        if (!Prescription.Medicines[currentRowIndex].PaySelf)
                         {
-                            var autoList = new List<AutoCompleteBox>();
-                            NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref autoList);
-                            NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref nextTextBox);
+                            NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
+                            NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
                             nextTextBox[0].Focus();
+                            return;
                         }
                         else
                         {
-                            NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Dosage", ref nextTextBox);
-                            nextTextBox[currentRowIndex + 1].Focus();
+                            NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Price", ref nextTextBox);
+                            nextTextBox[currentRowIndex].Focus();
                         }
+                        break;
+
+                    case "Price":
+                        NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
+                        NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
+                        nextTextBox[0].Focus();
                         return;
                 }
                 nextTextBox[currentRowIndex].Focus();
+                nextTextBox[currentRowIndex].CaretIndex = 0;
             }
-
             //按 Up Down
             if (e.Key == Key.Up || e.Key == Key.Down)
             {
@@ -312,61 +406,86 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     }
                 }
             }
-            return -1;
-        }
+            else if (sender is AutoCompleteBox)
+            {
+                List<AutoCompleteBox> temp = new List<AutoCompleteBox>();
+                AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
+                NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, autoCompleteBox.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
 
-        //return 1 : 長度不足 2 : 性別碼錯誤 3 : 首碼錯誤 4 : 檢查碼錯誤
-        private string CheckIcNumber(string vid)
-        {
-            var firstEng = new List<string> { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "X", "Y", "W", "Z", "I", "O" };
-            var aa = vid.ToUpper();
-            var chackFirstEnd = false;
-            if (aa.Trim().Length != 10) return "1";
-            var firstNo = Convert.ToByte(aa.Trim().Substring(1, 1));
-            if (firstNo > 2 || firstNo < 1)
-            {
-                return "性別碼(第一位數字)錯誤，男性為 1 女性為 2";
-            }
-            int x;
-            for (x = 0; x < firstEng.Count; x++)
-            {
-                if (aa.Substring(0, 1) == firstEng[x])
-                {
-                    aa = string.Format("{0}{1}", x + 10, aa.Substring(1, 9));
-                    chackFirstEnd = true;
-                    break;
-                }
-            }
-            if (!chackFirstEnd)
-                return "3";
-            int i = 1;
-            int ss = int.Parse(aa.Substring(0, 1));
-            while (aa.Length > i)
-            {
-                ss = ss + (int.Parse(aa.Substring(i, 1)) * (10 - i));
-                i++;
-            }
-            aa = ss.ToString();
-            if (vid.Substring(9, 1) == "0")
-            {
-                if (aa.Substring(aa.Length - 1, 1) == "0")
-                {
-                    return "0";
-                }
-                return "4";
-            }
-            if (vid.Substring(9, 1) == (10 - int.Parse(aa.Substring(aa.Length - 1, 1))).ToString())
-            {
-                return "0";
-            }
-            return "4";
+            return -1;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void MedicineTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox != null)
+            {
+                textBox.SelectionStart = 0;
+                textBox.SelectionLength = textBox.Text.Length;
+            }
+        }
+
+        private void CountMedicinesCost()
+        {
+            double medicinesHcCost = 0;//健保給付總藥價
+            double medicinesSelfCost = 0;//自費藥總藥價
+            double purchaseCosts = 0;//藥品總進貨成本
+            foreach (var medicine in Prescription.Medicines)
+            {
+                if (!medicine.PaySelf)
+                    medicinesHcCost += medicine.TotalPrice;
+                else
+                {
+                    medicinesSelfCost += medicine.TotalPrice;
+                }
+                purchaseCosts += medicine.Cost * medicine.Amount;
+            }
+            SelfCost = Convert.ToInt16(Math.Ceiling(medicinesSelfCost));//自費金額
+            Copayment = CountCopaymentCost(medicinesHcCost);//部分負擔
+            MedProfit = (medicinesHcCost + medicinesSelfCost - purchaseCosts);//藥品毛利
+        }
+
+        private void CountCharge()
+        {
+            Charge = Deposit + SelfCost + Copayment;
+            Change = pay - Charge;
+        }
+
+        /*
+        * 藥費部分負擔
+        */
+
+        private int CountCopaymentCost(double medicinesHcCost)
+        {
+            const int free = 0;
+            const int max = 200;
+            if (medicinesHcCost >= 1001)
+                return max;
+            var times = medicinesHcCost / 100;
+            if (times <= 1)
+                return free;
+            const int grades = 20;
+            return Convert.ToInt16(Math.Floor(times) * grades);
+        }
+
+        private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CountMedicinesCost();
         }
     }
 }

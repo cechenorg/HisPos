@@ -12,7 +12,7 @@ namespace His_Pos.Class.Copayment
         {
             Id = dataRow["HISCOP_ID"].ToString();
             Name = dataRow["HISCOP_NAME"].ToString();
-            FullName = dataRow["FULLNAME"].ToString();
+            FullName = dataRow["HISCOP_FULLNAME"].ToString();
         }
 
         public int Point { get; set; }

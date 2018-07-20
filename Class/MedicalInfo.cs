@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 
 namespace His_Pos.Class
 {
@@ -8,6 +9,15 @@ namespace His_Pos.Class
         public MedicalInfo()
         {
             Hospital = new Hospital();
+            SpecialCode = new SpecialCode();
+            MainDiseaseCode = new DiseaseCode();
+            SecondDiseaseCode = new DiseaseCode();
+            TreatmentCase = new TreatmentCase.TreatmentCase();
+        }
+
+        public MedicalInfo(DataRow row)
+        {
+            Hospital = new Hospital(row);
             SpecialCode = new SpecialCode();
             MainDiseaseCode = new DiseaseCode();
             SecondDiseaseCode = new DiseaseCode();

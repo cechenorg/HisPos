@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Data;
+using System.Text.RegularExpressions;
 
 namespace His_Pos.Class.Person
 {
@@ -7,8 +8,12 @@ namespace His_Pos.Class.Person
     {
         public Person()
         {
-
+            id = "";
+            icNumber = "";
+            name = "";
+            birthday = "";
         }
+
         public Person(DataRow dataRow)
         {
             Id = dataRow["EMP_ID"].ToString();
@@ -16,37 +21,45 @@ namespace His_Pos.Class.Person
             IcNumber = dataRow["EMP_IDNUM"].ToString();
             Birthday = dataRow["EMP_BIRTH"].ToString();
         }
+
         private string id;
+
         public string Id
         {
-            get { return id;}
+            get { return id; }
             set
             {
                 id = value;
                 NotifyPropertyChanged("Id");
             }
         }
+
         private string name;
+
         public string Name
         {
-            get { return name;}
+            get { return name; }
             set
             {
                 name = value;
                 NotifyPropertyChanged("Name");
             }
         }
+
         private string icNumber;
+
         public string IcNumber
         {
-            get { return icNumber;}
+            get { return icNumber; }
             set
             {
                 icNumber = value;
                 NotifyPropertyChanged("IcNumber");
             }
         }
+
         private string birthday;
+
         public string Birthday
         {
             get { return birthday; }
@@ -56,7 +69,27 @@ namespace His_Pos.Class.Person
                 NotifyPropertyChanged("Birthday");
             }
         }
+
+        public string CheckBirthDay(string customerBirthday)
+        {
+            Regex birth = new Regex(@"[0-9]{7}");
+            string errorMessage = "";
+            if (birth.IsMatch(customerBirthday))
+            {
+                string year = customerBirthday.Substring(0, 3);
+                string month = customerBirthday.Substring(3, 2);
+                string date = customerBirthday.Substring(5, 2);
+                Birthday = year + "/" + month + "/" + date;
+            }
+            else
+            {
+                errorMessage += "生日格式錯誤\n";
+            }
+            return errorMessage;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
+
         public void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)

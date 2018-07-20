@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.Xml;
+using His_Pos.Class.Person;
+using His_Pos.Class.Product;
 using His_Pos.Properties;
 using His_Pos.Service;
 
@@ -20,10 +24,16 @@ namespace His_Pos.Class.Declare
             CountDeclareDeatailPoint();
         }
 
-        public DeclareData()
+        public DeclareData(DataRow row)
         {
+             Prescription = new Prescription(row);
+            DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
+            CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
+            TotalPoint = Convert.ToInt32(row["HISDECMAS_TOTALPOINT"].ToString());
         }
-
+        public DeclareData(XmlDocument xml) { //匯入處方申報檔用
+            
+        }
         public Prescription Prescription { get; set; }
         public List<DeclareDetail> DeclareDetails { get; set; } = new List<DeclareDetail>();
         public string DeclareMakeUp { get; set; }//D4補報註記
