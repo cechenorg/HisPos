@@ -28,7 +28,7 @@ namespace His_Pos
         {
             User user = PersonDb.CheckUserPassword(UserName.Text, Password.Password);
 
-            if (user.Id != null)
+            if (!user.Id.Equals(""))
             {
                 var loadingWindow = new LoadingWindow();
                 loadingWindow.Show();

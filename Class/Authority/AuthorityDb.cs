@@ -10,6 +10,7 @@ using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
 using System.Collections.ObjectModel;
 using static His_Pos.H4_BASIC_MANAGE.AuthenticationManage.AuthenticationManageView;
 using System.Data;
+using His_Pos.Class.Leave;
 
 namespace His_Pos.Class.Authority
 {
@@ -36,6 +37,22 @@ namespace His_Pos.Class.Authority
             foreach(DataRow row in table.Rows)
             {
                 collection.Add( new AuthStatus(row));
+            }
+
+            return collection;
+        }
+
+        internal static Collection<AuthLeaveRecord> GetLeaveRecord()
+        {
+            Collection<AuthLeaveRecord> collection = new Collection<AuthLeaveRecord>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[AuthenticationManageView].[GetAuthLeaveRecord]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new AuthLeaveRecord(row));
             }
 
             return collection;

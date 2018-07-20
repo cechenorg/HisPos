@@ -38,12 +38,20 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
         }
 
         Collection<AuthStatus> AuthStatuses { get; set; }
+        public Collection<AuthLeaveRecord> AuthLeaveRecords { get; set; }
 
         public AuthenticationManageView()
         {
             InitializeComponent();
-
+            DataContext = this;
             InitAuthStatus();
+
+            InitAuthRecord();
+        }
+
+        private void InitAuthRecord()
+        {
+            AuthLeaveRecords = AuthorityDb.GetLeaveRecord();
         }
 
         private void InitAuthStatus()
