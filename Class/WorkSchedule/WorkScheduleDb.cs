@@ -119,8 +119,10 @@ namespace His_Pos.Class.WorkSchedule
             dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[SaveCalendarRemark]", parameters);
         }
 
-        internal static void GetSpecialData(int year, int month, Collection<WorkScheduleManageView.SpecialData> specialDates, Collection<WorkScheduleManageView.SpecialData> dateRemarks)
+        internal static Collection<WorkScheduleManageView.SpecialData> GetSpecialData(int year, int month)
         {
+            Collection<WorkScheduleManageView.SpecialData> collection = new Collection<WorkScheduleManageView.SpecialData>();
+
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();
@@ -132,19 +134,10 @@ namespace His_Pos.Class.WorkSchedule
 
             foreach (DataRow row in table.Rows)
             {
-                specialDates.Add(new WorkScheduleManageView.SpecialData(row));
+                collection.Add(new WorkScheduleManageView.SpecialData(row));
             }
 
-            parameters.Clear();
-            parameters.Add(new SqlParameter("YEAR", year));
-            parameters.Add(new SqlParameter("MONTH", month));
-
-            table = dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[GetCalendarRemark]", parameters);
-
-            foreach (DataRow row in table.Rows)
-            {
-                dateRemarks.Add(new WorkScheduleManageView.SpecialData(row));
-            }
+            return collection;
         }
     }
 }

@@ -47,5 +47,16 @@ namespace His_Pos.Class.Declare
             }
             return declareData;
         }
+        public static ObservableCollection<DeclareDetail> GetDeclareDetailByMasId(string id) {
+            ObservableCollection<DeclareDetail> declareDetails = new ObservableCollection<DeclareDetail>();
+            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAS_ID", id));
+            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[GetDeclareDetailByMasId]", parameters);
+            foreach (DataRow row in table.Rows) {
+                declareDetails.Add(new DeclareDetail(row));
+            }
+            return declareDetails;
+        }
     }
 }

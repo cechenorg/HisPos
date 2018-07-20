@@ -211,10 +211,14 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
                 messageWindow.ShowDialog();
                 return;
             }
-            var item = (DataGridSource.SelectedItem as TypeData);
-            changeItems.Add(new ChangeItem(item.proid, item.proname, item.typeName, ((ProductTypeManageDetail)ComboBoxTargetSmall.SelectedItem).Name));
-            (DataGridSource.SelectedItem as TypeData).typeName = ((ProductTypeManageDetail)ComboBoxTargetSmall.SelectedItem).Name; 
-            TypeDataTargetDatas.Single(product => product.proid == (DataGridSource.SelectedItem as TypeData).proid).typeName = ((ProductTypeManageDetail)ComboBoxTargetSmall.SelectedItem).Name;
+
+            foreach (TypeData item in DataGridSource.SelectedItems)
+            {
+                changeItems.Add(new ChangeItem(item.proid, item.proname, item.typeName, ((ProductTypeManageDetail)ComboBoxTargetSmall.SelectedItem).Name));
+                item.typeName = ((ProductTypeManageDetail)ComboBoxTargetSmall.SelectedItem).Name;
+                TypeDataTargetDatas.Single(product => product.proid == item.proid).typeName = ((ProductTypeManageDetail)ComboBoxTargetSmall.SelectedItem).Name;
+            }
+            
             DataGridTarget.Items.Filter = ProductTypeTargetFilter;
             DataGridSource.Items.Filter = ProductTypeSourceFilter;
             DataGridTarget.SelectedIndex = 0;
@@ -241,11 +245,14 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
                 messageWindow.ShowDialog();
                 return;
             }
-            var item = (DataGridTarget.SelectedItem as TypeData);
-            changeItems.Add(new ChangeItem(item.proid, item.proname, item.typeName, ((ProductTypeManageDetail)ComboBoxSourceSmall.SelectedItem).Name));
 
-            (DataGridTarget.SelectedItem as TypeData).typeName = ((ProductTypeManageDetail)ComboBoxSourceSmall.SelectedItem).Name;
-            TypeDataSourceDatas.Single(product => product.proid == (DataGridTarget.SelectedItem as TypeData).proid).typeName = ((ProductTypeManageDetail)ComboBoxSourceSmall.SelectedItem).Name;
+            foreach (TypeData item in DataGridTarget.SelectedItems)
+            {
+                changeItems.Add(new ChangeItem(item.proid, item.proname, item.typeName, ((ProductTypeManageDetail)ComboBoxSourceSmall.SelectedItem).Name));
+                item.typeName = ((ProductTypeManageDetail)ComboBoxSourceSmall.SelectedItem).Name;
+                TypeDataSourceDatas.Single(product => product.proid == item.proid).typeName = ((ProductTypeManageDetail)ComboBoxSourceSmall.SelectedItem).Name;
+            }
+            
             DataGridTarget.Items.Filter = ProductTypeTargetFilter;
             DataGridSource.Items.Filter = ProductTypeSourceFilter;
             DataGridTarget.SelectedIndex = 0;

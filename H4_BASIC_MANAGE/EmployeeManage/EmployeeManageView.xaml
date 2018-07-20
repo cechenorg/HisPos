@@ -99,10 +99,6 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <!--<StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
-                            <Label  Content="姓名" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                            <TextBox Name="OtcBasicAmount" Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontSize="20" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0"/>
-                        </StackPanel>-->
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
                             <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
                             <ComboBox Width="150" Text="{Binding Employee.Gender,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" SelectionChanged="Text_TextChanged" HorizontalContentAlignment="Center" Margin="10,0,0,0">
@@ -182,16 +178,17 @@
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="120"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <StackPanel Grid.Row="0"   Orientation="Horizontal"   Margin="10,0,10,10">
-                                <Label  Content="事假:12天" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
-                                <Label  Content="病假:20天" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
-                                <Label  Content="年假:7天" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                <local:LeaveTotalControl TopBackGroundBrush="AliceBlue" TotalDayCount="25" DayLeftCount="10" LeaveType="事假"/>
+                                <Label Content="事假:12天" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
+                                <Label Content="病假:20天" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
+                                <Label Content="年假:7天" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center"/>
                             </StackPanel>
                             <DataGrid Grid.Row="1" Name="DataGridHoliday" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                                 ItemsSource="{Binding UnchangedtakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="5,0,10,10" >
+                                 ItemsSource="{Binding UnchangedtakingCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" >
                                 <DataGrid.RowStyle>
                                     <Style TargetType="{x:Type DataGridRow}">
                                         <Style.Triggers>

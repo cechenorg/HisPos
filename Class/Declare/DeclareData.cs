@@ -30,12 +30,13 @@ namespace His_Pos.Class.Declare
             DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
             CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
             TotalPoint = Convert.ToInt32(row["HISDECMAS_TOTALPOINT"].ToString());
+            DeclareDetails = PrescriptionDB.GetDeclareDetailByMasId(row["HISDECMAS_ID"].ToString());
         }
         public DeclareData(XmlDocument xml) { //匯入處方申報檔用
             
         }
         public Prescription Prescription { get; set; }
-        public List<DeclareDetail> DeclareDetails { get; set; } = new List<DeclareDetail>();
+        public ObservableCollection<DeclareDetail> DeclareDetails { get; set; } = new ObservableCollection<DeclareDetail>();
         public string DeclareMakeUp { get; set; }//D4補報註記
         public int DeclarePoint { get; set; }//D16申請點數
         public int CopaymentPoint { get; set; }//D17部分負擔點數

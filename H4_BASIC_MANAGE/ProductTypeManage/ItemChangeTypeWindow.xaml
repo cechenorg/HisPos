@@ -5,28 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.ProductTypeManage"
         mc:Ignorable="d"
-        Title="換類別" Height="450" Width="1000" MinHeight="450" MinWidth="1000">
+        Title="換類別" Height="450" Width="800" MinHeight="450" MinWidth="800">
     <Viewbox  Stretch="Fill">
-        <Grid Height="450" Width="1000">
+        <Grid Height="450" Width="800">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="380"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="380"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="6*"/>
-                <RowDefinition Height="2*"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal"  Grid.Column="0" Grid.Row="0" >
-                <ComboBox Name="ComboBoxSourceBig"  DisplayMemberPath="Name" SelectionChanged="ComboBoxSourceBig_SelectionChanged" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" Margin="30,0,10,0"/>
-                <ComboBox Name="ComboBoxSourceSmall" DisplayMemberPath="Name" SelectionChanged="ComboBoxSourceSmall_SelectionChanged" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center"/>
+            <StackPanel Orientation="Horizontal"  Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
+                <ComboBox Name="ComboBoxSourceBig"  DisplayMemberPath="Name" SelectionChanged="ComboBoxSourceBig_SelectionChanged" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center"/>
+                <ComboBox Name="ComboBoxSourceSmall" DisplayMemberPath="Name" SelectionChanged="ComboBoxSourceSmall_SelectionChanged" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" Margin="20,0,0,0"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal"  Grid.Column="2" Grid.Row="0">
-                <ComboBox Name="ComboBoxTargetBig"  DisplayMemberPath="Name" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" Margin="30,0,10,0" SelectionChanged="ComboBoxTargetBig_SelectionChanged"/>
-                <ComboBox Name="ComboBoxTargetSmall" DisplayMemberPath="Name"  Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" SelectionChanged="ComboBoxTargetSmall_SelectionChanged"/>
+            <StackPanel Orientation="Horizontal"  Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center">
+                <ComboBox Name="ComboBoxTargetBig"  DisplayMemberPath="Name" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" SelectionChanged="ComboBoxTargetBig_SelectionChanged"/>
+                <ComboBox Name="ComboBoxTargetSmall" DisplayMemberPath="Name"  Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" SelectionChanged="ComboBoxTargetSmall_SelectionChanged" Margin="20,0,0,0"/>
             </StackPanel>
-            <DataGrid  Name="DataGridSource" Margin="10,10,10,10" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            <DataGrid  Name="DataGridSource" Margin="10,10,10,10" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled"
                                 ItemsSource="{Binding TypeDataSourceDatas,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  Grid.Row="1" Grid.Column="0">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
@@ -44,20 +44,12 @@
                     <DataGridTextColumn Width="110" Header="商品ID" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proid,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="110" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Left"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn  Width="110"  Header="目前類別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding typeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn Width="250" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -67,7 +59,7 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid  Name="DataGridTarget" Margin="10,10,10,10" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+            <DataGrid  Name="DataGridTarget" Margin="10,10,10,10" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled"
                                 ItemsSource="{Binding TypeDataTargetDatas,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  Grid.Row="1" Grid.Column="2">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
@@ -85,20 +77,12 @@
                     <DataGridTextColumn Width="110" Header="商品ID" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proid,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
                                 <Setter Property="VerticalAlignment" Value="Center"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="110" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proname}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment"  Value="Left"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn  Width="110"  Header="目前類別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding typeName}">
+                    <DataGridTextColumn Width="250" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding proname}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -108,11 +92,11 @@
                     </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Orientation="Vertical"  Grid.Column="1" Grid.Row="1" Background="{StaticResource GridBackGround}" >
-                <Image Source="/Images/Plus.png" Width="35" Name="ButtonPlus" MouseLeftButtonDown="ButtonPlus_MouseLeftButtonDown"/>
-                <Image Source="/Images/Balance.png" Width="30" Name="ButtonBalance" MouseLeftButtonDown="ButtonBalance_MouseLeftButtonDown"/>
+            <StackPanel Orientation="Vertical"  Grid.Column="1" Grid.Row="1"  VerticalAlignment="Center">
+                <Image Source="/Images/RightArrow.png" Width="35" Name="ButtonPlus" MouseLeftButtonDown="ButtonPlus_MouseLeftButtonDown"/>
+                <Image Source="/Images/LeftArrow.png" Width="35" Name="ButtonBalance" MouseLeftButtonDown="ButtonBalance_MouseLeftButtonDown" Margin="0,20,0,0"/>
             </StackPanel>
-            <Button Grid.Row="2" Grid.Column="1" Margin="10,0,10,10" Content="確定" Click="Button_Click"/>
+            <Button  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Width="300" Content="確定" Click="Button_Click"/>
         </Grid>
     </Viewbox>
 </Window>

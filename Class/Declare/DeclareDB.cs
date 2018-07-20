@@ -587,5 +587,6 @@ namespace His_Pos.Class.Declare
                 }
             }
         }
+        
     }
 }
