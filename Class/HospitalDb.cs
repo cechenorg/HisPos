@@ -16,7 +16,7 @@ namespace His_Pos.Class
             var institutionTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetHospitalsData]", dbConnection);
             foreach (DataRow row in institutionTable.Rows)
             {
-                HospitalsCollection.Add(new Hospital(row));
+                HospitalsCollection.Add(new Hospital(row,DataSource.InitHospitalData));
             }
             return HospitalsCollection;
         }

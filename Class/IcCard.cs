@@ -15,12 +15,21 @@ namespace His_Pos.Class
             MedicalNumber = "";
         }
 
-        public IcCard(DataRow row)
+        public IcCard(DataRow row,DataSource source)
         {
-            IcNumber = "";
-            MedicalNumber = "";
+            switch (source) {
+                case DataSource.InitMedicalIcCard:
+                    IcNumber = "";
+                    MedicalNumber = "";
+                    break;
+                case DataSource.GetMedicalIcCard:
+                    IcNumber = "";
+                    MedicalNumber = row["HISDECMAS_NUMBER"].ToString();
+                    break;
+            }
+          
         }
-
+       
         private string icNumber;
 
         public string IcNumber

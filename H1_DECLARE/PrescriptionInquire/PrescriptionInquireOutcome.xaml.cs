@@ -65,11 +65,11 @@ namespace His_Pos.PrescriptionInquire
 
         private void SetTreatmentData()
         {
-            /*AdjustCase.Content = AdjustCaseDb.GetAdjustCase(_inquiredPrescription.Prescription.Treatment.AdjustCase.Id);*///調劑案件
-            PaymentCategory.Content = PaymentCategroyDb.GetPaymentCategory(InquiredPrescription.Prescription.Treatment.PaymentCategory.Id);//給付類別
-            CopaymentCode.Content = CopaymentDb.GetCopayment(InquiredPrescription.Prescription.Treatment.Copayment.Id);
-            SetTreatmentCaseContent();//原處方案件
-            SetMedicalInfoData();//MedicalInfo資料
+            ///*AdjustCase.Content = AdjustCaseDb.GetAdjustCase(_inquiredPrescription.Prescription.Treatment.AdjustCase.Id);*///調劑案件
+            //PaymentCategory.Content = PaymentCategroyDb.GetPaymentCategory(InquiredPrescription.Prescription.Treatment.PaymentCategory.Id);//給付類別
+            //CopaymentCode.Content = CopaymentDb.GetCopayment(InquiredPrescription.Prescription.Treatment.Copayment.Id);
+            //SetTreatmentCaseContent();//原處方案件
+            //SetMedicalInfoData();//MedicalInfo資料
         }
 
         /*
@@ -78,9 +78,9 @@ namespace His_Pos.PrescriptionInquire
 
         private void SetMedicalInfoData()
         {
-            ReleasePalace.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//釋出院所
-            Division.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//就醫科別
-            SetDiseaseCode();//診斷代碼
+            //ReleasePalace.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//釋出院所
+            //Division.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;//就醫科別
+            //SetDiseaseCode();//診斷代碼
         }
 
         /*
@@ -110,8 +110,8 @@ namespace His_Pos.PrescriptionInquire
 
         private void SetTreatmentCaseContent()
         {
-            TreatmentCase.Content = TreatmentCaseDb.GetTreatmentCase(InquiredPrescription.Prescription.Treatment.MedicalInfo
-                .TreatmentCase.Id);
+            //TreatmentCase.Content = TreatmentCaseDb.GetTreatmentCase(InquiredPrescription.Prescription.Treatment.MedicalInfo
+            //    .TreatmentCase.Id);
         }
 
         /*
@@ -120,10 +120,10 @@ namespace His_Pos.PrescriptionInquire
 
         private void SetDiseaseCode()
         {
-            if (InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode == null) return;
-            MainDiagnosis.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
-            if (InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode != null)
-                SeconDiagnosis.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
+            //if (InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode == null) return;
+            //MainDiagnosis.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
+            //if (InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode != null)
+            //    SeconDiagnosis.Content = InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
         }
 
         /*

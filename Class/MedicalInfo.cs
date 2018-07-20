@@ -17,11 +17,13 @@ namespace His_Pos.Class
 
         public MedicalInfo(DataRow row)
         {
-            Hospital = new Hospital(row);
+            Hospital = new Hospital(row,DataSource.GetHospitalData);
             SpecialCode = new SpecialCode();
             MainDiseaseCode = new DiseaseCode();
             SecondDiseaseCode = new DiseaseCode();
             TreatmentCase = new TreatmentCase.TreatmentCase();
+            MainDiseaseCode =  new DiseaseCode { Id = row["HISINT_ID1"].ToString() };
+            SecondDiseaseCode = new DiseaseCode { Id = row["HISINT_ID2"].ToString() };
         }
 
         public MedicalInfo(Hospital hospital, SpecialCode specialCode, List<DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)

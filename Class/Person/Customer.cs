@@ -23,7 +23,7 @@ namespace His_Pos.Class.Person
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
             Gender = Convert.ToBoolean(row["CUS_GENDER"].ToString());
-            IcCard = new IcCard(row);
+            IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
         }
 
         public string Qname { get; set; }

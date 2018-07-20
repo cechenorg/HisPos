@@ -76,7 +76,11 @@ namespace His_Pos.Class
         PRODUCTBASICORSAFE = 5,
         ITEMDIALOGPRODUCT = 6,
         GetStoreOrderDetail = 7,
-        GetItemDialogProduct = 8
+        GetItemDialogProduct = 8,
+        GetMedicalIcCard = 9,
+        InitMedicalIcCard = 10,
+        GetHospitalData = 11,
+        InitHospitalData = 12
     }
     public enum MessageType
     {
