@@ -408,7 +408,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             if (leaveWindow.LeaveComplete)
             {
-                MessageWindow messageWindow = new MessageWindow("請假成功!", MessageType.SUCCESS);
+                MessageWindow messageWindow = new MessageWindow(leaveWindow.CompleteResult, (leaveWindow.CompleteResult.Contains("無法新增"))? MessageType.ERROR:MessageType.SUCCESS);
                 messageWindow.ShowDialog();
 
                 InitCalendar(selectDateTime);

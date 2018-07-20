@@ -25,6 +25,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
     public partial class LeaveWindow : Window
     {
         public bool LeaveComplete = false;
+        public string CompleteResult = "";
         public ObservableCollection<UserIconData> UserIconDatas { get; }
         public ObservableCollection<Class.Leave.Leave> LeaveTypes { get; }
 
@@ -65,14 +66,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
                 endDateTime = endDateTime.AddHours(((DateTime)EndTime.SelectedTime).Hour);
                 endDateTime = endDateTime.AddMinutes(((DateTime)EndTime.SelectedTime).Minute);
 
-                LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, startDateTime, endDateTime, Note.Text);
+                CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, startDateTime, endDateTime, Note.Text);
             }
             else
             {
                 if (EndDate.Text.Equals(""))
                     EndDate.SelectedDate = StartDate.SelectedDate;
 
-                LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, (DateTime)StartDate.SelectedDate, (DateTime)EndDate.SelectedDate, Note.Text);
+                CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, (DateTime)StartDate.SelectedDate, (DateTime)EndDate.SelectedDate, Note.Text);
             }
             
             LeaveComplete = true;
