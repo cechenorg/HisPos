@@ -20,6 +20,7 @@ using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
+using His_Pos.Interface;
 using His_Pos.Properties;
 using His_Pos.Service;
 using ComboBox = System.Windows.Controls.ComboBox;
@@ -108,5 +109,6 @@ namespace His_Pos.PrescriptionInquire
             ReleasePalace.ItemsSource = tempCollection;
             ReleasePalace.PopulateComplete();
         }
+       
     }
 }

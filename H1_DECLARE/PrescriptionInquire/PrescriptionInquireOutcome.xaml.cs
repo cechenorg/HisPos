@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
@@ -129,7 +130,7 @@ namespace His_Pos.PrescriptionInquire
         /*
          * 設定病患基本資料
          */
-
+       
         private void SetPatientData()
         {
             var patient = InquiredPrescription.Prescription.Customer;
@@ -145,6 +146,11 @@ namespace His_Pos.PrescriptionInquire
             PatientBirthday.SetIconLabel(100, 50, patient.Birthday);
             PatientId.SetIconLabel(200, 50, patient.IcNumber);
             PatientName.SetIconLabel(200, 50, patient.Name);
+        }
+
+        private void DataGridRow_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            PrescriptionSet.SelectedItem = (sender as DataGridRow).Item;
         }
     }
 }

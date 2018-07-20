@@ -83,7 +83,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="0"  >
                 <Label Content="給付類別" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <Label Name="PaymentCategory" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                <Label Name="PaymentCategory"  Content="{Binding InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName}" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="1"  >
                 <Label Content="部分負擔" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
@@ -106,25 +106,90 @@
                 <Label Content="/" FontSize="16" Width="auto" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" HorizontalContentAlignment="Stretch"/>
                 <Label Content="{Binding ChronicTotal}" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
             </StackPanel>
-            <DataGrid Name="PrescriptionSet" Grid.Row="5" Grid.ColumnSpan="5" Margin="10"   CanUserAddRows="True"
-                     ItemsSource="{Binding InquiredPrescription.DeclareDetails,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"
+            <DataGrid Name="PrescriptionSet" Grid.Row="5" Grid.ColumnSpan="5" Margin="10"  CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                      Background="{StaticResource GridBackGround}" ItemsSource="{Binding InquiredPrescription.DeclareDetails,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"
                       Grid.Column="0" IsReadOnly="True">
-                <DataGrid.HorizontalGridLinesBrush>
-                    <SolidColorBrush Color="#FF858585" Opacity="0.7"/>
-                </DataGrid.HorizontalGridLinesBrush>
-                <DataGrid.Background>
-                    <SolidColorBrush Color="#FFEEEEEE" Opacity="0.5"/>
-                </DataGrid.Background>
-                <DataGrid.BorderBrush>
-                    <SolidColorBrush Color="Black" Opacity="0.9"/>
-                </DataGrid.BorderBrush>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="Height" Value="40"/>
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="OverridesDefaultStyle" Value="true"/>
+                        <Setter Property="Width" Value="100"/>
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="15"/>
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridTextColumn MinWidth="130" Header="健保代碼" Binding="{Binding MedicalId}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="320" Header="藥品名稱" Binding="{Binding Name}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="60" Header="用量" Binding="{Binding Dosage}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="40" Header="用法" Binding="{Binding Usage}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="40" Header="天數" Binding="{Binding Days}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="40" Header="總數" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
+                    <DataGridTextColumn Width="120" Header="健保代碼" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedicalId}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="200" Header="藥品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="用量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Dosage}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="用法" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Usage}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="天數" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Days}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="總數" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Days}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Left"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTemplateColumn MinWidth="40" Header="自費" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicinePaysDataTemplate">
