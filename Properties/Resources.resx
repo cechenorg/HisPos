@@ -246,4 +246,7 @@
   <data name="PrescriptionDec2" xml:space="preserve">
     <value>測試啦</value>
   </data>
+  <data name="AuthenticationManage" xml:space="preserve">
+    <value>審核管理</value>
+  </data>
 </root>

@@ -31,11 +31,15 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             public SpecialData(DataRow dataRow)
             {
                 Day = dataRow["DAY"].ToString();
-                Name = dataRow["NAME"].ToString();
+                Special = dataRow["HOLIDAY"].ToString();
+                Remark = dataRow["REMARK"].ToString();
+                Leave = dataRow["LEAVERECORD"].ToString();
             }
 
             public string Day { get; }
-            public string Name { get; }
+            public string Special { get; }
+            public string Remark { get; }
+            public string Leave { get; }
         }
 
         class Time
@@ -178,20 +182,16 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             int endDayCount = 6 - Int16.Parse(TheMonthEnd.DayOfWeek.ToString("d"));
             int wcount = 0;
 
-            Collection<SpecialData> specialDates = new Collection<SpecialData>();
-            Collection<SpecialData> dateRemarks = new Collection<SpecialData>();
-
-            WorkScheduleDb.GetSpecialData(selectDateTime.Year, selectDateTime.Month, specialDates, dateRemarks);
-
+            Collection<SpecialData> specialDates = WorkScheduleDb.GetSpecialData(selectDateTime.Year, selectDateTime.Month);
+            
             while (TheMonthStart != TheMonthEnd.AddDays(1))
             {
                 string today = TheMonthStart.DayOfWeek.ToString("d");
                 if (today == "0") wcount++;
 
-                SpecialData holiday = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
-                SpecialData remark = dateRemarks.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
+                SpecialData specialData = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
 
-                Day day = new Day(TheMonthStart, (holiday is null) ? null : holiday.Name, (remark is null) ? null : remark.Name);
+                Day day = new Day(TheMonthStart, specialData);
 
                 Grid.SetRow(day, wcount);
                 Grid.SetColumn(day, Convert.ToInt32(today));
