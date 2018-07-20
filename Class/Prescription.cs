@@ -63,7 +63,8 @@ namespace His_Pos.Class
             CheckCopayment();
             CheckChronicTimes();
             Pharmacy = MainWindow.CurrentUser.Pharmacy;
-            Treatment.MedicalPersonId = MainWindow.CurrentUser.Id;
+            Treatment.MedicalPersonId = MainWindow.CurrentUser.IcNumber;
+            Customer.Id = "1";
             return ErrorMessage;
         }
 

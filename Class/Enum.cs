@@ -81,7 +81,8 @@ namespace His_Pos.Class
     public enum MessageType
     {
         ERROR = 0,
-        SUCCESS = 1
+        SUCCESS = 1,
+        WARNING = 2
     }
 
     public enum SystemType
