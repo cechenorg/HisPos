@@ -243,10 +243,6 @@ namespace His_Pos.ViewModel
 
                     switch (tabName)
                     {
-                        case nameof(FeatureItem.處方登錄):
-                            break;
-                        case nameof(FeatureItem.處方查詢):
-                            break;
                         case nameof(FeatureItem.庫存查詢):
                             if (InventoryManagement.InventoryManagementView.Instance is null) break;
 
@@ -254,8 +250,6 @@ namespace His_Pos.ViewModel
                                 InventoryManagement.InventoryManagementView.Instance.MergingData();
                                 InventoryManagement.InventoryManagementView.Instance.SearchData();
                             }
-                            break;
-                        case nameof(FeatureItem.處理單管理):
                             break;
                         case nameof(FeatureItem.處理單紀錄):
                             if (ProductPurchaseRecord.ProductPurchaseRecordView.Instance is null) break;
@@ -271,7 +265,11 @@ namespace His_Pos.ViewModel
                             if (StockTaking.StockTakingView.DataChanged)
                                 StockTaking.StockTakingView.Instance.InitProduct();
                             break;
-                        case nameof(FeatureItem.庫存盤點紀錄):
+                        case nameof(FeatureItem.審核管理):
+                            
+                            break;
+                        case nameof(FeatureItem.排班管理):
+                            
                             break;
                     }
 

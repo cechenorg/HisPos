@@ -56,10 +56,13 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
             get { return AuthLeaveRecords.Count(al => al.IsSelected).ToString(); }
         }
 
+        public static AuthenticationManageView Instance;
+
         public AuthenticationManageView()
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
             InitAuthStatus();
 
             InitAuthRecord();

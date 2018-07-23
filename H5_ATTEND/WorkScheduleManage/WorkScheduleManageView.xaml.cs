@@ -63,9 +63,12 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private bool IsFirst { get; set; } = true;
 
+        public static WorkScheduleManageView Instance;
+
         public WorkScheduleManageView()
         {
             InitializeComponent();
+            Instance = this;
             InitUserIconData();
             InitBasicData();
             InitCalendar(selectDateTime);
