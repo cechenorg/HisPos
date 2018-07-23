@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.Leave
 {
-    public class AuthLeaveRecord
+    public class AuthLeaveRecord : INotifyPropertyChanged
     {
         public AuthLeaveRecord(DataRow dataRow)
         {
@@ -16,6 +17,8 @@ namespace His_Pos.Class.Leave
             LeaveType = dataRow["EMPLEVTYP_NAME"].ToString();
             Dates = dataRow["LEAVEDATE"].ToString();
             Notes = dataRow["EMPLEVREC_NOTE"].ToString();
+            InsertTime = DateTime.Parse(dataRow["EMPLEVREC_INSERTDATE"].ToString());
+            IsSelected = false;
         }
 
         public string Id { get; set; }
@@ -23,5 +26,27 @@ namespace His_Pos.Class.Leave
         public string LeaveType { get; set; }
         public string Dates { get; set; }
         public string Notes { get; set; }
+        public DateTime InsertTime { get; }
+
+        private bool isSelected;
+
+        public bool IsSelected
+        {
+            get { return isSelected; }
+            set
+            {
+                isSelected = value;
+                NotifyPropertyChanged("IsSelected");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 }
