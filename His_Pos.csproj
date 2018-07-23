@@ -353,6 +353,7 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
+    <Compile Include="H4_BASIC_MANAGE\MedBagManage\MedBagDb.cs" />
     <Compile Include="H4_BASIC_MANAGE\MedBagManage\MedBagManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\MedBagManage\MedBagManageView.xaml.cs">
       <DependentUpon>MedBagManageView.xaml</DependentUpon>
