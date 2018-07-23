@@ -17,6 +17,7 @@ using His_Pos.InventoryManagement;
 using His_Pos.LocationManage;
 using His_Pos.H4_BASIC_MANAGE.PharmacyManage;
 using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
+using His_Pos.H4_BASIC_MANAGE.MedBagManage;
 
 namespace His_Pos.ViewModel
 {
@@ -159,6 +160,8 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.審核管理):
                     break;
+                case nameof(FeatureItem.藥袋管理):
+                    break;
                 default:
                     return;
             }
@@ -219,6 +222,9 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.藥品頻率管理):
                     newTab = new H4_BASIC_MANAGE.MedFrequencyManage.MedFrequencyManage() { TabName = MainWindow.HisFeatures[3].Functions[5], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+                case nameof(FeatureItem.藥袋管理):
+                    newTab = new H4_BASIC_MANAGE.MedBagManage.MedBagManage() { TabName = MainWindow.HisFeatures[3].Functions[7], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
                 case nameof(FeatureItem.上下班打卡):
                     newTab = new H5_ATTEND.ClockIn.ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
