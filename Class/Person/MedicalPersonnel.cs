@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Xml;
 
 namespace His_Pos.Class.Person
 {
@@ -14,7 +15,6 @@ namespace His_Pos.Class.Person
             Name = row["EMP_NAME"].ToString();
             IcNumber = row["EMP_IDNUM"].ToString();
         }
-
         public MedicalPersonnel(string id, string name, string icNumber)
         {
             Id = id;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using His_Pos.Class.Person;
 using System.Data;
+using System.Xml;
 
 namespace His_Pos.Class
 {
@@ -29,7 +30,10 @@ namespace His_Pos.Class
             }
           
         }
-       
+        public IcCard(XmlNode xml) {
+            IcNumber = xml.SelectSingleNode("d3") == null ? null : xml.SelectSingleNode("d3").InnerText;
+            MedicalNumber = xml.SelectSingleNode("d7") == null ? null : xml.SelectSingleNode("d7").InnerText;
+        }
         private string icNumber;
 
         public string IcNumber

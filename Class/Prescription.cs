@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Text.RegularExpressions;
+using System.Xml;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Service;
@@ -19,7 +20,7 @@ namespace His_Pos.Class
             Treatment = new Treatment();
             Medicines = new ObservableCollection<DeclareMedicine>();
         }
-
+     
         public Prescription(Customer customer, Pharmacy pharmacy, Treatment treatment, ObservableCollection<DeclareMedicine> medicines)
         {
             Customer = customer;
@@ -35,7 +36,16 @@ namespace His_Pos.Class
             Treatment = new Treatment(row);
             Medicines = new ObservableCollection<DeclareMedicine>();
         }
-
+        public Prescription(XmlNode xml)
+        {
+            Customer = new Customer(xml);
+            Pharmacy = new Pharmacy(xml);
+            Treatment = new Treatment(xml);
+            ChronicSequence = xml.SelectSingleNode("d35") == null ? null : xml.SelectSingleNode("d35").InnerText;
+            ChronicTotal = xml.SelectSingleNode("d36") == null ? null : xml.SelectSingleNode("d36").InnerText;
+            OriginalMedicalNumber = xml.SelectSingleNode("d43") == null ? null : xml.SelectSingleNode("d43").InnerText;
+            Medicines = new ObservableCollection<DeclareMedicine>();
+        }
         public Customer Customer { get; set; }
         public Pharmacy Pharmacy { get; set; } //藥局
         public Treatment Treatment { get; set; } //在醫院拿到的資料

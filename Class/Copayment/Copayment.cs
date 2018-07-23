@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Xml;
 
 namespace His_Pos.Class.Copayment
 {
@@ -7,7 +8,9 @@ namespace His_Pos.Class.Copayment
         public Copayment()
         {
         }
-
+        public Copayment(XmlNode xml) {
+            Id = xml.SelectSingleNode("d15") == null ? null : xml.SelectSingleNode("d15").InnerText;
+        }
         public Copayment(DataRow dataRow)
         {
             Id = dataRow["HISCOP_ID"].ToString();

@@ -49,7 +49,15 @@ namespace His_Pos.Class
             MedicineDays = medicineDays;
             MedicalPersonId = medicalPersonId;
         }
-
+        public Treatment(XmlNode xml) {
+            MedicalInfo = new MedicalInfo(xml);
+            PaymentCategory = new PaymentCategory.PaymentCategory(xml);
+            Copayment = new Copayment.Copayment(xml);
+            AdjustCase = new AdjustCase.AdjustCase(xml);
+            TreatmentDate = DateTimeExtensions.ToUsDate(xml.SelectSingleNode("d30") == null ? null : xml.SelectSingleNode("d30").InnerText);
+            MedicineDays = xml.SelectSingleNode("d30") == null ? null : xml.SelectSingleNode("d30").InnerText;
+            MedicalPersonId = xml.SelectSingleNode("d25") == null ? null : xml.SelectSingleNode("d25").InnerText;
+        }
         //d8 d9 國際疾病分類碼 d13就醫科別  d21原處方服務機構代號 d22原處方服務機構之案件分類 d24診治醫師代號 d26原處方服務機構之特定治療項目代號
         public MedicalInfo MedicalInfo { get; set; }
 

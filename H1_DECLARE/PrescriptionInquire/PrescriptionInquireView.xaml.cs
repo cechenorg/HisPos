@@ -109,6 +109,30 @@ namespace His_Pos.PrescriptionInquire
             ReleasePalace.ItemsSource = tempCollection;
             ReleasePalace.PopulateComplete();
         }
-       
+
+        private void ButtonImportXml_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fdlg = new OpenFileDialog();
+            fdlg.Title = "C# Corner Open File Dialog";
+            fdlg.InitialDirectory = @"c:\";   //@是取消转义字符的意思
+            fdlg.Filter = "Xml健保申報檔案|*.xml";
+            fdlg.FilterIndex = 2;
+            fdlg.RestoreDirectory = true;
+            XmlDocument doc = new XmlDocument();
+            if (fdlg.ShowDialog() == DialogResult.OK)
+            {
+                doc.PreserveWhitespace = true;
+                doc.Load(fdlg.FileName);
+                XmlNodeList tweets = doc.GetElementsByTagName("ddata");
+                foreach (XmlNode node in tweets) {
+                    XmlDocument xDoc = new XmlDocument();
+                    xDoc.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
+                    DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0]);
+                    declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
+                   
+                }
+            } 
+
+        }
     }
 }

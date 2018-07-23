@@ -85,5 +85,6 @@ namespace His_Pos.Service
             }
             return false;
         }
+       
     }
 }

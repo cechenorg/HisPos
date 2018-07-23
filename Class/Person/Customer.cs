@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Xml;
 
 namespace His_Pos.Class.Person
 {
@@ -25,7 +26,12 @@ namespace His_Pos.Class.Person
             Gender = Convert.ToBoolean(row["CUS_GENDER"].ToString());
             IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
         }
-
+        public Customer(XmlNode xml) {
+            IcCard = new IcCard(xml);
+            Name = xml.SelectSingleNode("d20") == null ? null : xml.SelectSingleNode("d20").InnerText;
+            IcNumber = xml.SelectSingleNode("d3") == null ? null : xml.SelectSingleNode("d3").InnerText;
+            Birthday = xml.SelectSingleNode("d6") == null ? null : xml.SelectSingleNode("d6").InnerText;
+        }
         public string Qname { get; set; }
         public bool Gender { get; set; }
         public IcCard IcCard { get; set; }
