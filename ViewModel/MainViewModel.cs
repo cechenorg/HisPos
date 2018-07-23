@@ -17,6 +17,7 @@ using His_Pos.InventoryManagement;
 using His_Pos.LocationManage;
 using His_Pos.H4_BASIC_MANAGE.PharmacyManage;
 using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
+using His_Pos.H5_ATTEND.WorkScheduleManage;
 
 namespace His_Pos.ViewModel
 {
@@ -263,13 +264,31 @@ namespace His_Pos.ViewModel
                             if (StockTaking.StockTakingView.Instance is null) break;
 
                             if (StockTaking.StockTakingView.DataChanged)
+                            {
                                 StockTaking.StockTakingView.Instance.InitProduct();
+
+                                StockTaking.StockTakingView.DataChanged = false;
+                            }
                             break;
                         case nameof(FeatureItem.審核管理):
-                            
+                            if (AuthenticationManageView.Instance is null) break;
+
+                            if (AuthenticationManageView.DataChanged)
+                            {
+                                AuthenticationManageView.Instance.InitAuthRecord();
+                                AuthenticationManageView.Instance.UpdateUi();
+
+                                AuthenticationManageView.DataChanged = false;
+                            }
                             break;
                         case nameof(FeatureItem.排班管理):
-                            
+                            if (WorkScheduleManageView.Instance is null) break;
+
+                            if (WorkScheduleManageView.DataChanged)
+                            {
+                                WorkScheduleManageView.Instance.InitCalendar();
+                                WorkScheduleManageView.DataChanged = false;
+                            }
                             break;
                     }
 

@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using His_Pos.Class;
 using His_Pos.Class.Leave;
 using His_Pos.Class.WorkSchedule;
+using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
 using His_Pos.H5_ATTEND.WorkScheduleManage.Leave;
 
 namespace His_Pos.H5_ATTEND.WorkScheduleManage
@@ -64,14 +65,16 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         private bool IsFirst { get; set; } = true;
 
         public static WorkScheduleManageView Instance;
+        public static bool DataChanged;
 
         public WorkScheduleManageView()
         {
             InitializeComponent();
             Instance = this;
+            DataChanged = false;
             InitUserIconData();
             InitBasicData();
-            InitCalendar(selectDateTime);
+            InitCalendar();
             UpdateEndEditUi();
         }
 
@@ -174,7 +177,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
             IsFirst = false;
         }
 
-        private void InitCalendar(Time selectDateTime)
+        public void InitCalendar()
         {
             if (IsFirst) return;
 
@@ -286,14 +289,14 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
         {
             if (ComboMonth.SelectedItem == null) return;
             selectDateTime.Month = Convert.ToInt32(ComboMonth.SelectedValue.ToString().Split('月')[0]);
-            InitCalendar(selectDateTime);
+            InitCalendar();
         }
 
         private void comboYear_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ComboYear.SelectedItem == null) return;
             selectDateTime.Year = Convert.ToInt32(ComboYear.SelectedValue.ToString().Split('年')[0]);
-            InitCalendar(selectDateTime);
+            InitCalendar();
 
         }
 
@@ -399,7 +402,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
         private void CancelSchedule_Click(object sender, RoutedEventArgs e)
         {
-            InitCalendar(selectDateTime);
+            InitCalendar();
             UpdateEndEditUi();
         }
 
@@ -414,7 +417,8 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 MessageWindow messageWindow = new MessageWindow(leaveWindow.CompleteResult, (leaveWindow.CompleteResult.Contains("無法新增"))? MessageType.ERROR:MessageType.SUCCESS);
                 messageWindow.ShowDialog();
 
-                InitCalendar(selectDateTime);
+                AuthenticationManageView.DataChanged = true;
+                InitCalendar();
             }
         }
     }

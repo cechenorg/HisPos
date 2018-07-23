@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.Class;
+using His_Pos.H5_ATTEND.WorkScheduleManage;
 
 namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
 {
@@ -57,12 +58,14 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
         }
 
         public static AuthenticationManageView Instance;
+        public static bool DataChanged;
 
         public AuthenticationManageView()
         {
             InitializeComponent();
             DataContext = this;
             Instance = this;
+            DataChanged = false;
             InitAuthStatus();
 
             InitAuthRecord();
@@ -77,7 +80,7 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
             }
         }
 
-        private void InitAuthRecord()
+        public void InitAuthRecord()
         {
             AuthLeaveRecords = AuthorityDb.GetLeaveRecord();
         }
@@ -110,10 +113,15 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
 
         private void AuthLeave_OnClick(object sender, RoutedEventArgs e)
         {
-            NotifyPropertyChanged("AuthLeaveCheckedCount");
+            UpdateUi();
 
             AuthLeaveAllSelectCheckBox.IsChecked =
                 AuthLeaveRecords.Count(al => al.IsSelected) == AuthLeaveRecords.Count;
+        }
+
+        public void UpdateUi()
+        {
+            NotifyPropertyChanged("AuthLeaveCheckedCount");
         }
 
         private void AuthLeaveAllSelectCheckBox_OnClick(object sender, RoutedEventArgs e)
@@ -125,7 +133,7 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
                 authLeaveRecord.IsSelected = selectStatus;
             }
 
-            NotifyPropertyChanged("AuthLeaveCheckedCount");
+            UpdateUi();
         }
 
         private void LeaveConfirm_OnClick(object sender, RoutedEventArgs e)
@@ -135,8 +143,10 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
             MessageWindow messageWindow = new MessageWindow("審核成功!", MessageType.SUCCESS);
             messageWindow.ShowDialog();
 
+            WorkScheduleManageView.DataChanged = true;
+
             InitAuthRecord();
-            NotifyPropertyChanged("AuthLeaveCheckedCount");
+            UpdateUi();
         }
     }
 }
