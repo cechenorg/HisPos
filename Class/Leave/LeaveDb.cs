@@ -50,7 +50,7 @@ namespace His_Pos.Class.Leave
             return collection;
         }
         
-        internal static void AddNewLeave(string id, string leaveType, DateTime startDate, DateTime endDate, string note)
+        internal static string AddNewLeave(string id, string leaveType, DateTime startDate, DateTime endDate, string note)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
@@ -61,7 +61,9 @@ namespace His_Pos.Class.Leave
             parameters.Add(new SqlParameter("EDATE", endDate));
             parameters.Add(new SqlParameter("NOTE", note));
 
-            dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[AddNewLeave]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[AddNewLeave]", parameters);
+
+            return table.Rows[0]["RESULT"].ToString();
         }
     }
 }

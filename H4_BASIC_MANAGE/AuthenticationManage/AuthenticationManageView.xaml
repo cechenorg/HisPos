@@ -11,7 +11,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -24,10 +23,10 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="5">
-                    <Label Content="請假審核" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-                    <ToggleButton Name="LeaveToggle" Margin="10,0,0,0" Click="AuthLeaveToggle"/>
+                    <Label Content="請假審核" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+                    <ToggleButton Name="LeaveToggle" Margin="20,0,0,0" Click="AuthLeaveToggle"/>
                 </StackPanel>
-                <DataGrid Name="LeaveGrid" Grid.Row="1" Background="{StaticResource Shadow}" CanUserAddRows="False"
+                <DataGrid Name="LeaveGrid" Grid.Row="1" Background="{StaticResource Shadow}" CanUserAddRows="False" ItemsSource="{Binding AuthLeaveRecords, UpdateSourceTrigger=PropertyChanged}"
                           CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled"
                           AutoGenerateColumns="False">
                     <DataGrid.Resources>
@@ -61,14 +60,14 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="40">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <CheckBox/>
+                                    <CheckBox HorizontalAlignment="Center" IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Click="AuthLeave_OnClick"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Width="100" Header="員工編號" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                        <DataGridTextColumn Width="90" Header="員工編號" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -76,7 +75,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="100" Header="員工姓名" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                        <DataGridTextColumn Width="110" Header="員工姓名" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -84,7 +83,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="80" Header="假別" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Type}">
+                        <DataGridTextColumn Width="70" Header="假別" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding LeaveType}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -92,7 +91,15 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Width="120" Header="原因" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Reason}">
+                        <DataGridTextColumn Width="200" Header="請假日期" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Dates}">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Width="120" Header="原因" FontSize="16" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Notes}">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -103,12 +110,12 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <StackPanel Name="LeaveConfirmStack" Grid.Row="2" Orientation="Horizontal" Margin="5">
-                    <CheckBox Content="全選" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                    <Rectangle Width="90"/>
+                    <CheckBox Name="AuthLeaveAllSelectCheckBox" Content="全選" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="5,0,0,0" Click="AuthLeaveAllSelectCheckBox_OnClick"/>
+                    <Rectangle Width="320"/>
                     <Label Content="同意" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center"/>
-                    <Label Width="50" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                    <Label Width="50" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Content="{Binding AuthLeaveCheckedCount, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="位" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                    <Button Width="100" Content="核准" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Margin="10,0,0,0"/>
+                    <Button Width="100" Content="核准" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Margin="10,0,0,0" Click="LeaveConfirm_OnClick"/>
                 </StackPanel>
             </Grid>
             

@@ -10,6 +10,8 @@ using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
 using System.Collections.ObjectModel;
 using static His_Pos.H4_BASIC_MANAGE.AuthenticationManage.AuthenticationManageView;
 using System.Data;
+using His_Pos.Class.Leave;
+using His_Pos.Interface;
 
 namespace His_Pos.Class.Authority
 {
@@ -39,6 +41,40 @@ namespace His_Pos.Class.Authority
             }
 
             return collection;
+        }
+
+        internal static Collection<AuthLeaveRecord> GetLeaveRecord()
+        {
+            Collection<AuthLeaveRecord> collection = new Collection<AuthLeaveRecord>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[AuthenticationManageView].[GetAuthLeaveRecord]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new AuthLeaveRecord(row));
+            }
+
+            return collection;
+        }
+
+        internal static void AuthLeaveConfirm(List<AuthLeaveRecord> confirmList)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            DataTable details = new DataTable();
+            details.Columns.Add("EMP_ID", typeof(string));
+            details.Columns.Add("INSERTDATE", typeof(DateTime));
+            foreach (var record in confirmList)
+            {
+                var newRow = details.NewRow();
+                newRow["EMP_ID"] = record.Id;
+                newRow["INSERTDATE"] = record.InsertTime;
+                details.Rows.Add(newRow);
+            }
+            parameters.Add(new SqlParameter("LEAVE", details));
+            dd.ExecuteProc("[HIS_POS_DB].[AuthenticationManageView].[ConfirmLeaveRecord]", parameters);
         }
     }
 }

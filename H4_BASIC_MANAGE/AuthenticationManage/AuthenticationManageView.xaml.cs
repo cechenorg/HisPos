@@ -3,6 +3,7 @@ using His_Pos.Class.Leave;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -17,13 +18,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class;
+using His_Pos.H5_ATTEND.WorkScheduleManage;
 
 namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
 {
     /// <summary>
     /// AuthenticationManageView.xaml 的互動邏輯
     /// </summary>
-    public partial class AuthenticationManageView : UserControl
+    public partial class AuthenticationManageView : UserControl, INotifyPropertyChanged
     {
         public class AuthStatus
         {
@@ -38,12 +41,48 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
         }
 
         Collection<AuthStatus> AuthStatuses { get; set; }
+        private Collection<AuthLeaveRecord> authLeaveRecords;
+
+        public Collection<AuthLeaveRecord> AuthLeaveRecords
+        {
+            get { return authLeaveRecords; }
+            set
+            {
+                authLeaveRecords = value;
+                NotifyPropertyChanged("AuthLeaveRecords");
+            }
+        }
+
+        public string AuthLeaveCheckedCount {
+            get { return AuthLeaveRecords.Count(al => al.IsSelected).ToString(); }
+        }
+
+        public static AuthenticationManageView Instance;
+        public static bool DataChanged;
 
         public AuthenticationManageView()
         {
             InitializeComponent();
-
+            DataContext = this;
+            Instance = this;
+            DataChanged = false;
             InitAuthStatus();
+
+            InitAuthRecord();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        public void InitAuthRecord()
+        {
+            AuthLeaveRecords = AuthorityDb.GetLeaveRecord();
         }
 
         private void InitAuthStatus()
@@ -70,6 +109,44 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
         {
             LeaveGrid.IsEnabled = status;
             LeaveConfirmStack.IsEnabled = status;
+        }
+
+        private void AuthLeave_OnClick(object sender, RoutedEventArgs e)
+        {
+            UpdateUi();
+
+            AuthLeaveAllSelectCheckBox.IsChecked =
+                AuthLeaveRecords.Count(al => al.IsSelected) == AuthLeaveRecords.Count;
+        }
+
+        public void UpdateUi()
+        {
+            NotifyPropertyChanged("AuthLeaveCheckedCount");
+        }
+
+        private void AuthLeaveAllSelectCheckBox_OnClick(object sender, RoutedEventArgs e)
+        {
+            bool selectStatus = (bool)AuthLeaveAllSelectCheckBox.IsChecked;
+
+            foreach (var authLeaveRecord in AuthLeaveRecords)
+            {
+                authLeaveRecord.IsSelected = selectStatus;
+            }
+
+            UpdateUi();
+        }
+
+        private void LeaveConfirm_OnClick(object sender, RoutedEventArgs e)
+        {
+            AuthorityDb.AuthLeaveConfirm(AuthLeaveRecords.Where(al => al.IsSelected).ToList());
+
+            MessageWindow messageWindow = new MessageWindow("審核成功!", MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+
+            WorkScheduleManageView.DataChanged = true;
+
+            InitAuthRecord();
+            UpdateUi();
         }
     }
 }

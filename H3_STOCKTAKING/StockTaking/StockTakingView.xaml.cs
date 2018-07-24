@@ -102,6 +102,7 @@ namespace His_Pos.StockTaking
             SetOtcTypeUi();
             Instance = this;
             DataContext = this;
+            DataChanged = false;
             UserAutoCompleteCollection = PersonDb.GetUserCollection();
             TakingEmp.ItemsSource = UserAutoCompleteCollection;
             TakingEmp.ItemFilter = UserFilter;
@@ -125,7 +126,6 @@ namespace His_Pos.StockTaking
         }
         public void InitProduct()
         {
-            DataChanged = false;
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.MergeProductStockTaking(this);
             loadingWindow.Topmost = true;
