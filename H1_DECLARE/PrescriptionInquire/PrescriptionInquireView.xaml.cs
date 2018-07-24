@@ -118,6 +118,7 @@ namespace His_Pos.PrescriptionInquire
             fdlg.Filter = "Xml健保申報檔案|*.xml";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
+            DeclareDb declareDb = new DeclareDb();
             XmlDocument doc = new XmlDocument();
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
@@ -129,7 +130,7 @@ namespace His_Pos.PrescriptionInquire
                     xDoc.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
                     DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0]);
                     declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
-                   
+                    declareDb.InsertDb(declareData);
                 }
             } 
 

@@ -37,7 +37,7 @@ namespace His_Pos.Service
             var dt = DateTime.ParseExact(datetime, "yyy/MM/dd", CultureInfo.InvariantCulture).AddYears(1911);
             return dt;
         }
-      
+       
         /*
          * 計算年齡
          */
@@ -59,7 +59,10 @@ namespace His_Pos.Service
             var year = birthday.Substring(0, 3).StartsWith("0") ? birthday.Substring(1, 2) : birthday.Substring(0, 3);
             return year + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
         }
-
+        public static string BirthdayFormatConverter2(string birthday)
+        {
+            return birthday.Substring(0, 3) + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
+        }
         public static string UsToTaiwan(string ustring)
         {
             string[] split = ustring.Split('/');

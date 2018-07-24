@@ -100,12 +100,6 @@
                 <Label Content="調劑案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                 <Label x:Name="AdjustCase" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded"  HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="4" >
-                <Label Content="領藥次數" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <Label Content="{Binding ChronicSequence}" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" Margin="10,0,0,0" HorizontalContentAlignment="Center"/>
-                <Label Content="/" FontSize="16" Width="auto" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" HorizontalContentAlignment="Stretch"/>
-                <Label Content="{Binding ChronicTotal}" Width="30" FontSize="15" FontWeight="Bold" VerticalContentAlignment="Center" Height="30" MinWidth="30" HorizontalContentAlignment="Center" HorizontalAlignment="Left"/>
-            </StackPanel>
             <DataGrid Name="PrescriptionSet" Grid.Row="5" Grid.ColumnSpan="5" Margin="10"  CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       Background="{StaticResource GridBackGround}" ItemsSource="{Binding InquiredPrescription.DeclareDetails,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"
                       Grid.Column="0" IsReadOnly="True">

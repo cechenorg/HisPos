@@ -39,12 +39,19 @@ namespace His_Pos.Class
         public Prescription(XmlNode xml)
         {
             Customer = new Customer(xml);
+            Customer.Id = CustomerDb.CheckCustomerExist(Customer);
             Pharmacy = new Pharmacy(xml);
             Treatment = new Treatment(xml);
             ChronicSequence = xml.SelectSingleNode("d35") == null ? null : xml.SelectSingleNode("d35").InnerText;
             ChronicTotal = xml.SelectSingleNode("d36") == null ? null : xml.SelectSingleNode("d36").InnerText;
             OriginalMedicalNumber = xml.SelectSingleNode("d43") == null ? null : xml.SelectSingleNode("d43").InnerText;
             Medicines = new ObservableCollection<DeclareMedicine>();
+            XmlDocument tempxml = new XmlDocument();
+            tempxml.LoadXml("<temp>" + xml.InnerXml + "</temp>");
+            XmlNodeList pdatas = tempxml.GetElementsByTagName("pdata");
+            foreach (XmlNode pdata in pdatas) {
+                Medicines.Add(new DeclareMedicine(pdata));
+            }
         }
         public Customer Customer { get; set; }
         public Pharmacy Pharmacy { get; set; } //藥局
