@@ -242,6 +242,8 @@
     <Compile Include="Class\Manufactory\ManufactoryPayOverview.cs" />
     <Compile Include="Class\Manufactory\ManufactoryPrincipal.cs" />
     <Compile Include="Class\Manufactory\ProductDetailManufactory.cs" />
+    <Compile Include="Class\MedBagLocation\MedBagLocation.cs" />
+    <Compile Include="Class\MedBagLocation\MedBagLocationDB.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
     <Compile Include="Class\Copayment\Copayment.cs" />
     <Compile Include="Class\Copayment\CopaymentDb.cs" />
@@ -353,11 +355,15 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
-    <Compile Include="H4_BASIC_MANAGE\MedBagManage\MedBagDb.cs" />
     <Compile Include="H4_BASIC_MANAGE\MedBagManage\MedBagManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\MedBagManage\MedBagManageView.xaml.cs">
       <DependentUpon>MedBagManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H4_BASIC_MANAGE\MedBagManage\RdlLocationControl.xaml.cs">
+      <DependentUpon>RdlLocationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H4_BASIC_MANAGE\MedBagManage\RDLLocationMoveThumb.cs" />
+    <Compile Include="H4_BASIC_MANAGE\MedBagManage\RDLLocationResizeThumb.cs" />
     <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
       <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
@@ -569,6 +575,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\MedBagManage\MedBagManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\MedBagManage\RdlLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

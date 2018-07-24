@@ -5,84 +5,83 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedBagManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:s="clr-namespace:His_Pos.H4_BASIC_MANAGE.LocationManage"
     d:DesignHeight="839"
     d:DesignWidth="1365"
     mc:Ignorable="d">
     <UserControl.Resources>
 
         <!--  MoveThumb Template  -->
-        <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type s:MoveThumb}">
+        <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:RDLLocationMoveThumb}">
             <Rectangle Fill="Transparent" />
         </ControlTemplate>
 
-        <ControlTemplate x:Key="LineThumbTemplate" TargetType="{x:Type s:ResizeThumb}">
+        <ControlTemplate x:Key="LineThumbTemplate" TargetType="{x:Type local:RDLLocationResizeThumb}">
             <Rectangle Fill="DodgerBlue" />
         </ControlTemplate>
 
-        <ControlTemplate x:Key="CornerThumbTemplate" TargetType="{x:Type s:ResizeThumb}">
+        <ControlTemplate x:Key="CornerThumbTemplate" TargetType="{x:Type local:RDLLocationResizeThumb}">
             <Ellipse Fill="DarkBlue" />
         </ControlTemplate>
 
         <!--  ResizeDecorator Template  -->
         <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
             <Grid>
-                <s:ResizeThumb
+                <local:RDLLocationResizeThumb
                     Height="3"
-                    Margin="0,-4,0,0"
+                    Margin="0,-5,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"
                     Cursor="SizeNS"
                     Template="{StaticResource LineThumbTemplate}" />
-                <s:ResizeThumb
+                <local:RDLLocationResizeThumb
                     Width="3"
-                    Margin="-4,0,0,0"
+                    Margin="-5,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Stretch"
                     Cursor="SizeWE"
                     Template="{StaticResource LineThumbTemplate}" />
-                <s:ResizeThumb
+                <local:RDLLocationResizeThumb
                     Width="3"
-                    Margin="0,0,-4,0"
+                    Margin="0,0,-5,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Cursor="SizeWE"
                     Template="{StaticResource LineThumbTemplate}" />
-                <s:ResizeThumb
+                <local:RDLLocationResizeThumb
                     Height="3"
-                    Margin="0,0,0,-4"
+                    Margin="0,0,0,-5"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
                     Cursor="SizeNS"
                     Template="{StaticResource LineThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="20"
-                    Height="20"
-                    Margin="-12,-12,0,0"
+                <local:RDLLocationResizeThumb
+                    Width="5"
+                    Height="5"
+                    Margin="-3,-3,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Cursor="SizeNWSE"
                     Template="{StaticResource CornerThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="20"
-                    Height="20"
-                    Margin="0,-12,-12,0"
+                <local:RDLLocationResizeThumb
+                    Width="5"
+                    Height="5"
+                    Margin="0,-3,-3,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     Cursor="SizeNESW"
                     Template="{StaticResource CornerThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="20"
-                    Height="20"
-                    Margin="-12,0,0,-12"
+                <local:RDLLocationResizeThumb
+                    Width="5"
+                    Height="5"
+                    Margin="-3,0,0,-3"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
                     Cursor="SizeNESW"
                     Template="{StaticResource CornerThumbTemplate}" />
-                <s:ResizeThumb
-                    Width="20"
-                    Height="20"
-                    Margin="0,0,-12,-12"
+                <local:RDLLocationResizeThumb
+                    Width="5"
+                    Height="5"
+                    Margin="0,0,-3,-3"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Bottom"
                     Cursor="SizeNWSE"
@@ -91,19 +90,18 @@
         </ControlTemplate>
 
         <!--  Designer Item Template  -->
-        <ControlTemplate x:Key="DesignerItemTemplate" TargetType="ContentControl">
+        <ControlTemplate x:Key="MedBagDesignerItemTemplate" TargetType="ContentControl">
             <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                <s:MoveThumb
+                <local:RDLLocationMoveThumb
                     x:Name="MoveThumb"
                     Cursor="SizeAll"
                     Template="{StaticResource MoveThumbTemplate}">
-                    <s:MoveThumb.Style>
-                        <Style TargetType="s:MoveThumb">
+                    <local:RDLLocationMoveThumb.Style>
+                        <Style TargetType="local:RDLLocationMoveThumb">
                             <EventSetter Event="PreviewMouseLeftButtonDown" Handler="MoveThumb_MouseLeftButtonDown" />
-                            <EventSetter Event="MouseDoubleClick" Handler="ShowLocationDetail" />
                         </Style>
-                    </s:MoveThumb.Style>
-                </s:MoveThumb>
+                    </local:RDLLocationMoveThumb.Style>
+                </local:RDLLocationMoveThumb>
                 <Control Template="{StaticResource ResizeDecoratorTemplate}">
                     <Control.Style>
                         <Style TargetType="Control">

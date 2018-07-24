@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="His_Pos.H4_BASIC_MANAGE.MedBagManage.RdlLocationControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedBagManage"
+             mc:Ignorable="d">
+    <Grid Background="{StaticResource GridSelected}" IsHitTestVisible="False">
+        <Label
+            Name="RdlParameterName"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontFamily="Segoe UI Semibold"
+            FontSize="10" Margin="2"/>
+    </Grid>
+</UserControl>
