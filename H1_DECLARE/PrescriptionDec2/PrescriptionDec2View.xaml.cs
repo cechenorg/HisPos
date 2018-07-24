@@ -176,21 +176,25 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
             MessageWindow m;
+            ConfirmWindow c;
             if (Prescription.CheckPrescriptionData().Equals(""))
             {
                 var declareData = new DeclareData(Prescription);
                 var declareDb = new DeclareDb();
                 declareDb.InsertDb(declareData);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+                m.Show();
             }
             else
             {
-                m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
-                var declareData = new DeclareData(Prescription);
-                var declareDb = new DeclareDb();
-                declareDb.InsertDb(declareData);
+                c = new ConfirmWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
+                //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
+                //var declareData = new DeclareData(Prescription);
+                //var declareDb = new DeclareDb();
+                //declareDb.InsertDb(declareData);
+                c.ShowDialog();
             }
-            m.Show();
+            
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)

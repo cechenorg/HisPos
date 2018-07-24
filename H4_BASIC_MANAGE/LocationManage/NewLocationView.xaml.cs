@@ -35,18 +35,21 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 LocationManageView.Instance.NewLocation(null, txtNewLocation.Text);
                 Close();
             }
-            else {
+            else
+            {
                 txtNewLocation.Text = "";
                 MessageBox.Show(error);
             }
-           
         }
-        private string IsCheck() {
+
+        private string IsCheck()
+        {
             int number = 0;
-            bool canConvert = int.TryParse(txtNewLocation.Text.Substring(0,1), out number);
-            if (canConvert) {
+            bool canConvert = int.TryParse(txtNewLocation.Text.Substring(0, 1), out number);
+            if (canConvert)
+            {
                 return "第一個字不可以為數字";
-            } 
+            }
             foreach (ContentControl contentControl in LocationManageView.Instance.LocationCanvus.Children)
             {
                 LocationControl locationControl = (LocationControl)contentControl.Content;
@@ -55,6 +58,5 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
 
             return "";
         }
-
     }
 }

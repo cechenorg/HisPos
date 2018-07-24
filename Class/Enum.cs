@@ -28,7 +28,8 @@ namespace His_Pos.Class
         排班管理 = 13,
         藥品頻率管理 = 14,
         測試啦 = 15,
-        藥局管理 = 16
+        藥局管理 = 16,
+        藥袋管理 = 17
     }
 
     public enum ItemType
@@ -85,7 +86,8 @@ namespace His_Pos.Class
     public enum MessageType
     {
         ERROR = 0,
-        SUCCESS = 1
+        SUCCESS = 1,
+        WARNING = 2
     }
 
     public enum SystemType

@@ -1,9 +1,9 @@
 ﻿<UserControl
-    x:Class="His_Pos.LocationManage.LocationManageView"
+    x:Class="His_Pos.H4_BASIC_MANAGE.MedBagManage.MedBagManageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:His_Pos.LocationManage"
+    xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedBagManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:s="clr-namespace:His_Pos.H4_BASIC_MANAGE.LocationManage"
     d:DesignHeight="839"
@@ -115,68 +115,79 @@
             </Grid>
         </ControlTemplate>
     </UserControl.Resources>
-    <Viewbox Stretch="Fill">
-        <Grid Width="1365" Height="839">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="50" />
-            </Grid.RowDefinitions>
-            <Canvas
-                Name="LocationCanvus"
-                Grid.Row="0"
-                Margin="10">
-                <Canvas.Background>
-                    <ImageBrush ImageSource="../../Images/blueprint.png" />
-                </Canvas.Background>
-            </Canvas>
-            <StackPanel
-                Grid.Row="1"
-                Background="{StaticResource GridDarkerBackGround}"
-                Orientation="Horizontal">
-                <Button
-                    Width="120"
-                    Margin="15,9,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Click="ButtonBase_OnClick"
-                    Content="+ 新增櫃位"
-                    FontFamily="Segoe UI Semibold"
-                    Foreground="Black" />
-                <Button
-                    Name="ButtonDeleteLocation"
-                    Width="120"
-                    Margin="15,9,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Click="ButtonDeleteLocation_Click"
-                    Content="- 刪除櫃位"
-                    FontFamily="Segoe UI Semibold"
-                    Foreground="Black" />
-                <Button
-                    Name="ButtonCopyLocation"
-                    Width="120"
-                    Margin="15,9,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Click="ButtonCopyLocation_Click"
-                    Content="複製櫃位"
-                    FontFamily="Segoe UI Semibold"
-                    Foreground="Black" />
-                <Button
-                    Name="ButtonChangeLocation"
-                    Width="120"
-                    Margin="15,9,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Click="ButtonChangeLocation_Click"
-                    Content="換櫃"
-                    FontFamily="Segoe UI Semibold"
-                    Foreground="Black" />
-            </StackPanel>
-        </Grid>
-    </Viewbox>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="600" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Button
+            Name="ImageSelector"
+            Grid.Row="0"
+            Width="130"
+            Height="34"
+            Margin="30,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Click="ImageSelector_Click"
+            Content="選擇藥袋圖檔"
+            FontSize="16"
+            Foreground="White" />
+        <Image
+            Name="Image"
+            Grid.Row="1"
+            Height="600"
+            Stretch="Uniform" />
+        <Canvas
+            Name="MedBagCanvas"
+            Grid.Row="1"
+            Height="600"
+            Margin="10" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Button
+                Name="PatientName"
+                Width="120"
+                Margin="15,9,0,0"
+                VerticalAlignment="Top"
+                Background="{StaticResource Shadow}"
+                BorderBrush="Transparent"
+                Click="NewLocationClick"
+                Content="病患姓名"
+                FontFamily="Segoe UI Semibold"
+                Foreground="Black" />
+            <Button
+                Name="PatientIcNumber"
+                Width="120"
+                Margin="15,9,0,0"
+                VerticalAlignment="Top"
+                Background="{StaticResource Shadow}"
+                BorderBrush="Transparent"
+                Click="NewLocationClick"
+                Content="身分證字號"
+                FontFamily="Segoe UI Semibold"
+                Foreground="Black" />
+            <Button
+                Name="PatientBirth"
+                Width="120"
+                Margin="15,9,0,0"
+                VerticalAlignment="Top"
+                Background="{StaticResource Shadow}"
+                BorderBrush="Transparent"
+                Click="NewLocationClick"
+                Content="病患生日"
+                FontFamily="Segoe UI Semibold"
+                Foreground="Black" />
+            <Button
+                Name="PatientGender"
+                Width="120"
+                Margin="15,9,0,0"
+                VerticalAlignment="Top"
+                Background="{StaticResource Shadow}"
+                BorderBrush="Transparent"
+                Click="NewLocationClick"
+                Content="病患性別"
+                FontFamily="Segoe UI Semibold"
+                Foreground="Black" />
+        </StackPanel>
+    </Grid>
 </UserControl>

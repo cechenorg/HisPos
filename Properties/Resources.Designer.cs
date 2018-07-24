@@ -250,6 +250,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 藥袋管理 的當地語系化字串。
+        /// </summary>
+        internal static string MedBagManage {
+            get {
+                return ResourceManager.GetString("MedBagManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 藥品頻率管理 的當地語系化字串。
         /// </summary>
         internal static string MedFrequencyManage {
