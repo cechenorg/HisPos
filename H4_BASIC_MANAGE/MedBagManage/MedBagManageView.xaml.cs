@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.Class;
+using His_Pos.Class.MedBagLocation;
 using His_Pos.H4_BASIC_MANAGE.LocationManage;
 using His_Pos.LocationManage;
 using JetBrains.Annotations;
@@ -31,9 +32,8 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
     public partial class MedBagManageView : UserControl, INotifyPropertyChanged
     {
         public static MedBagManageView Instance;
-        public LocationControl selectItem;
-        public ObservableCollection<Location> locationCollection = new ObservableCollection<Location>();
-        public static int id = 0;
+        public ObservableCollection<MedBagLocation> MedBagLocationCollection = new ObservableCollection<MedBagLocation>();
+        private static int id = 0;
 
         public MedBagManageView()
         {
@@ -77,24 +77,24 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
             Instance.NewLocation(null, locationName);
         }
 
-        public void NewLocation(string locid = null, string locname = null, double height = 0, double width = 0, double top = 0, double left = 0)
+        public void NewLocation(string locid = null, string parameterName = null, double height = 0, double width = 0, double top = 0, double left = 0)
         {
             ContentControl contentControl = new ContentControl();
-            contentControl.Template = (ControlTemplate)FindResource("DesignerItemTemplate");
-            LocationControl newLocation = null;
+            contentControl.Template = (ControlTemplate)FindResource("MedBagDesignerItemTemplate");
+            RdlLocationControl newLocation = null;
             if (locid != null)
             {
-                newLocation = new LocationControl(Convert.ToInt32(locid));
-                newLocation.Name = locname;
-                newLocation.locationName.Content = locname;
+                newLocation = new RdlLocationControl(Convert.ToInt32(locid));
+                newLocation.Name = parameterName;
+                newLocation.RdlParameterName.Content = parameterName;
                 id = Convert.ToInt32(locid);
                 id++;
             }
             else
             {
-                newLocation = new LocationControl(id);
-                newLocation.Name = locname;
-                newLocation.locationName.Content = locname;
+                newLocation = new RdlLocationControl(id);
+                newLocation.Name = parameterName;
+                newLocation.RdlParameterName.Content = parameterName;
                 id++;
             }
             contentControl.Height = (height == 0) ? 10 : height;
@@ -108,13 +108,13 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
 
         public void SaveLocation()
         {
-            locationCollection.Clear();
+            MedBagLocationCollection.Clear();
             foreach (ContentControl contentControl in MedBagCanvas.Children)
             {
-                LocationControl locationControl = (LocationControl)contentControl.Content;
-                locationCollection.Add(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(contentControl), Canvas.GetTop(contentControl), contentControl.Width, contentControl.Height));
+                RdlLocationControl locationControl = (RdlLocationControl)contentControl.Content;
+                MedBagLocationCollection.Add(new MedBagLocation(locationControl.id, locationControl.Name, Canvas.GetLeft(contentControl), Canvas.GetTop(contentControl), contentControl.Width, contentControl.Height));
             }
-            MedBagDb.SaveLocationData(locationCollection);
+            MedBagLocationDB.SaveLocationData(MedBagLocationCollection);
         }
 
         private void MoveThumb_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -125,29 +125,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                 var thumb = VisualTreeHelper.GetChild(child, 1);
                 ((Control)thumb).Visibility = Visibility.Collapsed;
             }
-            (((Grid)(sender as MoveThumb).Parent).Children.OfType<Control>().ToList())[1].Visibility = Visibility.Visible;
-
-            var grid = VisualTreeHelper.GetChild(((Grid)(sender as MoveThumb).Parent), 2);
-            var locationcontrol = VisualTreeHelper.GetChild(grid, 0);
-            selectItem = (LocationControl)locationcontrol;
-        }
-
-        private void ShowLocationDetail(object sender, MouseButtonEventArgs e)
-        {
-            SaveLocation();
-            var control = (MoveThumb)sender;
-            foreach (ContentControl item in MedBagCanvas.Children)
-            {
-                if ((LocationControl)item.Content == selectItem)
-                {
-                    LocationControl locationControl = (LocationControl)item.Content;
-                    selectItem = locationControl;
-                    LocationDetailWindow locationDetailWindow = new LocationDetailWindow(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(item), Canvas.GetTop(item), item.Width, item.Height));
-                    locationDetailWindow.Show();
-                    locationDetailWindow.Focus();
-                    return;
-                }
-            }
+            (((Grid)(sender as RDLLocationMoveThumb).Parent).Children.OfType<Control>().ToList())[1].Visibility = Visibility.Visible;
         }
     }
 }
