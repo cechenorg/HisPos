@@ -21,8 +21,8 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="9" Grid.ColumnSpan="2">
                 <Label Content="頻率代號" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Margin="0,0,10,0" Width="130" FontSize="16"/>
-                <Rectangle Width="985"/>
-                <Button Name="ButtonSearch" Grid.Column="1" Grid.Row="0" Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Click="ButtonSearch_Click"/>
+                <Rectangle Width="990"/>
+                <Button Name="ButtonSearch" Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Click="ButtonSearch_Click"/>
             </StackPanel>
             <DataGrid Name="DataGridMedFrequency" Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                            SelectionChanged="DataGridMedFrequency_SelectionChanged" ItemsSource="{Binding UsageCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
