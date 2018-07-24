@@ -131,7 +131,7 @@ namespace His_Pos.ProductPurchaseRecord
         public bool StoOrderOverviewFilter(object item)
         {
             bool reply = false;
-            int id = Convert.ToInt32(((StoreOrder)item).Id.Substring(0,8));
+            int id = Convert.ToInt32(((StoreOrder)item).Id.Substring(1,8));
             switch (((StoreOrder)item).Category.CategoryName) {
                 case "進貨":
                     if (

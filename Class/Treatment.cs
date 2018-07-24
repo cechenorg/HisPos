@@ -20,7 +20,7 @@ namespace His_Pos.Class
         public Treatment(DataRow row)
         {
             MedicalInfo = new MedicalInfo(row);
-            Copayment = new Copayment.Copayment();
+            Copayment = new Copayment.Copayment(row);
             AdjustCase = new AdjustCase.AdjustCase(row);
             MedicineDays = "0";
             TreatmentDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_TREATDATE"].ToString().Substring(1, 9));

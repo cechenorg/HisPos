@@ -25,15 +25,15 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal"  Grid.Row="0" >
+            <StackPanel Orientation="Horizontal"  Grid.Row="0"  Grid.ColumnSpan="5">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
                         <hisPos:IconLabel x:Name="PatientName" HorizontalAlignment="Left"/>
-                        <hisPos:IconLabel x:Name="PatientBirthday" HorizontalAlignment="Left"/>
+                        <hisPos:IconLabel x:Name="PatientBirthday"  HorizontalAlignment="Left"/>
                         <hisPos:IconLabel Width="100"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0">
-                        <hisPos:IconLabel x:Name="PatientId" HorizontalAlignment="Left"/>
+                        <hisPos:IconLabel x:Name="PatientId"  HorizontalAlignment="Left"/>
                         <hisPos:IconLabel x:Name="PatientTel" HorizontalAlignment="Left"/>
                     </StackPanel>
                 </StackPanel>
@@ -87,11 +87,11 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="1"  >
                 <Label Content="部分負擔" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <Label Name="CopaymentCode" Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                <Label Name="CopaymentCode" Content="{Binding InquiredPrescription.Prescription.Treatment.Copayment.FullName}"  Width="147" Height="30" FontSize="14" FontWeight="Bold" Margin="0,10,0,0" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="2"  >
                 <Label Content="處方案件" Foreground="#FF424040" Width="auto" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <Label x:Name="TreatmentCase" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                <Label x:Name="TreatmentCase" Width="147" Content="{Binding InquiredPrescription.Prescription.Treatment.AdjustCase.FullName}" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
                 <Label Content="給藥日份" Width="auto" Foreground="#FF424040" Margin="10" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                 <Label Content="{Binding InquiredPrescription.Prescription.Treatment.MedicineDays}" MinWidth="60" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
                                      BorderThickness="0,0,0,1" HorizontalContentAlignment="Left" BorderBrush="DimGray" VerticalContentAlignment="Center"/>

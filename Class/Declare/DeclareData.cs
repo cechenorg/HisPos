@@ -150,7 +150,7 @@ namespace His_Pos.Class.Declare
                     MedicalServiceCode = "05202B";
                     break;
 
-                case "2" when treatmentCaseId == chronic:
+                case "2" :
                     SetChronicMedicalServiceCode();
                     break;
             }
