@@ -172,13 +172,18 @@ namespace His_Pos.H5_ATTEND.ClockIn
 
                     UserPassword.Password = "";
                     UserPassword.Focus();
-                    break;
+                    return;
             }
             EmpClockIns = EmployeeDb.GetEmpClockIn();
+
+
         }
 
         private void ClearUi()
         {
+            UserId.Focus();
+            AutoRadio.IsChecked = true;
+
             UserId.Text = "";
             UserPassword.Password = "";
         }

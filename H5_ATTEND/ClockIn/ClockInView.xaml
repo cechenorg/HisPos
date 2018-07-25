@@ -41,7 +41,7 @@
                     <StackPanel Name="InOutStack" Orientation="Horizontal" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center">
                         <RadioButton Content="上班" Tag="I" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                         <RadioButton Content="下班" Tag="O" Margin="30,0,0,0" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        <RadioButton Content="自動辨識" Tag="A" Margin="30,0,0,0" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
+                        <RadioButton Name="AutoRadio" Content="自動辨識" Tag="A" Margin="30,0,0,0" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True"/>
                     </StackPanel>
                     <TextBox Name="UserId" Grid.Row="4" Grid.Column="0" materialDesign:HintAssist.Hint="員工編號" Width="200" FontSize="25" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" KeyDown="UserId_KeyDown"/>
                     <PasswordBox Name="UserPassword" Grid.Row="5" Grid.Column="0" materialDesign:HintAssist.Hint="員工密碼" Width="200" FontSize="25" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" KeyDown="UserPassword_KeyDown"/>
