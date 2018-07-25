@@ -76,10 +76,11 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
         {
 
         }
-        private void Text_TextChanged(object sender, EventArgs e)
+        private void TextBox_DataChanged(object sender, EventArgs e)
         {
             DataChanged();
         }
+
         private void DataChanged()
         {
             if (isFirst) return;
@@ -110,13 +111,9 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
             InitDataChanged();
         }
 
-        private void ButtonSearch_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
+            UsageDetail = (Usage)UsageCollection[DataGridMedFrequency.SelectedIndex].Clone();
             InitDataChanged();
         }
 
@@ -125,6 +122,11 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
             UsageDb.SaveUsage(UsageDetail);
             UsageCollection[DataGridMedFrequency.SelectedIndex] = UsageDetail;
             InitDataChanged();
+        }
+
+        private void CheckBox_DataChanged(object sender, RoutedEventArgs e)
+        {
+            DataChanged();
         }
     }
 }

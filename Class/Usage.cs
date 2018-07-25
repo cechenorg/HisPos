@@ -14,7 +14,7 @@ namespace His_Pos.Class
         {
             Name = "";
         }
-        public Usage(Usage usage)
+        private Usage(Usage usage)
         {
             Id = usage.Id;
             Name = usage.Name;
@@ -24,6 +24,7 @@ namespace His_Pos.Class
             Days = usage.Days;
             Times = usage.Times;
             PreDefault = usage.PreDefault;
+            PrintIcons = (bool[])usage.PrintIcons.Clone();
         }
         public Usage(DataRow dataRow)
         {
@@ -47,6 +48,8 @@ namespace His_Pos.Class
         public string Times { get; set; }
 
         public bool PreDefault { get; set; }
+        
+        public bool[] PrintIcons { get; set; } = new bool[6];
 
         public object Clone()
         {
