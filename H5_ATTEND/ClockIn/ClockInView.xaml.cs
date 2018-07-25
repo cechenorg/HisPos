@@ -142,25 +142,25 @@ namespace His_Pos.H5_ATTEND.ClockIn
             }
 
             string inout = InOutStack.Children.OfType<RadioButton>().Single(r => (bool) r.IsChecked).Tag.ToString();
-
+            
             switch (WorkScheduleDb.UserClockIn(UserId.Text, UserPassword.Password, inout)) {
                 case "上班打卡成功":
                     MessageWindow messageWindow = new MessageWindow("上班打卡成功!", MessageType.SUCCESS);
                     messageWindow.ShowDialog();
                     ClearUi();
                     break;
-                case "您已經打過上班卡":
-                    messageWindow = new MessageWindow("您已經打過上班卡", MessageType.ERROR);
-                    messageWindow.ShowDialog();
-                    UserId.Text = string.Empty;
-                    UserPassword.Password = string.Empty;
-                    break;
-                case "您已經下班 無法打卡上班 已通知主管":
-                    messageWindow = new MessageWindow("您已經下班 無法打卡上班 已通知主管", MessageType.ERROR);
-                    messageWindow.ShowDialog();
-                    UserId.Text = string.Empty;
-                    UserPassword.Password = string.Empty;
-                    break;
+                //case "您已經打過上班卡":
+                //    messageWindow = new MessageWindow("您已經打過上班卡", MessageType.ERROR);
+                //    messageWindow.ShowDialog();
+                //    UserId.Text = string.Empty;
+                //    UserPassword.Password = string.Empty;
+                //    break;
+                //case "您已經下班 無法打卡上班 已通知主管":
+                //    messageWindow = new MessageWindow("您已經下班 無法打卡上班 已通知主管", MessageType.ERROR);
+                //    messageWindow.ShowDialog();
+                //    UserId.Text = string.Empty;
+                //    UserPassword.Password = string.Empty;
+                //    break;
                 case "下班打卡成功":
                     messageWindow = new MessageWindow("下班打卡成功!", MessageType.SUCCESS);
                     messageWindow.ShowDialog();
