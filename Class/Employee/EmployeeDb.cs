@@ -14,10 +14,18 @@ namespace His_Pos.Class.Employee
 {
    public class EmployeeDb
     {
-        public static DataTable GetEmployeeData()
+        public static ObservableCollection<Employee> GetEmployeeData()
         {
+            ObservableCollection<Employee> collection = new ObservableCollection<Employee>();
+
             var dd = new DbConnection(Settings.Default.SQL_global);
-            return dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetEmployeeData]");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetEmployeeData]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new Employee(row));
+            }
+            return collection;
         }
         public static ObservableCollection<EmpClockIn> GetEmpClockIn()
         {
@@ -25,16 +33,7 @@ namespace His_Pos.Class.Employee
            var table = dd.ExecuteProc("[HIS_POS_DB].[ClockInView].[GetEmpClockIn]");
             ObservableCollection<EmpClockIn> empClockIns = new ObservableCollection<EmpClockIn>();
             foreach (DataRow row in table.Rows) {
-                if (row["EMPATT_STIME"].ToString() != string.Empty && row["EMPATT_ETIME"].ToString() != string.Empty)
-                {
-                    empClockIns.Add(new EmpClockIn(row["EMP_NAME"].ToString(), "下班",row["EMPATT_DATE"].ToString(), row["EMPATT_ETIME"].ToString()));
-                    empClockIns.Add(new EmpClockIn(row["EMP_NAME"].ToString(), "上班", row["EMPATT_DATE"].ToString(), row["EMPATT_STIME"].ToString()));
-                }
-                else {
-                    empClockIns.Add(new EmpClockIn(row["EMP_NAME"].ToString(), row["EMPATT_STIME"].ToString() != string.Empty? "上班":"下班", row["EMPATT_DATE"].ToString(),
-                        row["EMPATT_STIME"].ToString() != string.Empty ? row["EMPATT_STIME"].ToString() : row["EMPATT_ETIME"].ToString()));
-                }
-
+                empClockIns.Add(new EmpClockIn(row));
             }
             return empClockIns;
         }

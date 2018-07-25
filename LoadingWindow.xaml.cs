@@ -233,14 +233,11 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("取得員工資料...");
 
-                var table = EmployeeDb.GetEmployeeData();
+                var collection = EmployeeDb.GetEmployeeData();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    foreach (DataRow row in table.Rows)
-                    {
-                        employeeManage.EmployeeCollection.Add(new Employee(row));
-                    }
+                    employeeManage.EmployeeCollection = collection;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>

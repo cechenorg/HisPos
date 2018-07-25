@@ -30,20 +30,18 @@ namespace His_Pos.H5_ATTEND.ClockIn
     {
         private int typeFilterCondition = 0;
         public class EmpClockIn {
-            public EmpClockIn(string name,string type,string date,string time) {
-                empName = name;
-                clocckType = type;
-                typeIcon = type == "上班" ? new BitmapImage(new Uri(@"..\..\Images\DarkerHisDot.png", UriKind.Relative)) : new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
-                clocckDate = date;
-                clockTime = time;
+            public EmpClockIn(DataRow dataRow) {
+                empName = dataRow["EMP_NAME"].ToString();
+                clocckType = dataRow["EMPATT_TYPE"].ToString();
+                typeIcon = dataRow["EMPATT_TYPE"].ToString().Equals("上班")? new BitmapImage(new Uri(@"..\..\Images\DarkerHisDot.png", UriKind.Relative)) : new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
+                clocckDate = dataRow["EMPATT_DATE"].ToString();
             }
             public BitmapImage typeIcon { get; set; }
             public string empName { get; set;}
             public string clocckType { get; set; }
             public string clocckDate { get; set; }
-            public string clockTime { get; set; }
         }
-        private ObservableCollection<Employee> employees = new ObservableCollection<Employee>();
+        private ObservableCollection<Employee> employees;
         public ObservableCollection<Employee> Employees
         {
             get
@@ -102,12 +100,13 @@ namespace His_Pos.H5_ATTEND.ClockIn
             }
         }
         private void InitEmployee() {
-            Employee employee = new Employee();
-            employee.Name = "";
-            Employees.Add(employee);
-            foreach (DataRow row in EmployeeDb.GetEmployeeData().Rows) {
-                Employees.Add(new Employee(row));
-            }
+            Employees = EmployeeDb.GetEmployeeData();
+
+            var EmptyEmp = new Employee() { Name = "" };
+
+            Employees.Add(EmptyEmp);
+
+            comboboxEmployee.SelectedItem = EmptyEmp;
         }
         private void UserIcon_Click(object sender, RoutedEventArgs e)
         {
