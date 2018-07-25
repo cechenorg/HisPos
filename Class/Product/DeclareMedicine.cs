@@ -38,9 +38,7 @@ namespace His_Pos.Class.Product
             Position = "";
             source = "";
         }
-        public DeclareMedicine(XmlNode xml) {
-            Id = xml.SelectSingleNode("p2") == null ? null : xml.SelectSingleNode("p2").InnerText;
-        }
+        
         public bool IsControlMed { get; set; }
         public bool IsFrozMed { get; set; }
         private bool payself;

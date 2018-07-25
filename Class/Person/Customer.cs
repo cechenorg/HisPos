@@ -24,7 +24,7 @@ namespace His_Pos.Class.Person
             Birthday = row["CUS_BIRTH"].ToString();
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
-            Gender = Convert.ToBoolean(row["CUS_GENDER"].ToString());
+            Gender = row["CUS_GENDER"].ToString() == "" ? true : Convert.ToBoolean(row["CUS_GENDER"].ToString());
             IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
         }
         public Customer(XmlNode xml) {

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.Xml;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Service;
@@ -45,13 +46,6 @@ namespace His_Pos.Class
             ChronicSequence = xml.SelectSingleNode("d35") == null ? null : xml.SelectSingleNode("d35").InnerText;
             ChronicTotal = xml.SelectSingleNode("d36") == null ? null : xml.SelectSingleNode("d36").InnerText;
             OriginalMedicalNumber = xml.SelectSingleNode("d43") == null ? null : xml.SelectSingleNode("d43").InnerText;
-            Medicines = new ObservableCollection<DeclareMedicine>();
-            XmlDocument tempxml = new XmlDocument();
-            tempxml.LoadXml("<temp>" + xml.InnerXml + "</temp>");
-            XmlNodeList pdatas = tempxml.GetElementsByTagName("pdata");
-            foreach (XmlNode pdata in pdatas) {
-                Medicines.Add(new DeclareMedicine(pdata));
-            }
         }
         public Customer Customer { get; set; }
         public Pharmacy Pharmacy { get; set; } //藥局

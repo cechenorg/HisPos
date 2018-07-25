@@ -1,6 +1,7 @@
 ﻿using His_Pos.Class.Product;
 using System;
 using System.Data;
+using System.Xml;
 
 namespace His_Pos.Class.Declare
 {
@@ -42,6 +43,23 @@ namespace His_Pos.Class.Declare
             Dosage = row["HISDECDET_AMOUNT"].ToString() == "" ? 0 : Convert.ToDouble(row["HISDECDET_AMOUNT"].ToString());
             Usage = row["HISWAY_ID"].ToString();
             Days = row["HISDECDET_DRUGDAY"].ToString() == "" ? 0 : Convert.ToInt32(row["HISDECDET_DRUGDAY"].ToString());
+        }
+
+        public DeclareDetail(XmlNode xml) {
+            MedicalOrder = xml.SelectSingleNode("p1") == null ? null : xml.SelectSingleNode("p1").InnerText;
+            MedicalId = xml.SelectSingleNode("p2") == null ? null : xml.SelectSingleNode("p2").InnerText;
+            Dosage = xml.SelectSingleNode("p3") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p3").InnerText);
+            Usage = xml.SelectSingleNode("p4") == null ? null : xml.SelectSingleNode("p4").InnerText;
+            Position = xml.SelectSingleNode("p5") == null ? null : xml.SelectSingleNode("p5").InnerText;
+            Percent = xml.SelectSingleNode("p6") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p6").InnerText); 
+            Total = xml.SelectSingleNode("p7") == null ?  0 : Convert.ToDouble(xml.SelectSingleNode("p7").InnerText);
+            Price = xml.SelectSingleNode("p8") == null ?  0 : Convert.ToDouble(xml.SelectSingleNode("p8").InnerText);
+            Point = xml.SelectSingleNode("p9") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p9").InnerText);
+            Sequence = xml.SelectSingleNode("p10") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("p10").InnerText);
+            Days = xml.SelectSingleNode("p11") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("p11").InnerText);
+            StartDate = xml.SelectSingleNode("p12") == null ? null : xml.SelectSingleNode("p12").InnerText;
+            EndDate = xml.SelectSingleNode("p13") == null ? null : xml.SelectSingleNode("p13").InnerText;
+            Form = xml.SelectSingleNode("p14") == null ? null : xml.SelectSingleNode("p14").InnerText;
         }
         public string MedicalOrder { get; set; }//p1
         public string MedicalId { get; set; }//p2

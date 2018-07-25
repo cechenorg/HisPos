@@ -136,7 +136,7 @@ namespace His_Pos.Class.Declare
             {
                 var row = pDataTable.NewRow();
                 var detail = declareData.DeclareDetails[i];
-                var paySelf = declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
+                var paySelf = declareData.Prescription.Medicines == null ? "0" : declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
                 var tagsDictionary = new Dictionary<string, string>
                 {
                     {"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
