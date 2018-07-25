@@ -69,26 +69,40 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-               
-                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="3">
-                    <TextBox Text="{Binding UsageDetail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="代號" TextChanged="Text_TextChanged" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,40,0"/>
-                    <TextBox Text="{Binding UsageDetail.PrintName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="名稱" TextChanged="Text_TextChanged" Width="600" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="4">
+                    <TextBox Text="{Binding UsageDetail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="代號" BorderThickness="0" TextChanged="Text_TextChanged" Width="250" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                    <TextBox Text="{Binding UsageDetail.PrintName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="名稱" BorderThickness="0" TextChanged="Text_TextChanged" Width="750" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
-                    <Label  Content="使用天數" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                    <TextBox Width="120" Text="{Binding UsageDetail.Days,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                    <Label  Content="頻率簡碼" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
+                    <TextBox Width="140" Text="{Binding UsageDetail.QuickName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
+                    <Label  Content="使用天數" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
+                    <TextBox Width="140" Text="{Binding UsageDetail.Days,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="8">
                     <Label  Content="使用次數" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                    <TextBox Width="120" Text="{Binding UsageDetail.Times,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                    <TextBox Width="140" Text="{Binding UsageDetail.Times,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
                 </StackPanel>
-                <StackPanel  Orientation="Horizontal"  Grid.Row="4" Grid.Column="2" Margin="10,0,0,0">
-                    <Button Name="ButtonCancel" Width="120" Content="取消" FontFamily="Segoe UI Semibold" Click="ButtonCancel_Click" FontSize="16" Background="DimGray" BorderThickness="0" />
-                    <Rectangle Width="50"/>
-                    <Button Name="ButtonSubmit" Width="120" Content="確認" FontFamily="Segoe UI Semibold" Click="ButtonSubmit_Click" FontSize="16" Background="Red" BorderThickness="0" />
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Background="{StaticResource Shadow}">
+                    <Label  Content="藥袋勾選" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    <CheckBox Content="早上" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DimGray" Margin="15,0,0,0"/>
+                    <CheckBox Content="中午" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DimGray" Margin="30,0,0,0"/>
+                    <CheckBox Content="晚上" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DimGray" Margin="30,0,0,0"/>
+                    <CheckBox Content="睡前" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DimGray" Margin="30,0,0,0"/>
+                    <CheckBox Content="飯前" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DimGray" Margin="30,0,0,0"/>
+                    <CheckBox Content="飯後" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DimGray" Margin="30,0,0,0"/>
                 </StackPanel>
-                <Label Name="Changed" Width="100"  Grid.Row="4" Grid.Column="1" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="30,0,0,0"/>
+                <StackPanel  Orientation="Horizontal"  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Background="{StaticResource GridDarkerBackGround}">
+                    <Rectangle Width="670"/>
+                    <Label Name="Changed" Width="100"  Grid.Row="4" Grid.Column="1" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                    <Button Name="ButtonCancel" Width="120" Content="取消" FontFamily="Segoe UI Semibold" Click="ButtonCancel_Click" FontSize="16" Background="DimGray" BorderThickness="0" Margin="20,0,0,0"/>
+                    <Button Name="ButtonSubmit" Width="120" Content="確認" FontFamily="Segoe UI Semibold" Click="ButtonSubmit_Click" FontSize="16" Background="Red" BorderThickness="0" Margin="10,0,0,0"/>
+                </StackPanel>
+                
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                 <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>

@@ -24,7 +24,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
     public partial class MedFrequencyManageView : UserControl, INotifyPropertyChanged
     {
         private bool isFirst = true;
-        private Usage usageDetail = new Usage();
+        private Usage usageDetail;
         public Usage UsageDetail
         {
             get
@@ -123,6 +123,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
             UsageDb.SaveUsage(UsageDetail);
+            UsageCollection[DataGridMedFrequency.SelectedIndex] = UsageDetail;
             InitDataChanged();
         }
     }
