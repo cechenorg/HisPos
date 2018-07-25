@@ -121,6 +121,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
         {
             UsageDb.SaveUsage(UsageDetail);
             UsageCollection[DataGridMedFrequency.SelectedIndex] = UsageDetail;
+            DataGridMedFrequency.SelectedItem = UsageDetail;
             InitDataChanged();
         }
 

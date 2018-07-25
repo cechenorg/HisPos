@@ -36,6 +36,14 @@ namespace His_Pos.Class
             Days = (dataRow["USAGE_DAY"].ToString());
             Times = (dataRow["USAGE_TIMES"].ToString());
             PreDefault = bool.Parse(dataRow["USAGE_DEFAULT"].ToString());
+            
+            PrintIcons[0] = Boolean.Parse( dataRow["HISFREPRI_MORNING"].ToString());
+            PrintIcons[1] = Boolean.Parse( dataRow["HISFREPRI_NOON"].ToString());
+            PrintIcons[2] = Boolean.Parse( dataRow["HISFREPRI_NIGHT"].ToString());
+            PrintIcons[3] = Boolean.Parse( dataRow["HISFREPRI_SLEEP"].ToString());
+            PrintIcons[4] = Boolean.Parse( dataRow["HISFREPRI_BEFOREMEAL"].ToString());
+            PrintIcons[5] = Boolean.Parse( dataRow["HISFREPRI_AFTERMEAL"].ToString());
+
         }
         public string PrintName { get; set; }
         public string QuickName { get; set; }//快速輸入用代號
