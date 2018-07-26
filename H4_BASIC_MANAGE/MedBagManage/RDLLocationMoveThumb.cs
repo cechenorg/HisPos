@@ -18,7 +18,6 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
         private void MoveThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             Control designerItem = DataContext as Control;
-
             if (designerItem != null)
             {
                 double left = Canvas.GetLeft(designerItem);

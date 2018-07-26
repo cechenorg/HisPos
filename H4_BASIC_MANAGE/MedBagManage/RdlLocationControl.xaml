@@ -5,12 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedBagManage"
              mc:Ignorable="d">
-    <Grid Background="{StaticResource GridSelected}" IsHitTestVisible="False">
+    <Grid IsHitTestVisible="False">
         <Label
             Name="RdlParameterName"
-            HorizontalAlignment="Center"
+            HorizontalAlignment="Left"
             VerticalAlignment="Center"
             FontFamily="Segoe UI Semibold"
-            FontSize="10" Margin="2"/>
+            FontSize="10" Margin="0,-20,0,-20"/>
     </Grid>
 </UserControl>
