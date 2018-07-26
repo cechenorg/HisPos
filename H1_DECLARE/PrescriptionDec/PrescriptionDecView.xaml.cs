@@ -370,7 +370,7 @@ namespace His_Pos.PrescriptionDec
             }
             var declareData = new DeclareData(prescription);
             var declareDb = new DeclareDb();
-            declareDb.InsertDb(declareData);
+            //declareDb.InsertDb(declareData);
             MessageBox.Show("處方登錄成功");
         }
 
