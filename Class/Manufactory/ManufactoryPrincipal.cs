@@ -53,7 +53,6 @@ namespace His_Pos.Class.Manufactory
         public double GetTotal { get; set; }
         public bool IsEnable { get; set; } = true;
         
-
         public ObservableCollection<ManufactoryPayOverview> ManufactoryPayOverviews { get; set; }
 
         public object Clone()

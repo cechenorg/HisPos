@@ -332,6 +332,10 @@
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
       <DependentUpon>AuthenticationManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H4_BASIC_MANAGE\CustomerManage\CustomerManage.cs" />
+    <Compile Include="H4_BASIC_MANAGE\CustomerManage\CustomerManageView.xaml.cs">
+      <DependentUpon>CustomerManageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
       <DependentUpon>EmployeeManageView.xaml</DependentUpon>
@@ -544,6 +548,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H4_BASIC_MANAGE\CustomerManage\CustomerManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
