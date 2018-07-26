@@ -343,50 +343,50 @@
     <Compile Include="H4_BASIC_MANAGE\EmployeeManage\LeaveTotalControl.xaml.cs">
       <DependentUpon>LeaveTotalControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\ChangeResultWindow.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\ChangeResultWindow.xaml.cs">
       <DependentUpon>ChangeResultWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\ItemChangeWindow.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\ItemChangeWindow.xaml.cs">
       <DependentUpon>ItemChangeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationControl.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\LocationControl.xaml.cs">
       <DependentUpon>LocationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationDetailWindow.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\LocationDetailWindow.xaml.cs">
       <DependentUpon>LocationDetailWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\MoveThumb.cs" />
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\NewLocationView.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\MoveThumb.cs" />
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml.cs">
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\ResizeThumb.cs" />
-    <Compile Include="H4_BASIC_MANAGE\MedBagManage\MedBagManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\MedBagManage\MedBagManageView.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\ResizeThumb.cs" />
+    <Compile Include="H1_DECLARE\MedBagManage\MedBagManage.cs" />
+    <Compile Include="H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
       <DependentUpon>MedBagManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\MedBagManage\RdlLocationControl.xaml.cs">
+    <Compile Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml.cs">
       <DependentUpon>RdlLocationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\MedBagManage\RDLLocationMoveThumb.cs" />
-    <Compile Include="H4_BASIC_MANAGE\MedBagManage\RDLLocationResizeThumb.cs" />
-    <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
+    <Compile Include="H1_DECLARE\MedBagManage\RDLLocationMoveThumb.cs" />
+    <Compile Include="H1_DECLARE\MedBagManage\RDLLocationResizeThumb.cs" />
+    <Compile Include="H1_DECLARE\MedFrequencyManage\MedFrequencyManage.cs" />
+    <Compile Include="H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
       <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
       <DependentUpon>PharmacyManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
       <DependentUpon>AddTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml.cs">
       <DependentUpon>ChangeTypeResultWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
       <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml.cs">
       <DependentUpon>ItemChangeTypeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H5_ATTEND\ClockIn\ClockInUserIcon.xaml.cs">
@@ -448,8 +448,8 @@
     <Compile Include="LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\LocationManage.cs" />
+    <Compile Include="H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml.cs">
       <DependentUpon>LocationManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoginPage.xaml.cs">
@@ -495,8 +495,8 @@
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\ProductPurchaseView.xaml.cs">
       <DependentUpon>ProductPurchaseView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\ProductTypeManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManage.cs" />
+    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Resource\MenuListItem.xaml.cs">
@@ -563,35 +563,35 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\LocationManage\ChangeResultWindow.xaml">
+    <Page Include="H2_STOCK_MANAGE\LocationManage\ChangeResultWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\LocationManage\ItemChangeWindow.xaml">
+    <Page Include="H2_STOCK_MANAGE\LocationManage\ItemChangeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\LocationManage\LocationControl.xaml">
+    <Page Include="H2_STOCK_MANAGE\LocationManage\LocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\LocationManage\LocationDetailWindow.xaml">
+    <Page Include="H2_STOCK_MANAGE\LocationManage\LocationDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\LocationManage\NewLocationView.xaml">
+    <Page Include="H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\MedBagManage\MedBagManageView.xaml">
+    <Page Include="H1_DECLARE\MedBagManage\MedBagManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\MedBagManage\RdlLocationControl.xaml">
+    <Page Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\MedFrequencyManage\MedFrequencyManageView.xaml">
+    <Page Include="H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -599,19 +599,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\AddTypeWindow.xaml">
+    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\AddTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml">
+    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
+    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml">
+    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -675,7 +675,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\LocationManage\LocationManageView.xaml">
+    <Page Include="H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -737,7 +737,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\ProductTypeManage\ProductTypeManageView.xaml">
+    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
