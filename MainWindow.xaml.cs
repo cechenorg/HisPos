@@ -49,14 +49,18 @@ namespace His_Pos
         private void FeatureFactory()
         {
             HisFeatures.Add(new Feature( @"..\Images\PrescriptionIcon.png", Properties.Resources.hisPrescription,
-                            new string[] { Properties.Resources.hisPrescriptionDeclare,Properties.Resources.PrescriptionDec2, Properties.Resources.hisPrescriptionInquire }));
+                            new string[] { Properties.Resources.hisPrescriptionDeclare, Properties.Resources.hisPrescriptionInquire, Properties.Resources.MedFrequencyManage, Properties.Resources.MedBagManage }));
+
             HisFeatures.Add(new Feature(@"..\Images\Truck_50px.png", Properties.Resources.StockManage,
-                            new string[] { Properties.Resources.StockSearch, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord }));
+                            new string[] { Properties.Resources.StockSearch, Properties.Resources.ProductPurchase, Properties.Resources.ProductPurchaseRecord, Properties.Resources.ProductTypeManage, Properties.Resources.LocationManage }));
+
             HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.StockTaking,
                             new string[] { Properties.Resources.NewStockTaking, Properties.Resources.StockTakingRecord }));
+
             HisFeatures.Add(new Feature(@"..\Images\Management.png", Properties.Resources.DataManagement,
-                            new string[] { Properties.Resources.ProductTypeManage, Properties.Resources.LocationManage, Properties.Resources.ManufactoryManage, Properties.Resources.PharmacyManage,
-                                           Properties.Resources.EmployeeManage, Properties.Resources.MedFrequencyManage, Properties.Resources.AuthenticationManage,Properties.Resources.MedBagManage}));
+                            new string[] { Properties.Resources.ManufactoryManage, Properties.Resources.PharmacyManage,
+                                           Properties.Resources.EmployeeManage, Properties.Resources.AuthenticationManage,}));
+
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", Properties.Resources.Attend,
                             new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
         }

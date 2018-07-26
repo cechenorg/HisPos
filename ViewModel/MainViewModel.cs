@@ -19,6 +19,9 @@ using His_Pos.H4_BASIC_MANAGE.PharmacyManage;
 using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
 using His_Pos.H4_BASIC_MANAGE.MedBagManage;
 using His_Pos.H5_ATTEND.WorkScheduleManage;
+using His_Pos.H4_BASIC_MANAGE.MedFrequencyManage;
+using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 
 namespace His_Pos.ViewModel
 {
@@ -129,7 +132,7 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.處方查詢):
                     break;
-                case nameof(FeatureItem.庫存查詢):
+                case nameof(FeatureItem.商品查詢):
                     break;
                 case nameof(FeatureItem.處理單管理):
                     //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
@@ -179,16 +182,22 @@ namespace His_Pos.ViewModel
 
             switch (featureItem.ToString())
             {
+                //處方管理
                 case nameof(FeatureItem.處方登錄):
-                    newTab = new PrescriptionDec.PrescriptionDec() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
-                    break;
-                case nameof(FeatureItem.測試啦):
-                    newTab = new H1_DECLARE.PrescriptionDec2.PrescriptionDec2() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new PrescriptionDec2() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
                 case nameof(FeatureItem.處方查詢):
-                    newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
-                case nameof(FeatureItem.庫存查詢):
+                case nameof(FeatureItem.藥品頻率管理):
+                    newTab = new MedFrequencyManage() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+                case nameof(FeatureItem.藥袋管理):
+                    newTab = new MedBagManage() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+
+                //商品管理
+                case nameof(FeatureItem.商品查詢):
                     newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
                 case nameof(FeatureItem.處理單管理):
@@ -197,41 +206,41 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.處理單紀錄):
                     newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
+                case nameof(FeatureItem.商品類別管理):
+                    newTab = new ProductTypeManage.ProductTypeManage() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
+                    break;
+                case nameof(FeatureItem.櫃位管理):
+                    newTab = new LocationManage.LocationManage() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+
+                //盤點
                 case nameof(FeatureItem.新增盤點):
                     newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
                 case nameof(FeatureItem.庫存盤點紀錄):
                     newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
-                case nameof(FeatureItem.商品類別管理):
-                    newTab = new ProductTypeManage.ProductTypeManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
-                    break;
-                case nameof(FeatureItem.櫃位管理):
-                    newTab = new LocationManage.LocationManage() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
-                    break;
+                
+                //基本資料管理
                 case nameof(FeatureItem.供應商管理):
-                    newTab = new ManufactoryManage.ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new ManufactoryManage.ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
                 case nameof(FeatureItem.藥局管理):
-                    newTab = new PharmacyManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new PharmacyManage() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
                 case nameof(FeatureItem.員工管理):
-                    newTab = new H4_BASIC_MANAGE.EmployeeManage.EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
                 case nameof(FeatureItem.審核管理):
-                    newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[3].Functions[6], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
-                case nameof(FeatureItem.藥品頻率管理):
-                    newTab = new H4_BASIC_MANAGE.MedFrequencyManage.MedFrequencyManage() { TabName = MainWindow.HisFeatures[3].Functions[5], Icon = MainWindow.HisFeatures[3].Icon };
-                    break;
-                case nameof(FeatureItem.藥袋管理):
-                    newTab = new H4_BASIC_MANAGE.MedBagManage.MedBagManage() { TabName = MainWindow.HisFeatures[3].Functions[7], Icon = MainWindow.HisFeatures[3].Icon };
-                    break;
+                
+                //打卡
                 case nameof(FeatureItem.上下班打卡):
-                    newTab = new H5_ATTEND.ClockIn.ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
+                    newTab = new ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
                 case nameof(FeatureItem.排班管理):
-                    newTab = new H5_ATTEND.WorkScheduleManage.WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
+                    newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
                 default:
                     return;
@@ -250,7 +259,7 @@ namespace His_Pos.ViewModel
 
                     switch (tabName)
                     {
-                        case nameof(FeatureItem.庫存查詢):
+                        case nameof(FeatureItem.商品查詢):
                             if (InventoryManagement.InventoryManagementView.Instance is null) break;
 
                             if (InventoryManagement.InventoryManagementView.DataChanged) {

@@ -412,7 +412,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 庫存管理 的當地語系化字串。
+        ///   查詢類似  商品管理 的當地語系化字串。
         /// </summary>
         internal static string StockManage {
             get {
@@ -421,7 +421,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 庫存查詢 的當地語系化字串。
+        ///   查詢類似 商品查詢 的當地語系化字串。
         /// </summary>
         internal static string StockSearch {
             get {

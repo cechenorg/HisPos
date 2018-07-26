@@ -196,7 +196,7 @@
     <value>處理單紀錄</value>
   </data>
   <data name="StockManage" xml:space="preserve">
-    <value>庫存管理</value>
+    <value> 商品管理</value>
   </data>
   <data name="StockTaking" xml:space="preserve">
     <value>庫存盤點</value>
@@ -208,7 +208,7 @@
     <value>新增盤點</value>
   </data>
   <data name="StockSearch" xml:space="preserve">
-    <value>庫存查詢</value>
+    <value>商品查詢</value>
   </data>
   <data name="DataManagement" xml:space="preserve">
     <value>基本資料管理</value>
