@@ -260,11 +260,11 @@ namespace His_Pos.ViewModel
                     switch (tabName)
                     {
                         case nameof(FeatureItem.商品查詢):
-                            if (InventoryManagement.InventoryManagementView.Instance is null) break;
+                            if (InventoryManagementView.Instance is null) break;
 
-                            if (InventoryManagement.InventoryManagementView.DataChanged) {
-                                InventoryManagement.InventoryManagementView.Instance.MergingData();
-                                InventoryManagement.InventoryManagementView.Instance.SearchData();
+                            if (InventoryManagementView.DataChanged) {
+                                InventoryManagementView.Instance.MergingData();
+                                InventoryManagementView.Instance.SearchData();
                             }
                             break;
                         case nameof(FeatureItem.處理單紀錄):
