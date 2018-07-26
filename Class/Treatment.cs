@@ -54,7 +54,8 @@ namespace His_Pos.Class
             PaymentCategory = new PaymentCategory.PaymentCategory(xml);
             Copayment = new Copayment.Copayment(xml);
             AdjustCase = new AdjustCase.AdjustCase(xml);
-            TreatmentDate = DateTimeExtensions.ToUsDate(xml.SelectSingleNode("d30") == null ? null : xml.SelectSingleNode("d30").InnerText);
+            AdjustDate = xml.SelectSingleNode("d23") == null ? new DateTime() : DateTime.ParseExact(xml.SelectSingleNode("d23").InnerText, "yyyMMdd", CultureInfo.InvariantCulture).AddYears(1911);
+            TreatmentDate = xml.SelectSingleNode("d14") == null ? new DateTime() : DateTime.ParseExact(xml.SelectSingleNode("d14").InnerText, "yyyMMdd", CultureInfo.InvariantCulture).AddYears(1911);
             MedicineDays = xml.SelectSingleNode("d30") == null ? null : xml.SelectSingleNode("d30").InnerText;
             MedicalPersonId = xml.SelectSingleNode("d25") == null ? null : xml.SelectSingleNode("d25").InnerText;
         }

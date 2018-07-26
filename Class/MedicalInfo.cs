@@ -48,8 +48,8 @@ namespace His_Pos.Class
             Hospital = new Hospital(xml);
             SpecialCode = new SpecialCode(xml);
             MainDiseaseCode = new DiseaseCode();
-            MainDiseaseCode.Id = xml.SelectSingleNode("d8") == null ? null : xml.SelectSingleNode("d9").InnerText;
             SecondDiseaseCode = new DiseaseCode();
+            MainDiseaseCode.Id = xml.SelectSingleNode("d8") == null ? null : xml.SelectSingleNode("d8").InnerText;
             SecondDiseaseCode.Id = xml.SelectSingleNode("d9") == null ? null : xml.SelectSingleNode("d9").InnerText;
             TreatmentCase = new TreatmentCase.TreatmentCase(xml);
         }

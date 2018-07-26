@@ -53,5 +53,18 @@ namespace His_Pos.Class.Person
                 Console.WriteLine(e.Message);
             }
         }
+        internal static string CheckCustomerExist(Customer customer)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+           
+            parameters.Add(new SqlParameter("CUS_NAME", customer.Name));
+            parameters.Add(new SqlParameter("CUS_BIRTH", customer.Birthday));
+            parameters.Add(new SqlParameter("CUS_IDNUM", customer.IcNumber));
+          var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[CheckCustomerExist]", parameters);
+            return table.Rows[0][0].ToString();
+        }
+        
     }
 }

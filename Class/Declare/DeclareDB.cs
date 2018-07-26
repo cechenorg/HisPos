@@ -18,18 +18,25 @@ namespace His_Pos.Class.Declare
          * 新增DeclareData至資料庫
          */
 
-        public void InsertDb(DeclareData declareData, string type = null, string id = null)
+        public void InsertDb(DeclareData declareData, DeclareTrade declareTrade = null)
         {
             var parameters = new List<SqlParameter>();
             AddParameterDData(parameters, declareData);//加入DData sqlparameters
             var pDataTable = SetPDataTable();//設定PData datatable columns
             AddPData(declareData, pDataTable);//加入PData sqlparameters
+            if (declareTrade != null) {
+                var dataTradeTable = SetDataTradeTable();
+                AddTradeData(declareTrade, dataTradeTable);
+                parameters.Add(new SqlParameter("DECLARETRADE", dataTradeTable));
+            }
+            else
+                parameters.Add(new SqlParameter("DECLARETRADE", DBNull.Value));
             parameters.Add(new SqlParameter("DETAIL", pDataTable));
             parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
             {
                 Value = new SqlXml(new XmlTextReader(CreateToXml(declareData).InnerXml, XmlNodeType.Document, null))
             });
-            CheckInsertDbTypeUpdate(parameters, id, type);
+           CheckInsertDbTypeUpdate(parameters);
         }
 
         /*
@@ -111,7 +118,45 @@ namespace His_Pos.Class.Declare
                 }
             }
         }
+        private DataTable SetDataTradeTable() {
+            var dataTradeTable = new DataTable();
+            var columnsDictionary = new Dictionary<string, Type>
+            {
+                {"CUS_ID", typeof(string)}, {"EMP_ID", typeof(string)},{"PAYSELF", typeof(string)},
+                {"DEPOSIT", typeof(string)},{"RECEIVE_MONEY", typeof(string)},{"COPAYMENT",typeof(string)},
+                {"PAYWAY",typeof(string)}
+            };
+            foreach (var col in columnsDictionary)
+            {
+                dataTradeTable.Columns.Add(col.Key, col.Value);
+            }
+            return dataTradeTable;
+        }
 
+        private void AddTradeData(DeclareTrade declareTrade, DataTable tradeTable)
+        {
+            var row = tradeTable.NewRow();
+            var tagsDictionary = new Dictionary<string, string>
+                {
+                    {"CUS_ID",declareTrade.CusId},
+                    {"EMP_ID", declareTrade.EmpId},
+                    {"PAYSELF", declareTrade.PaySelf},
+                    {"DEPOSIT", declareTrade.Deposit},
+                    {"RECEIVE_MONEY", declareTrade.ReceiveMoney},
+                    {"COPAYMENT", declareTrade.CopayMent},
+                    {"PAYWAY", declareTrade.PayWay},
+                };
+            foreach (var tag in tagsDictionary)
+            {
+                switch (tag.Key)
+                {
+                    default:
+                        CheckEmptyDataRow(tradeTable, tag.Value, ref row, tag.Key);
+                        break;
+                }
+            }
+            tradeTable.Rows.Add(row);
+        }
         private DataTable SetPDataTable()
         {
             var pDataTable = new DataTable();
@@ -129,14 +174,14 @@ namespace His_Pos.Class.Declare
             }
             return pDataTable;
         }
-
+     
         private void AddPData(DeclareData declareData, DataTable pDataTable)
         {
             for (var i = 0; i < declareData.DeclareDetails.Count; i++)
             {
                 var row = pDataTable.NewRow();
                 var detail = declareData.DeclareDetails[i];
-                var paySelf = declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
+                var paySelf = declareData.Prescription.Medicines == null ? "0" : declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
                 var tagsDictionary = new Dictionary<string, string>
                 {
                     {"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
@@ -259,18 +304,16 @@ namespace His_Pos.Class.Declare
          * 判斷InsertDb type為Update
          */
 
-        private void CheckInsertDbTypeUpdate(List<SqlParameter> parameters, string id, string type = null)
+        private void CheckInsertDbTypeUpdate(List<SqlParameter> parameters)
         {
             var conn = new DbConnection(Settings.Default.SQL_global);
-            if (type == "Update")
-            {
-                parameters.Add(new SqlParameter("ID", id));
-                conn.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEDECLAREDATA]", parameters);
-            }
-            else
-            {
-                conn.ExecuteProc("[HIS_POS_DB].[SET].[DECLAREDATA]", parameters);
-            }
+            conn.ExecuteProc("[HIS_POS_DB].[SET].[DECLAREDATA]", parameters);
+            //if (type == "Update")
+            //{
+            //    parameters.Add(new SqlParameter("ID", id));
+            //    conn.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEDECLAREDATA]", parameters);
+            //}
+            
         }
 
         private XmlDocument CreateToXml(DeclareData declareData)

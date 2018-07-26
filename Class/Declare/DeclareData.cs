@@ -44,6 +44,13 @@ namespace His_Pos.Class.Declare
             DrugsPoint = xml.SelectSingleNode("d33") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("d33").InnerText);
             MedicalServiceCode = xml.SelectSingleNode("d37") == null ? null : xml.SelectSingleNode("d37").InnerText;
             MedicalServicePoint = xml.SelectSingleNode("d38") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("d38").InnerText);
+            XmlDocument tempxml = new XmlDocument();
+            tempxml.LoadXml("<temp>" + xml.InnerXml + "</temp>");
+            XmlNodeList pdatas = tempxml.GetElementsByTagName("pdata");
+            foreach (XmlNode pdata in pdatas)
+            {
+                DeclareDetails.Add(new DeclareDetail(pdata));
+            }
         }
         public Prescription Prescription { get; set; }
         public ObservableCollection<DeclareDetail> DeclareDetails { get; set; } = new ObservableCollection<DeclareDetail>();

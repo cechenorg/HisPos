@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
 using His_Pos.Interface;
 using His_Pos.Service;
 
@@ -37,7 +38,7 @@ namespace His_Pos.Class.Product
             Position = "";
             source = "";
         }
-
+        
         public bool IsControlMed { get; set; }
         public bool IsFrozMed { get; set; }
         private bool payself;
