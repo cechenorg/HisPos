@@ -69,7 +69,7 @@ namespace His_Pos.ProductPurchaseRecord
         private void InitManufactory() {
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
             }
             Manufactory.ItemsSource = ManufactoryAutoCompleteCollection;
             Manufactory.ItemFilter = ManufactoryFilter;

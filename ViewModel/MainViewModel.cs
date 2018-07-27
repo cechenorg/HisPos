@@ -167,6 +167,8 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.藥袋管理):
                     break;
+                case nameof(FeatureItem.藥局管理):
+                    break;
                 default:
                     return;
             }

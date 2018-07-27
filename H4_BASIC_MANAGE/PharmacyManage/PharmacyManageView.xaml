@@ -18,7 +18,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                <TextBox Name="SearchName" materialDesign:HintAssist.Hint="藥局及負責人 名稱 簡稱 負責對象" Margin="20,0,0,5" Width="380" FontSize="25"/>
+                <TextBox Name="SearchName" materialDesign:HintAssist.Hint="藥局及聯絡人 名稱 簡稱" Margin="20,0,0,5" Width="380" FontSize="25"/>
                 <Rectangle Width="850"/>
                 <Button Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
             </StackPanel>
@@ -176,8 +176,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                        <TextBox  FontSize="35" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="負責人姓名" Margin="20,0,0,0" BorderThickness="0" />
-                        <TextBox  FontSize="25" Foreground="{StaticResource ForeGround}" materialDesign:HintAssist.Hint="負責對象" FontFamily="Segoe UI Semibold" Margin="20,10,0,0" BorderThickness="0" />
+                        <TextBox  FontSize="35" FontFamily="Segoe UI Semibold" materialDesign:HintAssist.Hint="聯絡人姓名" Margin="20,0,0,0" BorderThickness="0" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>

@@ -240,7 +240,9 @@
     <Compile Include="Class\Manufactory\Manufactory.cs" />
     <Compile Include="Class\Manufactory\ManufactoryChanged.cs" />
     <Compile Include="Class\Manufactory\ManufactoryDb.cs" />
-    <Compile Include="Class\Manufactory\PharmacyGetOverview.cs" />
+    <Compile Include="Class\Pharmacy\ManagePharmacy.cs" />
+    <Compile Include="Class\Pharmacy\PharmacyDb.cs" />
+    <Compile Include="Class\Pharmacy\PharmacyGetOverview.cs" />
     <Compile Include="Class\Manufactory\ManufactoryPayOverview.cs" />
     <Compile Include="Class\Manufactory\ManufactoryPrincipal.cs" />
     <Compile Include="Class\Manufactory\ProductDetailManufactory.cs" />
@@ -269,7 +271,8 @@
     <Compile Include="Class\PaymentCategory\PaymentCategory.cs" />
     <Compile Include="Class\PaymentCategory\PaymentCategroyDb.cs" />
     <Compile Include="Class\Person\PersonDb.cs" />
-    <Compile Include="Class\Pharmacy.cs" />
+    <Compile Include="Class\Pharmacy\Pharmacy.cs" />
+    <Compile Include="Class\Pharmacy\PharmacyPrincipal.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
     <Compile Include="Class\ProductType\ProductTypeManageDetail.cs" />
@@ -425,6 +428,7 @@
     </Compile>
     <Compile Include="Interface\IDeletable.cs" />
     <Compile Include="Interface\IInventory.cs" />
+    <Compile Include="Interface\IPrincipal.cs" />
     <Compile Include="Interface\IProductPurchase.cs" />
     <Compile Include="Interface\IProductType.cs" />
     <Compile Include="Interface\IStockTaking.cs" />

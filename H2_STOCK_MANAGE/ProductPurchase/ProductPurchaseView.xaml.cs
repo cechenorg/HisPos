@@ -128,7 +128,7 @@ namespace His_Pos.ProductPurchase
         {
             foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
             }
         }
 
