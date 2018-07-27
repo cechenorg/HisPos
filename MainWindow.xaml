@@ -25,6 +25,7 @@
     xmlns:resource="clr-namespace:His_Pos.Resource"
     xmlns:AuthenticationManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.AuthenticationManage"
     xmlns:MedBagManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedBagManage"
+    xmlns:CustomerManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.CustomerManage"
     x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="MainWindow"
         WindowStartupLocation="CenterScreen"   Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}" 
@@ -86,6 +87,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type MedBagManage:MedBagManage}">
             <MedBagManage:MedBagManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type CustomerManage:CustomerManage}">
+            <CustomerManage:CustomerManageView/>
         </DataTemplate>
     </Window.Resources>
     <Viewbox Stretch="Fill">

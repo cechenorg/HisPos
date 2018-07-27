@@ -29,7 +29,8 @@ namespace His_Pos.Class
         藥品頻率管理 = 14,
         測試啦 = 15,
         藥局管理 = 16,
-        藥袋管理 = 17
+        藥袋管理 = 17,
+        顧客管理 = 18
     }
 
     public enum ItemType

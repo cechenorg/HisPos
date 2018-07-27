@@ -252,4 +252,7 @@
   <data name="MedBagManage" xml:space="preserve">
     <value>藥袋管理</value>
   </data>
+  <data name="CustomerManage" xml:space="preserve">
+    <value>顧客管理</value>
+  </data>
 </root>

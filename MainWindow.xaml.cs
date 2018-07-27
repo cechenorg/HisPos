@@ -59,7 +59,7 @@ namespace His_Pos
 
             HisFeatures.Add(new Feature(@"..\Images\Management.png", Properties.Resources.DataManagement,
                             new string[] { Properties.Resources.ManufactoryManage, Properties.Resources.PharmacyManage,
-                                           Properties.Resources.EmployeeManage, Properties.Resources.AuthenticationManage,}));
+                                           Properties.Resources.EmployeeManage, Properties.Resources.AuthenticationManage, Properties.Resources.CustomerManage}));
 
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", Properties.Resources.Attend,
                             new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
