@@ -169,9 +169,8 @@
                 <local:RDLLocationMoveThumb
                     x:Name="MoveThumb"
                     Cursor="SizeAll"
-                    Template="{StaticResource MoveThumbTemplate}">
-                </local:RDLLocationMoveThumb>
-                <Control Template="{StaticResource ResizeDecoratorTemplate}"/>
+                    Template="{StaticResource MoveThumbTemplate}" />
+                <Control Template="{StaticResource ResizeDecoratorTemplate}" />
                 <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
             </Grid>
         </ControlTemplate>
@@ -180,9 +179,8 @@
                 <local:RDLLocationMoveThumb
                     x:Name="MoveThumb"
                     Cursor="SizeAll"
-                    Template="{StaticResource MoveThumbTemplate}">
-                </local:RDLLocationMoveThumb>
-                <Control Template="{StaticResource RangeResizeDecoratorTemplate}"/>
+                    Template="{StaticResource MoveThumbTemplate}" />
+                <Control Template="{StaticResource RangeResizeDecoratorTemplate}" />
                 <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
             </Grid>
         </ControlTemplate>
@@ -211,39 +209,40 @@
             Foreground="White" />
         <ListView
             Name="MedBagFileListView"
-            Grid.Column="0"
             Grid.Row="1"
-            />
-        <Canvas
-            Name="MedBagCanvas"
-            Grid.Row="0"
+            Grid.Column="0" />
+        <Grid
+            Name="ImgWrap"
+            Grid.Row="1"
             Grid.Column="1"
-            Grid.RowSpan="2"
-            MaxHeight="800"
-            Margin="10">
+            HorizontalAlignment="Center">
             <Image
                 Name="MedBagImg"
-                Width="1000"
                 Height="800"
-                Stretch="Uniform"
-                Source="{Binding SelectedMedBag.MedBagImage,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <local:RdlLocationControl 
-                x:Name="MedRangeLocationControl"
-                Canvas.Left="100"
-                Canvas.Top="100"
-                Width="100"
-                Height="100"
-                MedBagRangeTop="{Binding SelectedMedBag.RangeTop,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
-                MedBagRangeRight="{Binding SelectedMedBag.RangeRight,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                MedBagRangeLeft="{Binding SelectedMedBag.RangeLeft,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                MedBagRangeBottom="{Binding SelectedMedBag.RangeBottom,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-        </Canvas>
-        <ScrollViewer Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Width="170">
-            <StackPanel Orientation="Vertical" Width="160">
-                <Label Content="藥局"
-                   FontSize="18"
-                   FontFamily="Segoe UI Semibold"
-                   Foreground="Black"/>
+                HorizontalAlignment="Left"
+                Source="{Binding SelectedMedBag.MedBagImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Stretch="Uniform" />
+            <Canvas
+                Name="MedBagCanvas"
+                MaxHeight="800"
+                HorizontalAlignment="Center">
+                <local:RdlLocationControl
+                    x:Name="MedRangeLocationControl"
+                    Width="100"
+                    Height="100" />
+            </Canvas>
+        </Grid>
+        <ScrollViewer
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Grid.Column="2"
+            Width="170">
+            <StackPanel Width="160" Orientation="Vertical">
+                <Label
+                    Content="藥局"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black" />
                 <CheckBox
                     Name="Pharmacy"
                     Width="130"
@@ -252,8 +251,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="藥局名稱"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="PharmacyId"
@@ -263,8 +262,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="機構代碼"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="PharmacyAddr"
@@ -274,8 +273,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="地址"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="PharmacyTel"
@@ -285,10 +284,10 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="電話"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
-                    <CheckBox
+                <CheckBox
                     Name="MedicalPerson"
                     Width="130"
                     Margin="20,10,0,0"
@@ -296,13 +295,14 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="調劑藥師"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
-                <Label Content="病患"
-                   FontSize="18"
-                   FontFamily="Segoe UI Semibold"
-                   Foreground="Black"/>
+                <Label
+                    Content="病患"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black" />
                 <CheckBox
                     Name="PatientName"
                     Width="130"
@@ -311,8 +311,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="姓名"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="Phone"
@@ -322,8 +322,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="聯絡電話"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="Gender"
@@ -333,8 +333,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="性別"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="Birth"
@@ -344,8 +344,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="生日"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="MedRecNum"
@@ -356,8 +356,8 @@
                     BorderBrush="Transparent"
                     Click="NewLocationClick"
                     Content="病歷號"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="AdjustDate"
@@ -367,8 +367,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="調劑日期"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="NextDrugDate"
@@ -378,8 +378,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="下次領藥日"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="VisitBackDate"
@@ -389,13 +389,14 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="參考回診日"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
-                <Label Content="醫療院所"
-                   FontSize="18"
-                   FontFamily="Segoe UI Semibold"
-                   Foreground="Black"/>
+                <Label
+                    Content="醫療院所"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black" />
                 <CheckBox
                     Name="Institution"
                     Width="130"
@@ -404,8 +405,8 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="醫療院所名稱"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
                 <CheckBox
                     Name="Division"
@@ -415,145 +416,146 @@
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
                     Content="科別"
-                    FontSize="16"
                     FontFamily="Segoe UI Semi"
+                    FontSize="16"
                     Foreground="Black" />
-                <Label Content="藥品"
-                   FontSize="18"
-                   FontFamily="Segoe UI Semibold"
-                   Foreground="Black"/>
+                <Label
+                    Content="藥品"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black" />
                 <CheckBox
-                Name="MedicineId"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="藥品健保碼"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="MedicineId"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="藥品健保碼"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="EngName"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="英文名稱"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="EngName"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="英文名稱"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="ChnName"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="中文名稱"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="ChnName"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="中文名稱"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="Ingredient"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="成分"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="Ingredient"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="成分"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="Form"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="劑型外觀"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="Form"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="劑型外觀"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="Usage"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="用法"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="Usage"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="用法"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="Dosage"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="用量"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="Dosage"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="用量"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="Total"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="領藥總量"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="Total"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="領藥總量"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="Days"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="給藥天數"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="Days"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="給藥天數"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="Indication"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="適應症"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="Indication"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="適應症"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="SideEffect"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="副作用"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="SideEffect"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="副作用"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
                 <CheckBox
-                Name="Notes"
-                Width="130"
-                Margin="20,10,0,0"
-                VerticalAlignment="Top"
-                Background="{StaticResource Shadow}"
-                BorderBrush="Transparent"
-                Content="注意事項"
-                FontSize="16"
-                FontFamily="Segoe UI Semi"
-                Foreground="Black" />
+                    Name="Notes"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Content="注意事項"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black" />
             </StackPanel>
         </ScrollViewer>
     </Grid>

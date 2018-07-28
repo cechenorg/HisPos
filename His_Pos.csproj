@@ -218,7 +218,9 @@
     <Compile Include="Class\Authority\AuthorityDb.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryHis.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryMaster.cs" />
+    <Compile Include="Class\CustomerHistory\CustomerHistoryPos.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />

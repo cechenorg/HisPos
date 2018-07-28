@@ -44,7 +44,9 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                 OnPropertyChanged("SelectedMedBag");
             }
         }
+
         private static int id = 0;
+
         public MedBagManageView()
         {
             InitializeComponent();
@@ -77,6 +79,8 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(selectedFileName);
                 bitmap.EndInit();
+                ImgWrap.Width = bitmap.Width;
+                MedBagCanvas.Width = bitmap.Width;
                 SelectedMedBag = new MedBag(bitmap);
                 SetMedBagRange();
             }
@@ -85,8 +89,8 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
         private void SetMedBagRange()
         {
             MedRangeLocationControl.Template = (ControlTemplate)FindResource("MedBagRangeItemTemplate");
-            SelectedMedBag.RangeTop = MedBagImg.PointToScreen(new Point(0,0)).Y;
-            SelectedMedBag.RangeLeft = MedBagImg.PointToScreen(new Point(0, 0)).X;
+            MedRangeLocationControl.SetValue(Canvas.LeftProperty, 0.0);
+            MedRangeLocationControl.SetValue(Canvas.TopProperty, 0.0);
         }
 
         private void NewLocationClick(object sender, RoutedEventArgs e)

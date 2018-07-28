@@ -16,6 +16,7 @@ namespace His_Pos
             }
             return value;
         }
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             DateTime dateValue;
@@ -28,8 +29,10 @@ namespace His_Pos
                         if (!tempvalue.ToString().Contains("/"))
                             tempvalue = Int32.Parse(tempvalue.ToString()) + 19110000;
                         break;
+
                     case "2":
                         break;
+
                     default:
                         return value;
                 }
@@ -43,6 +46,7 @@ namespace His_Pos
             return value;
         }
     }
+
     public class AutoCompleteIsEnableConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -55,13 +59,12 @@ namespace His_Pos
         {
             return "";
         }
-
     }
+
     public class DoubleToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
             if (value.ToString().Contains("..") || value.ToString() == string.Empty)
                 return value.ToString().Replace("..", ".");
             else if (value.ToString().Contains("0.000"))
@@ -79,6 +82,7 @@ namespace His_Pos
             return value;
         }
     }
+
     public class LastRowIsEnableConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -95,6 +99,19 @@ namespace His_Pos
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return null;
+        }
+    }
+
+    public class NullTextBoxConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value == null ? string.Empty : String.Format(culture, "{0}", value);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return string.IsNullOrEmpty(String.Format(culture, "{0}", value)) ? null : value;
         }
     }
 }
