@@ -32,6 +32,19 @@ namespace His_Pos.PrescriptionInquire
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        private ObservableCollection<Hospital> hospitalCollection;
+        public ObservableCollection<Hospital> HospitalCollection
+        {
+            get
+            {
+                return hospitalCollection;
+            }
+            set
+            {
+                hospitalCollection = value;
+                NotifyPropertyChanged("HospitalCollection");
+            }
+        }
         private DeclareTrade declareTrade;
         
         public DeclareTrade DeclareTrade
@@ -68,6 +81,7 @@ namespace His_Pos.PrescriptionInquire
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             InquiredPrescription = inquired;
             SetPatientData();
+            InitData();
             InitDataChanged();
         }
 
@@ -112,6 +126,11 @@ namespace His_Pos.PrescriptionInquire
             Changed.Foreground = Brushes.Black;
 
             ButtonImportXml.IsEnabled = false;
+        }
+        private void InitData() {
+            HospitalCollection = HospitalDb.GetData();
+            ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
+            
         }
     }
 }
