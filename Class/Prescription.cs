@@ -60,6 +60,7 @@ namespace His_Pos.Class
 
         public string CheckPrescriptionData()
         {
+            ErrorMessage = string.Empty;
             Customer.IcCard.CheckIcNumber(Customer.IcCard.IcNumber);
             Customer.CheckBirthDay(Customer.Birthday);
             CheckReleaseInstitution();

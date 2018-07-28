@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
@@ -29,7 +30,20 @@ namespace His_Pos.PrescriptionInquire
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-
+        private DeclareTrade declareTrade;
+        //GetDeclarTradeByMasId
+        public DeclareTrade DeclareTrade
+        {
+            get
+            {
+                return declareTrade;
+            }
+            set
+            {
+                declareTrade = value;
+                NotifyPropertyChanged("DeclareTrade");
+            }
+        }
         private static DeclareData inquiredPrescription;
         public DeclareData InquiredPrescription
         {
@@ -49,6 +63,7 @@ namespace His_Pos.PrescriptionInquire
         {
             InitializeComponent();
             DataContext = this;
+            DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             InquiredPrescription = inquired;
             SetPatientData();
         }
