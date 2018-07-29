@@ -13,7 +13,7 @@ using JetBrains.Annotations;
 
 namespace His_Pos.Class.MedBag
 {
-    public class MedBag:INotifyPropertyChanged
+    public class MedBag : INotifyPropertyChanged
     {
         public MedBag(BitmapImage image)
         {
@@ -24,6 +24,7 @@ namespace His_Pos.Class.MedBag
             MedBagLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             MedBagImage = image;
         }
+
         public MedBag(DataRow dataRow)
         {
             RangeTop = double.Parse(dataRow["RANGE_TOP"].ToString());
@@ -32,10 +33,12 @@ namespace His_Pos.Class.MedBag
             RangeRight = double.Parse(dataRow["RANGE_RIGHT"].ToString());
             MedBagLocations = MedBagDb.ObservableGetLocationData();
         }
+
         public ObservableCollection<MedBagLocation.MedBagLocation> MedBagLocations { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
         private double rangeTop;
+
         public double RangeTop
         {
             get { return rangeTop; }
@@ -79,6 +82,30 @@ namespace His_Pos.Class.MedBag
             {
                 rangeTop = value;
                 OnPropertyChanged("RangeRight");
+            }
+        }
+
+        private double bagWidth;
+
+        public double BagWidth
+        {
+            get { return bagWidth; }
+            set
+            {
+                bagWidth = value;
+                OnPropertyChanged("BagWidth");
+            }
+        }
+
+        private double bagHeight;
+
+        public double BagHeight
+        {
+            get { return bagHeight; }
+            set
+            {
+                bagWidth = value;
+                OnPropertyChanged("BagHeight");
             }
         }
 

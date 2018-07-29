@@ -189,11 +189,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="190" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="170" />
+            <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
         <Button
             Name="ImageSelector"
@@ -207,6 +208,44 @@
             Content="選擇藥袋圖檔"
             FontSize="16"
             Foreground="White" />
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            Orientation="Horizontal">
+            <Label
+                Margin="20,0,0,0"
+                VerticalContentAlignment="Center"
+                Content="藥袋尺寸 : "
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black" />
+            <TextBox
+                Width="80"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                FontSize="18"
+                Text="{Binding SelectedMedBag.BagWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Margin="20,0,0,0"
+                VerticalContentAlignment="Center"
+                Content="公分 * "
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black" />
+            <TextBox
+                Width="80"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                FontSize="18"
+                Text="{Binding SelectedMedBag.BagHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                Margin="20,0,0,0"
+                VerticalContentAlignment="Center"
+                Content="公分"
+                FontFamily="Segoe UI Semibold"
+                FontSize="18"
+                Foreground="Black" />
+        </StackPanel>
         <ListView
             Name="MedBagFileListView"
             Grid.Row="1"
@@ -214,17 +253,18 @@
         <Grid
             Name="ImgWrap"
             Grid.Row="1"
+            Grid.RowSpan="2"
             Grid.Column="1"
             HorizontalAlignment="Center">
             <Image
                 Name="MedBagImg"
-                Height="800"
+                Height="700"
                 HorizontalAlignment="Left"
                 Source="{Binding SelectedMedBag.MedBagImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Stretch="Uniform" />
             <Canvas
                 Name="MedBagCanvas"
-                MaxHeight="800"
+                MaxHeight="700"
                 HorizontalAlignment="Center">
                 <local:RdlLocationControl
                     x:Name="MedRangeLocationControl"
@@ -236,7 +276,7 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="2"
-            Width="170">
+            Width="200">
             <StackPanel Width="160" Orientation="Vertical">
                 <Label
                     Content="藥局"
@@ -558,5 +598,33 @@
                     Foreground="Black" />
             </StackPanel>
         </ScrollViewer>
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Orientation="Horizontal">
+            <Button
+                Width="70"
+                Margin="15,0,15,0"
+                VerticalAlignment="Center"
+                Content="新增" />
+            <Button
+                Width="70"
+                VerticalAlignment="Center"
+                Content="刪除" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="2"
+            Orientation="Horizontal">
+            <Button
+                Width="70"
+                Margin="20,0,20,0"
+                VerticalAlignment="Center"
+                Content="儲存" />
+            <Button
+                Width="70"
+                VerticalAlignment="Center"
+                Content="清空" />
+        </StackPanel>
     </Grid>
 </UserControl>
