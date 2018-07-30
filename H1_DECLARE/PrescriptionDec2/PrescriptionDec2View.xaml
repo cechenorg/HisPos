@@ -621,7 +621,7 @@
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

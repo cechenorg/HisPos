@@ -321,6 +321,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         break;
 
                     case "Usage":
+                        FindUsagesQuickName(sender);
                         NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "MedicineDays", ref nextTextBox);
                         break;
 
@@ -497,6 +498,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             TextBox t = sender as TextBox;
             if (string.IsNullOrEmpty(t.Text))
                 t.Text = "0";
+        }
+
+        private void FindUsagesQuickName(object sender)
+        {
+            int currentRow = GetCurrentRowIndex(sender);
+            TextBox t = sender as TextBox;
+            if (!string.IsNullOrEmpty(t.Text))
+            {
+                Prescription.Medicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
+                if(Prescription.Medicines[currentRow].Usage != null)
+                    t.Text = Prescription.Medicines[currentRow].Usage.Name;
+            }       
         }
     }
 }

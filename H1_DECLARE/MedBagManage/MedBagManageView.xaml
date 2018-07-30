@@ -259,7 +259,7 @@
             <Image
                 Name="MedBagImg"
                 Height="700"
-                HorizontalAlignment="Left"
+                HorizontalAlignment="Center"
                 Source="{Binding SelectedMedBag.MedBagImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Stretch="Uniform" />
             <Canvas

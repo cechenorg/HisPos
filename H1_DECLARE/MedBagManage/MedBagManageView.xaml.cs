@@ -105,7 +105,6 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                 bitmap.EndInit();
                 ImgWrap.Width = bitmap.Width;
                 MedBagImgWidth = (bitmap.Width / bitmap.Height) * 700;
-                MedBagCanvas.Width = bitmap.Width;
                 SelectedMedBag = new MedBag(bitmap);
                 SetMedBagRange();
             }
@@ -118,6 +117,8 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
             MedRangeLocationControl.SetValue(Canvas.TopProperty, 0.0);
             MedRangeLocationControl.SetValue(WidthProperty, MedBagImgWidth);
             MedRangeLocationControl.SetValue(HeightProperty, MedBagImg.Height);
+            MedBagCanvas.Width = MedBagImgWidth;
+            MedBagCanvas.Height = MedBagImg.Height;
         }
 
         private void NewLocationClick(object sender, RoutedEventArgs e)

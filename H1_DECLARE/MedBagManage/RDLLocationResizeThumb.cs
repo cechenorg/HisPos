@@ -19,7 +19,9 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
         private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             Control designerItem = this.DataContext as Control;
-
+            Canvas parent = designerItem.Parent as Canvas;
+            double canvasWidth = parent.Width;
+            double canvasHeight = parent.Height;
             if (designerItem != null)
             {
                 double deltaVertical, deltaHorizontal;
@@ -28,12 +30,13 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                 {
                     case VerticalAlignment.Bottom:
                         deltaVertical = Math.Min(-e.VerticalChange, designerItem.ActualHeight - designerItem.MinHeight);
-                        designerItem.Height -= deltaVertical;
+                        designerItem.Height = ((designerItem.Height - deltaVertical) > canvasHeight)? canvasHeight : designerItem.Height - deltaVertical;
                         break;
                     case VerticalAlignment.Top:
                         deltaVertical = Math.Min(e.VerticalChange, designerItem.ActualHeight - designerItem.MinHeight);
-                        Canvas.SetTop(designerItem, Canvas.GetTop(designerItem) + deltaVertical);
-                        designerItem.Height -= deltaVertical;
+                        double topLimit = (Canvas.GetTop(designerItem) + deltaVertical) < 0 ? 0 : (Canvas.GetTop(designerItem) + deltaVertical);
+                        Canvas.SetTop(designerItem, topLimit);
+                        designerItem.Height -= (topLimit == 0.0)? 0:(deltaVertical);
                         break;
                     default:
                         break;
@@ -43,12 +46,13 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                 {
                     case HorizontalAlignment.Left:
                         deltaHorizontal = Math.Min(e.HorizontalChange, designerItem.ActualWidth - designerItem.MinWidth);
-                        Canvas.SetLeft(designerItem, Canvas.GetLeft(designerItem) + deltaHorizontal);
-                        designerItem.Width -= deltaHorizontal;
+                        double leftLimit = (Canvas.GetLeft(designerItem) + deltaHorizontal) < 0 ? 0 : (Canvas.GetLeft(designerItem) + deltaHorizontal);
+                        Canvas.SetLeft(designerItem, leftLimit);
+                        designerItem.Width -= (leftLimit == 0.0) ? 0 : deltaHorizontal;
                         break;
                     case HorizontalAlignment.Right:
                         deltaHorizontal = Math.Min(-e.HorizontalChange, designerItem.ActualWidth - designerItem.MinWidth);
-                        designerItem.Width -= deltaHorizontal;
+                        designerItem.Width = (designerItem.Width - deltaHorizontal > canvasWidth)? canvasWidth: designerItem.Width - deltaHorizontal;
                         break;
                     default:
                         break;
