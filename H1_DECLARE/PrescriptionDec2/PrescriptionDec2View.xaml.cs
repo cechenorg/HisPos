@@ -195,7 +195,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //declareDb.InsertDb(declareData);
                 c.ShowDialog();
             }
-            
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -491,6 +490,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
         {
             CountMedicinesCost();
+        }
+
+        private void NullTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox t = sender as TextBox;
+            if (string.IsNullOrEmpty(t.Text))
+                t.Text = "0";
         }
     }
 }
