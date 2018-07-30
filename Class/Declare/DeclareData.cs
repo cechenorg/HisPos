@@ -26,6 +26,7 @@ namespace His_Pos.Class.Declare
 
         public DeclareData(DataRow row)
         {
+            DecMasId = row["HISDECMAS_ID"].ToString();
              Prescription = new Prescription(row);
             DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
             CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
@@ -52,6 +53,7 @@ namespace His_Pos.Class.Declare
                 DeclareDetails.Add(new DeclareDetail(pdata));
             }
         }
+        public string DecMasId { get; set; }
         public Prescription Prescription { get; set; }
         public ObservableCollection<DeclareDetail> DeclareDetails { get; set; } = new ObservableCollection<DeclareDetail>();
         public string DeclareMakeUp { get; set; }//D4補報註記

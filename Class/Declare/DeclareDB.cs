@@ -124,7 +124,7 @@ namespace His_Pos.Class.Declare
             {
                 {"CUS_ID", typeof(string)}, {"EMP_ID", typeof(string)},{"PAYSELF", typeof(string)},
                 {"DEPOSIT", typeof(string)},{"RECEIVE_MONEY", typeof(string)},{"COPAYMENT",typeof(string)},
-                {"PAYWAY",typeof(string)}
+                {"PAYMONEY",typeof(string)},{"CHANGE",typeof(string)},{"PAYWAY",typeof(string)}
             };
             foreach (var col in columnsDictionary)
             {
@@ -144,6 +144,8 @@ namespace His_Pos.Class.Declare
                     {"DEPOSIT", declareTrade.Deposit},
                     {"RECEIVE_MONEY", declareTrade.ReceiveMoney},
                     {"COPAYMENT", declareTrade.CopayMent},
+                    {"PAYMONEY", declareTrade.PayMoney},
+                    {"CHANGE", declareTrade.Change},
                     {"PAYWAY", declareTrade.PayWay},
                 };
             foreach (var tag in tagsDictionary)

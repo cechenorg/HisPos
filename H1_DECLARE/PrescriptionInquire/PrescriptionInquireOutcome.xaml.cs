@@ -5,7 +5,9 @@ using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
@@ -21,6 +23,7 @@ namespace His_Pos.PrescriptionInquire
     /// </summary>
     public partial class PrescriptionInquireOutcome : Window, INotifyPropertyChanged
     {
+        private bool isFirst = true;
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -29,7 +32,33 @@ namespace His_Pos.PrescriptionInquire
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-
+        private ObservableCollection<Hospital> hospitalCollection;
+        public ObservableCollection<Hospital> HospitalCollection
+        {
+            get
+            {
+                return hospitalCollection;
+            }
+            set
+            {
+                hospitalCollection = value;
+                NotifyPropertyChanged("HospitalCollection");
+            }
+        }
+        private DeclareTrade declareTrade;
+        
+        public DeclareTrade DeclareTrade
+        {
+            get
+            {
+                return declareTrade;
+            }
+            set
+            {
+                declareTrade = value;
+                NotifyPropertyChanged("DeclareTrade");
+            }
+        }
         private static DeclareData inquiredPrescription;
         public DeclareData InquiredPrescription
         {
@@ -49,8 +78,11 @@ namespace His_Pos.PrescriptionInquire
         {
             InitializeComponent();
             DataContext = this;
+            DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             InquiredPrescription = inquired;
             SetPatientData();
+            InitData();
+            InitDataChanged();
         }
 
         private void SetPatientData()
@@ -73,6 +105,32 @@ namespace His_Pos.PrescriptionInquire
         private void DataGridRow_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             PrescriptionSet.SelectedItem = (sender as DataGridRow).Item;
+        }
+        private void Text_TextChanged(object sender, EventArgs e)
+        {
+            DataChanged();
+        }
+        private void DataChanged()
+        {
+            if (isFirst) return;
+
+            Changed.Content = "已修改";
+            Changed.Foreground = Brushes.Red;
+
+            ButtonImportXml.IsEnabled = true;
+        }
+
+        private void InitDataChanged()
+        {
+            Changed.Content = "未修改";
+            Changed.Foreground = Brushes.Black;
+
+            ButtonImportXml.IsEnabled = false;
+        }
+        private void InitData() {
+            HospitalCollection = HospitalDb.GetData();
+            ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
+            
         }
     }
 }

@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hisPos="clr-namespace:His_Pos"
+        xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d"
         Title="處方詳細資料" Height="595" Width="1200" WindowStartupLocation="CenterScreen">
     <Window.Background>
@@ -42,8 +43,31 @@
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
                 <Label Content="釋出院所"  Foreground="#FF424040" FontSize="16" FontFamily="Segoe UI Semibold" 
                                    BorderThickness="0,0,0,1"/>
-                <TextBox Name="ReleasePalace" Background="{x:Null}" Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="auto"  FontSize="14" FontStretch="ExtraExpanded" BorderThickness="0,0,0,1" 
-                           VerticalContentAlignment="Center" Margin="0" BorderBrush="DimGray"/>
+                <controls:AutoCompleteBox
+                        x:Name="ReleasePalace"
+                        Width="450"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Stretch"
+                        Background="Transparent"
+                        BorderBrush="DimGray"
+                        BorderThickness="0,0,0,1"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="16"
+                        FontStretch="ExtraExpanded"
+                        ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
+                        MinimumPrefixLength="4"
+                        SelectedItem="{Binding HospitalCollection, Mode=TwoWay}"
+                        ValueMemberPath="FullName">
+                    <controls:AutoCompleteBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Width="100" Content="{Binding Id}" />
+                                <Label Width="350" Content="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </controls:AutoCompleteBox.ItemTemplate>
+                </controls:AutoCompleteBox>
+               
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="10">
                 <Label Content="就醫科別" Width="auto" Foreground="#FF424040" FontSize="16" FontFamily="Segoe UI Semibold" 
@@ -194,12 +218,39 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn MinWidth="40" Header="途徑" Binding="{Binding Position}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold" IsReadOnly="True"/>
-                    <DataGridTextColumn MinWidth="60" Header="健保價格" Binding="{Binding Price}" FontSize="14" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                </DataGrid.Columns>
+                    <DataGridTextColumn Width="60" Header="途徑" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Position}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="60" Header="健保價格" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Price}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                   </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal"  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5">
-                <Rectangle Width="880"/>
+                <Label Content="押金" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="{Binding DeclareTrade.Deposit}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="自費" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="{Binding DeclareTrade.PaySelf}"  Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="部分負擔" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="{Binding DeclareTrade.CopayMent}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="應收金額" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="{Binding DeclareTrade.ReceiveMoney}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="已付" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="{Binding DeclareTrade.PayMoney}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="找零" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Content="{Binding DeclareTrade.Change}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Rectangle Width="140"/>
+                <Label Name="Changed" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="30,0,0,0"/>
                 <Button Name="ButtonImportXml" Width="120" Content="修改確定"  FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" />
             </StackPanel>
         </Grid>

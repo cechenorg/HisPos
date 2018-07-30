@@ -181,7 +181,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 var declareData = new DeclareData(Prescription);
                 var declareDb = new DeclareDb();
-                DeclareTrade declareTrade = new DeclareTrade(Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(),"現金");
+                DeclareTrade declareTrade = new DeclareTrade(Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(),Pay.ToString(),Change.ToString(),"現金");
                 declareDb.InsertDb(declareData, declareTrade);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.Show();
@@ -195,7 +195,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //declareDb.InsertDb(declareData);
                 c.ShowDialog();
             }
-            
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -491,6 +490,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
         {
             CountMedicinesCost();
+        }
+
+        private void NullTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox t = sender as TextBox;
+            if (string.IsNullOrEmpty(t.Text))
+                t.Text = "0";
         }
     }
 }
