@@ -172,13 +172,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
 
         public void SaveLocation()
         {
-            //MedBagLocationCollection.Clear();
-            //foreach (ContentControl contentControl in MedBagCanvas.Children)
-            //{
-            //    RdlLocationControl locationControl = (RdlLocationControl)contentControl.Content;
-            //    MedBagLocationCollection.Add(new MedBagLocation(locationControl.id, locationControl.Name, Canvas.GetLeft(contentControl), Canvas.GetTop(contentControl), contentControl.Width, contentControl.Height));
-            //}
-            //MedBagLocationDB.SaveLocationData(MedBagLocationCollection);
+
         }
     }
 }
