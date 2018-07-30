@@ -33,17 +33,15 @@ namespace His_Pos.Class.CustomerHistory
 
         public ObservableCollection<CustomerHistoryDetail> getCustomerHistoryDetails(SystemType type, string CustomerHistoryDetailId)
         {
-            var table = CustomerHistoryDetails.Select("SYSTEMTYPE = '" + (int)type + "' AND CUSHISTORYDETAILID = '" +
-                                                      CustomerHistoryDetailId + "'");
+            var table = CustomerHistoryDetails.Select("SYSTEMTYPE = '" + (int)type + "' AND CUSHISTORYDETAILID = '" + CustomerHistoryDetailId + "'");
+            var customerHistoryDetailCollection = new ObservableCollection<CustomerHistoryDetail>();
 
-            ObservableCollection<CustomerHistoryDetail> CustomerHistoryDetailCollection = new ObservableCollection<CustomerHistoryDetail>();
-
-            foreach (DataRow row in table)
+            foreach (var row in table)
             {
-                CustomerHistoryDetailCollection.Add(new CustomerHistoryDetail(row["COL0"].ToString(), row["COL1"].ToString(), row["COL2"].ToString(), row["COL3"].ToString()));
+                customerHistoryDetailCollection.Add(new CustomerHistoryDetail(row));
             }
 
-            return CustomerHistoryDetailCollection;
+            return customerHistoryDetailCollection;
         }
     }
 }

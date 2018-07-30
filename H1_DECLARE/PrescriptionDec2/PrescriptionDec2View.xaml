@@ -136,6 +136,7 @@
                     MinWidth="130"
                     Background="DeepSkyBlue"
                     BorderThickness="0"
+                    Click="Button_Click"
                     Content="取得病患資料"
                     FontFamily="Segoe UI Semibold"
                     FontSize="16" />
@@ -621,7 +622,7 @@
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -784,6 +785,7 @@
                             Margin="20,0,5,0"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
+                            Checked="RadioButton_Checked"
                             Content="交易"
                             FontFamily="Segoe UI Semibold"
                             FontSize="16"
@@ -793,6 +795,7 @@
                             Margin="20,0,5,0"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
+                            Checked="RadioButton_Checked"
                             Content="調劑"
                             FontFamily="Segoe UI Semibold"
                             FontSize="16"
@@ -819,8 +822,11 @@
                         Background="Transparent"
                         CellStyle="{StaticResource DataGridCellStyle}"
                         ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}"
+                        DataContext="{Binding CustomerHistoryMaster}"
                         HeadersVisibility="None"
-                        HorizontalScrollBarVisibility="Hidden">
+                        HorizontalScrollBarVisibility="Hidden"
+                        MouseEnter="Prescription_MouseEnter"
+                        SelectionChanged="Prescription_SelectionChanged">
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <Style.Triggers>
@@ -838,7 +844,10 @@
                             <DataGridTemplateColumn Width="Auto" MinWidth="15">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="CustomHistoriesTypeIcon">
-                                        <Image Width="15" Height="15" />
+                                        <Image
+                                            Width="15"
+                                            Height="15"
+                                            Source="{Binding TypeIcon, UpdateSourceTrigger=PropertyChanged}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -850,6 +859,7 @@
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
                                         <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Text" Value="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -861,28 +871,48 @@
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Left" />
                                         <Setter Property="VerticalAlignment" Value="Center" />
+                                        <Setter Property="Text" Value="{Binding CustomerHistoryData, UpdateSourceTrigger=PropertyChanged}" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-                <DataGrid
-                    x:Name="CusHistoryDetail"
+                <StackPanel
                     Grid.Column="1"
                     Margin="0,0,10,0"
-                    AutoGenerateColumns="False"
-                    Background="{StaticResource GridDarkerBackGround}"
-                    CanUserAddRows="False"
-                    ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                    VerticalScrollBarVisibility="Auto">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="250" />
-                        <DataGridTextColumn MinWidth="90" />
-                        <DataGridTextColumn MinWidth="90" />
-                        <DataGridTextColumn MinWidth="70" />
-                    </DataGrid.Columns>
-                </DataGrid>
+                    Background="{StaticResource GridDarkerBackGround}">
+                    <DataGrid
+                        x:Name="CusHistoryDetailPos"
+                        AutoGenerateColumns="False"
+                        Background="{StaticResource GridDarkerBackGround}"
+                        CanUserAddRows="False"
+                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                        VerticalScrollBarVisibility="Auto"
+                        Visibility="Collapsed">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="250" />
+                            <DataGridTextColumn MinWidth="90" />
+                            <DataGridTextColumn MinWidth="90" />
+                            <DataGridTextColumn MinWidth="70" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid
+                        x:Name="CusHistoryDetailHis"
+                        AutoGenerateColumns="False"
+                        Background="{StaticResource GridDarkerBackGround}"
+                        CanUserAddRows="False"
+                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                        DataContext="{Binding CustomerHistoryHis}"
+                        VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="250" Binding="{Binding MedicineName}" />
+                            <DataGridTextColumn MinWidth="90" Binding="{Binding Usage}" />
+                            <DataGridTextColumn MinWidth="90" Binding="{Binding Position}" />
+                            <DataGridTextColumn MinWidth="70" Binding="{Binding Dosage}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
                 <Grid Grid.Column="2" Background="{StaticResource GridBackGround}">
                     <Grid.RowDefinitions>
                         <RowDefinition />

@@ -11,12 +11,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
@@ -26,9 +29,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
-        private Prescription _prescription = new Prescription();
-        private bool isChanged;
+        private Prescription _currentPrescription = new Prescription();
+        private bool _isChanged;
         private int selfCost;
+        private SystemType cusHhistoryFilterCondition = SystemType.ALL;
 
         public int SelfCost
         {
@@ -61,7 +65,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             set
             {
                 copayment = value;
-                Prescription.Treatment.Copayment.Point = copayment;
+                CurrentPrescription.Treatment.Copayment.Point = copayment;
                 CountCharge();
                 NotifyPropertyChanged("Copayment");
             }
@@ -127,6 +131,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public ObservableCollection<AdjustCase> AdjustCases { get; set; }
         public ObservableCollection<Usage> Usages { get; set; }
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
+        public CustomerHistory CustomerHistoryMaster { get; set; }
 
         public PrescriptionDec2View()
         {
@@ -141,13 +146,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             GetPrescriptionData();
         }
 
-        public Prescription Prescription
+        public Prescription CurrentPrescription
         {
-            get => _prescription;
+            get => _currentPrescription;
             set
             {
-                _prescription = value;
-                NotifyPropertyChanged("Prescription");
+                _currentPrescription = value;
+                NotifyPropertyChanged("CurrentPrescription");
             }
         }
 
@@ -177,18 +182,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             MessageWindow m;
             ConfirmWindow c;
-            if (Prescription.CheckPrescriptionData().Equals(""))
+            if (CurrentPrescription.CheckPrescriptionData().Equals(""))
             {
-                var declareData = new DeclareData(Prescription);
+                var declareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
-                DeclareTrade declareTrade = new DeclareTrade(Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(),Pay.ToString(),Change.ToString(),"現金");
+                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
                 declareDb.InsertDb(declareData, declareTrade);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.Show();
             }
             else
             {
-                c = new ConfirmWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
+                c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
                 //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
                 //var declareData = new DeclareData(Prescription);
                 //var declareDb = new DeclareDb();
@@ -203,13 +208,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             if (selectedItem is IDeletable)
             {
-                if (Prescription.Medicines.Contains(selectedItem))
+                if (CurrentPrescription.Medicines.Contains(selectedItem))
                     (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
 
                 PrescriptionMedicines.SelectedItem = selectedItem;
                 return;
             }
-            PrescriptionMedicines.SelectedIndex = Prescription.Medicines.Count;
+            PrescriptionMedicines.SelectedIndex = CurrentPrescription.Medicines.Count;
         }
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
@@ -221,15 +226,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ClearMedicine(Prescription.Medicines[PrescriptionMedicines.SelectedIndex]);
+            ClearMedicine(CurrentPrescription.Medicines[PrescriptionMedicines.SelectedIndex]);
             SetChanged();
-            Prescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
+            CurrentPrescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
         }
 
         private void SetChanged()
         {
             if (IsFirst) return;
-            isChanged = true;
+            _isChanged = true;
         }
 
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
@@ -267,21 +272,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DeclareMedicine declareMedicine = (DeclareMedicine)(medicineCodeAuto.SelectedItem as DeclareMedicine).Clone();
             int currentRow = GetCurrentRowIndex(sender);
 
-            if (Prescription.Medicines.Count > 0)
+            if (CurrentPrescription.Medicines.Count > 0)
             {
-                if (Prescription.Medicines.Count == currentRow)
+                if (CurrentPrescription.Medicines.Count == currentRow)
                 {
-                    Prescription.Medicines.Add(declareMedicine);
+                    CurrentPrescription.Medicines.Add(declareMedicine);
                     medicineCodeAuto.Text = "";
                 }
                 else
                 {
-                    Prescription.Medicines[currentRow] = declareMedicine;
+                    CurrentPrescription.Medicines[currentRow] = declareMedicine;
                 }
             }
             else
             {
-                Prescription.Medicines.Add(declareMedicine);
+                CurrentPrescription.Medicines.Add(declareMedicine);
                 medicineCodeAuto.Text = "";
             }
         }
@@ -334,7 +339,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         break;
 
                     case "Position":
-                        if (!Prescription.Medicines[currentRowIndex].PaySelf)
+                        if (!CurrentPrescription.Medicines[currentRowIndex].PaySelf)
                         {
                             NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
                             NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
@@ -450,7 +455,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             double medicinesHcCost = 0;//健保給付總藥價
             double medicinesSelfCost = 0;//自費藥總藥價
             double purchaseCosts = 0;//藥品總進貨成本
-            foreach (var medicine in Prescription.Medicines)
+            foreach (var medicine in CurrentPrescription.Medicines)
             {
                 if (!medicine.PaySelf)
                     medicinesHcCost += medicine.TotalPrice;
@@ -506,10 +511,98 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             TextBox t = sender as TextBox;
             if (!string.IsNullOrEmpty(t.Text))
             {
-                Prescription.Medicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
-                if(Prescription.Medicines[currentRow].Usage != null)
-                    t.Text = Prescription.Medicines[currentRow].Usage.Name;
-            }       
+                CurrentPrescription.Medicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
+                if (CurrentPrescription.Medicines[currentRow].Usage != null)
+                    t.Text = CurrentPrescription.Medicines[currentRow].Usage.Name;
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            LoadPatentDataFromIcCard();
+        }
+
+        private void LoadPatentDataFromIcCard()
+        {
+            //_res = HisApiBase.csOpenCom(0);
+            //if (_res != 0) return;
+            //_res = HisApiBase.csVerifySAMDC();
+            //if (_res != 0) return;
+            //GetBasicData();
+            //if (!_currentCustomer.CheckCustomerExist(_currentCustomer.IdNumber))
+            //{
+            //    _currentCustomer.InsertCustomerData(_currentCustomer);
+            //}
+            //HisApiBase.csCloseCom();
+            CurrentPrescription.Customer.Name = "林連義進";
+            CurrentPrescription.Customer.Birthday = "037/10/01";
+            CurrentPrescription.Customer.IcNumber = "S88824769A";
+            CurrentPrescription.Customer.Gender = true;
+            CurrentPrescription.Customer.IcCard = new IcCard("900000000720", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination(), "");
+            CurrentPrescription.Customer.Id = "1";
+            PatientName.Text = CurrentPrescription.Customer.Name;
+            PatientId.Text = CurrentPrescription.Customer.IcNumber;
+            PatientBirthday.Text = CurrentPrescription.Customer.Birthday;
+            CustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
+            CusHistoryMaster.ItemsSource = CustomerHistoryMaster.CustomerHistoryMasterCollection;
+            CusHistoryMaster.SelectedIndex = 0;
+        }
+
+        private bool CusHistoryFilter(object item)
+        {
+            if (cusHhistoryFilterCondition == SystemType.ALL) return true;
+
+            if (((CustomerHistoryMaster)item).Type == cusHhistoryFilterCondition)
+                return true;
+            return false;
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+
+            cusHhistoryFilterCondition = (SystemType)Int16.Parse(radioButton.Tag.ToString());
+
+            if (CusHistoryMaster is null) return;
+            CusHistoryMaster.Items.Filter = CusHistoryFilter;
+        }
+
+        private void Prescription_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var dataGrid = sender as DataGrid;
+            Debug.Assert(dataGrid != null, nameof(dataGrid) + " != null");
+            dataGrid.Focus();
+        }
+
+        private void Prescription_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CusHistoryMaster.SelectedItem is null)
+            {
+                CusHistoryMaster.SelectedIndex = 0;
+                return;
+            }
+
+            CustomerHistoryMaster selectedItem = (CustomerHistoryMaster)CusHistoryMaster.SelectedItem;
+
+            SetCusHistoryDetail(selectedItem.Type, selectedItem.CustomerHistoryDetailId);
+        }
+
+        private void SetCusHistoryDetail(SystemType type, string customerHistoryDetailId)
+        {
+            switch (type)
+            {
+                case SystemType.HIS:
+                    CusHistoryDetailHis.Visibility = Visibility.Visible;
+                    CusHistoryDetailHis.ItemsSource =
+                        CustomerHistoryMaster.getCustomerHistoryDetails(type, customerHistoryDetailId);
+                    break;
+
+                case SystemType.POS:
+                    CusHistoryDetailPos.Visibility = Visibility.Visible;
+                    CusHistoryDetailPos.ItemsSource =
+                        CustomerHistoryMaster.getCustomerHistoryDetails(type, customerHistoryDetailId);
+                    break;
+            }
         }
     }
 }

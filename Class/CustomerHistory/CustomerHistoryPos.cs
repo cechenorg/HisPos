@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.CustomerHistory
 {
-    public class CustomerHistoryPos
+    public class CustomerHistoryPos : CustomerHistoryDetail
     {
         public CustomerHistoryPos(string col0, string col1, string col2, string col3)
         {
