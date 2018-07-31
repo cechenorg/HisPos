@@ -132,8 +132,10 @@ namespace His_Pos.PrescriptionInquire
                     declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
                     declareDb.InsertDb(declareData);
                 }
-            } 
-
+                MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS);
+                mainWindow.Show();
+            }
+         
         }
     }
 }

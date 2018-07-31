@@ -212,7 +212,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay}" />
+                        SelectedItem="{Binding InquiredPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"

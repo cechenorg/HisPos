@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -11,6 +12,7 @@ using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Properties;
@@ -30,6 +32,71 @@ namespace His_Pos.PrescriptionInquire
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        private ObservableCollection<TreatmentCase> treatmentCaseCollection;
+        public ObservableCollection<TreatmentCase> TreatmentCaseCollection
+        {
+            get
+            {
+                return treatmentCaseCollection;
+            }
+            set
+            {
+                treatmentCaseCollection = value;
+                NotifyPropertyChanged("TreatmentCaseCollection");
+            }
+        }
+        private ObservableCollection<AdjustCase> adjustCaseCollection;
+        public ObservableCollection<AdjustCase> AdjustCaseCollection
+        {
+            get
+            {
+                return adjustCaseCollection;
+            }
+            set
+            {
+                adjustCaseCollection = value;
+                NotifyPropertyChanged("AdjustCaseCollection");
+            }
+        }
+        private ObservableCollection<PaymentCategory> paymentCategoryCollection;
+        public ObservableCollection<PaymentCategory> PaymentCategoryCollection
+        {
+            get
+            {
+                return paymentCategoryCollection;
+            }
+            set
+            {
+                paymentCategoryCollection = value;
+                NotifyPropertyChanged("PaymentCategoryCollection");
+            }
+        }
+        private ObservableCollection<Copayment> copaymentCollection;
+        public ObservableCollection<Copayment> CopaymentCollection
+        {
+            get
+            {
+                return copaymentCollection;
+            }
+            set
+            {
+                copaymentCollection = value;
+                NotifyPropertyChanged("CopaymentCollection");
+            }
+        }
+        private ObservableCollection<Division> divisionCollection;
+        public ObservableCollection<Division> DivisionCollection
+        {
+            get
+            {
+                return divisionCollection;
+            }
+            set
+            {
+                divisionCollection = value;
+                NotifyPropertyChanged("DivisionCollection");
             }
         }
         private ObservableCollection<Hospital> hospitalCollection;
@@ -83,6 +150,7 @@ namespace His_Pos.PrescriptionInquire
             SetPatientData();
             InitData();
             InitDataChanged();
+            isFirst = false;
         }
 
         private void SetPatientData()
@@ -119,7 +187,7 @@ namespace His_Pos.PrescriptionInquire
 
             ButtonImportXml.IsEnabled = true;
         }
-
+        
         private void InitDataChanged()
         {
             Changed.Content = "未修改";
@@ -130,7 +198,33 @@ namespace His_Pos.PrescriptionInquire
         private void InitData() {
             HospitalCollection = HospitalDb.GetData();
             ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
-            
+
+            DivisionCollection = DivisionDb.GetData();
+            Division.ItemsSource = DivisionCollection;
+            Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
+
+            CopaymentCollection = CopaymentDb.GetData();
+            CopaymentCode.ItemsSource = CopaymentCollection;
+            CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
+
+            PaymentCategoryCollection = PaymentCategroyDb.GetData();
+            PaymentCategory.ItemsSource = PaymentCategoryCollection;
+            PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
+
+            AdjustCaseCollection = AdjustCaseDb.GetData();
+            AdjustCase.ItemsSource = AdjustCaseCollection;
+            AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
+
+            TreatmentCaseCollection = TreatmentCaseDb.GetData();
+            TreatmentCase.ItemsSource = TreatmentCaseCollection;
+            TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+        }
+
+        private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
+        {
+            ObservableCollection<Hospital> tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
+            ReleasePalace.ItemsSource = tempCollection;
+            ReleasePalace.PopulateComplete();
         }
     }
 }

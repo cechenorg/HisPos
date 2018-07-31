@@ -24,6 +24,7 @@ namespace His_Pos.Class
             AdjustCase = new AdjustCase.AdjustCase(row);
             MedicineDays = "0";
             TreatmentDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_TREATDATE"].ToString().Substring(1, 9));
+            TreatmentDate.ToShortDateString();
             AdjustDate = DateTime.Today;
             PaymentCategory = new PaymentCategory.PaymentCategory(row);
         }

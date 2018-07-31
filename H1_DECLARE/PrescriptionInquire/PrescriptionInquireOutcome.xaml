@@ -56,7 +56,10 @@
                         FontStretch="ExtraExpanded"
                         ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                         MinimumPrefixLength="4"
-                        SelectedItem="{Binding HospitalCollection, Mode=TwoWay}"
+                        SelectionChanged="Text_TextChanged"
+                        ItemsSource="{Binding HospitalCollection}"
+                        SelectedItem="{Binding HospitalCollection.FullName, Mode=TwoWay}"
+                        Populating="ReleasePalace_Populating"
                         ValueMemberPath="FullName">
                     <controls:AutoCompleteBox.ItemTemplate>
                         <DataTemplate>
@@ -67,12 +70,13 @@
                         </DataTemplate>
                     </controls:AutoCompleteBox.ItemTemplate>
                 </controls:AutoCompleteBox>
-               
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="10">
                 <Label Content="就醫科別" Width="auto" Foreground="#FF424040" FontSize="16" FontFamily="Segoe UI Semibold" 
                                    HorizontalContentAlignment="Stretch"/>
-                <TextBox x:Name="Division" Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                <ComboBox
+                        x:Name="Division" Width="140" HorizontalContentAlignment="Center"  DisplayMemberPath="FullName" 
+                        FontFamily="Segoe UI Semibold"  FontSize="14" IsEditable="False" SelectedValuePath="FullName" SelectionChanged="Text_TextChanged" SelectedItem="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName, Mode=TwoWay}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="3" Margin="10">
                 <Label Content="調劑藥師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
@@ -82,12 +86,12 @@
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="4" Margin="10">
                 <Label Content="就醫日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <TextBox Width="147" Height="30" MinWidth="147" FontSize="14" FontWeight="Bold" Padding="0" 
-                           Text="{Binding InquiredPrescription.Prescription.Treatment.AdjustDate}" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                           Text="{Binding InquiredPrescription.Prescription.Treatment.AdjustDate,StringFormat={}{0:yyyy/MM/dd}}" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="0" Margin="10">
                 <Label Content="調劑日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <TextBox Width="auto" Height="30" MinWidth="143" FontSize="14" FontWeight="Bold" Padding="0" FontStretch="ExtraExpanded" 
-                           Text="{Binding InquiredPrescription.Prescription.Treatment.TreatmentDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                           Text="{Binding InquiredPrescription.Prescription.Treatment.TreatmentDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={}{0:yyyy/MM/dd}}" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="1" Margin="10">
                 <Label Content="主要診斷" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
@@ -108,24 +112,24 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="0" Margin="10" >
                 <Label Content="給付類別" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="PaymentCategory"  Text="{Binding InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName}" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                <ComboBox Name="PaymentCategory" SelectedItem="{Binding  InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName}"  SelectionChanged="Text_TextChanged" DisplayMemberPath="FullName" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="1" Margin="10">
                 <Label Content="部分負擔" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="CopaymentCode" Text="{Binding InquiredPrescription.Prescription.Treatment.Copayment.FullName}"  Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
+                <ComboBox Name="CopaymentCode" SelectedItem="{Binding InquiredPrescription.Prescription.Treatment.Copayment.FullName}" DisplayMemberPath="FullName" SelectionChanged="Text_TextChanged" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="2" Margin="10">
                 <Label Content="處方案件" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <TextBox x:Name="TreatmentCase" Width="147" Text="{Binding InquiredPrescription.Prescription.Treatment.AdjustCase.FullName}" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                <ComboBox x:Name="TreatmentCase" Width="147" SelectedItem="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName}" DisplayMemberPath="FullName" SelectionChanged="Text_TextChanged" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="3" Margin="10">
+                <Label Content="調劑案件" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
+                <ComboBox x:Name="AdjustCase" SelectedItem="{Binding InquiredPrescription.Prescription.Treatment.AdjustCase.FullName}"  DisplayMemberPath="FullName" SelectionChanged="Text_TextChanged" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded"  HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="4" Margin="10">
                 <Label Content="給藥日份" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                 <TextBox Text="{Binding InquiredPrescription.Prescription.Treatment.MedicineDays}" MinWidth="60" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
                                      BorderThickness="0,0,0,1" HorizontalContentAlignment="Left" BorderBrush="DimGray" VerticalContentAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="4" Margin="10">
-                <Label Content="調劑案件" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <TextBox x:Name="AdjustCase" Text="{Binding InquiredPrescription.Prescription.Treatment.AdjustCase.FullName}" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded"  HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <DataGrid Name="PrescriptionSet" Grid.Row="4" Grid.ColumnSpan="5" Margin="10"  CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       Background="{StaticResource GridBackGround}" ItemsSource="{Binding InquiredPrescription.DeclareDetails,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"

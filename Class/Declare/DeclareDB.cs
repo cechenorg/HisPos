@@ -24,13 +24,11 @@ namespace His_Pos.Class.Declare
             AddParameterDData(parameters, declareData);//加入DData sqlparameters
             var pDataTable = SetPDataTable();//設定PData datatable columns
             AddPData(declareData, pDataTable);//加入PData sqlparameters
-            if (declareTrade != null) {
+            
                 var dataTradeTable = SetDataTradeTable();
                 AddTradeData(declareTrade, dataTradeTable);
                 parameters.Add(new SqlParameter("DECLARETRADE", dataTradeTable));
-            }
-            else
-                parameters.Add(new SqlParameter("DECLARETRADE", DBNull.Value));
+            
             parameters.Add(new SqlParameter("DETAIL", pDataTable));
             parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
             {
@@ -122,9 +120,9 @@ namespace His_Pos.Class.Declare
             var dataTradeTable = new DataTable();
             var columnsDictionary = new Dictionary<string, Type>
             {
-                {"CUS_ID", typeof(string)}, {"EMP_ID", typeof(string)},{"PAYSELF", typeof(string)},
-                {"DEPOSIT", typeof(string)},{"RECEIVE_MONEY", typeof(string)},{"COPAYMENT",typeof(string)},
-                {"PAYMONEY",typeof(string)},{"CHANGE",typeof(string)},{"PAYWAY",typeof(string)}
+                {"CUS_ID", typeof(int)}, {"EMP_ID", typeof(string)},{"PAYSELF", typeof(int)},
+                {"DEPOSIT", typeof(int)},{"RECEIVE_MONEY", typeof(int)},{"COPAYMENT",typeof(int)},
+                {"PAYMONEY",typeof(int)},{"CHANGE",typeof(int)},{"PAYWAY",typeof(string)}
             };
             foreach (var col in columnsDictionary)
             {
@@ -135,28 +133,50 @@ namespace His_Pos.Class.Declare
 
         private void AddTradeData(DeclareTrade declareTrade, DataTable tradeTable)
         {
+            if (declareTrade == null) return;
             var row = tradeTable.NewRow();
-            var tagsDictionary = new Dictionary<string, string>
-                {
-                    {"CUS_ID",declareTrade.CusId},
-                    {"EMP_ID", declareTrade.EmpId},
-                    {"PAYSELF", declareTrade.PaySelf},
-                    {"DEPOSIT", declareTrade.Deposit},
-                    {"RECEIVE_MONEY", declareTrade.ReceiveMoney},
-                    {"COPAYMENT", declareTrade.CopayMent},
-                    {"PAYMONEY", declareTrade.PayMoney},
-                    {"CHANGE", declareTrade.Change},
-                    {"PAYWAY", declareTrade.PayWay},
-                };
-            foreach (var tag in tagsDictionary)
-            {
-                switch (tag.Key)
-                {
-                    default:
-                        CheckEmptyDataRow(tradeTable, tag.Value, ref row, tag.Key);
-                        break;
-                }
-            }
+           
+            row["CUS_ID"] = Convert.ToInt32(declareTrade.CusId);
+
+            if (declareTrade.EmpId == null)
+                row["EMP_ID"] = DBNull.Value;
+            else
+                row["EMP_ID"] = declareTrade.EmpId;
+
+            if (declareTrade.PaySelf == null)
+                row["PAYSELF"] = DBNull.Value;
+            else
+                row["PAYSELF"] = Convert.ToInt32(declareTrade.PaySelf);
+
+            if (declareTrade.Deposit == null)
+                row["DEPOSIT"] = DBNull.Value;
+            else
+                row["DEPOSIT"] = Convert.ToInt32(declareTrade.Deposit);
+
+            if (declareTrade.ReceiveMoney == null)
+                row["RECEIVE_MONEY"] = DBNull.Value;
+            else
+                row["RECEIVE_MONEY"] = Convert.ToInt32(declareTrade.ReceiveMoney);
+
+            if (declareTrade.CopayMent == null)
+                row["COPAYMENT"] = DBNull.Value;
+            else
+                row["COPAYMENT"] = Convert.ToInt32(declareTrade.CopayMent);
+
+            if (declareTrade.PayMoney == null)
+                row["PAYMONEY"] = DBNull.Value;
+            else
+                row["PAYMONEY"] = Convert.ToInt32(declareTrade.PayMoney);
+
+            if (declareTrade.Change == null)
+                row["CHANGE"] = DBNull.Value;
+            else
+                row["CHANGE"] = Convert.ToInt32(declareTrade.Change);
+
+            if (declareTrade.PayWay == null)
+                row["PAYWAY"] = DBNull.Value;
+            else
+                row["PAYWAY"] = declareTrade.PayWay;
             tradeTable.Rows.Add(row);
         }
         private DataTable SetPDataTable()

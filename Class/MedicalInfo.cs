@@ -22,7 +22,7 @@ namespace His_Pos.Class
             SpecialCode = new SpecialCode();
             MainDiseaseCode = new DiseaseCode();
             SecondDiseaseCode = new DiseaseCode();
-            TreatmentCase = new TreatmentCase.TreatmentCase();
+            TreatmentCase = new TreatmentCase.TreatmentCase(row);
             MainDiseaseCode =  new DiseaseCode { Id = row["HISINT_ID1"].ToString() };
             SecondDiseaseCode = new DiseaseCode { Id = row["HISINT_ID2"].ToString() };
         }
@@ -37,7 +37,6 @@ namespace His_Pos.Class
                 case 1:
                     MainDiseaseCode = diseaseCodes[0];
                     break;
-
                 case 2:
                     MainDiseaseCode = diseaseCodes[0];
                     SecondDiseaseCode = diseaseCodes[1];
