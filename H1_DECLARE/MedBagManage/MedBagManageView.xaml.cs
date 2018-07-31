@@ -137,16 +137,14 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
             RdlLocationControl newLocation = null;
             if (locid != null)
             {
-                newLocation = new RdlLocationControl(Convert.ToInt32(locid));
-                newLocation.Name = parameterName;
+                newLocation = new RdlLocationControl(Convert.ToInt32(locid),parameterName);
                 newLocation.RdlParameterName.Content = parameterName;
                 id = Convert.ToInt32(locid);
                 id++;
             }
             else
             {
-                newLocation = new RdlLocationControl(id);
-                newLocation.Name = parameterName;
+                newLocation = new RdlLocationControl(id, parameterName);
                 newLocation.RdlParameterName.Content = parameterName;
                 id++;
             }

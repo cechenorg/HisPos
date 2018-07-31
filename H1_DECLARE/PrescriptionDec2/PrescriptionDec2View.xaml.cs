@@ -131,7 +131,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public ObservableCollection<AdjustCase> AdjustCases { get; set; }
         public ObservableCollection<Usage> Usages { get; set; }
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
-        public CustomerHistory CustomerHistoryMaster { get; set; }
+        public CustomerHistoryMaster CurrentCustomerHistoryMaster { get; set; }
 
         public PrescriptionDec2View()
         {
@@ -543,8 +543,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PatientName.Text = CurrentPrescription.Customer.Name;
             PatientId.Text = CurrentPrescription.Customer.IcNumber;
             PatientBirthday.Text = CurrentPrescription.Customer.Birthday;
-            CustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
-            CusHistoryMaster.ItemsSource = CustomerHistoryMaster.CustomerHistoryMasterCollection;
+            CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
+            CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
             CusHistoryMaster.SelectedIndex = 0;
         }
 
@@ -581,26 +581,24 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 CusHistoryMaster.SelectedIndex = 0;
                 return;
             }
-
-            CustomerHistoryMaster selectedItem = (CustomerHistoryMaster)CusHistoryMaster.SelectedItem;
-
-            SetCusHistoryDetail(selectedItem.Type, selectedItem.CustomerHistoryDetailId);
+            CustomerHistoryMaster selectedMaster = CusHistoryMaster.SelectedItem as CustomerHistoryMaster;
+            selectedMaster.HistoryCollection = CurrentCustomerHistoryMaster.getCustomerHistoryDetails(selectedMaster.Type, selectedMaster.CustomerHistoryDetailId);
+            SetCusHistoryDetail(CusHistoryMaster.SelectedItem as CustomerHistoryMaster);
         }
 
-        private void SetCusHistoryDetail(SystemType type, string customerHistoryDetailId)
+        private void SetCusHistoryDetail(CustomerHistoryMaster selectedItem)
         {
-            switch (type)
+            switch (selectedItem.Type)
             {
                 case SystemType.HIS:
+                    CusHistoryDetailPos.Visibility = Visibility.Collapsed;
                     CusHistoryDetailHis.Visibility = Visibility.Visible;
-                    CusHistoryDetailHis.ItemsSource =
-                        CustomerHistoryMaster.getCustomerHistoryDetails(type, customerHistoryDetailId);
+                    CusHistoryDetailHis.ItemsSource = selectedItem.HistoryCollection;
                     break;
-
                 case SystemType.POS:
+                    CusHistoryDetailHis.Visibility = Visibility.Collapsed;
                     CusHistoryDetailPos.Visibility = Visibility.Visible;
-                    CusHistoryDetailPos.ItemsSource =
-                        CustomerHistoryMaster.getCustomerHistoryDetails(type, customerHistoryDetailId);
+                    CusHistoryDetailPos.ItemsSource = selectedItem.HistoryCollection;
                     break;
             }
         }

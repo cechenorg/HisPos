@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -78,6 +79,39 @@ namespace His_Pos.Class.CustomerHistory
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public ObservableCollection<CustomerHistoryMaster> CustomerHistoryMasterCollection { get; }
+        private DataTable CustomerHistoryDetails;
+
+        public CustomerHistoryMaster(DataTable customerHistoryMasters, DataTable customerHistoryDetails)
+        {
+            CustomerHistoryMasterCollection = new ObservableCollection<CustomerHistoryMaster>();
+
+            foreach (DataRow row in customerHistoryMasters.Rows)
+            {
+                CustomerHistoryMasterCollection.Add(new CustomerHistoryMaster((SystemType)row["TYPE"], row["DATE"].ToString(), row["HISTORY_ID"].ToString(), row["HISTORY_DATA"].ToString()));
+            }
+
+            CustomerHistoryDetails = customerHistoryDetails;
+        }
+
+        public ObservableCollection<CustomerHistoryDetail> getCustomerHistoryDetails(SystemType type, string CustomerHistoryDetailId)
+        {
+            var table = CustomerHistoryDetails.Select("SYSTEMTYPE = '" + (int)type + "' AND CUSHISTORYDETAILID = '" + CustomerHistoryDetailId + "'");
+            var customerHistoryDetailCollection = new ObservableCollection<CustomerHistoryDetail>();
+
+            foreach (var row in table)
+            {
+                if (type == SystemType.HIS)
+                    customerHistoryDetailCollection.Add(new CustomerHistoryHis(row));
+                else
+                {
+                    customerHistoryDetailCollection.Add(new CustomerHistoryPos(row));
+                }
+            }
+
+            return customerHistoryDetailCollection;
         }
     }
 }

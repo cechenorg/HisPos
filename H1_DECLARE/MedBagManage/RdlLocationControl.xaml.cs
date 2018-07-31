@@ -21,65 +21,24 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
     public partial class RdlLocationControl : UserControl
     {
         public int id;
+        public string LabelContent { get; set; }
 
-        public double MedBagRangeTop
+        public Brush GridBackground
         {
-            get { return (double)GetValue(MedBagRangeTopProperty); }
-            set { SetValue(MedBagRangeTopProperty, value); }
+            get { return LabelContent.Equals("")? Brushes.Transparent: (Brush)FindResource("GridSelected"); }
         }
 
-        public static readonly DependencyProperty MedBagRangeTopProperty =
-            DependencyProperty.Register("MedBagRangeTop",
-                typeof(double),
-                typeof(RdlLocationControl),
-                new PropertyMetadata(0.0));
-
-        public double MedBagRangeBottom
-        {
-            get { return (double)GetValue(MedBagRangeBottomProperty); }
-            set { SetValue(MedBagRangeBottomProperty, value); }
-        }
-
-        public static readonly DependencyProperty MedBagRangeBottomProperty =
-            DependencyProperty.Register("MedBagRangeBottom",
-                typeof(double),
-                typeof(RdlLocationControl),
-                new PropertyMetadata(0.0));
-
-        public double MedBagRangeLeft
-        {
-            get { return (double)GetValue(MedBagRangeLeftProperty); }
-            set { SetValue(MedBagRangeLeftProperty, value); }
-        }
-
-        public static readonly DependencyProperty MedBagRangeLeftProperty =
-            DependencyProperty.Register("MedBagRangeLeft",
-                typeof(double),
-                typeof(RdlLocationControl),
-                new PropertyMetadata(0.0));
-
-        public double MedBagRangeRight
-        {
-            get { return (double)GetValue(MedBagRangeRightProperty); }
-            set { SetValue(MedBagRangeRightProperty, value); }
-        }
-
-        public static readonly DependencyProperty MedBagRangeRightProperty =
-            DependencyProperty.Register("MedBagRangeRight",
-                typeof(double),
-                typeof(RdlLocationControl),
-                new PropertyMetadata(0.0));
-
-        public RdlLocationControl(int locId)
+        public RdlLocationControl(int locId,string name)
         {
             InitializeComponent();
             id = locId;
+            LabelContent = name;
+            DataContext = this;
         }
 
         public RdlLocationControl()
         {
             InitializeComponent();
-            DataContext = this;
         }
     }
 }

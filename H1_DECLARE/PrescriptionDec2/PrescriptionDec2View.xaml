@@ -803,13 +803,15 @@
                         <Image Width="18" Source="/Images/HisDot.png" />
                         <RadioButton
                             Margin="20,0,5,0"
+                            Tag="2"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
                             Content="全部顯示"
+                            Checked="RadioButton_Checked"
                             FontFamily="Segoe UI Semibold"
                             FontSize="16"
                             IsChecked="True"
-                            Tag="2" />
+                             />
                         <Image
                             Width="27"
                             Margin="0,0,15,0"
@@ -847,7 +849,7 @@
                                         <Image
                                             Width="15"
                                             Height="15"
-                                            Source="{Binding TypeIcon, UpdateSourceTrigger=PropertyChanged}" />
+                                            Source="{Binding TypeIcon}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -859,7 +861,7 @@
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
                                         <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="Text" Value="{Binding Date, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Setter Property="Text" Value="{Binding Date}" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -871,7 +873,7 @@
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Left" />
                                         <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="Text" Value="{Binding CustomerHistoryData, UpdateSourceTrigger=PropertyChanged}" />
+                                        <Setter Property="Text" Value="{Binding CustomerHistoryData}" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
@@ -885,31 +887,35 @@
                     <DataGrid
                         x:Name="CusHistoryDetailPos"
                         AutoGenerateColumns="False"
-                        Background="{StaticResource GridDarkerBackGround}"
+                        Background="{StaticResource GridBackGround}"
                         CanUserAddRows="False"
+                        Height ="290"
                         ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                        DataContext="{Binding CustomerHistoryPos}"
                         VerticalScrollBarVisibility="Auto"
                         Visibility="Collapsed">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="250" />
-                            <DataGridTextColumn MinWidth="90" />
-                            <DataGridTextColumn MinWidth="90" />
-                            <DataGridTextColumn MinWidth="70" />
+                            <DataGridTextColumn Width="250" Header="品名" Binding="{Binding ProductName}"/>
+                            <DataGridTextColumn MinWidth="90" Header="單價" Binding="{Binding Price}"/>
+                            <DataGridTextColumn MinWidth="90" Header="數量" Binding="{Binding Amount}"/>
+                            <DataGridTextColumn MinWidth="70" Header="小計" Binding="{Binding SubTotal}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid
                         x:Name="CusHistoryDetailHis"
                         AutoGenerateColumns="False"
-                        Background="{StaticResource GridDarkerBackGround}"
                         CanUserAddRows="False"
-                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                        Height ="290"
+                        Visibility="Collapsed"
                         DataContext="{Binding CustomerHistoryHis}"
+                        Background="{StaticResource GridBackGround}"
+                        ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                         VerticalScrollBarVisibility="Auto">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="250" Binding="{Binding MedicineName}" />
-                            <DataGridTextColumn MinWidth="90" Binding="{Binding Usage}" />
-                            <DataGridTextColumn MinWidth="90" Binding="{Binding Position}" />
-                            <DataGridTextColumn MinWidth="70" Binding="{Binding Dosage}" />
+                            <DataGridTextColumn Width="250" Header="藥品" Binding="{Binding MedicineName}" />
+                            <DataGridTextColumn MinWidth="90" Header="用法" Binding="{Binding Usage}" />
+                            <DataGridTextColumn MinWidth="90" Header="途徑" Binding="{Binding Position}" />
+                            <DataGridTextColumn MinWidth="70" Header="用量" Binding="{Binding Dosage}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>

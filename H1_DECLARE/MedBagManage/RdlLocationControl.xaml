@@ -6,13 +6,14 @@
     xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedBagManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Grid IsHitTestVisible="False">
+    <Grid IsHitTestVisible="False" Background="{Binding GridBackground}">
         <Label
             Name="RdlParameterName"
             Margin="0,-20,0,-20"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
             FontFamily="Segoe UI Semibold"
+            Content="{Binding LabelContent}"
             FontSize="10" />
     </Grid>
 </UserControl>

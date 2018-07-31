@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,17 +9,17 @@ namespace His_Pos.Class.CustomerHistory
 {
     public class CustomerHistoryPos : CustomerHistoryDetail
     {
-        public CustomerHistoryPos(string col0, string col1, string col2, string col3)
+        public CustomerHistoryPos(DataRow dataRow)
         {
-            Col0 = col0;
-            Col1 = col1;
-            Col2 = col2;
-            Col3 = col3;
+            ProductName = dataRow["COL0"].ToString(); ;
+            Price = dataRow["COL1"].ToString(); ;
+            Amount = dataRow["COL2"].ToString();;
+            Subtotal = dataRow["COL3"].ToString(); ;
         }
 
-        public string Col0 { get; }
-        public string Col1 { get; }
-        public string Col2 { get; }
-        public string Col3 { get; }
+        public string ProductName { get; }
+        public string Price { get; }
+        public string Amount { get; }
+        public string Subtotal { get; }
     }
 }

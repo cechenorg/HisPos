@@ -255,7 +255,6 @@
     <Compile Include="Class\Copayment\Copayment.cs" />
     <Compile Include="Class\Copayment\CopaymentDb.cs" />
     <Compile Include="Class\Person\Customer.cs" />
-    <Compile Include="Class\CustomerHistory\CustomerHistory.cs" />
     <Compile Include="Class\Declare\DeclareData.cs" />
     <Compile Include="Class\Declare\DeclareDetail.cs" />
     <Compile Include="Class\DiseaseCode.cs" />

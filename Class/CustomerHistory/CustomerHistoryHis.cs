@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,12 +9,13 @@ namespace His_Pos.Class.CustomerHistory
 {
     public class CustomerHistoryHis : CustomerHistoryDetail
     {
-        public CustomerHistoryHis(string medicineName, string usage, string position, string dosage)
+
+        public CustomerHistoryHis(DataRow dataRow)
         {
-            MedicineName = medicineName;
-            Usage = usage;
-            Position = position;
-            Dosage = dosage;
+            MedicineName = dataRow["COL0"].ToString();
+            Usage = dataRow["COL1"].ToString();
+            Position = dataRow["COL2"].ToString();
+            Dosage = dataRow["COL3"].ToString();
         }
 
         public string MedicineName { get; }
