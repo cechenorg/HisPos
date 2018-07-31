@@ -196,7 +196,7 @@
     <value>處理單紀錄</value>
   </data>
   <data name="StockManage" xml:space="preserve">
-    <value> 商品管理</value>
+    <value>商品管理</value>
   </data>
   <data name="StockTaking" xml:space="preserve">
     <value>庫存盤點</value>

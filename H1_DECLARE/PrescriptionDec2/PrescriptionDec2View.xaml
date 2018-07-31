@@ -35,6 +35,7 @@
         <local:GenderConverter x:Key="GenderConverter" />
         <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter" />
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
+        <hisPos:NullTextBoxConverter x:Key="NullTextBoxConverter" />
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">
         <Grid Width="1365" Height="839">
@@ -641,7 +642,8 @@
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    Text="{Binding Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextChanged="NullTextBox_TextChanged" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -662,7 +664,8 @@
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextChanged="NullTextBox_TextChanged" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -734,7 +737,8 @@
                                     FontWeight="Bold"
                                     IsEnabled="{Binding PaySelf, UpdateSourceTrigger=PropertyChanged}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextChanged="NullTextBox_TextChanged" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -906,7 +910,8 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                            Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextChanged="NullTextBox_TextChanged" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="1"
@@ -925,7 +930,8 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                            Text="{Binding SelfCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding SelfCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextChanged="NullTextBox_TextChanged" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="2"
@@ -944,7 +950,8 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                            Text="{Binding Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextChanged="NullTextBox_TextChanged" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="3"
@@ -963,7 +970,8 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                            Text="{Binding Charge, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding Charge, UpdateSourceTrigger=PropertyChanged}"
+                            TextChanged="NullTextBox_TextChanged" />
                     </StackPanel>
                     <StackPanel
                         Grid.Row="4"
@@ -985,7 +993,8 @@
                             FontSize="18"
                             Foreground="{StaticResource ForeGround}"
                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                            Text="{Binding Pay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            Text="{Binding Pay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            TextChanged="NullTextBox_TextChanged" />
                         <Label
                             Width="60"
                             Margin="20,0,0,0"
