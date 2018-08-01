@@ -212,7 +212,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding InquiredPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay}" />
+                        SelectedItem="{Binding Prescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -233,7 +233,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id, Mode=TwoWay}" />
+                        Text="{Binding Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -273,7 +273,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay}" />
+                        SelectedItem="{Binding Prescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -348,7 +348,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id, Mode=TwoWay}" />
+                        Text="{Binding Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -368,7 +368,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id, Mode=TwoWay}" />
+                        Text="{Binding Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -388,7 +388,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.PaymentCategory, Mode=TwoWay}" />
+                        SelectedItem="{Binding Prescription.Treatment.PaymentCategory, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -408,7 +408,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.Copayment, Mode=TwoWay}" />
+                        SelectedItem="{Binding Prescription.Treatment.Copayment, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -428,7 +428,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.AdjustCase, Mode=TwoWay}" />
+                        SelectedItem="{Binding Prescription.Treatment.AdjustCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
