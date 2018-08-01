@@ -22,6 +22,7 @@ using His_Pos.Class.MedBagLocation;
 using His_Pos.H4_BASIC_MANAGE.LocationManage;
 using His_Pos.LocationManage;
 using JetBrains.Annotations;
+using CheckBox = System.Windows.Controls.CheckBox;
 using Control = System.Windows.Controls.Control;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -34,6 +35,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
     {
         public static MedBagManageView Instance;
         private MedBag selectedMedBag;
+        private ObservableCollection<RdlLocationControl> locationControls = new ObservableCollection<RdlLocationControl>();
 
         public MedBag SelectedMedBag
         {
@@ -104,7 +106,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                 bitmap.UriSource = new Uri(selectedFileName);
                 bitmap.EndInit();
                 ImgWrap.Width = bitmap.Width;
-                MedBagImgWidth = (bitmap.Width / bitmap.Height) * 700;
+                MedBagImgWidth = (bitmap.Width / bitmap.Height) * 850;
                 SelectedMedBag = new MedBag(bitmap);
                 SetMedBagRange();
             }
@@ -121,7 +123,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
             MedBagCanvas.Height = MedBagImg.Height;
         }
 
-        private void NewLocationClick(object sender, RoutedEventArgs e)
+        private void NewLocationChecked(object sender, RoutedEventArgs e)
         {
             string locationName = (sender as System.Windows.Controls.CheckBox).Content.ToString();
             Instance.NewLocation(null, locationName);
@@ -137,7 +139,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
             RdlLocationControl newLocation = null;
             if (locid != null)
             {
-                newLocation = new RdlLocationControl(Convert.ToInt32(locid),parameterName);
+                newLocation = new RdlLocationControl(Convert.ToInt32(locid), parameterName);
                 newLocation.RdlParameterName.Content = parameterName;
                 id = Convert.ToInt32(locid);
                 id++;
@@ -171,7 +173,23 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
 
         public void SaveLocation()
         {
+        }
 
+        private void DeleteLocation(object sender, RoutedEventArgs e)
+        {
+            //RdlLocationControl deleteControl = null;
+            //CheckBox checkBox = sender as CheckBox;
+            //MedBagLocation deletLocation = null;
+            //foreach (RdlLocationControl contentcontrol in MedBagCanvas.Children)
+            //{
+            //    if (!string.IsNullOrEmpty(checkBox.Content.ToString()) && contentcontrol.LabelContent == checkBox.Content)
+            //        deleteControl = contentcontrol;
+            //}
+            //if (deleteControl != null)
+            //{
+            //    MedBagCanvas.Children.Remove(deleteControl);
+            //    //MedBagLocationDB.DeleteLocation(deletLocation.Id);
+            //}
         }
     }
 }

@@ -803,15 +803,14 @@
                         <Image Width="18" Source="/Images/HisDot.png" />
                         <RadioButton
                             Margin="20,0,5,0"
-                            Tag="2"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Content="全部顯示"
                             Checked="RadioButton_Checked"
+                            Content="全部顯示"
                             FontFamily="Segoe UI Semibold"
                             FontSize="16"
                             IsChecked="True"
-                             />
+                            Tag="2" />
                         <Image
                             Width="27"
                             Margin="0,0,15,0"
@@ -886,36 +885,60 @@
                     Background="{StaticResource GridDarkerBackGround}">
                     <DataGrid
                         x:Name="CusHistoryDetailPos"
+                        Height="290"
                         AutoGenerateColumns="False"
                         Background="{StaticResource GridBackGround}"
                         CanUserAddRows="False"
-                        Height ="290"
                         ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                         DataContext="{Binding CustomerHistoryPos}"
                         VerticalScrollBarVisibility="Auto"
                         Visibility="Collapsed">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="250" Header="品名" Binding="{Binding ProductName}"/>
-                            <DataGridTextColumn MinWidth="90" Header="單價" Binding="{Binding Price}"/>
-                            <DataGridTextColumn MinWidth="90" Header="數量" Binding="{Binding Amount}"/>
-                            <DataGridTextColumn MinWidth="70" Header="小計" Binding="{Binding SubTotal}"/>
+                            <DataGridTextColumn
+                                Width="250"
+                                Binding="{Binding ProductName}"
+                                Header="品名" />
+                            <DataGridTextColumn
+                                MinWidth="90"
+                                Binding="{Binding Price}"
+                                Header="單價" />
+                            <DataGridTextColumn
+                                MinWidth="90"
+                                Binding="{Binding Amount}"
+                                Header="數量" />
+                            <DataGridTextColumn
+                                MinWidth="70"
+                                Binding="{Binding SubTotal}"
+                                Header="小計" />
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid
                         x:Name="CusHistoryDetailHis"
+                        Height="290"
                         AutoGenerateColumns="False"
-                        CanUserAddRows="False"
-                        Height ="290"
-                        Visibility="Collapsed"
-                        DataContext="{Binding CustomerHistoryHis}"
                         Background="{StaticResource GridBackGround}"
+                        CanUserAddRows="False"
                         ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                        VerticalScrollBarVisibility="Auto">
+                        DataContext="{Binding CustomerHistoryHis}"
+                        VerticalScrollBarVisibility="Auto"
+                        Visibility="Collapsed">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="250" Header="藥品" Binding="{Binding MedicineName}" />
-                            <DataGridTextColumn MinWidth="90" Header="用法" Binding="{Binding Usage}" />
-                            <DataGridTextColumn MinWidth="90" Header="途徑" Binding="{Binding Position}" />
-                            <DataGridTextColumn MinWidth="70" Header="用量" Binding="{Binding Dosage}" />
+                            <DataGridTextColumn
+                                Width="250"
+                                Binding="{Binding MedicineName}"
+                                Header="藥品" />
+                            <DataGridTextColumn
+                                MinWidth="90"
+                                Binding="{Binding Usage}"
+                                Header="用法" />
+                            <DataGridTextColumn
+                                MinWidth="90"
+                                Binding="{Binding Position}"
+                                Header="途徑" />
+                            <DataGridTextColumn
+                                MinWidth="70"
+                                Binding="{Binding Dosage}"
+                                Header="用量" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>

@@ -192,7 +192,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="190" />
+            <ColumnDefinition Width="310" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
@@ -202,69 +202,71 @@
             Grid.Column="0"
             Width="130"
             Height="34"
-            HorizontalAlignment="Center"
+            Margin="20,0,0,0"
+            HorizontalAlignment="Left"
             VerticalAlignment="Center"
             Click="ImageSelector_Click"
             Content="選擇藥袋圖檔"
             FontSize="16"
             Foreground="White" />
         <StackPanel
-            Grid.Row="0"
-            Grid.Column="1"
-            Orientation="Horizontal">
-            <Label
-                Margin="20,0,0,0"
-                VerticalContentAlignment="Center"
-                Content="藥袋尺寸 : "
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Foreground="Black" />
-            <TextBox
-                Width="80"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                FontSize="18"
-                Text="{Binding SelectedMedBag.BagWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Label
-                Margin="20,0,0,0"
-                VerticalContentAlignment="Center"
-                Content="公分 * "
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Foreground="Black" />
-            <TextBox
-                Width="80"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
-                FontSize="18"
-                Text="{Binding SelectedMedBag.BagHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <Label
-                Margin="20,0,0,0"
-                VerticalContentAlignment="Center"
-                Content="公分"
-                FontFamily="Segoe UI Semibold"
-                FontSize="18"
-                Foreground="Black" />
-        </StackPanel>
-        <ListView
-            Name="MedBagFileListView"
             Grid.Row="1"
-            Grid.Column="0" />
+            Grid.Column="0"
+            Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Label
+                    Margin="20,0,0,0"
+                    VerticalContentAlignment="Center"
+                    Content="尺寸:"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="14"
+                    Foreground="Black" />
+                <TextBox
+                    Width="40"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    FontSize="14"
+                    Text="{Binding SelectedMedBag.BagWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label
+                    VerticalContentAlignment="Center"
+                    Content=" * "
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="14"
+                    Foreground="Black" />
+                <TextBox
+                    Width="40"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    FontSize="14"
+                    Text="{Binding SelectedMedBag.BagHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Label
+                    Margin="10,0,0,0"
+                    VerticalContentAlignment="Center"
+                    Content="(公分)"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="14"
+                    Foreground="Black" />
+            </StackPanel>
+            <ListView
+                Name="MedBagFileListView"
+                Grid.Row="1"
+                Grid.Column="0" />
+        </StackPanel>
         <Grid
             Name="ImgWrap"
-            Grid.Row="1"
-            Grid.RowSpan="2"
+            Grid.Row="0"
+            Grid.RowSpan="3"
             Grid.Column="1"
             HorizontalAlignment="Center">
             <Image
                 Name="MedBagImg"
-                Height="700"
+                Height="850"
                 HorizontalAlignment="Center"
                 Source="{Binding SelectedMedBag.MedBagImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Stretch="Uniform" />
             <Canvas
                 Name="MedBagCanvas"
-                MaxHeight="700"
+                MaxHeight="850"
                 HorizontalAlignment="Center">
                 <local:RdlLocationControl
                     x:Name="MedRangeLocationControl"
@@ -290,10 +292,12 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="藥局名稱"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
-                    Foreground="Black" />
+                    Foreground="Black"
+                    Unchecked="DeleteLocation" />
                 <CheckBox
                     Name="PharmacyId"
                     Width="130"
@@ -301,6 +305,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="機構代碼"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -312,6 +317,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="地址"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -323,6 +329,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="電話"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -334,6 +341,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="調劑藥師"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -350,6 +358,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="姓名"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -361,6 +370,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="聯絡電話"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -372,6 +382,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="性別"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -383,6 +394,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="生日"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -394,7 +406,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
-                    Click="NewLocationClick"
+                    Checked="NewLocationChecked"
                     Content="病歷號"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -406,6 +418,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="調劑日期"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -417,6 +430,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="下次領藥日"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -428,6 +442,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="參考回診日"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -444,6 +459,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="醫療院所名稱"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -455,6 +471,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="科別"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -471,6 +488,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="藥品健保碼"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -482,6 +500,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="英文名稱"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -493,6 +512,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="中文名稱"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -504,6 +524,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="成分"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -515,6 +536,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="劑型外觀"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -526,6 +548,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="用法"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -537,6 +560,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="用量"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -548,6 +572,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="領藥總量"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -559,6 +584,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="給藥天數"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -570,6 +596,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="適應症"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -581,6 +608,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="副作用"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -592,6 +620,7 @@
                     VerticalAlignment="Top"
                     Background="{StaticResource Shadow}"
                     BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
                     Content="注意事項"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
@@ -620,11 +649,11 @@
                 Width="70"
                 Margin="20,0,20,0"
                 VerticalAlignment="Center"
-                Content="儲存" />
+                Content="清空" />
             <Button
                 Width="70"
                 VerticalAlignment="Center"
-                Content="清空" />
+                Content="儲存" />
         </StackPanel>
     </Grid>
 </UserControl>

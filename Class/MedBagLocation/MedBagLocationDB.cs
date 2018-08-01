@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace His_Pos.Class.MedBagLocation
         internal static void UpdateLocationName(string locId, string name)
         {
         }
+
         internal static void DeleteLocation(string locId)
         {
         }
