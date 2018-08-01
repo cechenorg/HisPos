@@ -17,7 +17,7 @@ namespace His_Pos.Class.Pharmacy
             ObservableCollection<ManagePharmacy> collection = new ObservableCollection<ManagePharmacy>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
-            var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManageManufactory]");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PharmacyManageView].[GetManagePharmacy]");
 
             foreach (DataRow row in table.Rows)
             {
@@ -36,6 +36,24 @@ namespace His_Pos.Class.Pharmacy
             }
 
             return collection;
+        }
+
+        internal static ManagePharmacy AddNewManagePharmacy()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PharmacyManageView].[AddNewManagePharmacy]");
+
+            return new ManagePharmacy(table.Rows[0]);
+        }
+
+        internal static void UpdateManagePharmacy(ManagePharmacy currentPharmacy)
+        {
+        }
+
+        internal static void DeleteManagePharmacy(string id)
+        {
+
         }
     }
 }

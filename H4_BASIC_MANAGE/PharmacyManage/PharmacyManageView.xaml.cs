@@ -21,18 +21,18 @@ namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
     /// <summary>
     /// PharmacyManageView.xaml 的互動邏輯
     /// </summary>
-    public partial class PharmacyManageView : UserControl
+    public partial class PharmacyManageView : UserControl, INotifyPropertyChanged
     {
         private bool isFirst = true;
 
-        private ManagePharmacy currentManufactory;
-        public ManagePharmacy CurrentManufactory
+        private ManagePharmacy currentPharmacy;
+        public ManagePharmacy CurrentPharmacy
         {
-            get { return currentManufactory; }
+            get { return currentPharmacy; }
             set
             {
-                currentManufactory = value;
-                NotifyPropertyChanged("CurrentManufactory");
+                currentPharmacy = value;
+                NotifyPropertyChanged("CurrentPharmacy");
             }
         }
         public ObservableCollection<ManagePharmacy> ManagePharmacies { get; set; }
@@ -40,13 +40,14 @@ namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
         public PharmacyManageView()
         {
             InitializeComponent();
+            DataContext = this;
             InitPharmacy();
-
         }
 
         private void InitPharmacy()
         {
             ManagePharmacies = PharmacyDb.GetManagePharmacy();
+            ManagePharmacyDataGrid.SelectedIndex = 0;
         }
 
         private void DataChanged()
@@ -78,5 +79,81 @@ namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
             }
         }
 
+        private void ManagePharmacy_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as DataGrid).SelectedItem is null) return;
+
+            CurrentPharmacy = (ManagePharmacy)(ManagePharmacyDataGrid.SelectedItem as ManagePharmacy).Clone();
+
+            Notes.Document.Blocks.Clear();
+            Notes.AppendText(CurrentPharmacy.Note);
+
+            UpdateUi();
+            InitDataChanged();
+        }
+
+        private void Principal_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+        }
+
+        private void AddManufactory_Click(object sender, MouseButtonEventArgs e)
+        {
+            ManagePharmacy newManagePharmacy = PharmacyDb.AddNewManagePharmacy();
+
+            ManagePharmacies.Add(newManagePharmacy);
+
+            ManagePharmacyDataGrid.SelectedItem = newManagePharmacy;
+            ManagePharmacyDataGrid.ScrollIntoView(newManagePharmacy);
+        }
+
+        private void ConfirmChanged_OnClick(object sender, RoutedEventArgs e)
+        {
+            int index = ManagePharmacyDataGrid.SelectedIndex;
+
+            CurrentPharmacy.Note = new TextRange(Notes.Document.ContentStart, Notes.Document.ContentEnd).Text;
+
+            ManagePharmacies[index] = CurrentPharmacy;
+
+            ManagePharmacyDataGrid.SelectedIndex = index;
+
+            PharmacyDb.UpdateManagePharmacy(CurrentPharmacy);
+        }
+
+        private void DeleteManufactory_Click(object sender, MouseButtonEventArgs e)
+        {
+            ManagePharmacy pharmacy = ManagePharmacyDataGrid.SelectedItem as ManagePharmacy;
+
+            PharmacyDb.DeleteManagePharmacy(pharmacy.Id);
+
+            ManagePharmacies.Remove(pharmacy);
+
+            ManagePharmacyDataGrid.SelectedIndex = 0;
+            ManagePharmacyDataGrid.ScrollIntoView(ManagePharmacyDataGrid.SelectedItem);
+        }
+
+        private void Cancel_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (ManagePharmacyDataGrid.SelectedItem is null) return;
+
+            CurrentPharmacy = (ManagePharmacyDataGrid.SelectedItem as ManagePharmacy).Clone() as ManagePharmacy;
+            UpdateUi();
+            InitDataChanged();
+        }
+
+        private void UpdateUi()
+        {
+            if (CurrentPharmacy.PharmacyPrincipals.Count > 0)
+            {
+                PrincipalDetail.IsEnabled = true;
+                PrincipalDataGrid.SelectedIndex = 0;
+
+                PrincipalDataGrid.Items.Filter = p => (p as PharmacyPrincipal).IsEnable;
+            }
+            else
+            {
+                PrincipalDetail.IsEnabled = false;
+                PrincipalDetail.DataContext = null;
+            }
+        }
     }
 }

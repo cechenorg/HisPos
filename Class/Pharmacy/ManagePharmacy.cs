@@ -18,7 +18,6 @@ namespace His_Pos.Class.Pharmacy
             NickName = row["MAN_NICKNAME"].ToString();
             UniformNumber = row["MAN_EIN"].ToString();
             Email = row["MAN_EMAIL"].ToString();
-            ControlMedicineID = row["MAN_CONTROLMEDID"].ToString();
             MedicalID = row["MAN_MEDICALID"].ToString();
             Note = row["MAN_NOTE"].ToString();
             PharmacyPrincipals = new ObservableCollection<PharmacyPrincipal>();
@@ -27,7 +26,6 @@ namespace His_Pos.Class.Pharmacy
         public string NickName { get; set; }
         public string UniformNumber { get; set; }
         public string Email { get; set; }
-        public string ControlMedicineID { get; set; }
         public string MedicalID { get; set; }
         public string Note { get; set; }
         private ObservableCollection<PharmacyPrincipal> pharmacyPrincipals;
@@ -53,7 +51,6 @@ namespace His_Pos.Class.Pharmacy
                 NickName = NickName,
                 UniformNumber = UniformNumber,
                 Email = Email,
-                ControlMedicineID = ControlMedicineID,
                 MedicalID = MedicalID,
                 Note = Note
             };
