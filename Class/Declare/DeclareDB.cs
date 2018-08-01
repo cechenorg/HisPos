@@ -3,6 +3,7 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
@@ -36,7 +37,21 @@ namespace His_Pos.Class.Declare
             });
            CheckInsertDbTypeUpdate(parameters);
         }
-
+        /*
+         * 藥品扣庫
+         */
+        public void InsertInventoryDb(ObservableCollection<DeclareDetail> declareDetails) {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            foreach (DeclareDetail declareDetail in declareDetails) {
+                //parameters.Add(new SqlParameter("DETAIL", pDataTable));
+                //parameters.Add(new SqlParameter("DETAIL", pDataTable));
+                //parameters.Add(new SqlParameter("DETAIL", pDataTable));
+                //parameters.Add(new SqlParameter("DETAIL", pDataTable));
+                //parameters.Add(new SqlParameter("DETAIL", pDataTable));
+                conn.ExecuteProc("[HIS_POS_DB].[SET].[DECLAREDATA]", parameters);
+            }
+        }
         /*
          * 加入DData資料之parameters
          */

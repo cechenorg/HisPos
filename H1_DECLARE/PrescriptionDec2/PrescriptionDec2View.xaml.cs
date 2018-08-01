@@ -183,6 +183,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var declareDb = new DeclareDb();
                 DeclareTrade declareTrade = new DeclareTrade(Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(),Pay.ToString(),Change.ToString(),"現金");
                 declareDb.InsertDb(declareData, declareTrade);
+                declareDb.InsertInventoryDb(declareData.DeclareDetails);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.Show();
             }
