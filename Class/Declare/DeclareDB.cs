@@ -1,4 +1,5 @@
 ﻿using His_Pos.Class.Person;
+using His_Pos.Class.Product;
 using His_Pos.Properties;
 using His_Pos.Service;
 using System;
@@ -43,14 +44,14 @@ namespace His_Pos.Class.Declare
         public void InsertInventoryDb(DeclareData declareData, string way) {
             var parameters = new List<SqlParameter>();
             var conn = new DbConnection(Settings.Default.SQL_global);
-            foreach (DeclareDetail declareDetail in declareData.DeclareDetails) {
+            foreach (DeclareMedicine declareDetail in declareData.Prescription.Medicines) {
                 parameters.Clear();
                 if (declareData.DecMasId == null)
                     parameters.Add(new SqlParameter("MAS_ID", DBNull.Value));
                 else 
                      parameters.Add(new SqlParameter("MAS_ID", declareData.DecMasId));
-               parameters.Add(new SqlParameter("PRO_ID", declareDetail.MedicalId));
-               parameters.Add(new SqlParameter("BUCJLE_VALUE", declareDetail.Total));
+               parameters.Add(new SqlParameter("PRO_ID", declareDetail.Id));
+               parameters.Add(new SqlParameter("BUCJLE_VALUE", declareDetail.Amount));
                parameters.Add(new SqlParameter("BUCKLE_STATUS", "1"));
                parameters.Add(new SqlParameter("WAY", way));
                conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[InsertDeclareDetailBuckle]", parameters);
