@@ -132,7 +132,7 @@
                                      BorderThickness="0,0,0,1" HorizontalContentAlignment="Left" BorderBrush="DimGray" VerticalContentAlignment="Center"/>
             </StackPanel>
             <DataGrid Name="PrescriptionSet" Grid.Row="4" Grid.ColumnSpan="5" Margin="10"  CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      Background="{StaticResource GridBackGround}" ItemsSource="{Binding InquiredPrescription.DeclareDetails,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"
+                      Background="{StaticResource GridBackGround}" ItemsSource="{Binding DeclareDetails,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" CanUserResizeRows="False" GridLinesVisibility="Horizontal" VerticalGridLinesBrush="#FF919191"
                       Grid.Column="0" IsReadOnly="True">
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">

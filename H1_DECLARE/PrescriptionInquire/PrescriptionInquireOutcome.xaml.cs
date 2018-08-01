@@ -139,6 +139,19 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("InquiredPrescription");
             }
         }
+        private ObservableCollection<DeclareDetail> declareDetails;
+        public ObservableCollection<DeclareDetail> DeclareDetails
+        {
+            get
+            {
+                return declareDetails;
+            }
+            set
+            {
+                declareDetails = value;
+                NotifyPropertyChanged("DeclareDetails");
+            }
+        }
         public  ObservableCollection<DeclareDetail> medicineList = new ObservableCollection<DeclareDetail>();
 
         public PrescriptionInquireOutcome(DeclareData inquired)
@@ -147,6 +160,10 @@ namespace His_Pos.PrescriptionInquire
             DataContext = this;
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             InquiredPrescription = inquired;
+            foreach (DeclareDetail newDeclareDetail in InquiredPrescription.DeclareDetails) {
+                DeclareDetail declareDetailClone = (DeclareDetail)newDeclareDetail.Clone();
+                DeclareDetails.Add(declareDetailClone);
+            }
             SetPatientData();
             InitData();
             InitDataChanged();

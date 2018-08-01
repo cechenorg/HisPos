@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace His_Pos.Class.Declare
 {
-    public class DeclareDetail
+    public class DeclareDetail : ICloneable
     {
         public DeclareDetail(string medicalId, double percent, double price, int sequence, string start, string end)
         {
@@ -61,6 +61,22 @@ namespace His_Pos.Class.Declare
             EndDate = xml.SelectSingleNode("p13") == null ? null : xml.SelectSingleNode("p13").InnerText;
             Form = xml.SelectSingleNode("p14") == null ? null : xml.SelectSingleNode("p14").InnerText;
         }
+        public DeclareDetail(DeclareDetail declareDetail) {
+            MedicalOrder = declareDetail.MedicalOrder;
+            MedicalId = declareDetail.MedicalId;
+            Dosage = declareDetail.Dosage;
+            Usage = declareDetail.Usage;
+            Position = declareDetail.Position;
+            Percent = declareDetail.Percent;
+            Total = declareDetail.Total;
+            Price = declareDetail.Price;
+            Point = declareDetail.Point;
+            Sequence = declareDetail.Sequence;
+            Days = declareDetail.Days;
+            StartDate = declareDetail.StartDate;
+            EndDate = declareDetail.EndDate;
+            Form = declareDetail.Form;
+        }
         public string MedicalOrder { get; set; }//p1
         public string MedicalId { get; set; }//p2
         public double Dosage { get; set; }//p3
@@ -112,6 +128,10 @@ namespace His_Pos.Class.Declare
             {
                 Point = Price * Total * Percent;
             }
+        }
+        public object Clone()
+        {
+            return new DeclareDetail(this);
         }
     }
 }
