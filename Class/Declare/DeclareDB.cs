@@ -223,6 +223,7 @@ namespace His_Pos.Class.Declare
             {
                 var row = pDataTable.NewRow();
                 var detail = declareData.DeclareDetails[i];
+                detail.Usage = declareData.Prescription.Medicines == null ? detail.Usage : declareData.Prescription.Medicines[i].UsageName;
                 var paySelf = declareData.Prescription.Medicines == null ? "0" : declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
                 var tagsDictionary = new Dictionary<string, string>
                 {

@@ -15,6 +15,7 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using His_Pos.Properties;
@@ -128,6 +129,7 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("DeclareTrade");
             }
         }
+        public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
         private static DeclareData inquiredPrescription;
         public DeclareData InquiredPrescription
         {
@@ -141,8 +143,8 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("InquiredPrescription");
             }
         }
-        private ObservableCollection<DeclareDetail> declareDetails = new ObservableCollection<DeclareDetail>();
-        public ObservableCollection<DeclareDetail> DeclareDetails
+        private ObservableCollection<DeclareMedicine> declareDetails = new ObservableCollection<DeclareMedicine>();
+        public ObservableCollection<DeclareMedicine> DeclareDetails
         {
             get
             {
@@ -154,16 +156,17 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("DeclareDetails");
             }
         }
-        public  ObservableCollection<DeclareDetail> medicineList = new ObservableCollection<DeclareDetail>();
+        private ObservableCollection<object> Medicines;
 
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
             InitializeComponent();
+            isFirst = true;
             DataContext = this;
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             InquiredPrescription = inquired;
-            foreach (DeclareDetail newDeclareDetail in InquiredPrescription.DeclareDetails) {
-                DeclareDetail declareDetailClone = (DeclareDetail)newDeclareDetail.Clone();
+            foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines) {
+                DeclareMedicine declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
                 DeclareDetails.Add(declareDetailClone);
             }
             SetPatientData();
@@ -234,6 +237,8 @@ namespace His_Pos.PrescriptionInquire
             TreatmentCaseCollection = TreatmentCaseDb.GetData();
             TreatmentCase.ItemsSource = TreatmentCaseCollection;
             TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+
+            DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
@@ -245,35 +250,54 @@ namespace His_Pos.PrescriptionInquire
         private void MedicineCodeAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
             var medicineCodeAuto = sender as AutoCompleteBox;
-           
+            DataChanged();
             if (medicineCodeAuto is null) return;
             if (medicineCodeAuto.SelectedItem is null)
             {
                 if (medicineCodeAuto.Text != string.Empty &&
-                    (medicineCodeAuto.ItemsSource as ObservableCollection<object>).Count != 0 &&
-                    medicineCodeAuto.Text.Length >= 4)
+                    (medicineCodeAuto.ItemsSource as ObservableCollection<object>).Count != 0 && medicineCodeAuto.Text.Length >= 4){
                     medicineCodeAuto.SelectedItem = (medicineCodeAuto.ItemsSource as ObservableCollection<object>)[0];
+                }
                 else
                     return;
             }
-            
+            DeclareMedicine declareMedicine = (DeclareMedicine)(medicineCodeAuto.SelectedItem as DeclareMedicine).Clone();
+            int currentRow = GetCurrentRowIndex(sender);
+
+            if (DeclareDetails.Count > 0)
+            {
+                if (DeclareDetails.Count == currentRow)
+                {
+                    DeclareDetails.Add(declareMedicine);
+                    medicineCodeAuto.Text = "";
+                }
+                else
+                {
+                    DeclareDetails[currentRow] = declareMedicine;
+                }
+            }
+            else
+            {
+                DeclareDetails.Add(declareMedicine);
+                medicineCodeAuto.Text = "";
+            }
         }
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
 
-            //    if (selectedItem is IDeletable)
-            //    {
-            //        if (Prescription.Medicines.Contains(selectedItem))
-            //            (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+            if (selectedItem is IDeletable)
+            {
+                if (DeclareDetails.Contains(selectedItem))
+                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
 
-            //        PrescriptionMedicines.SelectedItem = selectedItem;
-            //        return;
-            //    }
-            //    PrescriptionSet.SelectedIndex = Prescription.Medicines.Count;
-            //
+                PrescriptionSet.SelectedItem = selectedItem;
+                return;
+            }
+            PrescriptionSet.SelectedIndex = DeclareDetails.Count;
+
         }
-       
+
 
         private void DataGridRow_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
@@ -283,27 +307,40 @@ namespace His_Pos.PrescriptionInquire
         }
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
-            //var medicineCodeAuto = sender as AutoCompleteBox;
+            var medicineCodeAuto = sender as AutoCompleteBox;
 
-            //if (medicineCodeAuto is null) return;
+            if (medicineCodeAuto is null) return;
 
-            //var result = DeclareMedicines.Where(x =>
-            //    x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
-            //    x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
-            //    x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
-            //Medicines = new ObservableCollection<object>(result.ToList());
+            var result = DeclareMedicinesData.Where(x =>
+                x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
+                x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
+                x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
+            Medicines = new ObservableCollection<object>(result.ToList());
 
-            //medicineCodeAuto.ItemsSource = Medicines;
-            //medicineCodeAuto.ItemFilter = MedicineFilter;
-            //medicineCodeAuto.PopulateComplete();
+            medicineCodeAuto.ItemsSource = Medicines;
+            medicineCodeAuto.ItemFilter = MedicineFilter;
+            medicineCodeAuto.PopulateComplete();
         }
         private void DeleteDot_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            //ClearMedicine(Prescription.Medicines[PrescriptionMedicines.SelectedIndex]);
-            //SetChanged();
-            //Prescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
+            ClearMedicine(DeclareDetails[PrescriptionSet.SelectedIndex]);
+            DataChanged();
+            DeclareDetails.RemoveAt(PrescriptionSet.SelectedIndex);
         }
-
+        public void ClearMedicine(DeclareMedicine med)
+        {
+            med.PaySelf = false;
+            med.Cost = 0;
+            med.TotalPrice = 0;
+            med.Amount = 0;
+            med.CountStatus = "";
+            med.FocusColumn = "";
+            med.Usage = new Usage();
+            med.Days = "";
+            med.Position = "";
+            med.Source = "";
+            med.Dosage = "";
+        }
         private void Dosage_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             var textBox = sender as TextBox;
@@ -321,6 +358,7 @@ namespace His_Pos.PrescriptionInquire
         }
         private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (isFirst) return;
             CountMedicinesCost();
         }
         private void CountMedicinesCost()
@@ -328,21 +366,32 @@ namespace His_Pos.PrescriptionInquire
             double medicinesHcCost = 0;//健保給付總藥價
             double medicinesSelfCost = 0;//自費藥總藥價
             double purchaseCosts = 0;//藥品總進貨成本
-            //foreach (var medicine in Prescription.Medicines)
-            //{
-            //    if (!medicine.PaySelf)
-            //        medicinesHcCost += medicine.TotalPrice;
-            //    else
-            //    {
-            //        medicinesSelfCost += medicine.TotalPrice;
-            //    }
-            //    purchaseCosts += medicine.Cost * medicine.Amount;
-            //}
-            //SelfCost = Convert.ToInt16(Math.Ceiling(medicinesSelfCost));//自費金額
-            //Copayment = CountCopaymentCost(medicinesHcCost);//部分負擔
+            foreach (var medicine in DeclareDetails)
+            {
+                if (!medicine.PaySelf)
+                    medicinesHcCost += medicine.TotalPrice;
+                else
+                {
+                    medicinesSelfCost += medicine.TotalPrice;
+                }
+                purchaseCosts += medicine.Cost * medicine.Amount;
+            }
+            DeclareTrade.PaySelf = Math.Ceiling(medicinesSelfCost).ToString();//自費金額
+            DeclareTrade.CopayMent = CountCopaymentCost(medicinesHcCost).ToString();//部分負擔
             //MedProfit = (medicinesHcCost + medicinesSelfCost - purchaseCosts);//藥品毛利
         }
-
+        private int CountCopaymentCost(double medicinesHcCost)
+        {
+            const int free = 0;
+            const int max = 200;
+            if (medicinesHcCost >= 1001)
+                return max;
+            var times = medicinesHcCost / 100;
+            if (times <= 1)
+                return free;
+            const int grades = 20;
+            return Convert.ToInt16(Math.Floor(times) * grades);
+        }
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var objectName = (sender as Control).Name;
@@ -418,6 +467,67 @@ namespace His_Pos.PrescriptionInquire
 
             //    thisTextBox[newIndex].Focus();
             //}
+        }
+
+        private int GetCurrentRowIndex(object sender)
+        {
+            if (sender is TextBox)
+            {
+                List<TextBox> temp = new List<TextBox>();
+                TextBox textBox = sender as TextBox;
+
+                NewFunction.FindChildGroup<TextBox>(PrescriptionSet, textBox.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
+            else if (sender is CheckBox)
+            {
+                List<CheckBox> temp = new List<CheckBox>();
+                CheckBox checkBox = sender as CheckBox;
+
+                NewFunction.FindChildGroup<CheckBox>(PrescriptionSet, checkBox.Name, ref temp);
+
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
+            else if (sender is AutoCompleteBox)
+            {
+                List<AutoCompleteBox> temp = new List<AutoCompleteBox>();
+                AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
+                NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionSet, autoCompleteBox.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(sender))
+                    {
+                        return x;
+                    }
+                }
+            }
+
+            return -1;
+        }
+        public AutoCompleteFilterPredicate<object> MedicineFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    (obj as DeclareMedicine)?.Id is null
+                        ? false
+                        : (obj as DeclareMedicine).Id.ToLower().Contains(searchText.ToLower())
+                          || (obj as DeclareMedicine).ChiName.ToLower().Contains(searchText.ToLower()) ||
+                          (obj as DeclareMedicine).EngName.ToLower().Contains(searchText.ToLower());
+            }
         }
     }
 }

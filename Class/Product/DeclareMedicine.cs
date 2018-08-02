@@ -18,7 +18,7 @@ namespace His_Pos.Class.Product
         {
         }
 
-        public DeclareMedicine(DataRow dataRow) : base(dataRow)
+        public DeclareMedicine(DataRow dataRow,string type) : base(dataRow)
         {
             IsControlMed = Boolean.Parse((dataRow["HISMED_CONTROL"].ToString() == "") ? "False" : dataRow["HISMED_CONTROL"].ToString());
             IsFrozMed = Boolean.Parse((dataRow["HISMED_FROZ"].ToString() == "") ? "False" : dataRow["HISMED_FROZ"].ToString());
@@ -30,13 +30,26 @@ namespace His_Pos.Class.Product
             Cost = 1;
             Price = dataRow["PRO_SELL_PRICE"].ToString();
             TotalPrice = 0;
-            Amount = 0;
             CountStatus = "";
             FocusColumn = "";
-            Usage = new Usage();
-            days = "";
-            Position = "";
             source = "";
+            Usage = new Usage();
+            if (type == "Init") {
+                Amount = 0;
+                days = "";
+            }
+            else{
+                Dosage = dataRow["HISDECDET_AMOUNT"].ToString() == string.Empty ? "" : dataRow["HISDECDET_AMOUNT"].ToString();
+                UsageName = dataRow["HISFEQ_ID"].ToString() == string.Empty ? "" : dataRow["HISFEQ_ID"].ToString();
+                Days = dataRow["HISDECDET_DRUGDAY"].ToString() == string.Empty ? "" : dataRow["HISDECDET_DRUGDAY"].ToString();
+                Position = dataRow["HISWAY_ID"].ToString() == string.Empty ? "" : dataRow["HISWAY_ID"].ToString();
+                Amount = dataRow["HISDECDET_QTY"].ToString() == string.Empty ? 0: Convert.ToDouble(dataRow["HISDECDET_QTY"].ToString());
+            }
+                
+          
+           
+               
+           
         }
         
         public bool IsControlMed { get; set; }

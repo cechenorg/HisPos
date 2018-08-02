@@ -35,7 +35,7 @@ namespace His_Pos.Class
             Customer = new Customer(row);
             Pharmacy = new Pharmacy(row);
             Treatment = new Treatment(row);
-            Medicines = new ObservableCollection<DeclareMedicine>();
+            Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
         }
         public Prescription(XmlNode xml)
         {

@@ -48,7 +48,23 @@ namespace His_Pos.Class.Product
 
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new DeclareMedicine(row));
+                collection.Add(new DeclareMedicine(row,"Init"));
+            }
+
+            return collection;
+        }
+        internal static ObservableCollection<DeclareMedicine> GetDeclareMedicineByMasId(string decmasId)
+        {
+            ObservableCollection<DeclareMedicine> collection = new ObservableCollection<DeclareMedicine>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAS_ID", decmasId));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDeclareMedicineByMasId]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new DeclareMedicine(row,"Get"));
             }
 
             return collection;

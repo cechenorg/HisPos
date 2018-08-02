@@ -26,6 +26,9 @@ using His_Pos.Class.Employee;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.PrescriptionInquire;
+using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos
 {
@@ -60,11 +63,42 @@ namespace His_Pos
         //    Show();
         //    backgroundWorker.RunWorkerAsync();
         //}
+        public void ImportXmlFile(PrescriptionInquireView prescriptionInquireView,string filename)
+        {
+           
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("申報檔匯入...");
+                DeclareDb declareDb = new DeclareDb();
+                XmlDocument doc = new XmlDocument();
+                doc.PreserveWhitespace = true;
+                doc.Load(filename);
+                XmlNodeList tweets = doc.GetElementsByTagName("ddata");
+                foreach (XmlNode node in tweets)
+                {
+                    XmlDocument xDoc = new XmlDocument();
+                    xDoc.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
+                    DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0]);
+                    declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
+                    declareDb.InsertDb(declareData);
+                }
+            };
 
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS);
+                    mainWindow.Show();
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
         public void GetNecessaryData(User userLogin)
         {
             MainWindow mainWindow = new MainWindow(userLogin);
-
+            
             backgroundWorker.DoWork += (s, o) =>
             {
                 //ChangeLoadingMessage("取得藥品資料...");

@@ -167,7 +167,9 @@
                 CanUserAddRows="True"
                 CellStyle="{StaticResource DataGridCellStyle}"
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                GridLinesVisibility="Horizontal">
+                GridLinesVisibility="Horizontal"
+                ItemsSource="{Binding DeclareDetails}"
+                >
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True" />
