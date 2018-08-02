@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.Manufactory;
 
 namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
 {
@@ -123,7 +124,7 @@ namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
         {
             ManagePharmacy pharmacy = ManagePharmacyDataGrid.SelectedItem as ManagePharmacy;
 
-            PharmacyDb.DeleteManagePharmacy(pharmacy.Id);
+            ManufactoryDb.DeleteManageManufactory(pharmacy.Id);
 
             ManagePharmacies.Remove(pharmacy);
 
@@ -154,6 +155,16 @@ namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
                 PrincipalDetail.IsEnabled = false;
                 PrincipalDetail.DataContext = null;
             }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            DataChanged();
+        }
+
+        private void PharmacyManageView_Loaded(object sender, RoutedEventArgs e)
+        {
+            isFirst = false;
         }
     }
 }
