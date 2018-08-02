@@ -105,7 +105,7 @@ namespace His_Pos
 
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    productPurchaseView.UpdateUi();
+                    //productPurchaseView.UpdateUi();
                     productPurchaseView.StoOrderOverview.SelectedIndex = 0;
                 }));
             };
