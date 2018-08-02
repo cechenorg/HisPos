@@ -95,6 +95,16 @@ namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
 
         private void Principal_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if ((sender as DataGrid).SelectedItem is null) return;
+
+            bool isChanged = IsChangedLbl.Content.Equals("已修改");
+
+            //if (((sender as DataGrid).SelectedItem as PharmacyPrincipal).PharmacyGetOverviews is null)
+            //    ((sender as DataGrid).SelectedItem as PharmacyPrincipal).PharmacyGetOverviews = null
+
+            PrincipalDetail.DataContext = (sender as DataGrid).SelectedItem;
+
+            if (!isChanged) InitDataChanged();
         }
 
         private void AddManufactory_Click(object sender, MouseButtonEventArgs e)
@@ -165,6 +175,24 @@ namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
         private void PharmacyManageView_Loaded(object sender, RoutedEventArgs e)
         {
             isFirst = false;
+        }
+
+        private void AddPrincipal_Click(object sender, RoutedEventArgs e)
+        {
+            PharmacyPrincipal newPrincipal = new PharmacyPrincipal();
+
+            CurrentPharmacy.PharmacyPrincipals.Add(newPrincipal);
+            PrincipalDataGrid.SelectedItem = newPrincipal;
+            PrincipalDataGrid.ScrollIntoView(newPrincipal);
+            PrincipalDetail.IsEnabled = true;
+            DataChanged();
+        }
+
+        private void DelPrincipal_Click(object sender, RoutedEventArgs e)
+        {
+            (PrincipalDetail.DataContext as PharmacyPrincipal).IsEnable = false;
+            UpdateUi();
+            DataChanged();
         }
     }
 }

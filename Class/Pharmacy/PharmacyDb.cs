@@ -70,6 +70,7 @@ namespace His_Pos.Class.Pharmacy
             parameters.Add(new SqlParameter("PAYCONDITION", DBNull.Value));
             parameters.Add(new SqlParameter("PAYTYPE", DBNull.Value));
             parameters.Add(new SqlParameter("ISENABLE", 1));
+            parameters.Add(new SqlParameter("ISMAN", false)); 
 
             dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
 
@@ -83,7 +84,7 @@ namespace His_Pos.Class.Pharmacy
                 parameters.Add(new SqlParameter("NAME", principal.Name));
                 parameters.Add(new SqlParameter("NICKNAME", principal.NickName));
                 parameters.Add(new SqlParameter("ADDR", DBNull.Value));
-                parameters.Add(new SqlParameter("TEL", principal.Telphone));
+                parameters.Add(new SqlParameter("TEL", principal.Telephone));
                 parameters.Add(new SqlParameter("FAX", principal.Fax));
                 parameters.Add(new SqlParameter("EIN", DBNull.Value));
                 parameters.Add(new SqlParameter("EMAIL", principal.Email));
@@ -96,6 +97,7 @@ namespace His_Pos.Class.Pharmacy
                 parameters.Add(new SqlParameter("PAYCONDITION", DBNull.Value));
                 parameters.Add(new SqlParameter("PAYTYPE", DBNull.Value));
                 parameters.Add(new SqlParameter("ISENABLE", principal.IsEnable));
+                parameters.Add(new SqlParameter("ISMAN", false));
 
                 dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
             }

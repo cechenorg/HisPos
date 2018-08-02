@@ -17,7 +17,7 @@ namespace His_Pos.Class.Pharmacy
             Id = "";
             Name = "";
             NickName = "";
-            Telphone = "";
+            Telephone = "";
             Fax = "";
             Email = "";
             Line = "";
@@ -28,7 +28,7 @@ namespace His_Pos.Class.Pharmacy
             Id = row["MAN_ID"].ToString();
             Name = row["MAN_NAME"].ToString();
             NickName = row["MAN_NICKNAME"].ToString();
-            Telphone = row["MAN_TEL"].ToString();
+            Telephone = row["MAN_TEL"].ToString();
             Fax = row["MAN_FAX"].ToString();
             Email = row["MAN_EMAIL"].ToString();
             Line = row["MAN_LINE"].ToString();
@@ -38,7 +38,7 @@ namespace His_Pos.Class.Pharmacy
         public string Id { get; set; }
         public string Name { get; set; }
         public string NickName { get; set; }
-        public string Telphone { get; set; }
+        public string Telephone { get; set; }
         public string Fax { get; set; }
         public string Email { get; set; }
         public string Line { get; set; }
@@ -52,7 +52,7 @@ namespace His_Pos.Class.Pharmacy
             {
                 Id = Id,
                 Name = Name,
-                Telphone = Telphone,
+                Telephone = Telephone,
                 Fax = Fax,
                 NickName = NickName,
                 Email = Email,

@@ -12,7 +12,7 @@ namespace His_Pos.Interface
         string Id { get; set; }
         string Name { get; set; }
         string NickName { get; set; }
-        string Telphone { get; set; }
+        string Telephone { get; set; }
         string Fax { get; set; }
         string Email { get; set; }
         string Line { get; set; }

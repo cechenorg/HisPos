@@ -41,6 +41,8 @@ namespace His_Pos.Class.Manufactory
             }
         }
 
+        public int ManufactoryPrincipalsCount { get { return ManufactoryPrincipals.Count(m => m.IsEnable); } }
+
         public object Clone()
         {
             ManageManufactory newManageManufactory = new ManageManufactory

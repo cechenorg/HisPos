@@ -39,6 +39,10 @@ namespace His_Pos.Class.Pharmacy
             }
         }
 
+        public int PharmacyPrincipalsCount {
+            get { return PharmacyPrincipals.Count(p => p.IsEnable); }
+        }
+
         public object Clone()
         {
             ManagePharmacy newManagePharmacy = new ManagePharmacy
