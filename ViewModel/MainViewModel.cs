@@ -17,7 +17,7 @@ using His_Pos.InventoryManagement;
 using His_Pos.LocationManage;
 using His_Pos.H4_BASIC_MANAGE.PharmacyManage;
 using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
-using His_Pos.H4_BASIC_MANAGE.MedBagManage;
+using His_Pos.H1_DECLARE.MedBagManage;
 using His_Pos.H5_ATTEND.WorkScheduleManage;
 using His_Pos.H4_BASIC_MANAGE.MedFrequencyManage;
 using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
@@ -29,11 +29,14 @@ namespace His_Pos.ViewModel
     {
         //since we don't know what kind of objects are bound, so the sorting happens outside with the ReorderTabsCommand.
         public RelayCommand<TabReorder> ReorderTabsCommand { get; set; }
+
         public RelayCommand<object> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
+
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
         private TabBase _selectedTab;
+
         public TabBase SelectedTab
         {
             get { return _selectedTab; }
@@ -47,6 +50,7 @@ namespace His_Pos.ViewModel
         }
 
         private bool _canAddTabs;
+
         public bool CanAddTabs
         {
             get { return _canAddTabs; }
@@ -97,7 +101,7 @@ namespace His_Pos.ViewModel
         }
 
         //We need to set the TabNumber property on the viewmodels when the item source changes to keep it in sync.
-        void ItemCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void ItemCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -124,16 +128,20 @@ namespace His_Pos.ViewModel
         //To close a tab, we simply remove the viewmodel from the source collection.
         private void CloseTabCommandAction(TabBase vm)
         {
-            switch ( vm.TabName )
+            switch (vm.TabName)
             {
                 case nameof(FeatureItem.處方登錄):
                     break;
+
                 case nameof(FeatureItem.測試啦):
                     break;
+
                 case nameof(FeatureItem.處方查詢):
                     break;
+
                 case nameof(FeatureItem.商品查詢):
                     break;
+
                 case nameof(FeatureItem.處理單管理):
                     //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
                     //{
@@ -141,38 +149,51 @@ namespace His_Pos.ViewModel
                     //    return;
                     //}
                     break;
+
                 case nameof(FeatureItem.處理單紀錄):
                     break;
+
                 case nameof(FeatureItem.新增盤點):
                     break;
+
                 case nameof(FeatureItem.庫存盤點紀錄):
                     break;
+
                 case nameof(FeatureItem.商品類別管理):
                     break;
+
                 case nameof(FeatureItem.供應商管理):
                     break;
+
                 case nameof(FeatureItem.櫃位管理):
                     LocationManageView.Instance.SaveLocation();
                     break;
+
                 case nameof(FeatureItem.員工管理):
                     break;
+
                 case nameof(FeatureItem.藥品頻率管理):
                     break;
+
                 case nameof(FeatureItem.上下班打卡):
                     break;
+
                 case nameof(FeatureItem.排班管理):
                     break;
+
                 case nameof(FeatureItem.審核管理):
                     break;
+
                 case nameof(FeatureItem.藥袋管理):
                     break;
+
                 default:
                     return;
             }
 
             this.ItemCollection.Remove(vm);
         }
-     
+
         //Adds a random tab
         public void AddTabCommandAction(object featureItem)
         {
@@ -186,12 +207,15 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.處方登錄):
                     newTab = new PrescriptionDec2() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
+
                 case nameof(FeatureItem.處方查詢):
                     newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
+
                 case nameof(FeatureItem.藥品頻率管理):
                     newTab = new MedFrequencyManage() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
+
                 case nameof(FeatureItem.藥袋管理):
                     newTab = new MedBagManage() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
@@ -200,15 +224,19 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.商品查詢):
                     newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
+
                 case nameof(FeatureItem.處理單管理):
                     newTab = new ProductPurchase.ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
+
                 case nameof(FeatureItem.處理單紀錄):
                     newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
+
                 case nameof(FeatureItem.商品類別管理):
                     newTab = new ProductTypeManage.ProductTypeManage() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
+
                 case nameof(FeatureItem.櫃位管理):
                     newTab = new LocationManage.LocationManage() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
@@ -217,31 +245,37 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.新增盤點):
                     newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
+
                 case nameof(FeatureItem.庫存盤點紀錄):
                     newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
-                
+
                 //基本資料管理
                 case nameof(FeatureItem.供應商管理):
                     newTab = new ManufactoryManage.ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
+
                 case nameof(FeatureItem.藥局管理):
                     newTab = new PharmacyManage() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
+
                 case nameof(FeatureItem.員工管理):
                     newTab = new EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
+
                 case nameof(FeatureItem.審核管理):
                     newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
-                
+
                 //打卡
                 case nameof(FeatureItem.上下班打卡):
                     newTab = new ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
+
                 case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
+
                 default:
                     return;
             }
@@ -262,11 +296,13 @@ namespace His_Pos.ViewModel
                         case nameof(FeatureItem.商品查詢):
                             if (InventoryManagement.InventoryManagementView.Instance is null) break;
 
-                            if (InventoryManagement.InventoryManagementView.DataChanged) {
+                            if (InventoryManagement.InventoryManagementView.DataChanged)
+                            {
                                 InventoryManagement.InventoryManagementView.Instance.MergingData();
                                 InventoryManagement.InventoryManagementView.Instance.SearchData();
                             }
                             break;
+
                         case nameof(FeatureItem.處理單紀錄):
                             if (ProductPurchaseRecord.ProductPurchaseRecordView.Instance is null) break;
 
@@ -275,6 +311,7 @@ namespace His_Pos.ViewModel
 
                             ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
                             break;
+
                         case nameof(FeatureItem.新增盤點):
                             if (StockTaking.StockTakingView.Instance is null) break;
 
@@ -285,6 +322,7 @@ namespace His_Pos.ViewModel
                                 StockTaking.StockTakingView.DataChanged = false;
                             }
                             break;
+
                         case nameof(FeatureItem.審核管理):
                             if (AuthenticationManageView.Instance is null) break;
 
@@ -296,6 +334,7 @@ namespace His_Pos.ViewModel
                                 AuthenticationManageView.DataChanged = false;
                             }
                             break;
+
                         case nameof(FeatureItem.排班管理):
                             if (WorkScheduleManageView.Instance is null) break;
 

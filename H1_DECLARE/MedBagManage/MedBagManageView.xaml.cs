@@ -16,17 +16,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using His_Pos.Class;
 using His_Pos.Class.MedBag;
-using His_Pos.Class.MedBagLocation;
-using His_Pos.H4_BASIC_MANAGE.LocationManage;
-using His_Pos.LocationManage;
 using JetBrains.Annotations;
-using CheckBox = System.Windows.Controls.CheckBox;
-using Control = System.Windows.Controls.Control;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
+namespace His_Pos.H1_DECLARE.MedBagManage
 {
     /// <summary>
     /// MedBagManageView.xaml 的互動邏輯
@@ -34,16 +28,15 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
     public partial class MedBagManageView : UserControl, INotifyPropertyChanged
     {
         public static MedBagManageView Instance;
-        private MedBag selectedMedBag;
-        private ObservableCollection<RdlLocationControl> locationControls = new ObservableCollection<RdlLocationControl>();
+        private MedBag _selectedMedBag;
 
         public MedBag SelectedMedBag
         {
-            get { return selectedMedBag; }
+            get { return _selectedMedBag; }
             set
             {
-                selectedMedBag = value;
-                OnPropertyChanged("SelectedMedBag");
+                _selectedMedBag = value;
+                OnPropertyChanged(nameof(SelectedMedBag));
             }
         }
 
@@ -55,7 +48,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
             set
             {
                 medBagImgWidth = value;
-                OnPropertyChanged("MedBagImgWidth");
+                OnPropertyChanged(nameof(MedBagImgWidth));
             }
         }
 
@@ -67,11 +60,11 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
             set
             {
                 medBagImgHeight = value;
-                OnPropertyChanged("MedBagImgHeight");
+                OnPropertyChanged(nameof(MedBagImgHeight));
             }
         }
 
-        private static int id = 0;
+        private int id;
 
         public MedBagManageView()
         {
@@ -100,8 +93,8 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                string selectedFileName = dlg.FileName;
-                BitmapImage bitmap = new BitmapImage();
+                var selectedFileName = dlg.FileName;
+                var bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(selectedFileName);
                 bitmap.EndInit();

@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
+namespace His_Pos.H1_DECLARE.MedBagManage
 {
     /// <summary>
     /// RdlLocationControl.xaml 的互動邏輯
@@ -25,10 +25,10 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
 
         public Brush GridBackground
         {
-            get { return LabelContent.Equals("")? Brushes.Transparent: (Brush)FindResource("GridSelected"); }
+            get { return LabelContent.Equals("") ? Brushes.Transparent : (Brush)FindResource("GridSelected"); }
         }
 
-        public RdlLocationControl(int locId,string name)
+        public RdlLocationControl(int locId, string name)
         {
             InitializeComponent();
             id = locId;

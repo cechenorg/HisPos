@@ -1,9 +1,9 @@
 ﻿<UserControl
-    x:Class="His_Pos.H4_BASIC_MANAGE.MedBagManage.MedBagManageView"
+    x:Class="His_Pos.H1_DECLARE.MedBagManage.MedBagManageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedBagManage"
+    xmlns:local="clr-namespace:His_Pos.H1_DECLARE.MedBagManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="839"
     d:DesignWidth="1365"
@@ -11,58 +11,58 @@
     <UserControl.Resources>
 
         <!--  MoveThumb Template  -->
-        <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:RDLLocationMoveThumb}">
+        <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:RdlLocationMoveThumb}">
             <Rectangle Fill="Transparent" />
         </ControlTemplate>
 
-        <ControlTemplate x:Key="LineThumbTemplate" TargetType="{x:Type local:RDLLocationResizeThumb}">
+        <ControlTemplate x:Key="LineThumbTemplate" TargetType="{x:Type local:RdlLocationResizeThumb}">
             <Rectangle Fill="DodgerBlue" />
         </ControlTemplate>
 
-        <ControlTemplate x:Key="RangeLineThumbTemplate" TargetType="{x:Type local:RDLLocationResizeThumb}">
+        <ControlTemplate x:Key="RangeLineThumbTemplate" TargetType="{x:Type local:RdlLocationResizeThumb}">
             <Rectangle Fill="Red" />
         </ControlTemplate>
 
-        <ControlTemplate x:Key="CornerThumbTemplate" TargetType="{x:Type local:RDLLocationResizeThumb}">
+        <ControlTemplate x:Key="CornerThumbTemplate" TargetType="{x:Type local:RdlLocationResizeThumb}">
             <Ellipse Fill="DarkBlue" />
         </ControlTemplate>
 
-        <ControlTemplate x:Key="RangeCornerThumbTemplate" TargetType="{x:Type local:RDLLocationResizeThumb}">
+        <ControlTemplate x:Key="RangeCornerThumbTemplate" TargetType="{x:Type local:RdlLocationResizeThumb}">
             <Ellipse Fill="Red" />
         </ControlTemplate>
 
         <!--  ResizeDecorator Template  -->
         <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
             <Grid>
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Height="2"
                     Margin="0,-2,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"
                     Cursor="SizeNS"
                     Template="{StaticResource LineThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="2"
                     Margin="-2,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Stretch"
                     Cursor="SizeWE"
                     Template="{StaticResource LineThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="2"
                     Margin="0,0,-2,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Cursor="SizeWE"
                     Template="{StaticResource LineThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Height="2"
                     Margin="0,0,0,-2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
                     Cursor="SizeNS"
                     Template="{StaticResource LineThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="6"
                     Height="6"
                     Margin="-4,-4,0,0"
@@ -70,7 +70,7 @@
                     VerticalAlignment="Top"
                     Cursor="SizeNWSE"
                     Template="{StaticResource CornerThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="6"
                     Height="6"
                     Margin="0,-4,-4,0"
@@ -78,7 +78,7 @@
                     VerticalAlignment="Top"
                     Cursor="SizeNESW"
                     Template="{StaticResource CornerThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="6"
                     Height="6"
                     Margin="-4,0,0,-4"
@@ -86,7 +86,7 @@
                     VerticalAlignment="Bottom"
                     Cursor="SizeNESW"
                     Template="{StaticResource CornerThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="6"
                     Height="6"
                     Margin="0,0,-4,-4"
@@ -100,35 +100,35 @@
         <!--  ResizeDecorator Template  -->
         <ControlTemplate x:Key="RangeResizeDecoratorTemplate" TargetType="{x:Type Control}">
             <Grid>
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Height="3"
                     Margin="0,-2,0,0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Top"
                     Cursor="SizeNS"
                     Template="{StaticResource RangeLineThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="3"
                     Margin="-2,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Stretch"
                     Cursor="SizeWE"
                     Template="{StaticResource RangeLineThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="3"
                     Margin="0,0,-2,0"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Cursor="SizeWE"
                     Template="{StaticResource RangeLineThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Height="3"
                     Margin="0,0,0,-2"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
                     Cursor="SizeNS"
                     Template="{StaticResource RangeLineThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="8"
                     Height="8"
                     Margin="-4,-4,0,0"
@@ -136,7 +136,7 @@
                     VerticalAlignment="Top"
                     Cursor="SizeNWSE"
                     Template="{StaticResource RangeCornerThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="8"
                     Height="8"
                     Margin="0,-4,-4,0"
@@ -144,7 +144,7 @@
                     VerticalAlignment="Top"
                     Cursor="SizeNESW"
                     Template="{StaticResource RangeCornerThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="8"
                     Height="8"
                     Margin="-4,0,0,-4"
@@ -152,7 +152,7 @@
                     VerticalAlignment="Bottom"
                     Cursor="SizeNESW"
                     Template="{StaticResource RangeCornerThumbTemplate}" />
-                <local:RDLLocationResizeThumb
+                <local:RdlLocationResizeThumb
                     Width="8"
                     Height="8"
                     Margin="0,0,-4,-4"
@@ -166,7 +166,7 @@
         <!--  Designer Item Template  -->
         <ControlTemplate x:Key="MedBagDesignerItemTemplate" TargetType="ContentControl">
             <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                <local:RDLLocationMoveThumb
+                <local:RdlLocationMoveThumb
                     x:Name="MoveThumb"
                     Cursor="SizeAll"
                     Template="{StaticResource MoveThumbTemplate}" />
@@ -176,7 +176,7 @@
         </ControlTemplate>
         <ControlTemplate x:Key="MedBagRangeItemTemplate" TargetType="ContentControl">
             <Grid DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
-                <local:RDLLocationMoveThumb
+                <local:RdlLocationMoveThumb
                     x:Name="MoveThumb"
                     Cursor="SizeAll"
                     Template="{StaticResource MoveThumbTemplate}" />

@@ -129,8 +129,8 @@
     <Reference Include="ImeLib">
       <HintPath>.\ImeLib.dll</HintPath>
     </Reference>
-    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    <Reference Include="JetBrains.Annotations, Version=10.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>packages\JetBrains.Annotations.10.2.1\lib\net\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
@@ -328,6 +328,15 @@
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H1_DECLARE\MedBagManage\MedBagManage.cs" />
+    <Compile Include="H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
+      <DependentUpon>MedBagManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml.cs">
+      <DependentUpon>RdlLocationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
+    <Compile Include="H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\GenderConverter.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
@@ -365,15 +374,6 @@
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H2_STOCK_MANAGE\LocationManage\ResizeThumb.cs" />
-    <Compile Include="H1_DECLARE\MedBagManage\MedBagManage.cs" />
-    <Compile Include="H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
-      <DependentUpon>MedBagManageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml.cs">
-      <DependentUpon>RdlLocationControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="H1_DECLARE\MedBagManage\RDLLocationMoveThumb.cs" />
-    <Compile Include="H1_DECLARE\MedBagManage\RDLLocationResizeThumb.cs" />
     <Compile Include="H1_DECLARE\MedFrequencyManage\MedFrequencyManage.cs" />
     <Compile Include="H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
       <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
@@ -548,6 +548,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H1_DECLARE\MedBagManage\MedBagManageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -585,14 +593,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H1_DECLARE\MedBagManage\MedBagManageView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

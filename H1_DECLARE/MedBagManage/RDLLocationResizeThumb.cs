@@ -7,11 +7,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
+namespace His_Pos.H1_DECLARE.MedBagManage
 {
-    public class RDLLocationResizeThumb : Thumb
+    public class RdlLocationResizeThumb : Thumb
     {
-        public RDLLocationResizeThumb()
+        public RdlLocationResizeThumb()
         {
             DragDelta += new DragDeltaEventHandler(this.ResizeThumb_DragDelta);
         }
@@ -30,14 +30,16 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                 {
                     case VerticalAlignment.Bottom:
                         deltaVertical = Math.Min(-e.VerticalChange, designerItem.ActualHeight - designerItem.MinHeight);
-                        designerItem.Height = ((designerItem.Height - deltaVertical) > canvasHeight)? canvasHeight : designerItem.Height - deltaVertical;
+                        designerItem.Height = ((designerItem.Height - deltaVertical) > canvasHeight) ? canvasHeight : designerItem.Height - deltaVertical;
                         break;
+
                     case VerticalAlignment.Top:
                         deltaVertical = Math.Min(e.VerticalChange, designerItem.ActualHeight - designerItem.MinHeight);
                         double topLimit = (Canvas.GetTop(designerItem) + deltaVertical) < 0 ? 0 : (Canvas.GetTop(designerItem) + deltaVertical);
                         Canvas.SetTop(designerItem, topLimit);
-                        designerItem.Height -= (topLimit == 0.0)? 0:(deltaVertical);
+                        designerItem.Height -= (topLimit == 0.0) ? 0 : (deltaVertical);
                         break;
+
                     default:
                         break;
                 }
@@ -50,10 +52,12 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
                         Canvas.SetLeft(designerItem, leftLimit);
                         designerItem.Width -= (leftLimit == 0.0) ? 0 : deltaHorizontal;
                         break;
+
                     case HorizontalAlignment.Right:
                         deltaHorizontal = Math.Min(-e.HorizontalChange, designerItem.ActualWidth - designerItem.MinWidth);
-                        designerItem.Width = (designerItem.Width - deltaHorizontal > canvasWidth)? canvasWidth: designerItem.Width - deltaHorizontal;
+                        designerItem.Width = (designerItem.Width - deltaHorizontal > canvasWidth) ? canvasWidth : designerItem.Width - deltaHorizontal;
                         break;
+
                     default:
                         break;
                 }
