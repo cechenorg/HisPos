@@ -54,17 +54,14 @@
                     Width="25"
                     Margin="20,0,15,0"
                     Source="../../Images/Genders.png" />
-                <ComboBox
+                <Label
                     Name="PatientGender"
                     Width="50"
                     Margin="0,0,15,0"
                     HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
                     FontFamily="Segoe UI Semi"
-                    FontSize="18"
-                    Text="{Binding Prescription.Customer.Gender, Mode=TwoWay, Converter={StaticResource GenderConverter}}">
-                    <ListBoxItem Content="男" />
-                    <ListBoxItem Content="女" />
-                </ComboBox>
+                    FontSize="18"/>
                 <Image
                     Name="IcPatientName"
                     Width="25"
@@ -782,35 +779,35 @@
                         Background="{StaticResource GridBackGround}"
                         Orientation="Horizontal">
                         <RadioButton
+                            Tag="1"
                             Margin="20,0,5,0"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Checked="RadioButton_Checked"
                             Content="交易"
                             FontFamily="Segoe UI Semibold"
                             FontSize="16"
-                            Tag="1" />
+                            Checked="RadioButton_Checked"/>
                         <Image Width="18" Source="/Images/PosDot.png" />
                         <RadioButton
+                            Tag="0"
                             Margin="20,0,5,0"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Checked="RadioButton_Checked"
                             Content="調劑"
                             FontFamily="Segoe UI Semibold"
                             FontSize="16"
-                            Tag="0" />
+                            Checked="RadioButton_Checked"/>
                         <Image Width="18" Source="/Images/HisDot.png" />
                         <RadioButton
+                            Tag="2"
                             Margin="20,0,5,0"
                             VerticalAlignment="Center"
                             VerticalContentAlignment="Center"
-                            Checked="RadioButton_Checked"
                             Content="全部顯示"
                             FontFamily="Segoe UI Semibold"
                             FontSize="16"
                             IsChecked="True"
-                            Tag="2" />
+                            Checked="RadioButton_Checked"/>
                         <Image
                             Width="27"
                             Margin="0,0,15,0"

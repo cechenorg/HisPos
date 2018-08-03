@@ -12,13 +12,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
 
@@ -31,98 +28,98 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     {
         private Prescription _currentPrescription = new Prescription();
         private bool _isChanged;
-        private int selfCost;
-        private SystemType cusHhistoryFilterCondition = SystemType.ALL;
+        private int _selfCost;
+        private SystemType _cusHhistoryFilterCondition = SystemType.ALL;
 
         public int SelfCost
         {
-            get { return selfCost; }
+            get => _selfCost;
             set
             {
-                selfCost = value;
+                _selfCost = value;
                 CountCharge();
-                NotifyPropertyChanged("SelfCost");
+                NotifyPropertyChanged(nameof(SelfCost));
             }
         }
 
-        private double medProfit;
+        private double _medProfit;
 
         public double MedProfit
         {
-            get { return medProfit; }
+            get => _medProfit;
             set
             {
-                medProfit = value;
-                NotifyPropertyChanged("MedProfit");
+                _medProfit = value;
+                NotifyPropertyChanged(nameof(MedProfit));
             }
         }
 
-        private int copayment;
+        private int _copayment;
 
         public int Copayment
         {
-            get { return copayment; }
+            get => _copayment;
             set
             {
-                copayment = value;
-                CurrentPrescription.Treatment.Copayment.Point = copayment;
+                _copayment = value;
+                CurrentPrescription.Treatment.Copayment.Point = _copayment;
                 CountCharge();
-                NotifyPropertyChanged("Copayment");
+                NotifyPropertyChanged(nameof(Copayment));
             }
         }
 
-        private int charge;
+        private int _charge;
 
         public int Charge
         {
-            get { return charge; }
+            get => _charge;
             set
             {
-                charge = value;
-                NotifyPropertyChanged("Charge");
+                _charge = value;
+                NotifyPropertyChanged(nameof(Charge));
             }
         }
 
-        private int deposit;
+        private int _deposit;
 
         public int Deposit
         {
-            get { return deposit; }
+            get => _deposit;
             set
             {
-                deposit = value;
+                _deposit = value;
                 CountCharge();
-                NotifyPropertyChanged("Deposit");
+                NotifyPropertyChanged(nameof(Deposit));
             }
         }
 
-        private int pay;
+        private int _pay;
 
         public int Pay
         {
-            get { return pay; }
+            get => _pay;
             set
             {
-                pay = value;
-                Change = pay - Charge;
-                NotifyPropertyChanged("Pay");
+                _pay = value;
+                Change = _pay - Charge;
+                NotifyPropertyChanged(nameof(Pay));
             }
         }
 
-        private int change;
+        private int _change;
 
         public int Change
         {
-            get { return change; }
+            get => _change;
             set
             {
-                change = value;
-                NotifyPropertyChanged("Change");
+                _change = value;
+                NotifyPropertyChanged(nameof(Change));
             }
         }
 
-        private readonly bool IsFirst = true;
-        private ObservableCollection<object> Medicines;
+        private readonly bool _isFirst = true;
+        private ObservableCollection<object> _medicines;
         public ObservableCollection<Hospital> HosiHospitals { get; set; }
         public ObservableCollection<Division> Divisions { get; set; }
         public ObservableCollection<TreatmentCase> TreatmentCases { get; set; }
@@ -137,13 +134,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             InitializeComponent();
             DataContext = this;
+            SetDefaultFieldsValue();
+            GetPrescriptionData();
+        }
+
+        private void SetDefaultFieldsValue()
+        {
+            DataContext = this;
             SelfCost = 0;
             Copayment = 0;
             MedProfit = 0;
             Deposit = 0;
             Pay = 0;
             Change = 0;
-            GetPrescriptionData();
         }
 
         public Prescription CurrentPrescription
@@ -161,11 +164,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             get
             {
                 return (searchText, obj) =>
-                    (obj as DeclareMedicine)?.Id is null
-                        ? false
-                        : (obj as DeclareMedicine).Id.ToLower().Contains(searchText.ToLower())
-                          || (obj as DeclareMedicine).ChiName.ToLower().Contains(searchText.ToLower()) ||
-                          (obj as DeclareMedicine).EngName.ToLower().Contains(searchText.ToLower());
+                    !((obj as DeclareMedicine)?.Id is null) && (((DeclareMedicine) obj).Id.ToLower().Contains(searchText.ToLower())
+                                                                || ((DeclareMedicine) obj).ChiName.ToLower().Contains(searchText.ToLower()) ||
+                                                                ((DeclareMedicine) obj).EngName.ToLower().Contains(searchText.ToLower()));
             }
         }
 
@@ -233,7 +234,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void SetChanged()
         {
-            if (IsFirst) return;
+            if (_isFirst) return;
             _isChanged = true;
         }
 
@@ -247,9 +248,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
-            Medicines = new ObservableCollection<object>(result.ToList());
+            _medicines = new ObservableCollection<object>(result.ToList());
 
-            medicineCodeAuto.ItemsSource = Medicines;
+            medicineCodeAuto.ItemsSource = _medicines;
             medicineCodeAuto.ItemFilter = MedicineFilter;
             medicineCodeAuto.PopulateComplete();
         }
@@ -262,22 +263,22 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (medicineCodeAuto.SelectedItem is null)
             {
                 if (medicineCodeAuto.Text != string.Empty &&
-                    (medicineCodeAuto.ItemsSource as ObservableCollection<object>).Count != 0 &&
+                    ((ObservableCollection<object>) medicineCodeAuto.ItemsSource).Count != 0 &&
                     medicineCodeAuto.Text.Length >= 4)
-                    medicineCodeAuto.SelectedItem = (medicineCodeAuto.ItemsSource as ObservableCollection<object>)[0];
+                    medicineCodeAuto.SelectedItem = ((ObservableCollection<object>) medicineCodeAuto.ItemsSource)?[0];
                 else
                     return;
             }
 
-            DeclareMedicine declareMedicine = (DeclareMedicine)(medicineCodeAuto.SelectedItem as DeclareMedicine).Clone();
-            int currentRow = GetCurrentRowIndex(sender);
+            var declareMedicine = (DeclareMedicine)((DeclareMedicine)medicineCodeAuto.SelectedItem)?.Clone();
+            var currentRow = GetCurrentRowIndex(sender);
 
             if (CurrentPrescription.Medicines.Count > 0)
             {
                 if (CurrentPrescription.Medicines.Count == currentRow)
                 {
                     CurrentPrescription.Medicines.Add(declareMedicine);
-                    medicineCodeAuto.Text = "";
+                    medicineCodeAuto.Text = string.Empty;
                 }
                 else
                 {
@@ -287,7 +288,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
             {
                 CurrentPrescription.Medicines.Add(declareMedicine);
-                medicineCodeAuto.Text = "";
+                medicineCodeAuto.Text = string.Empty;
             }
         }
 
@@ -297,18 +298,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             med.Cost = 0;
             med.TotalPrice = 0;
             med.Amount = 0;
-            med.CountStatus = "";
-            med.FocusColumn = "";
+            med.CountStatus = string.Empty;
+            med.FocusColumn = string.Empty;
             med.Usage = new Usage();
-            med.Days = "";
-            med.Position = "";
-            med.Source = "";
-            med.Dosage = "";
+            med.Days = string.Empty;
+            med.Position = string.Empty;
+            med.Source = string.Empty;
+            med.Dosage = string.Empty;
         }
 
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var objectName = (sender as Control).Name;
+            var objectName = (sender as Control)?.Name;
             //按 Enter 下一欄
             if (e.Key == Key.Enter)
             {
@@ -322,40 +323,40 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 switch (objectName)
                 {
                     case "Dosage":
-                        NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Usage", ref nextTextBox);
+                        NewFunction.FindChildGroup(PrescriptionMedicines, "Usage", ref nextTextBox);
                         break;
 
                     case "Usage":
                         FindUsagesQuickName(sender);
-                        NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "MedicineDays", ref nextTextBox);
+                        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineDays", ref nextTextBox);
                         break;
 
                     case "MedicineDays":
-                        NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "MedicineTotal", ref nextTextBox);
+                        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineTotal", ref nextTextBox);
                         break;
 
                     case "MedicineTotal":
-                        NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Position", ref nextTextBox);
+                        NewFunction.FindChildGroup(PrescriptionMedicines, "Position", ref nextTextBox);
                         break;
 
                     case "Position":
                         if (!CurrentPrescription.Medicines[currentRowIndex].PaySelf)
                         {
-                            NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
-                            NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
+                            NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
+                            NewFunction.FindChildGroup(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
                             nextTextBox[0].Focus();
                             return;
                         }
                         else
                         {
-                            NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, "Price", ref nextTextBox);
+                            NewFunction.FindChildGroup(PrescriptionMedicines, "Price", ref nextTextBox);
                             nextTextBox[currentRowIndex].Focus();
                         }
                         break;
 
                     case "Price":
-                        NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
-                        NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
+                        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
+                        NewFunction.FindChildGroup(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
                         nextTextBox[0].Focus();
                         return;
                 }
@@ -368,10 +369,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 e.Handled = true;
                 var thisTextBox = new List<TextBox>();
                 var currentRowIndex = GetCurrentRowIndex(sender);
-
                 if (currentRowIndex == -1) return;
 
-                NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, objectName, ref thisTextBox);
+                NewFunction.FindChildGroup(PrescriptionMedicines, objectName, ref thisTextBox);
 
                 int newIndex = (e.Key == Key.Up) ? currentRowIndex - 1 : currentRowIndex + 1;
 
@@ -386,50 +386,36 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private int GetCurrentRowIndex(object sender)
         {
-            if (sender is TextBox)
+            if (sender is TextBox textBox)
             {
-                List<TextBox> temp = new List<TextBox>();
-                TextBox textBox = sender as TextBox;
-
-                NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, textBox.Name, ref temp);
-
-                for (int x = 0; x < temp.Count; x++)
+                var temp = new List<TextBox>();
+                NewFunction.FindChildGroup(PrescriptionMedicines, textBox.Name, ref temp);
+                for (var x = 0; x < temp.Count; x++)
                 {
-                    if (temp[x].Equals(sender))
-                    {
+                    if (temp[x].Equals(textBox))
                         return x;
-                    }
                 }
             }
-            else if (sender is CheckBox)
+            else if (sender is CheckBox checkBox)
             {
-                List<CheckBox> temp = new List<CheckBox>();
-                CheckBox checkBox = sender as CheckBox;
-
-                NewFunction.FindChildGroup<CheckBox>(PrescriptionMedicines, checkBox.Name, ref temp);
-
-                for (int x = 0; x < temp.Count; x++)
+                var temp = new List<CheckBox>();
+                NewFunction.FindChildGroup(PrescriptionMedicines, checkBox.Name, ref temp);
+                for (var x = 0; x < temp.Count; x++)
                 {
-                    if (temp[x].Equals(sender))
-                    {
+                    if (temp[x].Equals(checkBox))
                         return x;
-                    }
                 }
             }
-            else if (sender is AutoCompleteBox)
+            else if (sender is AutoCompleteBox autoCompleteBox)
             {
-                List<AutoCompleteBox> temp = new List<AutoCompleteBox>();
-                AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
-                NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, autoCompleteBox.Name, ref temp);
-                for (int x = 0; x < temp.Count; x++)
+                var temp = new List<AutoCompleteBox>();
+                NewFunction.FindChildGroup(PrescriptionMedicines, autoCompleteBox.Name, ref temp);
+                for (var x = 0; x < temp.Count; x++)
                 {
-                    if (temp[x].Equals(sender))
-                    {
+                    if (temp[x].Equals(autoCompleteBox))
                         return x;
-                    }
                 }
             }
-
             return -1;
         }
 
@@ -473,7 +459,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void CountCharge()
         {
             Charge = Deposit + SelfCost + Copayment;
-            Change = pay - Charge;
+            Change = _pay - Charge;
         }
 
         /*
@@ -500,16 +486,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void NullTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox t = sender as TextBox;
-            if (string.IsNullOrEmpty(t.Text))
+            if (sender is TextBox t && string.IsNullOrEmpty(t.Text))
                 t.Text = "0";
         }
 
         private void FindUsagesQuickName(object sender)
         {
-            int currentRow = GetCurrentRowIndex(sender);
-            TextBox t = sender as TextBox;
-            if (!string.IsNullOrEmpty(t.Text))
+            var currentRow = GetCurrentRowIndex(sender);
+            if (sender is TextBox t && !string.IsNullOrEmpty(t.Text))
             {
                 CurrentPrescription.Medicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
                 if (CurrentPrescription.Medicines[currentRow].Usage != null)
@@ -520,6 +504,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             LoadPatentDataFromIcCard();
+
         }
 
         private void LoadPatentDataFromIcCard()
@@ -536,8 +521,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             //HisApiBase.csCloseCom();
             CurrentPrescription.Customer.Name = "林連義進";
             CurrentPrescription.Customer.Birthday = "037/10/01";
-            CurrentPrescription.Customer.IcNumber = "S88824769A";
-            CurrentPrescription.Customer.Gender = true;
+            CurrentPrescription.Customer.IcNumber = "S18824769A";
+            CheckPatientGender();
             CurrentPrescription.Customer.IcCard = new IcCard("900000000720", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination(), "");
             CurrentPrescription.Customer.Id = "1";
             PatientName.Text = CurrentPrescription.Customer.Name;
@@ -548,20 +533,34 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CusHistoryMaster.SelectedIndex = 0;
         }
 
+        private void CheckPatientGender()
+        {
+            if (CurrentPrescription.Customer.IcNumber.IndexOf("1", StringComparison.Ordinal) == 1)
+                CurrentPrescription.Customer.Gender = true;
+            else if(CurrentPrescription.Customer.IcNumber.IndexOf("2", StringComparison.Ordinal) == 1)
+            {
+                CurrentPrescription.Customer.Gender = false;
+            }
+            else
+            {
+                CurrentPrescription.Customer.Gender = true;
+            }
+            PatientGender.Content = CurrentPrescription.Customer.Gender ? "男" : "女";
+        }
+
         private bool CusHistoryFilter(object item)
         {
-            if (cusHhistoryFilterCondition == SystemType.ALL) return true;
+            if (_cusHhistoryFilterCondition == SystemType.ALL) return true;
 
-            if (((CustomerHistoryMaster)item).Type == cusHhistoryFilterCondition)
+            if (((CustomerHistoryMaster)item).Type == _cusHhistoryFilterCondition)
                 return true;
             return false;
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            RadioButton radioButton = sender as RadioButton;
-
-            cusHhistoryFilterCondition = (SystemType)Int16.Parse(radioButton.Tag.ToString());
+            if (sender is RadioButton radioButton)
+                _cusHhistoryFilterCondition = (SystemType) short.Parse(radioButton.Tag.ToString());
 
             if (CusHistoryMaster is null) return;
             CusHistoryMaster.Items.Filter = CusHistoryFilter;
@@ -581,8 +580,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 CusHistoryMaster.SelectedIndex = 0;
                 return;
             }
-            CustomerHistoryMaster selectedMaster = CusHistoryMaster.SelectedItem as CustomerHistoryMaster;
-            selectedMaster.HistoryCollection = CurrentCustomerHistoryMaster.getCustomerHistoryDetails(selectedMaster.Type, selectedMaster.CustomerHistoryDetailId);
+
+            if (CusHistoryMaster.SelectedItem is CustomerHistoryMaster selectedMaster)
+                selectedMaster.HistoryCollection =
+                    CurrentCustomerHistoryMaster.getCustomerHistoryDetails(selectedMaster.Type,
+                        selectedMaster.CustomerHistoryDetailId);
             SetCusHistoryDetail(CusHistoryMaster.SelectedItem as CustomerHistoryMaster);
         }
 

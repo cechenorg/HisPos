@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.Class.MedBag;
 using JetBrains.Annotations;
+using CheckBox = System.Windows.Controls.CheckBox;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.H1_DECLARE.MedBagManage
@@ -32,7 +23,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         public MedBag SelectedMedBag
         {
-            get { return _selectedMedBag; }
+            get => _selectedMedBag;
             set
             {
                 _selectedMedBag = value;
@@ -40,31 +31,31 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
-        private double medBagImgWidth;
+        private double _medBagImgWidth;
 
         public double MedBagImgWidth
         {
-            get { return medBagImgWidth; }
+            get => _medBagImgWidth;
             set
             {
-                medBagImgWidth = value;
+                _medBagImgWidth = value;
                 OnPropertyChanged(nameof(MedBagImgWidth));
             }
         }
 
-        private double medBagImgHeight;
+        private double _medBagImgHeight;
 
         public double MedBagImgHeight
         {
-            get { return medBagImgHeight; }
+            get => _medBagImgHeight;
             set
             {
-                medBagImgHeight = value;
+                _medBagImgHeight = value;
                 OnPropertyChanged(nameof(MedBagImgHeight));
             }
         }
 
-        private int id;
+        private static int id;
 
         public MedBagManageView()
         {
@@ -83,13 +74,12 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void ImageSelector_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
-
-            dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-
-            dlg.Filter = "Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*";
-
-            dlg.RestoreDirectory = true;
+            var dlg = new OpenFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                Filter = @"Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*",
+                RestoreDirectory = true
+            };
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
@@ -118,32 +108,31 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void NewLocationChecked(object sender, RoutedEventArgs e)
         {
-            string locationName = (sender as System.Windows.Controls.CheckBox).Content.ToString();
-            Instance.NewLocation(null, locationName);
+            var locationName = (sender as CheckBox)?.Content.ToString();
+            var controlName = (sender as CheckBox)?.Name;
+            Instance.NewLocation(null, locationName, controlName);
         }
 
-        public void NewLocation(string locid = null, string parameterName = null, double height = 0, double width = 0, double top = 0, double left = 0)
+        public void NewLocation(string locid = null, string content = null, string controlName = null, double height = 0, double width = 0, double top = 0, double left = 0)
         {
-            ContentControl contentControl = new ContentControl();
-            if (string.IsNullOrEmpty(parameterName))
+            var contentControl = new ContentControl();
+            if (string.IsNullOrEmpty(content))
                 contentControl.Template = (ControlTemplate)FindResource("MedBagRangeItemTemplate");
             else
                 contentControl.Template = (ControlTemplate)FindResource("MedBagDesignerItemTemplate");
             RdlLocationControl newLocation = null;
             if (locid != null)
             {
-                newLocation = new RdlLocationControl(Convert.ToInt32(locid), parameterName);
-                newLocation.RdlParameterName.Content = parameterName;
+                newLocation = new RdlLocationControl(Convert.ToInt32(locid), content);
                 id = Convert.ToInt32(locid);
                 id++;
             }
             else
             {
-                newLocation = new RdlLocationControl(id, parameterName);
-                newLocation.RdlParameterName.Content = parameterName;
+                newLocation = new RdlLocationControl(id, content);
                 id++;
             }
-            if (string.IsNullOrEmpty(parameterName))
+            if (string.IsNullOrEmpty(content))
             {
                 contentControl.Height = (height == 0) ? 150 : height;
                 contentControl.Width = (width == 0) ? 150 : width;
@@ -161,7 +150,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 Canvas.SetTop(contentControl, top == 0 ? 360 : top);
                 Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
             }
-            SaveLocation();
         }
 
         public void SaveLocation()
@@ -170,19 +158,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void DeleteLocation(object sender, RoutedEventArgs e)
         {
-            //RdlLocationControl deleteControl = null;
-            //CheckBox checkBox = sender as CheckBox;
-            //MedBagLocation deletLocation = null;
-            //foreach (RdlLocationControl contentcontrol in MedBagCanvas.Children)
-            //{
-            //    if (!string.IsNullOrEmpty(checkBox.Content.ToString()) && contentcontrol.LabelContent == checkBox.Content)
-            //        deleteControl = contentcontrol;
-            //}
-            //if (deleteControl != null)
-            //{
-            //    MedBagCanvas.Children.Remove(deleteControl);
-            //    //MedBagLocationDB.DeleteLocation(deletLocation.Id);
-            //}
+            CheckBox checkBox = sender as CheckBox;
+            MedBagCanvas.Children.Remove(MedBagCanvas.Children.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl).Single(r => (r.Content as RdlLocationControl).LabelContent.Equals(checkBox.Content)));
         }
     }
 }
