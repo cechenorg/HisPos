@@ -34,13 +34,13 @@ namespace His_Pos.Class.Person
             Birthday = xml.SelectSingleNode("d6") == null ? null : DateTimeExtensions.BirthdayFormatConverter2(xml.SelectSingleNode("d6")?.InnerText);
         }
         public string Qname { get; set; }
-        private bool gender;
+        private bool _gender;
         public bool Gender
         {
-            get => gender;
+            get => _gender;
             set
             {
-                gender = value;
+                _gender = value;
                 NotifyPropertyChanged(nameof(Gender));
             }
         }
