@@ -38,6 +38,26 @@ namespace His_Pos.Class.Declare
             });
            CheckInsertDbTypeUpdate(parameters);
         }
+        public void UpdateDeclareData(DeclareData declareData, DeclareTrade declareTrade = null)
+        {
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            AddParameterDData(parameters, declareData);//加入DData sqlparameters
+            var pDataTable = SetPDataTable();//設定PData datatable columns
+            AddPData(declareData, pDataTable);//加入PData sqlparameters
+
+            var dataTradeTable = SetDataTradeTable();
+            AddTradeData(declareTrade, dataTradeTable);
+            parameters.Add(new SqlParameter("ID", declareData.DecMasId));
+            parameters.Add(new SqlParameter("EMP_ID", MainWindow.CurrentUser.Id));
+            parameters.Add(new SqlParameter("DECLARETRADE", dataTradeTable)); 
+            parameters.Add(new SqlParameter("DETAIL", pDataTable));
+            parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader(CreateToXml(declareData).InnerXml, XmlNodeType.Document, null))
+            });
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateDeclareData]", parameters);
+        }
         /*
          * 藥品扣庫
          */

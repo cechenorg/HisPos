@@ -215,30 +215,9 @@ namespace His_Pos.PrescriptionInquire
             ButtonImportXml.IsEnabled = false;
         }
         private void InitData() {
-            HospitalCollection = HospitalDb.GetData();
-            ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
-
-            DivisionCollection = DivisionDb.GetData();
-            Division.ItemsSource = DivisionCollection;
-            Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
-
-            CopaymentCollection = CopaymentDb.GetData();
-            CopaymentCode.ItemsSource = CopaymentCollection;
-            CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
-
-            PaymentCategoryCollection = PaymentCategroyDb.GetData();
-            PaymentCategory.ItemsSource = PaymentCategoryCollection;
-            PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
-
-            AdjustCaseCollection = AdjustCaseDb.GetData();
-            AdjustCase.ItemsSource = AdjustCaseCollection;
-            AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
-
-            TreatmentCaseCollection = TreatmentCaseDb.GetData();
-            TreatmentCase.ItemsSource = TreatmentCaseCollection;
-            TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
-
-            DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.GetMedicinesData(this);
+            loadingWindow.ShowDialog();
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
@@ -528,6 +507,33 @@ namespace His_Pos.PrescriptionInquire
                           || (obj as DeclareMedicine).ChiName.ToLower().Contains(searchText.ToLower()) ||
                           (obj as DeclareMedicine).EngName.ToLower().Contains(searchText.ToLower());
             }
+        }
+
+        private void ButtonImportXml_Click(object sender, RoutedEventArgs e)
+        {
+            MessageWindow m;
+            ConfirmWindow c;
+            InquiredPrescription.Prescription.Medicines = DeclareDetails;
+            if (InquiredPrescription.Prescription.CheckPrescriptionData().Equals(""))
+            {
+                var declareData = new DeclareData(InquiredPrescription.Prescription);
+                var declareDb = new DeclareDb();
+                DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+                declareDb.UpdateDeclareData(declareData, declareTrade);
+                //declareDb.InsertInventoryDb(declareData, "處方登陸");
+                m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
+                m.Show();
+            }
+            else
+            {
+                c = new ConfirmWindow("處方資料有誤:" + InquiredPrescription.Prescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
+                //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
+                //var declareData = new DeclareData(Prescription);
+                //var declareDb = new DeclareDb();
+                //declareDb.InsertDb(declareData);
+                c.ShowDialog();
+            }
+          
         }
     }
 }

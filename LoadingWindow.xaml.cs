@@ -260,7 +260,7 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-
+       
         public void GetEmployeeData(EmployeeManageView employeeManage)
         {
             backgroundWorker.DoWork += (s, o) =>
@@ -349,7 +349,42 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-
+        public void GetMedicinesData(PrescriptionInquireOutcome prescriptionInquireOutcome)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("載入處方詳細資料中...");
+                prescriptionInquireOutcome.HospitalCollection = HospitalDb.GetData();
+                prescriptionInquireOutcome.DivisionCollection = DivisionDb.GetData();
+                prescriptionInquireOutcome.CopaymentCollection = CopaymentDb.GetData();
+                prescriptionInquireOutcome.PaymentCategoryCollection = PaymentCategroyDb.GetData();
+                prescriptionInquireOutcome.AdjustCaseCollection = AdjustCaseDb.GetData();
+                prescriptionInquireOutcome.TreatmentCaseCollection = TreatmentCaseDb.GetData();
+                prescriptionInquireOutcome.DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    prescriptionInquireOutcome.ReleasePalace.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
+                    prescriptionInquireOutcome.Division.ItemsSource = prescriptionInquireOutcome.DivisionCollection;
+                    prescriptionInquireOutcome.Division.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
+                    prescriptionInquireOutcome.CopaymentCode.ItemsSource = prescriptionInquireOutcome.CopaymentCollection;
+                    prescriptionInquireOutcome.CopaymentCode.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.Copayment.FullName;
+                    prescriptionInquireOutcome.PaymentCategory.ItemsSource = prescriptionInquireOutcome.PaymentCategoryCollection;
+                    prescriptionInquireOutcome.PaymentCategory.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
+                    prescriptionInquireOutcome.AdjustCase.ItemsSource = prescriptionInquireOutcome.AdjustCaseCollection;
+                    prescriptionInquireOutcome.AdjustCase.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
+                    prescriptionInquireOutcome.TreatmentCase.ItemsSource = prescriptionInquireOutcome.TreatmentCaseCollection;
+                    prescriptionInquireOutcome.TreatmentCase.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
         public void GetMedicinesData(PrescriptionDec2View prescriptionDec2View)
         {
             prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
