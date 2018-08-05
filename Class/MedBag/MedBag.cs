@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using JetBrains.Annotations;
 
@@ -37,87 +31,87 @@ namespace His_Pos.Class.MedBag
         public ObservableCollection<MedBagLocation.MedBagLocation> MedBagLocations { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
-        private double rangeTop;
+        private double _rangeTop;
 
         public double RangeTop
         {
-            get { return rangeTop; }
+            get => _rangeTop;
             set
             {
-                rangeTop = value;
-                OnPropertyChanged("RangeTop");
+                _rangeTop = value;
+                OnPropertyChanged(nameof(RangeTop));
             }
         }
 
-        private double rangeLeft;
+        private double _rangeLeft;
 
         public double RangeLeft
         {
-            get { return rangeLeft; }
+            get => _rangeLeft;
             set
             {
-                rangeTop = value;
-                OnPropertyChanged("RangeLeft");
+                _rangeTop = value;
+                OnPropertyChanged(nameof(RangeLeft));
             }
         }
 
-        private double rangeBottom;
+        private double _rangeBottom;
 
         public double RangeBottom
         {
-            get { return rangeBottom; }
+            get => _rangeBottom;
             set
             {
-                rangeTop = value;
-                OnPropertyChanged("RangeBottom");
+                _rangeTop = value;
+                OnPropertyChanged(nameof(RangeBottom));
             }
         }
 
-        private double rangeRight;
+        private double _rangeRight;
 
         public double RangeRight
         {
-            get { return rangeRight; }
+            get => _rangeRight;
             set
             {
-                rangeTop = value;
-                OnPropertyChanged("RangeRight");
+                _rangeTop = value;
+                OnPropertyChanged(nameof(RangeRight));
             }
         }
 
-        private double bagWidth;
+        private double _bagWidth;
 
         public double BagWidth
         {
-            get { return bagWidth; }
+            get => _bagWidth;
             set
             {
-                bagWidth = value;
-                OnPropertyChanged("BagWidth");
+                _bagWidth = value;
+                OnPropertyChanged(nameof(BagWidth));
             }
         }
 
-        private double bagHeight;
+        private double _bagHeight;
 
         public double BagHeight
         {
-            get { return bagHeight; }
+            get => _bagHeight;
             set
             {
-                bagWidth = value;
-                OnPropertyChanged("BagHeight");
+                _bagHeight = value;
+                OnPropertyChanged(nameof(BagHeight));
             }
         }
 
-        private BitmapImage medBagImage;
+        private BitmapImage _medBagImage;
 
         public BitmapImage MedBagImage
         {
-            get { return medBagImage; }
+            get => _medBagImage;
             set
             {
-                medBagImage = value;
-                OnPropertyChanged("MedBagImage");
+                _medBagImage = value;
+                OnPropertyChanged(nameof(MedBagImage));
             }
         }
 

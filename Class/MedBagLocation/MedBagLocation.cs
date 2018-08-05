@@ -21,7 +21,7 @@ namespace His_Pos.Class.MedBagLocation
             Width = Convert.ToDouble(row["MEDBAG_WIDTH"].ToString());
             Height = Convert.ToDouble(row["MEDBAG_HEIGHT"].ToString());
         }
-        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height)
+        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height,string content)
         {
             Id = id.ToString();
             Name = name;
@@ -30,11 +30,12 @@ namespace His_Pos.Class.MedBagLocation
             Width = width;
             Height = height;
         }
-        public string Id { get; }
-        public string Name { get; }
-        public double PathX { get; }
-        public double PathY { get; }
-        public double Width { get; }
-        public double Height { get; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public double PathX { get; set; }
+        public double PathY { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public string Content { get; set; }
     }
 }

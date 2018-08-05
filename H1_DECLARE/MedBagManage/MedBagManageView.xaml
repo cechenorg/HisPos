@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:His_Pos.H1_DECLARE.MedBagManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:winForms="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms"
     d:DesignHeight="839"
     d:DesignWidth="1365"
     mc:Ignorable="d">
@@ -226,7 +227,7 @@
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     FontSize="14"
-                    Text="{Binding SelectedMedBag.BagWidth, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding SelectedMedBag.BagWidth,UpdateSourceTrigger=PropertyChanged}" />
                 <Label
                     VerticalContentAlignment="Center"
                     Content=" * "
@@ -238,7 +239,7 @@
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
                     FontSize="14"
-                    Text="{Binding SelectedMedBag.BagHeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding SelectedMedBag.BagHeight,UpdateSourceTrigger=PropertyChanged}" />
                 <Label
                     Margin="10,0,0,0"
                     VerticalContentAlignment="Center"
@@ -364,7 +365,7 @@
                     FontSize="16"
                     Foreground="Black" />
                 <CheckBox
-                    Name="Phone"
+                    Name="PatientTel"
                     Width="130"
                     Margin="20,10,0,0"
                     VerticalAlignment="Top"
@@ -376,7 +377,7 @@
                     FontSize="16"
                     Foreground="Black" />
                 <CheckBox
-                    Name="Gender"
+                    Name="PatientGender"
                     Width="130"
                     Margin="20,10,0,0"
                     VerticalAlignment="Top"
@@ -388,7 +389,7 @@
                     FontSize="16"
                     Foreground="Black" />
                 <CheckBox
-                    Name="Birth"
+                    Name="PatientBirth"
                     Width="130"
                     Margin="20,10,0,0"
                     VerticalAlignment="Top"
@@ -481,6 +482,18 @@
                     FontFamily="Segoe UI Semibold"
                     FontSize="18"
                     Foreground="Black" />
+                <CheckBox
+                    Name="MedicineList"
+                    Width="130"
+                    Margin="20,10,0,0"
+                    VerticalAlignment="Top"
+                    Background="{StaticResource Shadow}"
+                    BorderBrush="Transparent"
+                    Checked="NewLocationChecked"
+                    Content="多藥一袋藥品"
+                    FontFamily="Segoe UI Semi"
+                    FontSize="16"
+                    Foreground="Black"/>
                 <CheckBox
                     Name="MedicineId"
                     Width="130"
@@ -653,7 +666,10 @@
             <Button
                 Width="70"
                 VerticalAlignment="Center"
-                Content="儲存" />
+                Content="儲存" Click="MedBagSaveButtonClick" />
         </StackPanel>
+        <WindowsFormsHost Grid.Row="2">
+            <winForms:ReportViewer x:Name="_reportViewer" />
+        </WindowsFormsHost>
     </Grid>
 </UserControl>

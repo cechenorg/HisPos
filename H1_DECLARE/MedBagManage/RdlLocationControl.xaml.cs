@@ -22,17 +22,18 @@ namespace His_Pos.H1_DECLARE.MedBagManage
     {
         public int id;
         public string LabelContent { get; set; }
-
+        public string LabelName { get; set; }
         public Brush GridBackground
         {
             get { return LabelContent.Equals("") ? Brushes.Transparent : (Brush)FindResource("GridSelected"); }
         }
 
-        public RdlLocationControl(int locId, string name)
+        public RdlLocationControl(int locId,string content ,string name)
         {
             InitializeComponent();
             id = locId;
-            LabelContent = name;
+            LabelContent = content;
+            LabelName = name;
             DataContext = this;
         }
 
