@@ -75,5 +75,16 @@ namespace His_Pos.Service
         {
             return dateStr.PadLeft(2, '0');
         }
+        /*
+        Data:yy/mm/dd => yyy/mm/dd 
+        */
+        public static string YearFormatTransfer(string date) {
+            if (date.Split('/')[0].Length == 3)
+            {
+                return date;
+            }
+            else
+                return "0" + date;
+        }
     }
 }

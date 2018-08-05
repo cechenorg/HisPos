@@ -516,9 +516,11 @@ namespace His_Pos.PrescriptionInquire
             InquiredPrescription.Prescription.Medicines = DeclareDetails;
             if (InquiredPrescription.Prescription.CheckPrescriptionData().Equals(""))
             {
+                InquiredPrescription.Prescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(InquiredPrescription.Prescription.Customer.Birthday);
                 var declareData = new DeclareData(InquiredPrescription.Prescription);
+                declareData.DecMasId = InquiredPrescription.DecMasId;
                 var declareDb = new DeclareDb();
-                DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+                DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
                 declareDb.UpdateDeclareData(declareData, declareTrade);
                 //declareDb.InsertInventoryDb(declareData, "處方登陸");
                 m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
