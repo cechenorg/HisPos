@@ -157,7 +157,7 @@ namespace His_Pos.PrescriptionInquire
             }
         }
         private ObservableCollection<object> Medicines;
-
+        private DeclareData SimpleData;
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
             InitializeComponent();
@@ -165,6 +165,7 @@ namespace His_Pos.PrescriptionInquire
             DataContext = this;
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             InquiredPrescription = inquired;
+            SimpleData = (DeclareData)inquired.Clone();
             foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines) {
                 DeclareMedicine declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
                 DeclareDetails.Add(declareDetailClone);
@@ -334,7 +335,6 @@ namespace His_Pos.PrescriptionInquire
             TextBox t = sender as TextBox;
             if (string.IsNullOrEmpty(t.Text))
                 t.Text = "0";
-            DataChanged();
         }
         private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -540,6 +540,21 @@ namespace His_Pos.PrescriptionInquire
           
         }
 
-       
+        private void TextBox_GotFocus(object sender, EventArgs e)
+        {
+            DataChanged();
+        }
+
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
+            InquiredPrescription = (DeclareData)SimpleData.Clone();
+            DeclareDetails.Clear();
+            foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines)
+            {
+                DeclareMedicine declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
+                DeclareDetails.Add(declareDetailClone);
+            }
+            InitDataChanged();
+        }
     }
 }

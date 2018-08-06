@@ -10,7 +10,7 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.Declare
 {
-    public class DeclareData
+    public class DeclareData : ICloneable
     {
         public DeclareData(Prescription prescription)
         {
@@ -23,7 +23,22 @@ namespace His_Pos.Class.Declare
             SetCopaymentPoint();
             CountDeclareDeatailPoint();
         }
-
+        public DeclareData(DeclareData declareData)
+        {
+            Prescription = declareData.Prescription;
+            DeclareMakeUp = declareData.DeclareMakeUp;
+            DeclarePoint = declareData.DeclarePoint;
+            CopaymentPoint = declareData.CopaymentPoint;
+            TotalPoint = declareData.TotalPoint;
+            AssistProjectCopaymentPoint = declareData.AssistProjectCopaymentPoint;
+            SpecailMaterialPoint = declareData.SpecailMaterialPoint;
+            DiagnosisPoint = declareData.DiagnosisPoint;
+            DrugsPoint = declareData.DrugsPoint;
+            MedicalServiceCode = declareData.MedicalServiceCode;
+            MedicalServicePoint = declareData.MedicalServicePoint;
+            DeclareDetails = declareData.DeclareDetails;
+       
+        }
         public DeclareData(DataRow row)
         {
             DecMasId = row["HISDECMAS_ID"].ToString();
@@ -271,6 +286,10 @@ namespace His_Pos.Class.Declare
             {
                 MedicalServiceCode = "05211C";
             }
+        }
+        public object Clone()
+        {
+            return new DeclareData(this);
         }
     }
 }
