@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class.MedBagLocation
@@ -20,8 +21,10 @@ namespace His_Pos.Class.MedBagLocation
             PathY = Convert.ToDouble(row["MEDBAG_Y"].ToString());
             Width = Convert.ToDouble(row["MEDBAG_WIDTH"].ToString());
             Height = Convert.ToDouble(row["MEDBAG_HEIGHT"].ToString());
+            ActualWidth = Convert.ToDouble(row["MEDBAG_ACTUALWIDTH"].ToString());
+            ActualHeight = Convert.ToDouble(row["MEDBAG_ACTUALHEIGHT"].ToString());
         }
-        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height,string content)
+        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height,double actualWidth,double actualHeight)
         {
             Id = id.ToString();
             Name = name;
@@ -29,6 +32,8 @@ namespace His_Pos.Class.MedBagLocation
             PathY = pathY;
             Width = width;
             Height = height;
+            ActualWidth = actualWidth;
+            ActualHeight = actualHeight;
         }
         public string Id { get; set; }
         public string Name { get; set; }
@@ -36,6 +41,8 @@ namespace His_Pos.Class.MedBagLocation
         public double PathY { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
-        public string Content { get; set; }
+        public double ActualWidth { get; set; }
+        public double ActualHeight { get; set; }
+
     }
 }

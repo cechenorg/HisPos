@@ -18,6 +18,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
+using His_Pos.Properties;
 using JetBrains.Annotations;
 using CheckBox = System.Windows.Controls.CheckBox;
 using UserControl = System.Windows.Controls.UserControl;
@@ -56,18 +57,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             {
                 _medBagImgWidth = value;
                 OnPropertyChanged(nameof(MedBagImgWidth));
-            }
-        }
-
-        private double _medBagImgHeight;
-
-        public double MedBagImgHeight
-        {
-            get => _medBagImgHeight;
-            set
-            {
-                _medBagImgHeight = value;
-                OnPropertyChanged(nameof(MedBagImgHeight));
             }
         }
 
@@ -169,24 +158,9 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
-        public void SaveLocation()
+        private void SaveLocation()
         {
-            foreach (var contentControl in MedBagCanvas.Children.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl))
-            {
-                var rdlLocation = (RdlLocationControl) contentControl.Content;
-                var medBagImage = MedBagCanvas.Children.OfType<RdlLocationControl>().Where(r => r.Content is Grid).Single(r =>
-                        string.IsNullOrEmpty(r.LabelContent));
-                var width = medBagImage.Width;
-                var convert = SelectedMedBag.BagWidth / width;
-                if (!string.IsNullOrEmpty(rdlLocation.LabelContent))
-                {
-                    var pathX = convert * (double)rdlLocation.Parent.GetValue(Canvas.LeftProperty);
-                    var pathY = convert * (double)rdlLocation.Parent.GetValue(Canvas.TopProperty);
-                    var locationWidth = (double)rdlLocation.Parent.GetValue(WidthProperty) * convert;
-                    var locationHeight = (double)rdlLocation.Parent.GetValue(HeightProperty) * convert;
-                    _medBagLocations.Add(new MedBagLocation(rdlLocation.id, rdlLocation.LabelName,pathX,pathY,locationWidth,locationHeight,rdlLocation.LabelContent));
-                }
-            }
+            _selectedMedBag.SetLocationCollection(MedBagCanvas.Children);
         }
 
         private void DeleteLocation(object sender, RoutedEventArgs e)
@@ -247,7 +221,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 ReportUnitType = "cm",
                 ReportID = "cdd7925b-803a-4208-8788-8e2ae4bd14b8"
             };
-            foreach (var m in _medBagLocations)
+            foreach (var m in _selectedMedBag.MedBagLocations)
             {
                 if (m.Name != "MedicineList")
                 {
@@ -267,8 +241,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 KeepTogether = "true",
                 Top = m.PathY.ToString(CultureInfo.InvariantCulture) + "cm",
                 Left = m.PathX.ToString(CultureInfo.InvariantCulture) + "cm",
-                Height = m.Height.ToString(CultureInfo.InvariantCulture) + "cm",
-                Width = m.Width.ToString(CultureInfo.InvariantCulture) + "cm",
+                Height = m.ActualHeight.ToString(CultureInfo.InvariantCulture) + "cm",
+                Width = m.ActualWidth.ToString(CultureInfo.InvariantCulture) + "cm",
                 Paragraphs = new Paragraphs
                 {
                     Paragraph = new Paragraph
