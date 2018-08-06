@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using His_Pos.H1_DECLARE.MedBagManage;
@@ -86,7 +85,7 @@ namespace His_Pos.Class.MedBag
             }
         }
 
-        public void DeleteLocation(UIElementCollection locationCollection,string controlName)
+        public void DeleteLocation(UIElementCollection locationCollection, string controlName)
         {
             foreach (var contentControl in locationCollection.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl))
             {

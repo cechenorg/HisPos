@@ -668,8 +668,5 @@
                 VerticalAlignment="Center"
                 Content="儲存" Click="MedBagSaveButtonClick" />
         </StackPanel>
-        <WindowsFormsHost Grid.Row="2">
-            <winForms:ReportViewer x:Name="_reportViewer" />
-        </WindowsFormsHost>
     </Grid>
 </UserControl>

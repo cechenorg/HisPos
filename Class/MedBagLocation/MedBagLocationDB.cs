@@ -11,7 +11,7 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.MedBagLocation
 {
-    public class MedBagLocationDB
+    public class MedBagLocationDb
     {
         internal static void SaveLocationData(ObservableCollection<MedBagLocation> medBagLocations)
         {

@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
-using JetBrains.Annotations;
 
 namespace His_Pos.Class.MedBagLocation
 {
@@ -24,7 +16,7 @@ namespace His_Pos.Class.MedBagLocation
             ActualWidth = Convert.ToDouble(row["MEDBAG_ACTUALWIDTH"].ToString());
             ActualHeight = Convert.ToDouble(row["MEDBAG_ACTUALHEIGHT"].ToString());
         }
-        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height,double actualWidth,double actualHeight)
+        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height, double actualWidth, double actualHeight)
         {
             Id = id.ToString();
             Name = name;

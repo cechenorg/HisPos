@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,16 +10,15 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
-using His_Pos.Properties;
 using JetBrains.Annotations;
 using CheckBox = System.Windows.Controls.CheckBox;
 using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.RDLC;
 using Microsoft.Reporting.WinForms;
-using Rectangle = His_Pos.RDLC.Rectangle;
 using Report = His_Pos.RDLC.Report;
 
 namespace His_Pos.H1_DECLARE.MedBagManage
@@ -36,8 +30,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
     {
         public static MedBagManageView Instance;
         private MedBag _selectedMedBag;
-        private ObservableCollection<MedBagLocation> _medBagLocations;
-
+        private const string ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
         public MedBag SelectedMedBag
         {
             get => _selectedMedBag;
@@ -67,7 +60,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             InitializeComponent();
             Instance = this;
             DataContext = this;
-            _medBagLocations = new ObservableCollection<MedBagLocation>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -172,23 +164,16 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)
         {
             SaveLocation();
-            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
-            XmlSerializer serializer = new XmlSerializer(typeof(Report));
-            serializer.Serialize(Console.Out, CreatReportXml(), ns);
-            File.WriteAllText(@"C:\HisPos\RDLC\MedBagReport.rdlc", string.Empty);
-            Stream fs = new FileStream(@"C:\HisPos\RDLC\MedBagReport.rdlc", FileMode.OpenOrCreate,FileAccess.Write);
-            XmlWriter writer = new XmlTextWriter(fs, Encoding.Unicode);
-            serializer.Serialize(writer, CreatReportXml());
-            writer.Close();
-            _reportViewer.LocalReport.ReportPath = @"C:\HisPos\RDLC\MedBagReport.rdlc";
-            _reportViewer.RefreshReport();
-            _reportViewer.PrinterSettings.PrintToFile = true;
+            File.WriteAllText(ReportPath, string.Empty);
+            File.AppendAllText(ReportPath, SerializeObject<Report>(CreatReport()));
+            CreatePdf();
         }
 
-        private Report CreatReportXml()
+        private Report CreatReport()
         {
-            Report medBagReport = new Report
+            var medBagReport = new Report
             {
                 Xmlns = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition",
                 Rd = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner",
@@ -196,14 +181,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 {
                     ReportItems = new ReportItems(),
                     Height = SelectedMedBag.BagHeight + "cm",
-                    Style = new RDLC.Style
-                    {
-                        BackgroundImage = new BackgroundImage
-                        {
-                            Source = "External",
-                            Value = "=Parameters!ImagePath.Value"
-                        }
-                    }
+                    Style = new RDLC.Style()
                 },
                 Page = new RDLC.Page
                 {
@@ -269,5 +247,60 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             };
         }
 
+        public string SerializeObject<T>(Report report)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(report.GetType());
+
+            using (StringWriter textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, report);
+                return PrettyXml(textWriter);
+            }
+        }
+        private string PrettyXml(StringWriter writer)
+        {
+            var stringBuilder = new StringBuilder();
+            var element = XElement.Parse(writer.ToString());
+
+            var settings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true,
+                NewLineOnAttributes = true
+            };
+
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+            {
+                element.Save(xmlWriter);
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        private void CreatePdf()
+        {
+            var mimeType = string.Empty;
+            var encoding = string.Empty;
+            var extension = string.Empty;
+            var deviceInfo = "<DeviceInfo>" +
+                                "  <OutputFormat>PDF</OutputFormat>" +
+                                "  <PageWidth>"+ SelectedMedBag.BagWidth + "cm</PageWidth>" +
+                                "  <PageHeight>" + SelectedMedBag.BagHeight + "cm</PageHeight>" +
+                                "  <MarginTop>0cm</MarginTop>" +
+                                "  <MarginLeft>0cm</MarginLeft>" +
+                                "  <MarginRight>0cm</MarginRight>" +
+                                "  <MarginBottom>0cm</MarginBottom>" +
+                                "</DeviceInfo>";
+            deviceInfo = string.Format(deviceInfo, SelectedMedBag.BagWidth, SelectedMedBag.BagHeight);
+            var viewer = new ReportViewer {ProcessingMode = ProcessingMode.Local};
+            viewer.LocalReport.ReportPath = ReportPath;
+
+            var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out mimeType, out encoding, out extension, out string[] streamIds, out Warning[] warnings);
+
+            using (var fs = new FileStream("output.pdf", FileMode.Create))
+            {
+                fs.Write(bytes, 0, bytes.Length);
+            }
+        }
     }
 }
