@@ -53,11 +53,13 @@ namespace His_Pos.ProductPurchase
         }
 
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
-        public ObservableCollection<Person> UserAutoCompleteCollection;
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;
+        
+        private PurchaseControl purchaseControl = new PurchaseControl();
+        private ReturnControl returnControl = new ReturnControl();
 
         private UserControl currentControl;
 
@@ -110,65 +112,59 @@ namespace His_Pos.ProductPurchase
             InitializeComponent();
             DataContext = this;
             Instance = this;
-            //this.Loaded += UserControl1_Loaded;
-            //InitManufactory();
-            //InitUser();
-            //UpdateUi();
+            this.Loaded += UserControl1_Loaded;
+            InitManufactory();
+            UpdateUi();
             StoOrderOverview.SelectedIndex = 0;
 
-            CurrentControl = new PurchaseControl();
+            CurrentControl = purchaseControl;
+        }
+        
+
+        void UserControl1_Loaded(object sender, RoutedEventArgs e)
+        {
+            Window window = Window.GetWindow(this);
+            window.Closing += window_Closing;
         }
 
-        //private void InitUser()
-        //{
-        //    UserAutoCompleteCollection = PersonDb.GetUserCollection();
+        void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
+        {
+            if (StoreOrderData != null && IsChanged)
+            {
+                //SaveOrder();
+            }
+        }
 
-        //    ReceiveEmp.ItemsSource = UserAutoCompleteCollection;
-        //    ReceiveEmp.ItemFilter = UserFilter;
-        //}
+        private void InitManufactory()
+        {
+            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            {
+                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            }
+        }
 
-        //void UserControl1_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    Window window = Window.GetWindow(this);
-        //    window.Closing += window_Closing;
-        //}
+        public void UpdateUi()
+        {
+            StoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+        }
 
-        //void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
-        //{
-        //    if (StoreOrderData != null && IsChanged)
-        //    {
-        //        SaveOrder();
-        //    }
-        //}
+        private void ShowOrderDetail(object sender, SelectionChangedEventArgs e)
+        {
+            if (storeOrderData != null && IsChanged)
+            {
+                //SaveOrder();
+            }
 
-        //private void InitManufactory()
-        //{
-        //    foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
-        //    {
-        //        ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
-        //    }
-        //}
+            DataGrid dataGrid = sender as DataGrid;
 
-        //public void UpdateUi()
-        //{
-        //    StoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
-        //}
+            if (dataGrid.SelectedItem is null) return;
 
-        //private void ShowOrderDetail(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (storeOrderData != null && IsChanged)
-        //    {
-        //        SaveOrder();
-        //    }
+            StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
+            
 
-        //    DataGrid dataGrid = sender as DataGrid;
-
-        //    if (dataGrid.SelectedItem is null) return;
-
-        //    StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
-        //    UpdateOrderDetailData(storeOrder);
-        //    UpdateOrderDetailUi(storeOrder.Type);
-        //}
+            //UpdateOrderDetailData(storeOrder);
+            //UpdateOrderDetailUi(storeOrder.Type);
+        }
 
         //private void SaveOrder()
         //{
@@ -271,12 +267,9 @@ namespace His_Pos.ProductPurchase
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
         {
-            CurrentControl = new BackOrderControl();
+            AddNewOrderDialog addNewOrderDialog = new AddNewOrderDialog(ManufactoryAutoCompleteCollection);
 
-
-            //AddNewOrderDialog addNewOrderDialog = new AddNewOrderDialog(ManufactoryAutoCompleteCollection);
-
-            //addNewOrderDialog.ShowDialog();
+            addNewOrderDialog.ShowDialog();
 
             //if (addNewOrderDialog.ConfirmButtonClicked)
             //{
@@ -859,8 +852,6 @@ namespace His_Pos.ProductPurchase
         //            || (obj as Person).Name.Contains(searchText);
         //    }
         //}
-
-
     }
     
 }

@@ -6,18 +6,23 @@
         xmlns:local="clr-namespace:His_Pos.ProductPurchase"
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         mc:Ignorable="d"
-        Title="AddNewOrderDialog" Height="300" Width="500" WindowStartupLocation="CenterScreen">
+        Title="AddNewOrderDialog" Height="360" Width="500" WindowStartupLocation="CenterScreen">
     <Viewbox Stretch="Fill">
-        <Grid Height="300" Width="500">
+        <Grid Height="360" Width="500">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
-                <RowDefinition/>
                 <RowDefinition Height="50"/>
-                <RowDefinition/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="80"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <Label Content="選擇新增對象:" Foreground="Black" FontSize="30" Grid.Row="0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Grid Name="TargetGrid" Grid.Row="1" Margin="50,0,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <RadioButton Content="進貨" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" IsChecked="True"/>
+                <RadioButton Content="退貨" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="50,0,0,0"/>
+            </StackPanel>
+            <Label Content="選擇廠商:" Foreground="Black" FontSize="30" Grid.Row="1" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <Grid Name="TargetGrid" Grid.Row="2" Margin="50,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -42,8 +47,8 @@
                     </controls:AutoCompleteBox.ItemTemplate>
                 </controls:AutoCompleteBox>
             </Grid>
-            <Label Content="選擇新增條件:" Foreground="Black" FontSize="30" Grid.Row="2" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <Grid Name="ConditionGrid" Grid.Row="3" Margin="50,0,0,0">
+            <Label Content="選擇新增條件:" Foreground="Black" FontSize="30" Grid.Row="3" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <Grid Name="ConditionGrid" Grid.Row="4" Margin="50,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -57,7 +62,7 @@
                 <RadioButton Name="Con3" Tag="3" GroupName="condition" Grid.Row="1" Grid.Column="0" Content=" 全補至基準量" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
                 <RadioButton Name="Con4" Tag="4" GroupName="condition" Grid.Row="1" Grid.Column="1" Content=" 近期銷量較高" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
             </Grid>
-            <Button Content="確認"  Grid.Row="4" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmButtonClick"/>
+            <Button Content="確認" Grid.Row="5" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmButtonClick"/>
         </Grid>
     </Viewbox>
 </Window>

@@ -37,7 +37,7 @@
                 </StackPanel>
                 <DataGrid Name="StoOrderOverview" Grid.Row="1" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
-                           ItemsSource="{Binding StoreOrderCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                           ItemsSource="{Binding StoreOrderCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ShowOrderDetail">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="290">
                             <DataGridTemplateColumn.CellStyle>

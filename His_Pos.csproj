@@ -337,9 +337,6 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\BackOrderControl.xaml.cs">
-      <DependentUpon>BackOrderControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml.cs">
       <DependentUpon>PurchaseControl.xaml</DependentUpon>
     </Compile>
@@ -563,10 +560,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\BackOrderControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
