@@ -27,7 +27,7 @@ namespace His_Pos.Class.Declare
         public DeclareData(DataRow row)
         {
             DecMasId = row["HISDECMAS_ID"].ToString();
-             Prescription = new Prescription(row);
+            Prescription = new Prescription(row);
             DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
             CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
             TotalPoint = Convert.ToInt32(row["HISDECMAS_TOTALPOINT"].ToString());

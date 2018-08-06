@@ -526,6 +526,7 @@ namespace His_Pos.PrescriptionInquire
                 //declareDb.InsertInventoryDb(declareData, "處方登陸");
                 m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
                 m.Show();
+                InitDataChanged();
             }
             else
             {
