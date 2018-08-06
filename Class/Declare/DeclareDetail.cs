@@ -105,7 +105,7 @@ namespace His_Pos.Class.Declare
         private void SetMedicine(DeclareMedicine medicine)
         {
             MedicalId = medicine.Id;//p2
-            //Total = medicine.Amount;//p7
+            Total = medicine.Amount;//p7
             Price = double.Parse(medicine.HcPrice);//p8
         }
 

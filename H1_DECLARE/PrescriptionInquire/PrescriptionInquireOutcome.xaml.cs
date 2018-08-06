@@ -334,6 +334,7 @@ namespace His_Pos.PrescriptionInquire
             TextBox t = sender as TextBox;
             if (string.IsNullOrEmpty(t.Text))
                 t.Text = "0";
+            DataChanged();
         }
         private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -537,5 +538,7 @@ namespace His_Pos.PrescriptionInquire
             }
           
         }
+
+       
     }
 }
