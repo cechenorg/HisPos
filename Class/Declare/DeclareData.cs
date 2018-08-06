@@ -150,7 +150,8 @@ namespace His_Pos.Class.Declare
             switch (adjustCaseId)
             {
                 case "3" when treatmentCaseId == westMedNormal && medicineDays > daysLimit:
-                    throw new ArgumentException(Resources.MedicineDaysOutOfRange, "original");
+                    //throw new ArgumentException(Resources.MedicineDaysOutOfRange, "original");
+                    break;
                 case "1" when treatmentCaseId == westMedNormal && medicineDays <= daysLimit && DrugsPoint <= dayPay * medicineDays:
                     CheckDayPay(dayPay);
                     break;
@@ -161,6 +162,9 @@ namespace His_Pos.Class.Declare
 
                 case "2" :
                     SetChronicMedicalServiceCode();
+                    break;
+                default:
+                    MedicalServiceCode = "";
                     break;
             }
         }
