@@ -216,9 +216,27 @@ namespace His_Pos.PrescriptionInquire
             ButtonImportXml.IsEnabled = false;
         }
         private void InitData() {
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.GetMedicinesData(this);
-            loadingWindow.ShowDialog();
+            if (PrescriptionInquireView.Instance is null) return;
+            DivisionCollection = PrescriptionInquireView.Instance.DivisionCollection;
+            CopaymentCollection = PrescriptionInquireView.Instance.CopaymentCollection;
+            PaymentCategoryCollection = PrescriptionInquireView.Instance.PaymentCategoryCollection;
+            AdjustCaseCollection = PrescriptionInquireView.Instance.AdjustCaseCollection;
+            TreatmentCaseCollection = PrescriptionInquireView.Instance.TreatmentCaseCollection;
+            HospitalCollection = PrescriptionInquireView.Instance.HospitalCollection;
+            DeclareMedicinesData = PrescriptionInquireView.Instance.DeclareMedicinesData;
+
+            ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
+            Division.ItemsSource = DivisionCollection;
+            Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
+            CopaymentCode.ItemsSource = CopaymentCollection;
+            CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
+            PaymentCategory.ItemsSource = PaymentCategoryCollection;
+
+            PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
+            AdjustCase.ItemsSource = AdjustCaseCollection;
+            AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
+            TreatmentCase.ItemsSource = TreatmentCaseCollection;
+            TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
@@ -527,6 +545,8 @@ namespace His_Pos.PrescriptionInquire
                 m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
                 m.Show();
                 InitDataChanged();
+                PrescriptionOverview prescriptionOverview = new PrescriptionOverview(InquiredPrescription);
+                PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview);
             }
             else
             {

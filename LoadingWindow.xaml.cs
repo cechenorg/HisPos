@@ -69,6 +69,7 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("申報檔匯入...");
+                //取得最大DECMASID
                 DeclareDb declareDb = new DeclareDb();
                 XmlDocument doc = new XmlDocument();
                 doc.PreserveWhitespace = true;
@@ -349,31 +350,21 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void GetMedicinesData(PrescriptionInquireOutcome prescriptionInquireOutcome)
+        public void GetMedicinesData(PrescriptionInquireView prescriptionInquireView)
         {
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("載入處方詳細資料中...");
-                prescriptionInquireOutcome.HospitalCollection = HospitalDb.GetData();
-                prescriptionInquireOutcome.DivisionCollection = DivisionDb.GetData();
-                prescriptionInquireOutcome.CopaymentCollection = CopaymentDb.GetData();
-                prescriptionInquireOutcome.PaymentCategoryCollection = PaymentCategroyDb.GetData();
-                prescriptionInquireOutcome.AdjustCaseCollection = AdjustCaseDb.GetData();
-                prescriptionInquireOutcome.TreatmentCaseCollection = TreatmentCaseDb.GetData();
-                prescriptionInquireOutcome.DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
+                ChangeLoadingMessage("載入基本資料中...");
+                prescriptionInquireView.HospitalCollection = HospitalDb.GetData();
+                prescriptionInquireView.DivisionCollection = DivisionDb.GetData();
+                prescriptionInquireView.CopaymentCollection = CopaymentDb.GetData();
+                prescriptionInquireView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
+                prescriptionInquireView.AdjustCaseCollection = AdjustCaseDb.GetData();
+                prescriptionInquireView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
+                prescriptionInquireView.DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionInquireOutcome.ReleasePalace.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
-                    prescriptionInquireOutcome.Division.ItemsSource = prescriptionInquireOutcome.DivisionCollection;
-                    prescriptionInquireOutcome.Division.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
-                    prescriptionInquireOutcome.CopaymentCode.ItemsSource = prescriptionInquireOutcome.CopaymentCollection;
-                    prescriptionInquireOutcome.CopaymentCode.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.Copayment.FullName;
-                    prescriptionInquireOutcome.PaymentCategory.ItemsSource = prescriptionInquireOutcome.PaymentCategoryCollection;
-                    prescriptionInquireOutcome.PaymentCategory.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
-                    prescriptionInquireOutcome.AdjustCase.ItemsSource = prescriptionInquireOutcome.AdjustCaseCollection;
-                    prescriptionInquireOutcome.AdjustCase.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
-                    prescriptionInquireOutcome.TreatmentCase.ItemsSource = prescriptionInquireOutcome.TreatmentCaseCollection;
-                    prescriptionInquireOutcome.TreatmentCase.Text = prescriptionInquireOutcome.InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>

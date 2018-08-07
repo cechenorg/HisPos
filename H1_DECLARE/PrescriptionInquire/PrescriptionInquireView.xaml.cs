@@ -18,8 +18,13 @@ using System.Xml;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
+using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Division;
+using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
+using His_Pos.Class.Product;
+using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -52,16 +57,28 @@ namespace His_Pos.PrescriptionInquire
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        public ObservableCollection<TreatmentCase> TreatmentCaseCollection { get; set; }
+        public ObservableCollection<AdjustCase> AdjustCaseCollection { get; set; }
+        public ObservableCollection<PaymentCategory> PaymentCategoryCollection { get; set; }
+        public ObservableCollection<Copayment> CopaymentCollection { get; set; }
+        public ObservableCollection<Division> DivisionCollection { get; set; }
+        public ObservableCollection<Hospital> HospitalCollection { get; set; }
+        public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
+        public static PrescriptionInquireView Instance;
         private Function f = new Function();
 
         public PrescriptionInquireView()
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.GetMedicinesData(this);
+            loadingWindow.Show();
             start.SelectedDate = DateTime.Now.AddMonths(-3);
             end.SelectedDate = DateTime.Now;
             LoadAdjustCases();
-            Hospitals = HospitalDb.GetData();
+            Hospitals = HospitalCollection;
         }
 
         private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
@@ -109,7 +126,16 @@ namespace His_Pos.PrescriptionInquire
             ReleasePalace.ItemsSource = tempCollection;
             ReleasePalace.PopulateComplete();
         }
-
+        public void UpdateDataFromOutcome(PrescriptionOverview prescriptionOverview) {
+            for (int i =0;i< PrescriptionOverview.Count;i++) {
+                if (PrescriptionOverview[i].Decmas_Id == prescriptionOverview.Decmas_Id) {
+                    PrescriptionOverview[i] = prescriptionOverview;
+                    break;
+                }
+            }
+            NotifyPropertyChanged("PrescriptionOverview");
+            DataPrescription.Items.Filter = p => true;
+        }
         private void ButtonImportXml_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fdlg = new OpenFileDialog();

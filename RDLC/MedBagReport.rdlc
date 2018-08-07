@@ -17,10 +17,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Pharmacy</rd:DefaultName>
-        <Top>1.16571577303488cm</Top>
-        <Left>4.81712140012255cm</Left>
-        <Height>0.758330947423216cm</Height>
-        <Width>4.12718390012254cm</Width>
+        <Top>1.26833159812597cm</Top>
+        <Left>4.91344933363971cm</Left>
+        <Height>0.717284617386778cm</Height>
+        <Width>4.16571507352941cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -32,55 +32,25 @@
         </Style>
       </Textbox>
       <Textbox
-        Name="PatientName">
+        Name="PharmacyId">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
         <Paragraphs>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>PatientName</Value>
+                <Value>PharmacyId</Value>
                 <Style />
               </TextRun>
             </TextRuns>
             <Style />
           </Paragraph>
         </Paragraphs>
-        <rd:DefaultName>PatientName</rd:DefaultName>
-        <Top>5.24982561166059cm</Top>
-        <Left>3.6804517846201cm</Left>
-        <Height>0.491529802186362cm</Height>
-        <Width>3.18317015165441cm</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox
-        Name="EngName">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>EngName</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>EngName</rd:DefaultName>
-        <Top>7.22004945340968cm</Top>
-        <Left>3.89237323835784cm</Left>
-        <Height>0.491529802186362cm</Height>
-        <Width>3.58774747242647cm</Width>
+        <rd:DefaultName>PharmacyId</rd:DefaultName>
+        <Top>1.26833159812598cm</Top>
+        <Left>9.22894075520833cm</Left>
+        <Height>0.696761452368558cm</Height>
+        <Width>4.80147943474265cm</Width>
         <Style>
           <Border>
             <Style>None</Style>

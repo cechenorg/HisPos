@@ -164,7 +164,7 @@ namespace His_Pos.Class.Declare
                     SetChronicMedicalServiceCode();
                     break;
                 default:
-                    MedicalServiceCode = "";
+                    MedicalServiceCode = "000000";
                     break;
             }
         }
