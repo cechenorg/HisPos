@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.StoreOrder;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 {
@@ -23,6 +24,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         public ReturnControl()
         {
             InitializeComponent();
+        }
+
+        internal void SetDataContext(StoreOrder storeOrderData)
+        {
+            
         }
     }
 }

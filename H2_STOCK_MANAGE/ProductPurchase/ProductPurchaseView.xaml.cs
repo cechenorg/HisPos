@@ -61,6 +61,8 @@ namespace His_Pos.ProductPurchase
         private PurchaseControl purchaseControl = new PurchaseControl();
         private ReturnControl returnControl = new ReturnControl();
 
+        public StoreOrder StoreOrderData { get; set; }
+
         private UserControl currentControl;
 
         public UserControl CurrentControl
@@ -90,18 +92,6 @@ namespace His_Pos.ProductPurchase
         }
 
         private OrderType OrderTypeFilterCondition = OrderType.ALL;
-        private StoreOrder storeOrderData;
-        public StoreOrder StoreOrderData {
-            get
-            {
-                return storeOrderData;
-            }
-            set
-            {
-                storeOrderData = value;
-                NotifyPropertyChanged("StoreOrderData");
-            }
-        }
         private bool IsFirst = true;
         private bool IsChanged = false;
 
@@ -127,11 +117,11 @@ namespace His_Pos.ProductPurchase
             window.Closing += window_Closing;
         }
 
-        void window_Closing(object sender, global::System.ComponentModel.CancelEventArgs e)
+        void window_Closing(object sender, CancelEventArgs e)
         {
             if (StoreOrderData != null && IsChanged)
             {
-                //SaveOrder();
+                SaveOrder();
             }
         }
 
@@ -150,9 +140,9 @@ namespace His_Pos.ProductPurchase
 
         private void ShowOrderDetail(object sender, SelectionChangedEventArgs e)
         {
-            if (storeOrderData != null && IsChanged)
+            if (StoreOrderData != null && IsChanged)
             {
-                //SaveOrder();
+                SaveOrder();
             }
 
             DataGrid dataGrid = sender as DataGrid;
@@ -161,90 +151,55 @@ namespace His_Pos.ProductPurchase
 
             StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
             
+            if (storeOrder.Products is null)
+                storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
-            //UpdateOrderDetailData(storeOrder);
-            //UpdateOrderDetailUi(storeOrder.Type);
+            StoreOrderData = storeOrder;
+
+            SetCurrentControl();
         }
 
-        //private void SaveOrder()
-        //{
-        //    BackgroundWorker backgroundWorker = new BackgroundWorker();
-        //    Saving.Visibility = Visibility.Visible;
+        private void SetCurrentControl()
+        {
+            switch (StoreOrderData.Category.CategoryName)
+            {
+                case "進貨":
+                    CurrentControl = purchaseControl;
+                    purchaseControl.SetDataContext(StoreOrderData);
+                    return;
+                case "退貨":
+                    CurrentControl = returnControl;
+                    returnControl.SetDataContext(StoreOrderData);
+                    return;
+            }
+        }
 
-        //    StoreOrder saveOrder = storeOrderData.Clone() as StoreOrder;
+        private void SaveOrder()
+        {
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            Saving.Visibility = Visibility.Visible;
 
-        //    backgroundWorker.DoWork += (s, o) =>
-        //    {
-        //        StoreOrderDb.SaveOrderDetail(saveOrder);
-        //    };
+            StoreOrder saveOrder = StoreOrderData.Clone() as StoreOrder;
 
-        //    backgroundWorker.RunWorkerCompleted += (s, args) =>
-        //    {
-        //        Dispatcher.BeginInvoke(new Action(() =>
-        //        {
-        //            Saving.Visibility = Visibility.Hidden;
-        //        }));
-        //    };
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                StoreOrderDb.SaveOrderDetail(saveOrder);
+            };
 
-        //    backgroundWorker.RunWorkerAsync();
-        //}
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Saving.Visibility = Visibility.Hidden;
+                }));
+            };
 
-        //private void UpdateOrderDetailUi(OrderType type)
-        //{
-        //    AddNewProduct.IsEnabled = true;
-        //    DeleteOrder.IsEnabled = true;
-        //    ConfirmToProcess.IsEnabled = true;
-        //    Confirm.IsEnabled = true;
-        //    ReceiveEmp.IsEnabled = true;
-
-
-        //    switch (type)
-        //    {
-        //        case OrderType.PROCESSING:
-        //            Confirm.Visibility = Visibility.Visible;
-        //            ConfirmToProcess.Visibility = Visibility.Collapsed;
-        //            DeleteOrder.Visibility = Visibility.Collapsed;
-        //            OrderCategory.IsEnabled = false;
-        //            EmptySpace.Width = 400;
-        //            StoreOrderDetail.Columns[11].Visibility = Visibility.Visible;
-        //            StoreOrderDetail.Columns[12].Visibility = Visibility.Visible;
-        //            StoreOrderDetail.Columns[13].Visibility = Visibility.Visible;
-        //            StoreOrderDetail.Columns[5].Visibility = Visibility.Collapsed;
-        //            StoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
-        //            StoreOrderDetail.Columns[7].Visibility = Visibility.Collapsed;
-        //            break;
-        //        case OrderType.UNPROCESSING:
-        //            Confirm.Visibility = Visibility.Collapsed;
-        //            ConfirmToProcess.Visibility = Visibility.Visible;
-        //            DeleteOrder.Visibility = Visibility.Visible;
-        //            OrderCategory.IsEnabled = true;
-        //            EmptySpace.Width = 270;
-        //            StoreOrderDetail.Columns[11].Visibility = Visibility.Collapsed;
-        //            StoreOrderDetail.Columns[12].Visibility = Visibility.Collapsed;
-        //            StoreOrderDetail.Columns[13].Visibility = Visibility.Collapsed;
-        //            StoreOrderDetail.Columns[5].Visibility = Visibility.Visible;
-        //            StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
-        //            StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
-        //            break;
-        //    }
-        //}
+            backgroundWorker.RunWorkerAsync();
+        }
 
         //private void ClearOrderDetailData() {
         //    IsFirst = true;
         //    StoreOrderData = null;
-        //    IsChanged = false;
-        //    IsFirst = false;
-        //}
-        //private void UpdateOrderDetailData(StoreOrder storeOrder)
-        //{
-        //    IsFirst = true;
-        //    if (storeOrder.Products is null)
-        //        storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
-
-        //    StoreOrderData = storeOrder;
-
-        //    GetProductAutoComplete();
-
         //    IsChanged = false;
         //    IsFirst = false;
         //}

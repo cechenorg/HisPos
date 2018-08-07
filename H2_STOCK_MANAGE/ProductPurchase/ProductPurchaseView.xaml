@@ -9,13 +9,6 @@
              xmlns:hisPos="clr-namespace:His_Pos"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
-    <UserControl.Resources>
-        <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
-        <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
-        <hisPos:TextBoxDateConverter x:Key="TextBoxDateConverter"/>
-        <hisPos:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
-        <local:ProductPurchaseView x:Key="ProductPurchaseView"/>
-    </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.ColumnDefinitions>
@@ -87,7 +80,7 @@
                     <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Hidden"/>
                 </StackPanel>
             </Grid>
-            <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}"/>
+            <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}"/>
         </Grid>
     </Viewbox>
 </UserControl>
