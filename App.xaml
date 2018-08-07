@@ -135,7 +135,8 @@
           <Brush x:Key="LightForeGround">#B2EEEEEE</Brush>
           <Brush x:Key="ForeGround">#FF424040</Brush>
           <Brush x:Key="GridSelected">#33009DF7</Brush>
-        </ResourceDictionary>
+          <Brush x:Key="GridHalfTransBackground">#3FEEEEEE</Brush>
+          </ResourceDictionary>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

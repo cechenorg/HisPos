@@ -1,10 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using His_Pos.Class.MedBagLocation;
 using His_Pos.H1_DECLARE.MedBagManage;
 using JetBrains.Annotations;
 
@@ -12,18 +14,35 @@ namespace His_Pos.Class.MedBag
 {
     public class MedBag : INotifyPropertyChanged
     {
-        public MedBag(BitmapImage image)
+
+        public MedBag(BitmapImage image,bool mode)
         {
-            MedBagLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
+            SingleMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
+            MultiMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             MedBagImage = image;
+            Mode = mode;
         }
 
         public MedBag(DataRow dataRow)
         {
-            MedBagLocations = MedBagDb.ObservableGetLocationData();
+            SingleMedLocations = MedBagDb.ObservableGetLocationData();
+            MultiMedLocations = MedBagDb.ObservableGetLocationData();
         }
 
-        public ObservableCollection<MedBagLocation.MedBagLocation> MedBagLocations { get; set; }
+        public MedBag()
+        {
+            SingleMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
+            MultiMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
+            Id = string.Empty;
+            Name = string.Empty;
+            BagWidth = 0.0;
+            BagHeight = 0.0;
+            MedBagImage = null;
+            Mode = true;
+        }
+
+        public ObservableCollection<MedBagLocation.MedBagLocation> SingleMedLocations { get; set; }
+        public ObservableCollection<MedBagLocation.MedBagLocation> MultiMedLocations { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
 
@@ -63,6 +82,30 @@ namespace His_Pos.Class.MedBag
             }
         }
 
+        private bool _mode;
+
+        public bool Mode
+        {
+            get => _mode;
+            set
+            {
+                _mode = value;
+                OnPropertyChanged(nameof(Mode));
+            }
+        }
+
+        private bool _default;
+
+        public bool Default
+        {
+            get => _default;
+            set
+            {
+                _default = value;
+                OnPropertyChanged(nameof(Default));
+            }
+        }
+
         public void SetLocationCollection(UIElementCollection locationCollection)
         {
             foreach (var contentControl in locationCollection.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl))
@@ -80,7 +123,16 @@ namespace His_Pos.Class.MedBag
                     var locationHeight = rdlLocation.ActualHeight;
                     var actualWidth = locationWidth * convert;
                     var actualHeight = locationHeight * convert;
-                    MedBagLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
+                    switch (Mode)
+                    {
+                        case true:
+                            SingleMedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
+                            break;
+                        case false:
+                            MultiMedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
+                            break;
+                    }
+                    
                 }
             }
         }
@@ -102,7 +154,7 @@ namespace His_Pos.Class.MedBag
                     var locationHeight = rdlLocation.ActualHeight;
                     var actualWidth = locationWidth * convert;
                     var actualHeight = locationHeight * convert;
-                    MedBagLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
+                    SingleMedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
                 }
             }
         }

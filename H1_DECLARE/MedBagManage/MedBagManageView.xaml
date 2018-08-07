@@ -193,28 +193,31 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="310" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="230" />
+            <ColumnDefinition Width="935" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
-        <Button
-            Name="ImageSelector"
+        <DockPanel
             Grid.Row="0"
             Grid.Column="0"
-            Width="130"
-            Height="34"
-            Margin="20,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Click="ImageSelector_Click"
-            Content="選擇藥袋圖檔"
-            FontSize="16"
-            Foreground="White" />
+            Background="{StaticResource GridHalfTransBackground}">
+            <Button
+                Name="ImageSelector"
+                Width="130"
+                Height="34"
+                Margin="20,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Click="ImageSelector_Click"
+                Content="選擇藥袋圖檔"
+                FontSize="16"
+                Foreground="White" />
+        </DockPanel>
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
             Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" Background="{StaticResource GridHalfTransBackground}">
                 <Label
                     Margin="20,0,0,0"
                     VerticalContentAlignment="Center"
@@ -248,21 +251,113 @@
                     FontSize="14"
                     Foreground="Black" />
             </StackPanel>
-            <ListView
-                Name="MedBagFileListView"
-                Grid.Row="1"
-                Grid.Column="0" />
+            <StackPanel Orientation="Vertical">
+            </StackPanel>
+            <DataGrid
+                Name="MedBags"
+                AutoGenerateColumns="False"
+                Height="750"
+                Background="{StaticResource GridHalfTransBackground}"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                GridLinesVisibility="Horizontal">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="15" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter" />
+                        <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="Height" Value="40" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="30">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="20" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="210" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        Name="Default"
+                                        Width="18"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Source="{Binding Source, NotifyOnSourceUpdated=True}" />
+                                    <TextBox
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        FontFamily="Segoe UI Semibold"
+                                        FontSize="18"
+                                        Foreground="Black"
+                                        Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        FontFamily="Segoe UI Semi"
+                                        FontSize="14"
+                                        Foreground="Black"
+                                        Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                    />
+                                    <TextBox
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        FontFamily="Segoe UI Semi"
+                                        FontSize="14"
+                                        Foreground="Black"
+                                    />
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
         <Grid
             Name="ImgWrap"
+            MaxWidth="935"
             Grid.Row="0"
             Grid.RowSpan="3"
             Grid.Column="1"
             HorizontalAlignment="Center">
             <Image
                 Name="MedBagImg"
-                Height="850"
-                HorizontalAlignment="Center"
+                MaxWidth="935"
+                MaxHeight="850"
+                HorizontalAlignment="Left"
                 Source="{Binding SelectedMedBag.MedBagImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Stretch="Uniform" />
             <Canvas
@@ -281,6 +376,12 @@
             Grid.Column="2"
             Width="200">
             <StackPanel Width="160" Orientation="Vertical">
+                <CheckBox
+                    Content="設為預設藥袋"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black"
+                    Margin = "0,15,0,15"/>
                 <Label
                     Content="藥局"
                     FontFamily="Segoe UI Semibold"
@@ -493,7 +594,8 @@
                     Content="多藥一袋藥品"
                     FontFamily="Segoe UI Semi"
                     FontSize="16"
-                    Foreground="Black"/>
+                    Foreground="Black"
+                    Visibility="Collapsed"/>
                 <CheckBox
                     Name="MedicineId"
                     Width="130"
@@ -640,20 +742,17 @@
                     Foreground="Black" />
             </StackPanel>
         </ScrollViewer>
-        <StackPanel
+        <DockPanel
             Grid.Row="2"
             Grid.Column="0"
-            Orientation="Horizontal">
+            Background="{StaticResource GridHalfTransBackground}">
             <Button
                 Width="70"
                 Margin="15,0,15,0"
                 VerticalAlignment="Center"
-                Content="新增" />
-            <Button
-                Width="70"
-                VerticalAlignment="Center"
-                Content="刪除" />
-        </StackPanel>
+                HorizontalAlignment="Right"
+                Content="新增" Click="Button_Click" />
+        </DockPanel>
         <StackPanel
             Grid.Row="2"
             Grid.Column="2"
