@@ -184,7 +184,6 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
            var table = EmployeeDb.SaveEmployeeData(employee);
             employee.Id = table.Rows[0][0].ToString();
             EmployeeCollection.Add(employee);
-
             DataGridEmployee.SelectedIndex = count;
         }
 

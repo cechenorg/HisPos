@@ -35,8 +35,16 @@ namespace His_Pos.Class
                 NotifyPropertyChanged("Name");
             }
         }
-
-        public string FullName { get; set; }
+        private string fullName;
+        public string FullName
+        {
+            get { return fullName; }
+            set
+            {
+                fullName = value;
+                NotifyPropertyChanged("FullName");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

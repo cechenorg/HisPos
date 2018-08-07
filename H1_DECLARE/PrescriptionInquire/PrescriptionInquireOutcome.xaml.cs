@@ -157,15 +157,15 @@ namespace His_Pos.PrescriptionInquire
             }
         }
         private ObservableCollection<object> Medicines;
-        private DeclareData SimpleData;
+        private string DecMasId;
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
             InitializeComponent();
             isFirst = true;
             DataContext = this;
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
+            DecMasId = inquired.DecMasId;
             InquiredPrescription = inquired;
-            SimpleData = (DeclareData)inquired.Clone();
             foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines) {
                 DeclareMedicine declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
                 DeclareDetails.Add(declareDetailClone);
@@ -547,7 +547,16 @@ namespace His_Pos.PrescriptionInquire
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            InquiredPrescription = (DeclareData)SimpleData.Clone();
+            InquiredPrescription = PrescriptionDB.GetDeclareDataById(DecMasId);
+
+          ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
+          Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
+          CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
+          PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
+          AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
+          TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+
+
             DeclareDetails.Clear();
             foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines)
             {

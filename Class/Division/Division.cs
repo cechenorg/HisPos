@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.ComponentModel;
+using System.Data;
 using System.Xml;
 
 namespace His_Pos.Class.Division
@@ -17,5 +18,6 @@ namespace His_Pos.Class.Division
             Name = dataRow["HISDIV_NAME"].ToString();
             FullName = dataRow["HISDIV_FULLNAME"].ToString();
         }
+       
     }
 }
