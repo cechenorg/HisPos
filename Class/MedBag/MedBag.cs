@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using His_Pos.H1_DECLARE.MedBagManage;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class.MedBag
@@ -17,107 +14,96 @@ namespace His_Pos.Class.MedBag
     {
         public MedBag(BitmapImage image)
         {
-            RangeTop = 0;
-            RangeBottom = 0;
-            RangeLeft = 0;
-            RangeRight = 0;
             MedBagLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             MedBagImage = image;
         }
 
         public MedBag(DataRow dataRow)
         {
-            RangeTop = double.Parse(dataRow["RANGE_TOP"].ToString());
-            RangeBottom = double.Parse(dataRow["RANGE_BOTTOM"].ToString());
-            RangeLeft = double.Parse(dataRow["RANGE_LEFT"].ToString());
-            RangeRight = double.Parse(dataRow["RANGE_RIGHT"].ToString());
             MedBagLocations = MedBagDb.ObservableGetLocationData();
         }
 
         public ObservableCollection<MedBagLocation.MedBagLocation> MedBagLocations { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
-        private double rangeTop;
 
-        public double RangeTop
-        {
-            get { return rangeTop; }
-            set
-            {
-                rangeTop = value;
-                OnPropertyChanged("RangeTop");
-            }
-        }
-
-        private double rangeLeft;
-
-        public double RangeLeft
-        {
-            get { return rangeLeft; }
-            set
-            {
-                rangeTop = value;
-                OnPropertyChanged("RangeLeft");
-            }
-        }
-
-        private double rangeBottom;
-
-        public double RangeBottom
-        {
-            get { return rangeBottom; }
-            set
-            {
-                rangeTop = value;
-                OnPropertyChanged("RangeBottom");
-            }
-        }
-
-        private double rangeRight;
-
-        public double RangeRight
-        {
-            get { return rangeRight; }
-            set
-            {
-                rangeTop = value;
-                OnPropertyChanged("RangeRight");
-            }
-        }
-
-        private double bagWidth;
+        private double _bagWidth;
 
         public double BagWidth
         {
-            get { return bagWidth; }
+            get => _bagWidth;
             set
             {
-                bagWidth = value;
-                OnPropertyChanged("BagWidth");
+                _bagWidth = value;
+                OnPropertyChanged(nameof(BagWidth));
             }
         }
 
-        private double bagHeight;
+        private double _bagHeight;
 
         public double BagHeight
         {
-            get { return bagHeight; }
+            get => _bagHeight;
             set
             {
-                bagWidth = value;
-                OnPropertyChanged("BagHeight");
+                _bagHeight = value;
+                OnPropertyChanged(nameof(BagHeight));
             }
         }
 
-        private BitmapImage medBagImage;
+        private BitmapImage _medBagImage;
 
         public BitmapImage MedBagImage
         {
-            get { return medBagImage; }
+            get => _medBagImage;
             set
             {
-                medBagImage = value;
-                OnPropertyChanged("MedBagImage");
+                _medBagImage = value;
+                OnPropertyChanged(nameof(MedBagImage));
+            }
+        }
+
+        public void SetLocationCollection(UIElementCollection locationCollection)
+        {
+            foreach (var contentControl in locationCollection.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl))
+            {
+                var rdlLocation = (RdlLocationControl)contentControl.Content;
+                var medBagImage = locationCollection.OfType<RdlLocationControl>().Where(r => r.Content is Grid).Single(r =>
+                    string.IsNullOrEmpty(r.LabelContent));
+                var width = medBagImage.Width;
+                var convert = BagWidth / width;
+                if (!string.IsNullOrEmpty(rdlLocation.LabelContent))
+                {
+                    var pathX = convert * (double)rdlLocation.Parent.GetValue(Canvas.LeftProperty);
+                    var pathY = convert * (double)rdlLocation.Parent.GetValue(Canvas.TopProperty);
+                    var locationWidth = rdlLocation.ActualWidth;
+                    var locationHeight = rdlLocation.ActualHeight;
+                    var actualWidth = locationWidth * convert;
+                    var actualHeight = locationHeight * convert;
+                    MedBagLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
+                }
+            }
+        }
+
+        public void DeleteLocation(UIElementCollection locationCollection, string controlName)
+        {
+            foreach (var contentControl in locationCollection.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl))
+            {
+                var rdlLocation = (RdlLocationControl)contentControl.Content;
+                var medBagImage = locationCollection.OfType<RdlLocationControl>().Where(r => r.Content is Grid).Single(r =>
+                    string.IsNullOrEmpty(r.LabelContent));
+                var width = medBagImage.Width;
+                var convert = BagWidth / width;
+                if (!string.IsNullOrEmpty(rdlLocation.LabelContent))
+                {
+                    var pathX = convert * (double)rdlLocation.Parent.GetValue(Canvas.LeftProperty);
+                    var pathY = convert * (double)rdlLocation.Parent.GetValue(Canvas.TopProperty);
+                    var locationWidth = rdlLocation.ActualWidth;
+                    var locationHeight = rdlLocation.ActualHeight;
+                    var actualWidth = locationWidth * convert;
+                    var actualHeight = locationHeight * convert;
+                    MedBagLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
+                }
             }
         }
 

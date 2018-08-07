@@ -37,9 +37,9 @@ namespace His_Pos.PrescriptionDec
         private StringBuilder _pBuffer = new StringBuilder(100);
         private readonly HisApiFunction _hisApiFunction = new HisApiFunction();
         private ObservableCollection<DeclareMedicine> MedicineList { get; set; }
-        private ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
+        //private ObservableCollection<CustomerHistory> CustomerHistoryList { get; set; }
 
-        private CustomerHistory customerHistory;
+        //private CustomerHistory customerHistory;
         private List<string> _errorList = new List<string>();
 
         private Prescription _prescription = new Prescription();
@@ -198,9 +198,9 @@ namespace His_Pos.PrescriptionDec
             Debug.Assert(sender is Button button, nameof(button) + " != null");
             LoadPatentDataFromIcCard();
 
-            customerHistory = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
+            //customerHistory = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
 
-            CusHistoryMaster.ItemsSource = customerHistory.CustomerHistoryMasterCollection;
+            //CusHistoryMaster.ItemsSource = customerHistory.CustomerHistoryMasterCollection;
 
             CusHistoryMaster.SelectedIndex = 0;
 
@@ -243,8 +243,6 @@ namespace His_Pos.PrescriptionDec
                     CusHistoryDetail.Columns[3].Header = "價格";
                     break;
             }
-
-            CusHistoryDetail.ItemsSource = customerHistory.getCustomerHistoryDetails(type, customerHistoryDetailId);
         }
 
         private void Combo_DropDownOpened(object sender, EventArgs e)
@@ -271,7 +269,7 @@ namespace His_Pos.PrescriptionDec
         private void InitializeLists()
         {
             MedicineList = new ObservableCollection<DeclareMedicine>();
-            CustomerHistoryList = new ObservableCollection<CustomerHistory>();
+            //CustomerHistoryList = new ObservableCollection<CustomerHistory>();
             PrescriptionMedicines.ItemsSource = Prescription.Medicines;
         }
 

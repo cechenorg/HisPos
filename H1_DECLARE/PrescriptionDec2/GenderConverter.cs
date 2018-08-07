@@ -8,16 +8,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var Gender = (bool)value;
-            var result = Gender ? "男" : "女";
+            var gender = (bool)value;
+            var result = gender ? "男" : "女";
             return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             bool? result = null;
-            var Gender = value.ToString();
-            if (Gender.Equals("男"))
+            var gender = value.ToString();
+            if (gender.Equals("男"))
                 result = true;
             return result;
         }

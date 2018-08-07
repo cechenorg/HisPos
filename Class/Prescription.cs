@@ -53,7 +53,6 @@ namespace His_Pos.Class
         public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
         public ObservableCollection<DeclareMedicine> Medicines { get; set; }
-        public ObservableCollection<CustomerHistory.CustomerHistory> CustomerHistories { get; set; }
         public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
         public string ErrorMessage = "";
         private bool adjustCaseNull = false;

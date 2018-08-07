@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using JetBrains.Annotations;
 
 namespace His_Pos.Class.CustomerHistory
 {
-    public class CustomerHistoryMaster
+    public class CustomerHistoryMaster : INotifyPropertyChanged
     {
         public CustomerHistoryMaster(SystemType type, string date, string customerHistoryDetailId, string customerHistoryData)
         {
@@ -29,12 +33,85 @@ namespace His_Pos.Class.CustomerHistory
             }
         }
 
-        public BitmapImage TypeIcon { get; }
+        private BitmapImage typeIcon;
+
+        public BitmapImage TypeIcon
+        {
+            get { return typeIcon; }
+            set
+            {
+                typeIcon = value;
+                OnPropertyChanged("TypeIcon");
+            }
+        }
+
         public SystemType Type { get; }
-        public string Date { get; }
+        private string date;
+
+        public string Date
+        {
+            get { return date; }
+            set
+            {
+                date = value;
+                OnPropertyChanged("Date");
+            }
+        }
+
         public string CustomerHistoryDetailId { get; }
-        public string CustomerHistoryData { get; }
-        public ObservableCollection<CustomerHistoryPos> HistoryPosCollection { get; set; }
-        public ObservableCollection<CustomerHistoryHis> HistoryHisCollection { get; set; }
+        private string customerHistoryData;
+
+        public string CustomerHistoryData
+        {
+            get { return customerHistoryData; }
+            set
+            {
+                customerHistoryData = value;
+                OnPropertyChanged("CustomerHistoryData");
+            }
+        }
+
+        public ObservableCollection<CustomerHistoryDetail> HistoryCollection { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public ObservableCollection<CustomerHistoryMaster> CustomerHistoryMasterCollection { get; }
+        private DataTable CustomerHistoryDetails;
+
+        public CustomerHistoryMaster(DataTable customerHistoryMasters, DataTable customerHistoryDetails)
+        {
+            CustomerHistoryMasterCollection = new ObservableCollection<CustomerHistoryMaster>();
+
+            foreach (DataRow row in customerHistoryMasters.Rows)
+            {
+                CustomerHistoryMasterCollection.Add(new CustomerHistoryMaster((SystemType)row["TYPE"], row["DATE"].ToString(), row["HISTORY_ID"].ToString(), row["HISTORY_DATA"].ToString()));
+            }
+
+            CustomerHistoryDetails = customerHistoryDetails;
+        }
+
+        public ObservableCollection<CustomerHistoryDetail> getCustomerHistoryDetails(SystemType type, string CustomerHistoryDetailId)
+        {
+            var table = CustomerHistoryDetails.Select("SYSTEMTYPE = '" + (int)type + "' AND CUSHISTORYDETAILID = '" + CustomerHistoryDetailId + "'");
+            var customerHistoryDetailCollection = new ObservableCollection<CustomerHistoryDetail>();
+
+            foreach (var row in table)
+            {
+                if (type == SystemType.HIS)
+                    customerHistoryDetailCollection.Add(new CustomerHistoryHis(row));
+                else
+                {
+                    customerHistoryDetailCollection.Add(new CustomerHistoryPos(row));
+                }
+            }
+
+            return customerHistoryDetailCollection;
+        }
     }
 }

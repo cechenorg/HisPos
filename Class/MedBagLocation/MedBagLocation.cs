@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
 
 namespace His_Pos.Class.MedBagLocation
 {
@@ -20,8 +13,10 @@ namespace His_Pos.Class.MedBagLocation
             PathY = Convert.ToDouble(row["MEDBAG_Y"].ToString());
             Width = Convert.ToDouble(row["MEDBAG_WIDTH"].ToString());
             Height = Convert.ToDouble(row["MEDBAG_HEIGHT"].ToString());
+            ActualWidth = Convert.ToDouble(row["MEDBAG_ACTUALWIDTH"].ToString());
+            ActualHeight = Convert.ToDouble(row["MEDBAG_ACTUALHEIGHT"].ToString());
         }
-        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height)
+        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height, double actualWidth, double actualHeight)
         {
             Id = id.ToString();
             Name = name;
@@ -29,12 +24,17 @@ namespace His_Pos.Class.MedBagLocation
             PathY = pathY;
             Width = width;
             Height = height;
+            ActualWidth = actualWidth;
+            ActualHeight = actualHeight;
         }
-        public string Id { get; }
-        public string Name { get; }
-        public double PathX { get; }
-        public double PathY { get; }
-        public double Width { get; }
-        public double Height { get; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public double PathX { get; set; }
+        public double PathY { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public double ActualWidth { get; set; }
+        public double ActualHeight { get; set; }
+
     }
 }
