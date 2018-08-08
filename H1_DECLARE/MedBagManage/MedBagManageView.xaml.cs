@@ -9,7 +9,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Linq;
@@ -17,16 +16,13 @@ using System.Xml.Serialization;
 using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
-using His_Pos.Interface;
 using JetBrains.Annotations;
 using CheckBox = System.Windows.Controls.CheckBox;
 using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.RDLC;
 using Microsoft.Reporting.WinForms;
-using ComboBox = System.Windows.Controls.ComboBox;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using DataGrid = System.Windows.Controls.DataGrid;
 using Report = His_Pos.RDLC.Report;
-using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.H1_DECLARE.MedBagManage
 {
@@ -37,7 +33,17 @@ namespace His_Pos.H1_DECLARE.MedBagManage
     {
         public static MedBagManageView Instance;
         private MedBag _selectedMedBag;
-        public ObservableCollection<MedBag> MedBagCollection = new ObservableCollection<MedBag>();
+        private ObservableCollection<MedBag> _medBagCollection;
+        public ObservableCollection<MedBag> MedBagCollection
+        {
+            get => _medBagCollection;
+            set
+            {
+                _medBagCollection = value;
+                OnPropertyChanged(nameof(MedBagCollection));
+            }
+        }
+
         private const string ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
         public MedBag SelectedMedBag
         {
@@ -67,12 +73,11 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         {
             InitializeComponent();
             SelectedMedBag = new MedBag();
+            MedBagCollection = new ObservableCollection<MedBag>();
             Instance = this;
             DataContext = this;
         }
 
-        private readonly bool _isFirst = true;
-        private bool _isChanged;
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -115,11 +120,17 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             MedBagCanvas.Height = MedBagImg.Height;
         }
 
-        private void NewLocationChecked(object sender, RoutedEventArgs e)
+        private void NewLocationClick(object sender, RoutedEventArgs e)
         {
-            var locationName = (sender as CheckBox)?.Content.ToString();
-            var controlName = (sender as CheckBox)?.Name;
-            Instance.NewLocation(null, locationName, controlName);
+            var c = sender as CheckBox;
+            if (c.IsChecked == true)
+            {
+                var locationName = (sender as CheckBox)?.Content.ToString();
+                var controlName = (sender as CheckBox)?.Name;
+                Instance.NewLocation(null, locationName, controlName);
+            }
+            else
+                MedBagCanvas.Children.Remove(MedBagCanvas.Children.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl).Single(r => (r.Content as RdlLocationControl).LabelContent.Equals(c.Content)));
         }
 
         public void NewLocation(string locid = null, string content = null, string controlName = null, double height = 0, double width = 0, double top = 0, double left = 0)
@@ -167,20 +178,17 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             MedBagDb.SaveMedBagData(SelectedMedBag);
         }
 
-        private void DeleteLocation(object sender, RoutedEventArgs e)
-        {
-            var checkBox = sender as CheckBox;
-            MedBagCanvas.Children.Remove(MedBagCanvas.Children.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl).Single(r => (r.Content as RdlLocationControl).LabelContent.Equals(checkBox.Content)));
-        }
-
         private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)
         {
+            if(MedBagCollection[MedBags.SelectedIndex] == null)
+                return;
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
             File.WriteAllText(ReportPath, string.Empty);
             File.AppendAllText(ReportPath, SerializeObject<Report>(CreatReport()));
             CreatePdf();
             SaveMedBagData();
+            MedBagCollection[MedBags.SelectedIndex] = SelectedMedBag;
             var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
             m.Show();
         }
@@ -216,9 +224,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             foreach (var m in _selectedMedBag.SingleMedLocations)
             {
                 if (m.Name != "MedicineList")
-                {
                     medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m));
-                }
             }
             return medBagReport;
         }
@@ -260,11 +266,9 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 }
             };
         }
-
         public string SerializeObject<T>(Report report)
         {
             XmlSerializer xmlSerializer = new XmlSerializer(report.GetType());
-
             using (StringWriter textWriter = new StringWriter())
             {
                 xmlSerializer.Serialize(textWriter, report);
@@ -290,7 +294,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
             return stringBuilder.ToString();
         }
-
         private void CreatePdf()
         {
             var mimeType = string.Empty;
@@ -310,51 +313,39 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             viewer.LocalReport.ReportPath = ReportPath;
 
             var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out mimeType, out encoding, out extension, out string[] streamIds, out Warning[] warnings);
-
             using (var fs = new FileStream("output.pdf", FileMode.Create))
             {
                 fs.Write(bytes, 0, bytes.Length);
             }
         }
 
+        private void NewMedBagButtonClick(object sender, RoutedEventArgs e)
+        {
+            SelectedMedBag = new MedBag();
+            MedBagCollection.Add(SelectedMedBag);
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            SelectedMedBag.Default = true;
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            SelectedMedBag.Default = false;
+        }
+
+        private void MedBags_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            SelectedMedBag = ((DataGrid) sender).SelectedItem as MedBag;
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             SelectedMedBag = new MedBag();
-
-        }
-
-        private void DataGridRow_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            var selectedItem = (sender as DataGridRow).Item;
-
-            if (selectedItem is IDeletable)
-            {
-                if (MedBagCollection.Contains(selectedItem))
-                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
-                MedBags.SelectedItem = selectedItem;
+            if (MedBagCollection[MedBags.SelectedIndex] == null)
                 return;
-            }
-            MedBags.SelectedIndex = MedBagCollection.Count;
-        }
-
-        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
-        {
-            var leaveItem = (sender as DataGridRow).Item;
-
-            if (leaveItem is IDeletable) (leaveItem as IDeletable).Source = string.Empty;
-        }
-
-        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            MedBagCollection[MedBags.SelectedIndex] = new MedBag();
-            SetChanged();
-            MedBagCollection.RemoveAt(MedBags.SelectedIndex);
-        }
-
-        private void SetChanged()
-        {
-            if (_isFirst) return;
-            _isChanged = true;
+            MedBagCollection[MedBags.SelectedIndex] = SelectedMedBag;
         }
     }
 }
