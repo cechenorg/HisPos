@@ -80,7 +80,7 @@
                     <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Hidden"/>
                 </StackPanel>
             </Grid>
-            <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridDarkerBackGround}"/>
+            <ContentControl Grid.Column="1" Margin="0,10,10,10" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
     </Viewbox>
 </UserControl>

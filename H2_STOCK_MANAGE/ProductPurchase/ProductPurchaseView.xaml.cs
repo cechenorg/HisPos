@@ -53,8 +53,10 @@ namespace His_Pos.ProductPurchase
         }
 
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
+
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
+
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;
         

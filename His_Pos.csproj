@@ -337,6 +337,12 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
+      <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml.cs">
+      <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml.cs">
       <DependentUpon>PurchaseControl.xaml</DependentUpon>
     </Compile>
@@ -560,6 +566,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

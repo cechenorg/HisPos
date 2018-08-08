@@ -1,8 +1,10 @@
 ﻿using His_Pos.Class;
 using His_Pos.Class.Manufactory;
+using His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,87 +22,83 @@ namespace His_Pos.ProductPurchase
     /// <summary>
     /// AddNewOrderDialog.xaml 的互動邏輯
     /// </summary>
-    public partial class AddNewOrderDialog : Window
+    public partial class AddNewOrderDialog : Window, INotifyPropertyChanged
     {
+        private PurchaseTypeControl purchaseTypeControl;
+        private ReturnTypeControl returnTypeControl;
+
+        private UserControl currentControl;
+
+        public UserControl CurrentControl
+        {
+            get
+            {
+                return currentControl;
+            }
+            set
+            {
+                currentControl = value;
+                NotifyPropertyChanged("CurrentControl");
+            }
+        }
+
         public AddOrderType AddOrderType;
         public Manufactory Manufactory;
-        ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
+
         public bool ConfirmButtonClicked = false;
         public AddNewOrderDialog( ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
         {
             InitializeComponent();
+            DataContext = this;
 
-            ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
-            ManufactoryAuto.ItemsSource = ManufactoryAutoCompleteCollection;
-            ManufactoryAuto.ItemFilter = ManufactoryFilter;
+            purchaseTypeControl = new PurchaseTypeControl(manufactoryAutoCompleteCollection);
+            returnTypeControl = new ReturnTypeControl(manufactoryAutoCompleteCollection);
+
+            CurrentControl = purchaseTypeControl;
         }
         private void ConfirmButtonClick(object sender, RoutedEventArgs e)
         {
-            List<RadioButton> radioButtons = TargetGrid.Children.OfType<RadioButton>().ToList();
-            int taget = Int16.Parse(radioButtons.Single(r => r.GroupName == "target" && r.IsChecked == true).Tag.ToString());
+            //List<RadioButton> radioButtons = TargetGrid.Children.OfType<RadioButton>().ToList();
+            //int taget = Int16.Parse(radioButtons.Single(r => r.GroupName == "target" && r.IsChecked == true).Tag.ToString());
 
-            if (taget == 5 && Manufactory is null)
-            {
-                MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR);
-                messageWindow.ShowDialog();
-                return;
-            }
+            //if (taget == 5 && Manufactory is null)
+            //{
+            //    MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR);
+            //    messageWindow.ShowDialog();
+            //    return;
+            //}
 
-            radioButtons = ConditionGrid.Children.OfType<RadioButton>().ToList();
-            int condition = Int16.Parse(radioButtons.Single(r => r.GroupName == "condition" && r.IsChecked == true).Tag.ToString());
+            //radioButtons = ConditionGrid.Children.OfType<RadioButton>().ToList();
+            //int condition = Int16.Parse(radioButtons.Single(r => r.GroupName == "condition" && r.IsChecked == true).Tag.ToString());
 
-            AddOrderType = (AddOrderType) (taget * condition);
+            //AddOrderType = (AddOrderType) (taget * condition);
 
             ConfirmButtonClicked = true;
             this.Close();
         }
 
-        public AutoCompleteFilterPredicate<object> ManufactoryFilter
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
         {
-            get
+            if (PropertyChanged != null)
             {
-                return (searchText, obj) =>
-                    ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
-                                                               || (obj as Manufactory).Name.Contains(searchText);
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
 
-        private void RadioButton_TargetOnChecked(object sender, RoutedEventArgs e)
+        private void NewOrderType_Click(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
 
-            if (radioButton is null || Con1 is null) return;
-
-            switch (radioButton.Tag)
+            switch(radioButton.Tag.ToString())
             {
-                case "2":
-                    Con1.IsEnabled = false;
-                    Con2.IsEnabled = true;
-                    Con3.IsEnabled = true;
-                    Con4.IsEnabled = true;
-                    Con2.IsChecked = true;
+                case "P":
+                    CurrentControl = purchaseTypeControl;
                     break;
-                case "5":
-                    Con1.IsEnabled = true;
-                    Con2.IsEnabled = true;
-                    Con3.IsEnabled = true;
-                    Con4.IsEnabled = true;
+                case "R":
+                    CurrentControl = returnTypeControl;
                     break;
             }
-        }
-
-        private void ManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
-        {
-            AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
-
-            if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
-
-            Manufactory = autoCompleteBox.SelectedItem as Manufactory;
-        }
-
-        private void ManufactoryAuto_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            TargetManufactory.IsChecked = true;
         }
     }
 }
