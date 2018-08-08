@@ -69,9 +69,10 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("申報檔匯入...");
-                //取得最大DECMASID
+                ObservableCollection<DeclareData> declareDataCollection = new ObservableCollection<DeclareData>();
                 DeclareDb declareDb = new DeclareDb();
                 XmlDocument doc = new XmlDocument();
+                int maxDecMasId = declareDb.GetMaxDecMasId();
                 doc.PreserveWhitespace = true;
                 doc.Load(filename);
                 XmlNodeList tweets = doc.GetElementsByTagName("ddata");
@@ -80,9 +81,12 @@ namespace His_Pos
                     XmlDocument xDoc = new XmlDocument();
                     xDoc.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
                     DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0]);
+                    declareData.DecMasId = maxDecMasId.ToString();
+                    maxDecMasId++;
                     declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
-                    declareDb.InsertDb(declareData);
+                    declareDataCollection.Add(declareData);
                 }
+                declareDb.InsertDb(declareData);
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>
