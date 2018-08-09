@@ -10,7 +10,6 @@
     d:DesignWidth="1365"
     mc:Ignorable="d">
     <UserControl.Resources>
-
         <!--  MoveThumb Template  -->
         <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:RdlLocationMoveThumb}">
             <Rectangle Fill="Transparent" />
@@ -352,7 +351,7 @@
             <Canvas
                 Name="MedBagCanvas"
                 MaxHeight="850"
-                HorizontalAlignment="Center">
+                HorizontalAlignment="Left">
                 <local:RdlLocationControl
                     x:Name="MedRangeLocationControl"
                     Width="100"
@@ -738,11 +737,19 @@
             Grid.Column="0"
             Background="{StaticResource GridHalfTransBackground}">
             <Button
+                Name="AddMedBag"
+                Width="70"
+                Margin="15,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Content="新增" Click="NewMedBagButtonClick" />
+            <Button
+                Name="DeleteMedBag"
                 Width="70"
                 Margin="15,0,15,0"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
-                Content="新增" Click="NewMedBagButtonClick" />
+                Content="刪除" Click="NewMedBagButtonClick" />
         </DockPanel>
         <StackPanel
             Grid.Row="2"

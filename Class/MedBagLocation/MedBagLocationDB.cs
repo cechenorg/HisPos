@@ -32,6 +32,18 @@ namespace His_Pos.Class.MedBagLocation
             }
         }
 
+        internal static ObservableCollection<MedBag.MedBag> ObservableGetLocationData()
+        {
+            ObservableCollection<MedBag.MedBag> medBagCollection = new ObservableCollection<MedBag.MedBag>();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[GetMedBagLocationData]");
+            foreach (DataRow row in table.Rows)
+            {
+                medBagCollection.Add(new MedBag.MedBag(row));
+            }
+            return medBagCollection;
+        }
+
         internal static void UpdateLocationName(string locId, string name)
         {
         }
