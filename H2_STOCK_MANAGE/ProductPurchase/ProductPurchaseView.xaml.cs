@@ -257,65 +257,30 @@ namespace His_Pos.ProductPurchase
             }
         }
 
-        //private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
-        //{
-        //    var selectedItem = (sender as DataGridRow).Item;
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
 
-        //    if (selectedItem is IDeletable)
-        //    {
-        //        if (StoreOrderData.Products.Contains(selectedItem)) {
-        //            (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
-        //        }
+            OrderTypeFilterCondition = (OrderType)Int16.Parse(radioButton.Tag.ToString());
 
-        //        StoreOrderDetail.SelectedItem = selectedItem;
-        //        return;
-        //    }
+            if (StoOrderOverview is null) return;
+            StoOrderOverview.Items.Filter = OrderTypeFilter;
 
-        //    StoreOrderDetail.SelectedIndex = StoreOrderData.Products.Count;
-        //}
+            if (StoOrderOverview.Items.Count == 0)
+            {
+                //ClearOrderDetailData();
+            }
 
-        //private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
-        //{
-        //    var leaveItem = (sender as DataGridRow).Item;
+            StoOrderOverview.SelectedIndex = 0;
+        }
+        private bool OrderTypeFilter(object item)
+        {
+            if (OrderTypeFilterCondition == OrderType.ALL) return true;
 
-        //    if (leaveItem is IDeletable)
-        //    {
-        //        (leaveItem as IDeletable).Source = string.Empty;
-        //    }
-        //}
-
-        //private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        //{
-        //    RadioButton radioButton = sender as RadioButton;
-
-        //    OrderTypeFilterCondition = (OrderType)Int16.Parse(radioButton.Tag.ToString());
-
-        //    if (StoOrderOverview is null) return;
-        //    StoOrderOverview.Items.Filter = OrderTypeFilter;
-
-        //    if (StoOrderOverview.Items.Count == 0)
-        //    {
-        //        ClearOrderDetailData();
-
-        //        OrderCategory.IsEnabled = false;
-        //        AddNewProduct.IsEnabled = false;
-        //        DeleteOrder.IsEnabled = false;
-        //        ConfirmToProcess.IsEnabled = false;
-        //        Confirm.IsEnabled = false;
-        //        ReceiveEmp.IsEnabled = false;
-
-        //    }
-
-        //    StoOrderOverview.SelectedIndex = 0;
-        //}
-        //private bool OrderTypeFilter(object item)
-        //{
-        //    if (OrderTypeFilterCondition == OrderType.ALL) return true;
-
-        //    if (((StoreOrder)item).Type == OrderTypeFilterCondition)
-        //        return true;
-        //    return false;
-        //}
+            if (((StoreOrder)item).Type == OrderTypeFilterCondition)
+                return true;
+            return false;
+        }
 
         //public AutoCompleteFilterPredicate<object> ProductFilter
         //{
@@ -326,6 +291,7 @@ namespace His_Pos.ProductPurchase
         //            || (obj as Product).ChiName.ToLower().Contains(searchText.ToLower()) || (obj as Product).EngName.ToLower().Contains(searchText.ToLower());
         //    }
         //}
+
         //private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
         //{
         //    var productAuto = sender as AutoCompleteBox;
@@ -362,6 +328,7 @@ namespace His_Pos.ProductPurchase
         //    }
         //    storeOrderData.TotalPrice = Math.Round(count, MidpointRounding.AwayFromZero).ToString();
         //}
+
         //private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         //{
         //    var productAuto = sender as AutoCompleteBox;
@@ -383,6 +350,7 @@ namespace His_Pos.ProductPurchase
         //    if (IsFirst == true) return;
         //    IsChanged = true;
         //}
+
         //private void SetIsChanged(object sender, EventArgs e)
         //{
         //    SetChanged();
@@ -404,6 +372,7 @@ namespace His_Pos.ProductPurchase
         //    else
         //        StoOrderOverview.SelectedIndex = 0;
         //}
+
         //private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
         //{
         //    int oldIndex = storeOrderCollection.IndexOf(storeOrderData);
@@ -425,6 +394,7 @@ namespace His_Pos.ProductPurchase
         //    StoOrderOverview.ScrollIntoView(storeOrderData);
         //    UpdateOrderDetailUi(OrderType.PROCESSING);
         //}
+
         //private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         //{
         //    if (StoreOrderData != null && IsChanged)
@@ -446,7 +416,6 @@ namespace His_Pos.ProductPurchase
         //    return true;
         //}
 
-
         //private void DeleteOrder_Click(object sender, RoutedEventArgs e)
         //{
         //    if (StoreOrderData == null) return;
@@ -458,6 +427,7 @@ namespace His_Pos.ProductPurchase
         //    else
         //        StoOrderOverview.SelectedIndex = 0;
         //}
+
         //private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         //{
         //    SetChanged();

@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.Class;
 using His_Pos.Class.StoreOrder;
+using His_Pos.Interface;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 {
@@ -93,6 +94,34 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
                     break;
+            }
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is IDeletable)
+            {
+                if (StoreOrderData.Products.Contains(selectedItem))
+                {
+                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+                }
+
+                StoreOrderDetail.SelectedItem = selectedItem;
+                return;
+            }
+
+            StoreOrderDetail.SelectedIndex = StoreOrderData.Products.Count;
+        }
+
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var leaveItem = (sender as DataGridRow).Item;
+
+            if (leaveItem is IDeletable)
+            {
+                (leaveItem as IDeletable).Source = string.Empty;
             }
         }
     }
