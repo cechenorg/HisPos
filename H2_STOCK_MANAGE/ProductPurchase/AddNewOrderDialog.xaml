@@ -13,11 +13,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Name="RadioStack" Orientation="Horizontal" HorizontalAlignment="Center">
             <RadioButton Tag="P" Content="進貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" IsChecked="True" Click="NewOrderType_Click" />
             <RadioButton Tag="R" Content="退貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="50,0,0,0" Click="NewOrderType_Click"/>
         </StackPanel>
         <ContentControl Grid.Row="1" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Content="確認" Grid.Row="5" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmButtonClick"/>
+        <Button Content="確認" Grid.Row="2" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmButtonClick"/>
     </Grid>
 </Window>

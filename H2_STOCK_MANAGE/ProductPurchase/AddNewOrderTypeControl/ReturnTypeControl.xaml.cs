@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
@@ -22,16 +23,32 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
     /// </summary>
     public partial class ReturnTypeControl : UserControl
     {
-        private ObservableCollection<Manufactory> manufactoryAutoCompleteCollection;
-
-        public ReturnTypeControl()
-        {
-            InitializeComponent();
-        }
+        public Manufactory SelectedManufactory { get; set; }
+        private ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection { get; }
 
         public ReturnTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
         {
-            this.manufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
+            InitializeComponent();
+            ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
+        }
+
+        internal AddOrderType GetOrderType()
+        {
+            return AddOrderType.ERROR;
+        }
+
+        private void ManufactoryAuto_OnDropDownClosing(object sender, RoutedPropertyChangingEventArgs<bool> e)
+        {
+            AutoCompleteBox autoCompleteBox = sender as AutoCompleteBox;
+
+            if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
+
+            SelectedManufactory = autoCompleteBox.SelectedItem as Manufactory;
+        }
+
+        private void ManufactoryAuto_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            TargetManufactory.IsChecked = true;
         }
     }
 }

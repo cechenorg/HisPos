@@ -23,12 +23,12 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <RadioButton Tag="2" GroupName="target" Grid.Row="0" Grid.Column="0" Content=" 所有廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
-            <RadioButton Name="TargetManufactory" Tag="5" GroupName="target" Grid.Row="1" Grid.Column="0" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
-            <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="300" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
+            <RadioButton Name="AllManufactory" Tag="2" GroupName="target" Grid.Row="0" Grid.Column="0" Content=" 所有廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" Checked="RadioButton_TargetOnChecked" IsChecked="True"/>
+            <RadioButton Name="TargetManufactory" Tag="5" GroupName="target" Grid.Row="1" Grid.Column="0" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" Checked="RadioButton_TargetOnChecked"/>
+            <controls:AutoCompleteBox Width="300" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" Margin="-130,0,0,0"
                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Grid.Row="1" Grid.Column="1"
-                                              >
+                                              DropDownClosing="ManufactoryAuto_OnDropDownClosing" GotFocus="ManufactoryAuto_OnGotFocus" ItemsSource="{Binding ManufactoryAutoCompleteCollection}">
                 <controls:AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

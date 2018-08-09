@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
@@ -22,16 +23,16 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
     /// </summary>
     public partial class PurchaseTypeControl : UserControl
     {
-        private ObservableCollection<Manufactory> manufactoryAutoCompleteCollection;
+        public Manufactory SelectedManufactory { get; set; }
 
-        public PurchaseTypeControl()
-        {
-            InitializeComponent();
-        }
+        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection { get; }
 
         public PurchaseTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
         {
-            this.manufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
+            InitializeComponent();
+            DataContext = this;
+
+            ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
         }
 
         private void RadioButton_TargetOnChecked(object sender, RoutedEventArgs e)
@@ -64,7 +65,25 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
 
             if (autoCompleteBox is null || autoCompleteBox.SelectedItem is null) return;
 
-            Manufactory = autoCompleteBox.SelectedItem as Manufactory;
+            SelectedManufactory = autoCompleteBox.SelectedItem as Manufactory;
+        }
+
+        internal AddOrderType GetOrderType()
+        {
+            List<RadioButton> radioButtons = TargetGrid.Children.OfType<RadioButton>().ToList();
+            int taget = Int16.Parse(radioButtons.Single(r => r.GroupName == "target" && r.IsChecked == true).Tag.ToString());
+
+            if (taget == 5 && SelectedManufactory is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return AddOrderType.ERROR;
+            }
+
+            radioButtons = ConditionGrid.Children.OfType<RadioButton>().ToList();
+            int condition = Int16.Parse(radioButtons.Single(r => r.GroupName == "condition" && r.IsChecked == true).Tag.ToString());
+
+            return (AddOrderType)(taget * condition);
         }
 
         private void ManufactoryAuto_OnGotFocus(object sender, RoutedEventArgs e)

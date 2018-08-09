@@ -13,11 +13,11 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-            <RadioButton Name="TargetManufactory" Tag="5" GroupName="target" Grid.Row="1" Grid.Column="0" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
+            <RadioButton Name="TargetManufactory"  Tag="5" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
             <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="300" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" Margin="10,0,0,0"
-                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" Grid.Row="1" Grid.Column="1"
-                                              >
+                                              BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" ItemsSource="{Binding ManufactoryAutoCompleteCollection}"
+                                              DropDownClosing="ManufactoryAuto_OnDropDownClosing" GotFocus="ManufactoryAuto_OnGotFocus">
                 <controls:AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

@@ -66,7 +66,8 @@ namespace His_Pos.Class
         ADDALLGOODSALES = 8,
         ADDBYMANUFACTORYBELOWSAFEAMOUNT = 10,
         ADDBYMANUFACTORYTOBASICAMOUNT = 15,
-        ADDBYMANUFACTORYGOODSALES = 20
+        ADDBYMANUFACTORYGOODSALES = 20,
+        ERROR = 100
     }
     public enum DataSource
     {

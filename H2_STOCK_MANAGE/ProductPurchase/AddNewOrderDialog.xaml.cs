@@ -43,7 +43,7 @@ namespace His_Pos.ProductPurchase
         }
 
         public AddOrderType AddOrderType;
-        public Manufactory Manufactory;
+        public Manufactory SelectedManufactory;
 
         public bool ConfirmButtonClicked = false;
         public AddNewOrderDialog( ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
@@ -58,20 +58,21 @@ namespace His_Pos.ProductPurchase
         }
         private void ConfirmButtonClick(object sender, RoutedEventArgs e)
         {
-            //List<RadioButton> radioButtons = TargetGrid.Children.OfType<RadioButton>().ToList();
-            //int taget = Int16.Parse(radioButtons.Single(r => r.GroupName == "target" && r.IsChecked == true).Tag.ToString());
+            RadioButton radioButton = RadioStack.Children.OfType<RadioButton>().Single(r => (bool) r.IsChecked);
 
-            //if (taget == 5 && Manufactory is null)
-            //{
-            //    MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR);
-            //    messageWindow.ShowDialog();
-            //    return;
-            //}
+            switch (radioButton.Tag.ToString())
+            {
+                case "P":
+                    AddOrderType = purchaseTypeControl.GetOrderType();
+                    SelectedManufactory = purchaseTypeControl.SelectedManufactory;
+                    break;
+                case "R":
+                    AddOrderType = returnTypeControl.GetOrderType();
+                    SelectedManufactory = returnTypeControl.SelectedManufactory;
+                    break;
+            }
 
-            //radioButtons = ConditionGrid.Children.OfType<RadioButton>().ToList();
-            //int condition = Int16.Parse(radioButtons.Single(r => r.GroupName == "condition" && r.IsChecked == true).Tag.ToString());
-
-            //AddOrderType = (AddOrderType) (taget * condition);
+            if (AddOrderType == AddOrderType.ERROR) return;
 
             ConfirmButtonClicked = true;
             this.Close();

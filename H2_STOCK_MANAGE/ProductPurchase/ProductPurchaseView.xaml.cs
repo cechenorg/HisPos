@@ -228,33 +228,33 @@ namespace His_Pos.ProductPurchase
 
             addNewOrderDialog.ShowDialog();
 
-            //if (addNewOrderDialog.ConfirmButtonClicked)
-            //{
-            //    switch (addNewOrderDialog.AddOrderType)
-            //    {
-            //        case AddOrderType.ADDALLBELOWSAFEAMOUNT:
-            //            AddBasicOrSafe(StoreOrderProductType.SAFE);
-            //            break;
-            //        case AddOrderType.ADDBYMANUFACTORY:
-            //            AddNewOrderByUm(addNewOrderDialog.Manufactory);
-            //            break;
-            //        case AddOrderType.ADDALLTOBASICAMOUNT:
-            //            AddBasicOrSafe(StoreOrderProductType.BASIC);
-            //            break;
-            //        case AddOrderType.ADDALLGOODSALES:
-            //            AddGoodSales();
-            //            break;
-            //        case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
-            //            AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.Manufactory);
-            //            break;
-            //        case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
-            //            AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.Manufactory);
-            //            break;
-            //        case AddOrderType.ADDBYMANUFACTORYGOODSALES:
-            //            AddGoodSales(addNewOrderDialog.Manufactory);
-            //            break;
-            //    }
-            //}
+            if (addNewOrderDialog.ConfirmButtonClicked)
+            {
+                switch (addNewOrderDialog.AddOrderType)
+                {
+                    case AddOrderType.ADDALLBELOWSAFEAMOUNT:
+                        AddBasicOrSafe(StoreOrderProductType.SAFE);
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORY:
+                        AddNewOrderByUm(addNewOrderDialog.SelectedManufactory);
+                        break;
+                    case AddOrderType.ADDALLTOBASICAMOUNT:
+                        AddBasicOrSafe(StoreOrderProductType.BASIC);
+                        break;
+                    case AddOrderType.ADDALLGOODSALES:
+                        AddGoodSales();
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
+                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.SelectedManufactory);
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
+                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.SelectedManufactory);
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYGOODSALES:
+                        AddGoodSales(addNewOrderDialog.SelectedManufactory);
+                        break;
+                }
+            }
         }
 
         //private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
