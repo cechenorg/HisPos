@@ -188,7 +188,7 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="90" />
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
@@ -197,7 +197,7 @@
             <ColumnDefinition Width="935" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
-        <DockPanel
+        <StackPanel
             Grid.Row="0"
             Grid.Column="0"
             Background="{StaticResource GridHalfTransBackground}">
@@ -212,7 +212,26 @@
                 Content="選擇藥袋圖檔"
                 FontSize="16"
                 Foreground="White" />
-        </DockPanel>
+            <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                <RadioButton 
+                    Name ="Single"
+                    Margin="40,0,0,0"
+                    Content="一藥一袋" 
+                    FontSize="16" 
+                    FontFamily="Segoe UI Semibold"
+                    IsChecked="True"
+                    VerticalContentAlignment="Center"
+                    Checked="MedBagMode_Checked"/>
+                <RadioButton 
+                    Name ="Multi"
+                    Margin="40,0,0,0" 
+                    Content="多藥一袋" 
+                    FontSize="16" 
+                    FontFamily="Segoe UI Semibold"
+                    VerticalContentAlignment="Center"
+                    Checked="MedBagMode_Checked"/>
+            </StackPanel>
+        </StackPanel>
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
@@ -759,7 +778,7 @@
                 Width="70"
                 Margin="20,0,20,0"
                 VerticalAlignment="Center"
-                Content="清空" Click="Button_Click"/>
+                Content="清空" Click="CleanButtonClick"/>
             <Button
                 Width="70"
                 VerticalAlignment="Center"

@@ -21,7 +21,9 @@ using CheckBox = System.Windows.Controls.CheckBox;
 using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.RDLC;
 using Microsoft.Reporting.WinForms;
+using Button = System.Windows.Controls.Button;
 using DataGrid = System.Windows.Controls.DataGrid;
+using RadioButton = System.Windows.Controls.RadioButton;
 using Report = His_Pos.RDLC.Report;
 
 namespace His_Pos.H1_DECLARE.MedBagManage
@@ -32,15 +34,26 @@ namespace His_Pos.H1_DECLARE.MedBagManage
     public partial class MedBagManageView : UserControl, INotifyPropertyChanged
     {
         public static MedBagManageView Instance;
+        private MedBagMode _mode = MedBagMode.SINGLE;
         private MedBag _selectedMedBag;
-        private ObservableCollection<MedBag> _medBagCollection;
-        public ObservableCollection<MedBag> MedBagCollection
+        private ObservableCollection<MedBag> _medBagCollectionMulti;
+        public ObservableCollection<MedBag> MedBagCollectionMulti
         {
-            get => _medBagCollection;
+            get => _medBagCollectionMulti;
             set
             {
-                _medBagCollection = value;
-                OnPropertyChanged(nameof(MedBagCollection));
+                _medBagCollectionMulti = value;
+                OnPropertyChanged(nameof(MedBagCollectionMulti));
+            }
+        }
+        private ObservableCollection<MedBag> _medBagCollectionSingle;
+        public ObservableCollection<MedBag> MedBagCollectionSingle
+        {
+            get => _medBagCollectionSingle;
+            set
+            {
+                _medBagCollectionSingle = value;
+                OnPropertyChanged(nameof(MedBagCollectionSingle));
             }
         }
 
@@ -84,10 +97,9 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         public MedBagManageView()
         {
             InitializeComponent();
-            SelectedMedBag = new MedBag();
-            MedBagCollection = new ObservableCollection<MedBag>();
             Instance = this;
             DataContext = this;
+            MedBags.ItemsSource = MedBagCollectionSingle;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -221,7 +233,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)
         {
-            if(MedBagCollection[MedBags.SelectedIndex] == null)
+            if(MedBagCollectionSingle[MedBags.SelectedIndex] == null)
                 return;
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
@@ -229,7 +241,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             File.AppendAllText(ReportPath, SerializeObject<Report>(CreatReport()));
             CreatePdf();
             SaveMedBagData();
-            MedBagCollection[MedBags.SelectedIndex] = SelectedMedBag;
+            MedBagCollectionSingle[MedBags.SelectedIndex] = SelectedMedBag;
             var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
             m.Show();
         }
@@ -262,11 +274,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 ReportUnitType = "cm",
                 ReportID = "cdd7925b-803a-4208-8788-8e2ae4bd14b8"
             };
-            foreach (var m in _selectedMedBag.SingleMedLocations)
-            {
-                if (m.Name != "MedicineList")
-                    medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m));
-            }
+            SetReportItem(medBagReport,
+                SelectedMedBag.Mode == MedBagMode.SINGLE ? SelectedMedBag.SingleMedLocations : SelectedMedBag.MultiMedLocations);
             return medBagReport;
         }
 
@@ -362,20 +371,29 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void NewMedBagButtonClick(object sender, RoutedEventArgs e)
         {
-            System.Windows.Controls.Button b = sender as System.Windows.Controls.Button;
-            if (b.Name.Contains("Add"))
+            if (sender is Button b && b.Name.Contains("Add"))
             {
                 SelectedMedBag = new MedBag();
-                MedBagCollection.Add(SelectedMedBag);
+                MedBagCollectionSingle.Add(SelectedMedBag);
+                MedBagCollectionMulti.Add(SelectedMedBag);
             }
             else
             {
                 if (CheckMedBagCollectionEmpty())
                     return;
                 int i = MedBags.SelectedIndex;
-                if(i > 0)
-                    MedBags.SelectedItem = MedBagCollection[i - 1];
-                MedBagCollection.Remove(MedBagCollection[i]);
+                if (_mode == MedBagMode.SINGLE)
+                {
+                    if (i > 0)
+                        MedBags.SelectedItem = MedBagCollectionSingle[i - 1];
+                    MedBagCollectionSingle.Remove(MedBagCollectionSingle[i]);
+                }
+                else
+                {
+                    if (i > 0)
+                        MedBags.SelectedItem = MedBagCollectionMulti[i - 1];
+                    MedBagCollectionMulti.Remove(MedBagCollectionMulti[i]);
+                }
             }
         }
 
@@ -398,27 +416,70 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             SelectedMedBag = ((DataGrid) sender).SelectedItem as MedBag;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CleanButtonClick(object sender, RoutedEventArgs e)
         {
             SelectedMedBag = new MedBag();
-            if (MedBagCollection.Count == 0)
-                return;
-            if (MedBagCollection[MedBags.SelectedIndex] == null)
-                return;
-            MedBagCollection[MedBags.SelectedIndex] = SelectedMedBag;
+            CleanMedBagCheckMode(_mode == MedBagMode.SINGLE ? MedBagCollectionSingle : MedBagCollectionMulti);
         }
 
         private bool CheckMedBagCollectionEmpty()
         {
-            MessageWindow m = new MessageWindow("未新增藥袋",MessageType.WARNING);
+            var m = new MessageWindow("未新增藥袋",MessageType.WARNING);
             m.SetLabelFontSize(16);
             m.SetLabelContentAlignment(System.Windows.HorizontalAlignment.Center);
-            if (MedBagCollection.Count == 0)
+            if (MedBagCollectionSingle.Count == 0)
             {
                 m.Show();
                 return true;
             }
             return false;
+        }
+
+        private void MedBagMode_Checked(object sender, RoutedEventArgs e)
+        {
+            if (SelectedMedBag == null)
+            {
+                MedBagCollectionSingle = new ObservableCollection<MedBag>();
+                MedBagCollectionMulti = new ObservableCollection<MedBag>();
+                SelectedMedBag = new MedBag();
+            }
+            if (sender is RadioButton r)
+            {
+                _mode = r.Name.Equals("Single") ? MedBagMode.SINGLE : MedBagMode.MULTI;
+                SelectedMedBag.Mode = _mode;
+            }
+            if (MedBags != null)
+            {
+                if (_mode == MedBagMode.SINGLE)
+                {
+                    MedBags.ItemsSource = MedBagCollectionSingle;
+                    if (MedBagCollectionSingle.Count > 0)
+                        MedBags.SelectedItem = MedBagCollectionSingle[0];
+                }
+                else
+                {
+                    MedBags.ItemsSource = MedBagCollectionMulti;
+                    if (MedBagCollectionMulti.Count > 0)
+                        MedBags.SelectedItem = MedBagCollectionMulti[0];
+                }
+            }
+        }
+        private void SetReportItem(Report medBagReport, ObservableCollection<MedBagLocation> locations)
+        {
+            foreach (var m in locations)
+            {
+                if (m.Name != "MedicineList")
+                    medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m));
+            }
+        }
+
+        private void CleanMedBagCheckMode(ObservableCollection<MedBag> medBags)
+        {
+            if (medBags.Count == 0)
+                return;
+            if (medBags[MedBags.SelectedIndex] == null)
+                return;
+            medBags[MedBags.SelectedIndex] = SelectedMedBag;
         }
     }
 }

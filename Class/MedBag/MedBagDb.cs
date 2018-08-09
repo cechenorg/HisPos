@@ -54,10 +54,10 @@ namespace His_Pos.Class.MedBag
             dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[SavaMedBag]", parameters);
             switch (medBag.Mode)
             {
-                case true:
+                case MedBagMode.SINGLE:
                     MedBagLocationDb.SaveLocationData(medBag.SingleMedLocations);
                     break;
-                case false:
+                case MedBagMode.MULTI:
                     MedBagLocationDb.SaveLocationData(medBag.MultiMedLocations);
                     break;
             }

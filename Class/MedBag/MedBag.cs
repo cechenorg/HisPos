@@ -15,7 +15,7 @@ namespace His_Pos.Class.MedBag
     public class MedBag : INotifyPropertyChanged
     {
 
-        public MedBag(BitmapImage image,bool mode)
+        public MedBag(BitmapImage image,MedBagMode mode)
         {
             SingleMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             MultiMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
@@ -38,7 +38,7 @@ namespace His_Pos.Class.MedBag
             BagWidth = 0.0;
             BagHeight = 0.0;
             MedBagImage = null;
-            Mode = true;
+            Mode = MedBagMode.SINGLE;
         }
 
         public ObservableCollection<MedBagLocation.MedBagLocation> SingleMedLocations { get; set; }
@@ -82,9 +82,9 @@ namespace His_Pos.Class.MedBag
             }
         }
 
-        private bool _mode;
+        private MedBagMode _mode;
 
-        public bool Mode
+        public MedBagMode Mode
         {
             get => _mode;
             set
@@ -125,10 +125,10 @@ namespace His_Pos.Class.MedBag
                     var actualHeight = locationHeight * convert;
                     switch (Mode)
                     {
-                        case true:
+                        case MedBagMode.SINGLE:
                             SingleMedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
                             break;
-                        case false:
+                        case MedBagMode.MULTI:
                             MultiMedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
                             break;
                     }
