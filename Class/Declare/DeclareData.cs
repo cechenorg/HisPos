@@ -53,6 +53,7 @@ namespace His_Pos.Class.Declare
                 DeclareDetails.Add(new DeclareDetail(pdata));
             }
         }
+        
         public string DecMasId { get; set; }
         public Prescription Prescription { get; set; }
         public ObservableCollection<DeclareDetail> DeclareDetails { get; set; } = new ObservableCollection<DeclareDetail>();

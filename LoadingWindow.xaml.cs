@@ -86,7 +86,7 @@ namespace His_Pos
                     declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
                     declareDataCollection.Add(declareData);
                 }
-                declareDb.InsertDb(declareData);
+                declareDb.ImportDeclareData(declareDataCollection);
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

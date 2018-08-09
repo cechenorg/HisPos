@@ -64,14 +64,19 @@ namespace His_Pos.Class.Declare
          */
         public void ImportDeclareData(ObservableCollection<DeclareData> declareDataCollection)
         {
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+
             var declareMasterTable = SetDeclareMasterTable();
-            var pDataTable = SetPDataTable();//設定PData datatable columns
+            var pDataTable = SetImportPDataTable();//設定PData datatable columns
             foreach (DeclareData declaredata in declareDataCollection) {
                 AddDeclareMaster(declaredata,declareMasterTable);
-                AddPData(declaredata, pDataTable);//加入PData sqlparameters
+                AddImportPData(declaredata, pDataTable);//加入PData sqlparameters
             }
-           
-        }
+            parameters.Add(new SqlParameter("DeclareMasterTable", declareMasterTable));
+            parameters.Add(new SqlParameter("DETAIL", pDataTable));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[ImportDeclareMaster]", parameters);
+    }
 
         /*
          * 藥品扣庫
@@ -243,33 +248,46 @@ namespace His_Pos.Class.Declare
         }
         private DataTable SetDeclareMasterTable() {
             var declareMasterTable = new DataTable();
-            var columnsDictionary = new Dictionary<string, Type> {
-                { "DecMasId", typeof(string)},
-                 { "d1", typeof(string)},{ "d2",typeof(int)},
-                { "d3", typeof(int)}, { "d4",typeof(string)},
-                { "d5",typeof(string)}, { "d6",typeof(int)},
-                { "d7",typeof(string)},{ "d8",typeof(string)},
-                { "d9",typeof(string)},{ "d10",typeof(string)},
-                { "d11",typeof(string)},{ "d12",typeof(string)},
-                { "d13",typeof(string)},
-                { "d14",typeof(string)}, { "d15",typeof(string)},
-                { "d16",typeof(int)}, { "d17",typeof(int)},
-                { "d18",typeof(int)}, { "d19",typeof(int)},
-                { "d20",typeof(int)}, { "d21",typeof(string)},
-                { "d22",typeof(string)}, { "d23",typeof(string)},
-                { "d24",typeof(string)},{ "d25",typeof(string)},
-                { "d26",typeof(string)}, { "d30",typeof(string)},
-                 { "d28",typeof(string)}, { "d29",typeof(string)},
-                { "d30",typeof(int)},{ "d31",typeof(int)},
-                { "d32",typeof(int)}, { "d33",typeof(int)},
-                { "d35",typeof(int)},{ "d36",typeof(int)},
-                { "d37",typeof(int)}, { "d38",typeof(int)},
-                 { "d43",typeof(string)}, { "XML",typeof(SqlDbType)}
-            };
-            foreach (var col in columnsDictionary)
-            {
-                declareMasterTable.Columns.Add(col.Key, col.Value);
-            }
+
+            declareMasterTable.Columns.Add("DecMasId", typeof(string));
+            declareMasterTable.Columns.Add("D1", typeof(string));
+            declareMasterTable.Columns.Add("D4", typeof(string));
+            declareMasterTable.Columns.Add("D5", typeof(string));
+            declareMasterTable.Columns.Add("D6", typeof(string));
+            declareMasterTable.Columns.Add("D7", typeof(string));
+            declareMasterTable.Columns.Add("D8", typeof(string));
+            declareMasterTable.Columns.Add("D9", typeof(string));
+            declareMasterTable.Columns.Add("D10", typeof(string));
+            declareMasterTable.Columns.Add("D11", typeof(string));
+            declareMasterTable.Columns.Add("D12", typeof(string));
+            declareMasterTable.Columns.Add("D13", typeof(string));
+            declareMasterTable.Columns.Add("CUS_ID", typeof(string));
+            declareMasterTable.Columns.Add("D14", typeof(string));
+            declareMasterTable.Columns.Add("D15", typeof(string));
+            declareMasterTable.Columns.Add("D16", typeof(int));
+            declareMasterTable.Columns.Add("D17", typeof(int));
+            declareMasterTable.Columns.Add("D18", typeof(int));
+            declareMasterTable.Columns.Add("D19", typeof(int));
+            declareMasterTable.Columns.Add("D21", typeof(string));
+            declareMasterTable.Columns.Add("D22", typeof(string));
+            declareMasterTable.Columns.Add("D23", typeof(string));
+            declareMasterTable.Columns.Add("D24", typeof(string));
+            declareMasterTable.Columns.Add("D25", typeof(string));
+            declareMasterTable.Columns.Add("D26", typeof(string));
+            declareMasterTable.Columns.Add("D27", typeof(string));
+            declareMasterTable.Columns.Add("D28", typeof(string));
+            declareMasterTable.Columns.Add("D29", typeof(string));
+            declareMasterTable.Columns.Add("D30", typeof(int));
+            declareMasterTable.Columns.Add("D31", typeof(int));
+            declareMasterTable.Columns.Add("D32", typeof(int));
+            declareMasterTable.Columns.Add("D33", typeof(int));
+            declareMasterTable.Columns.Add("D35", typeof(int));
+            declareMasterTable.Columns.Add("D36", typeof(int));
+            declareMasterTable.Columns.Add("D37", typeof(string));
+            declareMasterTable.Columns.Add("D38", typeof(int));
+            declareMasterTable.Columns.Add("D43", typeof(string));
+            declareMasterTable.Columns.Add("XML", typeof(string));
+           
             return declareMasterTable;
         }
         private void AddDeclareMaster(DeclareData declareData, DataTable declareMaster)
@@ -284,40 +302,50 @@ namespace His_Pos.Class.Declare
                     d9 = declareData.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
             }
             var row = declareMaster.NewRow();
-            var tagsDictionary = new Dictionary<string, string>
-            {
-                { "DecMasId", declareData.DecMasId},
-                 { "d1",declareData.Prescription.Treatment.AdjustCase.Id},{ "d2",string.Empty},
-                { "d3",declareData.Prescription.Customer.IcNumber}, { "d4",CheckXmlDbNullValue(declareData.DeclareMakeUp)},
-                { "d5",CheckXmlDbNullValue(declareData.Prescription.Treatment.PaymentCategory.Id)}, { "d6",DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth))},
-                { "d7",declareData.Prescription.Customer.IcCard.MedicalNumber},{ "d8",d8},
-                { "d9",d8},{ "d10",d9},
-                { "d11",string.Empty},{ "d12",string.Empty},
-                { "d13",CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id)},
-                { "d14",CheckXmlDbNullValue(DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate))}, { "d15",declareData.Prescription.Treatment.Copayment.Id},
-                { "d16",declareData.DeclarePoint.ToString()}, { "d17",declareData.Prescription.Treatment.Copayment.Point.ToString()},
-                { "d18",declareData.TotalPoint.ToString()}, { "d19",CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString())},
-                { "d20",declareData.Prescription.Customer.Name}, { "d21",declareData.Prescription.Treatment.MedicalInfo.Hospital.Id},
-                { "d22",declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id}, { "d23",DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate)},
-                { "d24",declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id},{ "d25",declareData.Prescription.Treatment.MedicalPersonId},
-                { "d26",CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id)}, { "d30",CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicineDays)},
-                 { "d28",string.Empty}, { "d29",string.Empty},
-                { "d30",CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicineDays)},{ "d31",CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString())},
-                { "d32",CheckXmlDbNullValue(declareData.DiagnosisPoint.ToString())}, { "d33",CheckXmlDbNullValue(declareData.DrugsPoint.ToString())},
-                { "d35",d35},{ "d36",d35},
-                { "d37",declareData.MedicalServiceCode}, { "d38",declareData.MedicalServicePoint.ToString()},
-                 { "d43",""}, { "XML",CreateToXml(declareData).InnerXml.ToString() }
-            };
-            foreach (var tag in tagsDictionary)
-            {
-                switch (tag.Key)
-                {
 
-                    default:
-                        CheckEmptyDataRow(declareMaster, tag.Value, ref row, tag.Key);
-                        break;
-                }
-            }
+            row["DecMasId"] = declareData.DecMasId;
+            row["D1"] = declareData.Prescription.Treatment.AdjustCase.Id;
+            row["D4"] = CheckXmlDbNullValue(declareData.DeclareMakeUp);
+            row["D5"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.PaymentCategory.Id);
+            row["D6"] = DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth));
+            row["D7"] = declareData.Prescription.Customer.IcCard.MedicalNumber;
+            row["D8"] = d8;
+            row["D9"] = d9;
+            row["CUS_ID"] = declareData.Prescription.Customer.Id;
+            row["D11"] = string.Empty;
+            row["D12"] = string.Empty;
+            row["D13"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id);
+            row["D14"] = CheckXmlDbNullValue(DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate));
+            row["D15"] = declareData.Prescription.Treatment.Copayment.Id;
+            row["D16"] = declareData.DeclarePoint.ToString();
+            row["D17"] = declareData.Prescription.Treatment.Copayment.Point.ToString();
+            row["D18"] = declareData.TotalPoint.ToString();
+            row["D19"] = CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString());
+            row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;
+            row["D22"] = declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
+            row["D23"] = DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate);
+            row["D24"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id;
+            row["D25"] = declareData.Prescription.Treatment.MedicalPersonId;
+            row["D26"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id);
+            row["D27"] = string.Empty;
+            row["D28"] = string.Empty;
+            row["D29"] = string.Empty;
+            row["D30"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicineDays);
+            row["D31"] = CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString());
+            row["D32"] = CheckXmlDbNullValue(declareData.DiagnosisPoint.ToString());
+            row["D33"] = CheckXmlDbNullValue(declareData.DrugsPoint.ToString());
+            if(String.IsNullOrEmpty(d35))
+                row["D35"] = DBNull.Value;
+            else
+                row["D35"] = d35;
+            if (String.IsNullOrEmpty(d36))
+                row["D36"] = DBNull.Value;
+            else
+                row["D36"] = d36;
+            row["D37"] = declareData.MedicalServiceCode;
+            row["D38"] = declareData.MedicalServicePoint.ToString();
+            row["D43"] = "";
+            row["XML"] = CreateToXml(declareData).InnerXml.ToString();
             declareMaster.Rows.Add(row);
         }
     
@@ -338,7 +366,23 @@ namespace His_Pos.Class.Declare
             }
             return pDataTable;
         }
-     
+        private DataTable SetImportPDataTable()
+        {
+            var pDataTable = new DataTable();
+            var columnsDictionary = new Dictionary<string, Type>
+            {
+                {"DecMasId", typeof(string)},{"P10", typeof(int)}, {"P1", typeof(string)},{"P2", typeof(string)},
+                {"P7", typeof(double)},{"P8", typeof(double)},{"P9",typeof(int)},
+                {"P3",typeof(double)},{"P4",typeof(string)},{"P5",typeof(string)},
+                {"P6",typeof(string)},{"P11",typeof(string)},{"P12",typeof(string)},
+                {"P13",typeof(string)},{"PAY_BY_YOURSELF",typeof(string)}
+            };
+            foreach (var col in columnsDictionary)
+            {
+                pDataTable.Columns.Add(col.Key, col.Value);
+            }
+            return pDataTable;
+        }
         private void AddPData(DeclareData declareData, DataTable pDataTable)
         {
             for (var i = 0; i < declareData.DeclareDetails.Count; i++)
@@ -377,7 +421,44 @@ namespace His_Pos.Class.Declare
             }
             AddMedicalServiceCostPData(declareData, pDataTable);
         }
+        private void AddImportPData(DeclareData declareData, DataTable pDataTable)
+        {
+            for (var i = 0; i < declareData.DeclareDetails.Count; i++)
+            {
+                var row = pDataTable.NewRow();
+                var detail = declareData.DeclareDetails[i];
+                detail.Usage = declareData.Prescription.Medicines == null ? detail.Usage : declareData.Prescription.Medicines[i].UsageName;
+                var paySelf = declareData.Prescription.Medicines == null ? "0" : declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
+                var tagsDictionary = new Dictionary<string, string>
+                {
+                   {"DecMasId", declareData.DecMasId},{"P1", detail.MedicalOrder}, {"P2", detail.MedicalId},
+                    {"P3", function.SetStrFormat(detail.Dosage,"{0:0000.00}")}, {"P4", detail.Usage},
+                    {"P5", detail.Position},{"P6",function.ToInvCulture(detail.Percent)},
+                    {"P7",function.SetStrFormat(detail.Total,"{0:00000.0}")},{"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},
+                    {"P9",function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point,0,MidpointRounding.AwayFromZero))),"{0:D8}")},{"P10",detail.Sequence.ToString()},
+                    {"P11",detail.Days.ToString()},{"PAY_BY_YOURSELF",paySelf}
+                };
+                foreach (var tag in tagsDictionary)
+                {
+                    switch (tag.Key)
+                    {
+                        case "P10":
+                            row[tag.Key] = Convert.ToInt32(tag.Value);
+                            break;
 
+                        case "PAY_BY_YOURSELF":
+                            row[tag.Key] = tag.Value;
+                            break;
+
+                        default:
+                            CheckEmptyDataRow(pDataTable, tag.Value, ref row, tag.Key);
+                            break;
+                    }
+                }
+                pDataTable.Rows.Add(row);
+            }
+            AddMedicalServiceCostPData(declareData, pDataTable);
+        }
         /*
          * 加入藥事服務費之PData
          */
@@ -766,7 +847,7 @@ namespace His_Pos.Class.Declare
 
         private string CheckXmlDbNullValue(string value)
         {
-            if (value != string.Empty || value != "0")
+            if (value != string.Empty || value != "0" || value != null)
                 return value;
             return string.Empty;
         }

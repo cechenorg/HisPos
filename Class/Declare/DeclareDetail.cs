@@ -51,9 +51,9 @@ namespace His_Pos.Class.Declare
             Dosage = xml.SelectSingleNode("p3") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p3").InnerText);
             Usage = xml.SelectSingleNode("p4") == null ? null : xml.SelectSingleNode("p4").InnerText;
             Position = xml.SelectSingleNode("p5") == null ? null : xml.SelectSingleNode("p5").InnerText;
-            Percent = xml.SelectSingleNode("p6") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p6").InnerText); 
-            Total = xml.SelectSingleNode("p7") == null ?  0 : Convert.ToDouble(xml.SelectSingleNode("p7").InnerText);
-            Price = xml.SelectSingleNode("p8") == null ?  0 : Convert.ToDouble(xml.SelectSingleNode("p8").InnerText);
+            Percent = xml.SelectSingleNode("p6") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p6").InnerText);
+            Total = xml.SelectSingleNode("p7") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p7").InnerText);
+            Price = xml.SelectSingleNode("p8") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p8").InnerText);
             Point = xml.SelectSingleNode("p9") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p9").InnerText);
             Sequence = xml.SelectSingleNode("p10") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("p10").InnerText);
             Days = xml.SelectSingleNode("p11") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("p11").InnerText);
@@ -77,6 +77,7 @@ namespace His_Pos.Class.Declare
             EndDate = declareDetail.EndDate;
             Form = declareDetail.Form;
         }
+       
         public string MedicalOrder { get; set; }//p1
         public string MedicalId { get; set; }//p2
         public double Dosage { get; set; }//p3
