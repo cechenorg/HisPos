@@ -29,7 +29,7 @@ namespace His_Pos.Class.MedBag
             MultiMedLocations = MedBagDb.ObservableGetLocationData();
         }
 
-        public MedBag()
+        public MedBag(MedBagMode mode)
         {
             SingleMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             MultiMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
@@ -38,7 +38,7 @@ namespace His_Pos.Class.MedBag
             BagWidth = 0.0;
             BagHeight = 0.0;
             MedBagImage = null;
-            Mode = MedBagMode.SINGLE;
+            Mode = mode;
         }
 
         public ObservableCollection<MedBagLocation.MedBagLocation> SingleMedLocations { get; set; }
