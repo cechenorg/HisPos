@@ -65,7 +65,8 @@ namespace His_Pos
         //}
         public void ImportXmlFile(PrescriptionInquireView prescriptionInquireView,string filename)
         {
-           
+            backgroundWorker.WorkerReportsProgress = true;
+
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("申報檔匯入...");
@@ -76,6 +77,10 @@ namespace His_Pos
                 doc.PreserveWhitespace = true;
                 doc.Load(filename);
                 XmlNodeList tweets = doc.GetElementsByTagName("ddata");
+
+                double totalDecCount = tweets.Count;
+                double currentDecCount = 1;
+
                 foreach (XmlNode node in tweets)
                 {
                     XmlDocument xDoc = new XmlDocument();
@@ -85,8 +90,17 @@ namespace His_Pos
                     maxDecMasId++;
                     declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
                     declareDataCollection.Add(declareData);
+
+                    backgroundWorker.ReportProgress((int)((currentDecCount / totalDecCount) * 100));
+
+                    currentDecCount++;
                 }
                 declareDb.ImportDeclareData(declareDataCollection);
+            };
+
+            backgroundWorker.ProgressChanged += (s, e) =>
+            {
+                ChangeLoadingMessage("申報檔匯入... " + e.ProgressPercentage.ToString() + "%");
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

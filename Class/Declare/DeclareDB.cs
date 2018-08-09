@@ -496,16 +496,32 @@ namespace His_Pos.Class.Declare
         private void SetMedicalServiceCostDataRow(DataRow pData, DeclareData declareData, DeclareDetail detail)
         {
             var declarecount = declareData.DeclareDetails.Count + 1;//藥事服務醫令序
-            var tagsDictionary = new Dictionary<string, object>
+            if (String.IsNullOrEmpty(declareData.DecMasId))
             {
+                var tagsDictionary = new Dictionary<string, object>{
                 {"P1",detail.MedicalOrder},{"P2",detail.MedicalId},
                 {"P6",function.ToInvCulture(detail.Percent)},{"P7",function.SetStrFormat(detail.Total,"{0:00000.0}")},
                 {"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},{"P9",function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point,0,MidpointRounding.AwayFromZero))),"{0:D8}")},
                 {"P10",function.SetStrFormatInt(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
             };
-            foreach (var tag in tagsDictionary)
-            {
-                pData[tag.Key] = tag.Value;
+                foreach (var tag in tagsDictionary)
+                {
+                    pData[tag.Key] = tag.Value;
+                }
+            }
+            else {
+                var tagsDictionary = new Dictionary<string, object>{
+                {"DecMasId",declareData.DecMasId},
+                {"P1",detail.MedicalOrder},{"P2",detail.MedicalId},
+                {"P6",function.ToInvCulture(detail.Percent)},{"P7",function.SetStrFormat(detail.Total,"{0:00000.0}")},
+                {"P8",function.SetStrFormat(detail.Price,"{0:0000000.00}")},{"P9",function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point,0,MidpointRounding.AwayFromZero))),"{0:D8}")},
+                {"P10",function.SetStrFormatInt(declarecount,"{0:D3}")},{"P12",detail.StartDate},{"P13",detail.EndDate}
+            };
+                foreach (var tag in tagsDictionary)
+                {
+                    pData[tag.Key] = tag.Value;
+                }
+
             }
         }
 
