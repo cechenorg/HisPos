@@ -74,9 +74,6 @@ namespace His_Pos
                 //ChangeLoadingMessage("取得商品資料...");
                 //MainWindow.OtcDataTable = OTCDb.GetOtcData();
 
-                ChangeLoadingMessage("取得廠商資料...");
-                MainWindow.ManufactoryTable = ManufactoryDb.GetManufactoryData();
-
                 if (FunctionDb.CheckYearlyHoliday())
                 {
                     ChangeLoadingMessage("更新假日資料...");
@@ -107,6 +104,34 @@ namespace His_Pos
                 {
                     //productPurchaseView.UpdateUi();
                     productPurchaseView.StoOrderOverview.SelectedIndex = 0;
+                }));
+            };
+
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        internal void GetProductPurchaseData(ProductPurchaseView productPurchaseView)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得廠商資料...");
+                ObservableCollection<Manufactory> tempManufactories = ManufactoryDb.GetManufactoryData();
+                
+                ChangeLoadingMessage("取得商品資料...");
+
+
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    productPurchaseView.ManufactoryAutoCompleteCollection = tempManufactories;
+
+
                 }));
             };
 

@@ -19,10 +19,19 @@ namespace His_Pos.Class.Manufactory
             parameters.Add(new SqlParameter("MAN_ID", id));
             return dd.ExecuteProc("[HIS_POS_DB].[GET].[MANBYID]", parameters); 
     }
-        public static DataTable GetManufactoryData()
+        public static ObservableCollection<Manufactory> GetManufactoryData()
         {
+            ObservableCollection<Manufactory> collection = new ObservableCollection<Manufactory>();
+
             var dd = new DbConnection(Settings.Default.SQL_global);
-            return dd.ExecuteProc("[HIS_POS_DB].[GET].[MANUFACTORY]");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetManufactory]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new Manufactory(row));
+            }
+
+            return collection;
         }
         internal static void UpdateProductManufactory(string productId, ManufactoryChanged manufactoryChanged)
         {

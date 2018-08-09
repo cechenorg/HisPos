@@ -52,7 +52,7 @@ namespace His_Pos.ProductPurchase
             }
         }
 
-        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection = new ObservableCollection<Manufactory>();
+        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
 
         public ObservableCollection<object> Products;
         public ObservableCollection<object> ProductAutoCompleteCollection;
@@ -105,11 +105,15 @@ namespace His_Pos.ProductPurchase
             DataContext = this;
             Instance = this;
             this.Loaded += UserControl1_Loaded;
-            InitManufactory();
             UpdateUi();
             StoOrderOverview.SelectedIndex = 0;
 
             CurrentControl = purchaseControl;
+
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.GetProductPurchaseData(this);
+
+            loadingWindow.Show();
         }
         
 
@@ -127,14 +131,6 @@ namespace His_Pos.ProductPurchase
             }
         }
 
-        private void InitManufactory()
-        {
-            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
-            {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
-            }
-        }
-
         public void UpdateUi()
         {
             StoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
@@ -144,7 +140,7 @@ namespace His_Pos.ProductPurchase
         {
             if (StoreOrderData != null && IsChanged)
             {
-                SaveOrder();
+                 SaveOrder();
             }
 
             DataGrid dataGrid = sender as DataGrid;

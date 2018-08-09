@@ -38,7 +38,6 @@ namespace His_Pos
             StratClock();
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
-           
         }
         
         private void InitialUserBlock()
