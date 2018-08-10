@@ -29,6 +29,7 @@ using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.PrescriptionInquire;
 using System.Xml;
 using His_Pos.Class.Declare;
+using System.Threading;
 
 namespace His_Pos
 {
@@ -63,41 +64,45 @@ namespace His_Pos
         //    Show();
         //    backgroundWorker.RunWorkerAsync();
         //}
-        public void ImportXmlFile(PrescriptionInquireView prescriptionInquireView,string filename,string decId)
+        public void ImportXmlFile(PrescriptionInquireView prescriptionInquireView,string filename)
         {
             backgroundWorker.WorkerReportsProgress = true;
 
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("申報檔匯入...");
-                ObservableCollection<DeclareData> declareDataCollection = new ObservableCollection<DeclareData>();
+                ChangeLoadingMessage("檢查申報檔是否存在...");
                 DeclareDb declareDb = new DeclareDb();
                 XmlDocument doc = new XmlDocument();
-                int maxDecMasId = declareDb.GetMaxDecMasId();
                 doc.PreserveWhitespace = true;
                 doc.Load(filename);
-                XmlNodeList tweets = doc.GetElementsByTagName("ddata");
-
-                double totalDecCount = tweets.Count;
-                double currentDecCount = 1;
-
-                foreach (XmlNode node in tweets)
+                int maxDecMasId = declareDb.GetMaxDecMasId();
+                string decId = declareDb.CheckXmlFileExist(doc);
+                if (decId != string.Empty)
                 {
-                    XmlDocument xDoc = new XmlDocument();
-                    xDoc.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
-                    DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0]);
-                    declareData.DecMasId = maxDecMasId.ToString();
-                    maxDecMasId++;
-                    declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
-                    declareDataCollection.Add(declareData);
-
-                    backgroundWorker.ReportProgress((int)((currentDecCount / totalDecCount) * 100));
-
-                    currentDecCount++;
+                    ChangeLoadingMessage("申報檔匯入...");
+                    ObservableCollection<DeclareData> declareDataCollection = new ObservableCollection<DeclareData>();
+                    XmlNodeList tweets = doc.GetElementsByTagName("ddata");
+                    double totalDecCount = tweets.Count;
+                    double currentDecCount = 1;
+                    foreach (XmlNode node in tweets)
+                    {
+                        XmlDocument xDoc = new XmlDocument();
+                        xDoc.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
+                        DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0]);
+                        declareData.DecMasId = maxDecMasId.ToString();
+                        maxDecMasId++;
+                        declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
+                        declareDataCollection.Add(declareData);
+                        backgroundWorker.ReportProgress((int)((currentDecCount / totalDecCount) * 100));
+                        currentDecCount++;
+                        declareDb.ImportDeclareData(declareDataCollection, decId);
+                    }
                 }
-                declareDb.ImportDeclareData(declareDataCollection,decId);
+                else {
+                    ChangeLoadingMessage("申報檔已存在!");
+                    Thread.Sleep(2000);
+                }
             };
-
             backgroundWorker.ProgressChanged += (s, e) =>
             {
                 ChangeLoadingMessage("申報檔匯入... " + e.ProgressPercentage.ToString() + "%");
@@ -107,6 +112,7 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
+                  
                     MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS);
                     mainWindow.Show();
                     Close();
@@ -495,7 +501,7 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void ChangeLoadingMessage(string message)
+        public void ChangeLoadingMessage(string message,int sec = 0)
         {
             Dispatcher.Invoke((Action)(() =>
             {
