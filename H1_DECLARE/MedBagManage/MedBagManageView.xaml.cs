@@ -31,10 +31,48 @@ namespace His_Pos.H1_DECLARE.MedBagManage
     /// <summary>
     /// MedBagManageView.xaml 的互動邏輯
     /// </summary>
-    public partial class MedBagManageView : UserControl, INotifyPropertyChanged
+    public partial class MedBagManageView : INotifyPropertyChanged
     {
         public static MedBagManageView Instance;
-        private MedBagMode _mode = MedBagMode.SINGLE;
+        private bool _checkSingle;
+        public bool CheckSingle
+        {
+            get => _checkSingle;
+            set
+            {
+                _checkSingle = value;
+                OnPropertyChanged(nameof(CheckSingle));
+            }
+        }
+        private bool _checkMulti;
+        public bool CheckMulti
+        {
+            get => _checkMulti;
+            set
+            {
+                _checkMulti = value;
+                OnPropertyChanged(nameof(CheckMulti));
+            }
+        }
+        private MedBagMode _mode;
+        public MedBagMode Mode
+        {
+            get => _mode;
+            set
+            {
+                _mode = value;
+                if (_mode == MedBagMode.SINGLE)
+                {
+                    CheckSingle = true;
+                    CheckMulti = false;
+                }
+                else
+                {
+                    CheckSingle = false;
+                    CheckMulti = true;
+                }
+            }
+        }
         private MedBag _selectedMedBag;
         private ObservableCollection<MedBag> _medBagCollection;
         public ObservableCollection<MedBag> MedBagCollection
@@ -89,6 +127,15 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             InitializeComponent();
             Instance = this;
             DataContext = this;
+            InitializeMedManageViewControl();
+            
+        }
+
+        private void InitializeMedManageViewControl()
+        {
+            Mode = MedBagMode.SINGLE;
+            SelectedMedBag = new MedBag(Mode);
+            MedBagCollection = new ObservableCollection<MedBag>();
             MedBags.ItemsSource = MedBagCollection;
         }
 
@@ -218,7 +265,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             if (CheckMedBagCollectionEmpty())
                 return;
             SelectedMedBag.SetLocationCollection(MedBagCanvas.Children);
-            MedBagDb.SaveMedBagData(SelectedMedBag);
+            //MedBagDb.SaveMedBagData(SelectedMedBag);
         }
 
         private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)
@@ -227,144 +274,20 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 return;
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
+            SaveMedBagData();
             File.WriteAllText(ReportPath, string.Empty);
             File.AppendAllText(ReportPath, SerializeObject<Report>(CreatReport()));
             CreatePdf();
-            SaveMedBagData();
             MedBagCollection[MedBags.SelectedIndex] = SelectedMedBag;
             var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
             m.Show();
         }
-
-        private Report CreatReport()
-        {
-            var medBagReport = new Report
-            {
-                Xmlns = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition",
-                Rd = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner",
-                Body = new Body
-                {
-                    ReportItems = new ReportItems(),
-                    Height = SelectedMedBag.BagHeight + "cm",
-                    Style = new RDLC.Style()
-                },
-                Page = new RDLC.Page
-                {
-                    PageHeight = SelectedMedBag.BagHeight.ToString(CultureInfo.InvariantCulture) + "cm",
-                    PageWidth = SelectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
-                    Style = string.Empty,
-                    LeftMargin = "0cm",
-                    RightMargin = "0cm",
-                    TopMargin = "0cm",
-                    BottomMargin = "0cm",
-                    ColumnSpacing = "0cm"
-                },
-                Width = SelectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
-                AutoRefresh = "0",
-                ReportUnitType = "cm",
-                ReportID = "cdd7925b-803a-4208-8788-8e2ae4bd14b8"
-            };
-            SetReportItem(medBagReport,
-                SelectedMedBag.Mode == MedBagMode.SINGLE ? SelectedMedBag.SingleMedLocations : SelectedMedBag.MultiMedLocations);
-            return medBagReport;
-        }
-
-        private Textbox CreatTextBoxField(MedBagLocation m)
-        {
-            return new Textbox
-            {
-                Name = m.Name,
-                DefaultName = m.Name,
-                CanGrow = "true",
-                KeepTogether = "true",
-                Top = m.PathY.ToString(CultureInfo.InvariantCulture) + "cm",
-                Left = m.PathX.ToString(CultureInfo.InvariantCulture) + "cm",
-                Height = m.ActualHeight.ToString(CultureInfo.InvariantCulture) + "cm",
-                Width = m.ActualWidth.ToString(CultureInfo.InvariantCulture) + "cm",
-                Paragraphs = new Paragraphs
-                {
-                    Paragraph = new Paragraph
-                    {
-                        Style = string.Empty,
-                        TextRuns = new TextRuns
-                        {
-                            TextRun = new TextRun
-                            {
-                                Value = m.Name,
-                                Style = string.Empty
-                            }
-                        }
-                    }
-                },
-                Style = new RDLC.Style
-                {
-                    Border = new RDLC.Border {Style = "None"},
-                    PaddingLeft = "2pt",
-                    PaddingRight = "2pt",
-                    PaddingTop = "2pt",
-                    PaddingBottom = "2pt"
-                }
-            };
-        }
-        public string SerializeObject<T>(Report report)
-        {
-            XmlSerializer xmlSerializer = new XmlSerializer(report.GetType());
-            using (StringWriter textWriter = new StringWriter())
-            {
-                xmlSerializer.Serialize(textWriter, report);
-                return PrettyXml(textWriter);
-            }
-        }
-        private string PrettyXml(StringWriter writer)
-        {
-            var stringBuilder = new StringBuilder();
-            var element = XElement.Parse(writer.ToString());
-
-            var settings = new XmlWriterSettings
-            {
-                OmitXmlDeclaration = true,
-                Indent = true,
-                NewLineOnAttributes = true
-            };
-
-            using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
-            {
-                element.Save(xmlWriter);
-            }
-
-            return stringBuilder.ToString();
-        }
-        private void CreatePdf()
-        {
-            var mimeType = string.Empty;
-            var encoding = string.Empty;
-            var extension = string.Empty;
-            var deviceInfo = "<DeviceInfo>" +
-                                "  <OutputFormat>PDF</OutputFormat>" +
-                                "  <PageWidth>"+ SelectedMedBag.BagWidth + "cm</PageWidth>" +
-                                "  <PageHeight>" + SelectedMedBag.BagHeight + "cm</PageHeight>" +
-                                "  <MarginTop>0cm</MarginTop>" +
-                                "  <MarginLeft>0cm</MarginLeft>" +
-                                "  <MarginRight>0cm</MarginRight>" +
-                                "  <MarginBottom>0cm</MarginBottom>" +
-                                "</DeviceInfo>";
-            deviceInfo = string.Format(deviceInfo, SelectedMedBag.BagWidth, SelectedMedBag.BagHeight);
-            var viewer = new ReportViewer {ProcessingMode = ProcessingMode.Local};
-            viewer.LocalReport.ReportPath = ReportPath;
-
-            var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out mimeType, out encoding, out extension, out string[] streamIds, out Warning[] warnings);
-            using (var fs = new FileStream("output.pdf", FileMode.Create))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-            }
-        }
-
+        //新增/刪除藥袋
         private void NewMedBagButtonClick(object sender, RoutedEventArgs e)
         {
             if (sender is Button b && b.Name.Contains("Add"))
             {
-                MedBagCollection.Add(new MedBag(MedBagMode.SINGLE));
-                MedBagCollection.Add(new MedBag(MedBagMode.MULTI));
+                MedBagCollection.Add(new MedBag(_mode));
             }
             else
             {
@@ -376,14 +299,14 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 MedBagCollection.Remove(MedBagCollection[i]);
             }
         }
-
+        //設定預設藥袋
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             if (CheckMedBagCollectionEmpty())
                 return;
             SelectedMedBag.Default = true;
         }
-
+        //取消預設藥袋
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             if (CheckMedBagCollectionEmpty())
@@ -415,25 +338,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             return false;
         }
 
-        private void MedBagMode_Checked(object sender, RoutedEventArgs e)
-        {
-            if (SelectedMedBag == null)
-            {
-                MedBagCollection = new ObservableCollection<MedBag>();
-                SelectedMedBag = new MedBag(_mode);
-            }
-            if (sender is RadioButton r)
-            {
-                _mode = r.Name.Equals("Single") ? MedBagMode.SINGLE : MedBagMode.MULTI;
-                SelectedMedBag.Mode = _mode;
-            }
-            if (MedBags != null)
-            {
-                MedBags.ItemsSource = MedBagCollection;
-                if (MedBagCollection.Count > 0)
-                    MedBags.SelectedItem = MedBagCollection[0];
-            }
-        }
         private void SetReportItem(Report medBagReport, ObservableCollection<MedBagLocation> locations)
         {
             foreach (var m in locations)
@@ -443,13 +347,157 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
-        private void CleanMedBagCheckMode(ObservableCollection<MedBag> medBags)
+        private void Mode_Checked(object sender, RoutedEventArgs e)
         {
-            if (medBags.Count == 0)
-                return;
-            if (medBags[MedBags.SelectedIndex] == null)
-                return;
-            medBags[MedBags.SelectedIndex] = SelectedMedBag;
+            if (!(sender is CheckBox c)) return;
+            if (c.Name.Equals("SingleMed"))
+            {
+                Mode = MedBagMode.SINGLE;
+            }
+            else
+            {
+                Mode = MedBagMode.MULTI;
+            }
+            SelectedMedBag.Mode = Mode;
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender is RadioButton radioButton)
+               Mode = (MedBagMode)short.Parse(radioButton.Tag.ToString());
+
+            if (MedBags is null) return;
+            MedBags.Items.Filter = ModeFilter;
+        }
+
+        private bool ModeFilter(object item)
+        {
+            if (Mode == MedBagMode.SINGLE)
+                return true;
+            return ((MedBag)item).Mode == Mode;
+        }
+
+        private Report CreatReport()
+        {
+            var medBagReport = new Report
+            {
+                Xmlns = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition",
+                Rd = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner",
+                Body = new Body
+                {
+                    ReportItems = new ReportItems(),
+                    Height = SelectedMedBag.BagHeight + "cm",
+                    Style = new RDLC.Style()
+                },
+                Page = new RDLC.Page
+                {
+                    PageHeight = SelectedMedBag.BagHeight.ToString(CultureInfo.InvariantCulture) + "cm",
+                    PageWidth = SelectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
+                    Style = string.Empty,
+                    LeftMargin = "0cm",
+                    RightMargin = "0cm",
+                    TopMargin = "0cm",
+                    BottomMargin = "0cm",
+                    ColumnSpacing = "0cm"
+                },
+                Width = SelectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
+                AutoRefresh = "0",
+                ReportUnitType = "cm",
+                ReportID = "cdd7925b-803a-4208-8788-8e2ae4bd14b8"
+            };
+            SetReportItem(medBagReport, SelectedMedBag.MedLocations);
+            return medBagReport;
+        }
+
+        private static Textbox CreatTextBoxField(MedBagLocation m)
+        {
+            return new Textbox
+            {
+                Name = m.Name,
+                DefaultName = m.Name,
+                CanGrow = "true",
+                KeepTogether = "true",
+                Top = m.PathY.ToString(CultureInfo.InvariantCulture) + "cm",
+                Left = m.PathX.ToString(CultureInfo.InvariantCulture) + "cm",
+                Height = m.ActualHeight.ToString(CultureInfo.InvariantCulture) + "cm",
+                Width = m.ActualWidth.ToString(CultureInfo.InvariantCulture) + "cm",
+                Paragraphs = new Paragraphs
+                {
+                    Paragraph = new Paragraph
+                    {
+                        Style = string.Empty,
+                        TextRuns = new TextRuns
+                        {
+                            TextRun = new TextRun
+                            {
+                                Value = m.Name,
+                                Style = string.Empty
+                            }
+                        }
+                    }
+                },
+                Style = new RDLC.Style
+                {
+                    Border = new RDLC.Border { Style = "None" },
+                    PaddingLeft = "2pt",
+                    PaddingRight = "2pt",
+                    PaddingTop = "2pt",
+                    PaddingBottom = "2pt"
+                }
+            };
+        }
+        public string SerializeObject<T>(Report report)
+        {
+            var xmlSerializer = new XmlSerializer(report.GetType());
+            using (var textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, report);
+                return PrettyXml(textWriter);
+            }
+        }
+        private static string PrettyXml(StringWriter writer)
+        {
+            var stringBuilder = new StringBuilder();
+            var element = XElement.Parse(writer.ToString());
+
+            var settings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = true,
+                NewLineOnAttributes = true
+            };
+
+            using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
+            {
+                element.Save(xmlWriter);
+            }
+
+            return stringBuilder.ToString();
+        }
+        private void CreatePdf()
+        {
+            var mimeType = string.Empty;
+            var encoding = string.Empty;
+            var extension = string.Empty;
+            var deviceInfo = "<DeviceInfo>" +
+                             "  <OutputFormat>PDF</OutputFormat>" +
+                             "  <PageWidth>" + SelectedMedBag.BagWidth + "cm</PageWidth>" +
+                             "  <PageHeight>" + SelectedMedBag.BagHeight + "cm</PageHeight>" +
+                             "  <MarginTop>0cm</MarginTop>" +
+                             "  <MarginLeft>0cm</MarginLeft>" +
+                             "  <MarginRight>0cm</MarginRight>" +
+                             "  <MarginBottom>0cm</MarginBottom>" +
+                             "</DeviceInfo>";
+            deviceInfo = string.Format(deviceInfo, SelectedMedBag.BagWidth, SelectedMedBag.BagHeight);
+            var viewer = new ReportViewer { ProcessingMode = ProcessingMode.Local };
+            viewer.LocalReport.ReportPath = ReportPath;
+
+            var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out mimeType, out encoding, out extension, out string[] streamIds, out Warning[] warnings);
+
+            using (var fs = new FileStream("output.pdf", FileMode.Create))
+            {
+                fs.Write(bytes, 0, bytes.Length);
+            }
         }
     }
 }

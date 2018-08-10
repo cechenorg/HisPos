@@ -15,24 +15,20 @@ namespace His_Pos.Class.MedBag
     public class MedBag : INotifyPropertyChanged
     {
 
-        public MedBag(BitmapImage image,MedBagMode mode)
+        public MedBag(BitmapImage image)
         {
-            SingleMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
-            MultiMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
+            MedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             MedBagImage = image;
-            Mode = mode;
         }
 
         public MedBag(DataRow dataRow)
         {
-            SingleMedLocations = MedBagDb.ObservableGetLocationData();
-            MultiMedLocations = MedBagDb.ObservableGetLocationData();
+            MedLocations = MedBagDb.ObservableGetLocationData();
         }
 
         public MedBag(MedBagMode mode)
         {
-            SingleMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
-            MultiMedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
+            MedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             Id = string.Empty;
             Name = string.Empty;
             BagWidth = 0.0;
@@ -41,8 +37,7 @@ namespace His_Pos.Class.MedBag
             Mode = mode;
         }
 
-        public ObservableCollection<MedBagLocation.MedBagLocation> SingleMedLocations { get; set; }
-        public ObservableCollection<MedBagLocation.MedBagLocation> MultiMedLocations { get; set; }
+        public ObservableCollection<MedBagLocation.MedBagLocation> MedLocations { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
 
@@ -123,16 +118,7 @@ namespace His_Pos.Class.MedBag
                     var locationHeight = rdlLocation.ActualHeight;
                     var actualWidth = locationWidth * convert;
                     var actualHeight = locationHeight * convert;
-                    switch (Mode)
-                    {
-                        case MedBagMode.SINGLE:
-                            SingleMedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
-                            break;
-                        case MedBagMode.MULTI:
-                            MultiMedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
-                            break;
-                    }
-                    
+                    MedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
                 }
             }
         }
@@ -154,7 +140,7 @@ namespace His_Pos.Class.MedBag
                     var locationHeight = rdlLocation.ActualHeight;
                     var actualWidth = locationWidth * convert;
                     var actualHeight = locationHeight * convert;
-                    SingleMedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
+                    MedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation.id, rdlLocation.LabelName, pathX, pathY, locationWidth, locationHeight, actualWidth, actualHeight));
                 }
             }
         }

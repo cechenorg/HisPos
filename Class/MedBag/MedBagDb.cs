@@ -52,16 +52,7 @@ namespace His_Pos.Class.MedBag
             };
 
             dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[SavaMedBag]", parameters);
-            switch (medBag.Mode)
-            {
-                case MedBagMode.SINGLE:
-                    MedBagLocationDb.SaveLocationData(medBag.SingleMedLocations);
-                    break;
-                case MedBagMode.MULTI:
-                    MedBagLocationDb.SaveLocationData(medBag.MultiMedLocations);
-                    break;
-            }
-            
+            MedBagLocationDb.SaveLocationData(medBag.MedLocations);
         }
     }
 }
