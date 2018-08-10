@@ -62,7 +62,7 @@ namespace His_Pos.Class.Declare
         /*
          * 匯入申報檔
          */
-        public void ImportDeclareData(ObservableCollection<DeclareData> declareDataCollection)
+        public void ImportDeclareData(ObservableCollection<DeclareData> declareDataCollection,string decId)
         {
             var conn = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
@@ -73,11 +73,21 @@ namespace His_Pos.Class.Declare
                 AddDeclareMaster(declaredata,declareMasterTable);
                 AddImportPData(declaredata, pDataTable);//加入PData sqlparameters
             }
+            parameters.Add(new SqlParameter("DecId", decId));
             parameters.Add(new SqlParameter("DeclareMasterTable", declareMasterTable));
             parameters.Add(new SqlParameter("DETAIL", pDataTable));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[ImportDeclareMaster]", parameters);
+        }
+        public string CheckXmlFileExist(XmlDocument xml) {
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("XML", xml.InnerXml));
+            var table = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[CheckXMLFileExist]", parameters);
+            if (table.Rows[0]["IsCheck"].ToString() == "0")
+                return string.Empty;
+            else 
+                return table.Rows[0]["DECID"].ToString();
     }
-
         /*
          * 藥品扣庫
          */

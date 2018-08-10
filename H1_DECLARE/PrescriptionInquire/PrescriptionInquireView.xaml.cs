@@ -144,12 +144,24 @@ namespace His_Pos.PrescriptionInquire
             fdlg.Filter = "Xml健保申報檔案|*.xml";
             fdlg.FilterIndex = 2;
             fdlg.RestoreDirectory = true;
-           
+            XmlDocument doc = new XmlDocument();
+            doc.PreserveWhitespace = true;
+            string decId;
             if (fdlg.ShowDialog() == DialogResult.OK)
             {
-                var loadingWindow = new LoadingWindow();
-                loadingWindow.ImportXmlFile(this, fdlg.FileName);
-                loadingWindow.Show();
+                DeclareDb declareDb = new DeclareDb();
+                doc.Load(fdlg.FileName);
+                decId = declareDb.CheckXmlFileExist(doc);
+                if(decId != string.Empty)
+                {
+                    var loadingWindow = new LoadingWindow();
+                    loadingWindow.ImportXmlFile(this, fdlg.FileName, decId);
+                    loadingWindow.Show();
+                }
+                else {
+                    MessageWindow messageWindow = new MessageWindow("此申報檔已匯入過",MessageType.ERROR);
+                    messageWindow.ShowDialog();
+                }
             }
 
         }

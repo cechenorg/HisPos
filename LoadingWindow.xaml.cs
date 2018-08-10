@@ -63,7 +63,7 @@ namespace His_Pos
         //    Show();
         //    backgroundWorker.RunWorkerAsync();
         //}
-        public void ImportXmlFile(PrescriptionInquireView prescriptionInquireView,string filename)
+        public void ImportXmlFile(PrescriptionInquireView prescriptionInquireView,string filename,string decId)
         {
             backgroundWorker.WorkerReportsProgress = true;
 
@@ -95,7 +95,7 @@ namespace His_Pos
 
                     currentDecCount++;
                 }
-                declareDb.ImportDeclareData(declareDataCollection);
+                declareDb.ImportDeclareData(declareDataCollection,decId);
             };
 
             backgroundWorker.ProgressChanged += (s, e) =>
