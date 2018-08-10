@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -14,8 +15,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.Class;
+using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 {
@@ -24,6 +27,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
     /// </summary>
     public partial class PurchaseControl : UserControl, INotifyPropertyChanged
     {
+
+        public Collection<PurchaseProduct> ProductAutoCompleteCollection;
+
         private StoreOrder storeOrderData;
 
         public StoreOrder StoreOrderData
@@ -60,7 +66,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             UpdateOrderDetailUi();
 
-            Init
+            InitProducts();
+        }
+
+        private void InitProducts()
+        {
+            ProductAutoCompleteCollection = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
         }
 
         private void UpdateOrderDetailUi()
