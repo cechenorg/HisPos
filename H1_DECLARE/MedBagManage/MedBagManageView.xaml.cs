@@ -265,7 +265,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             if (CheckMedBagCollectionEmpty())
                 return;
             SelectedMedBag.SetLocationCollection(MedBagCanvas.Children);
-            //MedBagDb.SaveMedBagData(SelectedMedBag);
+            MedBagDb.SaveMedBagData(SelectedMedBag);
         }
 
         private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using His_Pos.Class.MedBagLocation;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -44,7 +47,7 @@ namespace His_Pos.Class.MedBag
             {
                 new SqlParameter("MEDBAG_ID", medBag.Id),
                 new SqlParameter("MEDBAG_NAME", medBag.Name),
-                new SqlParameter("MEDBAG_IMAGE", medBag.MedBagImage),
+                new SqlParameter("MEDBAG_IMAGE", ImageToByte(medBag.MedBagImage)),
                 new SqlParameter("MEDBAG_SIZEX", medBag.BagWidth),
                 new SqlParameter("MEDBAG_SIZEY", medBag.BagHeight),
                 new SqlParameter("MEDBAG_MODE", medBag.Mode),
@@ -53,6 +56,18 @@ namespace His_Pos.Class.MedBag
 
             dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[SavaMedBag]", parameters);
             MedBagLocationDb.SaveLocationData(medBag.MedLocations);
+        }
+        public static byte[] ImageToByte(BitmapImage img)
+        {
+            byte[] data;
+            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(img));
+            using (MemoryStream ms = new MemoryStream())
+            {
+                encoder.Save(ms);
+                data = ms.ToArray();
+            }
+            return data;
         }
     }
 }
