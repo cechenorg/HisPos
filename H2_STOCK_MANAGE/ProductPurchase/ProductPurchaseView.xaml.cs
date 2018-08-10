@@ -30,6 +30,7 @@ using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchaseRecord;
 using His_Pos.Service;
 using His_Pos.StockTaking;
+using His_Pos.Struct.Product;
 using MahApps.Metro.Controls;
 
 namespace His_Pos.ProductPurchase
@@ -55,7 +56,8 @@ namespace His_Pos.ProductPurchase
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
 
         public ObservableCollection<object> Products;
-        public ObservableCollection<object> ProductAutoCompleteCollection;
+
+        public Collection<PurchaseProduct> ProductAutoCompleteCollection;
 
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;

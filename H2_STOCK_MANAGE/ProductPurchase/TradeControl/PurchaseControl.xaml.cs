@@ -59,6 +59,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData = storeOrder;
 
             UpdateOrderDetailUi();
+
+            Init
         }
 
         private void UpdateOrderDetailUi()

@@ -26,6 +26,7 @@ using His_Pos.Class.Employee;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.Struct.Product;
 
 namespace His_Pos
 {
@@ -123,15 +124,10 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("取得廠商資料...");
                 ObservableCollection<Manufactory> tempManufactories = ManufactoryDb.GetManufactoryData();
-                
-                ChangeLoadingMessage("取得商品資料...");
-
 
                 Dispatcher.Invoke((Action)(() =>
                 {
                     productPurchaseView.ManufactoryAutoCompleteCollection = tempManufactories;
-
-
                 }));
             };
 
