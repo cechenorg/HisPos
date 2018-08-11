@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.MedBagLocation;
@@ -14,7 +16,6 @@ namespace His_Pos.Class.MedBag
 {
     public class MedBag : INotifyPropertyChanged
     {
-
         public MedBag(BitmapImage image)
         {
             MedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
@@ -23,7 +24,14 @@ namespace His_Pos.Class.MedBag
 
         public MedBag(DataRow dataRow)
         {
-            MedLocations = MedBagDb.ObservableGetLocationData();
+            Id = dataRow["MEDBAG_ID"].ToString();
+            Name = dataRow["MEDBAG_NAME"].ToString();
+            BagWidth = double.Parse(dataRow["MEDBAG_SIZEX"].ToString());
+            BagHeight = double.Parse(dataRow["MEDBAG_SIZEY"].ToString());
+            MedBagImage = ToImage((byte[])dataRow["MEDBAG_IMAGE"]);
+            MedLocations = MedBagDb.ObservableGetLocationData(Id);
+            Mode = dataRow["MEDBAG_MODE"].ToString() == "0" ? MedBagMode.SINGLE : MedBagMode.MULTI;
+            Default = dataRow["MEDBAG_DEFAULT"].ToString() != "0";
         }
 
         public MedBag(MedBagMode mode)
@@ -151,6 +159,31 @@ namespace His_Pos.Class.MedBag
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private BitmapImage ToImage(byte[] array)
+        {
+            using (var ms = new System.IO.MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad; // here
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
+        }
+
+        private byte[] ObjectToByteArray(object obj)
+        {
+            if (obj == null)
+                return null;
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
         }
     }
 }

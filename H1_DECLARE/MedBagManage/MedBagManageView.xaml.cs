@@ -128,15 +128,16 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             Instance = this;
             DataContext = this;
             InitializeMedManageViewControl();
-            
         }
 
         private void InitializeMedManageViewControl()
         {
             Mode = MedBagMode.SINGLE;
             SelectedMedBag = new MedBag(Mode);
-            MedBagCollection = new ObservableCollection<MedBag>();
+            MedBagCollection = MedBagDb.ObservableGetMedBagData();
             MedBags.ItemsSource = MedBagCollection;
+            if (MedBags.Items.Count != 0)
+                MedBags.SelectedIndex = 0;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -278,7 +279,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             File.WriteAllText(ReportPath, string.Empty);
             File.AppendAllText(ReportPath, SerializeObject<Report>(CreatReport()));
             CreatePdf();
-            MedBagCollection[MedBags.SelectedIndex] = SelectedMedBag;
             var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
             m.Show();
         }
@@ -317,6 +317,13 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         private void MedBags_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
             SelectedMedBag = ((DataGrid) sender).SelectedItem as MedBag;
+            if (SelectedMedBag != null && SelectedMedBag.MedLocations.Count > 0)
+            {
+                foreach (MedBagLocation location in SelectedMedBag.MedLocations)
+                {
+                    NewLocation(location.Id,location.Name, location.Name,location.Height,location.Width,location.PathY,location.PathX);
+                }
+            }
         }
 
         private void CleanButtonClick(object sender, RoutedEventArgs e)

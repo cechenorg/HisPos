@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.MedBagLocation;
 using His_Pos.Properties;
@@ -21,18 +16,22 @@ namespace His_Pos.Class.MedBag
         {
             ObservableCollection<MedBag> medBags = new ObservableCollection<MedBag>();
             var dd = new DbConnection(Settings.Default.SQL_global);
-            var table = dd.ExecuteProc("");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[GetMedBagData]");
             foreach (DataRow row in table.Rows)
             {
                 medBags.Add(new MedBag(row));
             }
             return medBags;
         }
-        internal static ObservableCollection<MedBagLocation.MedBagLocation> ObservableGetLocationData()
+        internal static ObservableCollection<MedBagLocation.MedBagLocation> ObservableGetLocationData(string medBagId)
         {
             ObservableCollection<MedBagLocation.MedBagLocation> medBagLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             var dd = new DbConnection(Settings.Default.SQL_global);
-            var table = dd.ExecuteProc("");
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("MEDBAG_ID", medBagId),
+            };
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[GetMedBagLocationData]", parameters);
             foreach (DataRow row in table.Rows)
             {
                 medBagLocations.Add(new MedBagLocation.MedBagLocation(row));
@@ -55,7 +54,7 @@ namespace His_Pos.Class.MedBag
             };
 
             dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[SavaMedBag]", parameters);
-            MedBagLocationDb.SaveLocationData(medBag.MedLocations);
+            MedBagLocationDb.SaveLocationData(medBag.MedLocations, medBag.Id);
         }
         public static byte[] ImageToByte(BitmapImage img)
         {

@@ -8,7 +8,7 @@ namespace His_Pos.Class.MedBagLocation
         public MedBagLocation(DataRow row)
         {
             Id = row["MEDBAG_ID"].ToString();
-            Name = row["MEDBAG_NAME"].ToString();
+            Name = row["MEDBAG_LOCNAME"].ToString();
             PathX = Convert.ToDouble(row["MEDBAG_X"].ToString());
             PathY = Convert.ToDouble(row["MEDBAG_Y"].ToString());
             Width = Convert.ToDouble(row["MEDBAG_WIDTH"].ToString());

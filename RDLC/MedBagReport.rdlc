@@ -17,10 +17,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Pharmacy</rd:DefaultName>
-        <Top>1.24780843310776cm</Top>
-        <Left>4.85565257352941cm</Left>
-        <Height>0.676238287350338cm</Height>
-        <Width>4.82074502144608cm</Width>
+        <Top>1.32484122852681cm</Top>
+        <Left>4.87556288296569cm</Left>
+        <Height>0.469214601769912cm</Height>
+        <Width>3.80440464154412cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -32,25 +32,85 @@
         </Style>
       </Textbox>
       <Textbox
-        Name="PatientName">
+        Name="PharmacyId">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
         <Paragraphs>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>PatientName</Value>
+                <Value>PharmacyId</Value>
                 <Style />
               </TextRun>
             </TextRuns>
             <Style />
           </Paragraph>
         </Paragraphs>
-        <rd:DefaultName>PatientName</rd:DefaultName>
-        <Top>5.29087194169703cm</Top>
-        <Left>3.69971737132353cm</Left>
-        <Height>0.532576132222802cm</Height>
-        <Width>4.12718390012255cm</Width>
+        <rd:DefaultName>PharmacyId</rd:DefaultName>
+        <Top>1.32484122852681cm</Top>
+        <Left>8.77159715839461cm</Left>
+        <Height>0.469214601769912cm</Height>
+        <Width>5.22463388480393cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="Pharmacy">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Pharmacy</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Pharmacy</rd:DefaultName>
+        <Top>1.32484122852681cm</Top>
+        <Left>4.87556288296569cm</Left>
+        <Height>0.469214601769912cm</Height>
+        <Width>3.80440464154412cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="PharmacyId">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>PharmacyId</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>PharmacyId</rd:DefaultName>
+        <Top>1.32484122852681cm</Top>
+        <Left>8.77159715839461cm</Left>
+        <Height>0.469214601769912cm</Height>
+        <Width>5.22463388480393cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -65,10 +125,10 @@
     <Height>19.71cm</Height>
     <Style />
   </Body>
-  <Width>15.77cm</Width>
+  <Width>15.71cm</Width>
   <Page>
     <PageHeight>19.71cm</PageHeight>
-    <PageWidth>15.77cm</PageWidth>
+    <PageWidth>15.71cm</PageWidth>
     <LeftMargin>0cm</LeftMargin>
     <RightMargin>0cm</RightMargin>
     <TopMargin>0cm</TopMargin>

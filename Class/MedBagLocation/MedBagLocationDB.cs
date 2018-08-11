@@ -13,14 +13,14 @@ namespace His_Pos.Class.MedBagLocation
 {
     public class MedBagLocationDb
     {
-        internal static void SaveLocationData(ObservableCollection<MedBagLocation> medBagLocations)
+        internal static void SaveLocationData(ObservableCollection<MedBagLocation> medBagLocations,string medBagId)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             foreach (var m in medBagLocations)
             {
                 parameters.Clear();
-                parameters.Add(new SqlParameter("MEDBAG_ID", m.Id));
+                parameters.Add(new SqlParameter("MEDBAG_ID", medBagId));
                 parameters.Add(new SqlParameter("MEDBAG_NAME", m.Name));
                 parameters.Add(new SqlParameter("MEDBAG_X", m.PathX));
                 parameters.Add(new SqlParameter("MEDBAG_Y", m.PathY));
