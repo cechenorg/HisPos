@@ -17,7 +17,7 @@ namespace His_Pos.Class.MedBagLocation
             Height = Convert.ToDouble(row["MEDBAG_HEIGHT"].ToString());
             RealWidth = Convert.ToDouble(row["MEDBAG_REALWIDTH"].ToString());
             RealHeight = Convert.ToDouble(row["MEDBAG_REALHEIGHT"].ToString());
-            Content = row["MEDBAG_LOCCONTENT"].ToString();
+            Content = row["MEDBAG_LOCCONTENT"].ToString().Trim();
             CanvasLeft = Convert.ToDouble(row["MEDBAG_CANVASLEFT"].ToString());
             CanvasTop = Convert.ToDouble(row["MEDBAG_CANVASTOP"].ToString());
         }

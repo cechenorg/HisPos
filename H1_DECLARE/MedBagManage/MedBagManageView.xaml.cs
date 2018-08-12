@@ -16,26 +16,49 @@ using System.Xml.Serialization;
 using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
-using JetBrains.Annotations;
-using CheckBox = System.Windows.Controls.CheckBox;
-using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.RDLC;
 using His_Pos.Service;
+using JetBrains.Annotations;
 using Microsoft.Reporting.WinForms;
+using Border = His_Pos.RDLC.Border;
 using Button = System.Windows.Controls.Button;
+using CheckBox = System.Windows.Controls.CheckBox;
 using DataGrid = System.Windows.Controls.DataGrid;
+using HorizontalAlignment = System.Windows.HorizontalAlignment;
+using Page = His_Pos.RDLC.Page;
 using RadioButton = System.Windows.Controls.RadioButton;
 using Report = His_Pos.RDLC.Report;
+using Style = His_Pos.RDLC.Style;
 
 namespace His_Pos.H1_DECLARE.MedBagManage
 {
     /// <summary>
-    /// MedBagManageView.xaml 的互動邏輯
+    ///     MedBagManageView.xaml 的互動邏輯
     /// </summary>
     public partial class MedBagManageView : INotifyPropertyChanged
     {
+        private const string ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
         public static MedBagManageView Instance;
+        private bool _checkMulti;
         private bool _checkSingle;
+
+        private int _id;
+        private ObservableCollection<MedBag> _medBagCollection;
+
+        private double _medBagImgHeight;
+
+        private double _medBagImgWidth;
+        private MedBagMode _mode;
+        private MedBag _selectedMedBag;
+
+        public MedBagManageView()
+        {
+            InitializeComponent();
+            Instance = this;
+            DataContext = this;
+            InitializeMedManageViewControl();
+        }
+
         public bool CheckSingle
         {
             get => _checkSingle;
@@ -45,7 +68,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 OnPropertyChanged(nameof(CheckSingle));
             }
         }
-        private bool _checkMulti;
+
         public bool CheckMulti
         {
             get => _checkMulti;
@@ -55,7 +78,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 OnPropertyChanged(nameof(CheckMulti));
             }
         }
-        private MedBagMode _mode;
+
         public MedBagMode Mode
         {
             get => _mode;
@@ -74,8 +97,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 }
             }
         }
-        private MedBag _selectedMedBag;
-        private ObservableCollection<MedBag> _medBagCollection;
+
         public ObservableCollection<MedBag> MedBagCollection
         {
             get => _medBagCollection;
@@ -86,7 +108,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
-        private const string ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
         public MedBag SelectedMedBag
         {
             get => _selectedMedBag;
@@ -96,8 +117,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 OnPropertyChanged(nameof(SelectedMedBag));
             }
         }
-
-        private double _medBagImgWidth;
 
         public double MedBagImgWidth
         {
@@ -109,8 +128,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
-        private double _medBagImgHeight;
-
         public double MedBagImgHeight
         {
             get => _medBagImgHeight;
@@ -121,15 +138,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
-        private int _id;
-
-        public MedBagManageView()
-        {
-            InitializeComponent();
-            Instance = this;
-            DataContext = this;
-            InitializeMedManageViewControl();
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void InitializeMedManageViewControl()
         {
@@ -140,8 +149,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             if (MedBags.Items.Count != 0)
                 MedBags.SelectedIndex = 0;
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -178,7 +185,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             {
                 MedBagImgWidth = 935;
                 MedBagImgHeight = 935 * (SelectedMedBag.MedBagImage.Height / SelectedMedBag.MedBagImage.Width);
-                while(MedBagImgHeight > MedBagImg.MaxHeight)
+                while (MedBagImgHeight > MedBagImg.MaxHeight)
                 {
                     MedBagImgWidth *= 0.9;
                     MedBagImgHeight *= 0.9;
@@ -201,7 +208,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             MedBagCanvas.Width = MedBagImgWidth;
             MedBagCanvas.Height = MedBagImgHeight;
 
-            MedRangeLocationControl.Template = (ControlTemplate)FindResource("MedBagRangeItemTemplate");
+            MedRangeLocationControl.Template = (ControlTemplate) FindResource("MedBagRangeItemTemplate");
             MedRangeLocationControl.SetValue(Canvas.LeftProperty, 0.0);
             MedRangeLocationControl.SetValue(Canvas.TopProperty, 0.0);
             MedRangeLocationControl.SetValue(WidthProperty, MedBagImgWidth);
@@ -220,16 +227,17 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 Instance.NewLocation(null, locationName, controlName);
             }
             else
-                MedBagCanvas.Children.Remove(MedBagCanvas.Children.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl).Single(r => (r.Content as RdlLocationControl).LabelContent.Equals(c.Content)));
+            {
+                MedBagCanvas.Children.Remove(MedBagCanvas.Children.OfType<ContentControl>()
+                    .Where(r => r.Content is RdlLocationControl)
+                    .Single(r => (r.Content as RdlLocationControl).LabelContent.Equals(c.Content)));
+            }
         }
 
-        public void NewLocation(string locid = null, string content = null, string controlName = null, double height = 0, double width = 0, double top = 0, double left = 0)
+        public void NewLocation(string locid = null, string content = null, string controlName = null,
+            double height = 0, double width = 0, double top = 0, double left = 0)
         {
             var contentControl = new ContentControl();
-            if (string.IsNullOrEmpty(content))
-                contentControl.Template = (ControlTemplate)FindResource("MedBagRangeItemTemplate");
-            else
-                contentControl.Template = (ControlTemplate)FindResource("MedBagDesignerItemTemplate");
             RdlLocationControl newLocation;
             if (locid != null)
             {
@@ -242,10 +250,12 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 newLocation = new RdlLocationControl(_id, content, controlName);
                 _id++;
             }
+
             if (string.IsNullOrEmpty(content))
             {
-                contentControl.Height = (height == 0) ? 150 : height;
-                contentControl.Width = (width == 0) ? 150 : width;
+                contentControl.Template = (ControlTemplate) FindResource("MedBagRangeItemTemplate");
+                contentControl.Height = height == 0 ? 150 : height;
+                contentControl.Width = width == 0 ? 150 : width;
                 contentControl.Content = newLocation;
                 MedBagCanvas.Children.Add(contentControl);
                 Canvas.SetTop(contentControl, top == 0 ? 360 : top);
@@ -253,8 +263,9 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
             else
             {
-                contentControl.Height = (height == 0) ? 15 : height;
-                contentControl.Width = (width == 0) ? 60 : width;
+                contentControl.Template = (ControlTemplate) FindResource("MedBagDesignerItemTemplate");
+                contentControl.Height = height == 0 ? 15 : height;
+                contentControl.Width = width == 0 ? 60 : width;
                 contentControl.Content = newLocation;
                 MedBagCanvas.Children.Add(contentControl);
                 Canvas.SetTop(contentControl, top == 0 ? 360 : top);
@@ -265,11 +276,10 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         public void SetLocation(MedBagLocation m)
         {
             if (!string.IsNullOrEmpty(m.Content))
-            {
                 NewFunction.FindChild<CheckBox>(CheckBoxStack, m.Name).IsChecked = true;
-            }
-            var contentControl = new ContentControl {Template = (ControlTemplate) FindResource("MedBagDesignerItemTemplate")};
-            var newLocation = new RdlLocationControl(m.Id, m.Content ,m.Name);
+            var contentControl =
+                new ContentControl {Template = (ControlTemplate) FindResource("MedBagDesignerItemTemplate")};
+            var newLocation = new RdlLocationControl(m.Id, m.Content, m.Name);
             contentControl.Height = m.Height;
             contentControl.Width = m.Width;
             contentControl.Content = newLocation;
@@ -288,7 +298,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)
         {
-            if(MedBagCollection[MedBags.SelectedIndex] == null)
+            if (MedBagCollection[MedBags.SelectedIndex] == null)
                 return;
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
@@ -299,6 +309,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
             m.Show();
         }
+
         //新增/刪除藥袋
         private void NewMedBagButtonClick(object sender, RoutedEventArgs e)
         {
@@ -310,12 +321,13 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             {
                 if (CheckMedBagCollectionEmpty())
                     return;
-                int i = MedBags.SelectedIndex;
+                var i = MedBags.SelectedIndex;
                 if (i > 0)
                     MedBags.SelectedItem = MedBagCollection[i - 1];
                 MedBagCollection.Remove(MedBagCollection[i]);
             }
         }
+
         //設定預設藥袋
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
@@ -323,6 +335,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 return;
             SelectedMedBag.Default = true;
         }
+
         //取消預設藥袋
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
@@ -336,10 +349,10 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             SelectedMedBag = ((DataGrid) sender).SelectedItem as MedBag;
             if (SelectedMedBag != null && SelectedMedBag.MedLocations.Count > 0)
             {
-                foreach (MedBagLocation location in SelectedMedBag.MedLocations)
-                {
+                if (SelectedMedBag.MedBagImage != null)
+                    SetMedBagRange();
+                foreach (var location in SelectedMedBag.MedLocations)
                     SetLocation(location);
-                }
             }
         }
 
@@ -351,44 +364,39 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private bool CheckMedBagCollectionEmpty()
         {
-            var m = new MessageWindow("未新增藥袋",MessageType.WARNING);
+            var m = new MessageWindow("未新增藥袋", MessageType.WARNING);
             m.SetLabelFontSize(16);
-            m.SetLabelContentAlignment(System.Windows.HorizontalAlignment.Center);
+            m.SetLabelContentAlignment(HorizontalAlignment.Center);
             if (MedBagCollection.Count == 0)
             {
                 m.Show();
                 return true;
             }
+
             return false;
         }
 
         private void SetReportItem(Report medBagReport, ObservableCollection<MedBagLocation> locations)
         {
             foreach (var m in locations)
-            {
                 if (m.Name != "MedicineList")
                     medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m));
-            }
         }
 
         private void Mode_Checked(object sender, RoutedEventArgs e)
         {
             if (!(sender is CheckBox c)) return;
             if (c.Name.Equals("SingleMed"))
-            {
                 Mode = MedBagMode.SINGLE;
-            }
             else
-            {
                 Mode = MedBagMode.MULTI;
-            }
             SelectedMedBag.Mode = Mode;
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             if (sender is RadioButton radioButton)
-               Mode = (MedBagMode)short.Parse(radioButton.Tag.ToString());
+                Mode = (MedBagMode) short.Parse(radioButton.Tag.ToString());
 
             if (MedBags is null) return;
             MedBags.Items.Filter = ModeFilter;
@@ -398,7 +406,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         {
             if (Mode == MedBagMode.SINGLE)
                 return true;
-            return ((MedBag)item).Mode == Mode;
+            return ((MedBag) item).Mode == Mode;
         }
 
         private Report CreatReport()
@@ -411,9 +419,9 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 {
                     ReportItems = new ReportItems(),
                     Height = SelectedMedBag.BagHeight + "cm",
-                    Style = new RDLC.Style()
+                    Style = new Style()
                 },
-                Page = new RDLC.Page
+                Page = new Page
                 {
                     PageHeight = SelectedMedBag.BagHeight.ToString(CultureInfo.InvariantCulture) + "cm",
                     PageWidth = SelectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
@@ -460,9 +468,9 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                         }
                     }
                 },
-                Style = new RDLC.Style
+                Style = new Style
                 {
-                    Border = new RDLC.Border { Style = "None" },
+                    Border = new Border {Style = "None"},
                     PaddingLeft = "2pt",
                     PaddingRight = "2pt",
                     PaddingTop = "2pt",
@@ -470,6 +478,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 }
             };
         }
+
         public string SerializeObject<T>(Report report)
         {
             var xmlSerializer = new XmlSerializer(report.GetType());
@@ -479,6 +488,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 return PrettyXml(textWriter);
             }
         }
+
         private static string PrettyXml(StringWriter writer)
         {
             var stringBuilder = new StringBuilder();
@@ -498,6 +508,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
             return stringBuilder.ToString();
         }
+
         private void CreatePdf()
         {
             var mimeType = string.Empty;
@@ -513,10 +524,10 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                              "  <MarginBottom>0cm</MarginBottom>" +
                              "</DeviceInfo>";
             deviceInfo = string.Format(deviceInfo, SelectedMedBag.BagWidth, SelectedMedBag.BagHeight);
-            var viewer = new ReportViewer { ProcessingMode = ProcessingMode.Local };
+            var viewer = new ReportViewer {ProcessingMode = ProcessingMode.Local};
             viewer.LocalReport.ReportPath = ReportPath;
-
-            var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out mimeType, out encoding, out extension, out string[] streamIds, out Warning[] warnings);
+            var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out mimeType, out encoding, out extension,
+                out var streamIds, out var warnings);
 
             using (var fs = new FileStream("output.pdf", FileMode.Create))
             {

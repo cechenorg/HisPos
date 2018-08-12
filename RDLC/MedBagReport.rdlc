@@ -2,25 +2,55 @@
   <Body>
     <ReportItems>
       <Textbox
-        Name="藥局名稱">
+        Name="Pharmacy">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
         <Paragraphs>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>藥局名稱</Value>
+                <Value>Pharmacy</Value>
                 <Style />
               </TextRun>
             </TextRuns>
             <Style />
           </Paragraph>
         </Paragraphs>
-        <rd:DefaultName>藥局名稱</rd:DefaultName>
-        <Top>1.1862389380531cm</Top>
-        <Left>4.81712140012255cm</Left>
-        <Height>0.799377277459657cm</Height>
-        <Width>4.31983976715686cm</Width>
+        <rd:DefaultName>Pharmacy</rd:DefaultName>
+        <Top>1.20676210307132cm</Top>
+        <Left>4.85565257352941cm</Left>
+        <Height>0.778854112441437cm</Height>
+        <Width>3.64554423253677cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="PharmacyId">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>PharmacyId</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>PharmacyId</rd:DefaultName>
+        <Top>1.20676210307132cm</Top>
+        <Left>8.55464522058823cm</Left>
+        <Height>0.778854112441437cm</Height>
+        <Width>4.43543328737745cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
