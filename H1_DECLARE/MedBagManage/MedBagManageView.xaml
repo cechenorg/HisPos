@@ -402,7 +402,7 @@
             Grid.RowSpan="2"
             Grid.Column="2"
             Width="200">
-            <StackPanel Width="160" Orientation="Vertical">
+            <StackPanel Name="CheckBoxStack"  Width="160" Orientation="Vertical">
                 <CheckBox
                     Content="設為預設藥袋"
                     FontFamily="Segoe UI Semibold"

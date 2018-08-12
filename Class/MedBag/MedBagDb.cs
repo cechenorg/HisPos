@@ -41,7 +41,8 @@ namespace His_Pos.Class.MedBag
         internal static void SaveMedBagData(MedBag medBag)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
-
+            if (string.IsNullOrEmpty(medBag.Id))
+                medBag.Id = "0";
             var parameters = new List<SqlParameter>
             {
                 new SqlParameter("MEDBAG_ID", medBag.Id),

@@ -20,6 +20,7 @@ using JetBrains.Annotations;
 using CheckBox = System.Windows.Controls.CheckBox;
 using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.RDLC;
+using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 using Button = System.Windows.Controls.Button;
 using DataGrid = System.Windows.Controls.DataGrid;
@@ -261,6 +262,22 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
+        public void SetLocation(MedBagLocation m)
+        {
+            if (!string.IsNullOrEmpty(m.Content))
+            {
+                NewFunction.FindChild<CheckBox>(CheckBoxStack, m.Name).IsChecked = true;
+            }
+            var contentControl = new ContentControl {Template = (ControlTemplate) FindResource("MedBagDesignerItemTemplate")};
+            var newLocation = new RdlLocationControl(m.Id, m.Content ,m.Name);
+            contentControl.Height = m.Height;
+            contentControl.Width = m.Width;
+            contentControl.Content = newLocation;
+            MedBagCanvas.Children.Add(contentControl);
+            Canvas.SetTop(contentControl, m.CanvasTop);
+            Canvas.SetLeft(contentControl, m.CanvasLeft);
+        }
+
         private void SaveMedBagData()
         {
             if (CheckMedBagCollectionEmpty())
@@ -321,7 +338,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             {
                 foreach (MedBagLocation location in SelectedMedBag.MedLocations)
                 {
-                    NewLocation(location.Id,location.Name, location.Name,location.Height,location.Width,location.PathY,location.PathX);
+                    SetLocation(location);
                 }
             }
         }
@@ -426,8 +443,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 KeepTogether = "true",
                 Top = m.PathY.ToString(CultureInfo.InvariantCulture) + "cm",
                 Left = m.PathX.ToString(CultureInfo.InvariantCulture) + "cm",
-                Height = m.ActualHeight.ToString(CultureInfo.InvariantCulture) + "cm",
-                Width = m.ActualWidth.ToString(CultureInfo.InvariantCulture) + "cm",
+                Height = m.RealHeight.ToString(CultureInfo.InvariantCulture) + "cm",
+                Width = m.RealWidth.ToString(CultureInfo.InvariantCulture) + "cm",
                 Paragraphs = new Paragraphs
                 {
                     Paragraph = new Paragraph

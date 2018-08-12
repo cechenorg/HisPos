@@ -2,115 +2,25 @@
   <Body>
     <ReportItems>
       <Textbox
-        Name="Pharmacy">
+        Name="藥局名稱">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
         <Paragraphs>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Pharmacy</Value>
+                <Value>藥局名稱</Value>
                 <Style />
               </TextRun>
             </TextRuns>
             <Style />
           </Paragraph>
         </Paragraphs>
-        <rd:DefaultName>Pharmacy</rd:DefaultName>
-        <Top>1.32484122852681cm</Top>
-        <Left>4.87556288296569cm</Left>
-        <Height>0.469214601769912cm</Height>
-        <Width>3.80440464154412cm</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox
-        Name="PharmacyId">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>PharmacyId</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>PharmacyId</rd:DefaultName>
-        <Top>1.32484122852681cm</Top>
-        <Left>8.77159715839461cm</Left>
-        <Height>0.469214601769912cm</Height>
-        <Width>5.22463388480393cm</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox
-        Name="Pharmacy">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Pharmacy</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Pharmacy</rd:DefaultName>
-        <Top>1.32484122852681cm</Top>
-        <Left>4.87556288296569cm</Left>
-        <Height>0.469214601769912cm</Height>
-        <Width>3.80440464154412cm</Width>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox
-        Name="PharmacyId">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>PharmacyId</Value>
-                <Style />
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>PharmacyId</rd:DefaultName>
-        <Top>1.32484122852681cm</Top>
-        <Left>8.77159715839461cm</Left>
-        <Height>0.469214601769912cm</Height>
-        <Width>5.22463388480393cm</Width>
+        <rd:DefaultName>藥局名稱</rd:DefaultName>
+        <Top>1.1862389380531cm</Top>
+        <Left>4.81712140012255cm</Left>
+        <Height>0.799377277459657cm</Height>
+        <Width>4.31983976715686cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -125,10 +35,10 @@
     <Height>19.71cm</Height>
     <Style />
   </Body>
-  <Width>15.71cm</Width>
+  <Width>15.77cm</Width>
   <Page>
     <PageHeight>19.71cm</PageHeight>
-    <PageWidth>15.71cm</PageWidth>
+    <PageWidth>15.77cm</PageWidth>
     <LeftMargin>0cm</LeftMargin>
     <RightMargin>0cm</RightMargin>
     <TopMargin>0cm</TopMargin>

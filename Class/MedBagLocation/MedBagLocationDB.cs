@@ -21,13 +21,16 @@ namespace His_Pos.Class.MedBagLocation
             {
                 parameters.Clear();
                 parameters.Add(new SqlParameter("MEDBAG_ID", medBagId));
-                parameters.Add(new SqlParameter("MEDBAG_NAME", m.Name));
+                parameters.Add(new SqlParameter("MEDBAG_LOCNAME", m.Name));
                 parameters.Add(new SqlParameter("MEDBAG_X", m.PathX));
                 parameters.Add(new SqlParameter("MEDBAG_Y", m.PathY));
                 parameters.Add(new SqlParameter("MEDBAG_WIDTH", m.Width));
                 parameters.Add(new SqlParameter("MEDBAG_HEIGHT", m.Height));
-                parameters.Add(new SqlParameter("MEDBAG_ACTUALWIDTH", m.ActualWidth));
-                parameters.Add(new SqlParameter("MEDBAG_ACTUALHEIGHT", m.ActualHeight));
+                parameters.Add(new SqlParameter("MEDBAG_REALWIDTH", m.RealWidth));
+                parameters.Add(new SqlParameter("MEDBAG_REALHEIGHT", m.RealHeight));
+                parameters.Add(new SqlParameter("MEDBAG_LOCCONTENT", m.Content));
+                parameters.Add(new SqlParameter("MEDBAG_CANVASLEFT", m.CanvasLeft));
+                parameters.Add(new SqlParameter("MEDBAG_CANVASTOP", m.CanvasTop));
                 dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[SavaMedBagLocation]", parameters);
             }
         }
