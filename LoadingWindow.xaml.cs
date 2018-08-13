@@ -115,7 +115,7 @@ namespace His_Pos
             };
             backgroundWorker.ProgressChanged += (s, e) =>
             {
-                ChangeLoadingMessage("申報檔匯入... " + e.ProgressPercentage.ToString() + "%");
+                ChangeLoadingMessage("申報檔匯入... " + (e.ProgressPercentage.ToString() == "100" ? "99" : e.ProgressPercentage.ToString()) + "%");
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>
