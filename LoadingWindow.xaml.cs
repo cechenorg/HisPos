@@ -507,7 +507,7 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-
+        
         public void ChangeLoadingMessage(string message,int sec = 0)
         {
             Dispatcher.Invoke((Action)(() =>

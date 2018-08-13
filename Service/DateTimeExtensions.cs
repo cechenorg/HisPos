@@ -34,8 +34,12 @@ namespace His_Pos.Service
                 return Convert.ToDateTime(datetime.Substring(0, 10));
             if (datetime.Substring(0, 3).Contains("/"))
                 datetime = "0" + datetime;
-            var dt = DateTime.ParseExact(datetime, "yyy/MM/dd", CultureInfo.InvariantCulture).AddYears(1911);
-            return dt;
+            if (datetime.Contains("02/29")){
+                datetime = (Convert.ToInt32(datetime.Substring(0, 3)) + 1911).ToString() + datetime.Substring(3,6);
+                return Convert.ToDateTime(datetime, CultureInfo.InvariantCulture.DateTimeFormat);
+            }
+          
+            return DateTime.ParseExact(datetime, "yyy/MM/dd", CultureInfo.InvariantCulture).AddYears(1911);
         }
        
         /*

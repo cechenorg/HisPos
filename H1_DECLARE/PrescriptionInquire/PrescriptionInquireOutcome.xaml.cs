@@ -173,7 +173,6 @@ namespace His_Pos.PrescriptionInquire
             SetPatientData();
             InitData();
             InitDataChanged();
-            isFirst = false;
         }
 
         private void SetPatientData()
@@ -183,14 +182,14 @@ namespace His_Pos.PrescriptionInquire
             var patientIdIcon = new BitmapImage(new Uri(@"..\..\Images\ID_Card.png", UriKind.Relative));
             var patientBirthIcon = new BitmapImage(new Uri(@"..\..\Images\birthday.png", UriKind.Relative));
             //var patientEmergentPhoneIcon = new BitmapImage(new Uri(@"..\..\Images\Phone.png", UriKind.Relative));
-            PatientName.SetIconSource(patientGenderIcon);
-            PatientId.SetIconSource(patientIdIcon);
-            PatientBirthday.SetIconSource(patientBirthIcon);
+            //PatientName.SetIconSource(patientGenderIcon);
+            //PatientId.SetIconSource(patientIdIcon);
+            //PatientBirthday.SetIconSource(patientBirthIcon);
             //PatientTel.SetIconSource(patientEmergentPhoneIcon);
             //PatientTel.SetIconLabel(200, 50, InquiredPrescription.Prescription.Customer.ContactInfo.Tel);
-            PatientBirthday.SetIconLabel(200, 50, InquiredPrescription.Prescription.Customer.Birthday);
-            PatientId.SetIconLabel(200, 50, InquiredPrescription.Prescription.Customer.IcNumber);
-            PatientName.SetIconLabel(200, 50, InquiredPrescription.Prescription.Customer.Name);
+            //PatientBirthday.SetIconLabel(200, 50, InquiredPrescription.Prescription.Customer.Birthday);
+            //PatientId.SetIconLabel(200, 50, InquiredPrescription.Prescription.Customer.IcNumber);
+            //PatientName.SetIconLabel(200, 50, InquiredPrescription.Prescription.Customer.Name);
         }
 
       
@@ -217,6 +216,9 @@ namespace His_Pos.PrescriptionInquire
         }
         private void InitData() {
             if (PrescriptionInquireView.Instance is null) return;
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.ChangeLoadingMessage("處方詳細資料載入中...");
+            loadingWindow.Show();
             DivisionCollection = PrescriptionInquireView.Instance.DivisionCollection;
             CopaymentCollection = PrescriptionInquireView.Instance.CopaymentCollection;
             PaymentCategoryCollection = PrescriptionInquireView.Instance.PaymentCategoryCollection;
@@ -237,6 +239,7 @@ namespace His_Pos.PrescriptionInquire
             AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
             TreatmentCase.ItemsSource = TreatmentCaseCollection;
             TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+            loadingWindow.Close();
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
@@ -361,6 +364,7 @@ namespace His_Pos.PrescriptionInquire
         }
         private void CountMedicinesCost()
         {
+            if (DeclareTrade == null) return;
             double medicinesHcCost = 0;//健保給付總藥價
             double medicinesSelfCost = 0;//自費藥總藥價
             double purchaseCosts = 0;//藥品總進貨成本
@@ -584,6 +588,11 @@ namespace His_Pos.PrescriptionInquire
                 DeclareDetails.Add(declareDetailClone);
             }
             InitDataChanged();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            isFirst = false;
         }
     }
 }

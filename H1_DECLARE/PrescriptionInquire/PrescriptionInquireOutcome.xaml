@@ -7,6 +7,7 @@
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         xmlns:local="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="處方詳細資料" Height="595" Width="1200" WindowStartupLocation="CenterScreen">
     <Window.Background>
         <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
@@ -56,13 +57,13 @@
             <StackPanel Orientation="Horizontal"  Grid.Row="0"  Grid.ColumnSpan="5">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                        <hisPos:IconLabel x:Name="PatientName" HorizontalAlignment="Left"/>
-                        <hisPos:IconLabel x:Name="PatientBirthday"  HorizontalAlignment="Left"/>
-                        <hisPos:IconLabel Width="100"/>
+                        <Label x:Name="PatientName" FontSize="25" Content="{Binding InquiredPrescription.Prescription.Customer.Name}" HorizontalAlignment="Left" />
+                        <Label x:Name="PatientBirthday" FontSize="25" Content="{Binding InquiredPrescription.Prescription.Customer.Birthday}"  HorizontalAlignment="Left" />
+                        <Rectangle Width="100"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0">
-                        <hisPos:IconLabel x:Name="PatientId"  HorizontalAlignment="Left"/>
-                        <hisPos:IconLabel x:Name="PatientTel" HorizontalAlignment="Left"/>
+                        <Label x:Name="PatientId" FontSize="25" Content="{Binding InquiredPrescription.Prescription.Customer.IcNumber}" HorizontalAlignment="Left" />
+                        <Label x:Name="PatientTel" HorizontalAlignment="Left" IsEnabled="False"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
@@ -247,7 +248,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTextColumn
-                        MinWidth="400"
+                        Width="380"
                         Binding="{Binding Name}"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
