@@ -1,5 +1,4 @@
 ﻿using His_Pos.ViewModel;
-using MenuUserControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
