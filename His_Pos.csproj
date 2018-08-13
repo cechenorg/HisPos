@@ -257,7 +257,7 @@
     <Compile Include="Class\Manufactory\ManufactoryPrincipal.cs" />
     <Compile Include="Class\Manufactory\ProductDetailManufactory.cs" />
     <Compile Include="Class\MedBagLocation\MedBagLocation.cs" />
-    <Compile Include="Class\MedBagLocation\MedBagLocationDB.cs" />
+    <Compile Include="Class\MedBagLocation\MedBagLocationDb.cs" />
     <Compile Include="Class\MedBag\MedBag.cs" />
     <Compile Include="Class\MedBag\MedBagDb.cs" />
     <Compile Include="Class\Person\ContactInfo.cs" />
