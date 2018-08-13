@@ -107,7 +107,6 @@ namespace His_Pos.ProductPurchase
             DataContext = this;
             Instance = this;
             this.Loaded += UserControl1_Loaded;
-            UpdateUi();
             StoOrderOverview.SelectedIndex = 0;
 
             CurrentControl = purchaseControl;
@@ -116,8 +115,9 @@ namespace His_Pos.ProductPurchase
             loadingWindow.GetProductPurchaseData(this);
 
             loadingWindow.Show();
+
         }
-        
+
 
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
         {
@@ -131,11 +131,6 @@ namespace His_Pos.ProductPurchase
             {
                 SaveOrder();
             }
-        }
-
-        public void UpdateUi()
-        {
-            StoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
         }
 
         private void ShowOrderDetail(object sender, SelectionChangedEventArgs e)

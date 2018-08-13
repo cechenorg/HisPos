@@ -71,7 +71,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void InitProducts()
         {
-            ProductAutoCompleteCollection = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
+            BackgroundWorker getProductAutobackground = new BackgroundWorker();
+
+            getProductAutobackground.DoWork += (s, o) =>
+            {
+                Collection<PurchaseProduct> temp = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    ProductAutoCompleteCollection = temp;
+                }));
+            };
+
+            getProductAutobackground.RunWorkerAsync();
         }
 
         private void UpdateOrderDetailUi()
@@ -135,6 +146,30 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             if (leaveItem is IDeletable)
             {
                 (leaveItem as IDeletable).Source = string.Empty;
+            }
+        }
+
+        private void StoreOrderDetail_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;
+                
+                (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                var focusedCell = StoreOrderDetail.CurrentCell.Column.GetCellContent(StoreOrderDetail.CurrentCell.Item);
+
+                while (focusedCell is TextBlock)
+                {
+                    focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                    focusedCell = StoreOrderDetail.CurrentCell.Column.GetCellContent(StoreOrderDetail.CurrentCell.Item);
+                }
+
+                UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                child.Focus();
+
             }
         }
     }

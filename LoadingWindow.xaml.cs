@@ -125,9 +125,14 @@ namespace His_Pos
                 ChangeLoadingMessage("取得廠商資料...");
                 ObservableCollection<Manufactory> tempManufactories = ManufactoryDb.GetManufactoryData();
 
+                ChangeLoadingMessage("取得進退貨資料...");
+
                 Dispatcher.Invoke((Action)(() =>
                 {
                     productPurchaseView.ManufactoryAutoCompleteCollection = tempManufactories;
+                    //待修改
+                    ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+                    productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
                 }));
             };
 
