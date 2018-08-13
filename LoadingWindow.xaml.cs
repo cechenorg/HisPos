@@ -97,11 +97,21 @@ namespace His_Pos
                         currentDecCount++;
                     }
                     declareDb.ImportDeclareData(declareDataCollection, decId);
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS);
+                        mainWindow.Show();
+                    }));
                 }
                 else {
-                    ChangeLoadingMessage("申報檔已存在!");
-                    Thread.Sleep(2000);
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        MessageWindow mainWindow = new MessageWindow("申報檔已存在!", MessageType.ERROR);
+                        mainWindow.Show();
+                    }));
                 }
+               
+               
             };
             backgroundWorker.ProgressChanged += (s, e) =>
             {
@@ -112,9 +122,6 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                  
-                    MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS);
-                    mainWindow.Show();
                     Close();
                 }));
             };

@@ -84,7 +84,7 @@ namespace His_Pos.Class.Declare
         public string CheckXmlFileExist(XmlDocument xml) {
             var conn = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("XML", xml.InnerXml));
+            parameters.Add(new SqlParameter("XML", xml.SelectSingleNode("pharmacy/tdata").InnerXml));
             var table = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[CheckXMLFileExist]", parameters);
             if (table.Rows[0]["IsCheck"].ToString() == "0")
                 return string.Empty;

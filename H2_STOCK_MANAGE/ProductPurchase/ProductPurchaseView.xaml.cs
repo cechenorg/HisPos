@@ -238,18 +238,20 @@ namespace His_Pos.ProductPurchase
 
         private void GetProductAutoComplete()
         {
-            BackgroundWorker getProductAutobackground = new BackgroundWorker();
+            Products = ProductDb.GetItemDialogProduct();
 
-            getProductAutobackground.DoWork += (s, o) =>
-            {
-                ObservableCollection<object> temp = ProductDb.GetItemDialogProduct();
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Products = temp;
-                }));
-            };
+            //BackgroundWorker getProductAutobackground = new BackgroundWorker();
 
-            getProductAutobackground.RunWorkerAsync();
+            //getProductAutobackground.DoWork += (s, o) =>
+            //{
+            //    Products = ProductDb.GetItemDialogProduct();
+            //    Dispatcher.BeginInvoke(new Action(() =>
+            //    {
+            //        Products = temp;
+            //    }));
+            //};
+
+            //getProductAutobackground.RunWorkerAsync();
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
