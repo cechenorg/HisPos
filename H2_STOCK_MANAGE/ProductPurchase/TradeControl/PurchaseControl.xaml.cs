@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
@@ -234,11 +235,42 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     return;
             }
 
-            if(((PurchaseProduct)productAuto.SelectedItem).Type.Equals("M"))
-                StoreOrderData.Products.Add(new ProductPurchaseMedicine((PurchaseProduct)productAuto.SelectedItem));
+            Product newProduct;
+
+            if (((PurchaseProduct)productAuto.SelectedItem).Type.Equals("M"))
+                newProduct = new ProductPurchaseMedicine((PurchaseProduct)productAuto.SelectedItem);
             else
-                StoreOrderData.Products.Add(new ProductPurchaseOtc((PurchaseProduct)productAuto.SelectedItem));
-            productAuto.Text = "";
+                newProduct = new ProductPurchaseOtc((PurchaseProduct)productAuto.SelectedItem);
+
+            int rowIndex = GetCurrentRowIndex(productAuto);
+
+            if (rowIndex == StoreOrderData.Products.Count)
+            {
+                StoreOrderData.Products.Add(newProduct);
+                
+                productAuto.Text = "";
+            }
+            else
+            {
+                ((IProductPurchase)newProduct).CopyFilledData(StoreOrderData.Products[rowIndex]);
+
+                StoreOrderData.Products[rowIndex] = newProduct;
+            }
+        }
+
+        private int GetCurrentRowIndex(AutoCompleteBox productAuto)
+        {
+            List<AutoCompleteBox> temp = new List<AutoCompleteBox>();
+            NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, productAuto.Name, ref temp);
+            for (int x = 0; x < temp.Count; x++)
+            {
+                if (temp[x].Equals(productAuto))
+                {
+                    return x;
+                }
+            }
+
+            return -1;
         }
 
         public AutoCompleteFilterPredicate<object> ProductFilter

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using His_Pos.AbstractClass;
 using His_Pos.Interface;
 using His_Pos.Struct.Product;
 
@@ -250,6 +251,21 @@ namespace His_Pos.Class.Product
             med.Status = Status;
 
             return med;
+        }
+
+        public void CopyFilledData(AbstractClass.Product product)
+        {
+            Amount = ((ITrade)product).Amount;
+            Price = ((ITrade)product).Price;
+            TotalPrice = ((ITrade)product).TotalPrice;
+            Note = ((IProductPurchase)product).Note;
+            Invoice = ((IProductPurchase)product).Invoice;
+            FreeAmount = ((IProductPurchase)product).FreeAmount;
+            ValidDate = ((IProductPurchase)product).ValidDate;
+            BatchNumber = ((IProductPurchase)product).BatchNumber;
+            Status = ((IProductPurchase)product).Status;
+            LastPrice = ((IProductPurchase)product).LastPrice;
+            Stock = ((IProductPurchase)product).Stock;
         }
     }
 }
