@@ -84,7 +84,7 @@
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}" MinimumPrefixLength="4"
                                                               IsEnabled="{Binding Id, Converter={StaticResource AutoCompleteIsEnableConverter}}"
-                                                              ItemsSource="{Binding ProductAutoCompleteCollection}">
+                                                              ItemsSource="{Binding ProductAutoCompleteCollection}" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown">
                                     <controls:AutoCompleteBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">

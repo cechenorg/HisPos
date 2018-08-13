@@ -18,7 +18,9 @@ using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
+using His_Pos.Service;
 using His_Pos.Struct.Product;
+using MahApps.Metro.Controls;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 {
@@ -154,22 +156,55 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
-                
-                (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                if (sender is TextBox)
+                {
+                    (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                    if(Keyboard.FocusedElement is Button)
+                        (Keyboard.FocusedElement as Button).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                }
+                else
+                {
+                    UIElement child = (sender as AutoCompleteBox).FindChild<TextBox>("Text");
+
+                    child.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                }
 
                 var focusedCell = StoreOrderDetail.CurrentCell.Column.GetCellContent(StoreOrderDetail.CurrentCell.Item);
 
-                while (focusedCell is TextBlock)
+                while (true)
                 {
+                    if (focusedCell is ContentPresenter)
+                    {
+                        UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                        if (!(child is Image))
+                            break;
+                    }
+
                     focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
                     focusedCell = StoreOrderDetail.CurrentCell.Column.GetCellContent(StoreOrderDetail.CurrentCell.Item);
                 }
 
-                UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
 
-                child.Focus();
+                if (firstChild is TextBox)
+                    firstChild.Focus();
+                else
+                {
+                    UIElement secondChild = (UIElement)VisualTreeHelper.GetChild(firstChild, 0);
 
+                    if (secondChild is AutoCompleteBox)
+                    {
+                        secondChild.FindChild<TextBox>("Text").Focus();
+                    }
+                    else
+                    {
+                        secondChild.Focus();
+                    }
+                }
             }
         }
     }
