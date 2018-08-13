@@ -17,10 +17,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Pharmacy</rd:DefaultName>
-        <Top>1.20676210307132cm</Top>
-        <Left>4.85565257352941cm</Left>
-        <Height>0.778854112441437cm</Height>
-        <Width>3.64554423253677cm</Width>
+        <Top>1.27104433748322cm</Top>
+        <Left>4.84024010416667cm</Left>
+        <Height>0.544928784653121cm</Height>
+        <Width>3.93452803308824cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -47,10 +47,340 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>PharmacyId</rd:DefaultName>
-        <Top>1.20676210307132cm</Top>
-        <Left>8.55464522058823cm</Left>
-        <Height>0.778854112441437cm</Height>
-        <Width>4.43543328737745cm</Width>
+        <Top>1.28746609894941cm</Top>
+        <Left>8.83004044117647cm</Left>
+        <Height>0.511081709631138cm</Height>
+        <Width>5.10587570465686cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="PatientName">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>PatientName</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>PatientName</rd:DefaultName>
+        <Top>5.29437589670014cm</Top>
+        <Left>3.66889243259803cm</Left>
+        <Height>0.495663500254549cm</Height>
+        <Width>4.24277742034315cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="Institution">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Institution</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Institution</rd:DefaultName>
+        <Top>3.55366918128385cm</Top>
+        <Left>6.33524963235294cm</Left>
+        <Height>0.462819977322164cm</Height>
+        <Width>3.70334099264706cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="Division">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Division</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Division</rd:DefaultName>
+        <Top>3.50440389688526cm</Top>
+        <Left>11.6371390931373cm</Left>
+        <Height>0.512085261720739cm</Height>
+        <Width>2.63988060661765cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="MedicineId">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>MedicineId</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>MedicineId</rd:DefaultName>
+        <Top>7.19930022677836cm</Top>
+        <Left>3.90007947303921cm</Left>
+        <Height>0.544928784653121cm</Height>
+        <Width>4.08865272671568cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="EngName">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>EngName</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>EngName</rd:DefaultName>
+        <Top>7.21572198824455cm</Top>
+        <Left>8.04603373161765cm</Left>
+        <Height>0.512085261720739cm</Height>
+        <Width>5.27541286764706cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="Usage">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Usage</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Usage</rd:DefaultName>
+        <Top>8.0696535844865cm</Top>
+        <Left>3.86925453431373cm</Left>
+        <Height>0.479241738788356cm</Height>
+        <Width>2.4857559129902cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="Dosage">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Dosage</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Dosage</rd:DefaultName>
+        <Top>8.05323182302031cm</Top>
+        <Left>6.42772444852941cm</Left>
+        <Height>0.495663500254549cm</Height>
+        <Width>3.65710358455882cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="Total">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Total</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Total</rd:DefaultName>
+        <Top>8.0696535844865cm</Top>
+        <Left>11.7296139093137cm</Left>
+        <Height>0.577772307585504cm</Height>
+        <Width>2.26998134191176cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="Indication">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Indication</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Indication</rd:DefaultName>
+        <Top>8.97285046512705cm</Top>
+        <Left>3.9617293504902cm</Left>
+        <Height>0.955472821307911cm</Height>
+        <Width>10.114928247549cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="SideEffect">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>SideEffect</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>SideEffect</rd:DefaultName>
+        <Top>10.0402649604295cm</Top>
+        <Left>3.9617293504902cm</Left>
+        <Height>0.90620753690933cm</Height>
+        <Width>10.1303407169118cm</Width>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox
+        Name="Notes">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Notes</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Notes</rd:DefaultName>
+        <Top>12.7170120794187cm</Top>
+        <Left>3.83842959558824cm</Left>
+        <Height>1.02115986717268cm</Height>
+        <Width>10.3769402267157cm</Width>
         <Style>
           <Border>
             <Style>None</Style>

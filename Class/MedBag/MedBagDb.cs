@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
@@ -40,9 +41,12 @@ namespace His_Pos.Class.MedBag
         }
         internal static void SaveMedBagData(MedBag medBag)
         {
+            var locationDataTable = CreateLocationDataTable();
+            foreach (var location in medBag.MedLocations)
+            {
+                AddLocationData(location, locationDataTable);
+            }
             var dd = new DbConnection(Settings.Default.SQL_global);
-            if (string.IsNullOrEmpty(medBag.Id))
-                medBag.Id = "0";
             var parameters = new List<SqlParameter>
             {
                 new SqlParameter("MEDBAG_ID", medBag.Id),
@@ -51,7 +55,8 @@ namespace His_Pos.Class.MedBag
                 new SqlParameter("MEDBAG_SIZEX", medBag.BagWidth),
                 new SqlParameter("MEDBAG_SIZEY", medBag.BagHeight),
                 new SqlParameter("MEDBAG_MODE", medBag.Mode),
-                new SqlParameter("MEDBAG_DEFAULT",medBag.Default)
+                new SqlParameter("MEDBAG_DEFAULT",medBag.Default),
+                new SqlParameter("LOCATION",locationDataTable)
             };
 
             dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[SavaMedBag]", parameters);
@@ -68,6 +73,40 @@ namespace His_Pos.Class.MedBag
                 data = ms.ToArray();
             }
             return data;
+        }
+
+        private static DataTable CreateLocationDataTable()
+        {
+            DataTable locationDataTable = new DataTable();
+            locationDataTable.Columns.Add("MEDBAG_ID",typeof(string));
+            locationDataTable.Columns.Add("MEDBAG_LOCNAME",typeof(string));
+            locationDataTable.Columns.Add("MEDBAG_X",typeof(double));
+            locationDataTable.Columns.Add("MEDBAG_Y",typeof(double));
+            locationDataTable.Columns.Add("MEDBAG_WIDTH",typeof(double));
+            locationDataTable.Columns.Add("MEDBAG_HEIGHT",typeof(double));
+            locationDataTable.Columns.Add("MEDBAG_REALWIDTH", typeof(double));
+            locationDataTable.Columns.Add("MEDBAG_REALHEIGHT", typeof(double));
+            locationDataTable.Columns.Add("MEDBAG_LOCCONTENT", typeof(string));
+            locationDataTable.Columns.Add("MEDBAG_CANVASLEFT", typeof(double));
+            locationDataTable.Columns.Add("MEDBAG_CANVASTOP", typeof(double));
+            return locationDataTable;
+        }
+
+        private static void AddLocationData(MedBagLocation.MedBagLocation medBagLocation, DataTable locationDataTable)
+        {
+            var row = locationDataTable.NewRow();
+            row["MEDBAG_ID"] = medBagLocation.Id.ToString();
+            row["MEDBAG_LOCNAME"] = medBagLocation.Name;
+            row["MEDBAG_X"] = medBagLocation.PathX;
+            row["MEDBAG_Y"] = medBagLocation.PathY;
+            row["MEDBAG_WIDTH"] = medBagLocation.Width;
+            row["MEDBAG_HEIGHT"] = medBagLocation.Height;
+            row["MEDBAG_REALWIDTH"] = medBagLocation.RealWidth;
+            row["MEDBAG_REALHEIGHT"] = medBagLocation.RealHeight;
+            row["MEDBAG_LOCCONTENT"] = medBagLocation.Content;
+            row["MEDBAG_CANVASLEFT"] = medBagLocation.CanvasLeft;
+            row["MEDBAG_CANVASTOP"] = medBagLocation.CanvasTop;
+            locationDataTable.Rows.Add(row);
         }
     }
 }

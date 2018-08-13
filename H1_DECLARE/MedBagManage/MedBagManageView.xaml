@@ -227,9 +227,9 @@
                 Content="選擇藥袋圖檔"
                 FontSize="16"
                 Foreground="White" />
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+            <StackPanel x:Name="ModeStack" Orientation="Horizontal" Margin="0,20,0,0">
                 <RadioButton 
-                    Name ="Single"
+                    Name="SingleMode"
                     Content="一藥一袋"
                     Margin="20,0,0,0"
                     FontSize="16" 
@@ -237,19 +237,19 @@
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
                     Tag ="0"
-                    IsChecked ="{Binding CheckSingle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    Checked="RadioButton_Checked"/>
+                    Checked="ModeRadioChecked"
+                    />
                 <RadioButton 
-                    Name ="Multi"
+                    Name="MultiMode"
                     Content="多藥一袋" 
                     Margin="20,0,0,0"
                     FontSize="16" 
                     FontFamily="Segoe UI Semibold"
                     VerticalAlignment="Center"
                     VerticalContentAlignment="Center"
-                    Tag ="1"
-                    IsChecked ="{Binding CheckMulti,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    Checked="RadioButton_Checked"/>
+                    
+                    Tag ="1" Checked="ModeRadioChecked"
+                    />
             </StackPanel>
         </StackPanel>
         <StackPanel
@@ -265,7 +265,8 @@
                 CellStyle="{StaticResource DataGridCellStyle}"
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 GridLinesVisibility="Horizontal"
-                ItemsSource="{Binding MedBagCollection,UpdateSourceTrigger=PropertyChanged}" SelectedCellsChanged="MedBags_SelectedCellsChanged">
+                HeadersVisibility="None"
+                ItemsSource="{Binding MedBagCollectionView}" SelectedCellsChanged="MedBags_SelectedCellsChanged">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -339,13 +340,13 @@
                                             FontSize="12"
                                             Foreground="Black" />
                                         <TextBox
-                                            Width="25"
+                                            Width="35"
                                             FontFamily="Segoe UI Semi"
                                             FontSize="12"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Bottom"
                                             BorderThickness="0"
-                                            Text="{Binding BagWidth,UpdateSourceTrigger=PropertyChanged}" />
+                                            Text="{Binding BagWidth,UpdateSourceTrigger=PropertyChanged,Delay=400}" />
                                         <Label
                                             Content=" x "
                                             FontFamily="Segoe UI Semibold"
@@ -353,12 +354,12 @@
                                             FontSize="12"
                                             Foreground="Black" />
                                         <TextBox
-                                            Width="25"
+                                            Width="35"
                                             FontSize="12"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Bottom"
                                             BorderThickness="0"
-                                            Text="{Binding BagHeight,UpdateSourceTrigger=PropertyChanged}" />
+                                            Text="{Binding BagHeight,UpdateSourceTrigger=PropertyChanged,Delay=400}" />
                                         <Label
                                             Content="(公分)"
                                             FontFamily="Segoe UI Semi"
@@ -411,21 +412,6 @@
                     Margin = "0,15,0,15"
                     IsChecked="{Binding SelectedMedBag.Default,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                <Label
-                    Content="藥袋模式"
-                    Style="{StaticResource LocLabel}" />
-                <CheckBox
-                    Name="SingleMed"
-                    Content="一藥一袋"
-                    Style="{StaticResource LocCheckBox}"
-                    IsChecked ="{Binding CheckSingle,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    Click="Mode_Checked"/>
-                <CheckBox
-                    Name="MultiMed"
-                    Content="多藥一袋"
-                    Style="{StaticResource LocCheckBox}"
-                    IsChecked ="{Binding CheckMulti,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                    Click="Mode_Checked"/>
                 <Label
                     Content="藥局"
                     Style="{StaticResource LocLabel}"/>

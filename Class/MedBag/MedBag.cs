@@ -4,7 +4,6 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using His_Pos.H1_DECLARE.MedBagManage;
@@ -28,11 +27,14 @@ namespace His_Pos.Class.MedBag
             BagHeight = double.Parse(dataRow["MEDBAG_SIZEY"].ToString());
             MedBagImage = ToImage((byte[])dataRow["MEDBAG_IMAGE"]);
             MedLocations = MedBagDb.ObservableGetLocationData(Id);
-            Mode = dataRow["MEDBAG_MODE"].ToString() == "0" ? MedBagMode.SINGLE : MedBagMode.MULTI;
+            if (dataRow["MEDBAG_MODE"].ToString() == "False")
+                Mode = MedBagMode.SINGLE;
+            else
+                Mode = MedBagMode.MULTI;
             Default = dataRow["MEDBAG_DEFAULT"].ToString() == "1";
         }
 
-        public MedBag(MedBagMode mode)
+        public MedBag(MedBagMode m)
         {
             MedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             Id = string.Empty;
@@ -40,7 +42,7 @@ namespace His_Pos.Class.MedBag
             BagWidth = 0.0;
             BagHeight = 0.0;
             MedBagImage = null;
-            Mode = mode;
+            Mode = m;
         }
 
         public ObservableCollection<MedBagLocation.MedBagLocation> MedLocations { get; set; }
@@ -117,7 +119,21 @@ namespace His_Pos.Class.MedBag
                 var convert = BagWidth / medBagImage.Width;
                 if (!string.IsNullOrEmpty(rdlLocation.LabelContent))
                 {
-                    MedLocations.Add(new MedBagLocation.MedBagLocation(rdlLocation,convert));
+                    MedBagLocation.MedBagLocation medLoc = new MedBagLocation.MedBagLocation(rdlLocation, convert);
+                    if (!CheckExistLocation(medLoc))
+                        MedLocations.Add(medLoc);
+                    else
+                    {
+                        int i = 0;
+                        int existIndex = 0;
+                        foreach (var m in MedLocations)
+                        {
+                            if (m.Content.Equals(medLoc.Content))
+                                existIndex = i;
+                            i++;
+                        }
+                        MedLocations[existIndex] = medLoc;
+                    }
                 }
             }
         }
@@ -147,16 +163,14 @@ namespace His_Pos.Class.MedBag
             }
         }
 
-        private byte[] ObjectToByteArray(object obj)
+        private bool CheckExistLocation(MedBagLocation.MedBagLocation m)
         {
-            if (obj == null)
-                return null;
-            BinaryFormatter bf = new BinaryFormatter();
-            using (MemoryStream ms = new MemoryStream())
+            foreach (MedBagLocation.MedBagLocation location in MedLocations)
             {
-                bf.Serialize(ms, obj);
-                return ms.ToArray();
+                if (location.Content.Equals(m.Content))
+                    return true;
             }
+            return false;
         }
     }
 }

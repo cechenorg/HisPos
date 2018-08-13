@@ -29,6 +29,7 @@ using Page = His_Pos.RDLC.Page;
 using RadioButton = System.Windows.Controls.RadioButton;
 using Report = His_Pos.RDLC.Report;
 using Style = His_Pos.RDLC.Style;
+using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.H1_DECLARE.MedBagManage
 {
@@ -39,16 +40,33 @@ namespace His_Pos.H1_DECLARE.MedBagManage
     {
         private const string ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
         public static MedBagManageView Instance;
-        private bool _checkMulti;
-        private bool _checkSingle;
 
         private int _id;
+        private int maxMedBagId = -1;
+        private MedBagMode selectedMode;
+
+        public MedBagMode SelectedMode
+        {
+            get => selectedMode;
+            set
+            {
+                selectedMode = value;
+                if (selectedMode == MedBagMode.SINGLE)
+                {
+                    SingleMode.IsChecked = true;
+                    MultiMode.IsChecked = false;
+                }
+                else
+                {
+                    MultiMode.IsChecked = true;
+                    SingleMode.IsChecked = false;
+                }
+                OnPropertyChanged(nameof(SelectedMode));
+            }
+        }
         private ObservableCollection<MedBag> _medBagCollection;
-
         private double _medBagImgHeight;
-
         private double _medBagImgWidth;
-        private MedBagMode _mode;
         private MedBag _selectedMedBag;
 
         public MedBagManageView()
@@ -56,47 +74,10 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             InitializeComponent();
             Instance = this;
             DataContext = this;
-            InitializeMedManageViewControl();
+            InitializeMedManageViewControl(MedBagMode.SINGLE);
         }
 
-        public bool CheckSingle
-        {
-            get => _checkSingle;
-            set
-            {
-                _checkSingle = value;
-                OnPropertyChanged(nameof(CheckSingle));
-            }
-        }
-
-        public bool CheckMulti
-        {
-            get => _checkMulti;
-            set
-            {
-                _checkMulti = value;
-                OnPropertyChanged(nameof(CheckMulti));
-            }
-        }
-
-        public MedBagMode Mode
-        {
-            get => _mode;
-            set
-            {
-                _mode = value;
-                if (_mode == MedBagMode.SINGLE)
-                {
-                    CheckSingle = true;
-                    CheckMulti = false;
-                }
-                else
-                {
-                    CheckSingle = false;
-                    CheckMulti = true;
-                }
-            }
-        }
+        private bool singleMode;
 
         public ObservableCollection<MedBag> MedBagCollection
         {
@@ -114,6 +95,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             set
             {
                 _selectedMedBag = value;
+                SetMedBagRange();
                 OnPropertyChanged(nameof(SelectedMedBag));
             }
         }
@@ -140,11 +122,17 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void InitializeMedManageViewControl()
+        private void InitializeMedManageViewControl(MedBagMode mode)
         {
-            Mode = MedBagMode.SINGLE;
-            SelectedMedBag = new MedBag(Mode);
+            SelectedMode = mode;
+            SelectedMedBag = new MedBag(SelectedMode);
             MedBagCollection = MedBagDb.ObservableGetMedBagData();
+            foreach (var m in MedBagCollection)
+            {
+                var i = int.Parse(m.Id);
+                if (i > maxMedBagId)
+                    maxMedBagId = i;
+            }
             MedBags.ItemsSource = MedBagCollection;
             if (MedBags.Items.Count != 0)
                 MedBags.SelectedIndex = 0;
@@ -181,6 +169,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void SetMedBagRange()
         {
+            if (SelectedMedBag?.MedBagImage == null) return;
             if (SelectedMedBag.MedBagImage.Width >= SelectedMedBag.MedBagImage.Height)
             {
                 MedBagImgWidth = 935;
@@ -213,6 +202,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             MedRangeLocationControl.SetValue(Canvas.TopProperty, 0.0);
             MedRangeLocationControl.SetValue(WidthProperty, MedBagImgWidth);
             MedRangeLocationControl.SetValue(HeightProperty, MedBagImgHeight);
+            MedRangeLocationControl.Visibility = Visibility.Visible;
         }
 
         private void NewLocationClick(object sender, RoutedEventArgs e)
@@ -231,10 +221,12 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 MedBagCanvas.Children.Remove(MedBagCanvas.Children.OfType<ContentControl>()
                     .Where(r => r.Content is RdlLocationControl)
                     .Single(r => (r.Content as RdlLocationControl).LabelContent.Equals(c.Content)));
+                SelectedMedBag.MedLocations.Remove(SelectedMedBag.MedLocations.Where(l => l != null)
+                    .Single(l => l.Content.Equals(c.Content)));
             }
         }
 
-        public void NewLocation(string locid = null, string content = null, string controlName = null,
+        private void NewLocation(string locid = null, string content = null, string controlName = null,
             double height = 0, double width = 0, double top = 0, double left = 0)
         {
             var contentControl = new ContentControl();
@@ -273,7 +265,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
-        public void SetLocation(MedBagLocation m)
+        private void SetLocation(MedBagLocation m)
         {
             if (!string.IsNullOrEmpty(m.Content))
                 NewFunction.FindChild<CheckBox>(CheckBoxStack, m.Name).IsChecked = true;
@@ -292,6 +284,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         {
             if (CheckMedBagCollectionEmpty())
                 return;
+            SelectedMedBag.Mode = SelectedMode;
             SelectedMedBag.SetLocationCollection(MedBagCanvas.Children);
             MedBagDb.SaveMedBagData(SelectedMedBag);
         }
@@ -315,7 +308,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         {
             if (sender is Button b && b.Name.Contains("Add"))
             {
-                MedBagCollection.Add(new MedBag(_mode));
+                MedBagCollection.Add(new MedBag(SelectedMode));
+                MedBags.SelectedItem = MedBagCollection[MedBagCollection.Count-1];
             }
             else
             {
@@ -346,19 +340,25 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void MedBags_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
+            ClearMedBagCanvasUIElement();
             SelectedMedBag = ((DataGrid) sender).SelectedItem as MedBag;
-            if (SelectedMedBag != null && SelectedMedBag.MedLocations.Count > 0)
+            if (SelectedMedBag == null) return;
+            if (SelectedMedBag.MedLocations.Count > 0)
             {
                 if (SelectedMedBag.MedBagImage != null)
                     SetMedBagRange();
                 foreach (var location in SelectedMedBag.MedLocations)
                     SetLocation(location);
             }
+            else
+            {
+                SelectedMedBag.Id = (maxMedBagId + 1).ToString();
+            }
         }
 
         private void CleanButtonClick(object sender, RoutedEventArgs e)
         {
-            SelectedMedBag = new MedBag(_mode);
+            SelectedMedBag = new MedBag(SelectedMode);
             MedBagCollection[MedBags.SelectedIndex] = SelectedMedBag;
         }
 
@@ -372,7 +372,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 m.Show();
                 return true;
             }
-
             return false;
         }
 
@@ -382,33 +381,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 if (m.Name != "MedicineList")
                     medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m));
         }
-
-        private void Mode_Checked(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is CheckBox c)) return;
-            if (c.Name.Equals("SingleMed"))
-                Mode = MedBagMode.SINGLE;
-            else
-                Mode = MedBagMode.MULTI;
-            SelectedMedBag.Mode = Mode;
-        }
-
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (sender is RadioButton radioButton)
-                Mode = (MedBagMode) short.Parse(radioButton.Tag.ToString());
-
-            if (MedBags is null) return;
-            MedBags.Items.Filter = ModeFilter;
-        }
-
-        private bool ModeFilter(object item)
-        {
-            if (Mode == MedBagMode.SINGLE)
-                return true;
-            return ((MedBag) item).Mode == Mode;
-        }
-
         private Report CreatReport()
         {
             var medBagReport = new Report
@@ -440,7 +412,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             SetReportItem(medBagReport, SelectedMedBag.MedLocations);
             return medBagReport;
         }
-
         private static Textbox CreatTextBoxField(MedBagLocation m)
         {
             return new Textbox
@@ -478,7 +449,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 }
             };
         }
-
         public string SerializeObject<T>(Report report)
         {
             var xmlSerializer = new XmlSerializer(report.GetType());
@@ -488,7 +458,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 return PrettyXml(textWriter);
             }
         }
-
         private static string PrettyXml(StringWriter writer)
         {
             var stringBuilder = new StringBuilder();
@@ -508,7 +477,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
             return stringBuilder.ToString();
         }
-
         private void CreatePdf()
         {
             var mimeType = string.Empty;
@@ -532,6 +500,37 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             using (var fs = new FileStream("output.pdf", FileMode.Create))
             {
                 fs.Write(bytes, 0, bytes.Length);
+            }
+        }
+
+        private void ModeRadioChecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is RadioButton r)
+                SelectedMode = (MedBagMode)Convert.ToInt32(r.Tag.ToString());
+
+            MedBags.Items.Filter = m => ((MedBag) m).Mode == SelectedMode;
+            if (MedBags.Items.Count > 0)
+            {
+                MedBags.SelectedIndex = 0;
+            }
+            else
+            {
+               SelectedMedBag = new MedBag(SelectedMode);
+            }
+        }
+
+        private void ClearMedBagCanvasUIElement()
+        {
+            MedRangeLocationControl.Visibility = Visibility.Hidden;
+            if (MedBagCanvas.Children.Count == 1) return;
+            foreach (UIElement child in CheckBoxStack.Children)
+            {
+                if (child is CheckBox box)
+                    box.IsChecked = false;
+            }
+            for (int i = 1; i < MedBagCanvas.Children.Count;)
+            {
+                MedBagCanvas.Children.Remove(MedBagCanvas.Children[i]);
             }
         }
     }
