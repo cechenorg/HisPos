@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using His_Pos.Interface;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.Class.Product
 {
@@ -60,6 +61,21 @@ namespace His_Pos.Class.Product
 
         private ProductPurchaseOtc()
         {
+        }
+
+        public ProductPurchaseOtc(PurchaseProduct selectedItem) : base(selectedItem)
+        {
+            Amount = 0;
+            Price = "0";
+            TotalPrice = 0;
+            Note = "";
+            Invoice = "";
+            FreeAmount = 0;
+            ValidDate = "";
+            BatchNumber = "";
+            Status = selectedItem.Status;
+            LastPrice = selectedItem.LastPrice;
+            Stock = new InStock(selectedItem);
         }
 
         public string CountStatus { get; set; } = "";

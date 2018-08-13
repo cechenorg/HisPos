@@ -80,11 +80,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <controls:AutoCompleteBox x:Name="Id" Width="110" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
+                                <controls:AutoCompleteBox x:Name="IdAutoComplete" Width="110" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" Height="30"
                                                               ValueMemberPath="Id" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Id}" MinimumPrefixLength="4"
-                                                              IsEnabled="{Binding Id, Converter={StaticResource AutoCompleteIsEnableConverter}}"
-                                                              ItemsSource="{Binding ProductAutoCompleteCollection}" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown">
+                                                              Populating="ProductID_Populating" DropDownClosed="ProductID_DropDownClosed"
+                                                              PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.IsVirtualizing="True">
                                     <controls:AutoCompleteBox.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">

@@ -24,8 +24,8 @@ namespace His_Pos.Struct.Product
             Status = Boolean.Parse(dataRow["PRO_STATUS"].ToString());
         }
 
-        public string Id;
-        public string Name;
+        public string Id { get; set; }
+        public string Name { get; set; }
         public string ChiName;
         public string EngName;
         public double Inventory;

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using His_Pos.Interface;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.Class.Product
 {
@@ -14,8 +15,6 @@ namespace His_Pos.Class.Product
     {
         public ProductPurchaseMedicine(DataRow dataRow, DataSource dataSource) : base(dataRow)
         {
-            BatchNumber = "";
-
             LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
 
             Stock = new InStock(dataRow);
@@ -59,6 +58,21 @@ namespace His_Pos.Class.Product
 
         private ProductPurchaseMedicine()
         {
+        }
+
+        public ProductPurchaseMedicine(PurchaseProduct selectedItem) : base (selectedItem)
+        {
+            Amount = 0;
+            Price = "0";
+            TotalPrice = 0;
+            Note = "";
+            Invoice = "";
+            FreeAmount = 0;
+            ValidDate = "";
+            BatchNumber = "";
+            Status = selectedItem.Status;
+            LastPrice = selectedItem.LastPrice;
+            Stock = new InStock(selectedItem);
         }
 
         public bool Status { get; set; } = false;

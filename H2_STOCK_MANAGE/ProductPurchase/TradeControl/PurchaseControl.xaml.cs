@@ -30,7 +30,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
     public partial class PurchaseControl : UserControl, INotifyPropertyChanged
     {
 
-        public Collection<PurchaseProduct> ProductAutoCompleteCollection;
+        public Collection<PurchaseProduct> ProductAutoCompleteCollection { get; set; }
 
         private StoreOrder storeOrderData;
 
@@ -205,6 +205,50 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                         secondChild.Focus();
                     }
                 }
+            }
+        }
+
+        private void ProductID_Populating(object sender, PopulatingEventArgs e)
+        {
+            var productAuto = sender as AutoCompleteBox;
+
+            if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || ProductAutoCompleteCollection is null) return;
+
+            var result = ProductAutoCompleteCollection.Where(x => (x.Id.ToLower().Contains(productAuto.Text.ToLower()) || x.ChiName.ToLower().Contains(productAuto.Text.ToLower()) || x.EngName.ToLower().Contains(productAuto.Text.ToLower()))).Take(50);
+            
+            productAuto.ItemsSource = new ObservableCollection<PurchaseProduct>(result.ToList());
+            productAuto.ItemFilter = ProductFilter;
+            productAuto.PopulateComplete();
+        }
+
+        private void ProductID_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            var productAuto = sender as AutoCompleteBox;
+
+            if (productAuto is null) return;
+            if (productAuto.SelectedItem is null)
+            {
+                if (productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<PurchaseProduct>).Count != 0 && productAuto.Text.Length >= 4)
+                    productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<PurchaseProduct>)[0];
+                else
+                    return;
+            }
+
+            if(((PurchaseProduct)productAuto.SelectedItem).Type.Equals("M"))
+                StoreOrderData.Products.Add(new ProductPurchaseMedicine((PurchaseProduct)productAuto.SelectedItem));
+            else
+                StoreOrderData.Products.Add(new ProductPurchaseOtc((PurchaseProduct)productAuto.SelectedItem));
+            productAuto.Text = "";
+        }
+
+        public AutoCompleteFilterPredicate<object> ProductFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((PurchaseProduct)obj).Id.ToLower().Contains(searchText.ToLower())
+                    || ((PurchaseProduct)obj).ChiName.ToLower().Contains(searchText.ToLower())
+                    || ((PurchaseProduct)obj).EngName.ToLower().Contains(searchText.ToLower());
             }
         }
     }

@@ -199,22 +199,6 @@ namespace His_Pos.ProductPurchase
         //    IsFirst = false;
         //}
 
-        //private void GetProductAutoComplete()
-        //{
-        //    BackgroundWorker getProductAutobackground = new BackgroundWorker();
-
-        //    getProductAutobackground.DoWork += (s, o) =>
-        //    {
-        //        ObservableCollection<object> temp = ProductDb.GetItemDialogProduct();
-        //        Dispatcher.BeginInvoke(new Action(() =>
-        //        {
-        //            Products = temp;
-        //        }));
-        //    };
-
-        //    getProductAutobackground.RunWorkerAsync();
-        //}
-
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
         {
             AddNewOrderDialog addNewOrderDialog = new AddNewOrderDialog(ManufactoryAutoCompleteCollection);
@@ -275,15 +259,7 @@ namespace His_Pos.ProductPurchase
             return false;
         }
 
-        //public AutoCompleteFilterPredicate<object> ProductFilter
-        //{
-        //    get
-        //    {
-        //        return (searchText, obj) =>
-        //            ((obj as Product).Id is null) ? false : (obj as Product).Id.ToLower().Contains(searchText.ToLower())
-        //            || (obj as Product).ChiName.ToLower().Contains(searchText.ToLower()) || (obj as Product).EngName.ToLower().Contains(searchText.ToLower());
-        //    }
-        //}
+
 
         //private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
         //{

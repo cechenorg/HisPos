@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.Class
 {
@@ -43,6 +44,13 @@ namespace His_Pos.Class
             Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "")
                 ? "0"
                 : dataRow["PRO_INVENTORY"].ToString());
+        }
+
+        public InStock(PurchaseProduct selectedItem)
+        {
+            BasicAmount = selectedItem.BasicAmount;
+            SafeAmount = selectedItem.SafeAmount;
+            Inventory = selectedItem.Inventory;
         }
 
         public string BasicAmount

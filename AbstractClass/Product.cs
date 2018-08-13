@@ -3,6 +3,7 @@ using System.Data;
 using System.Security.Permissions;
 using System.Windows;
 using System.Windows.Media.Imaging;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.AbstractClass
 {
@@ -16,6 +17,14 @@ namespace His_Pos.AbstractClass
             Name = dataRow["PRO_NAME"].ToString();
             ChiName = dataRow["PRO_CHI"].ToString();
             EngName = dataRow["PRO_ENG"].ToString();
+        }
+
+        public Product(PurchaseProduct selectedItem)
+        {
+            Id = selectedItem.Id;
+            Name = selectedItem.Name;
+            ChiName = selectedItem.ChiName;
+            EngName = selectedItem.EngName;
         }
 
         public string Id { get; set; }
