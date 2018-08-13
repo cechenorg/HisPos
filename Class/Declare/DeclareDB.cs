@@ -67,15 +67,18 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
 
+            var customerTable = SetCustomerTable();
             var declareMasterTable = SetDeclareMasterTable();
             var pDataTable = SetImportPDataTable();//設定PData datatable columns
             foreach (DeclareData declaredata in declareDataCollection) {
                 AddDeclareMaster(declaredata,declareMasterTable);
                 AddImportPData(declaredata, pDataTable);//加入PData sqlparameters
+                AddCustomer(declaredata, customerTable);
             }
             parameters.Add(new SqlParameter("DecId", decId));
             parameters.Add(new SqlParameter("DeclareMasterTable", declareMasterTable));
             parameters.Add(new SqlParameter("DETAIL", pDataTable));
+            parameters.Add(new SqlParameter("Customer", customerTable));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[ImportDeclareMaster]", parameters);
         }
         public string CheckXmlFileExist(XmlDocument xml) {
@@ -256,6 +259,21 @@ namespace His_Pos.Class.Declare
                 row["PAYWAY"] = declareTrade.PayWay;
             tradeTable.Rows.Add(row);
         }
+        private DataTable SetCustomerTable()
+        {
+            var CustomerTable = new DataTable();
+            CustomerTable.Columns.Add("CUS_NAME",typeof(string));
+            CustomerTable.Columns.Add("CUS_BIRTH", typeof(string));
+            CustomerTable.Columns.Add("CUS_IDNUM", typeof(string));
+            return CustomerTable;
+        }
+        private void AddCustomer(DeclareData declareData, DataTable customerTable) {
+            var row = customerTable.NewRow();
+            row["CUS_NAME"] = declareData.Prescription.Customer.Name;
+            row["CUS_BIRTH"] = declareData.Prescription.Customer.Birthday;
+            row["CUS_IDNUM"] = declareData.Prescription.Customer.IcCard.IcNumber;
+            customerTable.Rows.Add(row);
+        }
         private DataTable SetDeclareMasterTable() {
             var declareMasterTable = new DataTable();
 
@@ -321,7 +339,7 @@ namespace His_Pos.Class.Declare
             row["D7"] = declareData.Prescription.Customer.IcCard.MedicalNumber;
             row["D8"] = d8;
             row["D9"] = d9;
-            row["CUS_ID"] = declareData.Prescription.Customer.Id;
+            row["CUS_ID"] = declareData.Prescription.Customer.IcCard.IcNumber; //身分證
             row["D11"] = string.Empty;
             row["D12"] = string.Empty;
             row["D13"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id);

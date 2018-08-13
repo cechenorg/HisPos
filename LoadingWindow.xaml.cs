@@ -95,8 +95,8 @@ namespace His_Pos
                         declareDataCollection.Add(declareData);
                         backgroundWorker.ReportProgress((int)((currentDecCount / totalDecCount) * 100));
                         currentDecCount++;
-                        declareDb.ImportDeclareData(declareDataCollection, decId);
                     }
+                    declareDb.ImportDeclareData(declareDataCollection, decId);
                 }
                 else {
                     ChangeLoadingMessage("申報檔已存在!");

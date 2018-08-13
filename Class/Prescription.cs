@@ -40,7 +40,6 @@ namespace His_Pos.Class
         public Prescription(XmlNode xml)
         {
             Customer = new Customer(xml);
-            Customer.Id = CustomerDb.CheckCustomerExist(Customer);
             Pharmacy = new Pharmacy(xml);
             Treatment = new Treatment(xml);
             ChronicSequence = xml.SelectSingleNode("d35") == null ? null : xml.SelectSingleNode("d35").InnerText;
