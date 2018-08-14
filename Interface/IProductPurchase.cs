@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
 
 namespace His_Pos.Interface
@@ -17,5 +18,7 @@ namespace His_Pos.Interface
         string Invoice { get; set; }
         string ValidDate { get; set; }
         string BatchNumber { get; set; }
+
+        void CopyFilledData(Product product);
     }
 }

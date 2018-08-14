@@ -22,6 +22,7 @@ using His_Pos.H5_ATTEND.WorkScheduleManage;
 using His_Pos.H4_BASIC_MANAGE.MedFrequencyManage;
 using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 
 namespace His_Pos.ViewModel
 {
@@ -186,7 +187,8 @@ namespace His_Pos.ViewModel
 
                 case nameof(FeatureItem.藥袋管理):
                     break;
-
+                case nameof(FeatureItem.藥局管理):
+                    break;
                 default:
                     return;
             }
@@ -265,6 +267,9 @@ namespace His_Pos.ViewModel
 
                 case nameof(FeatureItem.審核管理):
                     newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
+                    break;
+                case nameof(FeatureItem.顧客管理):
+                    newTab = new CustomerManage() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
                 //打卡

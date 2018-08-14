@@ -15,6 +15,7 @@ using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductPurchase;
 using His_Pos.Interface;
 using His_Pos.Class.ProductType;
+using His_Pos.Struct.Product;
 using LiveCharts;
 using LiveCharts.Wpf;
 
@@ -122,25 +123,19 @@ namespace His_Pos.Class.Product
             return dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[GetStockTakingProduct]");
         }
 
-        internal static ObservableCollection<object> GetItemDialogProduct()
+        internal static Collection<PurchaseProduct> GetItemDialogProduct(string id)
         {
-            ObservableCollection<object> collection = new ObservableCollection<object>();
+            Collection<PurchaseProduct> collection = new Collection<PurchaseProduct>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
-            
-            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetItemDialogProduct]");
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", id));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetItemDialogProduct]", parameters);
 
             foreach (DataRow row in table.Rows)
             {
-                switch (row["TYPE"].ToString())
-                {
-                    case "M":
-                        collection.Add(new ProductPurchase.ProductPurchaseView.NewItemProduct(Boolean.Parse(row["IS_MAN"].ToString()), new ProductPurchaseMedicine(row, DataSource.GetItemDialogProduct)));
-                        break;
-                    case "O":
-                        collection.Add(new ProductPurchase.ProductPurchaseView.NewItemProduct(Boolean.Parse(row["IS_MAN"].ToString()), new ProductPurchaseOtc(row, DataSource.GetItemDialogProduct)));
-                        break;
-                }
+                collection.Add(new PurchaseProduct(row));
             }
 
             return collection;

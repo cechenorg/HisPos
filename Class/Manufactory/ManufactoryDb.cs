@@ -19,10 +19,19 @@ namespace His_Pos.Class.Manufactory
             parameters.Add(new SqlParameter("MAN_ID", id));
             return dd.ExecuteProc("[HIS_POS_DB].[GET].[MANBYID]", parameters); 
     }
-        public static DataTable GetManufactoryData()
+        public static ObservableCollection<Manufactory> GetManufactoryData()
         {
+            ObservableCollection<Manufactory> collection = new ObservableCollection<Manufactory>();
+
             var dd = new DbConnection(Settings.Default.SQL_global);
-            return dd.ExecuteProc("[HIS_POS_DB].[GET].[MANUFACTORY]");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetManufactory]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new Manufactory(row));
+            }
+
+            return collection;
         }
         internal static void UpdateProductManufactory(string productId, ManufactoryChanged manufactoryChanged)
         {
@@ -155,6 +164,7 @@ namespace His_Pos.Class.Manufactory
             parameters.Add(new SqlParameter("PAYCONDITION", DBNull.Value));
             parameters.Add(new SqlParameter("PAYTYPE", DBNull.Value));
             parameters.Add(new SqlParameter("ISENABLE", 1));
+            parameters.Add(new SqlParameter("ISMAN", 1));
 
             dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
 
@@ -168,7 +178,7 @@ namespace His_Pos.Class.Manufactory
                 parameters.Add(new SqlParameter("NAME", principal.Name));
                 parameters.Add(new SqlParameter("NICKNAME", principal.NickName));
                 parameters.Add(new SqlParameter("ADDR", DBNull.Value));
-                parameters.Add(new SqlParameter("TEL", principal.Telphone));
+                parameters.Add(new SqlParameter("TEL", principal.Telephone));
                 parameters.Add(new SqlParameter("FAX", principal.Fax));
                 parameters.Add(new SqlParameter("EIN", DBNull.Value));
                 parameters.Add(new SqlParameter("EMAIL", principal.Email));
@@ -181,6 +191,7 @@ namespace His_Pos.Class.Manufactory
                 parameters.Add(new SqlParameter("PAYCONDITION", principal.PayCondition));
                 parameters.Add(new SqlParameter("PAYTYPE", principal.PayType));
                 parameters.Add(new SqlParameter("ISENABLE", principal.IsEnable));
+                parameters.Add(new SqlParameter("ISMAN", 1));
 
                 dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
             }

@@ -67,10 +67,10 @@ namespace His_Pos.ProductPurchaseRecord
             PassValueSearchData();
         }
         private void InitManufactory() {
-            foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
-            {
-                ManufactoryAutoCompleteCollection.Add(new Manufactory(row, DataSource.MANUFACTORY));
-            }
+            //foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
+            //{
+            //    ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
+            //}
             Manufactory.ItemsSource = ManufactoryAutoCompleteCollection;
             Manufactory.ItemFilter = ManufactoryFilter;
         }

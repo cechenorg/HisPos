@@ -51,14 +51,7 @@ namespace His_Pos.Class.StoreOrder
             OrdEmp = row["ORD_EMP"].ToString();
             TotalPrice = Double.Parse(row["TOTAL"].ToString()).ToString("0.##");
             RecEmp = row["REC_EMP"].ToString();
-            if (row["MAN_ID"].ToString() == "")
-                Manufactory = new Manufactory.Manufactory();
-            else
-            {
-                var data = MainWindow.ManufactoryTable.Select("MAN_ID = '" + row["MAN_ID"].ToString() + "'");
-
-                Manufactory = new Manufactory.Manufactory(data[0], DataSource.MANUFACTORY);
-            }
+            Manufactory = new Manufactory.Manufactory(row);
         }
 
         private StoreOrder()

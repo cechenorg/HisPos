@@ -124,6 +124,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 顧客管理 的當地語系化字串。
+        /// </summary>
+        internal static string CustomerManage {
+            get {
+                return ResourceManager.GetString("CustomerManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 基本資料管理 的當地語系化字串。
         /// </summary>
         internal static string DataManagement {

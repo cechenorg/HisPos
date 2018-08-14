@@ -1,9 +1,10 @@
 ﻿using His_Pos.AbstractClass;
+using His_Pos.Class;
 using His_Pos.Class.Person;
 using System.Data;
 using System.Xml;
 
-namespace His_Pos.Class
+namespace His_Pos.Class.Pharmacy
 {
     public class Pharmacy : Selection
     {

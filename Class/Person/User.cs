@@ -15,7 +15,7 @@ namespace His_Pos.Class.Person
 	        
 	    }
         
-	    public Pharmacy Pharmacy { get; set; }
+	    public Pharmacy.Pharmacy Pharmacy { get; set; }
         public string Position { get; set; }
 	    public ContactInfo ContactInfo { get; set; }
         public Authority.Authority Authority { get; set; } = new Authority.Authority();

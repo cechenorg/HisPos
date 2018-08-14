@@ -28,7 +28,7 @@ namespace His_Pos.ProductPurchase
 
             StoOrderOverview.SelectedIndex = 0;
 
-            SetChanged();
+            //SetChanged();
         }
 
         private void AddNewOrderByUm(Manufactory manufactory = null)
@@ -36,7 +36,7 @@ namespace His_Pos.ProductPurchase
             StoreOrderCollection.Insert(0, new StoreOrder(MainWindow.CurrentUser, manufactory));
             StoOrderOverview.SelectedIndex = 0;
 
-            SetChanged();
+            //SetChanged();
         }
     }
 }

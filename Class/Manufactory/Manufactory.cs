@@ -16,19 +16,13 @@ namespace His_Pos.Class.Manufactory
         {
         }
 
-        public Manufactory(DataRow row, DataSource dataSource)
+        public Manufactory(DataRow row)
         {
-            switch (dataSource)
-            {
-                case DataSource.MANUFACTORY:
-                    Address = row["MAN_ADDR"].ToString();
-                    Telphone = row["MAN_TEL"].ToString();
-                    Fax = row["MAN_FAX"].ToString();
-                    break;
-            }
-            
             Id = row["MAN_ID"].ToString();
             Name = row["MAN_NAME"].ToString();
+            Address = row["MAN_ADDR"].ToString();
+            Telphone = row["MAN_TEL"].ToString();
+            Fax = row["MAN_FAX"].ToString();
         }
 
         public string Id { get; set; }

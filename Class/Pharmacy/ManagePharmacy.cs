@@ -7,45 +7,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace His_Pos.Class.Manufactory
+namespace His_Pos.Class.Pharmacy
 {
-    public class ManageManufactory : Manufactory, ICloneable, INotifyPropertyChanged
+    public class ManagePharmacy : Manufactory.Manufactory, ICloneable, INotifyPropertyChanged
     {
-        private ManageManufactory() { }
+        private ManagePharmacy() { }
 
-        public ManageManufactory(DataRow row) : base(row)
+        public ManagePharmacy(DataRow row) : base(row)
         {
             NickName = row["MAN_NICKNAME"].ToString();
             UniformNumber = row["MAN_EIN"].ToString();
             Email = row["MAN_EMAIL"].ToString();
-            ControlMedicineID = row["MAN_CONTROLMEDID"].ToString();
             MedicalID = row["MAN_MEDICALID"].ToString();
             Note = row["MAN_NOTE"].ToString();
-            ManufactoryPrincipals = new ObservableCollection<ManufactoryPrincipal>();
+            PharmacyPrincipals = new ObservableCollection<PharmacyPrincipal>();
         }
 
         public string NickName { get; set; }
         public string UniformNumber { get; set; }
         public string Email { get; set; }
-        public string ControlMedicineID { get; set; }
         public string MedicalID { get; set; }
         public string Note { get; set; }
-        private ObservableCollection<ManufactoryPrincipal> manufactoryPrincipals;
-        public ObservableCollection<ManufactoryPrincipal> ManufactoryPrincipals
+        private ObservableCollection<PharmacyPrincipal> pharmacyPrincipals;
+        public ObservableCollection<PharmacyPrincipal> PharmacyPrincipals
         {
-            get { return manufactoryPrincipals; }
+            get { return pharmacyPrincipals; }
             set
             {
-                manufactoryPrincipals = value;
-                NotifyPropertyChanged("ManufactoryPrincipals");
+                pharmacyPrincipals = value;
+                NotifyPropertyChanged("PharmacyPrincipals");
             }
         }
 
-        public int ManufactoryPrincipalsCount { get { return ManufactoryPrincipals.Count(m => m.IsEnable); } }
+        public int PharmacyPrincipalsCount {
+            get { return PharmacyPrincipals.Count(p => p.IsEnable); }
+        }
 
         public object Clone()
         {
-            ManageManufactory newManageManufactory = new ManageManufactory
+            ManagePharmacy newManagePharmacy = new ManagePharmacy
             {
                 Id = Id,
                 Name = Name,
@@ -55,19 +55,18 @@ namespace His_Pos.Class.Manufactory
                 NickName = NickName,
                 UniformNumber = UniformNumber,
                 Email = Email,
-                ControlMedicineID = ControlMedicineID,
                 MedicalID = MedicalID,
                 Note = Note
             };
 
-            newManageManufactory.ManufactoryPrincipals = new ObservableCollection<ManufactoryPrincipal>();
+            newManagePharmacy.PharmacyPrincipals = new ObservableCollection<PharmacyPrincipal>();
 
-            foreach (ManufactoryPrincipal manufactoryPrincipal in ManufactoryPrincipals)
+            foreach (PharmacyPrincipal pharmacyPrincipal in PharmacyPrincipals)
             {
-                newManageManufactory.ManufactoryPrincipals.Add(manufactoryPrincipal.Clone() as ManufactoryPrincipal);
+                newManagePharmacy.PharmacyPrincipals.Add(pharmacyPrincipal.Clone() as PharmacyPrincipal);
             }
 
-            return newManageManufactory;
+            return newManagePharmacy;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
