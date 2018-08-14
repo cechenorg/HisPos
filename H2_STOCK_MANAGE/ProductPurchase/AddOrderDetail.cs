@@ -33,7 +33,7 @@ namespace His_Pos.ProductPurchase
 
         private void AddNewOrderByUm(Manufactory manufactory = null)
         {
-            StoreOrderCollection.Insert(0, new StoreOrder(MainWindow.CurrentUser, manufactory));
+            StoreOrderCollection.Insert(0, new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser, manufactory));
             StoOrderOverview.SelectedIndex = 0;
 
             //SetChanged();

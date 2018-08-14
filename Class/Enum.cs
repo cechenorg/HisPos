@@ -3,6 +3,13 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum StoreOrderCategory
+    {
+        PURCHASE = 0,
+        RETURN = 1,
+
+    }
+
     public enum StockTakingStatus
     {
         ADDPRODUCTS = 0,

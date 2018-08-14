@@ -18,7 +18,7 @@ namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
-        public StoreOrder(User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
+        public StoreOrder(StoreOrderCategory category, User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
@@ -27,7 +27,7 @@ namespace His_Pos.Class.StoreOrder
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
-            Category = new Category();
+            Category = new Category(category);
 
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 
@@ -47,7 +47,7 @@ namespace His_Pos.Class.StoreOrder
                     break;
             }
 
-            Category = new Category(row["STOORD_TYPE"].ToString());
+            Category = new Category(row["STOORD_TYPE"].ToString().Equals("進")? StoreOrderCategory.PURCHASE : StoreOrderCategory.RETURN);
             OrdEmp = row["ORD_EMP"].ToString();
             TotalPrice = Double.Parse(row["TOTAL"].ToString()).ToString("0.##");
             RecEmp = row["REC_EMP"].ToString();
