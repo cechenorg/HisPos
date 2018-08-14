@@ -92,6 +92,12 @@ namespace His_Pos.Class
         WARNING = 2
     }
 
+    public enum MedBagMode
+    {
+        SINGLE = 0,
+        MULTI = 1
+    }
+
     public enum SystemType
     {
         HIS = 0,

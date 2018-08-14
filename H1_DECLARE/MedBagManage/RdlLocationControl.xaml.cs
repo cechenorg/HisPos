@@ -20,18 +20,15 @@ namespace His_Pos.H1_DECLARE.MedBagManage
     /// </summary>
     public partial class RdlLocationControl : UserControl
     {
-        public int id;
+        public int Id { get; set; }
         public string LabelContent { get; set; }
         public string LabelName { get; set; }
-        public Brush GridBackground
-        {
-            get { return LabelContent.Equals("") ? Brushes.Transparent : (Brush)FindResource("GridSelected"); }
-        }
+        public Brush GridBackground => LabelContent.Equals("") ? Brushes.Transparent : (Brush)FindResource("GridSelected");
 
         public RdlLocationControl(int locId,string content ,string name)
         {
             InitializeComponent();
-            id = locId;
+            Id = locId;
             LabelContent = content;
             LabelName = name;
             DataContext = this;

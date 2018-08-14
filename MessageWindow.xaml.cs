@@ -35,6 +35,9 @@ namespace His_Pos
                 case MessageType.SUCCESS:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Success.png", UriKind.Relative));
                     break;
+                case MessageType.WARNING:
+                    Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png", UriKind.Relative));
+                    break;
             }
             Message.Content = message;
         }
@@ -42,6 +45,15 @@ namespace His_Pos
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        public void SetLabelFontSize(double size)
+        {
+            Message.FontSize = size;
+        }
+        public void SetLabelContentAlignment(HorizontalAlignment alignment)
+        {
+            Message.HorizontalContentAlignment = alignment;
         }
     }
 }

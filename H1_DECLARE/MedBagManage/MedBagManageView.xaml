@@ -5,12 +5,26 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:His_Pos.H1_DECLARE.MedBagManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:winForms="clr-namespace:Microsoft.Reporting.WinForms;assembly=Microsoft.ReportViewer.WinForms"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     d:DesignHeight="839"
     d:DesignWidth="1365"
     mc:Ignorable="d">
     <UserControl.Resources>
-
+        <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label" x:Key="LocLabel">
+            <Setter Property="FontFamily" Value="Segoe UI Semibold"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
+        <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox" x:Key="LocCheckBox">
+            <Setter Property="Width" Value="130" />
+            <Setter Property="Margin" Value="20,10,0,0" />
+            <Setter Property="FontFamily" Value="Segoe UI Semi"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Background" Value="{StaticResource MaterialDesignBodyLight}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>
         <!--  MoveThumb Template  -->
         <ControlTemplate x:Key="MoveThumbTemplate" TargetType="{x:Type local:RdlLocationMoveThumb}">
             <Rectangle Fill="Transparent" />
@@ -185,90 +199,199 @@
                 <ContentPresenter Content="{TemplateBinding ContentControl.Content}" />
             </Grid>
         </ControlTemplate>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="100" />
             <RowDefinition Height="*" />
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="310" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="230" />
+            <ColumnDefinition Width="935" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
-        <Button
-            Name="ImageSelector"
+        <StackPanel
             Grid.Row="0"
             Grid.Column="0"
-            Width="130"
-            Height="34"
-            Margin="20,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            Click="ImageSelector_Click"
-            Content="選擇藥袋圖檔"
-            FontSize="16"
-            Foreground="White" />
+            Background="{StaticResource GridHalfTransBackground}">
+            <Button
+                Name="ImageSelector"
+                Width="130"
+                Height="34"
+                Margin="20,20,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Click="ImageSelector_Click"
+                Content="選擇藥袋圖檔"
+                FontSize="16"
+                Foreground="White" />
+            <StackPanel x:Name="ModeStack" Orientation="Horizontal" Margin="0,20,0,0">
+                <RadioButton 
+                    Name="SingleMode"
+                    Content="一藥一袋"
+                    Margin="20,0,0,0"
+                    FontSize="16" 
+                    FontFamily="Segoe UI Semibold"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Tag ="0"
+                    Checked="ModeRadioChecked"
+                    />
+                <RadioButton 
+                    Name="MultiMode"
+                    Content="多藥一袋" 
+                    Margin="20,0,0,0"
+                    FontSize="16" 
+                    FontFamily="Segoe UI Semibold"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    
+                    Tag ="1" Checked="ModeRadioChecked"
+                    />
+            </StackPanel>
+        </StackPanel>
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
             Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
-                <Label
-                    Margin="20,0,0,0"
-                    VerticalContentAlignment="Center"
-                    Content="尺寸:"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="14"
-                    Foreground="Black" />
-                <TextBox
-                    Width="40"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    FontSize="14"
-                    Text="{Binding SelectedMedBag.BagWidth,UpdateSourceTrigger=PropertyChanged}" />
-                <Label
-                    VerticalContentAlignment="Center"
-                    Content=" * "
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="14"
-                    Foreground="Black" />
-                <TextBox
-                    Width="40"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    FontSize="14"
-                    Text="{Binding SelectedMedBag.BagHeight,UpdateSourceTrigger=PropertyChanged}" />
-                <Label
-                    Margin="10,0,0,0"
-                    VerticalContentAlignment="Center"
-                    Content="(公分)"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="14"
-                    Foreground="Black" />
-            </StackPanel>
-            <ListView
-                Name="MedBagFileListView"
-                Grid.Row="1"
-                Grid.Column="0" />
+            <DataGrid
+                Name="MedBags"
+                AutoGenerateColumns="False"
+                Height="850"
+                Background="{StaticResource GridHalfTransBackground}"
+                CanUserAddRows="False"
+                CellStyle="{StaticResource DataGridCellStyle}"
+                ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                GridLinesVisibility="Horizontal"
+                HeadersVisibility="None"
+                ItemsSource="{Binding MedBagCollectionView}" SelectedCellsChanged="MedBags_SelectedCellsChanged">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="15" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="Height" Value="70" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="230">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Height="70">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" />
+                                        <ColumnDefinition Width="210" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image
+                                        Name="Default"
+                                        Width="18"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Grid.Column="0"
+                                        Source="C:\HisPos\Images\Success.png"
+                                        Visibility="{Binding Default,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}"/>
+                                    <TextBox
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Width="105"
+                                        HorizontalAlignment="Left"
+                                        FontFamily="Segoe UI Semibold"
+                                        FontSize="17.5"
+                                        Foreground="Black"
+                                        BorderThickness="0"
+                                        materialDesign:HintAssist.Hint="輸入藥袋名稱"
+                                        materialDesign:HintAssist.HintOpacity="0.5"
+                                        Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                                    <WrapPanel Grid.Row="1" Grid.Column="1" Height="40" HorizontalAlignment="Right" Margin="0,0,10,0">
+                                        <Label
+                                            Content="尺寸:"
+                                            FontFamily="Segoe UI Semi"
+                                            VerticalContentAlignment="Bottom"
+                                            FontSize="12"
+                                            Foreground="Black" />
+                                        <TextBox
+                                            Width="35"
+                                            FontFamily="Segoe UI Semi"
+                                            FontSize="12"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Bottom"
+                                            BorderThickness="0"
+                                            Text="{Binding BagWidth,UpdateSourceTrigger=PropertyChanged,Delay=400}" />
+                                        <Label
+                                            Content=" x "
+                                            FontFamily="Segoe UI Semibold"
+                                            VerticalContentAlignment="Bottom"
+                                            FontSize="12"
+                                            Foreground="Black" />
+                                        <TextBox
+                                            Width="35"
+                                            FontSize="12"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Bottom"
+                                            BorderThickness="0"
+                                            Text="{Binding BagHeight,UpdateSourceTrigger=PropertyChanged,Delay=400}" />
+                                        <Label
+                                            Content="(公分)"
+                                            FontFamily="Segoe UI Semi"
+                                            VerticalContentAlignment="Bottom"
+                                            FontSize="14"
+                                            Foreground="Black" />
+                                    </WrapPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </StackPanel>
         <Grid
             Name="ImgWrap"
+            MaxWidth="935"
             Grid.Row="0"
             Grid.RowSpan="3"
             Grid.Column="1"
             HorizontalAlignment="Center">
             <Image
                 Name="MedBagImg"
-                Height="850"
-                HorizontalAlignment="Center"
+                MaxWidth="935"
+                MaxHeight="850"
+                HorizontalAlignment="Left"
                 Source="{Binding SelectedMedBag.MedBagImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Stretch="Uniform" />
             <Canvas
                 Name="MedBagCanvas"
                 MaxHeight="850"
-                HorizontalAlignment="Center">
+                HorizontalAlignment="Left">
                 <local:RdlLocationControl
                     x:Name="MedRangeLocationControl"
                     Width="100"
@@ -280,380 +403,189 @@
             Grid.RowSpan="2"
             Grid.Column="2"
             Width="200">
-            <StackPanel Width="160" Orientation="Vertical">
+            <StackPanel Name="CheckBoxStack"  Width="160" Orientation="Vertical">
+                <CheckBox
+                    Content="設為預設藥袋"
+                    FontFamily="Segoe UI Semibold"
+                    FontSize="18"
+                    Foreground="Black"
+                    Margin = "0,15,0,15"
+                    IsChecked="{Binding SelectedMedBag.Default,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                    Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                 <Label
                     Content="藥局"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="18"
-                    Foreground="Black" />
+                    Style="{StaticResource LocLabel}"/>
                 <CheckBox
                     Name="Pharmacy"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
-                    Content="藥局名稱"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black"
-                    Unchecked="DeleteLocation" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"
+                    Content="藥局名稱" />
                 <CheckBox
                     Name="PharmacyId"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="機構代碼"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="PharmacyAddr"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="地址"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="PharmacyTel"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="電話"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="MedicalPerson"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="調劑藥師"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <Label
                     Content="病患"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="18"
-                    Foreground="Black" />
+                    Style="{StaticResource LocLabel}"/>
                 <CheckBox
                     Name="PatientName"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
-                    Content="姓名"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"
+                    Content="姓名" />
                 <CheckBox
                     Name="PatientTel"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="聯絡電話"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="PatientGender"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="性別"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="PatientBirth"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="生日"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="MedRecNum"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="病歷號"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="AdjustDate"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="調劑日期"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="NextDrugDate"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="下次領藥日"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="VisitBackDate"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="參考回診日"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <Label
                     Content="醫療院所"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="18"
-                    Foreground="Black" />
+                    Style="{StaticResource LocLabel}"/>
                 <CheckBox
                     Name="Institution"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="醫療院所名稱"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Division"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="科別"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <Label
                     Content="藥品"
-                    FontFamily="Segoe UI Semibold"
-                    FontSize="18"
-                    Foreground="Black" />
+                    Style="{StaticResource LocLabel}"/>
                 <CheckBox
                     Name="MedicineList"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="多藥一袋藥品"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black"/>
+                    Style="{StaticResource LocCheckBox}"
+                    Visibility="Collapsed"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="MedicineId"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="藥品健保碼"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="EngName"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
-                    Content="英文名稱"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Content="英文名稱" 
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="ChnName"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="中文名稱"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Ingredient"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="成分"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Form"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="劑型外觀"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Usage"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="用法"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Dosage"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="用量"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Total"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="領藥總量"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Days"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="給藥天數"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Indication"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
-                    Content="適應症"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Content="適應症" 
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="SideEffect"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
-                    Content="副作用"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Content="副作用" 
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <CheckBox
                     Name="Notes"
-                    Width="130"
-                    Margin="20,10,0,0"
-                    VerticalAlignment="Top"
-                    Background="{StaticResource Shadow}"
-                    BorderBrush="Transparent"
-                    Checked="NewLocationChecked"
                     Content="注意事項"
-                    FontFamily="Segoe UI Semi"
-                    FontSize="16"
-                    Foreground="Black" />
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
             </StackPanel>
         </ScrollViewer>
-        <StackPanel
+        <DockPanel
             Grid.Row="2"
             Grid.Column="0"
-            Orientation="Horizontal">
+            Background="{StaticResource GridHalfTransBackground}">
             <Button
+                Name="AddMedBag"
+                Width="70"
+                Margin="15,0,0,0"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Content="新增" Click="NewMedBagButtonClick" />
+            <Button
+                Name="DeleteMedBag"
                 Width="70"
                 Margin="15,0,15,0"
                 VerticalAlignment="Center"
-                Content="新增" />
-            <Button
-                Width="70"
-                VerticalAlignment="Center"
-                Content="刪除" />
-        </StackPanel>
+                HorizontalAlignment="Right"
+                Content="刪除" Click="NewMedBagButtonClick" />
+        </DockPanel>
         <StackPanel
             Grid.Row="2"
             Grid.Column="2"
@@ -662,7 +594,7 @@
                 Width="70"
                 Margin="20,0,20,0"
                 VerticalAlignment="Center"
-                Content="清空" />
+                Content="清空" Click="CleanButtonClick"/>
             <Button
                 Width="70"
                 VerticalAlignment="Center"
