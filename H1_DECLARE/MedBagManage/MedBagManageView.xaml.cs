@@ -579,28 +579,26 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             {
                 foreach (UIElement child in CheckBoxStack.Children)
                 {
-                    if (child is CheckBox box)
+                    if (!(child is CheckBox box)) continue;
+                    switch (box.Name)
                     {
-                        switch (box.Name)
-                        {
-                            case "MedicineList":
-                                box.Visibility = Visibility.Visible;
-                                break;
-                            case "MedicineId":
-                            case "EngName":
-                            case "ChnName":
-                            case "Ingredient":
-                            case "Form":
-                            case "Usage":
-                            case "Dosage":
-                            case "Total":
-                            case "Days":
-                            case "Indication":
-                            case "SideEffect":
-                            case "Notes":
-                                box.Visibility = Visibility.Collapsed;
-                                break;
-                        }
+                        case "MedicineList":
+                            box.Visibility = Visibility.Visible;
+                            break;
+                        case "MedicineId":
+                        case "EngName":
+                        case "ChnName":
+                        case "Ingredient":
+                        case "Form":
+                        case "Usage":
+                        case "Dosage":
+                        case "Total":
+                        case "Days":
+                        case "Indication":
+                        case "SideEffect":
+                        case "Notes":
+                            box.Visibility = Visibility.Collapsed;
+                            break;
                     }
                 }
             }
