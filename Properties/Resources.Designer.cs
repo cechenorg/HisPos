@@ -178,15 +178,6 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 /9j/4AAQSkZJRgABAQEASABIAAD/4RDGRXhpZgAATU0AKgAAAAgABAESAAMAAAABAAEAAAEaAAUAAAABAAAAPgEbAAUAAAABAAAARgEoAAMAAAABAAIAAAAAAE4AAABIAAAAAQAAAEgAAAABAAYBAwADAAAAAQAGAAABGgAFAAAAAQAAAJwBGwAFAAAAAQAAAKQBKAADAAAAAQACAAACAQAEAAAAAQAAAKwCAgAEAAAAAQAAEBIAAAAAAAAASAAAAAEAAABIAAAAAf/Y/9sAQwAIBgYHBgUIBwcHCQkICgwUDQwLCwwZEhMPFB0aHx4dGhwcICQuJyAiLCMcHCg3KSwwMTQ0NB8nOT04MjwuMzQy/9sAQwEJCQkMCwwYDQ0YMiEcITIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy/8AAEQgAeABgAwEhAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAAB [字串的其餘部分已遭截斷]&quot;; 的當地語系化字串。
-        /// </summary>
-        internal static string embeddedImg {
-            get {
-                return ResourceManager.GetString("embeddedImg", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查詢類似 員工管理 的當地語系化字串。
         /// </summary>
         internal static string EmployeeManage {

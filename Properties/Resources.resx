@@ -254,6 +254,7 @@
   </data>
   <data name="ImageSelectorsFileTpyes" xml:space="preserve">
     <value>Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*</value>
+    </data>
   <data name="CustomerManage" xml:space="preserve">
     <value>顧客管理</value>
   </data>
