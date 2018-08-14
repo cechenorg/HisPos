@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.Interface;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.ProductPurchase
 {
@@ -24,96 +25,26 @@ namespace His_Pos.ProductPurchase
     /// </summary>
     public partial class NewItemDialog : Window
     {
-        private ObservableCollection<object> DataCollection;
-        Collection<ColumnDetail> ColumnDetails;
-        private ItemType ItemType;
-        public string Para;
-
+        private Collection<PurchaseProduct> DataCollection;
+        
         public object SelectedItem;
         public bool ConfirmButtonClicked = false;
 
-        struct ColumnDetail
-        {
-            public string Header;
-            public string Binding;
-            public int Width;
-            public Style Style;
-
-            public ColumnDetail(string header, string binding, int width, Style style = null)
-            {
-                Header = header;
-                Binding = binding;
-                Width = width;
-                Style = style;
-            }
-        }
-        public NewItemDialog(ItemType type, ObservableCollection<object> collection)
+        public NewItemDialog(Collection<PurchaseProduct> collection)
         {
             InitializeComponent();
             Title = "新增";
-
-            ItemType = type;
+            
             DataCollection = collection;
-
-            InitUi();
-
-            InitColumnDetails();
 
             InitCollection();
         }
-
-        private void InitUi()
-        {
-            switch (ItemType)
-            {
-                case ItemType.Product:
-                    OnlyManufactory.Visibility = Visibility.Visible;
-                    AllProducts.Visibility = Visibility.Visible;
-                    break;
-            }
-
-        }
-
         private void InitCollection()
         {
             SearchResult.ItemsSource = DataCollection;
             SearchResult.Items.Filter = SearchFilter;
         }
-
-        private void InitColumnDetails()
-        {
-            switch(ItemType)
-            {
-                case ItemType.Product:
-
-                    Style textInMidStyle = this.FindResource("TextInMiddleCellStyle") as Style;
-
-                    ColumnDetails = new Collection<ColumnDetail>() {
-                                    new ColumnDetail("商品編號", "Product.Id", 120, textInMidStyle),
-                                    new ColumnDetail("商品名稱", "Product.Name", 350),
-                                    new ColumnDetail("庫存", "Product.Stock.Inventory", 50, textInMidStyle),
-                                    new ColumnDetail("安全量", "Product.Stock.SafeAmount", 70, textInMidStyle),
-                                    new ColumnDetail("基準量", "Product.Stock.BasicAmount", 70, textInMidStyle)};
-                    break;
-            }
-
-            updateColumns();
-        }
-
-        private void updateColumns()
-        {
-            foreach(ColumnDetail columnDetail in ColumnDetails)
-            { 
-                DataGridTextColumn column = new DataGridTextColumn();
-                column.Header = columnDetail.Header;
-                column.Binding = new Binding(columnDetail.Binding);
-                column.Width = columnDetail.Width;
-                column.ElementStyle = columnDetail.Style;
-                column.IsReadOnly = true;
-                SearchResult.Columns.Add(column);
-            }
-        }
-
+        
         private void SearchTextChanged(object sender, TextChangedEventArgs e)
         {
             SearchResult.Items.Filter = SearchFilter;
@@ -121,30 +52,25 @@ namespace His_Pos.ProductPurchase
 
         private bool SearchFilter(object item)
         {
-            switch (ItemType)
+            if (!((bool) IsStatusTrue.IsChecked ||
+                  ((PurchaseProduct)item).Status))
+                return false;
+
+            if ((bool) OnlyManufactory.IsChecked)
             {
-                case ItemType.Product:
-                    if (!((bool) IsStatusTrue.IsChecked ||
-                          ((IProductPurchase) (item as ProductPurchaseView.NewItemProduct).Product).Status))
-                        return false;
+                if (String.IsNullOrEmpty(SearchText.Text))
+                    return ((PurchaseProduct)item).IsThisMan;
 
-                    if ((bool) OnlyManufactory.IsChecked)
-                    {
-                        if (String.IsNullOrEmpty(SearchText.Text))
-                            return (item as ProductPurchaseView.NewItemProduct).IsThisMan;
+                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text)) && ((PurchaseProduct)item).IsThisMan)
+                    return true;
+            }
+            else
+            {
+                if (String.IsNullOrEmpty(SearchText.Text))
+                    return true;
 
-                        if (((item as ProductPurchaseView.NewItemProduct).Product.Id.Contains(SearchText.Text) || (item as ProductPurchaseView.NewItemProduct).Product.Name.Contains(SearchText.Text)) && (item as ProductPurchaseView.NewItemProduct).IsThisMan)
-                            return true;
-                    }
-                    else
-                    {
-                        if (String.IsNullOrEmpty(SearchText.Text))
-                            return true;
-
-                        if ((item as ProductPurchaseView.NewItemProduct).Product.Id.Contains(SearchText.Text) || (item as ProductPurchaseView.NewItemProduct).Product.Name.Contains(SearchText.Text))
-                            return true;
-                    }
-                    break;
+                if (((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text))
+                    return true;
             }
 
             return false;

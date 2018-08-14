@@ -33,12 +33,6 @@ namespace His_Pos.Class
         顧客管理 = 18
     }
 
-    public enum ItemType
-    {
-        Product = 0,
-        Taking = 1
-    }
-
     public enum StoreOrderProductType
     {
         BASIC = 0,

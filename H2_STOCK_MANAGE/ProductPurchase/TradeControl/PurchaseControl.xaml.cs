@@ -19,6 +19,7 @@ using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
+using His_Pos.ProductPurchase;
 using His_Pos.Service;
 using His_Pos.Struct.Product;
 using MahApps.Metro.Controls;
@@ -74,6 +75,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void InitProducts()
         {
+            AddNewProduct.IsEnabled = false;
+
             BackgroundWorker getProductAutobackground = new BackgroundWorker();
 
             getProductAutobackground.DoWork += (s, o) =>
@@ -82,6 +85,14 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     ProductAutoCompleteCollection = temp;
+                }));
+            };
+
+            getProductAutobackground.RunWorkerCompleted += (s, o) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    AddNewProduct.IsEnabled = true;
                 }));
             };
 
@@ -281,6 +292,19 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     ((PurchaseProduct)obj).Id.ToLower().Contains(searchText.ToLower())
                     || ((PurchaseProduct)obj).ChiName.ToLower().Contains(searchText.ToLower())
                     || ((PurchaseProduct)obj).EngName.ToLower().Contains(searchText.ToLower());
+            }
+        }
+
+        private void NewProduct(object sender, RoutedEventArgs e)
+        {
+            NewItemDialog newItemDialog = new NewItemDialog(ProductAutoCompleteCollection);
+
+            newItemDialog.ShowDialog();
+
+            if (newItemDialog.ConfirmButtonClicked)
+            {
+                //SetChanged();
+                StoreOrderData.Products.Add(newItemDialog.SelectedItem as Product);
             }
         }
     }

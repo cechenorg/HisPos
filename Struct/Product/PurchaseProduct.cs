@@ -24,13 +24,13 @@ namespace His_Pos.Struct.Product
             Status = Boolean.Parse(dataRow["PRO_STATUS"].ToString());
         }
 
-        public string Id { get; set; }
-        public string Name { get; set; }
+        public string Id { get; }
+        public string Name { get; }
         public string ChiName;
         public string EngName;
-        public double Inventory;
-        public string SafeAmount;
-        public string BasicAmount;
+        public double Inventory { get; }
+        public string SafeAmount { get; }
+        public string BasicAmount { get; }
         public double LastPrice;
         public bool IsThisMan;
         public string Type;
