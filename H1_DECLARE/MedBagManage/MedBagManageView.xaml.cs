@@ -92,7 +92,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
 
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-            dlg.Filter = "Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*";
+            dlg.Filter = Properties.Resources.ImageSelectorsFileTpyes;
 
             dlg.RestoreDirectory = true;
 
