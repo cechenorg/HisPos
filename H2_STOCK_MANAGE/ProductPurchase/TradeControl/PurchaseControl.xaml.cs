@@ -307,5 +307,19 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 StoreOrderData.Products.Add(newItemDialog.SelectedItem as Product);
             }
         }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            if (textBox.Text == String.Empty)
+                textBox.Text = "0";
+
+            if (!textBox.Name.Equals("FreeAmount"))
+                storeOrderData.CalculateTotalPrice();
+        }
+        
     }
 }

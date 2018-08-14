@@ -198,5 +198,16 @@ namespace His_Pos.Class.StoreOrder
 
             return storeOrder;
         }
+
+        internal void CalculateTotalPrice()
+        {
+            double count = 0;
+            foreach (var product in Products)
+            {
+                count += ((ITrade)product).TotalPrice;
+            }
+
+            TotalPrice = Math.Round(count, MidpointRounding.AwayFromZero).ToString();
+        }
     }
 }

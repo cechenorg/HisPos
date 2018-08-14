@@ -275,28 +275,7 @@ namespace His_Pos.ProductPurchase
         //    productAuto.PopulateComplete();
         //}
 
-        //private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    TextBox textBox = sender as TextBox;
-
-        //    if (textBox is null) return;
-
-        //    if (textBox.Text == String.Empty)
-        //        textBox.Text = "0";
-
-        //    if (!textBox.Name.Equals("FreeAmount"))
-        //        CalculateTotalPrice();
-        //}
-
-        //private void CalculateTotalPrice()
-        //{
-        //    double count = 0;
-        //    foreach (var product in storeOrderData.Products)
-        //    {
-        //        count += ((ITrade)product).TotalPrice;
-        //    }
-        //    storeOrderData.TotalPrice = Math.Round(count, MidpointRounding.AwayFromZero).ToString();
-        //}
+        
 
         //private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         //{
