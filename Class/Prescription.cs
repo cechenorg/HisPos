@@ -17,12 +17,12 @@ namespace His_Pos.Class
         public Prescription()
         {
             Customer = new Customer();
-            Pharmacy = new Pharmacy();
+            Pharmacy = new Pharmacy.Pharmacy();
             Treatment = new Treatment();
             Medicines = new ObservableCollection<DeclareMedicine>();
         }
      
-        public Prescription(Customer customer, Pharmacy pharmacy, Treatment treatment, ObservableCollection<DeclareMedicine> medicines)
+        public Prescription(Customer customer, Pharmacy.Pharmacy pharmacy, Treatment treatment, ObservableCollection<DeclareMedicine> medicines)
         {
             Customer = customer;
             Pharmacy = pharmacy;
@@ -33,21 +33,21 @@ namespace His_Pos.Class
         public Prescription(DataRow row)
         {
             Customer = new Customer(row);
-            Pharmacy = new Pharmacy(row);
+            Pharmacy = new Pharmacy.Pharmacy(row);
             Treatment = new Treatment(row);
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
         }
         public Prescription(XmlNode xml)
         {
             Customer = new Customer(xml);
-            Pharmacy = new Pharmacy(xml);
+            Pharmacy = new Pharmacy.Pharmacy(xml);
             Treatment = new Treatment(xml);
             ChronicSequence = xml.SelectSingleNode("d35") == null ? null : xml.SelectSingleNode("d35").InnerText;
             ChronicTotal = xml.SelectSingleNode("d36") == null ? null : xml.SelectSingleNode("d36").InnerText;
             OriginalMedicalNumber = xml.SelectSingleNode("d43") == null ? null : xml.SelectSingleNode("d43").InnerText;
         }
         public Customer Customer { get; set; }
-        public Pharmacy Pharmacy { get; set; } //藥局
+        public Pharmacy.Pharmacy Pharmacy { get; set; } //藥局
         public Treatment Treatment { get; set; } //在醫院拿到的資料
         public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
