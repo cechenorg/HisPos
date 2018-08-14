@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using His_Pos.ViewModel;
 
-namespace His_Pos.H4_BASIC_MANAGE.MedBagManage
+namespace His_Pos.H1_DECLARE.MedBagManage
 {
-    class MedBagManage : TabBase
+    internal class MedBagManage : TabBase
     {
         public override TabBase getTab()
         {

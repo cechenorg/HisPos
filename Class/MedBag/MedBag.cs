@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using His_Pos.Class.MedBagLocation;
+using His_Pos.H1_DECLARE.MedBagManage;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class.MedBag
@@ -17,107 +15,123 @@ namespace His_Pos.Class.MedBag
     {
         public MedBag(BitmapImage image)
         {
-            RangeTop = 0;
-            RangeBottom = 0;
-            RangeLeft = 0;
-            RangeRight = 0;
-            MedBagLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
+            MedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
             MedBagImage = image;
         }
 
         public MedBag(DataRow dataRow)
         {
-            RangeTop = double.Parse(dataRow["RANGE_TOP"].ToString());
-            RangeBottom = double.Parse(dataRow["RANGE_BOTTOM"].ToString());
-            RangeLeft = double.Parse(dataRow["RANGE_LEFT"].ToString());
-            RangeRight = double.Parse(dataRow["RANGE_RIGHT"].ToString());
-            MedBagLocations = MedBagDb.ObservableGetLocationData();
+            Id = dataRow["MEDBAG_ID"].ToString();
+            Name = dataRow["MEDBAG_NAME"].ToString();
+            BagWidth = double.Parse(dataRow["MEDBAG_SIZEX"].ToString());
+            BagHeight = double.Parse(dataRow["MEDBAG_SIZEY"].ToString());
+            MedBagImage = ToImage((byte[])dataRow["MEDBAG_IMAGE"]);
+            MedLocations = MedBagLocationDb.ObservableGetLocationData(Id);
+            Mode = dataRow["MEDBAG_MODE"].ToString() == "False" ? MedBagMode.SINGLE : MedBagMode.MULTI;
+            Default = dataRow["MEDBAG_DEFAULT"].ToString() == "1";
         }
 
-        public ObservableCollection<MedBagLocation.MedBagLocation> MedBagLocations { get; set; }
+        public MedBag(MedBagMode m)
+        {
+            MedLocations = new ObservableCollection<MedBagLocation.MedBagLocation>();
+            Id = string.Empty;
+            Name = string.Empty;
+            BagWidth = 0.0;
+            BagHeight = 0.0;
+            MedBagImage = null;
+            Mode = m;
+        }
+
+        public ObservableCollection<MedBagLocation.MedBagLocation> MedLocations { get; set; }
         public string Id { get; set; }
         public string Name { get; set; }
-        private double rangeTop;
 
-        public double RangeTop
-        {
-            get { return rangeTop; }
-            set
-            {
-                rangeTop = value;
-                OnPropertyChanged("RangeTop");
-            }
-        }
-
-        private double rangeLeft;
-
-        public double RangeLeft
-        {
-            get { return rangeLeft; }
-            set
-            {
-                rangeTop = value;
-                OnPropertyChanged("RangeLeft");
-            }
-        }
-
-        private double rangeBottom;
-
-        public double RangeBottom
-        {
-            get { return rangeBottom; }
-            set
-            {
-                rangeTop = value;
-                OnPropertyChanged("RangeBottom");
-            }
-        }
-
-        private double rangeRight;
-
-        public double RangeRight
-        {
-            get { return rangeRight; }
-            set
-            {
-                rangeTop = value;
-                OnPropertyChanged("RangeRight");
-            }
-        }
-
-        private double bagWidth;
+        private double _bagWidth;
 
         public double BagWidth
         {
-            get { return bagWidth; }
+            get => _bagWidth;
             set
             {
-                bagWidth = value;
-                OnPropertyChanged("BagWidth");
+                _bagWidth = value;
+                OnPropertyChanged(nameof(BagWidth));
             }
         }
 
-        private double bagHeight;
+        private double _bagHeight;
 
         public double BagHeight
         {
-            get { return bagHeight; }
+            get => _bagHeight;
             set
             {
-                bagWidth = value;
-                OnPropertyChanged("BagHeight");
+                _bagHeight = value;
+                OnPropertyChanged(nameof(BagHeight));
             }
         }
 
-        private BitmapImage medBagImage;
+        private BitmapImage _medBagImage;
 
         public BitmapImage MedBagImage
         {
-            get { return medBagImage; }
+            get => _medBagImage;
             set
             {
-                medBagImage = value;
-                OnPropertyChanged("MedBagImage");
+                _medBagImage = value;
+                OnPropertyChanged(nameof(MedBagImage));
+            }
+        }
+
+        private MedBagMode _mode;
+
+        public MedBagMode Mode
+        {
+            get => _mode;
+            set
+            {
+                _mode = value;
+                OnPropertyChanged(nameof(Mode));
+            }
+        }
+
+        private bool _default;
+
+        public bool Default
+        {
+            get => _default;
+            set
+            {
+                _default = value;
+                OnPropertyChanged(nameof(Default));
+            }
+        }
+
+        public void SetLocationCollection(UIElementCollection locationCollection)
+        {
+            foreach (var contentControl in locationCollection.OfType<ContentControl>().Where(r => r.Content is RdlLocationControl))
+            {
+                var rdlLocation = (RdlLocationControl)contentControl.Content;
+                var medBagImage = locationCollection.OfType<RdlLocationControl>().Where(r => r.Content is Grid).Single(r =>
+                    string.IsNullOrEmpty(r.LabelContent));
+                var convert = BagWidth / medBagImage.Width;
+                if (!string.IsNullOrEmpty(rdlLocation.LabelContent))
+                {
+                    MedBagLocation.MedBagLocation medLoc = new MedBagLocation.MedBagLocation(rdlLocation, convert);
+                    if (!CheckExistLocation(medLoc))
+                        MedLocations.Add(medLoc);
+                    else
+                    {
+                        int i = 0;
+                        int existIndex = 0;
+                        foreach (var m in MedLocations)
+                        {
+                            if (m.Content.Equals(medLoc.Content))
+                                existIndex = i;
+                            i++;
+                        }
+                        MedLocations[existIndex] = medLoc;
+                    }
+                }
             }
         }
 
@@ -127,6 +141,29 @@ namespace His_Pos.Class.MedBag
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private BitmapImage ToImage(byte[] array)
+        {
+            using (var ms = new System.IO.MemoryStream(array))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
+            }
+        }
+        //檢查MedBagLocation存在
+        private bool CheckExistLocation(MedBagLocation.MedBagLocation m)
+        {
+            foreach (MedBagLocation.MedBagLocation location in MedLocations)
+            {
+                if (location.Content.Equals(m.Content))
+                    return true;
+            }
+            return false;
         }
     }
 }

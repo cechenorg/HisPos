@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using JetBrains.Annotations;
+using System.Windows.Controls;
+using His_Pos.H1_DECLARE.MedBagManage;
 
 namespace His_Pos.Class.MedBagLocation
 {
@@ -14,27 +9,43 @@ namespace His_Pos.Class.MedBagLocation
     {
         public MedBagLocation(DataRow row)
         {
-            Id = row["MEDBAG_ID"].ToString();
-            Name = row["MEDBAG_NAME"].ToString();
+            Id = int.Parse(row["MEDBAG_ID"].ToString());
+            Name = row["MEDBAG_LOCNAME"].ToString();
             PathX = Convert.ToDouble(row["MEDBAG_X"].ToString());
             PathY = Convert.ToDouble(row["MEDBAG_Y"].ToString());
             Width = Convert.ToDouble(row["MEDBAG_WIDTH"].ToString());
             Height = Convert.ToDouble(row["MEDBAG_HEIGHT"].ToString());
+            RealWidth = Convert.ToDouble(row["MEDBAG_REALWIDTH"].ToString());
+            RealHeight = Convert.ToDouble(row["MEDBAG_REALHEIGHT"].ToString());
+            Content = row["MEDBAG_LOCCONTENT"].ToString().Trim();
+            CanvasLeft = Convert.ToDouble(row["MEDBAG_CANVASLEFT"].ToString());
+            CanvasTop = Convert.ToDouble(row["MEDBAG_CANVASTOP"].ToString());
         }
-        public MedBagLocation(int id, string name, double pathX, double pathY, double width, double height)
+        public MedBagLocation(RdlLocationControl r,double convert)
         {
-            Id = id.ToString();
-            Name = name;
-            PathX = pathX;
-            PathY = pathY;
-            Width = width;
-            Height = height;
+            Id = r.Id;
+            Name = r.LabelName;
+            Content = r.LabelContent;
+            CanvasLeft = (double)r.Parent.GetValue(Canvas.LeftProperty);
+            CanvasTop = (double)r.Parent.GetValue(Canvas.TopProperty);
+            PathX = convert * CanvasLeft;
+            PathY = convert * CanvasTop;
+            Width = r.ActualWidth;
+            Height = r.ActualHeight;
+            RealWidth = convert * Width;
+            RealHeight = convert * Height;
         }
-        public string Id { get; }
-        public string Name { get; }
-        public double PathX { get; }
-        public double PathY { get; }
-        public double Width { get; }
-        public double Height { get; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Content { get; set; }
+        public double PathX { get; set; }
+        public double PathY { get; set; }
+        public double CanvasLeft { get; set; }
+        public double CanvasTop { get; set; }
+        public double Width { get; set; }
+        public double Height { get; set; }
+        public double RealWidth { get; set; }
+        public double RealHeight { get; set; }
+
     }
 }

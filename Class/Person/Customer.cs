@@ -24,17 +24,26 @@ namespace His_Pos.Class.Person
             Birthday = row["CUS_BIRTH"].ToString();
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
-            Gender = row["CUS_GENDER"].ToString() == "" ? true : Convert.ToBoolean(row["CUS_GENDER"].ToString());
+            Gender = row["CUS_GENDER"].ToString() == "" || Convert.ToBoolean(row["CUS_GENDER"].ToString());
             IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
         }
         public Customer(XmlNode xml) {
             IcCard = new IcCard(xml);
-            Name = xml.SelectSingleNode("d20") == null ? null : xml.SelectSingleNode("d20").InnerText;
-            IcNumber = xml.SelectSingleNode("d3") == null ? null : xml.SelectSingleNode("d3").InnerText;
-            Birthday = xml.SelectSingleNode("d6") == null ? null : DateTimeExtensions.BirthdayFormatConverter2(xml.SelectSingleNode("d6").InnerText);
+            Name = xml.SelectSingleNode("d20") == null ? null : xml.SelectSingleNode("d20")?.InnerText;
+            IcNumber = xml.SelectSingleNode("d3") == null ? null : xml.SelectSingleNode("d3")?.InnerText;
+            Birthday = xml.SelectSingleNode("d6") == null ? null : DateTimeExtensions.BirthdayFormatConverter2(xml.SelectSingleNode("d6")?.InnerText);
         }
         public string Qname { get; set; }
-        public bool Gender { get; set; }
+        private bool _gender;
+        public bool Gender
+        {
+            get => _gender;
+            set
+            {
+                _gender = value;
+                NotifyPropertyChanged(nameof(Gender));
+            }
+        }
         public IcCard IcCard { get; set; }
         public ContactInfo ContactInfo { get; set; } = new ContactInfo();
     }

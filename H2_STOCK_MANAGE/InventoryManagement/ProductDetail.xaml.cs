@@ -1,5 +1,4 @@
 ﻿using His_Pos.ViewModel;
-using MenuUserControl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,22 +43,22 @@ namespace His_Pos.InventoryManagement
             public string Id { get; set; }
             public SearchType Type { get; set; }
         }
-        
+
         public ProductDetail()
         {
             InitializeComponent();
 
             Title = "商品詳細資料管理";
-           // WindowState = WindowState.Maximized;
-           
+            // WindowState = WindowState.Maximized;
+
             Instance = this;
         }
-        
+
         public void AddNewTab(Product newProduct)
         {
             NewProduct = newProduct;
 
-            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id,(NewProduct is InventoryMedicine)? SearchType.MED : SearchType.OTC));
+            ((ViewModelProductDetailWindow)DataContext).AddTabCommandAction(new NewProductTab(NewProduct.Id, (NewProduct is InventoryMedicine) ? SearchType.MED : SearchType.OTC));
         }
 
         private void ProductDetail_OnClosed(object sender, EventArgs e)

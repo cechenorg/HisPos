@@ -16,24 +16,42 @@ namespace His_Pos.Class
             MedicalNumber = "";
         }
 
-        public IcCard(DataRow row,DataSource source)
+        public IcCard(DataRow row, DataSource source)
         {
-            switch (source) {
+            switch (source)
+            {
                 case DataSource.InitMedicalIcCard:
                     IcNumber = "";
                     MedicalNumber = "";
                     break;
+
                 case DataSource.GetMedicalIcCard:
                     IcNumber = "";
                     MedicalNumber = row["HISDECMAS_NUMBER"].ToString();
                     break;
             }
-          
         }
-        public IcCard(XmlNode xml) {
+
+        public IcCard(XmlNode xml)
+        {
             IcNumber = xml.SelectSingleNode("d3") == null ? null : xml.SelectSingleNode("d3").InnerText;
             MedicalNumber = xml.SelectSingleNode("d7") == null ? null : xml.SelectSingleNode("d7").InnerText;
         }
+
+        public IcCard(string icNumber, IcMarks icMarks, string sendDate, string validityPeriod, int availableTimes, IcCardPay icCardPay, IcCardPrediction icCardPrediction, Pregnant pregnant, Vaccination vaccination, string medicalNumber)
+        {
+            IcNumber = icNumber;
+            IcMarks = icMarks;
+            SendDate = sendDate;
+            ValidityPeriod = validityPeriod;
+            AvailableTimes = availableTimes;
+            IcCardPay = icCardPay;
+            IcCardPrediction = icCardPrediction;
+            Pregnant = pregnant;
+            Vaccination = vaccination;
+            MedicalNumber = medicalNumber;
+        }
+
         private string icNumber;
 
         public string IcNumber
