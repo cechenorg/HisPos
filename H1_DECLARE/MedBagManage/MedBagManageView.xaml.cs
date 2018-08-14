@@ -127,16 +127,16 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         {
             SelectedMode = mode;
             SelectedMedBag = new MedBag(SelectedMode);
-            MedBagCollection = MedBagDb.ObservableGetMedBagData();
+            MedBagCollection = new ObservableCollection<MedBag>();
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.GetMedBagData(this);
+            loadingWindow.Show();
             foreach (var m in MedBagCollection)
             {
                 var i = int.Parse(m.Id);
                 if (i > maxMedBagId)
                     maxMedBagId = i;
             }
-            MedBags.ItemsSource = MedBagCollection;
-            if (MedBags.Items.Count != 0)
-                MedBags.SelectedIndex = 0;
         }
 
         [NotifyPropertyChangedInvocator]
@@ -213,8 +213,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
             else
             {
-                MedBagImgHeight = 850;
-                MedBagImgWidth = 850 * (SelectedMedBag.MedBagImage.Width / SelectedMedBag.MedBagImage.Height);
+                MedBagImgHeight = 835;
+                MedBagImgWidth = 835 * (SelectedMedBag.MedBagImage.Width / SelectedMedBag.MedBagImage.Height);
                 while (MedBagImgWidth > MedBagImg.MaxWidth)
                 {
                     MedBagImgWidth *= 0.9;
@@ -303,7 +303,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             return contentControl;
         }
 
-        private void SaveMedBagData()
+        public void SaveMedBagData()
         {
             if (CheckMedBagCollectionEmpty())
                 return;
@@ -318,12 +318,10 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 return;
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
-            SaveMedBagData();
-            File.WriteAllText(ReportPath, string.Empty);
-            File.AppendAllText(ReportPath, SerializeObject<Report>(CreatReport()));
-            CreatePdf();
-            var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
-            m.Show();
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.SetMedBagData(this,ReportPath);
+            loadingWindow.Show();
+            
         }
 
         //新增/刪除藥袋
@@ -413,7 +411,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 if (m.Name != "MedicineList")
                     medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m));
         }
-        private Report CreatReport()
+        public Report CreatReport()
         {
             var medBagReport = new Report
             {
@@ -481,7 +479,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 }
             };
         }
-        private string SerializeObject<T>(Report report)
+        public string SerializeObject<T>(Report report)
         {
             var xmlSerializer = new XmlSerializer(report.GetType());
             using (var textWriter = new StringWriter())
@@ -509,7 +507,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
             return stringBuilder.ToString();
         }
-        private void CreatePdf()
+        public void CreatePdf()
         {
             var deviceInfo = "<DeviceInfo>" +
                              "  <OutputFormat>PDF</OutputFormat>" +
