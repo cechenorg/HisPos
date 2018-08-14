@@ -315,7 +315,6 @@ namespace His_Pos.Class.Declare
             declareMasterTable.Columns.Add("D38", typeof(int));
             declareMasterTable.Columns.Add("D43", typeof(string));
             declareMasterTable.Columns.Add("XML", typeof(string));
-           
             return declareMasterTable;
         }
         private void AddDeclareMaster(DeclareData declareData, DataTable declareMaster)
