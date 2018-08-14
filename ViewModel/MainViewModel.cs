@@ -294,12 +294,11 @@ namespace His_Pos.ViewModel
                     switch (tabName)
                     {
                         case nameof(FeatureItem.°Ó«~¬d¸ß):
-                            if (InventoryManagement.InventoryManagementView.Instance is null) break;
+                            if (InventoryManagementView.Instance is null) break;
 
-                            if (InventoryManagement.InventoryManagementView.DataChanged)
-                            {
-                                InventoryManagement.InventoryManagementView.Instance.MergingData();
-                                InventoryManagement.InventoryManagementView.Instance.SearchData();
+                            if (InventoryManagementView.DataChanged) {
+                                InventoryManagementView.Instance.MergingData();
+                                InventoryManagementView.Instance.SearchData();
                             }
                             break;
 

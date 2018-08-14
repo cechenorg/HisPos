@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using His_Pos.Class.MedBagLocation;
 using His_Pos.H1_DECLARE.MedBagManage;
 using JetBrains.Annotations;
 
@@ -26,11 +26,8 @@ namespace His_Pos.Class.MedBag
             BagWidth = double.Parse(dataRow["MEDBAG_SIZEX"].ToString());
             BagHeight = double.Parse(dataRow["MEDBAG_SIZEY"].ToString());
             MedBagImage = ToImage((byte[])dataRow["MEDBAG_IMAGE"]);
-            MedLocations = MedBagDb.ObservableGetLocationData(Id);
-            if (dataRow["MEDBAG_MODE"].ToString() == "False")
-                Mode = MedBagMode.SINGLE;
-            else
-                Mode = MedBagMode.MULTI;
+            MedLocations = MedBagLocationDb.ObservableGetLocationData(Id);
+            Mode = dataRow["MEDBAG_MODE"].ToString() == "False" ? MedBagMode.SINGLE : MedBagMode.MULTI;
             Default = dataRow["MEDBAG_DEFAULT"].ToString() == "1";
         }
 
@@ -138,10 +135,6 @@ namespace His_Pos.Class.MedBag
             }
         }
 
-        public void DeleteLocation(UIElementCollection locationCollection, string controlName)
-        {
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -156,13 +149,13 @@ namespace His_Pos.Class.MedBag
             {
                 var image = new BitmapImage();
                 image.BeginInit();
-                image.CacheOption = BitmapCacheOption.OnLoad; // here
+                image.CacheOption = BitmapCacheOption.OnLoad;
                 image.StreamSource = ms;
                 image.EndInit();
                 return image;
             }
         }
-
+        //檢查MedBagLocation存在
         private bool CheckExistLocation(MedBagLocation.MedBagLocation m)
         {
             foreach (MedBagLocation.MedBagLocation location in MedLocations)

@@ -61,6 +61,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                     MultiMode.IsChecked = true;
                     SingleMode.IsChecked = false;
                 }
+                SetMedicineCheckBoxVisibility();
                 OnPropertyChanged(nameof(SelectedMode));
             }
         }
@@ -328,19 +329,25 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         //新增/刪除藥袋
         private void NewMedBagButtonClick(object sender, RoutedEventArgs e)
         {
-            if (sender is Button b && b.Name.Contains("Add"))
+            if (!(sender is Button b)) return;
+            if (b.Name.Contains("Add"))
             {
                 MedBagCollection.Add(new MedBag(SelectedMode));
-                MedBags.SelectedItem = MedBagCollection[MedBagCollection.Count-1];
+                MedBags.SelectedItem = MedBagCollection[MedBagCollection.Count - 1];
             }
             else
             {
                 if (CheckMedBagCollectionEmpty())
                     return;
-                var i = MedBags.SelectedIndex;
-                if (i > 0)
-                    MedBags.SelectedItem = MedBagCollection[i - 1];
-                MedBagCollection.Remove(MedBagCollection[i]);
+                MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("確認刪除藥袋 " + SelectedMedBag.Name, "刪除確認", MessageBoxButton.YesNo);
+                if (messageBoxResult == MessageBoxResult.Yes)
+                {
+                    MedBagDb.DeleteMedBagData(SelectedMedBag);
+                    var i = MedBags.SelectedIndex;
+                    if (i > 0)
+                        MedBags.SelectedItem = MedBagCollection[i - 1];
+                    MedBagCollection.Remove(MedBagCollection[i]);
+                }
             }
         }
 
@@ -362,15 +369,17 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void MedBags_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            ClearMedBagCanvasUIElement();
+            ClearMedBagCanvasUiElement();
             SelectedMedBag = ((DataGrid) sender).SelectedItem as MedBag;
             if (SelectedMedBag == null) return;
-            if (SelectedMedBag.MedLocations.Count > 0)
+            var idExist = int.TryParse(SelectedMedBag.Id, out _);
+            if (idExist)
             {
                 if (SelectedMedBag.MedBagImage != null)
                     SetMedBagRange();
-                foreach (var location in SelectedMedBag.MedLocations)
-                    SetLocation(location);
+                if (SelectedMedBag.MedLocations.Count > 0)
+                    foreach (var location in SelectedMedBag.MedLocations)
+                        SetLocation(location);
             }
             else
             {
@@ -380,6 +389,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void CleanButtonClick(object sender, RoutedEventArgs e)
         {
+            ClearMedBagCanvasUiElement();
             SelectedMedBag = new MedBag(SelectedMode);
             MedBagCollection[MedBags.SelectedIndex] = SelectedMedBag;
         }
@@ -455,7 +465,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                         {
                             TextRun = new TextRun
                             {
-                                Value = m.Name,
+                                Value = m.Content,
                                 Style = string.Empty
                             }
                         }
@@ -501,9 +511,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         }
         private void CreatePdf()
         {
-            var mimeType = string.Empty;
-            var encoding = string.Empty;
-            var extension = string.Empty;
             var deviceInfo = "<DeviceInfo>" +
                              "  <OutputFormat>PDF</OutputFormat>" +
                              "  <PageWidth>" + SelectedMedBag.BagWidth + "cm</PageWidth>" +
@@ -516,8 +523,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             deviceInfo = string.Format(deviceInfo, SelectedMedBag.BagWidth, SelectedMedBag.BagHeight);
             var viewer = new ReportViewer {ProcessingMode = ProcessingMode.Local};
             viewer.LocalReport.ReportPath = ReportPath;
-            var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out mimeType, out encoding, out extension,
-                out var streamIds, out var warnings);
+            var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out _, out _, out _,
+                out _, out _);
 
             using (var fs = new FileStream("output.pdf", FileMode.Create))
             {
@@ -541,7 +548,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
         }
 
-        private void ClearMedBagCanvasUIElement()
+        private void ClearMedBagCanvasUiElement()
         {
             MedRangeLocationControl.Visibility = Visibility.Hidden;
             if (MedBagCanvas.Children.Count == 1) return;
@@ -550,9 +557,52 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 if (child is CheckBox box)
                     box.IsChecked = false;
             }
-            for (int i = 1; i < MedBagCanvas.Children.Count;)
+            for (var i = 1; i < MedBagCanvas.Children.Count;)
             {
                 MedBagCanvas.Children.Remove(MedBagCanvas.Children[i]);
+            }
+        }
+
+        private void SetMedicineCheckBoxVisibility()
+        {
+            if (SelectedMode == MedBagMode.SINGLE)
+            {
+                foreach (UIElement child in CheckBoxStack.Children)
+                {
+                    if (child is CheckBox box)
+                    {
+                        box.Visibility = !box.Name.Equals("MedicineList") ? Visibility.Visible : Visibility.Collapsed;
+                    }
+                }
+            }
+            else
+            {
+                foreach (UIElement child in CheckBoxStack.Children)
+                {
+                    if (child is CheckBox box)
+                    {
+                        switch (box.Name)
+                        {
+                            case "MedicineList":
+                                box.Visibility = Visibility.Visible;
+                                break;
+                            case "MedicineId":
+                            case "EngName":
+                            case "ChnName":
+                            case "Ingredient":
+                            case "Form":
+                            case "Usage":
+                            case "Dosage":
+                            case "Total":
+                            case "Days":
+                            case "Indication":
+                            case "SideEffect":
+                            case "Notes":
+                                box.Visibility = Visibility.Collapsed;
+                                break;
+                        }
+                    }
+                }
             }
         }
     }
