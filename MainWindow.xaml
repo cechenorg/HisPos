@@ -24,6 +24,7 @@
     xmlns:resource="clr-namespace:His_Pos.Resource"
     xmlns:stockTaking="clr-namespace:His_Pos.StockTaking"
     xmlns:stockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
+    xmlns:CustomerManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.CustomerManage"
     xmlns:workScheduleManage="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
     Title="MainWindow"
     Width="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
@@ -74,6 +75,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type employeeManage:EmployeeManage}">
             <employeeManage:EmployeeManageView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type CustomerManage:CustomerManage}">
+            <CustomerManage:CustomerManageView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type medFrequencyManage:MedFrequencyManage}">
             <medFrequencyManage:MedFrequencyManageView />
