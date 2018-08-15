@@ -131,63 +131,63 @@ namespace His_Pos.ViewModel
         {
             switch (vm.TabName)
             {
-                case nameof(FeatureItem.矪よ祅魁):
+                case nameof(FeatureItem.處方登錄):
                     break;
 
-                case nameof(FeatureItem.代刚罢):
+                case nameof(FeatureItem.測試啦):
                     break;
 
-                case nameof(FeatureItem.矪よ琩高):
+                case nameof(FeatureItem.處方查詢):
                     break;
 
-                case nameof(FeatureItem.坝珇琩高):
+                case nameof(FeatureItem.商品查詢):
                     break;
 
-                case nameof(FeatureItem.矪瞶虫恨瞶):
+                case nameof(FeatureItem.處理單管理):
                     //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
                     //{
-                    //    MessageWindow message = new MessageWindow("タ纗", MessageType.ERROR);
+                    //    MessageWindow message = new MessageWindow("正在儲存", MessageType.ERROR);
                     //    return;
                     //}
                     break;
 
-                case nameof(FeatureItem.矪瞶虫魁):
+                case nameof(FeatureItem.處理單紀錄):
                     break;
 
-                case nameof(FeatureItem.穝糤絃翴):
+                case nameof(FeatureItem.新增盤點):
                     break;
 
-                case nameof(FeatureItem.畐絃翴魁):
+                case nameof(FeatureItem.庫存盤點紀錄):
                     break;
 
-                case nameof(FeatureItem.坝珇摸恨瞶):
+                case nameof(FeatureItem.商品類別管理):
                     break;
 
-                case nameof(FeatureItem.ㄑ莱坝恨瞶):
+                case nameof(FeatureItem.供應商管理):
                     break;
 
-                case nameof(FeatureItem.耫恨瞶):
+                case nameof(FeatureItem.櫃位管理):
                     LocationManageView.Instance.SaveLocation();
                     break;
 
-                case nameof(FeatureItem.恨瞶):
+                case nameof(FeatureItem.員工管理):
                     break;
 
-                case nameof(FeatureItem.媚珇繵瞯恨瞶):
+                case nameof(FeatureItem.藥品頻率管理):
                     break;
 
-                case nameof(FeatureItem.痁ゴ):
+                case nameof(FeatureItem.上下班打卡):
                     break;
 
-                case nameof(FeatureItem.逼痁恨瞶):
+                case nameof(FeatureItem.排班管理):
                     break;
 
-                case nameof(FeatureItem.糵恨瞶):
+                case nameof(FeatureItem.審核管理):
                     break;
 
-                case nameof(FeatureItem.媚砋恨瞶):
+                case nameof(FeatureItem.藥袋管理):
                     break;
-                case nameof(FeatureItem.媚Ы恨瞶):
+                case nameof(FeatureItem.藥局管理):
                     break;
                 default:
                     return;
@@ -205,79 +205,79 @@ namespace His_Pos.ViewModel
 
             switch (featureItem.ToString())
             {
-                //矪よ恨瞶
-                case nameof(FeatureItem.矪よ祅魁):
+                //處方管理
+                case nameof(FeatureItem.處方登錄):
                     newTab = new PrescriptionDec2() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
-                case nameof(FeatureItem.矪よ琩高):
+                case nameof(FeatureItem.處方查詢):
                     newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
-                case nameof(FeatureItem.媚珇繵瞯恨瞶):
+                case nameof(FeatureItem.藥品頻率管理):
                     newTab = new MedFrequencyManage() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.媚砋恨瞶):
+                case nameof(FeatureItem.藥袋管理):
                     newTab = new MedBagManage() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                //坝珇恨瞶
-                case nameof(FeatureItem.坝珇琩高):
+                //商品管理
+                case nameof(FeatureItem.商品查詢):
                     newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
-                case nameof(FeatureItem.矪瞶虫恨瞶):
+                case nameof(FeatureItem.處理單管理):
                     newTab = new ProductPurchase.ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
-                case nameof(FeatureItem.矪瞶虫魁):
+                case nameof(FeatureItem.處理單紀錄):
                     newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
-                case nameof(FeatureItem.坝珇摸恨瞶):
+                case nameof(FeatureItem.商品類別管理):
                     newTab = new ProductTypeManage.ProductTypeManage() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
-                case nameof(FeatureItem.耫恨瞶):
+                case nameof(FeatureItem.櫃位管理):
                     newTab = new LocationManage.LocationManage() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                //絃翴
-                case nameof(FeatureItem.穝糤絃翴):
+                //盤點
+                case nameof(FeatureItem.新增盤點):
                     newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
-                case nameof(FeatureItem.畐絃翴魁):
+                case nameof(FeatureItem.庫存盤點紀錄):
                     newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
-                //膀セ戈恨瞶
-                case nameof(FeatureItem.ㄑ莱坝恨瞶):
+                //基本資料管理
+                case nameof(FeatureItem.供應商管理):
                     newTab = new ManufactoryManage.ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.媚Ы恨瞶):
+                case nameof(FeatureItem.藥局管理):
                     newTab = new PharmacyManage() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.恨瞶):
+                case nameof(FeatureItem.員工管理):
                     newTab = new EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.糵恨瞶):
+                case nameof(FeatureItem.審核管理):
                     newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
-                case nameof(FeatureItem.臮恨瞶):
+                case nameof(FeatureItem.顧客管理):
                     newTab = new CustomerManage() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                //ゴ
-                case nameof(FeatureItem.痁ゴ):
+                //打卡
+                case nameof(FeatureItem.上下班打卡):
                     newTab = new ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
 
-                case nameof(FeatureItem.逼痁恨瞶):
+                case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
 
@@ -298,7 +298,7 @@ namespace His_Pos.ViewModel
 
                     switch (tabName)
                     {
-                        case nameof(FeatureItem.坝珇琩高):
+                        case nameof(FeatureItem.商品查詢):
                             if (InventoryManagement.InventoryManagementView.Instance is null) break;
 
                             if (InventoryManagement.InventoryManagementView.DataChanged)
@@ -308,7 +308,7 @@ namespace His_Pos.ViewModel
                             }
                             break;
 
-                        case nameof(FeatureItem.矪瞶虫魁):
+                        case nameof(FeatureItem.處理單紀錄):
                             if (ProductPurchaseRecord.ProductPurchaseRecordView.Instance is null) break;
 
                             if (ProductPurchaseRecord.ProductPurchaseRecordView.DataChanged)
@@ -317,7 +317,7 @@ namespace His_Pos.ViewModel
                             ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
                             break;
 
-                        case nameof(FeatureItem.穝糤絃翴):
+                        case nameof(FeatureItem.新增盤點):
                             if (StockTaking.StockTakingView.Instance is null) break;
 
                             if (StockTaking.StockTakingView.DataChanged)
@@ -328,7 +328,7 @@ namespace His_Pos.ViewModel
                             }
                             break;
 
-                        case nameof(FeatureItem.糵恨瞶):
+                        case nameof(FeatureItem.審核管理):
                             if (AuthenticationManageView.Instance is null) break;
 
                             if (AuthenticationManageView.DataChanged)
@@ -340,7 +340,7 @@ namespace His_Pos.ViewModel
                             }
                             break;
 
-                        case nameof(FeatureItem.逼痁恨瞶):
+                        case nameof(FeatureItem.排班管理):
                             if (WorkScheduleManageView.Instance is null) break;
 
                             if (WorkScheduleManageView.DataChanged)

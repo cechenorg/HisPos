@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace His_Pos.Class.Person
 {
-    public class Customer : Person
+    public class Customer : Person, ICloneable
     {
         public Customer()
         {
@@ -16,21 +16,41 @@ namespace His_Pos.Class.Person
         {
             IcCard = icCard;
         }
-
-        public Customer(DataRow row)
+        public Customer(Customer customer)
+        {
+            Id = customer.Id;
+            IcNumber = customer.IcNumber;
+            Birthday = customer.Birthday;
+            Name = customer.Name;
+            Qname = customer.Qname;
+            Gender = customer.Gender;
+            GenderName = customer.GenderName;
+            IcCard = customer.IcCard;
+          
+        }
+        public Customer(DataRow row,string type)
         {
             Id = row["CUS_ID"].ToString();
             IcNumber = row["CUS_IDNUM"].ToString();
-            Birthday = row["CUS_BIRTH"].ToString();
+            Birthday = DateTimeExtensions.ToUsDate(row["CUS_BIRTH"].ToString()).ToString();
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
             Gender = row["CUS_GENDER"].ToString() == "" || Convert.ToBoolean(row["CUS_GENDER"].ToString());
-            IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
+            
+            if (type == "fromXml") 
+             IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
+            if(type == "fromDb")
+            {
+              GenderName = row["CUS_GENDER"].ToString() == "True" ? "男" : "女";
+                IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
+            }
+             
         }
         public Customer(XmlNode xml) {
             IcCard = new IcCard(xml);
             Name = xml.SelectSingleNode("d20") == null ? null : xml.SelectSingleNode("d20")?.InnerText;
             IcNumber = xml.SelectSingleNode("d3") == null ? null : xml.SelectSingleNode("d3")?.InnerText;
+            Gender = IcNumber.Substring(1, 1) == "1" ? true : false;
             Birthday = xml.SelectSingleNode("d6") == null ? null : DateTimeExtensions.BirthdayFormatConverter2(xml.SelectSingleNode("d6")?.InnerText);
         }
         public string Qname { get; set; }
@@ -44,7 +64,12 @@ namespace His_Pos.Class.Person
                 NotifyPropertyChanged(nameof(Gender));
             }
         }
+        public string GenderName { get; set; }
         public IcCard IcCard { get; set; }
         public ContactInfo ContactInfo { get; set; } = new ContactInfo();
+        public object Clone()
+        {
+            return new Customer(this);
+        }
     }
 }

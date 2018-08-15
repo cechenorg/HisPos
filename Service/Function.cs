@@ -30,19 +30,18 @@ namespace His_Pos
         //用途:將中文字轉成注音符號再轉成英文字母
         //輸入:中文字串
         //輸出:英文字串
+        [STAThread]
         public string ChangeNameToEnglish(string txtInput)
         {
             string[] result;
             string resultOutput = string.Empty;
-            using (MsImeFacade ime = new MsImeFacade(ImeClass.Taiwan))
-            {
 
+            MsImeFacade ime = new MsImeFacade(ImeClass.Taiwan);
                 result = ime.GetBopomofo(txtInput);
                 for (int i = 0; i < result.Length; i++)
                 {
                     resultOutput += result[i].Substring(0, 1);
                 }
-            }
             return resultOutput;
         }//ChangeNameToEnglish
 

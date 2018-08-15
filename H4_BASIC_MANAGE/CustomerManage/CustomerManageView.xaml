@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.CustomerManage"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" GotFocus="UserControl_GotFocus"
              d:DesignHeight="839" d:DesignWidth="1365">
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
@@ -29,8 +29,8 @@
                         <RowDefinition />
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <DataGrid Name="DataGridEmployee" Grid.Row="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
-                        ItemsSource="{Binding EmployeeCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
+                    <DataGrid Name="DataGridCustomer" Grid.Row="0" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent"
+                        SelectionChanged="DataGridCustomer_SelectionChanged"  ItemsSource="{Binding CustomerCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="250">
                                 <DataGridTemplateColumn.CellStyle>
@@ -69,9 +69,9 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <TextBox Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-                        <TextBox Text="{Binding Employee.NickName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-                        <Label Content="{Binding Employee.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                        <TextBox Text="{Binding CustomerDetail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                        <TextBox Text="{Binding CustomerDetail.Qname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱" Width="140" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                        <Label Content="{Binding CustomerDetail.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical"  Background="{StaticResource GridBackGround}" Grid.Row="0" Margin="10,10,10,10" Width="150">
                         
@@ -96,49 +96,37 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
                             <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <ComboBox Width="145" Text="{Binding Employee.Gender,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
+                            <ComboBox Width="145" Text="{Binding CustomerDetail.GenderName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
                                 <ComboBoxItem >男</ComboBoxItem>
                                 <ComboBoxItem >女</ComboBoxItem>
                             </ComboBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
                             <Label  Content="生日" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                            <DatePicker  Width="145" Text="{Binding Employee.Birth,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Name="birth" SelectedDateFormat="Short" FontFamily="Segoe UI Semi" FontSize="18"  Margin="10,0,0,0"/>
+                            <DatePicker  Width="145" Text="{Binding CustomerDetail.Birthday,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="Text_TextChanged" Name="birth" SelectedDateFormat="Short" FontFamily="Segoe UI Semi" FontSize="18"  Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
                             <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox Width="120" Text="{Binding Employee.IdNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                            <TextBox Width="120" Text="{Binding CustomerDetail.IcNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Margin="8">
                             <Label  Content="手機" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox  Width="150" Text="{Binding Employee.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                            <TextBox  Width="150" Text="{Binding CustomerDetail.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="4" Margin="8">
                             <Label  Content="家電" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox  Width="150" Text="{Binding Employee.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                            <TextBox  Width="150" Text="{Binding CustomerDetail.Tel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="8">
-                            <Label  Content="電子信箱" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox Width="325" Text="{Binding Employee.Email,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0"/>
-                        </StackPanel>
-                        <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="3" Grid.Row="1" Grid.Column="2" Margin="8">
+                        <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="3" Grid.Row="1" Grid.Column="0" Margin="8">
                             <Label  Content="住址" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox Width="590" Text="{Binding Employee.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0"/>
+                            <TextBox Width="500" Text="{Binding CustomerDetail.Address,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0"/>
+                            
                         </StackPanel>
-                        <StackPanel  Orientation="Horizontal" Grid.ColumnSpan="5" Grid.Row="2" Grid.Column="0" Margin="10">
-                            <Label Content="備註" Grid.Row="0" Grid.Column="2" Margin="10,0,10,0" HorizontalAlignment="Center" Height="50" VerticalContentAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                            <RichTextBox Name="richtextbox" FontSize="15" Width="750">
-                                <RichTextBox.Document>
-                                    <FlowDocument Focusable="True" LineHeight="1" >
-                                    </FlowDocument>
-                                </RichTextBox.Document>
-                            </RichTextBox>
-                            <Label Name="Changed" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="30,0,0,0"/>
-                            <StackPanel  Orientation="Vertical">
-
-                                <Button Name="ButtonCancel" Margin="0,5,0,10" Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0"/>
-                                <Button Name="ButtonSubmit" Width="120" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" />
-                            </StackPanel>
+                        <StackPanel  Orientation="Horizontal"  Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="8">
+                            <Rectangle Width="100"/>
+                            <Label Name="Changed" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" />
+                            <Button Name="ButtonCancel" Width="100" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="ButtonCancel_Click"/>
+                            <Button Name="ButtonSubmit" Width="100" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" />
                         </StackPanel>
                     </Grid>
                 </Grid>
