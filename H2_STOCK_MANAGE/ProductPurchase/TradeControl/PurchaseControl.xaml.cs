@@ -31,7 +31,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
     /// </summary>
     public partial class PurchaseControl : UserControl, INotifyPropertyChanged
     {
-
+        #region ----- Define Variables -----
         public Collection<PurchaseProduct> ProductAutoCompleteCollection { get; set; }
 
         private StoreOrder storeOrderData;
@@ -57,6 +57,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        #endregion
+
 
         public PurchaseControl()
         {
@@ -292,6 +294,5 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             if (!textBox.Name.Equals("FreeAmount"))
                 storeOrderData.CalculateTotalPrice();
         }
-        
     }
 }

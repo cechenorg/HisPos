@@ -116,6 +116,10 @@ namespace His_Pos.ProductPurchase
 
             loadingWindow.Show();
 
+            purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
+            purchaseControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
+            purchaseControl.Confirm.Click += Confirm_Click;
+
         }
 
 
@@ -197,12 +201,13 @@ namespace His_Pos.ProductPurchase
             backgroundWorker.RunWorkerAsync();
         }
 
-        //private void ClearOrderDetailData() {
-        //    IsFirst = true;
-        //    StoreOrderData = null;
-        //    IsChanged = false;
-        //    IsFirst = false;
-        //}
+        private void ClearOrderDetailData()
+        {
+            IsFirst = true;
+            StoreOrderData = null;
+            IsChanged = false;
+            IsFirst = false;
+        }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
         {
@@ -264,41 +269,6 @@ namespace His_Pos.ProductPurchase
             return false;
         }
 
-
-
-        //private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
-        //{
-        //    var productAuto = sender as AutoCompleteBox;
-
-        //    if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || Products is null) return;
-
-        //    var result = Products.Where(x => (((NewItemProduct)x).Product.Id.ToLower().Contains(productAuto.Text.ToLower()) || ((NewItemProduct)x).Product.ChiName.ToLower().Contains(productAuto.Text.ToLower()) || ((NewItemProduct)x).Product.EngName.ToLower().Contains(productAuto.Text.ToLower())) && ((IProductPurchase)((NewItemProduct)x).Product).Status).Take(50).Select(x => ((NewItemProduct)x).Product);
-        //    ProductAutoCompleteCollection = new ObservableCollection<object>(result.ToList());
-
-        //    productAuto.ItemsSource = ProductAutoCompleteCollection;
-        //    productAuto.ItemFilter = ProductFilter;
-        //    productAuto.PopulateComplete();
-        //}
-
-        
-
-        //private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
-        //{
-        //    var productAuto = sender as AutoCompleteBox;
-        //    SetChanged();
-        //    if (productAuto is null) return;
-        //    if (productAuto.SelectedItem is null) {
-        //        if (productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<object>).Count != 0 && productAuto.Text.Length >= 4)
-        //            productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<object>)[0];
-        //        else
-        //            return;
-        //    }
-
-        //    StoreOrderData.Products.Add(((ICloneable)productAuto.SelectedItem).Clone() as Product);
-
-        //    productAuto.Text = "";
-        //}
-
         //private void SetChanged() {
         //    if (IsFirst == true) return;
         //    IsChanged = true;
@@ -309,44 +279,43 @@ namespace His_Pos.ProductPurchase
         //    SetChanged();
         //}
 
-        //private void Confirm_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (!CheckNoEmptyData()) return;
-        //    StoreOrderData.Type = OrderType.DONE;
-        //    SaveOrder();
-        //    IsChanged = false;
-        //    storeOrderCollection.Remove(storeOrderData);
-        //    InventoryManagementView.DataChanged = true;
-        //    ProductPurchaseRecordView.DataChanged = true;
-        //    StockTakingView.DataChanged = true;
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CheckNoEmptyData()) return;
+            StoreOrderData.Type = OrderType.DONE;
+            SaveOrder();
+            IsChanged = false;
+            storeOrderCollection.Remove(StoreOrderData);
+            InventoryManagementView.DataChanged = true;
+            ProductPurchaseRecordView.DataChanged = true;
+            StockTakingView.DataChanged = true;
 
-        //    if (StoOrderOverview.Items.Count == 0)
-        //        ClearOrderDetailData();
-        //    else
-        //        StoOrderOverview.SelectedIndex = 0;
-        //}
+            if (StoOrderOverview.Items.Count == 0)
+                ClearOrderDetailData();
+            else
+                StoOrderOverview.SelectedIndex = 0;
+        }
 
-        //private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    int oldIndex = storeOrderCollection.IndexOf(storeOrderData);
-        //    int newIndex = storeOrderCollection.Count - 1;
+        private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
+        {
+            int oldIndex = storeOrderCollection.IndexOf(StoreOrderData);
+            int newIndex = storeOrderCollection.Count - 1;
 
-        //    for (int x = 0; x < storeOrderCollection.Count; x++)
-        //    {
-        //        if (storeOrderCollection[x].type == OrderType.PROCESSING)
-        //        {
-        //            newIndex = x - 1;
-        //            break;
-        //        }
-        //    }
-        //    if (!CheckNoEmptyData()) return;
-        //    StoreOrderData.Type = OrderType.PROCESSING;
-        //    SaveOrder();
-        //    storeOrderCollection.Move(oldIndex, newIndex);
-        //    StoOrderOverview.SelectedItem = storeOrderData;
-        //    StoOrderOverview.ScrollIntoView(storeOrderData);
-        //    UpdateOrderDetailUi(OrderType.PROCESSING);
-        //}
+            for (int x = 0; x < storeOrderCollection.Count; x++)
+            {
+                if (storeOrderCollection[x].type == OrderType.PROCESSING)
+                {
+                    newIndex = x - 1;
+                    break;
+                }
+            }
+            if (!CheckNoEmptyData()) return;
+            StoreOrderData.Type = OrderType.PROCESSING;
+            SaveOrder();
+            storeOrderCollection.Move(oldIndex, newIndex);
+            StoOrderOverview.SelectedItem = StoreOrderData;
+            StoOrderOverview.ScrollIntoView(StoreOrderData);
+        }
 
         //private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         //{
@@ -356,30 +325,30 @@ namespace His_Pos.ProductPurchase
         //    }
         //}
 
-        //private bool CheckNoEmptyData()
-        //{
-        //    string errorMessage = StoreOrderData.IsAnyDataEmpty();
+        private bool CheckNoEmptyData()
+        {
+            string errorMessage = StoreOrderData.IsAnyDataEmpty();
 
-        //    if (errorMessage != String.Empty)
-        //    {
-        //        MessageWindow messageWindow = new MessageWindow(errorMessage, MessageType.ERROR);
-        //        messageWindow.ShowDialog();
-        //        return false;
-        //    }
-        //    return true;
-        //}
+            if (errorMessage != String.Empty)
+            {
+                MessageWindow messageWindow = new MessageWindow(errorMessage, MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return false;
+            }
+            return true;
+        }
 
-        //private void DeleteOrder_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (StoreOrderData == null) return;
-        //    StoreOrderDb.DeleteOrder(StoreOrderData.Id);
-        //    StoreOrderCollection.Remove(StoreOrderData);
+        private void DeleteOrder_Click(object sender, RoutedEventArgs e)
+        {
+            if (StoreOrderData == null) return;
+            StoreOrderDb.DeleteOrder(StoreOrderData.Id);
+            StoreOrderCollection.Remove(StoreOrderData);
 
-        //    if (StoOrderOverview.Items.Count == 0)
-        //        ClearOrderDetailData();
-        //    else
-        //        StoOrderOverview.SelectedIndex = 0;
-        //}
+            if (StoOrderOverview.Items.Count == 0)
+                ClearOrderDetailData();
+            else
+                StoOrderOverview.SelectedIndex = 0;
+        }
 
         //private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         //{
