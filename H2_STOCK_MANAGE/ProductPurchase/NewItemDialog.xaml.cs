@@ -30,12 +30,15 @@ namespace His_Pos.ProductPurchase
         public object SelectedItem;
         public bool ConfirmButtonClicked = false;
 
-        public NewItemDialog(Collection<PurchaseProduct> collection)
+        public string ManufactoryID;
+
+        public NewItemDialog(Collection<PurchaseProduct> collection, string id)
         {
             InitializeComponent();
             Title = "新增";
             
             DataCollection = collection;
+            ManufactoryID = id;
 
             InitCollection();
         }
@@ -59,9 +62,9 @@ namespace His_Pos.ProductPurchase
             if ((bool) OnlyManufactory.IsChecked)
             {
                 if (String.IsNullOrEmpty(SearchText.Text))
-                    return ((PurchaseProduct)item).IsThisMan;
+                    return ((PurchaseProduct)item).Mans.Contains(ManufactoryID);
 
-                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text)) && ((PurchaseProduct)item).IsThisMan)
+                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text)) && ((PurchaseProduct)item).Mans.Contains(ManufactoryID))
                     return true;
             }
             else

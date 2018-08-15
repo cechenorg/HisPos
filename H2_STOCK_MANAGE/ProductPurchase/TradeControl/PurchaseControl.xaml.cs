@@ -69,34 +69,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData = storeOrder;
 
             UpdateOrderDetailUi();
-
-            InitProducts();
-        }
-
-        private void InitProducts()
-        {
-            AddNewProduct.IsEnabled = false;
-
-            BackgroundWorker getProductAutobackground = new BackgroundWorker();
-
-            getProductAutobackground.DoWork += (s, o) =>
-            {
-                Collection<PurchaseProduct> temp = ProductDb.GetItemDialogProduct(storeOrderData.Manufactory.Id);
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    ProductAutoCompleteCollection = temp;
-                }));
-            };
-
-            getProductAutobackground.RunWorkerCompleted += (s, o) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    AddNewProduct.IsEnabled = true;
-                }));
-            };
-
-            getProductAutobackground.RunWorkerAsync();
         }
 
         private void UpdateOrderDetailUi()
@@ -297,7 +269,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ProductAutoCompleteCollection);
+            NewItemDialog newItemDialog = new NewItemDialog(ProductAutoCompleteCollection, StoreOrderData.Manufactory.Id);
 
             newItemDialog.ShowDialog();
 

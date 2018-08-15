@@ -154,6 +154,11 @@ namespace His_Pos.ProductPurchase
             SetCurrentControl();
         }
 
+        internal void SetControlProduct(Collection<PurchaseProduct> tempProduct)
+        {
+            purchaseControl.ProductAutoCompleteCollection = tempProduct;
+        }
+
         private void SetCurrentControl()
         {
             switch (StoreOrderData.Category.CategoryName)

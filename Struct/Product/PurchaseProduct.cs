@@ -19,11 +19,12 @@ namespace His_Pos.Struct.Product
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
-            IsThisMan = Boolean.Parse(dataRow["IS_MAN"].ToString());
+            Mans = dataRow["MANS"].ToString();
             Type = dataRow["TYPE"].ToString();
             Status = Boolean.Parse(dataRow["PRO_STATUS"].ToString());
         }
 
+        public string Mans;
         public string Id { get; }
         public string Name { get; }
         public string ChiName;
@@ -32,7 +33,6 @@ namespace His_Pos.Struct.Product
         public string SafeAmount { get; }
         public string BasicAmount { get; }
         public double LastPrice;
-        public bool IsThisMan;
         public string Type;
         public bool Status;
     }
