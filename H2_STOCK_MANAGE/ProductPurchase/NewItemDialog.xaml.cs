@@ -27,7 +27,7 @@ namespace His_Pos.ProductPurchase
     {
         private Collection<PurchaseProduct> DataCollection;
         
-        public object SelectedItem;
+        public PurchaseProduct SelectedItem;
         public bool ConfirmButtonClicked = false;
 
         public string ManufactoryID;
@@ -88,7 +88,7 @@ namespace His_Pos.ProductPurchase
                 return;
             }
 
-            SelectedItem = (SearchResult.SelectedItem as ProductPurchaseView.NewItemProduct).Product;
+            SelectedItem = (PurchaseProduct)SearchResult.SelectedItem;
             ConfirmButtonClicked = true;
             Close();
         }

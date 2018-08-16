@@ -58,8 +58,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
         #endregion
-
-
+        
         public PurchaseControl()
         {
             InitializeComponent();
@@ -243,15 +242,34 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private int GetCurrentRowIndex(AutoCompleteBox productAuto)
+        private int GetCurrentRowIndex(object sender)
         {
-            List<AutoCompleteBox> temp = new List<AutoCompleteBox>();
-            NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, productAuto.Name, ref temp);
-            for (int x = 0; x < temp.Count; x++)
+            if (sender is AutoCompleteBox)
             {
-                if (temp[x].Equals(productAuto))
+                AutoCompleteBox productAuto = sender as AutoCompleteBox;
+
+                List<AutoCompleteBox> temp = new List<AutoCompleteBox>();
+                NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, productAuto.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
                 {
-                    return x;
+                    if (temp[x].Equals(productAuto))
+                    {
+                        return x;
+                    }
+                }
+            }
+            else if (sender is Button)
+            {
+                Button btn = sender as Button;
+
+                List<Button> temp = new List<Button>();
+                NewFunction.FindChildGroup<Button>(StoreOrderDetail, btn.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(btn))
+                    {
+                        return x;
+                    }
                 }
             }
 
@@ -278,7 +296,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             if (newItemDialog.ConfirmButtonClicked)
             {
                 //SetChanged();
-                StoreOrderData.Products.Add(newItemDialog.SelectedItem as Product);
+                if (newItemDialog.SelectedItem.Type.Equals("M"))
+                    StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem));
+                else
+                    StoreOrderData.Products.Add(new ProductPurchaseOtc(newItemDialog.SelectedItem));
             }
         }
 
@@ -293,6 +314,29 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!textBox.Name.Equals("FreeAmount"))
                 storeOrderData.CalculateTotalPrice();
+        }
+
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //SetChanged();
+            StoreOrderData.Products.RemoveAt(StoreOrderDetail.SelectedIndex);
+            StoreOrderData.CalculateTotalPrice();
+        }
+
+        private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            var currentRowIndex = GetCurrentRowIndex(sender);
+
+            double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
+
+            ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
+
+            StoreOrderData.Products.Insert(currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
+
+            if (left != 0)
+                ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
         }
     }
 }

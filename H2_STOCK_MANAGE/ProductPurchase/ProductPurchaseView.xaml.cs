@@ -41,18 +41,7 @@ namespace His_Pos.ProductPurchase
     /// 
     public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
     {
-        public class NewItemProduct
-        {
-            public bool IsThisMan { get; }
-            public Product Product { get; }
-
-            public NewItemProduct(bool isThisMan, Product product)
-            {
-                IsThisMan = isThisMan;
-                Product = product;
-            }
-        }
-
+        #region ----- Define Variables -----
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
 
         public ObservableCollection<object> Products;
@@ -101,6 +90,8 @@ namespace His_Pos.ProductPurchase
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        #endregion
+
         public ProductPurchaseView()
         {
             InitializeComponent();
@@ -121,8 +112,7 @@ namespace His_Pos.ProductPurchase
             purchaseControl.Confirm.Click += Confirm_Click;
 
         }
-
-
+        
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
         {
             Window window = Window.GetWindow(this);
@@ -255,7 +245,7 @@ namespace His_Pos.ProductPurchase
 
             if (StoOrderOverview.Items.Count == 0)
             {
-                //ClearOrderDetailData();
+                ClearOrderDetailData();
             }
 
             StoOrderOverview.SelectedIndex = 0;
@@ -349,16 +339,7 @@ namespace His_Pos.ProductPurchase
             else
                 StoOrderOverview.SelectedIndex = 0;
         }
-
-        //private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    SetChanged();
-        //    StoreOrderData.Products.RemoveAt(StoreOrderDetail.SelectedIndex);
-        //    CalculateTotalPrice();
-        //}
-
-
-
+        
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -388,21 +369,7 @@ namespace His_Pos.ProductPurchase
         //    return false;
         //}
 
-        //private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is null) return;
-
-        //    var currentRowIndex = GetCurrentRowIndex(sender);
-
-        //    double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
-
-        //    ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
-
-        //    StoreOrderData.Products.Insert(currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
-
-        //    if (left != 0)
-        //        ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
-        //}
+        
     }
     
 }

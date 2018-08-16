@@ -81,7 +81,7 @@
                 <DataGridTemplateColumn Width="30">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}"/>
+                            <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -180,7 +180,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown"/>
-                                <Button x:Name="Split" Content="拆批" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Width="40" Margin="5" Padding="0" FontFamily="Segoe UI Semi"/>
+                                <Button x:Name="Split" Content="拆批" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Width="40" Margin="5" Padding="0" FontFamily="Segoe UI Semi" Click="SplitBatchNumber_Click"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
