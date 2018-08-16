@@ -276,7 +276,7 @@ namespace His_Pos.Class.Declare
             row["CUS_IDNUM"] = declareData.Prescription.Customer.IcCard.IcNumber;
             row["CUS_GENDER"] = declareData.Prescription.Customer.Gender == true ? "1" : "0";
             Function function = new Function();
-            row["CUS_QNAME"] = declareData.Prescription.Customer.Name;
+            row["CUS_QNAME"] = function.ChangeNameToEnglish( declareData.Prescription.Customer.Name);
             customerTable.Rows.Add(row);
         }
         private DataTable SetDeclareMasterTable() {

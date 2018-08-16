@@ -47,9 +47,9 @@
                                 </DataGridTemplateColumn.CellStyle>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Label Content="{Binding Id}"  Width="50" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                            <Label Content="{Binding Name}" Width="200" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center"/>
+                                        <StackPanel Orientation="Horizontal" Height="50">
+                                            <Label Content="{Binding Name}" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                            <Label Content="{Binding Birthday}" Width="200" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="17" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

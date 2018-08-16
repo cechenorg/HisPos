@@ -172,7 +172,8 @@ namespace His_Pos.ViewModel
 
                 case nameof(FeatureItem.員工管理):
                     break;
-
+                case nameof(FeatureItem.顧客管理):
+                    break;
                 case nameof(FeatureItem.藥品頻率管理):
                     break;
 

@@ -17,9 +17,10 @@ using System.Xml;
 using His_Pos.Class;
 using His_Pos.Properties;
 using His_Pos.Service;
-using ImeLib;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NChinese;
+using NChinese.Phonetic;
 
 namespace His_Pos
 {
@@ -30,18 +31,16 @@ namespace His_Pos
         //用途:將中文字轉成注音符號再轉成英文字母
         //輸入:中文字串
         //輸出:英文字串
-        [STAThread]
         public string ChangeNameToEnglish(string txtInput)
         {
-            string[] result;
             string resultOutput = string.Empty;
-
-            MsImeFacade ime = new MsImeFacade(ImeClass.Taiwan);
-                result = ime.GetBopomofo(txtInput);
-                for (int i = 0; i < result.Length; i++)
-                {
-                    resultOutput += result[i].Substring(0, 1);
-                }
+            // 取得一串中文字的注音字根
+            var zhuyinProvicer = new ZhuyinReverseConversionProvider();
+            string[] zhuyinArray = zhuyinProvicer.Convert(txtInput);
+            foreach (var s in zhuyinArray) {
+                if (s == string.Empty) return txtInput;
+                resultOutput += GetEnumDescription("Alphabat", s.Substring(0, 1));
+            }
             return resultOutput;
         }//ChangeNameToEnglish
 

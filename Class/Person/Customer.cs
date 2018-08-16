@@ -32,7 +32,7 @@ namespace His_Pos.Class.Person
         {
             Id = row["CUS_ID"].ToString();
             IcNumber = row["CUS_IDNUM"].ToString();
-            Birthday = DateTimeExtensions.ToUsDate(row["CUS_BIRTH"].ToString()).ToString();
+            Birthday = DateTimeExtensions.BirthdayFormatConverter3(row["CUS_BIRTH"].ToString()).ToString();
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
             Gender = row["CUS_GENDER"].ToString() == "" || Convert.ToBoolean(row["CUS_GENDER"].ToString());
