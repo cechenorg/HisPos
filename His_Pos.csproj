@@ -513,6 +513,7 @@
     <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
     <Compile Include="Resource\MenuListItem.xaml.cs">
       <DependentUpon>MenuListItem.xaml</DependentUpon>

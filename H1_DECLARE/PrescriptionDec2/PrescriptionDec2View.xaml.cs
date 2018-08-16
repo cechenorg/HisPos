@@ -12,12 +12,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
+using His_Pos.Class.MedBag;
+using His_Pos.RDLC;
+using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -201,6 +205,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //declareDb.InsertDb(declareData);
                 c.ShowDialog();
             }
+            PrintMedBag();
+        }
+
+        private void PrintMedBag()
+        {
+            var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
+            var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
+            File.WriteAllText(ReportService.ReportPath, string.Empty);
+            File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
+            ReportService.CreatePdf(defaultMedBag);
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)

@@ -449,6 +449,11 @@
                     Click="NewLocationClick"
                     Content="姓名" />
                 <CheckBox
+                    Name="PatientId"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"
+                    Content="身分證字號" />
+                <CheckBox
                     Name="PatientTel"
                     Content="聯絡電話"
                     Style="{StaticResource LocCheckBox}"
@@ -459,7 +464,7 @@
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
                 <CheckBox
-                    Name="PatientBirth"
+                    Name="PatientBirthday"
                     Content="生日"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
@@ -474,6 +479,16 @@
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
                 <CheckBox
+                    Name="TreatmentDate"
+                    Content="就醫日期"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="MedicalNumber"
+                    Content="就醫序號"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
                     Name="NextDrugDate"
                     Content="下次領藥日"
                     Style="{StaticResource LocCheckBox}"
@@ -483,17 +498,27 @@
                     Content="參考回診日"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
+                <CheckBox
+                    Name="ChronicSequence"
+                    Content="領藥次數"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
                 <Label
                     Content="醫療院所"
                     Style="{StaticResource LocLabel}"/>
                 <CheckBox
-                    Name="Institution"
+                    Name="ReleaseHospital"
                     Content="醫療院所名稱"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
                 <CheckBox
                     Name="Division"
                     Content="科別"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="DoctorId"
+                    Content="診治醫師"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
                 <Label

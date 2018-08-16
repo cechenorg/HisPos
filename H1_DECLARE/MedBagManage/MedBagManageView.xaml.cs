@@ -38,20 +38,19 @@ namespace His_Pos.H1_DECLARE.MedBagManage
     /// </summary>
     public partial class MedBagManageView : INotifyPropertyChanged
     {
-        private const string ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
         public static MedBagManageView Instance;
 
         private int _id;
-        private int maxMedBagId = -1;
-        private MedBagMode selectedMode;
+        private int _maxMedBagId = -1;
+        private MedBagMode _selectedMode;
 
         public MedBagMode SelectedMode
         {
-            get => selectedMode;
+            get => _selectedMode;
             set
             {
-                selectedMode = value;
-                if (selectedMode == MedBagMode.SINGLE)
+                _selectedMode = value;
+                if (_selectedMode == MedBagMode.SINGLE)
                 {
                     SingleMode.IsChecked = true;
                     MultiMode.IsChecked = false;
@@ -131,8 +130,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             foreach (var m in MedBagCollection)
             {
                 var i = int.Parse(m.Id);
-                if (i > maxMedBagId)
-                    maxMedBagId = i;
+                if (i > _maxMedBagId)
+                    _maxMedBagId = i;
             }
             MedBags.ItemsSource = MedBagCollection;
             if (MedBags.Items.Count != 0)
@@ -297,9 +296,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
             SaveMedBagData();
-            File.WriteAllText(ReportPath, string.Empty);
-            File.AppendAllText(ReportPath, SerializeObject<Report>(CreatReport()));
-            CreatePdf();
             var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
             m.Show();
         }
@@ -361,7 +357,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
             else
             {
-                SelectedMedBag.Id = (maxMedBagId + 1).ToString();
+                SelectedMedBag.Id = (_maxMedBagId + 1).ToString();
             }
         }
 
@@ -385,130 +381,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             return false;
         }
 
-        private void SetReportItem(Report medBagReport, ObservableCollection<MedBagLocation> locations)
-        {
-            foreach (var m in locations)
-                if (m.Name != "MedicineList")
-                    medBagReport.Body.ReportItems.Textbox.Add(CreatTextBoxField(m));
-        }
-        private Report CreatReport()
-        {
-            var medBagReport = new Report
-            {
-                Xmlns = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition",
-                Rd = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner",
-                Body = new Body
-                {
-                    ReportItems = new ReportItems(),
-                    Height = SelectedMedBag.BagHeight + "cm",
-                    Style = new Style()
-                },
-                Page = new Page
-                {
-                    PageHeight = SelectedMedBag.BagHeight.ToString(CultureInfo.InvariantCulture) + "cm",
-                    PageWidth = SelectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
-                    Style = string.Empty,
-                    LeftMargin = "0cm",
-                    RightMargin = "0cm",
-                    TopMargin = "0cm",
-                    BottomMargin = "0cm",
-                    ColumnSpacing = "0cm"
-                },
-                Width = SelectedMedBag.BagWidth.ToString(CultureInfo.InvariantCulture) + "cm",
-                AutoRefresh = "0",
-                ReportUnitType = "cm",
-                ReportID = "cdd7925b-803a-4208-8788-8e2ae4bd14b8"
-            };
-            SetReportItem(medBagReport, SelectedMedBag.MedLocations);
-            return medBagReport;
-        }
-        private static Textbox CreatTextBoxField(MedBagLocation m)
-        {
-            return new Textbox
-            {
-                Name = m.Name,
-                DefaultName = m.Name,
-                CanGrow = "true",
-                KeepTogether = "true",
-                Top = m.PathY.ToString(CultureInfo.InvariantCulture) + "cm",
-                Left = m.PathX.ToString(CultureInfo.InvariantCulture) + "cm",
-                Height = m.RealHeight.ToString(CultureInfo.InvariantCulture) + "cm",
-                Width = m.RealWidth.ToString(CultureInfo.InvariantCulture) + "cm",
-                Paragraphs = new Paragraphs
-                {
-                    Paragraph = new Paragraph
-                    {
-                        Style = string.Empty,
-                        TextRuns = new TextRuns
-                        {
-                            TextRun = new TextRun
-                            {
-                                Value = m.Content,
-                                Style = string.Empty
-                            }
-                        }
-                    }
-                },
-                Style = new Style
-                {
-                    Border = new Border {Style = "None"},
-                    PaddingLeft = "2pt",
-                    PaddingRight = "2pt",
-                    PaddingTop = "2pt",
-                    PaddingBottom = "2pt"
-                }
-            };
-        }
-        public string SerializeObject<T>(Report report)
-        {
-            var xmlSerializer = new XmlSerializer(report.GetType());
-            using (var textWriter = new StringWriter())
-            {
-                xmlSerializer.Serialize(textWriter, report);
-                return PrettyXml(textWriter);
-            }
-        }
-        private static string PrettyXml(StringWriter writer)
-        {
-            var stringBuilder = new StringBuilder();
-            var element = XElement.Parse(writer.ToString());
-
-            var settings = new XmlWriterSettings
-            {
-                OmitXmlDeclaration = true,
-                Indent = true,
-                NewLineOnAttributes = true
-            };
-
-            using (var xmlWriter = XmlWriter.Create(stringBuilder, settings))
-            {
-                element.Save(xmlWriter);
-            }
-
-            return stringBuilder.ToString();
-        }
-        private void CreatePdf()
-        {
-            var deviceInfo = "<DeviceInfo>" +
-                             "  <OutputFormat>PDF</OutputFormat>" +
-                             "  <PageWidth>" + SelectedMedBag.BagWidth + "cm</PageWidth>" +
-                             "  <PageHeight>" + SelectedMedBag.BagHeight + "cm</PageHeight>" +
-                             "  <MarginTop>0cm</MarginTop>" +
-                             "  <MarginLeft>0cm</MarginLeft>" +
-                             "  <MarginRight>0cm</MarginRight>" +
-                             "  <MarginBottom>0cm</MarginBottom>" +
-                             "</DeviceInfo>";
-            deviceInfo = string.Format(deviceInfo, SelectedMedBag.BagWidth, SelectedMedBag.BagHeight);
-            var viewer = new ReportViewer {ProcessingMode = ProcessingMode.Local};
-            viewer.LocalReport.ReportPath = ReportPath;
-            var bytes = viewer.LocalReport.Render("PDF", deviceInfo, out _, out _, out _,
-                out _, out _);
-
-            using (var fs = new FileStream("output.pdf", FileMode.Create))
-            {
-                fs.Write(bytes, 0, bytes.Length);
-            }
-        }
+        
+        
 
         private void ModeRadioChecked(object sender, RoutedEventArgs e)
         {
