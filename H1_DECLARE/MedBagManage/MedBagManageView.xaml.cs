@@ -126,16 +126,16 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         {
             SelectedMode = mode;
             SelectedMedBag = new MedBag(SelectedMode);
-            MedBagCollection = MedBagDb.ObservableGetMedBagData();
+            MedBagCollection = new ObservableCollection<MedBag>();
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.GetMedBagData(this);
+            loadingWindow.Show();
             foreach (var m in MedBagCollection)
             {
                 var i = int.Parse(m.Id);
                 if (i > _maxMedBagId)
                     _maxMedBagId = i;
             }
-            MedBags.ItemsSource = MedBagCollection;
-            if (MedBags.Items.Count != 0)
-                MedBags.SelectedIndex = 0;
         }
 
         [NotifyPropertyChangedInvocator]
@@ -146,8 +146,8 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private void ImageSelector_Click(object sender, RoutedEventArgs e)
         {
-            if (CheckMedBagCollectionEmpty())
-                return;
+            if (CheckMedBagCollectionEmpty()) return;
+
             var dlg = new OpenFileDialog
             {
                 InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
@@ -155,21 +155,51 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 RestoreDirectory = true
             };
 
-            if (dlg.ShowDialog() == DialogResult.OK)
-            {
-                var selectedFileName = dlg.FileName;
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.UriSource = new Uri(selectedFileName);
-                bitmap.EndInit();
-                SelectedMedBag.MedBagImage = bitmap;
-                SetMedBagRange();
-            }
+            if (dlg.ShowDialog() != DialogResult.OK) return;
+
+            SetMedBagImage(dlg);
+            SetMedBagRange();
+        }
+
+        private void SetMedBagImage(OpenFileDialog dlg)
+        {
+            var selectedFileName = dlg.FileName;
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(selectedFileName);
+            bitmap.EndInit();
+            SelectedMedBag.MedBagImage = bitmap;
         }
 
         private void SetMedBagRange()
         {
             if (SelectedMedBag?.MedBagImage == null) return;
+            SetImageRangeSize();
+            SetImageRangeConrol();
+        }
+
+        private void SetImageRangeConrol()
+        {
+            ImgWrap.Width = MedBagImgWidth;
+            ImgWrap.Height = MedBagImgHeight;
+
+            MedBagCanvas.Width = MedBagImgWidth;
+            MedBagCanvas.Height = MedBagImgHeight;
+            SetMedRangeLocationControl();
+        }
+
+        private void SetMedRangeLocationControl()
+        {
+            MedRangeLocationControl.Template = (ControlTemplate)FindResource("MedBagRangeItemTemplate");
+            MedRangeLocationControl.SetValue(Canvas.LeftProperty, 0.0);
+            MedRangeLocationControl.SetValue(Canvas.TopProperty, 0.0);
+            MedRangeLocationControl.SetValue(WidthProperty, MedBagImgWidth);
+            MedRangeLocationControl.SetValue(HeightProperty, MedBagImgHeight);
+            MedRangeLocationControl.Visibility = Visibility.Visible;
+        }
+
+        private void SetImageRangeSize()
+        {
             if (SelectedMedBag.MedBagImage.Width >= SelectedMedBag.MedBagImage.Height)
             {
                 MedBagImgWidth = 935;
@@ -182,27 +212,14 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             }
             else
             {
-                MedBagImgHeight = 850;
-                MedBagImgWidth = 850 * (SelectedMedBag.MedBagImage.Width / SelectedMedBag.MedBagImage.Height);
+                MedBagImgHeight = 835;
+                MedBagImgWidth = 835 * (SelectedMedBag.MedBagImage.Width / SelectedMedBag.MedBagImage.Height);
                 while (MedBagImgWidth > MedBagImg.MaxWidth)
                 {
                     MedBagImgWidth *= 0.9;
                     MedBagImgHeight *= 0.9;
                 }
             }
-
-            ImgWrap.Width = MedBagImgWidth;
-            ImgWrap.Height = MedBagImgHeight;
-
-            MedBagCanvas.Width = MedBagImgWidth;
-            MedBagCanvas.Height = MedBagImgHeight;
-
-            MedRangeLocationControl.Template = (ControlTemplate) FindResource("MedBagRangeItemTemplate");
-            MedRangeLocationControl.SetValue(Canvas.LeftProperty, 0.0);
-            MedRangeLocationControl.SetValue(Canvas.TopProperty, 0.0);
-            MedRangeLocationControl.SetValue(WidthProperty, MedBagImgWidth);
-            MedRangeLocationControl.SetValue(HeightProperty, MedBagImgHeight);
-            MedRangeLocationControl.Visibility = Visibility.Visible;
         }
 
         private void NewLocationClick(object sender, RoutedEventArgs e)
@@ -210,19 +227,19 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             if (CheckMedBagCollectionEmpty())
                 return;
             var c = sender as CheckBox;
-            if (c.IsChecked == true)
+            if (c != null && c.IsChecked == true)
             {
-                var locationName = (sender as CheckBox)?.Content.ToString();
-                var controlName = (sender as CheckBox)?.Name;
+                var locationName = ((CheckBox) sender).Content.ToString();
+                var controlName = ((CheckBox) sender).Name;
                 Instance.NewLocation(null, locationName, controlName);
             }
             else
             {
                 MedBagCanvas.Children.Remove(MedBagCanvas.Children.OfType<ContentControl>()
                     .Where(r => r.Content is RdlLocationControl)
-                    .Single(r => ((RdlLocationControl) r.Content).LabelContent.Equals(c.Content)));
+                    .Single(r => c != null && ((RdlLocationControl) r.Content).LabelContent.Equals(c.Content)));
                 SelectedMedBag.MedLocations.Remove(SelectedMedBag.MedLocations.Where(l => l != null)
-                    .SingleOrDefault(l => l.Content.Equals(c.Content)));
+                    .Single(l => c != null && l.Content.Equals(c.Content)));
             }
         }
 
@@ -246,22 +263,22 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             if (string.IsNullOrEmpty(content))
             {
                 contentControl.Template = (ControlTemplate) FindResource("MedBagRangeItemTemplate");
-                contentControl.Height = height == 0 ? 150 : height;
-                contentControl.Width = width == 0 ? 150 : width;
+                contentControl.Height = Math.Abs(height) < 0.1 ? 150 : height;
+                contentControl.Width = Math.Abs(width) < 0.1 ? 150 : width;
                 contentControl.Content = newLocation;
                 MedBagCanvas.Children.Add(contentControl);
-                Canvas.SetTop(contentControl, top == 0 ? 360 : top);
-                Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
+                Canvas.SetTop(contentControl, Math.Abs(top) < 0.1 ? 360 : top);
+                Canvas.SetLeft(contentControl, Math.Abs(left) < 0.1 ? 648 : left);
             }
             else
             {
                 contentControl.Template = (ControlTemplate) FindResource("MedBagDesignerItemTemplate");
-                contentControl.Height = height == 0 ? 15 : height;
-                contentControl.Width = width == 0 ? 60 : width;
+                contentControl.Height = Math.Abs(height) < 0.1 ? 15 : height;
+                contentControl.Width = Math.Abs(width) < 0.1 ? 60 : width;
                 contentControl.Content = newLocation;
                 MedBagCanvas.Children.Add(contentControl);
-                Canvas.SetTop(contentControl, top == 0 ? 360 : top);
-                Canvas.SetLeft(contentControl, left == 0 ? 648 : left);
+                Canvas.SetTop(contentControl, Math.Abs(top) < 0.1 ? 360 : top);
+                Canvas.SetLeft(contentControl, Math.Abs(left) < 0.1 ? 648 : left);
             }
         }
 
@@ -269,18 +286,23 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         {
             if (!string.IsNullOrEmpty(m.Content))
                 NewFunction.FindChild<CheckBox>(CheckBoxStack, m.Name).IsChecked = true;
-            var contentControl =
-                new ContentControl {Template = (ControlTemplate) FindResource("MedBagDesignerItemTemplate")};
-            var newLocation = new RdlLocationControl(m.Id, m.Content, m.Name);
-            contentControl.Height = m.Height;
-            contentControl.Width = m.Width;
-            contentControl.Content = newLocation;
+            var contentControl = CreateLocationContentControl(m);
             MedBagCanvas.Children.Add(contentControl);
             Canvas.SetTop(contentControl, m.CanvasTop);
             Canvas.SetLeft(contentControl, m.CanvasLeft);
         }
 
-        private void SaveMedBagData()
+        private ContentControl CreateLocationContentControl(MedBagLocation m)
+        {
+            var contentControl = new ContentControl { Template = (ControlTemplate)FindResource("MedBagDesignerItemTemplate") };
+            var newLocation = new RdlLocationControl(m.Id, m.Content, m.Name);
+            contentControl.Height = m.Height;
+            contentControl.Width = m.Width;
+            contentControl.Content = newLocation;
+            return contentControl;
+        }
+
+        public void SaveMedBagData()
         {
             if (CheckMedBagCollectionEmpty())
                 return;
@@ -295,6 +317,10 @@ namespace His_Pos.H1_DECLARE.MedBagManage
                 return;
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.SetMedBagData(this,ReportPath);
+            loadingWindow.Show();
+            
             SaveMedBagData();
             var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
             m.Show();
@@ -431,28 +457,26 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             {
                 foreach (UIElement child in CheckBoxStack.Children)
                 {
-                    if (child is CheckBox box)
+                    if (!(child is CheckBox box)) continue;
+                    switch (box.Name)
                     {
-                        switch (box.Name)
-                        {
-                            case "MedicineList":
-                                box.Visibility = Visibility.Visible;
-                                break;
-                            case "MedicineId":
-                            case "EngName":
-                            case "ChnName":
-                            case "Ingredient":
-                            case "Form":
-                            case "Usage":
-                            case "Dosage":
-                            case "Total":
-                            case "Days":
-                            case "Indication":
-                            case "SideEffect":
-                            case "Notes":
-                                box.Visibility = Visibility.Collapsed;
-                                break;
-                        }
+                        case "MedicineList":
+                            box.Visibility = Visibility.Visible;
+                            break;
+                        case "MedicineId":
+                        case "EngName":
+                        case "ChnName":
+                        case "Ingredient":
+                        case "Form":
+                        case "Usage":
+                        case "Dosage":
+                        case "Total":
+                        case "Days":
+                        case "Indication":
+                        case "SideEffect":
+                        case "Notes":
+                            box.Visibility = Visibility.Collapsed;
+                            break;
                     }
                 }
             }
