@@ -157,11 +157,11 @@
                 <ColumnDefinition Width="230"/>
                 <ColumnDefinition Width="1365"/>
             </Grid.ColumnDefinitions>
-            <StackPanel Name="MenuStack"  Background="#FF363535" Orientation="Vertical" Grid.Column="0">
+            <StackPanel Background="#FF363535" Orientation="Vertical" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
-                    <Image Name="SystemIcon" Source="Images/LOGO_HISPOS.png" Height="60" Width="60" Margin="0,-1,0,5" />
-                    <Label Name="HisSwitch" FontFamily="Segoe UI Semi" Foreground="LightSkyBlue" Content="調劑" Margin="20,10,0,0" FontSize="20"/>
-                    <Label Name="PosSwitch" FontFamily="Segoe UI Semi" Foreground="Orange" Content="交易" Margin="25,10,0,0" FontSize="20"/>
+                    <Image Source="Images/LOGO_HISPOS.png" Height="60" Width="60" Margin="0,-1,0,5" />
+                    <Label FontFamily="Segoe UI Semi" Foreground="LightSkyBlue" Content="調劑" Margin="20,10,0,15" FontSize="20" MouseLeftButtonDown="Shortcut_OnMouseLeftButtonDown"/>
+                    <Label FontFamily="Segoe UI Semi" Foreground="Orange" Content="交易" Margin="25,10,0,15" FontSize="20" MouseLeftButtonDown="Shortcut_OnMouseLeftButtonDown"/>
                 </StackPanel>
                 <ScrollViewer Name="HisMenu" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="763">
                     <ScrollViewer.Resources>

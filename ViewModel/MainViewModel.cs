@@ -257,6 +257,9 @@ namespace His_Pos.ViewModel
 
         public bool IsTabOpened(string tabName)
         {
+            const int MAX_OPENTAB = 2;
+            int tabCount = 1;
+
             foreach (TabBase tab in ItemCollection)
             {
                 if (tab.TabName == tabName)
@@ -265,6 +268,13 @@ namespace His_Pos.ViewModel
 
                     switch (tabName)
                     {
+                        case nameof(FeatureItem.處方登錄):
+                            if (tabCount < MAX_OPENTAB)
+                            {
+                                tabCount++;
+                                continue;
+                            }
+                            break;
                         case nameof(FeatureItem.商品查詢):
                             if (InventoryManagementView.Instance is null) break;
 
@@ -316,7 +326,7 @@ namespace His_Pos.ViewModel
                     return true;
                 }
             }
-
+            
             return false;
         }
     }

@@ -119,9 +119,25 @@ namespace His_Pos
 
         private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Tabs.SelectedItem is null) return;
+            //if (Tabs.SelectedItem is null) return;
 
-            ((ViewModelMainWindow)DataContext).AddTabCommandAction(((TabBase)Tabs.SelectedItem).TabName);
+            //((ViewModelMainWindow)DataContext).AddTabCommandAction(((TabBase)Tabs.SelectedItem).TabName);
+        }
+
+        private void Shortcut_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is null) return;
+
+            Label shortcut = sender as Label;
+
+            switch (shortcut.Content.ToString())
+            {
+                case "調劑":
+                    AddNewTab(Properties.Resources.hisPrescriptionDeclare);
+                    break;
+                case "交易":
+                    break;
+            }
         }
     }
 }
