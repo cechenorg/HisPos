@@ -565,10 +565,10 @@
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ProductDetailViewModel.cs" />
     <Compile Include="ViewModel\ProductDetailViewModelLocator.cs" />
     <Compile Include="ViewModel\TabBase.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="ViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />

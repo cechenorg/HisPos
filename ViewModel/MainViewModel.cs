@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -131,64 +131,64 @@ namespace His_Pos.ViewModel
         {
             switch (vm.TabName)
             {
-                case nameof(FeatureItem.³B¤èµn¿ı):
+                case nameof(FeatureItem.è™•æ–¹ç™»éŒ„):
                     break;
 
-                case nameof(FeatureItem.´ú¸Õ°Õ):
+                case nameof(FeatureItem.æ¸¬è©¦å•¦):
                     break;
 
-                case nameof(FeatureItem.³B¤è¬d¸ß):
+                case nameof(FeatureItem.è™•æ–¹æŸ¥è©¢):
                     break;
 
-                case nameof(FeatureItem.°Ó«~¬d¸ß):
+                case nameof(FeatureItem.å•†å“æŸ¥è©¢):
                     break;
 
-                case nameof(FeatureItem.³B²z³æºŞ²z):
+                case nameof(FeatureItem.è™•ç†å–®ç®¡ç†):
                     //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
                     //{
-                    //    MessageWindow message = new MessageWindow("¥¿¦bÀx¦s", MessageType.ERROR);
+                    //    MessageWindow message = new MessageWindow("æ­£åœ¨å„²å­˜", MessageType.ERROR);
                     //    return;
                     //}
                     break;
 
-                case nameof(FeatureItem.³B²z³æ¬ö¿ı):
+                case nameof(FeatureItem.è™•ç†å–®ç´€éŒ„):
                     break;
 
-                case nameof(FeatureItem.·s¼W½LÂI):
+                case nameof(FeatureItem.æ–°å¢ç›¤é»):
                     break;
 
-                case nameof(FeatureItem.®w¦s½LÂI¬ö¿ı):
+                case nameof(FeatureItem.åº«å­˜ç›¤é»ç´€éŒ„):
                     break;
 
-                case nameof(FeatureItem.°Ó«~Ãş§OºŞ²z):
+                case nameof(FeatureItem.å•†å“é¡åˆ¥ç®¡ç†):
                     break;
 
-                case nameof(FeatureItem.¨ÑÀ³°ÓºŞ²z):
+                case nameof(FeatureItem.ä¾›æ‡‰å•†ç®¡ç†):
                     break;
 
-                case nameof(FeatureItem.Âd¦ìºŞ²z):
+                case nameof(FeatureItem.æ«ƒä½ç®¡ç†):
                     LocationManageView.Instance.SaveLocation();
                     break;
 
-                case nameof(FeatureItem.­û¤uºŞ²z):
+                case nameof(FeatureItem.å“¡å·¥ç®¡ç†):
                     break;
-                case nameof(FeatureItem.ÅU«ÈºŞ²z):
+                case nameof(FeatureItem.é¡§å®¢ç®¡ç†):
                     break;
-                case nameof(FeatureItem.ÃÄ«~ÀW²vºŞ²z):
-                    break;
-
-                case nameof(FeatureItem.¤W¤U¯Z¥´¥d):
+                case nameof(FeatureItem.è—¥å“é »ç‡ç®¡ç†):
                     break;
 
-                case nameof(FeatureItem.±Æ¯ZºŞ²z):
+                case nameof(FeatureItem.ä¸Šä¸‹ç­æ‰“å¡):
                     break;
 
-                case nameof(FeatureItem.¼f®ÖºŞ²z):
+                case nameof(FeatureItem.æ’ç­ç®¡ç†):
                     break;
 
-                case nameof(FeatureItem.ÃÄ³UºŞ²z):
+                case nameof(FeatureItem.å¯©æ ¸ç®¡ç†):
                     break;
-                case nameof(FeatureItem.ÃÄ§½ºŞ²z):
+
+                case nameof(FeatureItem.è—¥è¢‹ç®¡ç†):
+                    break;
+                case nameof(FeatureItem.è—¥å±€ç®¡ç†):
                     break;
                 default:
                     return;
@@ -206,79 +206,79 @@ namespace His_Pos.ViewModel
 
             switch (featureItem.ToString())
             {
-                //³B¤èºŞ²z
-                case nameof(FeatureItem.³B¤èµn¿ı):
+                //è™•æ–¹ç®¡ç†
+                case nameof(FeatureItem.è™•æ–¹ç™»éŒ„):
                     newTab = new PrescriptionDec2() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
-                case nameof(FeatureItem.³B¤è¬d¸ß):
+                case nameof(FeatureItem.è™•æ–¹æŸ¥è©¢):
                     newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
-                case nameof(FeatureItem.ÃÄ«~ÀW²vºŞ²z):
+                case nameof(FeatureItem.è—¥å“é »ç‡ç®¡ç†):
                     newTab = new MedFrequencyManage() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.ÃÄ³UºŞ²z):
+                case nameof(FeatureItem.è—¥è¢‹ç®¡ç†):
                     newTab = new MedBagManage() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                //°Ó«~ºŞ²z
-                case nameof(FeatureItem.°Ó«~¬d¸ß):
+                //å•†å“ç®¡ç†
+                case nameof(FeatureItem.å•†å“æŸ¥è©¢):
                     newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
-                case nameof(FeatureItem.³B²z³æºŞ²z):
+                case nameof(FeatureItem.è™•ç†å–®ç®¡ç†):
                     newTab = new ProductPurchase.ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
-                case nameof(FeatureItem.³B²z³æ¬ö¿ı):
+                case nameof(FeatureItem.è™•ç†å–®ç´€éŒ„):
                     newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
-                case nameof(FeatureItem.°Ó«~Ãş§OºŞ²z):
+                case nameof(FeatureItem.å•†å“é¡åˆ¥ç®¡ç†):
                     newTab = new ProductTypeManage.ProductTypeManage() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
-                case nameof(FeatureItem.Âd¦ìºŞ²z):
+                case nameof(FeatureItem.æ«ƒä½ç®¡ç†):
                     newTab = new LocationManage.LocationManage() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                //½LÂI
-                case nameof(FeatureItem.·s¼W½LÂI):
+                //ç›¤é»
+                case nameof(FeatureItem.æ–°å¢ç›¤é»):
                     newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
-                case nameof(FeatureItem.®w¦s½LÂI¬ö¿ı):
+                case nameof(FeatureItem.åº«å­˜ç›¤é»ç´€éŒ„):
                     newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
-                //°ò¥»¸ê®ÆºŞ²z
-                case nameof(FeatureItem.¨ÑÀ³°ÓºŞ²z):
+                //åŸºæœ¬è³‡æ–™ç®¡ç†
+                case nameof(FeatureItem.ä¾›æ‡‰å•†ç®¡ç†):
                     newTab = new ManufactoryManage.ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.ÃÄ§½ºŞ²z):
+                case nameof(FeatureItem.è—¥å±€ç®¡ç†):
                     newTab = new PharmacyManage() { TabName = MainWindow.HisFeatures[3].Functions[1], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.­û¤uºŞ²z):
+                case nameof(FeatureItem.å“¡å·¥ç®¡ç†):
                     newTab = new EmployeeManage() { TabName = MainWindow.HisFeatures[3].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                case nameof(FeatureItem.¼f®ÖºŞ²z):
+                case nameof(FeatureItem.å¯©æ ¸ç®¡ç†):
                     newTab = new AuthenticationManage() { TabName = MainWindow.HisFeatures[3].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
-                case nameof(FeatureItem.ÅU«ÈºŞ²z):
+                case nameof(FeatureItem.é¡§å®¢ç®¡ç†):
                     newTab = new CustomerManage() { TabName = MainWindow.HisFeatures[3].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
-                //¥´¥d
-                case nameof(FeatureItem.¤W¤U¯Z¥´¥d):
+                //æ‰“å¡
+                case nameof(FeatureItem.ä¸Šä¸‹ç­æ‰“å¡):
                     newTab = new ClockIn() { TabName = MainWindow.HisFeatures[4].Functions[0], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
 
-                case nameof(FeatureItem.±Æ¯ZºŞ²z):
+                case nameof(FeatureItem.æ’ç­ç®¡ç†):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
 
@@ -299,7 +299,7 @@ namespace His_Pos.ViewModel
 
                     switch (tabName)
                     {
-                        case nameof(FeatureItem.°Ó«~¬d¸ß):
+                        case nameof(FeatureItem.å•†å“æŸ¥è©¢):
                             if (InventoryManagement.InventoryManagementView.Instance is null) break;
 
                             if (InventoryManagement.InventoryManagementView.DataChanged)
@@ -309,7 +309,7 @@ namespace His_Pos.ViewModel
                             }
                             break;
 
-                        case nameof(FeatureItem.³B²z³æ¬ö¿ı):
+                        case nameof(FeatureItem.è™•ç†å–®ç´€éŒ„):
                             if (ProductPurchaseRecord.ProductPurchaseRecordView.Instance is null) break;
 
                             if (ProductPurchaseRecord.ProductPurchaseRecordView.DataChanged)
@@ -318,7 +318,7 @@ namespace His_Pos.ViewModel
                             ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
                             break;
 
-                        case nameof(FeatureItem.·s¼W½LÂI):
+                        case nameof(FeatureItem.æ–°å¢ç›¤é»):
                             if (StockTaking.StockTakingView.Instance is null) break;
 
                             if (StockTaking.StockTakingView.DataChanged)
@@ -329,7 +329,7 @@ namespace His_Pos.ViewModel
                             }
                             break;
 
-                        case nameof(FeatureItem.¼f®ÖºŞ²z):
+                        case nameof(FeatureItem.å¯©æ ¸ç®¡ç†):
                             if (AuthenticationManageView.Instance is null) break;
 
                             if (AuthenticationManageView.DataChanged)
@@ -341,7 +341,7 @@ namespace His_Pos.ViewModel
                             }
                             break;
 
-                        case nameof(FeatureItem.±Æ¯ZºŞ²z):
+                        case nameof(FeatureItem.æ’ç­ç®¡ç†):
                             if (WorkScheduleManageView.Instance is null) break;
 
                             if (WorkScheduleManageView.DataChanged)
