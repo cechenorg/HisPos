@@ -9,7 +9,6 @@
              xmlns:hisPos="clr-namespace:His_Pos"
              mc:Ignorable="d" >
     <UserControl.Resources>
-        <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter"/>
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <hisPos:TextBoxDateConverter x:Key="TextBoxDateConverter"/>
         <hisPos:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
