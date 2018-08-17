@@ -29,11 +29,9 @@ namespace His_Pos
             FeatureFactory();
             InitializeComponent();
             WindowState = WindowState.Maximized;
-            Title = "藥健康 POS-HIS 系統";
             CurrentUser = userLogin;
             Instance = this;
-            InitializePosMenu();
-            InitializeHisMenu();
+            InitializeMenu();
             InitialUserBlock();
             StratClock();
             _openWindows = new List<DockingWindow>();
@@ -64,16 +62,7 @@ namespace His_Pos
                             new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
         }
         
-        private void InitializePosMenu()
-        {
-            for (int i = 0; i < PosFeatures.Count; i++)
-            {
-                PosFeature1.SetLabelText(PosFeatures[i].Title);
-                PosFeature1.SetLabelImage(PosFeatures[i].Icon);
-                SetFeaturesItem(PosFeature1, PosFeatures[i].Functions);
-            }
-        }
-        private void InitializeHisMenu()
+        private void InitializeMenu()
         {
             for (int i = 0; i < HisFeatures.Count; i++)
             {
@@ -81,11 +70,6 @@ namespace His_Pos
                 (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelImage(HisFeatures[i].Icon);
                 SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem), HisFeatures[i].Functions);
             }
-        }
-        private void MenuChange()
-        {
-            PosMenu.Visibility = (PosMenu.Visibility == Visibility.Visible)? Visibility.Collapsed : Visibility.Visible;
-            HisMenu.Visibility = (HisMenu.Visibility == Visibility.Visible) ? Visibility.Collapsed : Visibility.Visible;
         }
 
         private void SetFeaturesItem(MenuListItem features, string [] itemsName)
@@ -118,27 +102,7 @@ namespace His_Pos
             ((ViewModelMainWindow)DataContext).AddTabCommandAction(tabName);
             this.Focus();
         }
-
-        private void MenuSwitchMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var menuLabel = sender as Label;
-
-            if (menuLabel is null) return;
-
-            switch (menuLabel.Content)
-            {
-                case "P O S":
-                    menuLabel.Foreground = Brushes.Orange;
-                    HisSwitch.Foreground = Brushes.DimGray;
-                    MenuChange();
-                    break;
-                case "H I S":
-                    menuLabel.Foreground = Brushes.LightSkyBlue;
-                    PosSwitch.Foreground = Brushes.DimGray;
-                    MenuChange();
-                    break;
-            }
-        }
+        
         private void TickEvent(Object sender, EventArgs e)
         {
             SystemTime.Text = DateTime.Now.ToString(CultureInfo.CurrentCulture);

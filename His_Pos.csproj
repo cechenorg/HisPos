@@ -859,7 +859,6 @@
     <Resource Include="Images\Error.png" />
     <Resource Include="Images\Female.png" />
     <Resource Include="Images\File_50px.png" />
-    <Resource Include="Images\His.png" />
     <Resource Include="Images\HisDot.png" />
     <Resource Include="Images\Home.png" />
     <Resource Include="Images\icons8_Error_48px.png" />
@@ -871,7 +870,6 @@
     <Resource Include="Images\Male.png" />
     <Resource Include="Images\PaymentSwitchIcon.png" />
     <Resource Include="Images\Phone.png" />
-    <Resource Include="Images\Pos.png" />
     <Resource Include="Images\PosDot.png" />
     <Resource Include="Images\PrescriptionIcon.png" />
     <Resource Include="Images\Refresh Barcode_50px.png" />
@@ -910,6 +908,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LOGO_HISPOS.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
