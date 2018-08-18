@@ -39,6 +39,16 @@ namespace His_Pos.InventoryManagement
                 NotifyPropertyChanged("_DataList");
             }
         }
+        private ObservableCollection<string> wareHouseCollection = new ObservableCollection<string>();
+        public ObservableCollection<string> WareHouseCollection
+        {
+            get { return wareHouseCollection; }
+            set
+            {
+                wareHouseCollection = value;
+                NotifyPropertyChanged("WareHouseCollection");
+            }
+        }
 
         public static bool DataChanged { get; set; }
 
