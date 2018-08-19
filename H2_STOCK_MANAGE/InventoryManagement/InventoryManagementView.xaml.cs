@@ -35,12 +35,12 @@ namespace His_Pos.InventoryManagement
             get { return _dataList; }
             set
             {
-                _dataList = value;
+                _dataList = value; 
                 NotifyPropertyChanged("_DataList");
             }
         }
-        private ObservableCollection<string> wareHouseCollection = new ObservableCollection<string>();
-        public ObservableCollection<string> WareHouseCollection
+        private ObservableCollection<WareHouse> wareHouseCollection = new ObservableCollection<WareHouse>();
+        public ObservableCollection<WareHouse> WareHouseCollection
         {
             get { return wareHouseCollection; }
             set
@@ -67,6 +67,8 @@ namespace His_Pos.InventoryManagement
             MergingData();
             DataContext = this;
             SetOtcTypeUi();
+            WareHouseCollection = WareHouseDb.GetWareHouseData();
+      
         }
         public void SetOtcTypeUi() {
             ProductTypeCollection = ProductDb.GetProductType();
@@ -214,6 +216,11 @@ namespace His_Pos.InventoryManagement
         {
             if (e.Key == Key.Enter)
                 SearchData();
+        }
+
+        private void WareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

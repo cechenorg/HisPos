@@ -33,5 +33,6 @@ namespace His_Pos.Class.Product
         public string StockValue { get; set; }
         public string Note { get; set; }
         public string Ingredient { get; set; }
+        public string WareHouse { get; set; }
     }
 }

@@ -30,5 +30,6 @@ namespace His_Pos.Class.Product
         public BitmapImage TypeIcon { get; set; }
         public string StockValue { get; set; }
         public string Note { get; set; }
+        public string WareHouse { get; set; }
     }
 }

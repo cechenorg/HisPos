@@ -337,6 +337,8 @@
     <Compile Include="Class\Usage.cs" />
     <Compile Include="Class\UsageDb.cs" />
     <Compile Include="Class\Vaccination.cs" />
+    <Compile Include="Class\WareHouse.cs" />
+    <Compile Include="Class\WareHouseDb.cs" />
     <Compile Include="Class\WorkSchedule\UserIconData.cs" />
     <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
     <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
