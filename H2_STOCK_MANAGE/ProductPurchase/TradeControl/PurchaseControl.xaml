@@ -31,13 +31,13 @@
             <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <Label Name="PurchaseEmp" Content="{Binding OrdEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
             <Label Content="訂單聯絡人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox Width="120"/>
+            <ComboBox ItemsSource="{Binding PrincipalCollection}" Text="{Binding Path=Principal.Name}" DisplayMemberPath="Name" Width="120"/>
             <StackPanel Orientation="Horizontal">
-                <Label Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <Label Content="{Binding Path=Principal.Phone}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人名稱" FontFamily="Segoe UI Semi" FontSize="15"/>
-                <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人電話" FontFamily="Segoe UI Semi" FontSize="15"/>
+                <TextBox Text="{Binding Path=Principal.Name}" Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人名稱" FontFamily="Segoe UI Semi" FontSize="15"/>
+                <TextBox Text="{Binding Path=Principal.Phone}" Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人電話" FontFamily="Segoe UI Semi" FontSize="15"/>
             </StackPanel>
         </StackPanel>
         <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"

@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.Product;
 using His_Pos.Interface;
+using His_Pos.Struct.Manufactory;
 
 namespace His_Pos.Class.StoreOrder
 {
@@ -52,6 +53,7 @@ namespace His_Pos.Class.StoreOrder
             TotalPrice = Double.Parse(row["TOTAL"].ToString()).ToString("0.##");
             RecEmp = row["REC_EMP"].ToString();
             Manufactory = new Manufactory.Manufactory(row);
+            Principal = new PurchasePrincipal(row);
         }
 
         private StoreOrder()
@@ -122,6 +124,8 @@ namespace His_Pos.Class.StoreOrder
                 NotifyPropertyChanged("Manufactory");
             }
         }
+
+        public PurchasePrincipal Principal { get; set; }
 
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
