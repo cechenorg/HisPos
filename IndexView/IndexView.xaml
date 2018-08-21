@@ -6,6 +6,15 @@
              xmlns:local="clr-namespace:His_Pos.IndexView"
              mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
     <Viewbox Stretch="Fill">
-        
+        <Grid Width="1365" Height="839">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+        </Grid>
     </Viewbox>
 </UserControl>
