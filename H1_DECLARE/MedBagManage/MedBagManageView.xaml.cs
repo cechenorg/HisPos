@@ -318,7 +318,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
             var loadingWindow = new LoadingWindow();
-            loadingWindow.SetMedBagData(this,ReportPath);
+            loadingWindow.SetMedBagData(this);
             loadingWindow.Show();
             
             SaveMedBagData();

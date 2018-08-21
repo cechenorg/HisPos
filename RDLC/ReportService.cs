@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -11,6 +14,11 @@ using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
 using Microsoft.Reporting.WinForms;
+using System.Printing;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace His_Pos.RDLC
 {
@@ -176,6 +184,18 @@ namespace His_Pos.RDLC
                     {"ChronicSequence", "第 " + p.ChronicSequence + " 次，共 " + p.ChronicTotal + " 次"}
                 };
             return medBagDictionary;
+        }
+
+        public static void PrintMedBag()
+        {
+            PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
+            PageMediaSize ps = new PageMediaSize(1577, 1971);
+            PrintTicket pt = new PrintTicket();
+            pt.PageMediaSize = ps;
+            printDlg.PrintTicket = pt;
+            PrintDocument pd = new PrintDocument();
+            pd.DocumentName = ReportPath;
+            pd.Print();
         }
     }
 }
