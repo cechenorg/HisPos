@@ -197,7 +197,7 @@ namespace His_Pos.ViewModel
             {
                 //首頁
                 case nameof(FeatureItem.首頁):
-                    newTab = new Index() { TabName = "首頁", Icon = MainWindow.HisFeatures[0].Icon, IsPinned = true };
+                    newTab = new Index() { TabName = "首頁", Icon = @"..\Images\Home.png", IsPinned = true };
                     break;
 
                 //處方管理
