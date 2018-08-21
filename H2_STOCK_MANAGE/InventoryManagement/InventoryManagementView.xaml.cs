@@ -35,8 +35,18 @@ namespace His_Pos.InventoryManagement
             get { return _dataList; }
             set
             {
-                _dataList = value;
+                _dataList = value; 
                 NotifyPropertyChanged("_DataList");
+            }
+        }
+        private ObservableCollection<WareHouse> wareHouseCollection = new ObservableCollection<WareHouse>();
+        public ObservableCollection<WareHouse> WareHouseCollection
+        {
+            get { return wareHouseCollection; }
+            set
+            {
+                wareHouseCollection = value;
+                NotifyPropertyChanged("WareHouseCollection");
             }
         }
 
@@ -57,6 +67,8 @@ namespace His_Pos.InventoryManagement
             MergingData();
             DataContext = this;
             SetOtcTypeUi();
+            WareHouseCollection = WareHouseDb.GetWareHouseData();
+            WareHouse.SelectedItem = WareHouseCollection[0];
         }
         public void SetOtcTypeUi() {
             ProductTypeCollection = ProductDb.GetProductType();
@@ -102,6 +114,7 @@ namespace His_Pos.InventoryManagement
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
                         && (((InventoryOtc)item).ProductType.Name.Contains(OtcType.SelectedValue.ToString()) || OtcType.SelectedItem == null || OtcType.SelectedValue.ToString() == "無")
                         && ((((InventoryOtc)item).Stock.Inventory == 0 && (bool)NoneInventory.IsChecked) || (((InventoryOtc)item).Stock.Inventory != 0 && (bool)!NoneInventory.IsChecked))
+                        && (((InventoryOtc)item).WareHouse == WareHouse.Text)
                         ) reply = true;
                     }
                     if (reply) {
@@ -120,6 +133,7 @@ namespace His_Pos.InventoryManagement
                        && ((((InventoryMedicine)item).Stock.Inventory == 0 && (bool)NoneInventory.IsChecked) || (((InventoryMedicine)item).Stock.Inventory != 0 && (bool)!NoneInventory.IsChecked))
                          && ((((InventoryMedicine)item).Frozen && (bool)FreezeMed.IsChecked) ||  !(bool)FreezeMed.IsChecked)
                           && ((((InventoryMedicine)item).Control && (bool)ControlMed.IsChecked) || !(bool)ControlMed.IsChecked)
+                          && (((InventoryMedicine)item).WareHouse == WareHouse.Text )
                         ) reply = true;
                     if (reply)
                         {
@@ -135,6 +149,7 @@ namespace His_Pos.InventoryManagement
                            && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter              
                         && ((((IInventory)item).Stock.Inventory == 0 && (bool)NoneInventory.IsChecked) || (((IInventory)item).Stock.Inventory != 0 && (bool)!NoneInventory.IsChecked))
+                          && (((IInventory)item).WareHouse == WareHouse.Text)
                         ) reply = true;
                     if (reply)
                     {
@@ -204,6 +219,11 @@ namespace His_Pos.InventoryManagement
         {
             if (e.Key == Key.Enter)
                 SearchData();
+        }
+
+        private void WareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

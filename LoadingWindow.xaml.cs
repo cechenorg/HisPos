@@ -31,6 +31,7 @@ using His_Pos.PrescriptionInquire;
 using System.Xml;
 using His_Pos.Class.Declare;
 using System.Threading;
+using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 
 namespace His_Pos
 {
@@ -325,7 +326,30 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-       
+        
+        public void GetCustomerData(CustomerManageView customerManage)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得客戶資料...");
+
+                var collection = CustomerDb.GetCustomerData();
+
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    customerManage.CustomerCollection = collection;
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    customerManage.DataGridCustomer.SelectedIndex = 0;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
         public void GetEmployeeData(EmployeeManageView employeeManage)
         {
             backgroundWorker.DoWork += (s, o) =>

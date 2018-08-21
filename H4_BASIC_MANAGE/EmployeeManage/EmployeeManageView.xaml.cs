@@ -224,8 +224,6 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             isFirst = false;
         }
 
-      
-
-     
+       
     }
 }

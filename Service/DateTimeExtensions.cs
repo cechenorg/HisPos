@@ -67,6 +67,19 @@ namespace His_Pos.Service
         {
             return birthday.Substring(0, 3) + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
         }
+        public static string BirthdayFormatConverter3(string birthday)
+        {
+            if (birthday.Split('/')[0].Length == 3)
+            {
+                return (Convert.ToInt32(birthday.Substring(0, 3))+1911).ToString() + "/" + birthday.Substring(4, 2) + "/" + birthday.Substring(7, 2);
+            }
+            if (birthday.Split('/')[0].Length == 2)
+            {
+                return (Convert.ToInt32(birthday.Substring(0, 2)) + 1911).ToString() + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(6, 2);
+            }
+            return birthday;
+        }
+       
         public static string UsToTaiwan(string ustring)
         {
             string[] split = ustring.Split('/');

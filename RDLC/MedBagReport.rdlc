@@ -18,8 +18,8 @@
         </Paragraphs>
         <rd:DefaultName>Pharmacy</rd:DefaultName>
         <Top>1.20676210307131cm</Top>
-        <Left>4.83638698682599cm</Left>
-        <Height>0.758330947423216cm</Height>
+        <Left>4.836386986826cm</Left>
+        <Height>0.758330947423215cm</Height>
         <Width>4.58955798100489cm</Width>
         <Style>
           <Border>
@@ -48,8 +48,8 @@
         </Paragraphs>
         <rd:DefaultName>PharmacyId</rd:DefaultName>
         <Top>1.20676210307131cm</Top>
-        <Left>9.46012779564951cm</Left>
-        <Height>0.786037220197815cm</Height>
+        <Left>9.4601277956495cm</Left>
+        <Height>0.786037220197816cm</Height>
         <Width>4.08865272671568cm</Width>
         <Style>
           <Border>
@@ -77,10 +77,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Institution</rd:DefaultName>
-        <Top>3.52587975013014cm</Top>
-        <Left>6.33910274969363cm</Left>
-        <Height>0.491529802186362cm</Height>
-        <Width>3.74187216605393cm</Width>
+        <Top>3.52587975013013cm</Top>
+        <Left>6.33910274969362cm</Left>
+        <Height>0.491529802186363cm</Height>
+        <Width>3.74187216605391cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -108,9 +108,9 @@
         </Paragraphs>
         <rd:DefaultName>Division</rd:DefaultName>
         <Top>3.50535658511192cm</Top>
-        <Left>11.6949358532475cm</Left>
-        <Height>0.5325761322228cm</Height>
-        <Width>2.52814020373775cm</Width>
+        <Left>11.6949358532476cm</Left>
+        <Height>0.532576132222801cm</Height>
+        <Width>2.52814020373774cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -139,7 +139,7 @@
         <rd:DefaultName>PatientName</rd:DefaultName>
         <Top>5.29087194169703cm</Top>
         <Left>3.64192061121324cm</Left>
-        <Height>0.553099297241019cm</Height>
+        <Height>0.55309929724102cm</Height>
         <Width>6.34272637101715cm</Width>
         <Style>
           <Border>
@@ -169,7 +169,7 @@
         <rd:DefaultName>PatientGender</rd:DefaultName>
         <Top>5.29087194169703cm</Top>
         <Left>11.7719982000613cm</Left>
-        <Height>0.532576132222802cm</Height>
+        <Height>0.532576132222803cm</Height>
         <Width>0.929096507352946cm</Width>
         <Style>
           <Border>
@@ -199,7 +199,7 @@
         <rd:DefaultName>PatientBirth</rd:DefaultName>
         <Top>5.29087194169703cm</Top>
         <Left>12.7545431219363cm</Left>
-        <Height>0.532576132222799cm</Height>
+        <Height>0.532576132222798cm</Height>
         <Width>1.41073617493873cm</Width>
         <Style>
           <Border>
@@ -257,8 +257,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>MedicineId</rd:DefaultName>
-        <Top>7.22004945340968cm</Top>
-        <Left>3.89237323835784cm</Left>
+        <Top>7.22004945340969cm</Top>
+        <Left>3.89237323835785cm</Left>
         <Height>0.635191957313898cm</Height>
         <Width>2.64373372395833cm</Width>
         <Style>
@@ -287,10 +287,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>EngName</rd:DefaultName>
-        <Top>7.22004945340968cm</Top>
-        <Left>6.60882096354167cm</Left>
+        <Top>7.22004945340969cm</Top>
+        <Left>6.60882096354168cm</Left>
         <Height>0.635191957313898cm</Height>
-        <Width>3.49141953890931cm</Width>
+        <Width>3.49141953890932cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -317,9 +317,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>ChnName</rd:DefaultName>
-        <Top>7.22004945340968cm</Top>
+        <Top>7.22004945340969cm</Top>
         <Left>10.1729545036765cm</Left>
-        <Height>0.635191957313897cm</Height>
+        <Height>0.635191957313898cm</Height>
         <Width>3.70334099264706cm</Width>
         <Style>
           <Border>
@@ -348,9 +348,9 @@
         </Paragraphs>
         <rd:DefaultName>Usage</rd:DefaultName>
         <Top>8.08202238417491cm</Top>
-        <Left>3.85384206495098cm</Left>
+        <Left>3.85384206495097cm</Left>
         <Height>0.614668792295678cm</Height>
-        <Width>4.18498066023284cm</Width>
+        <Width>4.18498066023285cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -379,7 +379,7 @@
         <rd:DefaultName>Dosage</rd:DefaultName>
         <Top>8.08202238417491cm</Top>
         <Left>8.11153672640932cm</Left>
-        <Height>0.614668792295679cm</Height>
+        <Height>0.61466879229568cm</Height>
         <Width>1.96943818933822cm</Width>
         <Style>
           <Border>
@@ -408,8 +408,8 @@
         </Paragraphs>
         <rd:DefaultName>Total</rd:DefaultName>
         <Top>8.08202238417491cm</Top>
-        <Left>11.7527326133578cm</Left>
-        <Height>0.635191957313901cm</Height>
+        <Left>11.7527326133579cm</Left>
+        <Height>0.6351919573139cm</Height>
         <Width>2.14282846966912cm</Width>
         <Style>
           <Border>
@@ -437,7 +437,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Indication</rd:DefaultName>
-        <Top>8.96451847995835cm</Top>
+        <Top>8.96451847995836cm</Top>
         <Left>3.89237323835785cm</Left>
         <Height>1.12774791775117cm</Height>
         <Width>10.2921716452206cm</Width>
@@ -469,8 +469,8 @@
         <rd:DefaultName>SideEffect</rd:DefaultName>
         <Top>10.1548620510151cm</Top>
         <Left>3.89237323835785cm</Left>
-        <Height>0.799377277459656cm</Height>
-        <Width>10.2729060585172cm</Width>
+        <Height>0.799377277459657cm</Height>
+        <Width>10.2729060585171cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -500,7 +500,7 @@
         <Top>10.9963118167621cm</Top>
         <Left>3.89237323835785cm</Left>
         <Height>0.717284617386775cm</Height>
-        <Width>10.2729060585172cm</Width>
+        <Width>10.2729060585171cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -529,8 +529,8 @@
         <rd:DefaultName>Notes</rd:DefaultName>
         <Top>11.7556689224362cm</Top>
         <Left>3.89237323835785cm</Left>
-        <Height>0.881469937532535cm</Height>
-        <Width>10.2729060585172cm</Width>
+        <Height>1.02513209266007cm</Height>
+        <Width>10.2729060585171cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -557,10 +557,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>MedicalPerson</rd:DefaultName>
-        <Top>2.80756897449245cm</Top>
-        <Left>4.83638698682598cm</Left>
-        <Height>0.635191957313899cm</Height>
-        <Width>7.2867401194853cm</Width>
+        <Top>2.80756897449246cm</Top>
+        <Left>4.83638698682597cm</Left>
+        <Height>0.6351919573139cm</Height>
+        <Width>7.28674011948529cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -587,10 +587,10 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>PharmacyAddr</rd:DefaultName>
-        <Top>2.04821186881832cm</Top>
-        <Left>4.83638698682598cm</Left>
-        <Height>0.717284617386777cm</Height>
-        <Width>6.26566402420343cm</Width>
+        <Top>2.04821186881833cm</Top>
+        <Left>4.83638698682597cm</Left>
+        <Height>0.717284617386778cm</Height>
+        <Width>6.26566402420344cm</Width>
         <Style>
           <Border>
             <Style>None</Style>

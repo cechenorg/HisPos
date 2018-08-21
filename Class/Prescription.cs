@@ -32,7 +32,7 @@ namespace His_Pos.Class
 
         public Prescription(DataRow row)
         {
-            Customer = new Customer(row);
+            Customer = new Customer(row,"fromXml");
             Pharmacy = new Pharmacy.Pharmacy(row);
             Treatment = new Treatment(row);
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());

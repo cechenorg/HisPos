@@ -265,6 +265,8 @@ namespace His_Pos.Class.Declare
             CustomerTable.Columns.Add("CUS_NAME",typeof(string));
             CustomerTable.Columns.Add("CUS_BIRTH", typeof(string));
             CustomerTable.Columns.Add("CUS_IDNUM", typeof(string));
+            CustomerTable.Columns.Add("CUS_GENDER", typeof(string));
+            CustomerTable.Columns.Add("CUS_QNAME", typeof(string));
             return CustomerTable;
         }
         private void AddCustomer(DeclareData declareData, DataTable customerTable) {
@@ -272,6 +274,9 @@ namespace His_Pos.Class.Declare
             row["CUS_NAME"] = declareData.Prescription.Customer.Name;
             row["CUS_BIRTH"] = declareData.Prescription.Customer.Birthday;
             row["CUS_IDNUM"] = declareData.Prescription.Customer.IcCard.IcNumber;
+            row["CUS_GENDER"] = declareData.Prescription.Customer.Gender == true ? "1" : "0";
+            Function function = new Function();
+            row["CUS_QNAME"] = function.ChangeNameToEnglish( declareData.Prescription.Customer.Name);
             customerTable.Rows.Add(row);
         }
         private DataTable SetDeclareMasterTable() {
