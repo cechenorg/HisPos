@@ -295,6 +295,8 @@ namespace His_Pos.RDLC
         public string AutoRefresh { get; set; }
         [XmlElement(ElementName = "ReportUnitType", Namespace = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner")]
         public string ReportUnitType { get; set; }
+        [XmlElement(ElementName = "ConsumeContainerWhitespace", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
+        public string ConsumeContainerWhitespace { get; set; }
         [XmlElement(ElementName = "ReportID", Namespace = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner")]
         public string ReportID { get; set; }
         [XmlAttribute(AttributeName = "xmlns")]

@@ -185,8 +185,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
-            //MessageWindow m;
-            //ConfirmWindow c;
+            MessageWindow m;
+            ConfirmWindow c;
             //if (CurrentPrescription.CheckPrescriptionData().Equals(""))
             //{
             //    var declareData = new DeclareData(CurrentPrescription);
@@ -210,13 +210,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void PrintMedBag()
         {
-            ReportService.PrintMedBag();
-            //var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
-            //var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
+            var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
+            var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
             //File.WriteAllText(ReportService.ReportPath, string.Empty);
             //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
-            //ReportService.CreatePdf(defaultMedBag);
-
+            ReportService.CreatePdf(defaultMedBag);
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
