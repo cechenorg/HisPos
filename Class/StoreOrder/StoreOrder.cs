@@ -13,12 +13,13 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.Product;
 using His_Pos.Interface;
+using His_Pos.Struct.Manufactory;
 
 namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
-        public StoreOrder(User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
+        public StoreOrder(StoreOrderCategory category, User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
@@ -27,7 +28,7 @@ namespace His_Pos.Class.StoreOrder
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
-            Category = new Category();
+            Category = new Category(category);
 
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 
@@ -47,11 +48,12 @@ namespace His_Pos.Class.StoreOrder
                     break;
             }
 
-            Category = new Category(row["STOORD_TYPE"].ToString());
+            Category = new Category(row["STOORD_TYPE"].ToString().Equals("進")? StoreOrderCategory.PURCHASE : StoreOrderCategory.RETURN);
             OrdEmp = row["ORD_EMP"].ToString();
             TotalPrice = Double.Parse(row["TOTAL"].ToString()).ToString("0.##");
             RecEmp = row["REC_EMP"].ToString();
             Manufactory = new Manufactory.Manufactory(row);
+            Principal = new PurchasePrincipal(row);
         }
 
         private StoreOrder()
@@ -122,6 +124,8 @@ namespace His_Pos.Class.StoreOrder
                 NotifyPropertyChanged("Manufactory");
             }
         }
+
+        public PurchasePrincipal Principal { get; set; }
 
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
@@ -197,6 +201,17 @@ namespace His_Pos.Class.StoreOrder
             }
 
             return storeOrder;
+        }
+
+        internal void CalculateTotalPrice()
+        {
+            double count = 0;
+            foreach (var product in Products)
+            {
+                count += ((ITrade)product).TotalPrice;
+            }
+
+            TotalPrice = Math.Round(count, MidpointRounding.AwayFromZero).ToString();
         }
     }
 }

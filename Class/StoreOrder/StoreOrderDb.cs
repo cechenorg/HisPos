@@ -82,7 +82,9 @@ namespace His_Pos.Class.StoreOrder
                 parameters.Add(new SqlParameter("REC_EMP",DBNull.Value ));
             else
                 parameters.Add(new SqlParameter("REC_EMP", storeOrder.RecEmp));
-            
+
+            parameters.Add(new SqlParameter("PRINCIPAL_ID", storeOrder.Principal.Id));
+
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
             details.Columns.Add("QTY", typeof(int));

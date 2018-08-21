@@ -80,7 +80,7 @@ namespace His_Pos.Resource
             ListMenuImage.Margin = new Thickness(10, 10, 6, 0);
             ListMenuLabel.Margin = new Thickness(5, 10, 0, 0);
             ListMenu.Items.Add(newItem);
-            _listMenuHeight = ListMenu.Items.Count * 31;
+            _listMenuHeight = ListMenu.Items.Count * 32;
             SetListMenuVisibility(Visibility.Visible);
         }
 
@@ -106,7 +106,7 @@ namespace His_Pos.Resource
         {
             if (_listMenuHided)
             {
-                ListMenu.Height = ListMenu.Height + 6.5;
+                ListMenu.Height = ListMenu.Height + 8;
                 if (ListMenu.Height >= _listMenuHeight)
                 {
                     ListMenuTimer.Stop();
@@ -116,7 +116,7 @@ namespace His_Pos.Resource
             }
             else
             {
-                ListMenu.Height = ListMenu.Height - 6.5;
+                ListMenu.Height = ListMenu.Height - 8;
                 if (ListMenu.Height <= 0)
                 {
                     ListMenuTimer.Stop();

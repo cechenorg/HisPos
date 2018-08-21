@@ -451,6 +451,10 @@
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IndexView\Index.cs" />
+    <Compile Include="IndexView\IndexView.xaml.cs">
+      <DependentUpon>IndexView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interface\IDeletable.cs" />
     <Compile Include="Interface\IInventory.cs" />
     <Compile Include="Interface\IPrincipal.cs" />
@@ -552,6 +556,7 @@
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\UsagesFunction.cs" />
+    <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
@@ -719,6 +724,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="IndexView\IndexView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -871,7 +880,6 @@
     <Resource Include="Images\Error.png" />
     <Resource Include="Images\Female.png" />
     <Resource Include="Images\File_50px.png" />
-    <Resource Include="Images\His.png" />
     <Resource Include="Images\HisDot.png" />
     <Resource Include="Images\Home.png" />
     <Resource Include="Images\icons8_Error_48px.png" />
@@ -883,7 +891,6 @@
     <Resource Include="Images\Male.png" />
     <Resource Include="Images\PaymentSwitchIcon.png" />
     <Resource Include="Images\Phone.png" />
-    <Resource Include="Images\Pos.png" />
     <Resource Include="Images\PosDot.png" />
     <Resource Include="Images\PrescriptionIcon.png" />
     <Resource Include="Images\Refresh Barcode_50px.png" />
@@ -922,6 +929,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\LOGO_HISPOS.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,21 +10,15 @@ namespace His_Pos.Class.StoreOrder
 {
     public class Category : INotifyPropertyChanged
     {
-        public Category(string category = "")
+        public Category(StoreOrderCategory category)
         {
             switch (category)
             {
-                case "進":
+                case StoreOrderCategory.PURCHASE:
                     CategoryName = "進貨";
                     break;
-                case "退":
+                case StoreOrderCategory.RETURN:
                     CategoryName = "退貨";
-                    break;
-                case "調":
-                    CategoryName = "調貨";
-                    break;
-                default:
-                    CategoryName = "";
                     break;
             }
         }
@@ -57,9 +51,6 @@ namespace His_Pos.Class.StoreOrder
                     break;
                 case "調貨":
                     CategoryColor = Brushes.Blue;
-                    break;
-                default:
-                    CategoryColor = Brushes.Transparent;
                     break;
             }
         }

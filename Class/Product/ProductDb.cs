@@ -123,15 +123,13 @@ namespace His_Pos.Class.Product
             return dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[GetStockTakingProduct]");
         }
 
-        internal static Collection<PurchaseProduct> GetItemDialogProduct(string id)
+        internal static Collection<PurchaseProduct> GetItemDialogProduct()
         {
             Collection<PurchaseProduct> collection = new Collection<PurchaseProduct>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MAN_ID", id));
 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetItemDialogProduct]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetItemDialogProduct]");
 
             foreach (DataRow row in table.Rows)
             {

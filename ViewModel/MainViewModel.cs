@@ -23,6 +23,7 @@ using His_Pos.H4_BASIC_MANAGE.MedFrequencyManage;
 using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
+using His_Pos.IndexView;
 
 namespace His_Pos.ViewModel
 {
@@ -33,6 +34,7 @@ namespace His_Pos.ViewModel
 
         public RelayCommand<object> AddTabCommand { get; set; }
         public RelayCommand<TabBase> CloseTabCommand { get; set; }
+        public RelayCommand<TabBase> PinTabCommand { get; set; }
         public ObservableCollection<TabBase> ItemCollection { get; set; }
 
         //This is the current selected tab, if you change it, the tab is selected in the tab control.
@@ -72,6 +74,7 @@ namespace His_Pos.ViewModel
             this.ReorderTabsCommand = new RelayCommand<TabReorder>(ReorderTabsCommandAction);
             this.AddTabCommand = new RelayCommand<object>(AddTabCommandAction);
             this.CloseTabCommand = new RelayCommand<TabBase>(CloseTabCommandAction);
+            PinTabCommand = new RelayCommand<TabBase>(PinTabCommandAction);
             CanAddTabs = true;
         }
 
@@ -124,6 +127,13 @@ namespace His_Pos.ViewModel
                 foreach (var item in tabCollection)
                     item.TabNumber = tabCollection.IndexOf(item);
             }
+        }
+
+        private void PinTabCommandAction(TabBase tab)
+        {
+            tab.IsPinned = !tab.IsPinned;
+            ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
+            view.Refresh();
         }
 
         //To close a tab, we simply remove the viewmodel from the source collection.
@@ -205,6 +215,11 @@ namespace His_Pos.ViewModel
 
             switch (featureItem.ToString())
             {
+                //首頁
+                case nameof(FeatureItem.首頁):
+                    newTab = new Index() { TabName = "首頁", Icon = @"..\Images\Home.png", IsPinned = true };
+                    break;
+
                 //處方管理
                 case nameof(FeatureItem.處方登錄):
                     newTab = new PrescriptionDec2() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
@@ -290,6 +305,9 @@ namespace His_Pos.ViewModel
 
         public bool IsTabOpened(string tabName)
         {
+            const int MAX_OPENTAB = 2;
+            int tabCount = 1;
+
             foreach (TabBase tab in ItemCollection)
             {
                 if (tab.TabName == tabName)
@@ -298,6 +316,13 @@ namespace His_Pos.ViewModel
 
                     switch (tabName)
                     {
+                        case nameof(FeatureItem.處方登錄):
+                            if (tabCount < MAX_OPENTAB)
+                            {
+                                tabCount++;
+                                continue;
+                            }
+                            break;
                         case nameof(FeatureItem.商品查詢):
                             if (InventoryManagement.InventoryManagementView.Instance is null) break;
 
@@ -354,7 +379,7 @@ namespace His_Pos.ViewModel
                     return true;
                 }
             }
-
+            
             return false;
         }
     }

@@ -41,18 +41,7 @@ namespace His_Pos.ProductPurchase
     /// 
     public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
     {
-        public class NewItemProduct
-        {
-            public bool IsThisMan { get; }
-            public Product Product { get; }
-
-            public NewItemProduct(bool isThisMan, Product product)
-            {
-                IsThisMan = isThisMan;
-                Product = product;
-            }
-        }
-
+        #region ----- Define Variables -----
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
 
         public ObservableCollection<object> Products;
@@ -101,6 +90,8 @@ namespace His_Pos.ProductPurchase
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        #endregion
+
         public ProductPurchaseView()
         {
             InitializeComponent();
@@ -116,9 +107,12 @@ namespace His_Pos.ProductPurchase
 
             loadingWindow.Show();
 
+            purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
+            purchaseControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
+            purchaseControl.Confirm.Click += Confirm_Click;
+
         }
-
-
+        
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
         {
             Window window = Window.GetWindow(this);
@@ -152,6 +146,11 @@ namespace His_Pos.ProductPurchase
             StoreOrderData = storeOrder;
 
             SetCurrentControl();
+        }
+
+        internal void SetControlProduct(Collection<PurchaseProduct> tempProduct)
+        {
+            purchaseControl.ProductAutoCompleteCollection = tempProduct;
         }
 
         private void SetCurrentControl()
@@ -192,12 +191,13 @@ namespace His_Pos.ProductPurchase
             backgroundWorker.RunWorkerAsync();
         }
 
-        //private void ClearOrderDetailData() {
-        //    IsFirst = true;
-        //    StoreOrderData = null;
-        //    IsChanged = false;
-        //    IsFirst = false;
-        //}
+        private void ClearOrderDetailData()
+        {
+            IsFirst = true;
+            StoreOrderData = null;
+            IsChanged = false;
+            IsFirst = false;
+        }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
         {
@@ -245,7 +245,7 @@ namespace His_Pos.ProductPurchase
 
             if (StoOrderOverview.Items.Count == 0)
             {
-                //ClearOrderDetailData();
+                ClearOrderDetailData();
             }
 
             StoOrderOverview.SelectedIndex = 0;
@@ -259,62 +259,6 @@ namespace His_Pos.ProductPurchase
             return false;
         }
 
-
-
-        //private void ProductAuto_Populating(object sender, PopulatingEventArgs e)
-        //{
-        //    var productAuto = sender as AutoCompleteBox;
-
-        //    if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || Products is null) return;
-
-        //    var result = Products.Where(x => (((NewItemProduct)x).Product.Id.ToLower().Contains(productAuto.Text.ToLower()) || ((NewItemProduct)x).Product.ChiName.ToLower().Contains(productAuto.Text.ToLower()) || ((NewItemProduct)x).Product.EngName.ToLower().Contains(productAuto.Text.ToLower())) && ((IProductPurchase)((NewItemProduct)x).Product).Status).Take(50).Select(x => ((NewItemProduct)x).Product);
-        //    ProductAutoCompleteCollection = new ObservableCollection<object>(result.ToList());
-
-        //    productAuto.ItemsSource = ProductAutoCompleteCollection;
-        //    productAuto.ItemFilter = ProductFilter;
-        //    productAuto.PopulateComplete();
-        //}
-
-        //private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    TextBox textBox = sender as TextBox;
-
-        //    if (textBox is null) return;
-
-        //    if (textBox.Text == String.Empty)
-        //        textBox.Text = "0";
-
-        //    if (!textBox.Name.Equals("FreeAmount"))
-        //        CalculateTotalPrice();
-        //}
-
-        //private void CalculateTotalPrice()
-        //{
-        //    double count = 0;
-        //    foreach (var product in storeOrderData.Products)
-        //    {
-        //        count += ((ITrade)product).TotalPrice;
-        //    }
-        //    storeOrderData.TotalPrice = Math.Round(count, MidpointRounding.AwayFromZero).ToString();
-        //}
-
-        //private void AutoCompleteBox_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
-        //{
-        //    var productAuto = sender as AutoCompleteBox;
-        //    SetChanged();
-        //    if (productAuto is null) return;
-        //    if (productAuto.SelectedItem is null) {
-        //        if (productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<object>).Count != 0 && productAuto.Text.Length >= 4)
-        //            productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<object>)[0];
-        //        else
-        //            return;
-        //    }
-
-        //    StoreOrderData.Products.Add(((ICloneable)productAuto.SelectedItem).Clone() as Product);
-
-        //    productAuto.Text = "";
-        //}
-
         //private void SetChanged() {
         //    if (IsFirst == true) return;
         //    IsChanged = true;
@@ -325,44 +269,43 @@ namespace His_Pos.ProductPurchase
         //    SetChanged();
         //}
 
-        //private void Confirm_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (!CheckNoEmptyData()) return;
-        //    StoreOrderData.Type = OrderType.DONE;
-        //    SaveOrder();
-        //    IsChanged = false;
-        //    storeOrderCollection.Remove(storeOrderData);
-        //    InventoryManagementView.DataChanged = true;
-        //    ProductPurchaseRecordView.DataChanged = true;
-        //    StockTakingView.DataChanged = true;
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            if (!CheckNoEmptyData()) return;
+            StoreOrderData.Type = OrderType.DONE;
+            SaveOrder();
+            IsChanged = false;
+            storeOrderCollection.Remove(StoreOrderData);
+            InventoryManagementView.DataChanged = true;
+            ProductPurchaseRecordView.DataChanged = true;
+            StockTakingView.DataChanged = true;
 
-        //    if (StoOrderOverview.Items.Count == 0)
-        //        ClearOrderDetailData();
-        //    else
-        //        StoOrderOverview.SelectedIndex = 0;
-        //}
+            if (StoOrderOverview.Items.Count == 0)
+                ClearOrderDetailData();
+            else
+                StoOrderOverview.SelectedIndex = 0;
+        }
 
-        //private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    int oldIndex = storeOrderCollection.IndexOf(storeOrderData);
-        //    int newIndex = storeOrderCollection.Count - 1;
+        private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
+        {
+            int oldIndex = storeOrderCollection.IndexOf(StoreOrderData);
+            int newIndex = storeOrderCollection.Count - 1;
 
-        //    for (int x = 0; x < storeOrderCollection.Count; x++)
-        //    {
-        //        if (storeOrderCollection[x].type == OrderType.PROCESSING)
-        //        {
-        //            newIndex = x - 1;
-        //            break;
-        //        }
-        //    }
-        //    if (!CheckNoEmptyData()) return;
-        //    StoreOrderData.Type = OrderType.PROCESSING;
-        //    SaveOrder();
-        //    storeOrderCollection.Move(oldIndex, newIndex);
-        //    StoOrderOverview.SelectedItem = storeOrderData;
-        //    StoOrderOverview.ScrollIntoView(storeOrderData);
-        //    UpdateOrderDetailUi(OrderType.PROCESSING);
-        //}
+            for (int x = 0; x < storeOrderCollection.Count; x++)
+            {
+                if (storeOrderCollection[x].type == OrderType.PROCESSING)
+                {
+                    newIndex = x - 1;
+                    break;
+                }
+            }
+            if (!CheckNoEmptyData()) return;
+            StoreOrderData.Type = OrderType.PROCESSING;
+            SaveOrder();
+            storeOrderCollection.Move(oldIndex, newIndex);
+            StoOrderOverview.SelectedItem = StoreOrderData;
+            StoOrderOverview.ScrollIntoView(StoreOrderData);
+        }
 
         //private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         //{
@@ -372,51 +315,31 @@ namespace His_Pos.ProductPurchase
         //    }
         //}
 
-        //private bool CheckNoEmptyData()
-        //{
-        //    string errorMessage = StoreOrderData.IsAnyDataEmpty();
+        private bool CheckNoEmptyData()
+        {
+            string errorMessage = StoreOrderData.IsAnyDataEmpty();
 
-        //    if (errorMessage != String.Empty)
-        //    {
-        //        MessageWindow messageWindow = new MessageWindow(errorMessage, MessageType.ERROR);
-        //        messageWindow.ShowDialog();
-        //        return false;
-        //    }
-        //    return true;
-        //}
+            if (errorMessage != String.Empty)
+            {
+                MessageWindow messageWindow = new MessageWindow(errorMessage, MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return false;
+            }
+            return true;
+        }
 
-        //private void DeleteOrder_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (StoreOrderData == null) return;
-        //    StoreOrderDb.DeleteOrder(StoreOrderData.Id);
-        //    StoreOrderCollection.Remove(StoreOrderData);
+        private void DeleteOrder_Click(object sender, RoutedEventArgs e)
+        {
+            if (StoreOrderData == null) return;
+            StoreOrderDb.DeleteOrder(StoreOrderData.Id);
+            StoreOrderCollection.Remove(StoreOrderData);
 
-        //    if (StoOrderOverview.Items.Count == 0)
-        //        ClearOrderDetailData();
-        //    else
-        //        StoOrderOverview.SelectedIndex = 0;
-        //}
-
-        //private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    SetChanged();
-        //    StoreOrderData.Products.RemoveAt(StoreOrderDetail.SelectedIndex);
-        //    CalculateTotalPrice();
-        //}
-
-        //private void NewProduct(object sender, RoutedEventArgs e)
-        //{
-        //    NewItemDialog newItemDialog = new NewItemDialog(ItemType.Product, Products);
-
-        //    newItemDialog.ShowDialog();
-
-        //    if (newItemDialog.ConfirmButtonClicked)
-        //    {
-        //        SetChanged();
-        //        StoreOrderData.Products.Add(newItemDialog.SelectedItem as Product);
-        //    }
-        //}
-
+            if (StoOrderOverview.Items.Count == 0)
+                ClearOrderDetailData();
+            else
+                StoOrderOverview.SelectedIndex = 0;
+        }
+        
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -424,232 +347,6 @@ namespace His_Pos.ProductPurchase
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-
-        //private void OnPreviewKeyDown(object sender, KeyEventArgs e)
-        //{
-        //    var objectName = (sender as Control).Name;
-
-        //    //按 Enter 下一欄
-        //    if (e.Key == Key.Enter)
-        //    {
-        //        e.Handled = true;
-        //        var nextTextBox = new List<TextBox>();
-        //        var thisTextBox = new List<TextBox>();
-        //        var currentRowIndex = GetCurrentRowIndex(sender);
-
-        //        if (currentRowIndex == -1) return;
-
-        //        switch (objectName)
-        //        {
-        //            case "Price":
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
-        //                break;
-        //            case "Amount":
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
-        //                break;
-        //            case "FreeAmount":
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
-        //                break;
-        //            case "TotalPrice":
-        //                if (storeOrderData.Type == OrderType.UNPROCESSING)
-        //                    NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-        //                else
-        //                    NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
-        //                break;
-        //            case "BatchNumber":
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref thisTextBox);
-
-        //                if ((sender as TextBox).Text == String.Empty && currentRowIndex > 0 && thisTextBox.Count > 0)
-        //                {
-        //                    SetChanged();
-        //                    (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
-        //                }
-
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
-        //                break;
-        //            case "ValidDate":
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref thisTextBox);
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
-        //                break;
-        //            case "Invoice":
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref thisTextBox);
-        //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-        //                break;
-        //            case "Notes":
-        //                if (currentRowIndex == storeOrderData.Products.Count - 1)
-        //                {
-        //                    var autoList = new List<AutoCompleteBox>();
-        //                    NewFunction.FindChildGroup<AutoCompleteBox>(StoreOrderDetail, "Id", ref autoList);
-        //                    NewFunction.FindChildGroup<TextBox>(autoList[currentRowIndex + 1], "Text", ref nextTextBox);
-        //                    nextTextBox[0].Focus();
-        //                }
-        //                else
-        //                {
-        //                    NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref nextTextBox);
-        //                    nextTextBox[currentRowIndex + 1].Focus();
-        //                }
-        //                return;
-        //        }
-
-        //        if ((sender as TextBox).Text == String.Empty && currentRowIndex > 0 && thisTextBox.Count > 0)
-        //        {
-        //            SetChanged();
-        //            (sender as TextBox).Text = thisTextBox[currentRowIndex - 1].Text;
-        //        }
-
-
-        //        nextTextBox[currentRowIndex].Focus();
-        //    }
-
-        //    //按 Up Down
-        //    if (e.Key == Key.Up || e.Key == Key.Down)
-        //    {
-        //        e.Handled = true;
-        //        var thisTextBox = new List<TextBox>();
-        //        var currentRowIndex = GetCurrentRowIndex(sender);
-
-        //        if (currentRowIndex == -1) return;
-
-        //        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, objectName, ref thisTextBox);
-
-        //        int newIndex = (e.Key == Key.Up) ? currentRowIndex - 1 : currentRowIndex + 1;
-
-        //        if (newIndex < 0)
-        //            newIndex = 0;
-        //        else if (newIndex >= thisTextBox.Count)
-        //            newIndex = thisTextBox.Count - 1;
-
-        //        thisTextBox[newIndex].Focus();
-        //    }
-
-        //    ////按 Left
-        //    //if (e.Key == Key.Left)
-        //    //{
-        //    //    e.Handled = true;
-        //    //    var nextTextBox = new List<TextBox>();
-        //    //    var currentRowIndex = GetCurrentRowIndex(sender);
-
-        //    //    if (currentRowIndex == -1) return;
-
-        //    //    switch (objectName)
-        //    //    {
-        //    //        case "Price":
-        //    //            return;
-        //    //        case "Amount":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Price", ref nextTextBox);
-        //    //            break;
-        //    //        case "FreeAmount":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
-        //    //            break;
-        //    //        case "TotalPrice":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
-        //    //            break;
-        //    //        case "BatchNumber":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
-        //    //            break;
-        //    //        case "ValidDate":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
-        //    //            break;
-        //    //        case "Invoice":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
-        //    //            break;
-        //    //        case "Notes":
-        //    //            if (storeOrderData.Type == OrderType.UNPROCESSING)
-        //    //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
-        //    //            else
-        //    //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
-        //    //            break;
-        //    //    }
-
-        //    //    nextTextBox[currentRowIndex].Focus();
-        //    //}
-
-        //    ////按 Right
-        //    //if (e.Key == Key.Right)
-        //    //{
-        //    //    e.Handled = true;
-        //    //    var nextTextBox = new List<TextBox>();
-        //    //    var thisTextBox = new List<TextBox>();
-        //    //    var currentRowIndex = GetCurrentRowIndex(sender);
-
-        //    //    if (currentRowIndex == -1) return;
-
-        //    //    switch (objectName)
-        //    //    {
-        //    //        case "Price":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Amount", ref nextTextBox);
-        //    //            break;
-        //    //        case "Amount":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "FreeAmount", ref nextTextBox);
-        //    //            break;
-        //    //        case "FreeAmount":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "TotalPrice", ref nextTextBox);
-        //    //            break;
-        //    //        case "TotalPrice":
-        //    //            if (storeOrderData.Type == OrderType.UNPROCESSING)
-        //    //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-        //    //            else
-        //    //                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "BatchNumber", ref nextTextBox);
-        //    //            break;
-        //    //        case "BatchNumber":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "ValidDate", ref nextTextBox);
-        //    //            break;
-        //    //        case "ValidDate":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Invoice", ref nextTextBox);
-        //    //            break;
-        //    //        case "Invoice":
-        //    //            NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, "Notes", ref nextTextBox);
-        //    //            break;
-        //    //        case "Notes":
-        //    //            return;
-        //    //    }
-
-        //    //    nextTextBox[currentRowIndex].Focus();
-        //    //}
-
-        //    // Price Amount FreeAmount "0 打字 直接顯示數字"
-        //    if (objectName.Equals("Price") || objectName.Equals("Amount") || objectName.Equals("FreeAmount"))
-        //    {
-        //        if (!IsKeyAvailable(e.Key))
-        //            e.Handled = true;
-        //        else
-        //        {
-        //            TextBox textBox = sender as TextBox;
-        //            if ((e.Key == Key.Decimal || e.Key == Key.OemPeriod) && textBox.Text.Contains(".")) {
-        //                e.Handled = true;
-        //            }
-        //            if (textBox.Text.Equals("0"))
-        //            {
-        //                SetChanged();
-        //                if (!(e.Key == Key.Decimal || e.Key == Key.OemPeriod)) { 
-        //                    textBox.Text = GetCharFromKey(e.Key);
-        //                    e.Handled = true;
-        //                }
-        //                textBox.CaretIndex = 1;
-        //            }
-        //        }
-        //    }
-        //    else if (objectName.Equals("ValidDate")) {
-        //        if (!IsKeyAvailable(e.Key))
-        //            e.Handled = true;
-        //        else
-        //        {
-        //            SetChanged();
-        //            TextBox textBox = sender as TextBox;
-
-        //            if (e.Key == Key.Back || e.Key == Key.Delete)
-        //            {
-        //                textBox.Text = string.Empty;
-        //                e.Handled = true;
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        SetChanged();
-        //    }
-
-        //}
 
         //private string GetCharFromKey(Key key)
         //{
@@ -672,82 +369,7 @@ namespace His_Pos.ProductPurchase
         //    return false;
         //}
 
-        //private int GetCurrentRowIndex(object sender)
-        //{
-        //    if (sender is TextBox)
-        //    {
-        //        List<TextBox> temp = new List<TextBox>();
-        //        TextBox textBox = sender as TextBox;
-
-        //        NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, textBox.Name, ref temp);
-
-        //        for (int x = 0; x < temp.Count; x++)
-        //        {
-        //            if (temp[x].Equals(sender))
-        //            {
-        //                return x;
-        //            }
-        //        }
-        //    }
-        //    else if (sender is DatePicker)
-        //    {
-        //        List<DatePicker> temp = new List<DatePicker>();
-        //        DatePicker datePicker = sender as DatePicker;
-
-        //        NewFunction.FindChildGroup<DatePicker>(StoreOrderDetail, datePicker.Name, ref temp);
-
-        //        for (int x = 0; x < temp.Count; x++)
-        //        {
-        //            if (temp[x].Equals(sender))
-        //            {
-        //                return x;
-        //            }
-        //        }
-        //    }
-        //    else if (sender is Button)
-        //    {
-        //        List<Button> temp = new List<Button>();
-        //        Button SplitBtn = sender as Button;
-
-        //        NewFunction.FindChildGroup<Button>(StoreOrderDetail, SplitBtn.Name, ref temp);
-
-        //        for (int x = 0; x < temp.Count; x++)
-        //        {
-        //            if (temp[x].Equals(sender))
-        //            {
-        //                return x;
-        //            }
-        //        }
-        //    }
-
-        //    return -1;
-        //}
-
-        //private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (sender is null) return;
-
-        //    var currentRowIndex = GetCurrentRowIndex(sender);
-
-        //    double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
-
-        //    ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
-
-        //    StoreOrderData.Products.Insert(currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
-
-        //    if (left != 0)
-        //        ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
-        //}
-
-        //public AutoCompleteFilterPredicate<object> UserFilter
-        //{
-        //    get
-        //    {
-        //        return (searchText, obj) =>
-        //            ((obj as Person).Id is null) ? true : (obj as Person).Id.Contains(searchText)
-        //            || (obj as Person).Name.Contains(searchText);
-        //    }
-        //}
+        
     }
     
 }
