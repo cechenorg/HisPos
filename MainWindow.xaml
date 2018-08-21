@@ -25,6 +25,7 @@
         xmlns:AuthenticationManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.AuthenticationManage"
         xmlns:MedBagManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedBagManage"
         xmlns:CustomerManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.CustomerManage"
+        xmlns:IndexView="clr-namespace:His_Pos.IndexView"
         x:Class="His_Pos.MainWindow"
         mc:Ignorable="d" Title="藥健康 POS-HIS 系統"
         WindowStartupLocation="CenterScreen"   Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}" 
@@ -89,6 +90,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type CustomerManage:CustomerManage}">
             <CustomerManage:CustomerManageView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type IndexView:Index}">
+            <IndexView:IndexView/>
         </DataTemplate>
         
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
@@ -202,10 +206,11 @@
                 <DockPanel.Background>
                     <ImageBrush ImageSource="Images/onlyoneeeeeee.jpg"/>
                 </DockPanel.Background>
-                <chromeTabs:ChromeTabControl Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab"
-                             Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White"
+                <chromeTabs:ChromeTabControl Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab" PinnedTabWidth="100"
+                             Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White" PinTabCommand="{Binding PinTabCommand}"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
-                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900" SelectionChanged="Tabs_SelectionChanged">
+                             CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900" SelectionChanged="Tabs_SelectionChanged"
+                             ContainerItemPreparedForOverride="TabControl_ContainerItemPreparedForOverride">
                     <chromeTabs:ChromeTabControl.Template>
                         <ControlTemplate TargetType="{x:Type chromeTabs:ChromeTabControl}">
                             <ControlTemplate.Resources>

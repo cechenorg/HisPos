@@ -36,6 +36,8 @@ namespace His_Pos
             StratClock();
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
+
+            AddNewTab("首頁");
         }
         
         private void InitialUserBlock()
@@ -137,6 +139,14 @@ namespace His_Pos
                     break;
                 case "交易":
                     break;
+            }
+        }
+        private void TabControl_ContainerItemPreparedForOverride(object sender, ContainerOverrideEventArgs e)
+        {
+            e.Handled = true;
+            if (e.TabItem != null && e.Model is TabBase viewModel)
+            {
+                e.TabItem.IsPinned = viewModel.IsPinned;
             }
         }
     }

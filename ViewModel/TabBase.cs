@@ -44,6 +44,19 @@ namespace His_Pos.ViewModel
             }
         }
 
+        private bool _isPinned;
+        public bool IsPinned
+        {
+            get => _isPinned;
+            set
+            {
+                if (_isPinned != value)
+                {
+                    Set(() => IsPinned, ref _isPinned, value);
+                }
+            }
+        }
+
         public abstract TabBase getTab();
 
     }
