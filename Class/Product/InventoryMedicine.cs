@@ -23,6 +23,8 @@ namespace His_Pos.Class.Product
             Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
             Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
             Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");
+            WareHouse = dataRow["PROWAR_NAME"].ToString();
+
         }
         public InStock Stock { get; set; }
         public string Location { get; set; }

@@ -22,6 +22,7 @@ namespace His_Pos.Class.Product
             Note = dataRow["PRO_DESCRIPTION"].ToString();
             Stock = new InStock(dataRow);
             ProductType = new ProductType.ProductType(dataRow);
+            WareHouse = dataRow["PROWAR_NAME"].ToString();
         }
         public ProductType.ProductType ProductType { get; set; }
         public InStock Stock { get; set; }
