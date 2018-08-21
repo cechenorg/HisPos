@@ -26,7 +26,8 @@
     xmlns:stockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
     xmlns:CustomerManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.CustomerManage"
     xmlns:workScheduleManage="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
-    Title="MainWindow"
+    xmlns:IndexView="clr-namespace:His_Pos.IndexView"
+    Title="藥健康 HIS POS 系統"
     Width="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
     Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"
     MinWidth="800"
@@ -174,28 +175,26 @@
                         Name="SystemIcon"
                         Width="60"
                         Height="60"
-                        Margin="0,-1,0,5"
-                        Source="Images/His.png" />
+                        Margin="0,-2,0,5"
+                        Source="Images/LOGO_HISPOS.png" />
                     <Label
                         Name="HisSwitch"
                         Margin="25,10,0,0"
-                        Content="H I S"
-                        FontFamily="Arial"
-                        FontSize="16"
-                        FontWeight="Medium"
+                        Content="調劑"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
                         Foreground="LightSkyBlue"
-                        MouseDown="MenuSwitchMouseDown" />
+                        MouseDown="Shortcut_OnMouseLeftButtonDown" />
                     <Label
                         Name="PosSwitch"
                         Margin="25,10,0,0"
-                        Content="P O S"
-                        FontFamily="Arial"
-                        FontSize="16"
-                        FontWeight="Medium"
-                        Foreground="DarkGray"
-                        MouseDown="MenuSwitchMouseDown" />
+                        Content="交易"
+                        FontFamily="Segoe UI Semi"
+                        FontSize="20"
+                        Foreground="Orange"
+                        MouseDown="Shortcut_OnMouseLeftButtonDown" />
                 </StackPanel>
-                <ScrollViewer Name="HisMenu" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="763">
+                <ScrollViewer Name="HisMenu" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="760">
                     <ScrollViewer.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
