@@ -187,25 +187,25 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             MessageWindow m;
             ConfirmWindow c;
-            //if (CurrentPrescription.CheckPrescriptionData().Equals(""))
-            //{
-            //    var declareData = new DeclareData(CurrentPrescription);
-            //    var declareDb = new DeclareDb();
-            //    DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
-            //    declareDb.InsertDb(declareData, declareTrade);
-            //    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
-            //    m.Show();
-            //}
-            //else
-            //{
-            //    c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
-            //    //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
-            //    //var declareData = new DeclareData(Prescription);
-            //    //var declareDb = new DeclareDb();
-            //    //declareDb.InsertDb(declareData);
-            //    c.ShowDialog();
-            //}
-            PrintMedBag();
+            if (CurrentPrescription.CheckPrescriptionData().Equals(""))
+            {
+                var declareData = new DeclareData(CurrentPrescription);
+                var declareDb = new DeclareDb();
+                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+                declareDb.InsertDb(declareData, declareTrade);
+                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+                m.Show();
+            }
+            else
+            {
+                c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
+                //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
+                //var declareData = new DeclareData(Prescription);
+                //var declareDb = new DeclareDb();
+                //declareDb.InsertDb(declareData);
+                c.ShowDialog();
+            }
+            //PrintMedBag();
         }
 
         private void PrintMedBag()
@@ -214,7 +214,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
             //File.WriteAllText(ReportService.ReportPath, string.Empty);
             //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
-            ReportService.CreatePdf(defaultMedBag);
+            for (int i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            {
+                ReportService.CreatePdf(defaultMedBag,i);
+            }
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -537,7 +540,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentPrescription.Customer.Birthday = "037/10/01";
             CurrentPrescription.Customer.IcNumber = "S18824769A";
             CheckPatientGender();
-            CurrentPrescription.Customer.IcCard = new IcCard("900000000720", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination(), "");
+            CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination(), "");
             CurrentPrescription.Customer.Id = "1";
             PatientName.Text = CurrentPrescription.Customer.Name;
             PatientId.Text = CurrentPrescription.Customer.IcNumber;

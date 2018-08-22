@@ -238,6 +238,7 @@
     <Compile Include="Class\CustomerHistory\CustomerHistoryPos.cs" />
     <Compile Include="Class\DeclareTrade.cs" />
     <Compile Include="Class\DeclareTradeDb.cs" />
+    <Compile Include="Class\Declare\DeclareDataXml.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />

@@ -116,7 +116,7 @@ namespace His_Pos.RDLC
                 return PrettyXml(textWriter);
             }
         }
-        private static string PrettyXml(StringWriter writer)
+        public static string PrettyXml(StringWriter writer)
         {
             var stringBuilder = new StringBuilder();
             var element = XElement.Parse(writer.ToString());
