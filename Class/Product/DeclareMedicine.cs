@@ -16,6 +16,19 @@ namespace His_Pos.Class.Product
     {
         public DeclareMedicine()
         {
+            HcPrice = "";
+            Ingredient = "";
+            MedicalCategory = new Medicate();
+            Cost = 0;
+            Price = "";
+            TotalPrice = 0;
+            Amount = 0;
+            CountStatus = "";
+            FocusColumn = "";
+            Usage = new Usage();
+            days = "";
+            Position = "";
+            source = "";
         }
 
         public DeclareMedicine(DataRow dataRow) : base(dataRow)
@@ -98,7 +111,7 @@ namespace His_Pos.Class.Product
 
         public string CountStatus { get; set; }
         public string FocusColumn { get; set; }
-        public Usage Usage { get; set; }
+        public Usage Usage;
 
         public string UsageName
         {

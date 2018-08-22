@@ -213,8 +213,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
             var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
             File.WriteAllText(ReportService.ReportPath, string.Empty);
-            File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
-            ReportService.CreatePdf(defaultMedBag);
+            File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription, 0)));
+            ReportService.CreatePdf(defaultMedBag, 0);
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)

@@ -1,34 +1,23 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
-using His_Pos.RDLC;
 using His_Pos.Service;
 using JetBrains.Annotations;
-using Microsoft.Reporting.WinForms;
-using Border = His_Pos.RDLC.Border;
 using Button = System.Windows.Controls.Button;
 using CheckBox = System.Windows.Controls.CheckBox;
 using DataGrid = System.Windows.Controls.DataGrid;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
-using Page = His_Pos.RDLC.Page;
 using RadioButton = System.Windows.Controls.RadioButton;
-using Report = His_Pos.RDLC.Report;
-using Style = His_Pos.RDLC.Style;
 using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.H1_DECLARE.MedBagManage
@@ -318,7 +307,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             var ns = new XmlSerializerNamespaces();
             ns.Add("", "");
             var loadingWindow = new LoadingWindow();
-            loadingWindow.SetMedBagData(this,ReportPath);
+            loadingWindow.SetMedBagData(this);
             loadingWindow.Show();
             
             SaveMedBagData();

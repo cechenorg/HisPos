@@ -14,11 +14,13 @@ namespace His_Pos.Class
         public Pharmacy(DataRow row) {
             MedicalPersonnel = new MedicalPersonnel(row);
         }
-        public Pharmacy(string id, string name)
+        public Pharmacy(string id, string name,string address,string tel)
         {
             Id = id;
             Name = name;
             FullName = id + " " + name;
+            Address = address;
+            Tel = tel;
             MedicalPersonnel = new MedicalPersonnel();
         }
         public Pharmacy(XmlNode xml) {
@@ -26,5 +28,7 @@ namespace His_Pos.Class
             MedicalPersonnel.IcNumber = xml.SelectSingleNode("d25") == null ? null : xml.SelectSingleNode("d25").InnerText;
         }
         public MedicalPersonnel MedicalPersonnel { get; set; }
+        public string Address { get; set; }
+        public string Tel { get; set; }
     }
 }

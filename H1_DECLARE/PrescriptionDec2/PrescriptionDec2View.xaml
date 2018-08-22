@@ -76,7 +76,7 @@
                     materialDesign:HintAssist.Hint="姓名"
                     FontSize="18"
                     Foreground="{StaticResource ForeGround}"
-                    Text="{Binding Prescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding CurrentPrescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Image
                     Name="IcPatientId"
                     Width="30"
@@ -89,7 +89,7 @@
                     materialDesign:HintAssist.Hint="身分證字號"
                     FontSize="18"
                     Foreground="{StaticResource ForeGround}"
-                    Text="{Binding Prescription.Customer.IcCard.IcNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding CurrentPrescription.Customer.IcCard.IcNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Image
                     Name="IcPatientBirthday"
                     Width="30"
@@ -102,7 +102,7 @@
                     materialDesign:HintAssist.Hint="生日"
                     FontSize="18"
                     Foreground="{StaticResource ForeGround}"
-                    Text="{Binding Prescription.Customer.Birthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Text="{Binding CurrentPrescription.Customer.Birthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Label
                     Margin="0,0,15,0"
                     VerticalAlignment="Bottom"
@@ -179,7 +179,7 @@
                         FontStretch="ExtraExpanded"
                         ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                         MinimumPrefixLength="4"
-                        SelectedItem="{Binding Prescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay}"
+                        SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay}"
                         ValueMemberPath="FullName">
                         <controls:AutoCompleteBox.ItemTemplate>
                             <DataTemplate>
@@ -210,7 +210,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay}" />
+                        SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -231,7 +231,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id, Mode=TwoWay}" />
+                        Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.Id, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -251,7 +251,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.Customer.IcCard.MedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding CurrentPrescription.Customer.IcCard.MedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -271,7 +271,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay}" />
+                        SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -290,7 +290,7 @@
                         VerticalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
-                        Text="{Binding Prescription.Treatment.TreatDateStr, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding CurrentPrescription.Treatment.TreatDateStr, UpdateSourceTrigger=PropertyChanged}" />
                     <DatePicker
                         x:Name="TreatmentDate"
                         Width="40"
@@ -301,7 +301,7 @@
                         Foreground="Transparent"
                         IsHitTestVisible="True"
                         IsTodayHighlighted="False"
-                        SelectedDate="{Binding Prescription.Treatment.TreatmentDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
+                        SelectedDate="{Binding CurrentPrescription.Treatment.TreatmentDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -320,14 +320,14 @@
                         VerticalContentAlignment="Center"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
-                        Text="{Binding Prescription.Treatment.AdjustDateStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding CurrentPrescription.Treatment.AdjustDateStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <DatePicker
                         Width="40"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         FontFamily="Segoe UI Semi"
                         Foreground="Transparent"
-                        SelectedDate="{Binding Prescription.Treatment.AdjustDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
+                        SelectedDate="{Binding CurrentPrescription.Treatment.AdjustDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -346,7 +346,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id, Mode=TwoWay}" />
+                        Text="{Binding CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -366,7 +366,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id, Mode=TwoWay}" />
+                        Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -386,7 +386,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.PaymentCategory, Mode=TwoWay}" />
+                        SelectedItem="{Binding CurrentPrescription.Treatment.PaymentCategory, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -406,7 +406,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.Copayment, Mode=TwoWay}" />
+                        SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -426,7 +426,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         IsEditable="True"
-                        SelectedItem="{Binding Prescription.Treatment.AdjustCase, Mode=TwoWay}" />
+                        SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -445,7 +445,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.ChronicSequence, Mode=TwoWay}" />
+                        Text="{Binding CurrentPrescription.ChronicSequence, Mode=TwoWay}" />
                     <Label
                         Content=" / "
                         FontFamily="Segoe UI Semibold"
@@ -457,7 +457,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.ChronicTotal, Mode=TwoWay}" />
+                        Text="{Binding CurrentPrescription.ChronicTotal, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
@@ -476,7 +476,7 @@
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
-                        Text="{Binding Prescription.Treatment.MedicalInfo.SpecialCode.Id, Mode=TwoWay}" />
+                        Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
             <DataGrid
