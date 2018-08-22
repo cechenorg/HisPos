@@ -187,24 +187,24 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             MessageWindow m;
             ConfirmWindow c;
-            if (CurrentPrescription.CheckPrescriptionData().Equals(""))
-            {
-                var declareData = new DeclareData(CurrentPrescription);
-                var declareDb = new DeclareDb();
-                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
-                declareDb.InsertDb(declareData, declareTrade);
-                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
-                m.Show();
-            }
-            else
-            {
-                c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
-                //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
-                //var declareData = new DeclareData(Prescription);
-                //var declareDb = new DeclareDb();
-                //declareDb.InsertDb(declareData);
-                c.ShowDialog();
-            }
+            //if (CurrentPrescription.CheckPrescriptionData().Equals(""))
+            //{
+            //    var declareData = new DeclareData(CurrentPrescription);
+            //    var declareDb = new DeclareDb();
+            //    DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+            //    declareDb.InsertDb(declareData, declareTrade);
+            //    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+            //    m.Show();
+            //}
+            //else
+            //{
+            //    c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
+            //    //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
+            //    //var declareData = new DeclareData(Prescription);
+            //    //var declareDb = new DeclareDb();
+            //    //declareDb.InsertDb(declareData);
+            //    c.ShowDialog();
+            //}
             PrintMedBag();
         }
 
@@ -212,9 +212,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
             var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
-            File.WriteAllText(ReportService.ReportPath, string.Empty);
-            File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription, 0)));
-            ReportService.CreatePdf(defaultMedBag, 0);
+            //File.WriteAllText(ReportService.ReportPath, string.Empty);
+            //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
+            ReportService.CreatePdf(defaultMedBag);
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)

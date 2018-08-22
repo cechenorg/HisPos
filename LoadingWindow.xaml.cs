@@ -470,9 +470,6 @@ namespace His_Pos
                     medBagManageView.MedBagManageViewBox.IsEnabled = true;
                     var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
                     m.Show();
-                    //File.WriteAllText(ReportPath, string.Empty);
-                    //File.AppendAllText(ReportPath, medBagManageView.SerializeObject<Report>(medBagManageView.CreatReport()));
-                    //medBagManageView.CreatePdf();
                     Close();
                 }));
             };
