@@ -32,15 +32,43 @@ namespace His_Pos.ProductPurchase
 
         public string ManufactoryID;
 
-        public NewItemDialog(Collection<PurchaseProduct> collection, string id)
+        public NewItemDialog(Collection<PurchaseProduct> collection, string manId)
         {
             InitializeComponent();
             Title = "新增";
             
             DataCollection = collection;
-            ManufactoryID = id;
+            ManufactoryID = manId;
 
             InitCollection();
+        }
+        public NewItemDialog(Collection<PurchaseProduct> collection, string manId, string searchText)
+        {
+            InitializeComponent();
+            Title = "新增";
+
+            DataCollection = collection;
+            ManufactoryID = manId;
+
+            SearchText.Text = searchText;
+            AllProducts.IsChecked = true;
+
+            InitCollection();
+
+            if(SearchResult.Items.Count == 0)
+            {
+                MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                Close();
+            }
+            else if (SearchResult.Items.Count == 1)
+            {
+                SelectedItem = (PurchaseProduct)SearchResult.Items[0];
+                ConfirmButtonClicked = true;
+                Close();
+            }
+            else
+                ShowDialog();
         }
         private void InitCollection()
         {

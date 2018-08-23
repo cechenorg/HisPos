@@ -195,46 +195,22 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private void ProductID_Populating(object sender, PopulatingEventArgs e)
+        private void AddProduct(TextBox textBox, PurchaseProduct product)
         {
-            var productAuto = sender as AutoCompleteBox;
-
-            if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || ProductAutoCompleteCollection is null) return;
-
-            var result = ProductAutoCompleteCollection.Where(x => (x.Id.ToLower().Contains(productAuto.Text.ToLower()) || x.ChiName.ToLower().Contains(productAuto.Text.ToLower()) || x.EngName.ToLower().Contains(productAuto.Text.ToLower()))).Take(50);
-            
-            productAuto.ItemsSource = new ObservableCollection<PurchaseProduct>(result.ToList());
-            productAuto.ItemFilter = ProductFilter;
-            productAuto.PopulateComplete();
-        }
-
-        private void ProductID_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
-        {
-            var productAuto = sender as AutoCompleteBox;
-
-            if (productAuto is null) return;
-            if (productAuto.SelectedItem is null)
-            {
-                if (productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<PurchaseProduct>).Count != 0 && productAuto.Text.Length >= 4)
-                    productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<PurchaseProduct>)[0];
-                else
-                    return;
-            }
-
             Product newProduct;
 
-            if (((PurchaseProduct)productAuto.SelectedItem).Type.Equals("M"))
-                newProduct = new ProductPurchaseMedicine((PurchaseProduct)productAuto.SelectedItem);
+            if (product.Type.Equals("M"))
+                newProduct = new ProductPurchaseMedicine(product);
             else
-                newProduct = new ProductPurchaseOtc((PurchaseProduct)productAuto.SelectedItem);
+                newProduct = new ProductPurchaseOtc(product);
 
-            int rowIndex = GetCurrentRowIndex(productAuto);
+            int rowIndex = GetCurrentRowIndex(textBox);
 
             if (rowIndex == StoreOrderData.Products.Count)
             {
                 StoreOrderData.Products.Add(newProduct);
-                
-                productAuto.Text = "";
+
+                textBox.Text = "";
             }
             else
             {
@@ -269,6 +245,20 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 for (int x = 0; x < temp.Count; x++)
                 {
                     if (temp[x].Equals(btn))
+                    {
+                        return x;
+                    }
+                }
+            }
+            else if (sender is TextBox)
+            {
+                TextBox tb = sender as TextBox;
+
+                List<TextBox> temp = new List<TextBox>();
+                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, tb.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(tb))
                     {
                         return x;
                     }
@@ -339,6 +329,55 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (left != 0)
                 ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+        }
+
+        private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            if(e.Key == Key.Enter)
+            {
+                NewItemDialog newItemDialog = new NewItemDialog(ProductAutoCompleteCollection, StoreOrderData.Manufactory.Id, textBox.Text);
+
+                if (newItemDialog.ConfirmButtonClicked)
+                {
+                    AddProduct(textBox, newItemDialog.SelectedItem);
+                }
+            }
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            textBox.SelectAll();
+        }
+
+        private void Id_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            e.Handled = true;
+
+            textBox.Focus();
+        }
+
+        private void Id_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            var currentRowIndex = GetCurrentRowIndex(sender);
+
+            if (!textBox.Text.Equals(storeOrderData.Products[currentRowIndex].Id))
+                textBox.Text = storeOrderData.Products[currentRowIndex].Id;
         }
     }
 }
