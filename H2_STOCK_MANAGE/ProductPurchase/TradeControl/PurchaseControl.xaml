@@ -196,22 +196,22 @@
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}">
             <Rectangle Width="270"/>
-            <Button Tag="First" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="Transparent" Click="ChangePage">
-                <TextBlock Text="&lt;&lt;" Margin="0,-5,0,0"/>
+            <Button Tag="First" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Click="ChangePage">
+                <TextBlock Text="&lt;&lt;" Margin="0,-5,0,0" Foreground="Black"/>
             </Button>
-            <Button Tag="Minus" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="Transparent" Margin="10,0,0,0" Click="ChangePage">
-                <TextBlock Text="&lt;" Margin="0,-5,0,0"/>
+            <Button Tag="Minus" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Margin="10,0,0,0" Click="ChangePage">
+                <TextBlock Text="&lt;" Margin="0,-5,0,0" Foreground="Black"/>
             </Button>
             <TextBox Text="{Binding CurrentPage, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="60" FontSize="18" FontFamily="Segoe UI Semibold" Margin="10,0,0,6"
                      HorizontalContentAlignment="Center" LostFocus="ChangeCurrentPage_LostFocus" PreviewKeyDown="ChangeCurrentPage_PreviewKeyDown"
                      InputMethod.IsInputMethodEnabled="False"/>
             <Label Content="/" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Content="{Binding TotalPage, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="60" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Button Tag="Plus" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="Transparent" Margin="10,0,0,0" Click="ChangePage">
-                <TextBlock Text="&gt;" Margin="0,-5,0,0"/>
+            <Button Tag="Plus" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Margin="10,0,0,0" Click="ChangePage">
+                <TextBlock Text="&gt;" Margin="0,-5,0,0" Foreground="Black"/>
             </Button>
-            <Button Tag="Last" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="Transparent" Margin="10,0,0,0" Click="ChangePage">
-                <TextBlock Text="&gt;&gt;" Margin="0,-5,0,0"/>
+            <Button Tag="Last" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Margin="10,0,0,0" Click="ChangePage">
+                <TextBlock Text="&gt;&gt;" Margin="0,-5,0,0" Foreground="Black"/>
             </Button>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
