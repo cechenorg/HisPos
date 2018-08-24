@@ -522,5 +522,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 PreparePaging(PagingType.ADD);
             }
         }
+
+        private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+        }
     }
 }
