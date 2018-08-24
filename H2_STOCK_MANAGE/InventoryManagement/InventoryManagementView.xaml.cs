@@ -223,7 +223,7 @@ namespace His_Pos.InventoryManagement
 
         private void WareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            ProductList.Items.Filter = OrderTypeFilter;
         }
     }
 }

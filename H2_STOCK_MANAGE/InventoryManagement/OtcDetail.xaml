@@ -18,8 +18,8 @@
                 <RowDefinition Height="510"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="750"/>
                 <ColumnDefinition Width="850"/>
+                <ColumnDefinition Width="750"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
@@ -192,24 +192,33 @@
                 </StackPanel>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="10,5,10,5">
-                <Rectangle Width="1180"/>
+                <Rectangle Width="20"/>
+                 <Image Source="/Images/stock.png" Width="35"/>
+                 <Label Content="庫存總量" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                <Label Name="TotalStock" Content="100"  Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center" />
+                <Rectangle Width="20"/>
+                <Image Source="/Images/money.png" Width="35"/>
+                <Label Content="庫存現值" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center"  FontFamily="Segoe UI Semibold" FontSize="20"/>
+
+                <Label Name="StockTotalPrice" Content="100" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" VerticalAlignment="Center" />
+                
+                <Rectangle Width="780"/>
                 <Label Name="IsChangedLabel" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0,0,5,0"/>
                 <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="Gray" Click="ChangedCancelButton_Click" />
                 <Button Name="ButtonUpdateSubmmit" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="Red" PreviewMouseUp="ButtonUpdateSubmmit_OnMouseLeftButtonUp"/>
             </StackPanel>
             <Grid Grid.Column="0" Grid.Row="3">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="250"/>
-                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="330"/>
                     <RowDefinition Height="180"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="300"/>
-                    <ColumnDefinition Width="170"/>
-                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="300"/>
                 </Grid.ColumnDefinitions>
                 <DataGrid Name="OtcStock" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="0" Margin="10,5,0,5">
+                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" Grid.Column="0" Grid.Row="0" Margin="10,5,5,5">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -270,18 +279,55 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Orientation="Vertical" Background="{StaticResource GridDarkestBackGround}" Grid.Row="0" Grid.Column="1" Margin="0,5,5,5">
-                    <StackPanel Orientation="Horizontal" Margin="0,25,0,0" HorizontalAlignment="Center">
-                        <Image Source="/Images/stock.png" Width="35"/>
-                        <Label Content="庫存總量" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                <DockPanel Background="{StaticResource GridBackGround}" Margin="5,5,5,5" Grid.Row="0" Grid.Column="1">
+                    <DataGrid Name="productGroup" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                              CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" DockPanel.Dock="Top" Height="200">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                <Setter Property="Width" Value="100"/>
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15"/>
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Height" Value="40"/>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="產品名稱" Width="250" Binding="{Binding Name}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" DockPanel.Dock="Bottom">
+                        <Button Width="100"/>
                     </StackPanel>
-                    <Label Name="TotalStock" Content="100" Margin="0,0,0,20" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
-                        <Image Source="/Images/money.png" Width="35"/>
-                        <Label Content="庫存現值" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                    </StackPanel>
-                    <Label Name="StockTotalPrice" Content="100" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center"/>
-                </StackPanel>
+                </DockPanel>
                 <DockPanel Background="{StaticResource GridBackGround}" Margin="5,5,5,5" Grid.Row="0" Grid.Column="2">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Top">
                         <Label Content="交易紀錄" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="0,0,60,0"/>
@@ -350,26 +396,6 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
-                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="10,5,5,5" Grid.Column="0">
-
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="5" Grid.Column="1">
-
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="5" Grid.Column="2">
-
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Background="{StaticResource GridBackGround}" Margin="5" Grid.Column="3">
-
-                    </StackPanel>
-                </Grid>
                 <lvc:CartesianChart Series="{Binding SalesCollection}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Background="{StaticResource GridBackGround}" Margin="10,5,5,10">
                     <lvc:CartesianChart.AxisY>
                         <lvc:Axis ShowLabels="False"/>
