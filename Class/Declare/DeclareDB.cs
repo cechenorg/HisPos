@@ -71,7 +71,7 @@ namespace His_Pos.Class.Declare
             var cusBirth = year + c.Birthday.Substring(3, 6);
             var ddata = new Ddata
             {
-                aaa = new Dhead {D1 = declareData.Prescription.Treatment.AdjustCase.Id},
+                Dhead = new Dhead {D1 = declareData.Prescription.Treatment.AdjustCase.Id},
                 Dbody = new Dbody
                 {
                     D3 = c.IcNumber,

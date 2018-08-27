@@ -484,11 +484,6 @@
     <Compile Include="MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec\PrescriptionDec.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDec\PrescriptionDecView.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDec\PrescriptionDecView.xaml.cs">
-      <DependentUpon>PrescriptionDecView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquire.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml.cs">
@@ -726,10 +721,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MessageWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec\PrescriptionDecView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -294,6 +293,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 if (CurrentPrescription.Medicines.Count == currentRow)
                 {
+                    var m = CurrentPrescription.Medicines[currentRow - 1];
+                    declareMedicine.UsageName = m.UsageName;
+                    declareMedicine.Dosage = m.Dosage;
+                    declareMedicine.Days = m.Days;
                     CurrentPrescription.Medicines.Add(declareMedicine);
                     medicineCodeAuto.Text = string.Empty;
                 }
@@ -309,7 +312,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public void ClearMedicine(DeclareMedicine med)
+        private void ClearMedicine(DeclareMedicine med)
         {
             med.PaySelf = false;
             med.Cost = 0;
@@ -438,19 +441,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void NotifyPropertyChanged(string propertyName)
+        private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void MedicineTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var textBox = sender as TextBox;
-            if (textBox != null)
-            {
-                textBox.SelectionStart = 0;
-                textBox.SelectionLength = textBox.Text.Length;
-            }
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectionStart = 0;
+            textBox.SelectionLength = textBox.Text.Length;
         }
 
         private void CountMedicinesCost()
@@ -482,7 +482,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         /*
         * 藥費部分負擔
         */
-
         private int CountCopaymentCost(double medicinesHcCost)
         {
             const int free = 0;
@@ -524,7 +523,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             LoadPatentDataFromIcCard();
-
         }
 
         private void LoadPatentDataFromIcCard()
@@ -543,7 +541,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentPrescription.Customer.Birthday = "037/10/01";
             CurrentPrescription.Customer.IcNumber = "S18824769A";
             CheckPatientGender();
-            CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination(), "");
+            CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
             CurrentPrescription.Customer.Id = "1";
             PatientName.Text = CurrentPrescription.Customer.Name;
             PatientId.Text = CurrentPrescription.Customer.IcNumber;
@@ -551,6 +549,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
             CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
             CusHistoryMaster.SelectedIndex = 0;
+            if (string.IsNullOrEmpty(CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                !string.IsNullOrEmpty(MedicalNumber.Text))
+                CurrentPrescription.Customer.IcCard.MedicalNumber = MedicalNumber.Text;
         }
 
         private void CheckPatientGender()

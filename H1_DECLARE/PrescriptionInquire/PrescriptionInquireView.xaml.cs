@@ -113,7 +113,7 @@ namespace His_Pos.PrescriptionInquire
         private void ButtonImportXml_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog fdlg = new OpenFileDialog();
-            fdlg.Title = "C# Corner Open File Dialog";
+            fdlg.Title = "選擇申報檔";
             fdlg.InitialDirectory = @"c:\";   //@是取消转义字符的意思
             fdlg.Filter = "Xml健保申報檔案|*.xml";
             fdlg.FilterIndex = 2;

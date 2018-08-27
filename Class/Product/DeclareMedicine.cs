@@ -207,6 +207,7 @@ namespace His_Pos.Class.Product
 
         private void CalculateAmount()
         {
+            if(MedicalCategory.Form.Equals(""))
             foreach (var usage in UsageDb.GetUsages())
             {
                 Regex reg = new Regex(usage.Reg);
