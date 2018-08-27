@@ -240,6 +240,7 @@
     <Compile Include="Class\DeclareTradeDb.cs" />
     <Compile Include="Class\Declare\DeclareDataXml.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
+    <Compile Include="Class\Declare\DeclareTDataXml.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />

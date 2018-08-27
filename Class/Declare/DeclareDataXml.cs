@@ -7,7 +7,7 @@ namespace His_Pos.Class.Declare
     public class Ddata
     {
         [XmlElement(ElementName = "dhead")]
-        public Dhead Dhead { get; set; }
+        public Dhead aaa { get; set; }
         [XmlElement(ElementName = "dbody")]
         public Dbody Dbody { get; set; }
     }

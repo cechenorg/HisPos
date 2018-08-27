@@ -111,9 +111,9 @@ namespace His_Pos.Class.Product
 
         public string CountStatus { get; set; }
         public string FocusColumn { get; set; }
-        public Usage Usage;
+        public Usage Usage { get; set; }
 
-        public string UsageName
+    public string UsageName
         {
             get
             {

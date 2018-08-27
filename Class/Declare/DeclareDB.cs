@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -72,7 +71,7 @@ namespace His_Pos.Class.Declare
             var cusBirth = year + c.Birthday.Substring(3, 6);
             var ddata = new Ddata
             {
-                Dhead = new Dhead {D1 = declareData.Prescription.Treatment.AdjustCase.Id},
+                aaa = new Dhead {D1 = declareData.Prescription.Treatment.AdjustCase.Id},
                 Dbody = new Dbody
                 {
                     D3 = c.IcNumber,
@@ -132,14 +131,14 @@ namespace His_Pos.Class.Declare
                 {
                     P1 = detail.MedicalOrder,
                     P2 = detail.MedicalId,
-                    P3 = detail.Dosage.ToString(),
+                    P3 = function.SetStrFormat(detail.Dosage, "{0:0000.00}"),
                     P4 = detail.Usage,
                     P5 = detail.Position,
                     P6 = detail.Percent.ToString(),
-                    P7 = detail.Total.ToString(),
-                    P8 = detail.Price.ToString(),
-                    P9 = detail.Point.ToString(),
-                    P10 = declareCount.ToString(),
+                    P7 = function.SetStrFormat(detail.Total, "{0:00000.0}"),
+                    P8 = function.SetStrFormat(detail.Price, "{0:0000000.00}"),
+                    P9 = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}"),
+                    P10 = function.SetStrFormatInt(declareData.DeclareDetails.Count + 1, "{0:D3}"),
                     P11 = detail.Days.ToString(),
                     P12 = detail.StartDate,
                     P13 = detail.EndDate,
