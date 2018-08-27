@@ -46,9 +46,8 @@ namespace His_Pos.Class.Declare
             });
             CheckInsertDbTypeUpdate(parameters);
         }
-        
 
-        public string SerializeObject<T>(Ddata ddata)
+        private string SerializeObject<T>(Ddata ddata)
         {
             var xmlSerializer = new XmlSerializer(ddata.GetType());
             using (var textWriter = new StringWriter())

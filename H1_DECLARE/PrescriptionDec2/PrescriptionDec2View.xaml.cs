@@ -198,7 +198,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else
             {
-                c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
+                c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改?", MessageType.WARNING);
                 //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
                 //var declareData = new DeclareData(Prescription);
                 //var declareDb = new DeclareDb();
