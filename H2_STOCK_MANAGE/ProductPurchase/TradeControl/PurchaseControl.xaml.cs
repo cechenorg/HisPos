@@ -147,6 +147,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     break;
             }
         }
+        private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            if (sender is null) return;
+
+            DataGrid dataGrid = sender as DataGrid;
+
+            if (dataGrid.Items.Count == e.Row.GetIndex() + 1) return;
+
+            int rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
+
+            e.Row.Header = rowNum.ToString();
+        }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -521,19 +533,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 PreparePaging(PagingType.ADD);
             }
-        }
-
-        private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            if (sender is null) return;
-
-            DataGrid dataGrid = sender as DataGrid;
-
-            if (dataGrid.Items.Count == e.Row.GetIndex() + 1) return;
-
-            int rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
-            
-            e.Row.Header = rowNum.ToString();
         }
     }
 }
