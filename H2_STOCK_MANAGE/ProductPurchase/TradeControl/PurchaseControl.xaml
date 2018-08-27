@@ -42,7 +42,7 @@
             </StackPanel>
         </StackPanel>
         <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="3" LoadingRow="StoreOrderDetail_OnLoadingRow" HeadersVisibility="All">
+                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="3" LoadingRow="StoreOrderDetail_OnLoadingRow" HeadersVisibility="All" CanUserSortColumns="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -195,7 +195,7 @@
             </DataGrid.Columns>
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
-                    <TextBlock />
+                    <Label Content="{Binding}"/>
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
         </DataGrid>
@@ -207,7 +207,7 @@
             <Button Tag="Minus" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Margin="10,0,0,0" Click="ChangePage">
                 <TextBlock Text="&lt;" Margin="0,-5,0,0" Foreground="Black"/>
             </Button>
-            <TextBox Text="{Binding CurrentPage, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="60" FontSize="18" FontFamily="Segoe UI Semibold" Margin="10,0,0,6"
+            <TextBox Text="{Binding CurrentPage, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="60" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,7"
                      HorizontalContentAlignment="Center" LostFocus="ChangeCurrentPage_LostFocus" PreviewKeyDown="ChangeCurrentPage_PreviewKeyDown"
                      InputMethod.IsInputMethodEnabled="False"/>
             <Label Content="/" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>

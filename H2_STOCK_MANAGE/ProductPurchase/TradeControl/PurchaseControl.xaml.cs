@@ -525,7 +525,15 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
-            e.Row.Header = (e.Row.GetIndex() + 1).ToString();
+            if (sender is null) return;
+
+            DataGrid dataGrid = sender as DataGrid;
+
+            if (dataGrid.Items.Count == e.Row.GetIndex() + 1) return;
+
+            int rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
+            
+            e.Row.Header = rowNum.ToString();
         }
     }
 }
