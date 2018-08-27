@@ -309,6 +309,7 @@
     <Compile Include="Class\Product\OTCStockOverview.cs" />
     <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
+    <Compile Include="Class\Product\ProductGroup.cs" />
     <Compile Include="Class\Product\ProductPurchaseMedicine.cs" />
     <Compile Include="Class\Product\ProductPurchaseOTC.cs" />
     <Compile Include="Class\Product\ProductTypeMedicine.cs" />
@@ -365,6 +366,9 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml.cs">
+      <DependentUpon>DemolitionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
       <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
@@ -601,6 +605,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -16,6 +16,7 @@ namespace His_Pos.Interface
         BitmapImage TypeIcon { get; set; }
         string StockValue { get; set; }
         string Note { get; set; }
+        string WareHouseId { get; set; }
         string WareHouse { get; set; }
     }
 }

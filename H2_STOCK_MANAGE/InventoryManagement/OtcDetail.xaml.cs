@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -35,8 +36,16 @@ namespace His_Pos.InventoryManagement
     /// <summary>
     /// OtcDetail.xaml 的互動邏輯
     /// </summary>
-    public partial class OtcDetail : UserControl
+    public partial class OtcDetail : UserControl, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
 
@@ -49,7 +58,16 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<StockTakingOverview> StockTakingOverviewCollection;
         public ListCollectionView ProductTypeCollection;
-       
+        private ObservableCollection<ProductGroup> productGroupCollection;
+        public ObservableCollection<ProductGroup> ProductGroupCollection {
+            get { return productGroupCollection; }
+            set
+            {
+                productGroupCollection = value;
+                NotifyPropertyChanged("ProductGroupCollection");
+            }
+
+        }
         public InventoryOtc InventoryOtc;
         private bool IsChanged = false;
         private bool IsFirst = true;
@@ -151,6 +169,7 @@ namespace His_Pos.InventoryManagement
             if (StockTakingOverviewCollection.Count != 0)
                 LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
 
+            ProductGroupCollection = ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
             UpdateChart();
             InitVariables();
             SetUnitValue();
@@ -312,6 +331,16 @@ namespace His_Pos.InventoryManagement
             StockTakingHistory stockTakingHistory = new StockTakingHistory(StockTakingOverviewCollection);
 
             stockTakingHistory.Show();
+        }
+
+        private void ButtonMergeStock_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonDemolition_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

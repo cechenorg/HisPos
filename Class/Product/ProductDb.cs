@@ -372,6 +372,18 @@ namespace His_Pos.Class.Product
 
             }
         }
-        
+        internal static ObservableCollection<ProductGroup> GetProductGroup(string proId,string warId)
+        {
+            ObservableCollection<ProductGroup> productGroups = new ObservableCollection<ProductGroup>();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("PROWAR_ID", warId)); 
+            var table =  dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetProductGroup]", parameters);
+            foreach (DataRow row in table.Rows) {
+                productGroups.Add(new ProductGroup(row));
+            }
+            return productGroups;
+        }
     }
 }
