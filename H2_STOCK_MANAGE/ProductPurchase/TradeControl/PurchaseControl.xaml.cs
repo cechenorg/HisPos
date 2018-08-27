@@ -16,11 +16,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.Service;
+using His_Pos.Struct.Manufactory;
 using His_Pos.Struct.Product;
 using MahApps.Metro.Controls;
 
@@ -32,7 +34,21 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
     public partial class PurchaseControl : UserControl, INotifyPropertyChanged
     {
         #region ----- Define Variables -----
-        public Collection<PurchaseProduct> ProductAutoCompleteCollection { get; set; }
+        public Collection<PurchaseProduct> ProductCollection { get; set; }
+
+        private Collection<PurchasePrincipal> principalCollection;
+        public Collection<PurchasePrincipal> PrincipalCollection
+        {
+            get
+            {
+                return principalCollection;
+            }
+            set
+            {
+                principalCollection = value;
+                NotifyPropertyChanged("PrincipalCollection");
+            }
+        }
 
         private StoreOrder storeOrderData;
 
@@ -99,6 +115,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         public PurchaseControl()
         {
             InitializeComponent();
+
             DataContext = this;
         }
 
@@ -108,7 +125,14 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             UpdateOrderDetailUi();
 
+            InitPrincipal();
+
             PreparePaging(PagingType.INIT);
+        }
+
+        private void InitPrincipal()
+        {
+            PrincipalCollection = ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
         }
 
         #region ----- StoreOrderDetail Functions -----
@@ -314,7 +338,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (e.Key == Key.Enter)
             {
-                NewItemDialog newItemDialog = new NewItemDialog(ProductAutoCompleteCollection, StoreOrderData.Manufactory.Id, textBox.Text);
+                NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text);
 
                 if (newItemDialog.ConfirmButtonClicked)
                 {
@@ -459,7 +483,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         #endregion
 
-        #region ----- Other Functions -----
+        #region ----- Service Functions -----
         private int GetCurrentRowIndex(object sender)
         {
             if (sender is AutoCompleteBox)
@@ -519,7 +543,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ProductAutoCompleteCollection, StoreOrderData.Manufactory.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id);
 
             newItemDialog.ShowDialog();
 
