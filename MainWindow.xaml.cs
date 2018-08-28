@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using ChromeTabs;
 using His_Pos.Class;
 using His_Pos.Class.Person;
+using His_Pos.Class.Pharmacy;
 using His_Pos.Resource;
 using His_Pos.Service;
 using His_Pos.ViewModel;

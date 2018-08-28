@@ -65,6 +65,17 @@ namespace His_Pos.Class.Person
             }
         }
 
+        private string _genderName;
+        public string GenderName
+        {
+            get => _genderName;
+            set
+            {
+                _genderName = value;
+                NotifyPropertyChanged(nameof(Gender));
+            }
+        }
+
         private IcCard _icCard;
 
         public IcCard IcCard

@@ -15,6 +15,7 @@ using System.Xml.Serialization;
 using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
+using His_Pos.Class.Pharmacy;
 using His_Pos.Class.Product;
 using Microsoft.Reporting.WinForms;
 using Microsoft.ReportingServices.RdlObjectModel;
