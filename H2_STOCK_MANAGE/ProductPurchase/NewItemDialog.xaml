@@ -68,6 +68,6 @@
                 <DataGridTextColumn Header="基準量" Width="70" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding BasicAmount}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="確認" Grid.Row="2" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmClick"/>
+        <Button Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmClick"/>
     </Grid>
 </Window>

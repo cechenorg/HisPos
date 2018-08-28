@@ -22,8 +22,15 @@
                        Foreground="{StaticResource ForeGround}" />
                 <TextBox Width="130" Margin="0,0,10,0" FontSize="16" />
                 <Rectangle Width="990" />
-                <Button Name="ButtonSearch" Width="100" Height="30" Background="DeepSkyBlue" BorderThickness="0"
-                        Content="查詢" FontSize="18" FontWeight="Bold" />
+                <Button
+                    Name="ButtonSearch"
+                    Width="100"
+                    Height="30"
+                    Background="RoyalBlue"
+                    BorderThickness="0"
+                    Content="查詢"
+                    FontSize="18"
+                    FontWeight="Bold" />
             </StackPanel>
             <DataGrid Name="DataGridMedFrequency" Grid.Row="1" Grid.Column="0" Margin="10,0,0,0"
                       AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False"

@@ -558,5 +558,15 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 PreparePaging(PagingType.ADD);
             }
         }
+
+        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ComboBox_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

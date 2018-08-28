@@ -152,7 +152,7 @@
                             <TextBox Name="SmallTypeEngName" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Foreground="Red" Margin="10,0,0,0"/>
                         </StackPanel>
                         <Button Margin="0,0,20,0" Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="CancelTypeChange"/>
-                        <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ConfirmTypeChange"/>
+                        <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Click="ConfirmTypeChange"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
                         <Label Content="銷售額" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>

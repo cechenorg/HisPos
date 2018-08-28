@@ -45,12 +45,14 @@
                     </StackPanel>
                     <TextBox Name="UserId" Grid.Row="4" Grid.Column="0" materialDesign:HintAssist.Hint="員工編號" Width="200" FontSize="25" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" KeyDown="UserId_KeyDown"/>
                     <PasswordBox Name="UserPassword" Grid.Row="5" Grid.Column="0" materialDesign:HintAssist.Hint="員工密碼" Width="200" FontSize="25" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" KeyDown="UserPassword_KeyDown"/>
-                    <Button Grid.Row="6" Grid.Column="0" Width="150" Content="打卡" FontFamily="Segoe UI Semibold" FontSize="25" Background="DeepSkyBlue" BorderThickness="0" Height="40" Click="ClockIn_Click"/>
+                    <Button Grid.Row="6" Grid.Column="0" Width="150" Content="打卡" FontFamily="Segoe UI Semibold" FontSize="25" Background="RoyalBlue" BorderThickness="0" Height="40" Click="ClockIn_Click"/>
                 </Grid>
             </Border>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="0,0,10,0"  Background="{StaticResource GridBackGround}">
                 <Label Content="員工" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
-                <ComboBox Name="comboboxEmployee" ItemsSource="{Binding Employees,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" Width="120" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,10,0,10" SelectionChanged="ComboBox_SelectionChanged"/>
+                <ComboBox Name="comboboxEmployee" ItemsSource="{Binding Employees,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" 
+                          Width="120" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,10,0,10" 
+                          SelectionChanged="ComboBox_SelectionChanged" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
                 <Label Content="日期" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
                 <DatePicker  Width="120" Height="30" Name="start" SelectedDateFormat="Short"  SelectedDateChanged="start_SelectedDateChanged" Margin="10,0,0,0"/>
             </StackPanel>
