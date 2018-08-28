@@ -32,7 +32,8 @@
             <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <Label Name="PurchaseEmp" Content="{Binding OrdEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
             <Label Content="訂單聯絡人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox ItemsSource="{Binding PrincipalCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" DisplayMemberPath="Name" Width="120"/>
+            <ComboBox ItemsSource="{Binding PrincipalCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                      DisplayMemberPath="Name" Width="120" DropDownClosed="ComboBox_DropDownOpened" PreviewMouseLeftButtonUp="ComboBox_PreviewMouseLeftButtonUp" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center"/>
             <StackPanel Orientation="Horizontal">
                 <Label Content="{Binding Path=Principal.Phone}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0"/>
             </StackPanel>
@@ -227,9 +228,9 @@
             <Label Name="TotalAmount" Content="{Binding Path=Products.Count}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Rectangle Name="EmptySpace" Width="270"/>
-            <Button Name="DeleteOrder" Width="120" Content="刪除" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" BorderThickness="0" Background="DimGray"/>
-            <Button Name="ConfirmToProcess" Width="150" Content="轉成進貨單" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" BorderThickness="0" Background="Red" />
-            <Button Name="Confirm" Width="150" Content="確認收貨" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Margin="0,10,0,10" Background="DeepSkyBlue"/>
+            <Button Name="DeleteOrder" Width="120" Content="刪除" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" BorderThickness="0" Background="DimGray"/>
+            <Button Name="ConfirmToProcess" Width="150" Content="轉成進貨單" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="IndianRed" />
+            <Button Name="Confirm" Width="150" Content="確認收貨" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue"/>
         </StackPanel>
     </Grid>
 </UserControl>

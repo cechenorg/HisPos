@@ -133,6 +133,38 @@
                     </Style>
                 </ResourceDictionary>
                 <ResourceDictionary>
+                    <Style x:Key="ComboItemContainerStyle" TargetType="{x:Type ComboBoxItem}">
+                        <Setter Property="SnapsToDevicePixels" Value="True"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                        <Setter Property="OverridesDefaultStyle" Value="True"/>
+                        <Setter Property="Height" Value="50"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                                    <Border
+                                        Name="Border"
+                                        SnapsToDevicePixels="True"
+                                        Padding="3,2,2,2" Background="LightGray">
+                                        <ContentPresenter
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding ComboBoxItem.Content}" 
+                                            ContentTemplate="{TemplateBinding ComboBoxItem.ContentTemplate}" 
+                                            SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}"
+                                            ContentTemplateSelector="{TemplateBinding ComboBoxItem.ContentTemplateSelector}"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
+                                            <Setter Property="Panel.Background" TargetName="Border" Value="LightBlue"/>
+                                            <Setter Property="TextElement.Foreground" Value="Black"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ResourceDictionary>
+                <ResourceDictionary>
                     <Brush x:Key="GridBackGround">#B2EEEEEE</Brush>
                     <Brush x:Key="GridDarkerBackGround">#99BFBFBF</Brush>
                     <Brush x:Key="GridDarkestBackGround">#99ACACAC</Brush>

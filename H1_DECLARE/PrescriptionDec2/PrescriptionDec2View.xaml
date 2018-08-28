@@ -427,38 +427,6 @@
                         FontSize="14"
                         IsEditable="True"
                         SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay}">
-                        <!--<ComboBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ComboBoxItem}">
-                                <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
-                                <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
-                                <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>
-                                <Setter Property="Background" Value="Aqua"></Setter>
-                                <Setter Property="Control.Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ComboBoxItem}">
-                                            <Border
-                                                Name="Border"
-                                                SnapsToDevicePixels="True"
-                                                Padding="3,2,2,2" Background="Aqua">
-                                                <ContentPresenter
-                                                    ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
-                                                    Content="{TemplateBinding ContentControl.Content}" />
-                                            </Border>
-                                            
-                                            <ControlTemplate.Triggers>
-                                                <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
-                                                    <Setter Property="Panel.Background" TargetName="Border" Value="Red"/>
-                                                    <Setter Property="TextElement.Foreground" Value="White"></Setter>
-                                                </Trigger>
-                                                <Trigger Property="UIElement.IsEnabled" Value="False">
-                                                    <Setter Property="TextElement.Foreground" Value="Red"/>
-                                                </Trigger>
-                                            </ControlTemplate.Triggers>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </ComboBox.ItemContainerStyle>-->
                     </ComboBox>
                 </StackPanel>
                 <StackPanel
