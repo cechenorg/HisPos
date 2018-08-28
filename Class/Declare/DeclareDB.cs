@@ -103,6 +103,11 @@ namespace His_Pos.Class.Declare
                     D44 = ic.IcMarks.NewbornsData.Birthday
                 }
             };
+            if (!string.IsNullOrEmpty(declareData.DeclareMakeUp))
+            {
+                ddata.Dbody.D4 = declareData.DeclareMakeUp;
+            }
+
             if (!string.IsNullOrEmpty(t.AdjustCase.Id) && (t.AdjustCase.Id.StartsWith("D") || t.AdjustCase.Id.StartsWith("5")))
             {
                 if (string.IsNullOrEmpty(m.Hospital.Doctor.Id))
