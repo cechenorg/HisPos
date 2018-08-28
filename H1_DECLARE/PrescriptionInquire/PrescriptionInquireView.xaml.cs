@@ -155,5 +155,10 @@ namespace His_Pos.PrescriptionInquire
             }
 
         }
+
+        private void ButtonExportXml_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

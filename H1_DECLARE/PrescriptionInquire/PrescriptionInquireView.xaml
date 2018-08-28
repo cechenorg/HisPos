@@ -124,10 +124,10 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="4" >
-                <Rectangle Width="1230"/>
-                <Button Name="ButtonImportXml" Width="120" Content="匯入申報檔" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ButtonImportXml_Click" />
-            </StackPanel>
+            <Canvas Grid.Row="3" >
+                <Button Name="ButtonImportXml" Width="120" Height="30" Content="匯入申報檔" Canvas.Right="20" Canvas.Top="10" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ButtonImportXml_Click" />
+                <Button Name="ButtonExportXml" Width="120" Height="30" Content="匯出申報檔" Canvas.Right="160" Canvas.Top="10" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ButtonExportXml_Click" />
+            </Canvas>
         </Grid>
     </Viewbox>
 </UserControl>

@@ -374,6 +374,9 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionInquire\ExportDeclareDataDlg.xaml.cs">
+      <DependentUpon>ExportDeclareDataDlg.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
       <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
     </Compile>
@@ -605,6 +608,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionInquire\ExportDeclareDataDlg.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
