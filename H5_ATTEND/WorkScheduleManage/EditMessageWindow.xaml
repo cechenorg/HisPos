@@ -9,6 +9,6 @@
         Title="EditMessageWindow" Height="60" Width="530" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
     <StackPanel Orientation="Horizontal">
         <TextBox Name="MessageTb" Margin="10,5,10,5" Width="400" materialDesign:HintAssist.Hint="備註" FontSize="25" FontFamily="Segoe UI Semi"/>
-        <Button Content="確定" Width="100" Background="DeepSkyBlue" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Click="Button_Click" VerticalAlignment="Center"/>
+        <Button Content="確定" Width="100" Background="RoyalBlue" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Click="Button_Click" VerticalAlignment="Center"/>
     </StackPanel>
 </Window>

@@ -18,6 +18,6 @@
             <RadioButton Tag="R" Content="退貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="50,0,0,0" Click="NewOrderType_Click"/>
         </StackPanel>
         <ContentControl Grid.Row="1" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Content="確認" Grid.Row="2" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmButtonClick"/>
+        <Button Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="ConfirmButtonClick"/>
     </Grid>
 </Window>

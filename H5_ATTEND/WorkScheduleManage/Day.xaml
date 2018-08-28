@@ -153,7 +153,7 @@
                         </StackPanel>
                     </StackPanel>
                 </ScrollViewer>
-            <Border Name="AllDayBtn" Grid.Row="4" Grid.Column="3" CornerRadius="8" Background="DeepSkyBlue" Margin="2" MouseLeftButtonDown="AllDayBtn_OnMouseLeftButtonDown" Visibility="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsAllDayShowConverter}}">
+            <Border Name="AllDayBtn" Grid.Row="4" Grid.Column="3" CornerRadius="8" Background="RoyalBlue" Margin="2" MouseLeftButtonDown="AllDayBtn_OnMouseLeftButtonDown" Visibility="{Binding IsEditMode, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource IsAllDayShowConverter}}">
                 <TextBlock Text="全天" Foreground="{StaticResource ForeGround}" FontSize="12" FontFamily="Segoe UI Semibold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
             </Grid>

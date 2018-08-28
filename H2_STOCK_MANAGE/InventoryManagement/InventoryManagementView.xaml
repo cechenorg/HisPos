@@ -40,7 +40,9 @@
                     <CheckBox Name="BelowSafeAmount" Content="低於安全量" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <CheckBox Name="NoneInventory" Content="無庫存" Margin="0,0,20,0" Foreground="{StaticResource ForeGround}" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <Label Content="目前倉庫"  Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <ComboBox Width="120" Name="WareHouse"  ItemsSource="{Binding WareHouseCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" SelectionChanged="WareHouse_SelectionChanged" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <ComboBox Width="120" Name="WareHouse"  ItemsSource="{Binding WareHouseCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="Name" 
+                              SelectionChanged="WareHouse_SelectionChanged" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" 
+                              FontSize="18" FontFamily="Segoe UI Semibold" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0" Margin="9">
                     <Label Content="搜尋範圍" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
@@ -51,12 +53,13 @@
                     <RadioButton Content="全部" Tag="2" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="SearchConditionChanged"/>
                     <Image Source="/Images/PosHisDot.png" Width="25" Margin="0,0,30,0"/>
                 </StackPanel>
-                <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="查詢" Name="Search" Click="Search_Click" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" IsEnabled="False"/>
+                <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Content="查詢" Name="Search" Click="Search_Click" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" IsEnabled="False"/>
             </Grid>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkestBackGround}">
                 <Label Content="進階搜尋" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="19,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <Label Content="類別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <ComboBox Name="OtcType" SelectedValuePath="Name" Margin="0,0,10,0"  Width="140"  Foreground="Black"  FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" >
+                <ComboBox Name="OtcType" SelectedValuePath="Name" Margin="0,0,10,0"  Width="140"  Foreground="Black"  FontFamily="Segoe UI Semibold" 
+                          FontSize="14"  HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
                     <ComboBox.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>

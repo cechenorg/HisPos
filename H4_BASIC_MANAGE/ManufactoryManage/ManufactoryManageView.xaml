@@ -20,7 +20,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                 <TextBox Name="SearchName" materialDesign:HintAssist.Hint="廠商及負責人 名稱 簡稱 負責對象" Margin="20,0,0,5" Width="380" FontSize="25"/>
                 <Rectangle Width="850"/>
-                <Button Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Click="Search_OnClick"/>
+                <Button Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" Click="Search_OnClick"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Background="{StaticResource GridBackGround}" Margin="10,0,0,10">
                 <DataGrid Name="ManageManufactoryDataGrid" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}"
@@ -284,7 +284,7 @@
                     <Rectangle Width="750"/>
                     <Label Name="IsChangedLbl" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
                     <Button Name="CancelBtn" Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,10,0" Background="Gray" BorderThickness="0" Click="Cancel_OnClick"/>
-                    <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Click="ConfirmChanged_OnClick"/>
+                    <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Click="ConfirmChanged_OnClick"/>
                 </StackPanel>
             </Grid>
             

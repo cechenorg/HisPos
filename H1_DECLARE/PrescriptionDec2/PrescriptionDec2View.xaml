@@ -131,7 +131,7 @@
                 <Rectangle Width="200" />
                 <Button
                     MinWidth="130"
-                    Background="DeepSkyBlue"
+                    Background="RoyalBlue"
                     BorderThickness="0"
                     Click="Button_Click"
                     Content="取得病患資料"
@@ -209,7 +209,7 @@
                         DisplayMemberPath="FullName"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
-                        IsEditable="True"
+                        IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                         SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -270,7 +270,7 @@
                         DisplayMemberPath="FullName"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
-                        IsEditable="True"
+                        IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                         SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -385,7 +385,7 @@
                         DisplayMemberPath="FullName"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
-                        IsEditable="True"
+                        IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                         SelectedItem="{Binding CurrentPrescription.Treatment.PaymentCategory, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -405,7 +405,7 @@
                         DisplayMemberPath="FullName"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
-                        IsEditable="True"
+                        IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                         SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
@@ -425,7 +425,7 @@
                         DisplayMemberPath="FullName"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
-                        IsEditable="True"
+                        IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                         SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay}">
                     </ComboBox>
                 </StackPanel>
@@ -1083,7 +1083,7 @@
                         <Button
                             Width="180"
                             Margin="20,0,0,0"
-                            Background="Red"
+                            Background="IndianRed"
                             BorderThickness="0"
                             Click="Submit_ButtonClick"
                             Content="確認"

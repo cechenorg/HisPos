@@ -19,12 +19,19 @@
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal"  Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">
-                <ComboBox Name="ComboBoxSourceBig"  DisplayMemberPath="Name" SelectionChanged="ComboBoxSourceBig_SelectionChanged" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center"/>
-                <ComboBox Name="ComboBoxSourceSmall" DisplayMemberPath="Name" SelectionChanged="ComboBoxSourceSmall_SelectionChanged" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" Margin="20,0,0,0"/>
+                <ComboBox Name="ComboBoxSourceBig"  DisplayMemberPath="Name" SelectionChanged="ComboBoxSourceBig_SelectionChanged" 
+                          Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center"
+                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                <ComboBox Name="ComboBoxSourceSmall" DisplayMemberPath="Name" SelectionChanged="ComboBoxSourceSmall_SelectionChanged" 
+                          Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" 
+                          Margin="20,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center">
-                <ComboBox Name="ComboBoxTargetBig"  DisplayMemberPath="Name" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" SelectionChanged="ComboBoxTargetBig_SelectionChanged"/>
-                <ComboBox Name="ComboBoxTargetSmall" DisplayMemberPath="Name"  Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" HorizontalContentAlignment="Center" SelectionChanged="ComboBoxTargetSmall_SelectionChanged" Margin="20,0,0,0"/>
+                <ComboBox Name="ComboBoxTargetBig"  DisplayMemberPath="Name" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" 
+                          FontSize="14" HorizontalContentAlignment="Center" SelectionChanged="ComboBoxTargetBig_SelectionChanged" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                <ComboBox Name="ComboBoxTargetSmall" DisplayMemberPath="Name"  Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" 
+                          HorizontalContentAlignment="Center" SelectionChanged="ComboBoxTargetSmall_SelectionChanged" Margin="20,0,0,0"
+                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
             </StackPanel>
             <DataGrid  Name="DataGridSource" Margin="10,10,10,10" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" HorizontalScrollBarVisibility="Disabled"
                                 ItemsSource="{Binding TypeDataSourceDatas,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  Grid.Row="1" Grid.Column="0">

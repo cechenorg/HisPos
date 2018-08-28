@@ -27,7 +27,7 @@
                 <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
                 <DatePicker Width="100" Height="30" Name="end" SelectedDateFormat="Short"/>
                 <Rectangle Width="105"/>
-                <Button Name="ButtonSearch" Grid.Column="1" Grid.Row="0" Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Click="ButtonSearch_Click"/>
+                <Button Name="ButtonSearch" Grid.Column="1" Grid.Row="0" Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Click="ButtonSearch_Click"/>
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>

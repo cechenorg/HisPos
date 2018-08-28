@@ -115,7 +115,7 @@
                     <Label Content="同意" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center"/>
                     <Label Width="50" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" HorizontalContentAlignment="Center" Content="{Binding AuthLeaveCheckedCount, UpdateSourceTrigger=PropertyChanged}"/>
                     <Label Content="位" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                    <Button Width="100" Content="核准" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" Margin="10,0,0,0" Click="LeaveConfirm_OnClick"/>
+                    <Button Width="100" Content="核准" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Margin="10,0,0,0" Click="LeaveConfirm_OnClick"/>
                 </StackPanel>
             </Grid>
             

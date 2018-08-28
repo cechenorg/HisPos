@@ -112,7 +112,7 @@
                     </DataTemplate>
                 </controls:AutoCompleteBox.ItemTemplate>
             </controls:AutoCompleteBox>
-            <Button Content="確認" Name="Confirm" Width="200" Background="DeepSkyBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="Confirm_Click"/>
+            <Button Content="確認" Name="Confirm" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="Confirm_Click"/>
         </StackPanel>
         
     </Grid>

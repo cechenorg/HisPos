@@ -33,7 +33,8 @@
             <Label Name="PurchaseEmp" Content="{Binding OrdEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
             <Label Content="訂單聯絡人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <ComboBox ItemsSource="{Binding PrincipalCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                      DisplayMemberPath="Name" Width="120" DropDownClosed="ComboBox_DropDownOpened" PreviewMouseLeftButtonUp="ComboBox_PreviewMouseLeftButtonUp" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center"/>
+                      DisplayMemberPath="Name" Width="120" DropDownClosed="ComboBox_DropDownOpened" PreviewMouseLeftButtonUp="ComboBox_PreviewMouseLeftButtonUp" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center"
+                      />
             <StackPanel Orientation="Horizontal">
                 <Label Content="{Binding Path=Principal.Phone}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0"/>
             </StackPanel>

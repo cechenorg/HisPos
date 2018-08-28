@@ -16,7 +16,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="0"  Margin="10,10,10,10">
                 <TextBox Name="EmpId" Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Rectangle Width="1000"/>
-                <Button Name="ButtonSearch" Content="查詢" Background="DeepSkyBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" />
+                <Button Name="ButtonSearch" Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" />
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -96,7 +96,8 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
                             <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <ComboBox Width="145" Text="{Binding CustomerDetail.GenderName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0">
+                            <ComboBox Width="145" Text="{Binding CustomerDetail.GenderName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Text_TextChanged" 
+                                      FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
                                 <ComboBoxItem >男</ComboBoxItem>
                                 <ComboBoxItem >女</ComboBoxItem>
                             </ComboBox>
@@ -126,7 +127,7 @@
                             <Rectangle Width="100"/>
                             <Label Name="Changed" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" />
                             <Button Name="ButtonCancel" Width="100" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="ButtonCancel_Click"/>
-                            <Button Name="ButtonSubmit" Width="100" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="Red" BorderThickness="0" />
+                            <Button Name="ButtonSubmit" Width="100" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" />
                         </StackPanel>
                     </Grid>
                 </Grid>

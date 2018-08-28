@@ -82,7 +82,8 @@
                 <Label Grid.Column="0" Grid.Row="1" Content="OTC" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,9,0,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="9">
                     <Label Content="類別" Width="Auto" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <ComboBox Name="OtcType" SelectedValuePath="Name" Margin="0,0,10,0"  Width="120"  Foreground="Black"  FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" >
+                    <ComboBox Name="OtcType" SelectedValuePath="Name" Margin="0,0,10,0"  Width="120"  Foreground="Black"  FontFamily="Segoe UI Semibold" 
+                              FontSize="14"  HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
                         <ComboBox.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
@@ -124,7 +125,7 @@
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
                 </StackPanel>
-                <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Click="AddItems_Click"/>
+                <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="AddItems_Click"/>
             </Grid>
             <StackPanel Name="SortType" Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkestBackGround}">
                 <Label Content="列印排序: " VerticalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,10,0"/>
@@ -317,8 +318,8 @@
                 <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Rectangle Name="Row1Rectangle" Width="610"/>
                 <Button Name="ClearProduct" Margin="0,0,20,0" Width="150" Content="清空盤點單" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="ClearProduct_Click"/>
-                <Button Name="FinishedAddProduct" Width="150" Content="新增完成" FontFamily="Segoe UI Semibold" FontSize="16" Background="DeepSkyBlue" BorderThickness="0" Click="FinishedAddProduct_Click"/>
-                <Button Name="Print" Width="150" Content="列印盤點單" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="DeepSkyBlue" BorderThickness="0" Click="Print_OnClick"/>
+                <Button Name="FinishedAddProduct" Width="150" Content="新增完成" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="FinishedAddProduct_Click"/>
+                <Button Name="Print" Width="150" Content="列印盤點單" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="RoyalBlue" BorderThickness="0" Click="Print_OnClick"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="7" Background="{StaticResource GridDarkerBackGround}">
                 <Label Content="已盤點" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
@@ -331,11 +332,11 @@
                 <Label Content="{Binding ResultChanged, UpdateSourceTrigger=PropertyChanged}" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="項" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" Margin="0,0,20,0"/>
                 <Button Width="150" Content="自動補齊未填寫" Name="AutoFill" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,20,0" Background="DimGray" BorderThickness="0" Click="AutoFill_Click" />
-                <Button Width="150" Content="完成盤點" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="Red" BorderThickness="0" Click="StockTakingComplete_Click"/>
+                <Button Width="150" Content="完成盤點" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="IndianRed" BorderThickness="0" Click="StockTakingComplete_Click"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="8" Background="{StaticResource GridDarkerBackGround}">
                 <Rectangle Width="1200"/>
-                <Button Width="150" Content="完成" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="Red" BorderThickness="0" Click="Complete_Click"/>
+                <Button Width="150" Content="完成" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0" Background="IndianRed" BorderThickness="0" Click="Complete_Click"/>
             </StackPanel>
         </Grid>
     </Viewbox>
