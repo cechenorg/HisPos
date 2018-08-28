@@ -22,6 +22,7 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StockTakingOrder;
+using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.ProductPurchaseRecord;
@@ -340,7 +341,8 @@ namespace His_Pos.InventoryManagement
 
         private void ButtonDemolition_Click(object sender, RoutedEventArgs e)
         {
-
+            DemolitionWindow demolitionWindow = new DemolitionWindow();
+            demolitionWindow.ShowDialog();
         }
     }
 }
