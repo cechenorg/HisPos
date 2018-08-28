@@ -1,5 +1,6 @@
 ﻿using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.Struct.Manufactory;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -84,6 +85,24 @@ namespace His_Pos.Class.Manufactory
             foreach (DataRow row in table.Rows)
             {
                 collection.Add(new ManufactoryPayOverview(row));
+            }
+
+            return collection;
+        }
+
+        internal static Collection<PurchasePrincipal> GetPrincipal(string manId)
+        {
+            Collection<PurchasePrincipal> collection = new Collection<PurchasePrincipal>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MAN_ID", manId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetPrincipal]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new PurchasePrincipal(row));
             }
 
             return collection;

@@ -15,7 +15,6 @@
     xmlns:medBagManage="clr-namespace:His_Pos.H1_DECLARE.MedBagManage"
     xmlns:medFrequencyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedFrequencyManage"
     xmlns:pharmacyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.PharmacyManage"
-    xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
     xmlns:prescriptionDec2="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
     xmlns:prescriptionInquire="clr-namespace:His_Pos.PrescriptionInquire"
     xmlns:productPurchase="clr-namespace:His_Pos.ProductPurchase"
@@ -38,9 +37,6 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type prescriptionDec:PrescriptionDec}">
-            <prescriptionDec:PrescriptionDecView />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type prescriptionDec2:PrescriptionDec2}">
             <prescriptionDec2:PrescriptionDec2View />
         </DataTemplate>

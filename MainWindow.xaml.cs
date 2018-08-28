@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using ChromeTabs;
 using His_Pos.Class;
 using His_Pos.Class.Person;
+using His_Pos.Class.Pharmacy;
 using His_Pos.Resource;
 using His_Pos.Service;
 using His_Pos.ViewModel;
@@ -23,6 +24,7 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+        public static Pharmacy CurrentPharmacy;
         public static MainWindow MainWindowInstance;
         public MainWindow(User userLogin)
         {
@@ -36,6 +38,7 @@ namespace His_Pos
             StratClock();
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
+            CurrentPharmacy = new Pharmacy("5932012975", "杏昌藥局", "330桃園市桃園區中正路1100號", "03-3573268");
 
             AddNewTab("首頁");
         }

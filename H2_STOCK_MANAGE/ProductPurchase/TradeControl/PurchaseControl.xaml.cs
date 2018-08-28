@@ -16,11 +16,13 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.Service;
+using His_Pos.Struct.Manufactory;
 using His_Pos.Struct.Product;
 using MahApps.Metro.Controls;
 
@@ -32,7 +34,21 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
     public partial class PurchaseControl : UserControl, INotifyPropertyChanged
     {
         #region ----- Define Variables -----
-        public Collection<PurchaseProduct> ProductAutoCompleteCollection { get; set; }
+        public Collection<PurchaseProduct> ProductCollection { get; set; }
+
+        private Collection<PurchasePrincipal> principalCollection;
+        public Collection<PurchasePrincipal> PrincipalCollection
+        {
+            get
+            {
+                return principalCollection;
+            }
+            set
+            {
+                principalCollection = value;
+                NotifyPropertyChanged("PrincipalCollection");
+            }
+        }
 
         private StoreOrder storeOrderData;
 
@@ -49,6 +65,43 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
+        private int totalPage;
+        public int TotalPage
+        {
+            get
+            {
+                return totalPage;
+            }
+            set
+            {
+                totalPage = value;
+                NotifyPropertyChanged("TotalPage");
+            }
+        }
+
+        private int currentPage;
+        public int CurrentPage
+        {
+            get
+            {
+                return currentPage;
+            }
+            set
+            {
+                currentPage = value;
+                NotifyPropertyChanged("CurrentPage");
+            }
+        }
+
+        private const int PRODUCT_PER_PAGE = 12;
+
+        enum PagingType
+        {
+            INIT,
+            DEL,
+            ADD
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -62,6 +115,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         public PurchaseControl()
         {
             InitializeComponent();
+
             DataContext = this;
         }
 
@@ -71,9 +125,17 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             UpdateOrderDetailUi();
 
+            InitPrincipal();
 
+            PreparePaging(PagingType.INIT);
         }
 
+        private void InitPrincipal()
+        {
+            PrincipalCollection = ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
+        }
+
+        #region ----- StoreOrderDetail Functions -----
         private void UpdateOrderDetailUi()
         {
             AddNewProduct.IsEnabled = true;
@@ -108,6 +170,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
                     break;
             }
+        }
+        private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            if (sender is null) return;
+
+            DataGrid dataGrid = sender as DataGrid;
+
+            if (dataGrid.Items.Count == e.Row.GetIndex() + 1) return;
+
+            int rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
+
+            e.Row.Header = rowNum.ToString();
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -148,7 +222,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 {
                     (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
-                    if(Keyboard.FocusedElement is Button)
+                    if (Keyboard.FocusedElement is Button)
                         (Keyboard.FocusedElement as Button).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 }
                 else
@@ -194,47 +268,22 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 }
             }
         }
-
-        private void ProductID_Populating(object sender, PopulatingEventArgs e)
+        private void AddProduct(TextBox textBox, PurchaseProduct product)
         {
-            var productAuto = sender as AutoCompleteBox;
-
-            if (String.IsNullOrEmpty(storeOrderData.Manufactory.Id) || productAuto is null || ProductAutoCompleteCollection is null) return;
-
-            var result = ProductAutoCompleteCollection.Where(x => (x.Id.ToLower().Contains(productAuto.Text.ToLower()) || x.ChiName.ToLower().Contains(productAuto.Text.ToLower()) || x.EngName.ToLower().Contains(productAuto.Text.ToLower()))).Take(50);
-            
-            productAuto.ItemsSource = new ObservableCollection<PurchaseProduct>(result.ToList());
-            productAuto.ItemFilter = ProductFilter;
-            productAuto.PopulateComplete();
-        }
-
-        private void ProductID_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
-        {
-            var productAuto = sender as AutoCompleteBox;
-
-            if (productAuto is null) return;
-            if (productAuto.SelectedItem is null)
-            {
-                if (productAuto.Text != string.Empty && (productAuto.ItemsSource as ObservableCollection<PurchaseProduct>).Count != 0 && productAuto.Text.Length >= 4)
-                    productAuto.SelectedItem = (productAuto.ItemsSource as ObservableCollection<PurchaseProduct>)[0];
-                else
-                    return;
-            }
-
             Product newProduct;
 
-            if (((PurchaseProduct)productAuto.SelectedItem).Type.Equals("M"))
-                newProduct = new ProductPurchaseMedicine((PurchaseProduct)productAuto.SelectedItem);
+            if (product.Type.Equals("M"))
+                newProduct = new ProductPurchaseMedicine(product);
             else
-                newProduct = new ProductPurchaseOtc((PurchaseProduct)productAuto.SelectedItem);
+                newProduct = new ProductPurchaseOtc(product);
 
-            int rowIndex = GetCurrentRowIndex(productAuto);
+            int rowIndex = GetCurrentRowIndex(textBox);
 
-            if (rowIndex == StoreOrderData.Products.Count)
+            if (rowIndex == StoreOrderDetail.Items.Count - 1)
             {
                 StoreOrderData.Products.Add(newProduct);
-                
-                productAuto.Text = "";
+
+                textBox.Text = "";
             }
             else
             {
@@ -243,7 +292,198 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 StoreOrderData.Products[rowIndex] = newProduct;
             }
         }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
 
+            if (textBox is null) return;
+
+            if (textBox.Text == String.Empty)
+                textBox.Text = "0";
+
+            if (!textBox.Name.Equals("FreeAmount"))
+                storeOrderData.CalculateTotalPrice();
+        }
+
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //SetChanged();
+            StoreOrderData.Products.Remove((Product)StoreOrderDetail.SelectedItem);
+            StoreOrderData.CalculateTotalPrice();
+
+            PreparePaging(PagingType.DEL);
+        }
+
+        private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            var currentRowIndex = GetCurrentRowIndex(sender);
+
+            double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
+
+            ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
+
+            StoreOrderData.Products.Insert(currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
+
+            if (left != 0)
+                ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+        }
+
+        private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            if (e.Key == Key.Enter)
+            {
+                NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text);
+
+                if (newItemDialog.ConfirmButtonClicked)
+                {
+                    AddProduct(textBox, newItemDialog.SelectedItem);
+
+                    PreparePaging(PagingType.ADD);
+                }
+            }
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            textBox.SelectAll();
+        }
+
+        private void Id_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            e.Handled = true;
+
+            textBox.Focus();
+        }
+
+        private void Id_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            var currentRowIndex = GetCurrentRowIndex(sender);
+
+            if (currentRowIndex == -1) return;
+
+            if (!textBox.Text.Equals(storeOrderData.Products[currentRowIndex].Id))
+                textBox.Text = storeOrderData.Products[currentRowIndex].Id;
+        }
+        #endregion
+
+        #region ----- Paging Functions -----
+        private void PreparePaging(PagingType type)
+        {
+            TotalPage = (storeOrderData.Products.Count / PRODUCT_PER_PAGE) + ((storeOrderData.Products.Count % PRODUCT_PER_PAGE == 0) ? 0 : 1);
+
+            switch (type)
+            {
+                case PagingType.INIT:
+                    CurrentPage = 1;
+                    break;
+                case PagingType.DEL:
+                    if (StoreOrderDetail.Items.Count == 1)
+                    {
+                        CurrentPage = TotalPage;
+                    }
+                    break;
+                case PagingType.ADD:
+                    CurrentPage = TotalPage;
+                    break;
+            }
+
+            SelectPage();
+        }
+
+        private void SelectPage()
+        {
+            StoreOrderDetail.ItemsSource = storeOrderData.Products.Skip(PRODUCT_PER_PAGE * (currentPage - 1)).Take(PRODUCT_PER_PAGE).ToList();
+        }
+        private void ChangePage(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            Button button = sender as Button;
+
+            switch (button.Tag.ToString())
+            {
+                case "First":
+                    CurrentPage = 1;
+                    break;
+                case "Minus":
+                    if (CurrentPage - 1 >= 1)
+                        CurrentPage--;
+                    else
+                        CurrentPage = 1;
+                    break;
+                case "Plus":
+                    if (CurrentPage + 1 <= TotalPage)
+                        CurrentPage++;
+                    else
+                        CurrentPage = TotalPage;
+                    break;
+                case "Last":
+                    CurrentPage = TotalPage;
+                    break;
+            }
+
+            SelectPage();
+        }
+
+        private void ChangeCurrentPage_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+            CheckPageValid(textBox);
+
+            SelectPage();
+        }
+
+        private void CheckPageValid(TextBox textBox)
+        {
+            int selectPage = Int32.Parse(textBox.Text.ToString());
+
+            if (selectPage < 1)
+                selectPage = 1;
+            else if (selectPage > TotalPage)
+                selectPage = TotalPage;
+
+            CurrentPage = selectPage;
+        }
+
+        private void ChangeCurrentPage_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            if (e.Key == Key.Enter)
+            {
+                CheckPageValid(textBox);
+
+                SelectPage();
+            }
+            else if (!IsNumbers(e.Key))
+                e.Handled = true;
+        }
+
+        #endregion
+
+        #region ----- Service Functions -----
         private int GetCurrentRowIndex(object sender)
         {
             if (sender is AutoCompleteBox)
@@ -274,24 +514,36 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     }
                 }
             }
+            else if (sender is TextBox)
+            {
+                TextBox tb = sender as TextBox;
+
+                List<TextBox> temp = new List<TextBox>();
+                NewFunction.FindChildGroup<TextBox>(StoreOrderDetail, tb.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(tb))
+                    {
+                        return x;
+                    }
+                }
+            }
 
             return -1;
         }
 
-        public AutoCompleteFilterPredicate<object> ProductFilter
+        private bool IsNumbers(Key key)
         {
-            get
-            {
-                return (searchText, obj) =>
-                    ((PurchaseProduct)obj).Id.ToLower().Contains(searchText.ToLower())
-                    || ((PurchaseProduct)obj).ChiName.ToLower().Contains(searchText.ToLower())
-                    || ((PurchaseProduct)obj).EngName.ToLower().Contains(searchText.ToLower());
-            }
-        }
+            if (key >= Key.D0 && key <= Key.D9) return true;
+            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
 
+            return false;
+        }
+        #endregion
+        
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ProductAutoCompleteCollection, StoreOrderData.Manufactory.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id);
 
             newItemDialog.ShowDialog();
 
@@ -302,43 +554,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem));
                 else
                     StoreOrderData.Products.Add(new ProductPurchaseOtc(newItemDialog.SelectedItem));
+
+                PreparePaging(PagingType.ADD);
             }
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-
-            if (textBox is null) return;
-
-            if (textBox.Text == String.Empty)
-                textBox.Text = "0";
-
-            if (!textBox.Name.Equals("FreeAmount"))
-                storeOrderData.CalculateTotalPrice();
-        }
-
-        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //SetChanged();
-            StoreOrderData.Products.RemoveAt(StoreOrderDetail.SelectedIndex);
-            StoreOrderData.CalculateTotalPrice();
-        }
-
-        private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is null) return;
-
-            var currentRowIndex = GetCurrentRowIndex(sender);
-
-            double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
-
-            ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
-
-            StoreOrderData.Products.Insert(currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
-
-            if (left != 0)
-                ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
         }
     }
 }

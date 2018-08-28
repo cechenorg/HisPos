@@ -201,22 +201,23 @@
         </ControlTemplate>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="230" />
-            <ColumnDefinition Width="935" />
-            <ColumnDefinition Width="200" />
-        </Grid.ColumnDefinitions>
-        <StackPanel
+    <Viewbox Name="MedBagManageViewBox" Stretch="Fill">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="689" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230" />
+                <ColumnDefinition Width="935" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+            <StackPanel
             Grid.Row="0"
             Grid.Column="0"
             Background="{StaticResource GridHalfTransBackground}">
-            <Button
+                <Button
                 Name="ImageSelector"
                 Width="130"
                 Height="34"
@@ -227,8 +228,8 @@
                 Content="選擇藥袋圖檔"
                 FontSize="16"
                 Foreground="White" />
-            <StackPanel x:Name="ModeStack" Orientation="Horizontal" Margin="0,20,0,0">
-                <RadioButton 
+                <StackPanel x:Name="ModeStack" Orientation="Horizontal" Margin="0,20,0,0">
+                    <RadioButton 
                     Name="SingleMode"
                     Content="一藥一袋"
                     Margin="20,0,0,0"
@@ -239,7 +240,7 @@
                     Tag ="0"
                     Checked="ModeRadioChecked"
                     />
-                <RadioButton 
+                    <RadioButton 
                     Name="MultiMode"
                     Content="多藥一袋" 
                     Margin="20,0,0,0"
@@ -250,13 +251,13 @@
                     
                     Tag ="1" Checked="ModeRadioChecked"
                     />
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-        <StackPanel
+            <StackPanel
             Grid.Row="1"
             Grid.Column="0"
             Orientation="Vertical">
-            <DataGrid
+                <DataGrid
                 Name="MedBags"
                 AutoGenerateColumns="False"
                 Height="850"
@@ -267,52 +268,52 @@
                 GridLinesVisibility="Horizontal"
                 HeadersVisibility="None"
                 ItemsSource="{Binding MedBagCollectionView}" SelectedCellsChanged="MedBags_SelectedCellsChanged">
-                <DataGrid.Resources>
-                    <Style TargetType="{x:Type ScrollBar}">
-                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="OverridesDefaultStyle" Value="true" />
-                        <Setter Property="Width" Value="100" />
-                        <Style.Triggers>
-                            <Trigger Property="Orientation" Value="Horizontal">
-                                <Setter Property="Width" Value="Auto" />
-                                <Setter Property="Height" Value="15" />
-                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                            </Trigger>
-                            <Trigger Property="Orientation" Value="Vertical">
-                                <Setter Property="Width" Value="15" />
-                                <Setter Property="Height" Value="Auto" />
-                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.Resources>
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Style.Triggers>
-                            <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource GridSelected}" />
-                            </Trigger>
-                        </Style.Triggers>
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="FontSize" Value="16" />
-                        <Setter Property="Height" Value="70" />
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="230">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid Height="70">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="30" />
-                                        <ColumnDefinition Width="210" />
-                                    </Grid.ColumnDefinitions>
-                                    <Image
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="OverridesDefaultStyle" Value="true" />
+                            <Setter Property="Width" Value="100" />
+                            <Style.Triggers>
+                                <Trigger Property="Orientation" Value="Horizontal">
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Height" Value="15" />
+                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                </Trigger>
+                                <Trigger Property="Orientation" Value="Vertical">
+                                    <Setter Property="Width" Value="15" />
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="FontSize" Value="16" />
+                            <Setter Property="Height" Value="70" />
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="230">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Height="70">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30" />
+                                            <ColumnDefinition Width="210" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image
                                         Name="Default"
                                         Width="18"
                                         Grid.Row="0"
@@ -320,7 +321,7 @@
                                         Grid.Column="0"
                                         Source="C:\HisPos\Images\Success.png"
                                         Visibility="{Binding Default,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}"/>
-                                    <TextBox
+                                        <TextBox
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Width="105"
@@ -332,14 +333,14 @@
                                         materialDesign:HintAssist.Hint="輸入藥袋名稱"
                                         materialDesign:HintAssist.HintOpacity="0.5"
                                         Text="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                                    <WrapPanel Grid.Row="1" Grid.Column="1" Height="40" HorizontalAlignment="Right" Margin="0,0,10,0">
-                                        <Label
+                                        <WrapPanel Grid.Row="1" Grid.Column="1" Height="40" HorizontalAlignment="Right" Margin="0,0,10,0">
+                                            <Label
                                             Content="尺寸:"
                                             FontFamily="Segoe UI Semi"
                                             VerticalContentAlignment="Bottom"
                                             FontSize="12"
                                             Foreground="Black" />
-                                        <TextBox
+                                            <TextBox
                                             Width="35"
                                             FontFamily="Segoe UI Semi"
                                             FontSize="12"
@@ -347,64 +348,64 @@
                                             VerticalContentAlignment="Bottom"
                                             BorderThickness="0"
                                             Text="{Binding BagWidth,UpdateSourceTrigger=PropertyChanged,Delay=400}" />
-                                        <Label
+                                            <Label
                                             Content=" x "
                                             FontFamily="Segoe UI Semibold"
                                             VerticalContentAlignment="Bottom"
                                             FontSize="12"
                                             Foreground="Black" />
-                                        <TextBox
+                                            <TextBox
                                             Width="35"
                                             FontSize="12"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Bottom"
                                             BorderThickness="0"
                                             Text="{Binding BagHeight,UpdateSourceTrigger=PropertyChanged,Delay=400}" />
-                                        <Label
+                                            <Label
                                             Content="(公分)"
                                             FontFamily="Segoe UI Semi"
                                             VerticalContentAlignment="Bottom"
                                             FontSize="14"
                                             Foreground="Black" />
-                                    </WrapPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </StackPanel>
-        <Grid
+                                        </WrapPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+            <Grid
             Name="ImgWrap"
             MaxWidth="935"
             Grid.Row="0"
             Grid.RowSpan="3"
             Grid.Column="1"
             HorizontalAlignment="Center">
-            <Image
+                <Image
                 Name="MedBagImg"
                 MaxWidth="935"
                 MaxHeight="850"
                 HorizontalAlignment="Left"
                 Source="{Binding SelectedMedBag.MedBagImage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Stretch="Uniform" />
-            <Canvas
+                <Canvas
                 Name="MedBagCanvas"
                 MaxHeight="850"
                 HorizontalAlignment="Left">
-                <local:RdlLocationControl
+                    <local:RdlLocationControl
                     x:Name="MedRangeLocationControl"
                     Width="100"
                     Height="100" />
-            </Canvas>
-        </Grid>
-        <ScrollViewer
+                </Canvas>
+            </Grid>
+            <ScrollViewer
             Grid.Row="0"
             Grid.RowSpan="2"
             Grid.Column="2"
             Width="200">
-            <StackPanel Name="CheckBoxStack"  Width="160" Orientation="Vertical">
-                <CheckBox
+                <StackPanel Name="CheckBoxStack"  Width="160" Orientation="Vertical">
+                    <CheckBox
                     Content="設為預設藥袋"
                     FontFamily="Segoe UI Semibold"
                     FontSize="18"
@@ -412,65 +413,80 @@
                     Margin = "0,15,0,15"
                     IsChecked="{Binding SelectedMedBag.Default,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                     Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                <Label
+                    <Label
                     Content="藥局"
                     Style="{StaticResource LocLabel}"/>
-                <CheckBox
+                    <CheckBox
                     Name="Pharmacy"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"
                     Content="藥局名稱" />
-                <CheckBox
+                    <CheckBox
                     Name="PharmacyId"
                     Content="機構代碼"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="PharmacyAddr"
                     Content="地址"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="PharmacyTel"
                     Content="電話"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="MedicalPerson"
                     Content="調劑藥師"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <Label
+                    <Label
                     Content="病患"
                     Style="{StaticResource LocLabel}"/>
-                <CheckBox
+                    <CheckBox
                     Name="PatientName"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"
                     Content="姓名" />
                 <CheckBox
+                    Name="PatientId"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"
+                    Content="身分證字號" />
+                <CheckBox
                     Name="PatientTel"
                     Content="聯絡電話"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="PatientGender"
                     Content="性別"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
                 <CheckBox
-                    Name="PatientBirth"
+                    Name="PatientBirthday"
                     Content="生日"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="MedRecNum"
                     Content="病歷號"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="AdjustDate"
                     Content="調劑日期"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="TreatmentDate"
+                    Content="就醫日期"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="MedicalNumber"
+                    Content="就醫序號"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
                 <CheckBox
@@ -478,127 +494,138 @@
                     Content="下次領藥日"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="VisitBackDate"
                     Content="參考回診日"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="ChronicSequence"
+                    Content="領藥次數"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
                 <Label
                     Content="醫療院所"
                     Style="{StaticResource LocLabel}"/>
                 <CheckBox
-                    Name="Institution"
+                    Name="ReleaseHospital"
                     Content="醫療院所名稱"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Division"
                     Content="科別"
+                    Style="{StaticResource LocCheckBox}"
+                    Click="NewLocationClick"/>
+                <CheckBox
+                    Name="DoctorId"
+                    Content="診治醫師"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
                 <Label
                     Content="藥品"
                     Style="{StaticResource LocLabel}"/>
-                <CheckBox
+                    <CheckBox
                     Name="MedicineList"
                     Content="多藥一袋藥品"
                     Style="{StaticResource LocCheckBox}"
                     Visibility="Collapsed"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="MedicineId"
                     Content="藥品健保碼"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="EngName"
                     Content="英文名稱" 
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="ChnName"
                     Content="中文名稱"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Ingredient"
                     Content="成分"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Form"
                     Content="劑型外觀"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Usage"
                     Content="用法"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Dosage"
                     Content="用量"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Total"
                     Content="領藥總量"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Days"
                     Content="給藥天數"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Indication"
                     Content="適應症" 
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="SideEffect"
                     Content="副作用" 
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-                <CheckBox
+                    <CheckBox
                     Name="Notes"
                     Content="注意事項"
                     Style="{StaticResource LocCheckBox}"
                     Click="NewLocationClick"/>
-            </StackPanel>
-        </ScrollViewer>
-        <DockPanel
+                </StackPanel>
+            </ScrollViewer>
+            <DockPanel
             Grid.Row="2"
             Grid.Column="0"
             Background="{StaticResource GridHalfTransBackground}">
-            <Button
+                <Button
                 Name="AddMedBag"
                 Width="70"
                 Margin="15,0,0,0"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
                 Content="新增" Click="NewMedBagButtonClick" />
-            <Button
+                <Button
                 Name="DeleteMedBag"
                 Width="70"
                 Margin="15,0,15,0"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
                 Content="刪除" Click="NewMedBagButtonClick" />
-        </DockPanel>
-        <StackPanel
+            </DockPanel>
+            <StackPanel
             Grid.Row="2"
             Grid.Column="2"
             Orientation="Horizontal">
-            <Button
+                <Button
                 Width="70"
                 Margin="20,0,20,0"
                 VerticalAlignment="Center"
                 Content="清空" Click="CleanButtonClick"/>
-            <Button
+                <Button
                 Width="70"
                 VerticalAlignment="Center"
                 Content="儲存" Click="MedBagSaveButtonClick" />
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+        </Grid>
+    </Viewbox>
 </UserControl>

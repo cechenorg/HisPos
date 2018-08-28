@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
@@ -23,9 +24,12 @@ using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductTypeManage;
 using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.Class.Employee;
+using His_Pos.Class.MedBag;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.H1_DECLARE.MedBagManage;
+using His_Pos.RDLC;
 using His_Pos.Struct.Product;
 using His_Pos.PrescriptionInquire;
 using System.Xml;
@@ -464,6 +468,31 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
+        public void GetMedBagData(MedBagManageView medBagManageView)
+        {
+            medBagManageView.MedBagManageViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得藥袋資料...");
+                medBagManageView.
+                    Dispatcher.Invoke((Action)(() =>
+                    {
+                        medBagManageView.MedBagCollection = MedBagDb.ObservableGetMedBagData();
+                        medBagManageView.MedBags.ItemsSource = medBagManageView.MedBagCollection;
+                    }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    medBagManageView.MedBagManageViewBox.IsEnabled = true;
+                    if (medBagManageView.MedBags.Items.Count > 0)
+                        medBagManageView.MedBags.SelectedIndex = 0;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
         public void GetMedicinesData(PrescriptionDec2View prescriptionDec2View)
         {
             prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
@@ -571,6 +600,28 @@ namespace His_Pos
             {
                 LoadingMessage.Content = message;
             }));
+        }
+
+        public void SetMedBagData(MedBagManageView medBagManageView)
+        {
+            medBagManageView.MedBagManageViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("藥袋資料儲存中...");
+                medBagManageView.
+                    Dispatcher.Invoke((Action)(medBagManageView.SaveMedBagData));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    medBagManageView.MedBagManageViewBox.IsEnabled = true;
+                    var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
+                    m.Show();
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
         }
     }
 }

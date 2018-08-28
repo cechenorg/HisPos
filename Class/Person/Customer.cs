@@ -64,8 +64,29 @@ namespace His_Pos.Class.Person
                 NotifyPropertyChanged(nameof(Gender));
             }
         }
-        public string GenderName { get; set; }
-        public IcCard IcCard { get; set; }
+
+        private string _genderName;
+        public string GenderName
+        {
+            get => _genderName;
+            set
+            {
+                _genderName = value;
+                NotifyPropertyChanged(nameof(Gender));
+            }
+        }
+
+        private IcCard _icCard;
+
+        public IcCard IcCard
+        {
+            get => _icCard;
+            set
+            {
+                _icCard = value;
+                NotifyPropertyChanged("IcCard");
+            }
+        }
         public ContactInfo ContactInfo { get; set; } = new ContactInfo();
         public object Clone()
         {

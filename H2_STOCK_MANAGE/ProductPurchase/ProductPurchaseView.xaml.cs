@@ -150,7 +150,7 @@ namespace His_Pos.ProductPurchase
 
         internal void SetControlProduct(Collection<PurchaseProduct> tempProduct)
         {
-            purchaseControl.ProductAutoCompleteCollection = tempProduct;
+            purchaseControl.ProductCollection = tempProduct;
         }
 
         private void SetCurrentControl()

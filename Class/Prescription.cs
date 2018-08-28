@@ -37,6 +37,7 @@ namespace His_Pos.Class
             Treatment = new Treatment(row);
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
         }
+
         public Prescription(XmlNode xml)
         {
             Customer = new Customer(xml);
@@ -59,7 +60,7 @@ namespace His_Pos.Class
         public string CheckPrescriptionData()
         {
             ErrorMessage = string.Empty;
-            Customer.IcCard.CheckIcNumber(Customer.IcCard.IcNumber);
+            //Customer.IcCard.CheckIcNumber(Customer.IcCard.IcNumber);
             Customer.CheckBirthDay(Customer.Birthday);
             CheckReleaseInstitution();
             CheckDivision();
@@ -106,7 +107,6 @@ namespace His_Pos.Class
         /*
          * 判斷調劑案件為藥是居家照護及協助戒菸計畫
          */
-
         private bool CheckHomeCareAndSmokingCessation()
         {
             if (string.IsNullOrEmpty(Treatment.AdjustCase.Id))
