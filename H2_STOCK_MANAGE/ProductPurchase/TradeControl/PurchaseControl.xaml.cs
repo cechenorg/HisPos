@@ -133,6 +133,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         private void InitPrincipal()
         {
             PrincipalCollection = ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
+
+            if (StoreOrderData.Principal.Id == "")
+                PrincipalCombo.SelectedIndex = 0;
         }
 
         #region ----- StoreOrderDetail Functions -----
@@ -170,7 +173,24 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
                     break;
             }
+
+            UpdatePricipalStackUi();
         }
+
+        private void UpdatePricipalStackUi()
+        {
+            if (StoreOrderData.Principal.Name.Equals("新增負責人"))
+            {
+                HasPrincipalStack.Visibility = Visibility.Collapsed;
+                DontHasPrincipalStack.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                HasPrincipalStack.Visibility = Visibility.Visible;
+                DontHasPrincipalStack.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
             if (sender is null) return;
@@ -559,14 +579,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        private void Principal_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-        }
-
-        private void ComboBox_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
+            UpdatePricipalStackUi();
         }
     }
 }

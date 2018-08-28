@@ -125,8 +125,16 @@ namespace His_Pos.Class.StoreOrder
             }
         }
 
-        public PurchasePrincipal Principal { get; set; }
-
+        private PurchasePrincipal principal;
+        public PurchasePrincipal Principal
+        {
+            get { return principal; }
+            set
+            {
+                principal = value;
+                NotifyPropertyChanged("Principal");
+            }
+        }
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
