@@ -16,6 +16,19 @@ namespace His_Pos.Class.Product
     {
         public DeclareMedicine()
         {
+            HcPrice = "";
+            Ingredient = "";
+            MedicalCategory = new Medicate();
+            Cost = 0;
+            Price = "";
+            TotalPrice = 0;
+            Amount = 0;
+            CountStatus = "";
+            FocusColumn = "";
+            Usage = new Usage();
+            days = "";
+            Position = "";
+            source = "";
         }
 
         public DeclareMedicine(DataRow dataRow,string type) : base(dataRow)
@@ -113,7 +126,7 @@ namespace His_Pos.Class.Product
         public string FocusColumn { get; set; }
         public Usage Usage { get; set; }
 
-        public string UsageName
+    public string UsageName
         {
             get
             {
@@ -207,6 +220,7 @@ namespace His_Pos.Class.Product
 
         private void CalculateAmount()
         {
+            if(MedicalCategory.Form.Equals(""))
             foreach (var usage in UsageDb.GetUsages())
             {
                 Regex reg = new Regex(usage.Reg);

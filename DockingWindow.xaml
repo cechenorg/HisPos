@@ -4,15 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos"
-        xmlns:prescriptionDec="clr-namespace:His_Pos.PrescriptionDec"
         xmlns:prescriptionInquire="clr-namespace:His_Pos.PrescriptionInquire"
         xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         mc:Ignorable="d"
         Title="DockingWindow" Height="300" Width="300">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type prescriptionDec:PrescriptionDec}">
-            <prescriptionDec:PrescriptionDecView />
-        </DataTemplate>
+ 
         <DataTemplate DataType="{x:Type prescriptionInquire:PrescriptionInquire}">
             <prescriptionInquire:PrescriptionInquireView />
         </DataTemplate>

@@ -38,7 +38,7 @@ namespace His_Pos.Class
             MedicalNumber = xml.SelectSingleNode("d7") == null ? null : xml.SelectSingleNode("d7").InnerText;
         }
 
-        public IcCard(string icNumber, IcMarks icMarks, string sendDate, string validityPeriod, int availableTimes, IcCardPay icCardPay, IcCardPrediction icCardPrediction, Pregnant pregnant, Vaccination vaccination, string medicalNumber)
+        public IcCard(string icNumber, IcMarks icMarks, string sendDate, string validityPeriod, int availableTimes, IcCardPay icCardPay, IcCardPrediction icCardPrediction, Pregnant pregnant, Vaccination vaccination)
         {
             IcNumber = icNumber;
             IcMarks = icMarks;
@@ -49,7 +49,6 @@ namespace His_Pos.Class
             IcCardPrediction = icCardPrediction;
             Pregnant = pregnant;
             Vaccination = vaccination;
-            MedicalNumber = medicalNumber;
         }
 
         private string icNumber;

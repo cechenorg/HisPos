@@ -12,7 +12,14 @@ namespace His_Pos.Class
     {
         public Usage()
         {
+            Id = "";
             Name = "";
+            QuickName = "";
+            PrintName = "";
+            Reg = "";
+            Days = "";
+            Times = "";
+            PreDefault = true;
         }
         private Usage(Usage usage)
         {
@@ -43,7 +50,6 @@ namespace His_Pos.Class
             PrintIcons[3] = Boolean.Parse( dataRow["HISFREPRI_SLEEP"].ToString());
             PrintIcons[4] = Boolean.Parse( dataRow["HISFREPRI_BEFOREMEAL"].ToString());
             PrintIcons[5] = Boolean.Parse( dataRow["HISFREPRI_AFTERMEAL"].ToString());
-
         }
         public string PrintName { get; set; }
         public string QuickName { get; set; }//快速輸入用代號

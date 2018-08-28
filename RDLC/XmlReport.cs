@@ -31,7 +31,7 @@ namespace His_Pos.RDLC
         [XmlElement(ElementName = "TextRuns", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public TextRuns TextRuns { get; set; }
         [XmlElement(ElementName = "Style", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
-        public string Style { get; set; }
+        public Style Style { get; set; }
     }
 
     [XmlRoot(ElementName = "Paragraphs", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
@@ -70,6 +70,8 @@ namespace His_Pos.RDLC
         public string PaddingBottom { get; set; }
         [XmlElement(ElementName = "BackgroundImage", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
         public BackgroundImage BackgroundImage { get; set; }
+        [XmlElement(ElementName = "TextAlign", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
+        public string TextAlign { get; set; }
     }
 
     [XmlRoot(ElementName = "Textbox", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
@@ -293,6 +295,8 @@ namespace His_Pos.RDLC
         public string AutoRefresh { get; set; }
         [XmlElement(ElementName = "ReportUnitType", Namespace = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner")]
         public string ReportUnitType { get; set; }
+        [XmlElement(ElementName = "ConsumeContainerWhitespace", Namespace = "http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition")]
+        public string ConsumeContainerWhitespace { get; set; }
         [XmlElement(ElementName = "ReportID", Namespace = "http://schemas.microsoft.com/SQLServer/reporting/reportdesigner")]
         public string ReportID { get; set; }
         [XmlAttribute(AttributeName = "xmlns")]

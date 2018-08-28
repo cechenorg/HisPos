@@ -18,6 +18,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
+using His_Pos.Class.MedBag;
+using His_Pos.RDLC;
+using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -195,12 +198,25 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else
             {
-                c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
+                c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改?", MessageType.WARNING);
                 //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
                 //var declareData = new DeclareData(Prescription);
                 //var declareDb = new DeclareDb();
                 //declareDb.InsertDb(declareData);
                 c.ShowDialog();
+            }
+            //PrintMedBag();
+        }
+
+        private void PrintMedBag()
+        {
+            var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
+            var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
+            //File.WriteAllText(ReportService.ReportPath, string.Empty);
+            //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
+            for (int i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            {
+                ReportService.CreatePdf(defaultMedBag,i);
             }
         }
 
@@ -278,6 +294,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 if (CurrentPrescription.Medicines.Count == currentRow)
                 {
+                    var m = CurrentPrescription.Medicines[currentRow - 1];
+                    declareMedicine.UsageName = m.UsageName;
+                    declareMedicine.Dosage = m.Dosage;
+                    declareMedicine.Days = m.Days;
                     CurrentPrescription.Medicines.Add(declareMedicine);
                     medicineCodeAuto.Text = string.Empty;
                 }
@@ -293,7 +313,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public void ClearMedicine(DeclareMedicine med)
+        private void ClearMedicine(DeclareMedicine med)
         {
             med.PaySelf = false;
             med.Cost = 0;
@@ -422,19 +442,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void NotifyPropertyChanged(string propertyName)
+        private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         private void MedicineTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var textBox = sender as TextBox;
-            if (textBox != null)
-            {
-                textBox.SelectionStart = 0;
-                textBox.SelectionLength = textBox.Text.Length;
-            }
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectionStart = 0;
+            textBox.SelectionLength = textBox.Text.Length;
         }
 
         private void CountMedicinesCost()
@@ -466,7 +483,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         /*
         * 藥費部分負擔
         */
-
         private int CountCopaymentCost(double medicinesHcCost)
         {
             const int free = 0;
@@ -496,16 +512,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var currentRow = GetCurrentRowIndex(sender);
             if (sender is TextBox t && !string.IsNullOrEmpty(t.Text))
             {
-                CurrentPrescription.Medicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
-                if (CurrentPrescription.Medicines[currentRow].Usage != null)
-                    t.Text = CurrentPrescription.Medicines[currentRow].Usage.Name;
+                if (Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text)) != null)
+                {
+                    CurrentPrescription.Medicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
+                    if (CurrentPrescription.Medicines[currentRow].Usage != null)
+                        t.Text = CurrentPrescription.Medicines[currentRow].Usage.Name;
+                }
             }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             LoadPatentDataFromIcCard();
-
         }
 
         private void LoadPatentDataFromIcCard()
@@ -524,7 +542,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentPrescription.Customer.Birthday = "037/10/01";
             CurrentPrescription.Customer.IcNumber = "S18824769A";
             CheckPatientGender();
-            CurrentPrescription.Customer.IcCard = new IcCard("900000000720", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination(), "");
+            CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
             CurrentPrescription.Customer.Id = "1";
             PatientName.Text = CurrentPrescription.Customer.Name;
             PatientId.Text = CurrentPrescription.Customer.IcNumber;
@@ -532,6 +550,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
             CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
             CusHistoryMaster.SelectedIndex = 0;
+            if (string.IsNullOrEmpty(CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                !string.IsNullOrEmpty(MedicalNumber.Text))
+                CurrentPrescription.Customer.IcCard.MedicalNumber = MedicalNumber.Text;
         }
 
         private void CheckPatientGender()

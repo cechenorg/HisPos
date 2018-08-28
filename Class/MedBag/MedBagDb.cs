@@ -24,7 +24,20 @@ namespace His_Pos.Class.MedBag
             }
             return medBags;
         }
-        
+
+        internal static MedBag GetDefaultMedBagData(MedBagMode medBagMode)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("MEDBAG_MODE", medBagMode)
+            };
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[GetDefaultMedBag]",parameters);
+            var defaultMedBag = new MedBag(table.Rows[0]);
+            defaultMedBag.MedLocations = MedBagLocationDb.ObservableGetLocationData(defaultMedBag.Id);
+            return defaultMedBag;
+        }
+
         internal static void SaveMedBagData(MedBag medBag)
         {
             var locationDataTable = MedBagLocationDb.AddLocationData(medBag);

@@ -132,6 +132,9 @@
     <Reference Include="ControlzEx, Version=3.0.2.4, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\ControlzEx.3.0.2.4\lib\net45\ControlzEx.dll</HintPath>
     </Reference>
+    <Reference Include="DotNet Common Library, Version=4.5.0.5, Culture=neutral, PublicKeyToken=fa81e3c46e3914cc, processorArchitecture=MSIL">
+      <HintPath>packages\DotNetCommonLibrary.4.5.0.5\lib\net40-Client\DotNet Common Library.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -187,11 +190,14 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.2.7.1\lib\net46\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -242,7 +248,9 @@
     <Compile Include="Class\CustomerHistory\CustomerHistoryPos.cs" />
     <Compile Include="Class\DeclareTrade.cs" />
     <Compile Include="Class\DeclareTradeDb.cs" />
+    <Compile Include="Class\Declare\DeclareDataXml.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
+    <Compile Include="Class\Declare\DeclareTDataXml.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
@@ -508,11 +516,6 @@
     <Compile Include="MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec\PrescriptionDec.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDec\PrescriptionDecView.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDec\PrescriptionDecView.xaml.cs">
-      <DependentUpon>PrescriptionDecView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquire.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml.cs">
@@ -545,6 +548,7 @@
     <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
     <Compile Include="Resource\MenuListItem.xaml.cs">
       <DependentUpon>MenuListItem.xaml</DependentUpon>
@@ -771,10 +775,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MessageWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec\PrescriptionDecView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
