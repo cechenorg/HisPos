@@ -85,8 +85,6 @@ namespace His_Pos.ProductPurchase
         }
 
         private OrderType OrderTypeFilterCondition = OrderType.ALL;
-        private bool IsFirst = true;
-        private bool IsChanged = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -121,7 +119,7 @@ namespace His_Pos.ProductPurchase
 
         void window_Closing(object sender, CancelEventArgs e)
         {
-            if (StoreOrderData != null && IsChanged)
+            if (StoreOrderData != null && StoreOrderData.IsDataChanged)
             {
                 SaveOrder();
             }
@@ -129,7 +127,7 @@ namespace His_Pos.ProductPurchase
 
         private void ShowOrderDetail(object sender, SelectionChangedEventArgs e)
         {
-            if (StoreOrderData != null && IsChanged)
+            if (StoreOrderData != null && StoreOrderData.IsDataChanged)
             {
                  SaveOrder();
             }
@@ -189,14 +187,13 @@ namespace His_Pos.ProductPurchase
             };
 
             backgroundWorker.RunWorkerAsync();
+
+            StoreOrderData.IsDataChanged = false;
         }
 
         private void ClearOrderDetailData()
         {
-            IsFirst = true;
             StoreOrderData = null;
-            IsChanged = false;
-            IsFirst = false;
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)
@@ -258,23 +255,13 @@ namespace His_Pos.ProductPurchase
                 return true;
             return false;
         }
-
-        //private void SetChanged() {
-        //    if (IsFirst == true) return;
-        //    IsChanged = true;
-        //}
-
-        //private void SetIsChanged(object sender, EventArgs e)
-        //{
-        //    SetChanged();
-        //}
+        
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
             if (!CheckNoEmptyData()) return;
             StoreOrderData.Type = OrderType.DONE;
             SaveOrder();
-            IsChanged = false;
             storeOrderCollection.Remove(StoreOrderData);
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;

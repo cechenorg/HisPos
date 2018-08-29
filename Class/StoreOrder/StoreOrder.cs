@@ -54,11 +54,15 @@ namespace His_Pos.Class.StoreOrder
             RecEmp = row["REC_EMP"].ToString();
             Manufactory = new Manufactory.Manufactory(row);
             Principal = new PurchasePrincipal(row);
+
+            Warehouse = new WareHouse(row);
         }
 
         private StoreOrder()
         {
         }
+
+        public bool IsDataChanged { get; set; } = false;
 
         public BitmapImage typeIcon;
 
@@ -135,6 +139,8 @@ namespace His_Pos.Class.StoreOrder
                 NotifyPropertyChanged("Principal");
             }
         }
+
+        public WareHouse Warehouse { get; set; }
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -202,6 +208,8 @@ namespace His_Pos.Class.StoreOrder
             storeOrder.RecEmp = RecEmp;
             storeOrder.Manufactory = Manufactory;
             storeOrder.Products = new ObservableCollection<AbstractClass.Product>();
+            storeOrder.Principal = Principal;
+            storeOrder.Warehouse = Warehouse;
 
             foreach (AbstractClass.Product product in Products)
             {

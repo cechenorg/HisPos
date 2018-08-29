@@ -234,6 +234,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void StoreOrderDetail_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            StoreOrderData.IsDataChanged = true;
+
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
@@ -311,6 +313,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 StoreOrderData.Products[rowIndex] = newProduct;
             }
+
+            StoreOrderData.IsDataChanged = true;
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -323,15 +327,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!textBox.Name.Equals("FreeAmount"))
                 storeOrderData.CalculateTotalPrice();
+
+            StoreOrderData.IsDataChanged = true;
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //SetChanged();
             StoreOrderData.Products.Remove((Product)StoreOrderDetail.SelectedItem);
             StoreOrderData.CalculateTotalPrice();
 
             PreparePaging(PagingType.DEL);
+
+            StoreOrderData.IsDataChanged = true;
         }
 
         private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
@@ -348,6 +355,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (left != 0)
                 ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+
+            StoreOrderData.IsDataChanged = true;
         }
 
         private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -582,6 +591,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         private void Principal_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdatePricipalStackUi();
+
+            StoreOrderData.IsDataChanged = true;
         }
     }
 }
