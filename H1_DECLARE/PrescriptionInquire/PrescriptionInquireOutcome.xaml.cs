@@ -608,5 +608,7 @@ namespace His_Pos.PrescriptionInquire
             textBox.SelectionStart = 0;
             textBox.SelectionLength = textBox.Text.Length;
         }
+
+      
     }
 }

@@ -39,6 +39,16 @@ namespace His_Pos.InventoryManagement
     /// </summary>
     public partial class OtcDetail : UserControl, INotifyPropertyChanged
     {
+        public class WareStcok {
+            public WareStcok(DataRow row ) {
+                warId = row["PROWAR_ID"].ToString();
+                warName = row["PROWAR_NAME"].ToString();
+                warStock = row["PRO_INVENTORY"].ToString();
+            }
+           public string warId { get; set; }
+           public string warName { get; set; }
+           public string warStock { get; set; }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -69,10 +79,21 @@ namespace His_Pos.InventoryManagement
             }
 
         }
+        private ObservableCollection<WareStcok> wareStcokCollection;
+        public ObservableCollection<WareStcok> WareStcokCollection
+        {
+            get { return wareStcokCollection; }
+            set
+            {
+                wareStcokCollection = value;
+                NotifyPropertyChanged("WareStcokCollection");
+            }
+
+        }
         public InventoryOtc InventoryOtc;
         private bool IsChanged = false;
         private bool IsFirst = true;
-
+        public static OtcDetail Instance;
         public OtcDetail()
         {
             InitializeComponent();
@@ -85,6 +106,7 @@ namespace His_Pos.InventoryManagement
 
             IsFirst = false;
             DataContext = this;
+            Instance = this;
         }
         
 
@@ -104,7 +126,6 @@ namespace His_Pos.InventoryManagement
             SalesCollection.Add(GetSalesLineSeries());
             AddMonths();
         }
-
         private LineSeries GetSalesLineSeries()
         {
             ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(InventoryOtc.Id);
@@ -169,6 +190,8 @@ namespace His_Pos.InventoryManagement
             StockTakingOverviewCollection = ProductDb.GetProductStockTakingDate(InventoryOtc.Id);
             if (StockTakingOverviewCollection.Count != 0)
                 LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
+
+            WareStcokCollection = WareHouseDb.GetWareStockById(InventoryOtc.Id);
 
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
             UpdateChart();
@@ -343,6 +366,12 @@ namespace His_Pos.InventoryManagement
         {
             DemolitionWindow demolitionWindow = new DemolitionWindow();
             demolitionWindow.ShowDialog();
+        }
+
+        private void OtcWareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+            OtcStock.Items.Filter = product => ((OTCStockOverview)product).warId == ((WareStcok)(sender as DataGrid).SelectedItem).warId;
         }
     }
 }

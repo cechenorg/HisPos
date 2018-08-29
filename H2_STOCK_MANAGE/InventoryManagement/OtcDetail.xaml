@@ -271,7 +271,7 @@
                 <Grid Grid.Column="0" >
                     
                     <DataGrid Name="OtcWareHouse" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False"  Grid.Row="1" Margin="10,5,0,5">
+                        SelectionChanged="OtcWareHouse_SelectionChanged" ItemsSource="{Binding WareStcokCollection,UpdateSourceTrigger=PropertyChanged}"  CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False"  Grid.Row="1" Margin="10,5,0,5">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -306,7 +306,7 @@
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="庫名" Width="120" Binding="{Binding ValidDate}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Header="庫名" Width="120" Binding="{Binding warName}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -314,7 +314,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="庫存量" Width="80" Binding="{Binding Price}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn Header="庫存量" Width="80" Binding="{Binding warStock}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>

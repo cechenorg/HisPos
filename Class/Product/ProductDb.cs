@@ -161,7 +161,7 @@ namespace His_Pos.Class.Product
 
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new OTCStockOverview(row["VALIDDATE"].ToString(), row["PRICE"].ToString(), row["STOCK"].ToString()));
+                collection.Add(new OTCStockOverview(row));
             }
 
             return collection;
