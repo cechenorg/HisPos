@@ -251,6 +251,7 @@
     <Compile Include="Class\Declare\DeclareDataXml.cs" />
     <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\Declare\DeclareFile.cs" />
+    <Compile Include="Class\Declare\DeclareFileDB.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />

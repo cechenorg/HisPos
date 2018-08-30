@@ -8,14 +8,15 @@
              d:DesignHeight="839"
              d:DesignWidth="1365"
              mc:Ignorable="d">
-    <Grid>
+    <Viewbox Name="ExportViewBox" Stretch="UniformToFill">
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="420"/>
-            <RowDefinition/>
+            <RowDefinition Height="419"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="665"/>
         </Grid.ColumnDefinitions>
         <DataGrid
             Grid.Row="0" Grid.Column="0" Name="DeclareFileList" Width="660" Height="400" MaxHeight="400" CanUserAddRows="False" AutoGenerateColumns="False"
@@ -54,4 +55,5 @@
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
+    </Viewbox>
 </UserControl>

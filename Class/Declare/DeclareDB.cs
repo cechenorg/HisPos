@@ -12,6 +12,7 @@ using System.Data.SqlTypes;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -37,16 +38,50 @@ namespace His_Pos.Class.Declare
             {
                 var dataTradeTable = SetDataTradeTable();
                 AddTradeData(declareTrade, dataTradeTable);
+                var xmlStr = SerializeObject<Ddata>(CreatDeclareDataXmlObject(declareData));
                 parameters.Add(new SqlParameter("DECLARETRADE", dataTradeTable));
-
                 parameters.Add(new SqlParameter("DETAIL", pDataTable));
                 parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
                 {
-                    Value = new SqlXml(new XmlTextReader(SerializeObject<Ddata>(CreatDeclareDataXmlObject(declareData)),
-                        XmlNodeType.Document, null))
-                });
+                    Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
+            });
                 CheckInsertDbTypeUpdate(parameters);
+                UpdateDeclareFile(xmlStr,declareData.Prescription.Treatment.AdjustDate);
             }
+        }
+        private void UpdateDeclareFile(string xmlStr,DateTime declareDate)
+        {
+            var p = new Pharmacy();
+            p.Ddata = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).OrderBy(d => d.Dbody.D18).ToList();
+            Tdata tdata = new Tdata();
+            tdata.T1 = "30";
+            tdata.T2 = MainWindow.CurrentPharmacy.Id;
+            tdata.T3 = (declareDate.Year - 1911) + declareDate.Month.ToString().PadLeft(2,'0');
+            tdata.T4 = "2";
+            tdata.T5 = "1";
+            tdata.T6 = (DateTime.Now.Year - 1911) + DateTime.Now.Month.ToString().PadLeft(2, '0');
+            tdata.T7 = CountNormalCase(p.Ddata,1);
+
+            var serializer = new XmlSerializer(typeof(Ddata));
+            var memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlStr));
+            var ddata = (Ddata)serializer.Deserialize(memStream);
+        }
+
+        private string CountNormalCase(List<Ddata> listDdata,int CaseType)
+        {
+            IEnumerable<bool> normalCaseDdata;
+            if (CaseType == 1)
+            {
+                normalCaseDdata = listDdata.Select(d =>
+                    d.Dhead.D1.Equals("1") || d.Dhead.D1.Equals("3") || d.Dhead.D1.Equals("4") || d.Dhead.D1.Equals("5") ||
+                    d.Dhead.D1.Equals("D"));
+            }
+            else
+            {
+                normalCaseDdata = listDdata.Select(d => d.Dhead.D1.Equals("2") );
+            }
+            var caseDdata = normalCaseDdata.ToList();
+            return caseDdata.Any() ? caseDdata.Count().ToString() : "0";
         }
 
         public void UpdateDeclareData(DeclareData declareData, DeclareTrade declareTrade = null)

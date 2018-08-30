@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -57,6 +59,22 @@ namespace His_Pos.Class.Declare
                 declareDetails.Add(new DeclareDetail(row));
             }
             return declareDetails;
+        }
+
+        public static List<Ddata> GetPrescriptionXmlByDate(DateTime dateTime)
+        {
+            var ddatas = new List<Ddata>();
+            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter> {new SqlParameter("DEC_TIME", dateTime)};
+            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
+            foreach (DataRow row in table.Rows)
+            {
+                var serializer = new XmlSerializer(typeof(Ddata));
+                var memStream = new MemoryStream(Encoding.UTF8.GetBytes(row.ToString()));
+                var d = (Ddata)serializer.Deserialize(memStream);
+                ddatas.Add(d);
+            }
+            return ddatas;
         }
     }
 }

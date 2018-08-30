@@ -26,6 +26,14 @@ namespace His_Pos.H6_DECLAREFILE
         public ExportView()
         {
             InitializeComponent();
+            InitializeDeclareFiles();
+        }
+
+        private void InitializeDeclareFiles()
+        {
+            var load = new LoadingWindow();
+            //load.GetMedBagData(this);
+            load.Show();
         }
     }
 }

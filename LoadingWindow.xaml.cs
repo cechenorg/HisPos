@@ -36,6 +36,7 @@ using System.Xml;
 using His_Pos.Class.Declare;
 using System.Threading;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
+using His_Pos.H6_DECLAREFILE;
 
 namespace His_Pos
 {
@@ -493,6 +494,32 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
+        public void GetDeclareFileData(ExportView exportView)
+        {
+            exportView.ExportViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("申報資料處理中...");
+                exportView.
+                    Dispatcher.Invoke((Action)(() =>
+                    {
+                        exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
+                        exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
+                    }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    exportView.ExportViewBox.IsEnabled = true;
+                    if (exportView.DeclareFileList.Items.Count > 0)
+                        exportView.DeclareFileList.SelectedIndex = 0;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
         public void GetMedicinesData(PrescriptionDec2View prescriptionDec2View)
         {
             prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
