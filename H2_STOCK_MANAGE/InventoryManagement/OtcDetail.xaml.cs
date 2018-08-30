@@ -27,6 +27,7 @@ using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.ProductPurchaseRecord;
 using His_Pos.StockTaking;
+using His_Pos.Struct.Product;
 using His_Pos.ViewModel;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
@@ -192,7 +193,6 @@ namespace His_Pos.InventoryManagement
                 LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
 
             WareStcokCollection = WareHouseDb.GetWareStockById(InventoryOtc.Id);
-
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
             UpdateChart();
             InitVariables();
@@ -359,7 +359,8 @@ namespace His_Pos.InventoryManagement
 
         private void ButtonMergeStock_Click(object sender, RoutedEventArgs e)
         {
-
+            MergeStockWindow mergeStockWindow = new MergeStockWindow();
+            mergeStockWindow.ShowDialog();
         }
 
         private void ButtonDemolition_Click(object sender, RoutedEventArgs e)

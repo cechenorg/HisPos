@@ -29,7 +29,7 @@
                 <Label Content="拆出後剩餘庫存" VerticalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" Margin="2" />
                 <Label Content="{Binding AterDemolition,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" Margin="2" />
                 <Rectangle Width="80"/>
-                <Button Name="ButtonSubnmmit" Content="拆庫" Width="100" Margin="10"/>
+                <Button Name="ButtonSubnmmit" Content="拆庫" Width="100" Margin="10" Click="ButtonSubnmmit_Click"/>
             </StackPanel>
         </Grid>
     </Viewbox>

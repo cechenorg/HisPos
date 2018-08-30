@@ -378,6 +378,9 @@
     <Compile Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml.cs">
       <DependentUpon>DemolitionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
+      <DependentUpon>MergeStockWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
       <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
     </Compile>
@@ -613,6 +616,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

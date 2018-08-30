@@ -71,5 +71,10 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
             if( String.IsNullOrEmpty((sender as TextBox).Text) ) return;
             AterDemolition = (Convert.ToInt32(OtcDetail.Instance.InventoryOtc.Stock.Inventory) - Convert.ToInt32((sender as TextBox).Text)).ToString();
         }
+
+        private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
+        {
+            ProductDb.DemolitionProduct();
+        }
     }
 }
