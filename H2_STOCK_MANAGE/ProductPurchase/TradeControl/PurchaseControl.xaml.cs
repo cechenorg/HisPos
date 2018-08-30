@@ -99,7 +99,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         {
             INIT,
             DEL,
-            ADD
+            ADD,
+            SPLIT
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -357,6 +358,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
 
             StoreOrderData.IsDataChanged = true;
+            
+            PreparePaging(PagingType.SPLIT);
         }
 
         private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -431,6 +434,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     break;
                 case PagingType.ADD:
                     CurrentPage = TotalPage;
+                    break;
+                case PagingType.SPLIT:
                     break;
             }
 
