@@ -470,6 +470,10 @@
     <Compile Include="H5_ATTEND\ClockIn\ClockInView.xaml.cs">
       <DependentUpon>ClockInView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H6_DECLAREFILE\ExportView.xaml.cs">
+      <DependentUpon>ExportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H6_DECLAREFILE\Export\Export.cs" />
     <Compile Include="HisApi\HisApiFunction.cs" />
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
@@ -727,6 +731,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H6_DECLAREFILE\ExportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="IconLabel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -951,6 +959,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\LOGO_HISPOS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\DeclareFile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

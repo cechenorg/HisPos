@@ -160,6 +160,24 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 申報檔作業 的當地語系化字串。
+        /// </summary>
+        internal static string DeclareFile {
+            get {
+                return ResourceManager.GetString("DeclareFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 匯出申報檔 的當地語系化字串。
+        /// </summary>
+        internal static string DeclareFileExport {
+            get {
+                return ResourceManager.GetString("DeclareFileExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 ..\Images\SubmitProgress.png 的當地語系化字串。
         /// </summary>
         internal static string declareNone {
@@ -381,15 +399,6 @@ namespace His_Pos.Properties {
         internal static string PrescriptionDateNull {
             get {
                 return ResourceManager.GetString("PrescriptionDateNull", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 測試啦 的當地語系化字串。
-        /// </summary>
-        internal static string PrescriptionDec2 {
-            get {
-                return ResourceManager.GetString("PrescriptionDec2", resourceCulture);
             }
         }
         

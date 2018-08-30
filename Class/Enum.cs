@@ -38,7 +38,8 @@ namespace His_Pos.Class
         藥局管理 = 16,
         藥袋管理 = 17,
         顧客管理 = 18,
-        首頁 = 19
+        首頁 = 19,
+        匯出申報檔 = 20
     }
 
     public enum StoreOrderProductType

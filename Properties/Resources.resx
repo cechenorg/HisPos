@@ -243,9 +243,6 @@
   <data name="MedFrequencyManage" xml:space="preserve">
     <value>藥品頻率管理</value>
   </data>
-  <data name="PrescriptionDec2" xml:space="preserve">
-    <value>測試啦</value>
-  </data>
   <data name="AuthenticationManage" xml:space="preserve">
     <value>審核管理</value>
   </data>
@@ -254,8 +251,14 @@
   </data>
   <data name="ImageSelectorsFileTpyes" xml:space="preserve">
     <value>Image files (*.jpg;*.png)|*.jpg|All Files (*.*)|*.*</value>
-    </data>
+  </data>
   <data name="CustomerManage" xml:space="preserve">
     <value>顧客管理</value>
+  </data>
+  <data name="DeclareFile" xml:space="preserve">
+    <value>申報檔作業</value>
+  </data>
+  <data name="DeclareFileExport" xml:space="preserve">
+    <value>匯出申報檔</value>
   </data>
 </root>

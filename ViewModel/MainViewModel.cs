@@ -23,6 +23,7 @@ using His_Pos.H4_BASIC_MANAGE.MedFrequencyManage;
 using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
+using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.IndexView;
 
 namespace His_Pos.ViewModel
@@ -144,9 +145,6 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.處方登錄):
                     break;
 
-                case nameof(FeatureItem.測試啦):
-                    break;
-
                 case nameof(FeatureItem.處方查詢):
                     break;
 
@@ -199,6 +197,8 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.藥袋管理):
                     break;
                 case nameof(FeatureItem.藥局管理):
+                    break;
+                case nameof(FeatureItem.匯出申報檔):
                     break;
                 default:
                     return;
@@ -296,7 +296,9 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
-
+                case nameof(FeatureItem.匯出申報檔):
+                    newTab = new Export() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
                 default:
                     return;
             }

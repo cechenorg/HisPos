@@ -65,6 +65,9 @@ namespace His_Pos
 
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", Properties.Resources.Attend,
                             new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
+
+            HisFeatures.Add(new Feature(@"..\Images\DeclareFile.png", Properties.Resources.DeclareFile,
+                new string[] { Properties.Resources.DeclareFileExport }));
         }
         
         private void InitializeMenu()
