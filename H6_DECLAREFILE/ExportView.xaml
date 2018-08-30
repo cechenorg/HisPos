@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <DataGrid
             Grid.Row="0" Grid.Column="0" Name="DeclareFileList" Width="660" Height="400" MaxHeight="400" CanUserAddRows="False" AutoGenerateColumns="False"
-            materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Background="{StaticResource LightForeGround}">
+            materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Background="{StaticResource GridBackGround}">
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Header="月份"/>
@@ -34,7 +34,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid
-            Grid.Row="0" Grid.Column="1" Name="PrescriptionList"  Width="600" Height="400" MaxHeight="400"
+            Grid.Row="0" Grid.Column="1" Name="PrescriptionList"  Width="600" Height="400" MaxHeight="400" Background="{StaticResource GridBackGround}"
             CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="0,10,83,10">
             <DataGrid.Columns>
                 <DataGridCheckBoxColumn

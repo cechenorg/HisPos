@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.H6_DECLAREFILE
 {
@@ -20,6 +22,7 @@ namespace His_Pos.H6_DECLAREFILE
     /// </summary>
     public partial class ExportView : UserControl
     {
+        public ObservableCollection<DeclareFile> DeclareFiles { get; set; }
         public ExportView()
         {
             InitializeComponent();
