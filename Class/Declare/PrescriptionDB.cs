@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
@@ -69,12 +70,29 @@ namespace His_Pos.Class.Declare
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
             foreach (DataRow row in table.Rows)
             {
-                var serializer = new XmlSerializer(typeof(Ddata));
-                var memStream = new MemoryStream(Encoding.UTF8.GetBytes(row.ToString()));
-                var d = (Ddata)serializer.Deserialize(memStream);
+                var d = Deserialize<Ddata>(row["HISDECMAS_DETXML"].ToString());
                 ddatas.Add(d);
             }
             return ddatas;
+        }
+
+        public static T Deserialize<T>(string s)
+        {
+            XmlDocument xdoc = new XmlDocument();
+
+            try
+            {
+                xdoc.LoadXml(s);
+                XmlNodeReader reader = new XmlNodeReader(xdoc.DocumentElement);
+                XmlSerializer ser = new XmlSerializer(typeof(T));
+                object obj = ser.Deserialize(reader);
+
+                return (T)obj;
+            }
+            catch
+            {
+                return default(T);
+            }
         }
     }
 }

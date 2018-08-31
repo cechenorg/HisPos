@@ -261,4 +261,7 @@
   <data name="DeclareFileExport" xml:space="preserve">
     <value>匯出申報檔</value>
   </data>
+  <data name="XmlDeclare" xml:space="preserve">
+    <value>&lt;? xml version = "1.0" encoding = "Big5" ?&gt;</value>
+  </data>
 </root>

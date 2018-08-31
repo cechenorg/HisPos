@@ -45,43 +45,104 @@ namespace His_Pos.Class.Declare
                 {
                     Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
             });
+                parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG",""));
                 CheckInsertDbTypeUpdate(parameters);
-                UpdateDeclareFile(xmlStr,declareData.Prescription.Treatment.AdjustDate);
             }
         }
-        private void UpdateDeclareFile(string xmlStr,DateTime declareDate)
+        public void UpdateDeclareFile(DateTime declareDate)
         {
-            var p = new Pharmacy();
-            p.Ddata = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).OrderBy(d => d.Dbody.D18).ToList();
-            Tdata tdata = new Tdata();
-            tdata.T1 = "30";
-            tdata.T2 = MainWindow.CurrentPharmacy.Id;
-            tdata.T3 = (declareDate.Year - 1911) + declareDate.Month.ToString().PadLeft(2,'0');
-            tdata.T4 = "2";
-            tdata.T5 = "1";
-            tdata.T6 = (DateTime.Now.Year - 1911) + DateTime.Now.Month.ToString().PadLeft(2, '0');
-            tdata.T7 = CountNormalCase(p.Ddata,1);
-
-            var serializer = new XmlSerializer(typeof(Ddata));
-            var memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlStr));
-            var ddata = (Ddata)serializer.Deserialize(memStream);
+            var p = new Pharmacy
+            {
+                Ddata = GetDdataList(declareDate)
+            };
+            var sortedCaseList = SortDdataByCaseId(p);
+           
+            var tdata = new Tdata
+            {
+                T1 = "30",
+                T2 = MainWindow.CurrentPharmacy.Id,
+                T3 = (declareDate.Year - 1911) + declareDate.Month.ToString().PadLeft(2, '0'),
+                T4 = "2",
+                T5 = "1",
+                T6 = (DateTime.Now.Year - 1911) + DateTime.Now.Month.ToString().PadLeft(2, '0'),
+                T7 = CountPrescriptionByCase(sortedCaseList, 1).ToString(),
+                T8 = sortedCaseList.Where(d => !d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dbody.D16)).ToString(),
+                T9 = CountPrescriptionByCase(sortedCaseList, 2).ToString(),
+                T10 = sortedCaseList.Where(d => d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dbody.D16)).ToString(),
+                T11 = sortedCaseList.Count.ToString()
+            };
+            tdata.T12 = (int.Parse(tdata.T8) + int.Parse(tdata.T10)).ToString();
+            tdata.T13 = GetDateStr(DateTime.Now,true);
+            tdata.T14 = GetDateStr(declareDate, false);
+            p.Tdata = tdata;
+            p.Ddata = sortedCaseList;
+            DeclareFileDb.SetDeclareFileByPharmacyId(p,declareDate);
         }
 
-        private string CountNormalCase(List<Ddata> listDdata,int CaseType)
+        private List<Ddata> SortDdataByCaseId(Pharmacy p)
         {
-            IEnumerable<bool> normalCaseDdata;
-            if (CaseType == 1)
+            var normalCaseList = p.Ddata.OrderBy(d => d.Dbody.D38);
+            var sorted = new List<Ddata>();
+            var result = normalCaseList.GroupBy(d => d.Dhead.D1);
+            foreach (var group in result)
             {
-                normalCaseDdata = listDdata.Select(d =>
+                sorted.AddRange(@group);
+            }
+            return sorted;
+        }
+
+        private List<Ddata> GetDdataList(DateTime declareDate)
+        {
+            if (PrescriptionDB.GetPrescriptionXmlByDate(declareDate).Count == 0) return new List<Ddata>();
+            //依照藥事服務費點數排序
+            var ddatas = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).OrderBy(d => d.Dbody.D38)
+                .ToList();
+            /*
+             * 藥事服務費每人每日81 - 100件內 => 診療項目代碼: 05234D . 支付點數 : 15
+             *          每人每日100件以上 => 診療項目代碼: 0502B . 支付點數 : 0
+             */
+            for (var i = 0; i < ddatas.Count; i++)
+            {
+                if (i < 80)
+                {
+                    ddatas[i].Dbody.D37 = "0502B";
+                    ddatas[i].Dbody.D38 = "48";
+                }
+                else if (i < 100 && i >= 80)
+                {
+                    ddatas[i].Dbody.D37 = "05234D";
+                    ddatas[i].Dbody.D38 = "15";
+                }
+                else
+                {
+                    ddatas[i].Dbody.D37 = "0502B";
+                    ddatas[i].Dbody.D38 = "0";
+                }
+            }
+            return ddatas;
+        }
+
+        private string GetDateStr(DateTime d,bool now)
+        {
+            if(now)
+                return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + "01";
+            return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + d.Day.ToString().PadLeft(2, '0');
+        }
+
+        private int CountPrescriptionByCase(List<Ddata> listDdata,int caseType)
+        {
+            List<Ddata> normalCaseDdata = new List<Ddata>();
+            if (caseType == 1)
+            {
+                normalCaseDdata = listDdata.Where(d =>
                     d.Dhead.D1.Equals("1") || d.Dhead.D1.Equals("3") || d.Dhead.D1.Equals("4") || d.Dhead.D1.Equals("5") ||
-                    d.Dhead.D1.Equals("D"));
+                    d.Dhead.D1.Equals("D")).ToList();
             }
             else
             {
-                normalCaseDdata = listDdata.Select(d => d.Dhead.D1.Equals("2") );
+                normalCaseDdata = listDdata.Where(d => d.Dhead.D1.Equals("2") ).ToList();
             }
-            var caseDdata = normalCaseDdata.ToList();
-            return caseDdata.Any() ? caseDdata.Count().ToString() : "0";
+            return normalCaseDdata.Count;
         }
 
         public void UpdateDeclareData(DeclareData declareData, DeclareTrade declareTrade = null)
@@ -100,9 +161,9 @@ namespace His_Pos.Class.Declare
             {
                 xmlSerializer.Serialize(textWriter, ddata);
                 var document = XDocument.Parse(ReportService.PrettyXml(textWriter));
-                document.Descendants()
-                    .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
-                    .Remove();
+                //document.Descendants()
+                //    .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
+                //    .Remove();
                 return document.ToString()
                     .Replace(
                         "<ddata xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">",
@@ -661,7 +722,7 @@ namespace His_Pos.Class.Declare
                 detail.Usage = declareData.Prescription.Medicines == null
                     ? detail.Usage
                     : declareData.Prescription.Medicines[i].UsageName;
-                var paySelf = declareData.Prescription.Medicines == null ? "0" :
+                var paySelf = /*declareData.Prescription.Medicines == null ? "0" :*/
                     declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
                 var tagsDictionary = new Dictionary<string, string>
                         {
@@ -704,7 +765,29 @@ namespace His_Pos.Class.Declare
                 pDataTable.Rows.Add(row);
             }
 
+            if (declareData.Prescription.Treatment.AdjustCase.Id == "3")
+            {
+                foreach (DataRow p in pDataTable.Rows)
+                {
+                    p["P8"] = function.SetStrFormat(0.0, "{0:0000000.00}");
+                    p["P9"] = function.SetStrFormatInt(0, "{0:D8}");
+                }
+                AddDayPayCodePData(declareData, pDataTable);
+            }
             AddMedicalServiceCostPData(declareData, pDataTable);
+        }
+
+        private void AddDayPayCodePData(DeclareData declareData, DataTable pDataTable)
+        {
+            var percent = CountAdditionPercent(declareData);
+            var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            var detail = new DeclareDetail("1",declareData.DayPayCode, percent,
+                declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate,
+                currentDate);
+            var pData = pDataTable.NewRow();
+            SetMedicalServiceCostDataRow(pData, declareData, detail);
+            declareData.DeclareDetails.Add(detail);
+            pDataTable.Rows.Add(pData);
         }
 
         private void AddImportPData(DeclareData declareData, DataTable pDataTable)
@@ -768,9 +851,9 @@ namespace His_Pos.Class.Declare
 
         private void AddMedicalServiceCostPData(DeclareData declareData, DataTable pDataTable)
         {
-            var percent = CountAdditionPercent(declareData);
+            double percent = 100;
             var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            var detail = new DeclareDetail(declareData.MedicalServiceCode, percent,
+            var detail = new DeclareDetail("9",declareData.MedicalServiceCode, percent,
                 declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate,
                 currentDate);
             var pData = pDataTable.NewRow();
@@ -785,7 +868,7 @@ namespace His_Pos.Class.Declare
 
         private double CountAdditionPercent(DeclareData declareData)
         {
-            double percent = 0;
+            double percent = 100;
             var cusBirth = declareData.Prescription.Customer.Birthday;
             var month = DateTimeExtensions.CalculateAge(DateTimeExtensions.ToUsDate(cusBirth));
             if (month < 0.5) percent = 160;
@@ -801,7 +884,7 @@ namespace His_Pos.Class.Declare
         private void SetMedicalServiceCostDataRow(DataRow pData, DeclareData declareData, DeclareDetail detail)
         {
             var declarecount = declareData.DeclareDetails.Count + 1; //藥事服務醫令序
-            if (String.IsNullOrEmpty(declareData.DecMasId))
+            if (string.IsNullOrEmpty(declareData.DecMasId))
             {
                 var tagsDictionary = new Dictionary<string, object>
                         {

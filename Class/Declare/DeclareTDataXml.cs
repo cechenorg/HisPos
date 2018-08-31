@@ -31,6 +31,10 @@ namespace His_Pos.Class.Declare
         public string T11 { get; set; }
         [XmlElement(ElementName = "t12")]
         public string T12 { get; set; }
+        [XmlElement(ElementName = "t13")]
+        public string T13 { get; set; }
+        [XmlElement(ElementName = "t14")]
+        public string T14 { get; set; }
     }
 
     [XmlRoot(ElementName = "pharmacy")]

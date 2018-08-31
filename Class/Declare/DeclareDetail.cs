@@ -7,9 +7,9 @@ namespace His_Pos.Class.Declare
 {
     public class DeclareDetail : ICloneable
     {
-        public DeclareDetail(string medicalId, double percent, double price, int sequence, string start, string end)
+        public DeclareDetail(string medicalOrder,string medicalId, double percent, double price, int sequence, string start, string end)
         {
-            MedicalOrder = "9";
+            MedicalOrder = medicalOrder;
             MedicalId = medicalId;
             Dosage = 0;
             Total = 00001.0;

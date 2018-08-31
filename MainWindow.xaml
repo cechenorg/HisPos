@@ -27,7 +27,6 @@
     xmlns:workScheduleManage="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
     xmlns:IndexView="clr-namespace:His_Pos.IndexView"
     xmlns:declarefile="clr-namespace:His_Pos.H6_DECLAREFILE.Export"
-    xmlns:h6Declarefile="clr-namespace:His_Pos.H6_DECLAREFILE"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
     Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"
@@ -97,7 +96,7 @@
             <IndexView:IndexView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type declarefile:Export}">
-            <h6Declarefile:ExportView/>
+            <declarefile:ExportView/>
         </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>

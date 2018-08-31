@@ -15,7 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.Class.Declare;
 
-namespace His_Pos.H6_DECLAREFILE
+namespace His_Pos.H6_DECLAREFILE.Export
 {
     /// <summary>
     /// ExportView.xaml 的互動邏輯

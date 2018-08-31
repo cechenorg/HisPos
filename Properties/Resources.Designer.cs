@@ -491,5 +491,14 @@ namespace His_Pos.Properties {
                 return ResourceManager.GetString("WorkScheduleManage", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查詢類似 &lt;? xml version = &quot;1.0&quot; encoding = &quot;Big5&quot; ?&gt; 的當地語系化字串。
+        /// </summary>
+        internal static string XmlDeclare {
+            get {
+                return ResourceManager.GetString("XmlDeclare", resourceCulture);
+            }
+        }
     }
 }

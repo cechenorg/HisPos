@@ -37,6 +37,7 @@ using His_Pos.Class.Declare;
 using System.Threading;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE;
+using His_Pos.H6_DECLAREFILE.Export;
 
 namespace His_Pos
 {

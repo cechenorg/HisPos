@@ -66,6 +66,7 @@ namespace His_Pos.Class.Declare
         public int DiagnosisPoint { get; set; }//D32診療明細點數小計
         public int DrugsPoint { get; set; }//D33用藥明細點數小計
         public string MedicalServiceCode { get; set; }//D37藥事服務費項目代號
+        public string DayPayCode { get; set; }//P2 日劑藥費代號
         public int MedicalServicePoint { get; set; }//D38藥事服務費點數
         public string StatusFlag { get; set; }
         public XmlDocument Xml { get; set; } = new XmlDocument();
@@ -122,19 +123,19 @@ namespace His_Pos.Class.Declare
             switch (dayPay)
             {
                 case 22:
-                    MedicalServiceCode = "MA1";
+                    DayPayCode = "MA1";
                     break;
 
                 case 31:
-                    MedicalServiceCode = "MA2";
+                    DayPayCode = "MA2";
                     break;
 
                 case 37:
-                    MedicalServiceCode = "MA3";
+                    DayPayCode = "MA3";
                     break;
 
                 case 41:
-                    MedicalServiceCode = "MA4";
+                    DayPayCode = "MA4";
                     break;
             }
         }
@@ -153,19 +154,18 @@ namespace His_Pos.Class.Declare
                 case "3" when treatmentCaseId == westMedNormal && medicineDays > daysLimit:
                     //throw new ArgumentException(Resources.MedicineDaysOutOfRange, "original");
                     break;
-                case "1" when treatmentCaseId == westMedNormal && medicineDays <= daysLimit && DrugsPoint <= dayPay * medicineDays:
-                    CheckDayPay(dayPay);
+                case "1" when treatmentCaseId == westMedNormal  :
+                    if (medicineDays <= normalDaysLimit)
+                    {
+                        if (DrugsPoint <= dayPay * medicineDays && medicineDays <= daysLimit)
+                            CheckDayPay(dayPay);
+                        MedicalServiceCode = "05202B";
+                    }
                     break;
-
-                case "1" when treatmentCaseId == westMedNormal && medicineDays <= normalDaysLimit && DrugsPoint > dayPay * medicineDays:
-                    MedicalServiceCode = "05202B";
-                    break;
-
                 case "2" :
                     SetChronicMedicalServiceCode();
                     break;
                 default:
-                    MedicalServiceCode = "000000";
                     break;
             }
         }
