@@ -409,7 +409,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             var currentRowIndex = GetCurrentRowIndex(sender);
 
-            if (currentRowIndex == -1) return;
+            if (currentRowIndex == -1 || currentRowIndex == StoreOrderDetail.Items.Count - 1) return;
 
             if (!textBox.Text.Equals(storeOrderData.Products[currentRowIndex].Id))
                 textBox.Text = storeOrderData.Products[currentRowIndex].Id;
@@ -598,6 +598,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             UpdatePricipalStackUi();
 
             StoreOrderData.IsDataChanged = true;
+        }
+
+        private void PurchaseControl_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            if(StoreOrderData is null) return;
+
+            StoreOrderData.IsDataChanged = false;
         }
     }
 }
