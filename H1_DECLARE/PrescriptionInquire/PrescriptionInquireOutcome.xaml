@@ -108,12 +108,11 @@
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="3" Margin="10">
                 <Label Content="調劑藥師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                 <TextBox Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
-                           Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Name}" TextChanged="Text_TextChanged"/>
+                           Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id}" TextChanged="Text_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="4" Margin="10">
                 <Label Content="就醫日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox Width="147" Height="30" MinWidth="147" FontSize="14" FontWeight="Bold" Padding="0" 
-                           Text="{Binding InquiredPrescription.Prescription.Treatment.AdjustDate,StringFormat={}{0:yyyy/MM/dd}}" FontStretch="ExtraExpanded" HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" TextChanged="Text_TextChanged"/>
+                <DatePicker Width="147" Height="30"  SelectedDateChanged="Text_TextChanged"  Text="{Binding InquiredPrescription.Prescription.Treatment.AdjustDate,StringFormat={}{0:yyyy/MM/dd}}" SelectedDateFormat="Short"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="0" Margin="10">
                 <Label Content="調劑日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
@@ -164,10 +163,13 @@
                           HorizontalContentAlignment="Stretch" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
                           ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="4" Margin="10">
-                <Label Content="給藥日份" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <TextBox Text="{Binding InquiredPrescription.Prescription.Treatment.MedicineDays}" MinWidth="60" Width="auto" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
-                                     BorderThickness="0,0,0,1" HorizontalContentAlignment="Left" BorderBrush="DimGray" VerticalContentAlignment="Center" TextChanged="Text_TextChanged"/>
+            <StackPanel  Grid.Row="3"  Grid.Column="4"  Margin="8"  Orientation="Horizontal">
+                <Label  Content="領藥次數" FontFamily="Segoe UI Semibold"  FontSize="18" Foreground="{StaticResource ForeGround}" />
+                <TextBox  x:Name="ChronicSequence" Width="50" HorizontalContentAlignment="Center"  FontFamily="Segoe UI Semibold"  FontSize="14"
+                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding InquiredPrescription.Prescription.ChronicSequence, Mode=TwoWay}" />
+                <Label  Content=" / "  FontFamily="Segoe UI Semibold"  FontSize="16" />
+                <TextBox x:Name="ChronicTotal"   Width="50" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold"  FontSize="14"
+                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"  Text="{Binding InquiredPrescription.Prescription.ChronicTotal, Mode=TwoWay}" />
             </StackPanel>
             <DataGrid
                 Name="PrescriptionSet"
@@ -468,7 +470,7 @@
             </DataGrid>
             <StackPanel Orientation="Horizontal"  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="5">
                 <Label Content="押金" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <Label Name="Deposit" Content="{Binding DeclareTrade.Deposit}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label  Name="Deposit" Content="{Binding DeclareTrade.Deposit}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Content="自費" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Name="SelfCost" Content="{Binding DeclareTrade.PaySelf}"  Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Content="部分負擔" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
