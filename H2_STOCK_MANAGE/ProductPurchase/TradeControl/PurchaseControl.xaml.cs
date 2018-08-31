@@ -99,7 +99,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         {
             INIT,
             DEL,
-            ADD
+            ADD,
+            SPLIT
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -133,6 +134,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         private void InitPrincipal()
         {
             PrincipalCollection = ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
+
+            if (StoreOrderData.Principal.Id == "")
+                PrincipalCombo.SelectedIndex = 0;
         }
 
         #region ----- StoreOrderDetail Functions -----
@@ -170,7 +174,24 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
                     break;
             }
+
+            UpdatePricipalStackUi();
         }
+
+        private void UpdatePricipalStackUi()
+        {
+            if (StoreOrderData.Principal.Name.Equals("新增負責人"))
+            {
+                HasPrincipalStack.Visibility = Visibility.Collapsed;
+                DontHasPrincipalStack.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                HasPrincipalStack.Visibility = Visibility.Visible;
+                DontHasPrincipalStack.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
             if (sender is null) return;
@@ -214,6 +235,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void StoreOrderDetail_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            StoreOrderData.IsDataChanged = true;
+
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
@@ -291,6 +314,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 StoreOrderData.Products[rowIndex] = newProduct;
             }
+
+            StoreOrderData.IsDataChanged = true;
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -303,15 +328,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!textBox.Name.Equals("FreeAmount"))
                 storeOrderData.CalculateTotalPrice();
+
+            StoreOrderData.IsDataChanged = true;
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //SetChanged();
             StoreOrderData.Products.Remove((Product)StoreOrderDetail.SelectedItem);
             StoreOrderData.CalculateTotalPrice();
 
             PreparePaging(PagingType.DEL);
+
+            StoreOrderData.IsDataChanged = true;
         }
 
         private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
@@ -328,6 +356,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (left != 0)
                 ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+
+            StoreOrderData.IsDataChanged = true;
+            
+            PreparePaging(PagingType.SPLIT);
         }
 
         private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -402,6 +434,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     break;
                 case PagingType.ADD:
                     CurrentPage = TotalPage;
+                    break;
+                case PagingType.SPLIT:
                     break;
             }
 
@@ -559,14 +593,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        private void Principal_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            UpdatePricipalStackUi();
 
-        }
-
-        private void ComboBox_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
+            StoreOrderData.IsDataChanged = true;
         }
     }
 }

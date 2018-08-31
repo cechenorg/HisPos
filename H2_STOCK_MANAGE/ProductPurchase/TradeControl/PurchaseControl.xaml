@@ -32,15 +32,14 @@
             <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <Label Name="PurchaseEmp" Content="{Binding OrdEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
             <Label Content="訂單聯絡人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
-            <ComboBox ItemsSource="{Binding PrincipalCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
-                      DisplayMemberPath="Name" Width="120" DropDownClosed="ComboBox_DropDownOpened" PreviewMouseLeftButtonUp="ComboBox_PreviewMouseLeftButtonUp" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center"
-                      />
-            <StackPanel Orientation="Horizontal">
-                <Label Content="{Binding Path=Principal.Phone}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="15" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <ComboBox Name="PrincipalCombo" SelectedItem="{Binding Principal, Mode=TwoWay}" ItemsSource="{Binding PrincipalCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
+                      DisplayMemberPath="Name" Width="120" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center" SelectionChanged="Principal_OnSelectionChanged"/>
+            <StackPanel Name="HasPrincipalStack" Orientation="Horizontal">
+                <Label Content="{Binding Path=Principal.Phone}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="15,0,0,0"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding Path=Principal.Name}" Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人名稱" FontFamily="Segoe UI Semi" FontSize="15"/>
-                <TextBox Text="{Binding Path=Principal.Phone}" Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人電話" FontFamily="Segoe UI Semi" FontSize="15"/>
+            <StackPanel Name="DontHasPrincipalStack" Orientation="Horizontal" Margin="10,0,0,0" Visibility="Collapsed">
+                <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人名稱" FontFamily="Segoe UI Semi" FontSize="18"/>
+                <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人電話" FontFamily="Segoe UI Semi" FontSize="18"/>
             </StackPanel>
         </StackPanel>
         <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
@@ -231,7 +230,7 @@
             <Rectangle Name="EmptySpace" Width="270"/>
             <Button Name="DeleteOrder" Width="120" Content="刪除" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" BorderThickness="0" Background="DimGray"/>
             <Button Name="ConfirmToProcess" Width="150" Content="轉成進貨單" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="IndianRed" />
-            <Button Name="Confirm" Width="150" Content="確認收貨" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue"/>
+            <Button Name="Confirm" Width="150" Content="確認收貨" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue" Visibility="Collapsed"/>
         </StackPanel>
     </Grid>
 </UserControl>

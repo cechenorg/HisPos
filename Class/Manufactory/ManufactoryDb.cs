@@ -94,6 +94,8 @@ namespace His_Pos.Class.Manufactory
         {
             Collection<PurchasePrincipal> collection = new Collection<PurchasePrincipal>();
 
+            collection.Add(new PurchasePrincipal("無"));
+
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", manId));
@@ -104,6 +106,8 @@ namespace His_Pos.Class.Manufactory
             {
                 collection.Add(new PurchasePrincipal(row));
             }
+
+            collection.Add(new PurchasePrincipal("新增負責人"));
 
             return collection;
         }

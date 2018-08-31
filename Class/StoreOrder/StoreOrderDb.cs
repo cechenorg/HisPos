@@ -85,6 +85,12 @@ namespace His_Pos.Class.StoreOrder
 
             parameters.Add(new SqlParameter("PRINCIPAL_ID", storeOrder.Principal.Id));
 
+            if (storeOrder.Warehouse is null)
+                parameters.Add(new SqlParameter("WAREHOUSE_ID", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("WAREHOUSE_ID", storeOrder.Warehouse.Id));
+
+
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
             details.Columns.Add("QTY", typeof(int));

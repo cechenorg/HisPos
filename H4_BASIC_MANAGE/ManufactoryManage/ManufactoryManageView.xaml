@@ -181,7 +181,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                         <Label Content="電話" FontSize="20" FontFamily="Segoe UI Semibold"/>
-                        <TextBox Text="{Binding Telphone}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
+                        <TextBox Text="{Binding Telephone}" FontSize="18" Width="150" FontFamily="Segoe UI Semi" Margin="10,0,0,0" TextChanged="TextBox_OnTextChanged"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="8">
                         <Label Content="傳真" FontSize="20" FontFamily="Segoe UI Semibold"/>
