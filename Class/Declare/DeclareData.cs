@@ -107,10 +107,10 @@ namespace His_Pos.Class.Declare
         private int CountOralLiquidAgent()
         {
             var medFormCount = 0;
-            const string oralLiquidAgent = "內服液劑";
+            const string oralLiquidAgent = "口服液劑(原瓶包裝)";
             foreach (var med in Prescription.Medicines)
             {
-                if (med.MedicalCategory.Form.Equals(oralLiquidAgent))
+                if (med.Note.Equals(oralLiquidAgent))
                     medFormCount++;
             }
             return medFormCount;

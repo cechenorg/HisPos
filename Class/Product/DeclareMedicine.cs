@@ -58,11 +58,7 @@ namespace His_Pos.Class.Product
                 Position = dataRow["HISWAY_ID"].ToString() == string.Empty ? "" : dataRow["HISWAY_ID"].ToString();
                 Amount = dataRow["HISDECDET_QTY"].ToString() == string.Empty ? 0: Convert.ToDouble(dataRow["HISDECDET_QTY"].ToString());
             }
-                
-          
-           
-               
-           
+            Note = dataRow["HISMED_NOTE"].ToString() == string.Empty ? "" : dataRow["HISMEDTEM_NOTE"].ToString();
         }
         
         public bool IsControlMed { get; set; }
@@ -201,6 +197,8 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Source");
             }
         }
+
+        public string Note { get; set; }
 
         private void CalculateTotalPrice()
         {

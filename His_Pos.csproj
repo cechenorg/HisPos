@@ -184,6 +184,7 @@
     <Reference Include="Microsoft.ReportViewer.WinForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.ReportViewer.Runtime.WinForms.12.0.2402.15\lib\Microsoft.ReportViewer.WinForms.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="NChinese, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\NChinese.0.4.0\lib\net452\NChinese.dll</HintPath>
     </Reference>
@@ -315,6 +316,7 @@
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
+    <Compile Include="Class\Product\MedXml.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
     <Compile Include="Class\Product\OTCStockOverview.cs" />
     <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
