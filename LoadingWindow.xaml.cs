@@ -505,7 +505,7 @@ namespace His_Pos
                     Dispatcher.Invoke((Action)(() =>
                     {
                         exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
-                        exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
+                        //exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
                     }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -513,8 +513,8 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     exportView.ExportViewBox.IsEnabled = true;
-                    if (exportView.DeclareFileList.Items.Count > 0)
-                        exportView.DeclareFileList.SelectedIndex = 0;
+                    //if (exportView.DeclareFileList.Items.Count > 0)
+                    //    exportView.DeclareFileList.SelectedIndex = 0;
                     Close();
                 }));
             };

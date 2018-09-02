@@ -22,7 +22,7 @@ namespace His_Pos.Class.Declare
             Prescriptions = new ObservableCollection<Prescription>();
             DdataCollection = new ObservableCollection<Ddata>();
             Id = row["FILE_ID"].ToString();
-            DeclareTime = row["DECLARE_TIME"].ToString();
+            DeclareDate = row["DECLARE_TIME"].ToString();
             if(!string.IsNullOrEmpty(row["CHRONIC_COUNT"].ToString()))
                 ChronicCount = int.Parse(row["CHRONIC_COUNT"].ToString());
             if (!string.IsNullOrEmpty(row["NORMAL_COUNT"].ToString()))
@@ -35,15 +35,39 @@ namespace His_Pos.Class.Declare
 
         public string Id { get; set; }
 
-        private string _declareTime;
-
-        public string DeclareTime
+        private string _declareDate;
+        public string DeclareDate
         {
-            get => _declareTime;
+            get => _declareDate;
             set
             {
-                _declareTime = value; 
-                OnPropertyChanged(nameof(DeclareTime));
+                //0107-08-31
+                _declareDate = value;
+                DeclareYear = _declareDate.Substring(0, 4);
+                DeclareMonth = _declareDate.Substring(5, 2);
+            }
+        }
+
+        private string _declareYear;
+        public string DeclareYear
+        {
+            get => _declareYear;
+            set
+            {
+                _declareYear = value.StartsWith("0") ? value.Substring(1,3) : value;
+                OnPropertyChanged(nameof(DeclareYear));
+            }
+        }
+
+        private string _declareMonth;
+
+        public string DeclareMonth
+        {
+            get=>_declareMonth;
+            set
+            {
+                _declareMonth = value;
+                OnPropertyChanged(nameof(DeclareMonth));
             }
         }
 
@@ -81,6 +105,7 @@ namespace His_Pos.Class.Declare
         }
 
         private double _totalPoint;
+
         public double TotalPoint
         {
             get => _totalPoint;

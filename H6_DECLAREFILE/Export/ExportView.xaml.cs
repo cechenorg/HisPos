@@ -33,7 +33,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
         {
             var load = new LoadingWindow();
             //load.GetMedBagData(this);
-            load.Show();
+            //load.Show();
         }
     }
 }
