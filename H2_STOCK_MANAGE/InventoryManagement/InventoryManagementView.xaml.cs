@@ -68,6 +68,12 @@ namespace His_Pos.InventoryManagement
             DataContext = this;
             SetOtcTypeUi();
             WareHouseCollection = WareHouseDb.GetWareHouseData();
+
+            WareHouse wareHouse = new WareHouse();
+            wareHouse.Id = "0";
+            wareHouse.Name = "全部";
+            WareHouseCollection.Insert(0, wareHouse);
+
             WareHouse.SelectedItem = WareHouseCollection[0];
         }
         public void SetOtcTypeUi() {

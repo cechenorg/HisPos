@@ -5,16 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-             mc:Ignorable="d"  Height="300" Width="500">
+             mc:Ignorable="d"  Height="350" Width="500">
     <Grid Background="{StaticResource GridDarkerBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="選擇倉庫:" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <ComboBox Width="340" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontSize="20" FontFamily="Segoe UI Semi"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="15,0,0,0">
             <RadioButton Name="TargetManufactory"  Tag="5" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
-            <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="300" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
+            <controls:AutoCompleteBox x:Name="ManufactoryAuto" Width="345" FontSize="18" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" VerticalContentAlignment="Bottom" Height="30"
                                               ValueMemberPath="Name" Background="Transparent" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" Margin="10,0,0,0"
                                               BorderBrush="DimGray" FilterMode="Contains" IsTextCompletionEnabled="False" Text="{Binding Name}" ItemsSource="{Binding ManufactoryAutoCompleteCollection}"
                                               DropDownClosing="ManufactoryAuto_OnDropDownClosing" GotFocus="ManufactoryAuto_OnGotFocus">
@@ -28,8 +33,8 @@
                 </controls:AutoCompleteBox.ItemTemplate>
             </controls:AutoCompleteBox>
         </StackPanel>
-        <RadioButton Tag="2" GroupName="target" Grid.Row="1" Content=" 依訂單" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
-        <DataGrid Grid.Row="2" Background="{StaticResource Shadow}" Margin="10,0,10,10">
+        <RadioButton Tag="2" GroupName="target" Grid.Row="2" Content=" 依訂單" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="15,0,0,0"/>
+        <DataGrid Grid.Row="3" Background="{StaticResource Shadow}" Margin="10,0,10,10">
             
         </DataGrid>
     </Grid>

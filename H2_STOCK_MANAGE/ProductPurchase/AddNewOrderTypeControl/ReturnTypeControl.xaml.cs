@@ -24,12 +24,17 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
     public partial class ReturnTypeControl : UserControl
     {
         public Manufactory SelectedManufactory { get; set; }
-        private ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection { get; }
+        public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection { get; }
+        
+        public ObservableCollection<WareHouse> WareHouseComboCollection { get; }
 
-        public ReturnTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
+        public ReturnTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection, ObservableCollection<WareHouse> wareHouseComboCollection)
         {
             InitializeComponent();
+            DataContext = this;
+
             ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
+            WareHouseComboCollection = wareHouseComboCollection;
         }
 
         internal AddOrderType GetOrderType()

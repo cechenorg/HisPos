@@ -5,16 +5,21 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-             mc:Ignorable="d" Height="260" Width="500">
+             mc:Ignorable="d" Height="310" Width="500">
     <Grid Background="{StaticResource GridDarkerBackGround}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="80"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
-        <Label Content="選擇廠商:" Foreground="Black" FontSize="25" Grid.Row="0" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-        <Grid Name="TargetGrid" Grid.Row="1" Margin="50,0,0,0">
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="選擇倉庫:" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <ComboBox Width="335" Margin="10,0,0,0" DisplayMemberPath="Name" ItemsSource="{Binding WareHouseComboCollection}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontSize="20" FontFamily="Segoe UI Semi"/>
+        </StackPanel>
+        <Label Content="選擇廠商:" Foreground="Black" FontSize="25" Grid.Row="1" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        <Grid Name="TargetGrid" Grid.Row="2" Margin="50,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -39,7 +44,7 @@
                 </controls:AutoCompleteBox.ItemTemplate>
             </controls:AutoCompleteBox>
         </Grid>
-        <Label Content="選擇新增條件:" Foreground="Black" FontSize="25" Grid.Row="2" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        <Label Content="選擇新增條件:" Foreground="Black" FontSize="25" Grid.Row="3" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
         <Grid Name="ConditionGrid" Grid.Row="4" Margin="50,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition/>

@@ -27,12 +27,15 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
 
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection { get; }
 
-        public PurchaseTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
+        public ObservableCollection<WareHouse> WareHouseComboCollection { get; }
+
+        public PurchaseTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection, ObservableCollection<WareHouse> wareHouseComboCollection)
         {
             InitializeComponent();
             DataContext = this;
 
             ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
+            WareHouseComboCollection = wareHouseComboCollection;
         }
 
         private void RadioButton_TargetOnChecked(object sender, RoutedEventArgs e)
