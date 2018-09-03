@@ -32,10 +32,10 @@ namespace His_Pos.Class.Declare
             return declareFiles;
         }
 
-        public static void SetDeclareFileByPharmacyId(Pharmacy p,DateTime date)
+        public static void SetDeclareFileByPharmacyId(DeclareFile file,DateTime date,DeclareFileType type)
         {
             int[] sequence = { 0, 0, 0, 0};
-            
+            var p = file.FileContent;
             foreach (var t in p.Ddata)
             {
                 switch (t.Dhead.D1)
@@ -71,15 +71,29 @@ namespace His_Pos.Class.Declare
             {
                 Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
             });
-            parameters.Add(new SqlParameter("ERROR", SqlDbType.Xml)
-            {
-                Value = new SqlXml(new XmlTextReader("<Error></Error>", XmlNodeType.Document, null))
-            });
+            parameters.Add(new SqlParameter("ERROR", file.ErrorPrescriptionList));
             parameters.Add(new SqlParameter("CHRONIC_COUNT", int.Parse(p.Tdata.T9)));
             parameters.Add(new SqlParameter("NORMAL_COUNT", int.Parse(p.Tdata.T7)));
-            parameters.Add(new SqlParameter("ERROR_COUNT", int.Parse("0")));
             parameters.Add(new SqlParameter("TOTAL_POINT", int.Parse(p.Tdata.T12)));
+            parameters.Add(new SqlParameter("TOTAL_POINT", int.Parse(p.Tdata.T12)));
+            parameters.Add(new SqlParameter("HAS_ERROR", file.HasError));
+            parameters.Add(type.Equals(DeclareFileType.UPDATE)
+                ? new SqlParameter("IS_DECLARED", file.IsDeclared)
+                : new SqlParameter("IS_DECLARED", DBNull.Value));
             dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateDeclareFile]", parameters);
+        }
+
+        public static DeclareFile GetDeclareFileTypeLogIn(DateTime declareTime)
+        {
+            DeclareFile file = new DeclareFile();
+            var parameters = new List<SqlParameter>();
+            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            parameters.Add(new SqlParameter("SEND_DATE", declareTime));
+            parameters.Add(new SqlParameter("PHARMACY_ID", MainWindow.CurrentPharmacy.Id));
+            var fileTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDeclareFileData]", parameters);
+            if (fileTable.Rows.Count > 0)
+                file = new DeclareFile(fileTable.Rows[0]);
+            return file;
         }
 
         private static string SerializeDeclareFile(Pharmacy p)

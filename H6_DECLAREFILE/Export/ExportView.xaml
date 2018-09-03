@@ -4,24 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H6_DECLAREFILE.Export"
+             xmlns:hisPos="clr-namespace:His_Pos"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              d:DesignHeight="839"
              d:DesignWidth="1365"
              mc:Ignorable="d">
-    <Viewbox Name="ExportViewBox" Stretch="UniformToFill">
-        <Grid>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <hisPos:BrushColorConverter x:Key="BoolToBrush"/>
+    </UserControl.Resources>
+    <Viewbox Name="ExportViewBox" Stretch="Fill">
+        <Grid Background="{StaticResource GridDarkerBackGround}" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="839"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="400"/>
-                <ColumnDefinition Width="965"/>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="1065"/>
             </Grid.ColumnDefinitions>
-            <DataGrid ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                      VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="Transparent"
+            <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                      VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
                       Height="839">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="400">
+                    <DataGridTemplateColumn Width="320">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="{x:Type DataGridCell}">
                                 <Setter Property="Background" Value="Transparent"/>
@@ -36,40 +41,47 @@
                         </DataGridTemplateColumn.CellStyle>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid Height="80">
+                                <Grid Height="75" Width="320">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition/>
+                                        <RowDefinition Height="35"/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
                                     <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="240"/>
                                     </Grid.ColumnDefinitions>
-                                    <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="80">
-                                        <Label Content="{Binding DeclareFile.DeclareYear}"/>
-                                        <Label Content="{Binding DeclareFile.DeclareMonth}"/>
+                                    <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="60" Background="{Binding IsDeclared,Converter={StaticResource BoolToBrush}}"><!--DarkSeaGreen-->
+                                        <Label Content="{Binding DeclareMonth}" FontSize="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold"/>
+                                        <Label Content="{Binding DeclareYear}" FontSize="14" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" Margin="0,-15,0,0"/>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Width="320" HorizontalAlignment="Right" Grid.Row="0">
-                                        <Label Content="總點數" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="{Binding DeclareFile.TotalPoint}"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="8,0,0,0">
+                                        <Image  Source="C:\HisPos\Images\Ph.png" Width="15" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                        <Label  Content="{Binding FileContent.Tdata.T2}" FontSize="14" Foreground="Gray" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                        <Image Source="C:\HisPos\Images\Dollar.png" VerticalAlignment="Center" Width="16" Margin="25,0,0,0"/>
+                                        <!--Content="{Binding DeclareFile.TotalPoint}"-->
+                                        <Label Content="{Binding TotalPoint}" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,0,0,5"/>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Width="320" HorizontalAlignment="Right" Grid.Row="1">
-                                        <Label Content="一般" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" Margin="8,0,0,0">
+                                        <!--<Label Content="一般" FontSize="18" FontFamily="Segoe UI Semi"/>
                                         <Label Content="{Binding DeclareFile.NormalCount}" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="慢性" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="{Binding DeclareFile.ChronicCount}" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Image Source="C:\HisPos\Images\DeleteDot.png"/>
-                                        <Label Content="{Binding DeclareFile.ErrorCount}" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                        <Label Content="慢箋" FontSize="18" FontFamily="Segoe UI Semi"/>
+                                        <Label Content="{Binding DeclareFile.ChronicCount}" FontSize="18" FontFamily="Segoe UI Semi"/>-->
+                                        <Label Content="一般 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding NormalCount}" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                        <Label Content="慢箋 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                        <Label Content="{Binding ChronicCount}" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                        <Image Source="C:\HisPos\Images\Error.png" Visibility="{Binding HasError,Converter={StaticResource BoolToVis}}" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
+                <ListBoxItem/>
             </DataGrid>
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
                 <DataGrid
-                     Name="PrescriptionList" Height="400" MaxHeight="400" Background="{StaticResource GridBackGround}"
+                     Name="PrescriptionList" Height="400" MaxHeight="400" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                     CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10,10,10,429">
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn

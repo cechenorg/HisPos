@@ -95,6 +95,12 @@ namespace His_Pos.Class
         WARNING = 2
     }
 
+    public enum DeclareFileType
+    {
+        LOG_IN = 0,
+        UPDATE = 1
+    }
+
     public enum MedBagMode
     {
         SINGLE = 0,

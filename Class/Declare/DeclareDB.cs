@@ -49,11 +49,12 @@ namespace His_Pos.Class.Declare
                 CheckInsertDbTypeUpdate(parameters);
             }
         }
-        public void UpdateDeclareFile(DateTime declareDate)
+        public void UpdateDeclareFile(DeclareData declareData,ErrorList eList)
         {
+            DateTime declareDate = declareData.Prescription.Treatment.AdjustDate;
             var p = new Pharmacy
             {
-                Ddata = GetDdataList(declareDate)
+                Ddata = GetDdataList(declareData.Prescription.Treatment.AdjustDate)
             };
             var sortedCaseList = SortDdataByCaseId(p);
            
@@ -76,7 +77,16 @@ namespace His_Pos.Class.Declare
             tdata.T14 = GetDateStr(declareDate, false);
             p.Tdata = tdata;
             p.Ddata = sortedCaseList;
-            DeclareFileDb.SetDeclareFileByPharmacyId(p,declareDate);
+
+            var file = DeclareFileDb.GetDeclareFileTypeLogIn(declareDate);
+            file.FileContent = p;
+            file.ErrorPrescriptionList.ErrorList[FindPrescriptionIndex(declareData)] = eList;
+            DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate,DeclareFileType.LOG_IN);
+        }
+
+        private int FindPrescriptionIndex(DeclareData declareData)
+        {
+            throw new NotImplementedException();
         }
 
         private List<Ddata> SortDdataByCaseId(Pharmacy p)

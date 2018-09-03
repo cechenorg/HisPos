@@ -20,17 +20,17 @@ namespace His_Pos.Class.Declare
         public DeclareFile(DataRow row)
         {
             Prescriptions = new ObservableCollection<Prescription>();
-            DdataCollection = new ObservableCollection<Ddata>();
+            FileContent = SerializeToTdata(row["[HISDEC_XML]"].ToString());
             Id = row["FILE_ID"].ToString();
             DeclareDate = row["DECLARE_TIME"].ToString();
             if(!string.IsNullOrEmpty(row["CHRONIC_COUNT"].ToString()))
                 ChronicCount = int.Parse(row["CHRONIC_COUNT"].ToString());
             if (!string.IsNullOrEmpty(row["NORMAL_COUNT"].ToString()))
                 NormalCount = int.Parse(row["NORMAL_COUNT"].ToString());
-            if (!string.IsNullOrEmpty(row["ERROR_COUNT"].ToString()))
-                ErrorCount = int.Parse(row["ERROR_COUNT"].ToString());
             if (!string.IsNullOrEmpty(row["TOTALPOINT"].ToString()))
                 TotalPoint = double.Parse(row["TOTALPOINT"].ToString());
+            ErrorPrescriptionList = SerializeToErrorPrescriptions(row["HISDEC_ERROR"].ToString());
+            IsDeclared = row["IS_DECLARED"].ToString().Equals("1");
         }
 
         public string Id { get; set; }
@@ -93,17 +93,6 @@ namespace His_Pos.Class.Declare
             }
         }
 
-        private int _errorCount;
-        public int ErrorCount
-        {
-            get => _errorCount;
-            set
-            {
-                _errorCount = value;
-                OnPropertyChanged(nameof(ErrorCount));
-            }
-        }
-
         private double _totalPoint;
 
         public double TotalPoint
@@ -115,12 +104,59 @@ namespace His_Pos.Class.Declare
                 OnPropertyChanged(nameof(TotalPoint));
             }
         }
-
-
         
         public ObservableCollection<Prescription> Prescriptions { get; set; }
 
-        public ObservableCollection<Ddata> DdataCollection { get; set; }
+        private Pharmacy _fileContent;
+
+        public Pharmacy FileContent
+        {
+            get => _fileContent;
+            set
+            {
+                _fileContent = value;
+                
+                OnPropertyChanged(nameof(FileContent));
+            }
+        }
+
+        private ErrorPrescriptions _errorPrescriptionList;
+
+        public ErrorPrescriptions ErrorPrescriptionList
+        {
+            get => _errorPrescriptionList;
+            set
+            {
+                _errorPrescriptionList = value;
+                if (_errorPrescriptionList.ErrorList.Count > 0)
+                    HasError = true;
+                OnPropertyChanged(nameof(ErrorPrescriptionList));
+            }
+        }
+
+        private bool _hasError;
+
+        public bool HasError
+        {
+            get => _hasError;
+            set
+            {
+                _hasError = value;
+                OnPropertyChanged(nameof(HasError));
+            }
+        }
+
+        private bool _isDeclared;
+
+        public bool IsDeclared
+        {
+            get => _isDeclared;
+            set
+            {
+                _isDeclared = value;
+                OnPropertyChanged(nameof(IsDeclared));
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -130,11 +166,19 @@ namespace His_Pos.Class.Declare
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        //private string SerializeToDdata(string xmlStr)
-        //{
-        //    XmlSerializer serializer = new XmlSerializer(typeof(Tdata));
-        //    MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlStr));
-        //    Tdata tData = (Tdata)serializer.Deserialize(memStream);
-        //}
+        private Pharmacy SerializeToTdata(string xmlStr)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Tdata));
+            MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlStr));
+            Pharmacy tData = (Pharmacy)serializer.Deserialize(memStream);
+            return tData;
+        }
+        public ErrorPrescriptions SerializeToErrorPrescriptions(string xmlStr)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(ErrorPrescriptions));
+            MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlStr));
+            ErrorPrescriptions errorPrescriptions = (ErrorPrescriptions)serializer.Deserialize(memStream);
+            return errorPrescriptions;
+        }
     }
 }

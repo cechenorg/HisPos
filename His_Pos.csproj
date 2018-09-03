@@ -254,6 +254,7 @@
     <Compile Include="Class\Declare\DeclareFile.cs" />
     <Compile Include="Class\Declare\DeclareFileDB.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
+    <Compile Include="Class\Declare\ErrorMessage.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
@@ -959,6 +960,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\DeclareFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Declared.png" />
+    <Resource Include="Images\Dollar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -110,8 +110,11 @@ namespace His_Pos.Class.Declare
             const string oralLiquidAgent = "口服液劑(原瓶包裝)";
             foreach (var med in Prescription.Medicines)
             {
-                if (med.Note.Equals(oralLiquidAgent))
-                    medFormCount++;
+                if (med.Note != null)
+                {
+                    if (med.Note.Equals(oralLiquidAgent))
+                        medFormCount++;
+                }
             }
             return medFormCount;
         }

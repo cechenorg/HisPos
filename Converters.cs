@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows.Media;
 using His_Pos.AbstractClass;
 
 namespace His_Pos
@@ -112,6 +113,25 @@ namespace His_Pos
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return string.IsNullOrEmpty(String.Format(culture, "{0}", value)) ? null : value;
+        }
+    }
+
+    public class BrushColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if ((bool)value)
+            {
+                {
+                    return new SolidColorBrush(Colors.DarkSeaGreen); ;
+                }
+            }
+            return new SolidColorBrush(Colors.Transparent);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

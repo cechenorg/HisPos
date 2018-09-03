@@ -186,7 +186,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             MessageWindow m;
             ConfirmWindow c;
-            if (CurrentPrescription.CheckPrescriptionData().Equals(""))
+            CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
+            if (CurrentPrescription.EList.Error.Count == 0)
             {
                 var declareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
@@ -195,7 +196,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //declareDb.InsertInventoryDb(declareData,"處方登陸");
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.Show();
-                declareDb.UpdateDeclareFile(declareData.Prescription.Treatment.AdjustDate);
+                declareDb.UpdateDeclareFile(declareData, CurrentPrescription.EList);
             }
             else
             {
