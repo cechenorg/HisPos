@@ -7,7 +7,7 @@
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:hisPos="clr-namespace:His_Pos"
-             mc:Ignorable="d" TargetUpdated="PurchaseControl_OnTargetUpdated">
+             mc:Ignorable="d">
     <UserControl.Resources>
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <hisPos:TextBoxDateConverter x:Key="TextBoxDateConverter"/>

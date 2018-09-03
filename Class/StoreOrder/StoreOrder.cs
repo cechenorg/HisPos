@@ -30,6 +30,7 @@ namespace His_Pos.Class.StoreOrder
             RecEmp = "";
             Category = new Category(category);
             Warehouse = wareHouse;
+            Principal = new PurchasePrincipal("");
 
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 

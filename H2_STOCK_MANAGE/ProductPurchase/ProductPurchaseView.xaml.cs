@@ -292,6 +292,8 @@ namespace His_Pos.ProductPurchase
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = StoreOrderData;
             StoOrderOverview.ScrollIntoView(StoreOrderData);
+
+            SetCurrentControl();
         }
 
         //private void UserControl_Unloaded(object sender, RoutedEventArgs e)

@@ -604,12 +604,5 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             StoreOrderData.IsDataChanged = true;
         }
-
-        private void PurchaseControl_OnTargetUpdated(object sender, DataTransferEventArgs e)
-        {
-            if(storeOrderData is null ) return;
-
-            StoreOrderData.IsDataChanged = false;
-        }
     }
 }
