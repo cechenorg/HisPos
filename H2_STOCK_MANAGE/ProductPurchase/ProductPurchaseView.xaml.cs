@@ -261,6 +261,7 @@ namespace His_Pos.ProductPurchase
         {
             if (!CheckNoEmptyData()) return;
             StoreOrderData.Type = OrderType.DONE;
+            StoreOrderData.RecEmp = MainWindow.CurrentUser.Id;
             SaveOrder();
             storeOrderCollection.Remove(StoreOrderData);
             InventoryManagementView.DataChanged = true;

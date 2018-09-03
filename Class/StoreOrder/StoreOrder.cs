@@ -167,9 +167,6 @@ namespace His_Pos.Class.StoreOrder
             if (Products is null || Products.Count == 0)
                 message += "請填寫商品\n";
 
-            if (type == OrderType.PROCESSING && String.IsNullOrEmpty(RecEmp))
-                message += "請填寫收貨人\n";
-
             foreach (AbstractClass.Product product in Products)
             {
                 if (type == OrderType.PROCESSING)
