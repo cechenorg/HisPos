@@ -25,14 +25,19 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
     {
         public Manufactory SelectedManufactory { get; set; }
 
+        public WareHouse SelectedWareHouse { get; set; }
+
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection { get; }
 
-        public PurchaseTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
+        public ObservableCollection<WareHouse> WareHouseComboCollection { get; }
+
+        public PurchaseTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection, ObservableCollection<WareHouse> wareHouseComboCollection)
         {
             InitializeComponent();
             DataContext = this;
 
             ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
+            WareHouseComboCollection = wareHouseComboCollection;
         }
 
         private void RadioButton_TargetOnChecked(object sender, RoutedEventArgs e)
@@ -79,6 +84,15 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
                 messageWindow.ShowDialog();
                 return AddOrderType.ERROR;
             }
+
+            if (WareHouseCombo.SelectedItem is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("請輸入庫存名稱", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return AddOrderType.ERROR;
+            }
+
+            SelectedWareHouse = (WareHouse)WareHouseCombo.SelectedItem;
 
             radioButtons = ConditionGrid.Children.OfType<RadioButton>().ToList();
             int condition = Int16.Parse(radioButtons.Single(r => r.GroupName == "condition" && r.IsChecked == true).Tag.ToString());

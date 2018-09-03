@@ -19,7 +19,7 @@ namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
-        public StoreOrder(StoreOrderCategory category, User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
+        public StoreOrder(StoreOrderCategory category, User ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
@@ -29,6 +29,7 @@ namespace His_Pos.Class.StoreOrder
             TotalPrice = "0";
             RecEmp = "";
             Category = new Category(category);
+            Warehouse = wareHouse;
 
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 

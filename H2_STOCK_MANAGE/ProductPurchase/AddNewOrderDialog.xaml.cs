@@ -44,6 +44,9 @@ namespace His_Pos.ProductPurchase
 
         public AddOrderType AddOrderType;
         public Manufactory SelectedManufactory;
+        public WareHouse SelectedWareHouse;
+
+        public ObservableCollection<WareHouse> WareHouseCollection { get; }
 
         public bool ConfirmButtonClicked = false;
         public AddNewOrderDialog( ObservableCollection<Manufactory> manufactoryAutoCompleteCollection)
@@ -51,8 +54,10 @@ namespace His_Pos.ProductPurchase
             InitializeComponent();
             DataContext = this;
 
-            purchaseTypeControl = new PurchaseTypeControl(manufactoryAutoCompleteCollection);
-            returnTypeControl = new ReturnTypeControl(manufactoryAutoCompleteCollection);
+            WareHouseCollection = WareHouseDb.GetWareHouseData();
+
+            purchaseTypeControl = new PurchaseTypeControl(manufactoryAutoCompleteCollection, WareHouseCollection);
+            returnTypeControl = new ReturnTypeControl(manufactoryAutoCompleteCollection, WareHouseCollection);
 
             CurrentControl = purchaseTypeControl;
         }
@@ -65,6 +70,7 @@ namespace His_Pos.ProductPurchase
                 case "P":
                     AddOrderType = purchaseTypeControl.GetOrderType();
                     SelectedManufactory = purchaseTypeControl.SelectedManufactory;
+                    SelectedWareHouse = purchaseTypeControl.SelectedWareHouse;
                     break;
                 case "R":
                     AddOrderType = returnTypeControl.GetOrderType();

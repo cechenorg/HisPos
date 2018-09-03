@@ -19,10 +19,7 @@ namespace His_Pos.Class
             var dd = new DbConnection(Settings.Default.SQL_global);
             var table = dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[GetWareHouseData]");
             ObservableCollection<WareHouse> data = new ObservableCollection<WareHouse>();
-            WareHouse wareHouse = new WareHouse();
-            wareHouse.Id = "0";
-            wareHouse.Name = "全部";
-            data.Add(wareHouse);
+            
             foreach (DataRow row in table.Rows)
             {
                 data.Add(new WareHouse(row));
