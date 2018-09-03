@@ -207,22 +207,22 @@ namespace His_Pos.ProductPurchase
                 switch (addNewOrderDialog.AddOrderType)
                 {
                     case AddOrderType.ADDALLBELOWSAFEAMOUNT:
-                        AddBasicOrSafe(StoreOrderProductType.SAFE);
+                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.SelectedWareHouse);
                         break;
                     case AddOrderType.ADDBYMANUFACTORY:
-                        AddNewOrderByUm(addNewOrderDialog.SelectedManufactory);
+                        AddNewOrderByUm(addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
                         break;
                     case AddOrderType.ADDALLTOBASICAMOUNT:
-                        AddBasicOrSafe(StoreOrderProductType.BASIC);
+                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.SelectedWareHouse);
                         break;
                     case AddOrderType.ADDALLGOODSALES:
                         AddGoodSales();
                         break;
                     case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
-                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.SelectedManufactory);
+                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
                         break;
                     case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
-                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.SelectedManufactory);
+                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
                         break;
                     case AddOrderType.ADDBYMANUFACTORYGOODSALES:
                         AddGoodSales(addNewOrderDialog.SelectedManufactory);

@@ -165,12 +165,12 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void AddNewOrders(ProductPurchase.ProductPurchaseView productPurchaseView, StoreOrderProductType type, Manufactory manufactory = null)
+        public void AddNewOrders(ProductPurchase.ProductPurchaseView productPurchaseView, StoreOrderProductType type,WareHouse wareHouse, Manufactory manufactory = null)
         {
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("新增新處理單...");
-                ManufactoryDb.AddNewOrderBasicSafe(type, manufactory);
+                ManufactoryDb.AddNewOrderBasicSafe(type, wareHouse, manufactory);
 
                 Dispatcher.Invoke((Action)(() =>
                 {

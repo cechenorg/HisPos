@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="選擇倉庫:" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <ComboBox Width="335" Margin="10,0,0,0" DisplayMemberPath="Name" ItemsSource="{Binding WareHouseComboCollection}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontSize="20" FontFamily="Segoe UI Semi"/>
+            <ComboBox Name="WareHouseCombo" Width="335" Margin="10,0,0,0" DisplayMemberPath="Name" ItemsSource="{Binding WareHouseComboCollection}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontSize="20" FontFamily="Segoe UI Semi"/>
         </StackPanel>
         <Label Content="選擇廠商:" Foreground="Black" FontSize="25" Grid.Row="1" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
         <Grid Name="TargetGrid" Grid.Row="2" Margin="50,0,0,0">

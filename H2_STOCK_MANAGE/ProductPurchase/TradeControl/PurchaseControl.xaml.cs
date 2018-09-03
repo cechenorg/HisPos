@@ -123,11 +123,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         internal void SetDataContext(StoreOrder storeOrder)
         {
             StoreOrderData = storeOrder;
-
-            UpdateOrderDetailUi();
-
+            
             InitPrincipal();
 
+            UpdateOrderDetailUi();
+            
             PreparePaging(PagingType.INIT);
 
             StoreOrderData.IsDataChanged = false;
@@ -372,7 +372,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (e.Key == Key.Enter)
             {
-                NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text);
+                NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text, StoreOrderData.Warehouse.Id);
 
                 if (newItemDialog.ConfirmButtonClicked)
                 {
@@ -582,7 +582,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
 
             newItemDialog.ShowDialog();
 

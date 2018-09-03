@@ -19,11 +19,11 @@ namespace His_Pos.ProductPurchase
             throw new NotImplementedException();
         }
 
-        private void AddBasicOrSafe(StoreOrderProductType type,Manufactory manufactory = null)
+        private void AddBasicOrSafe(StoreOrderProductType type,WareHouse wareHouse, Manufactory manufactory = null)
         {
             LoadingWindow loadingWindow = new LoadingWindow();
 
-            loadingWindow.AddNewOrders(this, type, manufactory);
+            loadingWindow.AddNewOrders(this, type, wareHouse, manufactory);
             loadingWindow.ShowDialog();
 
             StoOrderOverview.SelectedIndex = 0;
@@ -31,9 +31,9 @@ namespace His_Pos.ProductPurchase
             //SetChanged();
         }
 
-        private void AddNewOrderByUm(Manufactory manufactory = null)
+        private void AddNewOrderByUm(WareHouse wareHouse, Manufactory manufactory = null)
         {
-            StoreOrderCollection.Insert(0, new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser, manufactory));
+            StoreOrderCollection.Insert(0, new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser, wareHouse, manufactory));
             StoOrderOverview.SelectedIndex = 0;
 
             //SetChanged();
