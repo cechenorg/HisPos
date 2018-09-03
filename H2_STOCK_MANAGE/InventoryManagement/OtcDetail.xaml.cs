@@ -152,7 +152,7 @@ namespace His_Pos.InventoryManagement
             }
         }
 
-        private void UpdateUi()
+        public void UpdateUi()
         {
             if (InventoryOtc is null) return;
 

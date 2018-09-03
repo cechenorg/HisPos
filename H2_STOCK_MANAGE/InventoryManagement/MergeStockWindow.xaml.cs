@@ -25,7 +25,8 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
     /// </summary>
     public partial class MergeStockWindow : Window
     {
-       
+
+        private string targetProId = string.Empty;
         public MergeStockWindow()
         {
             InitializeComponent();
@@ -54,13 +55,19 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 {
                     LabelTargetProductName.Content = ((PurchaseProduct)newItemDialog.SelectedItem).Name.ToString();
                     LabelTargetStock.Content = ((PurchaseProduct)newItemDialog.SelectedItem).Inventory.ToString();
+                    LabelMergeStock.Content = (Convert.ToInt32(LabelSourceStock.Content.ToString().Split('.')[0]) + Convert.ToInt32(LabelTargetStock.Content)).ToString();
+                    targetProId = ((PurchaseProduct)newItemDialog.SelectedItem).Id.ToString();
                 }
             }
         }
 
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
-
+            ProductDb.MergeProduct(OtcDetail.Instance.InventoryOtc.Id, targetProId);
+            MessageWindow messageWindow = new MessageWindow("併庫成功",Class.MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+            OtcDetail.Instance.UpdateUi();
+            Close();
         }
     }
 }

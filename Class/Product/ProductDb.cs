@@ -399,5 +399,12 @@ namespace His_Pos.Class.Product
             //}
             //return productGroups;
         }
+        internal static void MergeProduct(string soureProId,string targetProId) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SourcePRO_ID", soureProId));
+            parameters.Add(new SqlParameter("TargetPRO_ID", targetProId));
+            dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[MergeProduct]", parameters);
+        }
     }
 }

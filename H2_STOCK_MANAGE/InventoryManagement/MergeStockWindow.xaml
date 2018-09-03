@@ -47,6 +47,9 @@
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
             <Label Content="併庫後庫存" VerticalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" Margin="2" />
         </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <Label Name="LabelMergeStock" VerticalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" Margin="2" />
+        </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal">
             <Button Name="ButtonSubnmmit" Content="併庫" Width="100" Margin="10" Click="ButtonSubnmmit_Click"/>
         </StackPanel>
