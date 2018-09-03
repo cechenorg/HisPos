@@ -537,7 +537,7 @@ namespace His_Pos.PrescriptionInquire
             MessageWindow m;
             ConfirmWindow c;
             InquiredPrescription.Prescription.Medicines = DeclareDetails;
-            if (InquiredPrescription.Prescription.CheckPrescriptionData().Equals(""))
+            if (InquiredPrescription.Prescription.CheckPrescriptionData().Count == 0)
             {
                 InquiredPrescription.Prescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(InquiredPrescription.Prescription.Customer.Birthday);
                 var declareData = new DeclareData(InquiredPrescription.Prescription);

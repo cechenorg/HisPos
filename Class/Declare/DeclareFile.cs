@@ -20,17 +20,22 @@ namespace His_Pos.Class.Declare
         public DeclareFile(DataRow row)
         {
             Prescriptions = new ObservableCollection<Prescription>();
-            FileContent = SerializeToTdata(row["[HISDEC_XML]"].ToString());
-            Id = row["FILE_ID"].ToString();
-            DeclareDate = row["DECLARE_TIME"].ToString();
+            if (!string.IsNullOrEmpty(row["HISDEC_XML"].ToString()))
+                FileContent = SerializeToTdata(row["[HISDEC_XML]"].ToString());
+            if (!string.IsNullOrEmpty(row["FILE_ID"].ToString()))
+                Id = row["FILE_ID"].ToString();
+            if (!string.IsNullOrEmpty(row["DECLARE_TIME"].ToString()))
+                DeclareDate = row["DECLARE_TIME"].ToString();
             if(!string.IsNullOrEmpty(row["CHRONIC_COUNT"].ToString()))
                 ChronicCount = int.Parse(row["CHRONIC_COUNT"].ToString());
             if (!string.IsNullOrEmpty(row["NORMAL_COUNT"].ToString()))
                 NormalCount = int.Parse(row["NORMAL_COUNT"].ToString());
             if (!string.IsNullOrEmpty(row["TOTALPOINT"].ToString()))
                 TotalPoint = double.Parse(row["TOTALPOINT"].ToString());
-            ErrorPrescriptionList = SerializeToErrorPrescriptions(row["HISDEC_ERROR"].ToString());
-            IsDeclared = row["IS_DECLARED"].ToString().Equals("1");
+            if (!string.IsNullOrEmpty(row["HISDEC_ERROR"].ToString()))
+                ErrorPrescriptionList = SerializeToErrorPrescriptions(row["HISDEC_ERROR"].ToString());
+            if (!string.IsNullOrEmpty(row["IS_DECLARED"].ToString()))
+                IsDeclared = row["IS_DECLARED"].ToString().Equals("1");
         }
 
         public string Id { get; set; }

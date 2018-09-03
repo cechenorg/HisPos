@@ -187,26 +187,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             MessageWindow m;
             ConfirmWindow c;
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
-            if (CurrentPrescription.EList.Error.Count == 0)
-            {
-                var declareData = new DeclareData(CurrentPrescription);
-                var declareDb = new DeclareDb();
-                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
-                declareDb.InsertDb(declareData, declareTrade);
-                //declareDb.InsertInventoryDb(declareData,"處方登陸");
-                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
-                m.Show();
-                declareDb.UpdateDeclareFile(declareData, CurrentPrescription.EList);
-            }
-            else
-            {
-                c = new ConfirmWindow("處方資料有誤:" + CurrentPrescription.ErrorMessage + "是否修改?", MessageType.WARNING);
-                //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
-                //var declareData = new DeclareData(Prescription);
-                //var declareDb = new DeclareDb();
-                //declareDb.InsertDb(declareData);
-                c.ShowDialog();
-            }
+            var declareData = new DeclareData(CurrentPrescription);
+            var declareDb = new DeclareDb();
+            DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+            declareDb.InsertDb(declareData, declareTrade);
+            //declareDb.InsertInventoryDb(declareData,"處方登陸");
+            m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+            m.Show();
+            declareDb.UpdateDeclareFile(declareData);
             //PrintMedBag();
         }
 

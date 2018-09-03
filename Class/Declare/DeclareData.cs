@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.IO;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Properties;
+using His_Pos.RDLC;
 using His_Pos.Service;
 
 namespace His_Pos.Class.Declare
@@ -69,7 +73,7 @@ namespace His_Pos.Class.Declare
         public string DayPayCode { get; set; }//P2 日劑藥費代號
         public int MedicalServicePoint { get; set; }//D38藥事服務費點數
         public string StatusFlag { get; set; }
-        public XmlDocument Xml { get; set; } = new XmlDocument();
+        public Ddata DeclareXml { get; set; } = new Ddata();
         public string Id { get; set; }
         private int medFormCount = 0;
 
@@ -276,6 +280,135 @@ namespace His_Pos.Class.Declare
                 MedicalServiceCode = "05211C";
             }
         }
-     
+
+        public string SerializeObject<T>()
+        {
+            CreatDeclareDataXmlObject();
+            var xmlSerializer = new XmlSerializer(DeclareXml.GetType());
+            using (var textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, DeclareXml);
+                var document = XDocument.Parse(ReportService.PrettyXml(textWriter));
+                //document.Descendants()
+                //    .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
+                //    .Remove();
+                return document.ToString()
+                    .Replace(
+                        "<ddata xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">",
+                        "<ddata>");
+            }
+        }
+        private Function function = new Function();
+        private void CreatDeclareDataXmlObject()
+        {
+            var p = Prescription;
+            var c = p.Customer;
+            var t = p.Treatment;
+            var m = t.MedicalInfo;
+            var ic = c.IcCard;
+            var year = (int.Parse(c.Birthday.Substring(0, 3)) + 1911).ToString();
+            var cusBirth = year + c.Birthday.Substring(3, 6);
+            DeclareXml = new Ddata
+            {
+                Dhead = new Dhead { D1 = Prescription.Treatment.AdjustCase.Id },
+                Dbody = new Dbody
+                {
+                    D3 = c.IcNumber,
+                    D5 = t.PaymentCategory.Id,
+                    D6 = DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth)),
+                    D7 = CheckXmlEmptyValue(ic.MedicalNumber),
+                    D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id),
+                    D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id),
+                    D13 = CheckXmlEmptyValue(m.Hospital.Division.Id),
+                    D14 = CheckXmlEmptyValue(DateTimeExtensions.ToSimpleTaiwanDate(t.TreatmentDate)),
+                    D15 = CheckXmlEmptyValue(t.Copayment.Id),
+                    D16 = DeclarePoint.ToString(),
+                    D17 = CopaymentPoint.ToString(),
+                    D18 = TotalPoint.ToString(),
+                    D19 = CheckXmlEmptyValue(AssistProjectCopaymentPoint.ToString()),
+                    D20 = c.Name,
+                    D21 = CheckXmlEmptyValue(m.Hospital.Id),
+                    D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
+                    D23 = CheckXmlEmptyValue(DateTimeExtensions.ToSimpleTaiwanDate(t.AdjustDate)),
+                    D25 = t.MedicalPersonId,
+                    D30 = t.MedicineDays,
+                    D31 = SpecailMaterialPoint.ToString(),
+                    D32 = DiagnosisPoint.ToString(),
+                    D33 = DrugsPoint.ToString(),
+                    D35 = CheckXmlEmptyValue(p.ChronicSequence),
+                    D36 = CheckXmlEmptyValue(p.ChronicTotal),
+                    D37 = MedicalServiceCode,
+                    D38 = MedicalServicePoint.ToString(),
+                    D44 = ic.IcMarks.NewbornsData.Birthday
+                }
+            };
+            if (!string.IsNullOrEmpty(DeclareMakeUp))
+            {
+                DeclareXml.Dbody.D4 = DeclareMakeUp;
+            }
+
+            if (!string.IsNullOrEmpty(t.AdjustCase.Id) &&
+                (t.AdjustCase.Id.StartsWith("D") || t.AdjustCase.Id.StartsWith("5")))
+            {
+                if (string.IsNullOrEmpty(m.Hospital.Doctor.Id))
+                {
+                    m.Hospital.Doctor.Id = m.Hospital.Id;
+                }
+
+                DeclareXml.Dbody.D24 = m.Hospital.Doctor.Id;
+                DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode.Id;
+            }
+
+            if (!string.IsNullOrEmpty(p.ChronicSequence))
+            {
+                if (int.Parse(p.ChronicSequence) >= 2)
+                {
+                    DeclareXml.Dbody.D43 = p.OriginalMedicalNumber;
+                }
+            }
+
+            if (DeclareDetails.Count <= 0) return;
+            DeclareXml.Dbody.Pdata = new List<Pdata>();
+            var declareCount = 1;
+            var specialCount = 0;
+            foreach (var detail in DeclareDetails)
+            {
+                var pdata = new Pdata
+                {
+                    P1 = detail.MedicalOrder,
+                    P2 = detail.MedicalId,
+                    P3 = function.SetStrFormat(detail.Dosage, "{0:0000.00}"),
+                    P4 = detail.Usage,
+                    P5 = detail.Position,
+                    P6 = detail.Percent.ToString(),
+                    P7 = function.SetStrFormat(detail.Total, "{0:00000.0}"),
+                    P8 = function.SetStrFormat(detail.Price, "{0:0000000.00}"),
+                    P9 = function.SetStrFormatInt(
+                        Convert.ToInt32(
+                            Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))),
+                        "{0:D8}"),
+                    P10 = function.SetStrFormatInt(DeclareDetails.Count + 1, "{0:D3}"),
+                    P11 = detail.Days.ToString(),
+                    P12 = detail.StartDate,
+                    P13 = detail.EndDate,
+                };
+                if (pdata.P1.Equals("D") || pdata.P1.Equals("E") || pdata.P1.Equals("F"))
+                {
+                    specialCount++;
+                    pdata.P15 = specialCount.ToString();
+                }
+
+                DeclareXml.Dbody.Pdata.Add(pdata);
+                declareCount++;
+            }
+        }
+
+        private string CheckXmlEmptyValue(string value)
+        {
+            if (value != null)
+                return value.Length > 0 ? value : string.Empty;
+            return null;
+        }
+
     }
 }
