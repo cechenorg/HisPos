@@ -52,18 +52,18 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
             }
 
         }
-        public DemolitionWindow()
+        public DemolitionWindow(ObservableCollection<ProductGroup> productGroupCollection, InventoryOtc inventoryOtc)
         {
             InitializeComponent();
-            InitData();
+            InitData(productGroupCollection,inventoryOtc);
             DataContext = this;
         }
-        private void InitData() {
-            ProductGroups = OtcDetail.Instance.ProductGroupCollection;
+        private void InitData(ObservableCollection<ProductGroup> productGroupCollection,InventoryOtc inventoryOtc) {
+            ProductGroups = productGroupCollection;
             ComboBoxProduct.ItemsSource = ProductGroups;
-            ComboBoxProduct.Text = OtcDetail.Instance.InventoryOtc.Name;
-            LabelStock.Content = OtcDetail.Instance.InventoryOtc.Stock.Inventory;
-            AterDemolition = OtcDetail.Instance.InventoryOtc.Stock.Inventory.ToString();
+            ComboBoxProduct.Text = inventoryOtc.Name;
+            LabelStock.Content = inventoryOtc.Stock.Inventory;
+            AterDemolition = inventoryOtc.Stock.Inventory.ToString();
         }
 
         private void TextAmount_TextChanged(object sender, TextChangedEventArgs e)

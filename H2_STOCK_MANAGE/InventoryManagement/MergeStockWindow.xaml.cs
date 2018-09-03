@@ -25,19 +25,21 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
     /// </summary>
     public partial class MergeStockWindow : Window
     {
-
+        private InventoryOtc InventoryOtc;
+        public ObservableCollection<ProductGroup> ProductGroups;
         private string targetProId = string.Empty;
-        public MergeStockWindow()
+        public MergeStockWindow(InventoryOtc inventoryOtc)
         {
             InitializeComponent();
             InitData();
+            InventoryOtc = inventoryOtc;
             DataContext = this;
         }
         private void InitData() {
            
-            LabelSourceProduct.Content = OtcDetail.Instance.InventoryOtc.Id;
-            LabelSourceProductName.Content = OtcDetail.Instance.InventoryOtc.Name;
-            LabelSourceStock.Content = OtcDetail.Instance.InventoryOtc.StockValue;
+            LabelSourceProduct.Content = InventoryOtc.Id;
+            LabelSourceProductName.Content = InventoryOtc.Name;
+            LabelSourceStock.Content = InventoryOtc.StockValue;
         }
 
         private void LabelTargetProduct_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -48,7 +50,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 
             if (e.Key == Key.Enter)
             {
-                NewItemDialog newItemDialog = new NewItemDialog(InventoryManagementView.Instance.ProductCollection, "", LabelTargetProduct.Text, OtcDetail.Instance.InventoryOtc.WareHouse);
+                NewItemDialog newItemDialog = new NewItemDialog(InventoryManagementView.Instance.ProductCollection, "", LabelTargetProduct.Text, InventoryOtc.WareHouse);
                 LabelTargetStock.Content = "0";
                 LabelTargetProductName.Content = string.Empty;
                 if (newItemDialog.ConfirmButtonClicked)
@@ -63,10 +65,9 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.MergeProduct(OtcDetail.Instance.InventoryOtc.Id, targetProId);
+            ProductDb.MergeProduct(InventoryOtc.Id, targetProId);
             MessageWindow messageWindow = new MessageWindow("併庫成功",Class.MessageType.SUCCESS);
             messageWindow.ShowDialog();
-            OtcDetail.Instance.UpdateUi();
             Close();
         }
     }

@@ -94,7 +94,6 @@ namespace His_Pos.InventoryManagement
         public InventoryOtc InventoryOtc;
         private bool IsChanged = false;
         private bool IsFirst = true;
-        public static OtcDetail Instance;
         public OtcDetail()
         {
             InitializeComponent();
@@ -107,7 +106,6 @@ namespace His_Pos.InventoryManagement
 
             IsFirst = false;
             DataContext = this;
-            Instance = this;
         }
         
 
@@ -359,13 +357,14 @@ namespace His_Pos.InventoryManagement
 
         private void ButtonMergeStock_Click(object sender, RoutedEventArgs e)
         {
-            MergeStockWindow mergeStockWindow = new MergeStockWindow();
+            MergeStockWindow mergeStockWindow = new MergeStockWindow(InventoryOtc);
             mergeStockWindow.ShowDialog();
+            UpdateUi();
         }
 
         private void ButtonDemolition_Click(object sender, RoutedEventArgs e)
         {
-            DemolitionWindow demolitionWindow = new DemolitionWindow();
+            DemolitionWindow demolitionWindow = new DemolitionWindow(ProductGroupCollection, InventoryOtc);
             demolitionWindow.ShowDialog();
         }
 
