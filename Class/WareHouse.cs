@@ -16,5 +16,6 @@ namespace His_Pos.Class
             Id = dataRow["PROWAR_ID"].ToString();
             Name = dataRow["PROWAR_NAME"].ToString();
         }
+        
     }
 }

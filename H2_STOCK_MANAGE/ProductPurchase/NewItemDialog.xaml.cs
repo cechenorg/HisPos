@@ -29,7 +29,7 @@ namespace His_Pos.ProductPurchase
         
         public PurchaseProduct SelectedItem;
         public bool ConfirmButtonClicked = false;
-
+        public string WarName;
         public string ManufactoryID;
 
         public NewItemDialog(Collection<PurchaseProduct> collection, string manId)
@@ -42,14 +42,14 @@ namespace His_Pos.ProductPurchase
 
             InitCollection();
         }
-        public NewItemDialog(Collection<PurchaseProduct> collection, string manId, string searchText)
+        public NewItemDialog(Collection<PurchaseProduct> collection, string manId, string searchText,string warName = null)
         {
             InitializeComponent();
             Title = "新增";
 
             DataCollection = collection;
             ManufactoryID = manId;
-
+            WarName = warName;
             SearchText.Text = searchText;
             AllProducts.IsChecked = true;
 
@@ -89,18 +89,24 @@ namespace His_Pos.ProductPurchase
 
             if ((bool) OnlyManufactory.IsChecked)
             {
-                if (String.IsNullOrEmpty(SearchText.Text))
+                if (String.IsNullOrEmpty(SearchText.Text) && (((PurchaseProduct)item).WarName == WarName || WarName == null) )
                     return ((PurchaseProduct)item).Mans.Contains(ManufactoryID);
 
-                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text)) && ((PurchaseProduct)item).Mans.Contains(ManufactoryID))
+                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text)) && ((PurchaseProduct)item).Mans.Contains(ManufactoryID)
+                      && (((PurchaseProduct)item).WarName == WarName || WarName == null)
+                    )
                     return true;
             }
             else
             {
-                if (String.IsNullOrEmpty(SearchText.Text))
+                if (String.IsNullOrEmpty(SearchText.Text)
+                       && (((PurchaseProduct)item).WarName == WarName || WarName == null)
+                    )
                     return true;
 
-                if (((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text))
+                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text))
+                    && (((PurchaseProduct)item).WarName ==WarName || WarName == null)
+                    )
                     return true;
             }
 

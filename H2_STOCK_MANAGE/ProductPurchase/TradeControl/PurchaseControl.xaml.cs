@@ -129,6 +129,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             InitPrincipal();
 
             PreparePaging(PagingType.INIT);
+
+            StoreOrderData.IsDataChanged = false;
         }
 
         private void InitPrincipal()
@@ -328,7 +330,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!textBox.Name.Equals("FreeAmount"))
                 storeOrderData.CalculateTotalPrice();
-
+            
             StoreOrderData.IsDataChanged = true;
         }
 
@@ -419,8 +421,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         #region ----- Paging Functions -----
         private void PreparePaging(PagingType type)
         {
-            TotalPage = (storeOrderData.Products.Count / PRODUCT_PER_PAGE) + ((storeOrderData.Products.Count % PRODUCT_PER_PAGE == 0) ? 0 : 1);
-
+            if (storeOrderData.Products.Count == 0)
+                TotalPage = 1;
+            else
+                TotalPage = (storeOrderData.Products.Count / PRODUCT_PER_PAGE) + ((storeOrderData.Products.Count % PRODUCT_PER_PAGE == 0) ? 0 : 1);
+            
             switch (type)
             {
                 case PagingType.INIT:
@@ -600,9 +605,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData.IsDataChanged = true;
         }
 
-        private void PurchaseControl_OnGotFocus(object sender, RoutedEventArgs e)
+        private void PurchaseControl_OnTargetUpdated(object sender, DataTransferEventArgs e)
         {
-            if(StoreOrderData is null) return;
+            if(storeOrderData is null ) return;
 
             StoreOrderData.IsDataChanged = false;
         }

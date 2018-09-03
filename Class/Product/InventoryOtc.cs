@@ -22,6 +22,7 @@ namespace His_Pos.Class.Product
             Note = dataRow["PRO_DESCRIPTION"].ToString();
             Stock = new InStock(dataRow);
             ProductType = new ProductType.ProductType(dataRow);
+            WareHouseId = dataRow["PROWAR_ID"].ToString();
             WareHouse = dataRow["PROWAR_NAME"].ToString();
         }
         public ProductType.ProductType ProductType { get; set; }
@@ -31,6 +32,7 @@ namespace His_Pos.Class.Product
         public BitmapImage TypeIcon { get; set; }
         public string StockValue { get; set; }
         public string Note { get; set; }
+        public string WareHouseId { get; set; }
         public string WareHouse { get; set; }
     }
 }

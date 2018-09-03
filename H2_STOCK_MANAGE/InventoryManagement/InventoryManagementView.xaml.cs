@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Data;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.InventoryManagement
 {
@@ -60,6 +61,7 @@ namespace His_Pos.InventoryManagement
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        public Collection<PurchaseProduct> ProductCollection { get; set; }
         public InventoryManagementView()
         {
             InitializeComponent();

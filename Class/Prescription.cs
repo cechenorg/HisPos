@@ -36,6 +36,8 @@ namespace His_Pos.Class
             Pharmacy = new Pharmacy.Pharmacy(row);
             Treatment = new Treatment(row);
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
+            ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
+            ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
         }
 
         public Prescription(XmlNode xml)

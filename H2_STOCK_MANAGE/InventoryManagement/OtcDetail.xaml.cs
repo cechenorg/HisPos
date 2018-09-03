@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
@@ -21,10 +22,12 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StockTakingOrder;
+using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.ProductPurchaseRecord;
 using His_Pos.StockTaking;
+using His_Pos.Struct.Product;
 using His_Pos.ViewModel;
 using LiveCharts;
 using LiveCharts.Definitions.Series;
@@ -35,8 +38,26 @@ namespace His_Pos.InventoryManagement
     /// <summary>
     /// OtcDetail.xaml 的互動邏輯
     /// </summary>
-    public partial class OtcDetail : UserControl
+    public partial class OtcDetail : UserControl, INotifyPropertyChanged
     {
+        public class WareStcok {
+            public WareStcok(DataRow row ) {
+                warId = row["PROWAR_ID"].ToString();
+                warName = row["PROWAR_NAME"].ToString();
+                warStock = row["PRO_INVENTORY"].ToString();
+            }
+           public string warId { get; set; }
+           public string warName { get; set; }
+           public string warStock { get; set; }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
 
@@ -49,11 +70,31 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<string> OTCUnitChangdedCollection = new ObservableCollection<string>();
         public ObservableCollection<StockTakingOverview> StockTakingOverviewCollection;
         public ListCollectionView ProductTypeCollection;
-       
+        private ObservableCollection<ProductGroup> productGroupCollection;
+        public ObservableCollection<ProductGroup> ProductGroupCollection {
+            get { return productGroupCollection; }
+            set
+            {
+                productGroupCollection = value;
+                NotifyPropertyChanged("ProductGroupCollection");
+            }
+
+        }
+        private ObservableCollection<WareStcok> wareStcokCollection;
+        public ObservableCollection<WareStcok> WareStcokCollection
+        {
+            get { return wareStcokCollection; }
+            set
+            {
+                wareStcokCollection = value;
+                NotifyPropertyChanged("WareStcokCollection");
+            }
+
+        }
         public InventoryOtc InventoryOtc;
         private bool IsChanged = false;
         private bool IsFirst = true;
-
+        public static OtcDetail Instance;
         public OtcDetail()
         {
             InitializeComponent();
@@ -66,6 +107,7 @@ namespace His_Pos.InventoryManagement
 
             IsFirst = false;
             DataContext = this;
+            Instance = this;
         }
         
 
@@ -85,7 +127,6 @@ namespace His_Pos.InventoryManagement
             SalesCollection.Add(GetSalesLineSeries());
             AddMonths();
         }
-
         private LineSeries GetSalesLineSeries()
         {
             ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(InventoryOtc.Id);
@@ -151,6 +192,8 @@ namespace His_Pos.InventoryManagement
             if (StockTakingOverviewCollection.Count != 0)
                 LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
 
+            WareStcokCollection = WareHouseDb.GetWareStockById(InventoryOtc.Id);
+            ProductGroupCollection = ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
             UpdateChart();
             InitVariables();
             SetUnitValue();
@@ -312,6 +355,24 @@ namespace His_Pos.InventoryManagement
             StockTakingHistory stockTakingHistory = new StockTakingHistory(StockTakingOverviewCollection);
 
             stockTakingHistory.Show();
+        }
+
+        private void ButtonMergeStock_Click(object sender, RoutedEventArgs e)
+        {
+            MergeStockWindow mergeStockWindow = new MergeStockWindow();
+            mergeStockWindow.ShowDialog();
+        }
+
+        private void ButtonDemolition_Click(object sender, RoutedEventArgs e)
+        {
+            DemolitionWindow demolitionWindow = new DemolitionWindow();
+            demolitionWindow.ShowDialog();
+        }
+
+        private void OtcWareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
+            OtcStock.Items.Filter = product => ((OTCStockOverview)product).warId == ((WareStcok)(sender as DataGrid).SelectedItem).warId;
         }
     }
 }

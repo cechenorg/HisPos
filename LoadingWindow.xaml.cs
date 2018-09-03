@@ -263,7 +263,7 @@ namespace His_Pos
                 double stockValue = 0;
                 inventoryManagementView.InventoryMedicines = MedicineDb.GetInventoryMedicines();
                 inventoryManagementView.InventoryOtcs = OTCDb.GetInventoryOtcs();
-
+                inventoryManagementView.ProductCollection = ProductDb.GetItemDialogProduct();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     ObservableCollection<Product> products = new ObservableCollection<Product>();
