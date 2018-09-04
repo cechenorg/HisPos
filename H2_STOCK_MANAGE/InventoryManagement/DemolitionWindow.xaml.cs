@@ -1,9 +1,11 @@
-﻿using His_Pos.Class.Product;
+﻿using His_Pos.Class;
+using His_Pos.Class.Product;
 using His_Pos.InventoryManagement;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,16 +33,8 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        private string aterDemolition;
-        public string AterDemolition
-        {
-            get { return aterDemolition; }
-            set
-            {
-                aterDemolition = value;
-                NotifyPropertyChanged("AterDemolition");
-            }
-        }
+       
+        private InventoryOtc InventoryOtc;
         private ObservableCollection<ProductGroup> productGroups;
         public ObservableCollection<ProductGroup> ProductGroups
         {
@@ -50,31 +44,81 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 productGroups = value;
                 NotifyPropertyChanged("ProductGroups");
             }
+        }
+        private ObservableCollection<WareHouseInventory> wareHouseInventoryCollection;
+        public ObservableCollection<WareHouseInventory> WareHouseInventoryCollection
+        {
+            get { return wareHouseInventoryCollection; }
+            set
+            {
+                wareHouseInventoryCollection = value;
+                NotifyPropertyChanged("WareHouseInventoryCollection");
+            }
+        }
+        public class WareHouseInventory : INotifyPropertyChanged {
+            public WareHouseInventory(DataRow row){
+                warId = row["PROWAR_ID"].ToString();
+                warName = row["PROWAR_NAME"].ToString();
+                Inventory = row["PRO_INVENTORY"].ToString();
+                DemolitionAmount = "0";
+                AfterDemolitionAmount = "0";
+            }
+            public string warId { get; set; }
+            public string warName { get; set; }
+            public string Inventory { get; set; }
+            private string demolitionAmount;
+            public string DemolitionAmount
+            {
+                get { return demolitionAmount; }
+                set
+                {
+                    demolitionAmount = value;
+                    AfterDemolitionAmount = (Convert.ToInt32(Inventory) - Convert.ToInt32(demolitionAmount)).ToString();
+                }
+            }
+            private string afterDemolitionAmount;
+            public string AfterDemolitionAmount
+            {
+                get { return afterDemolitionAmount; }
+                set
+                {
+                    afterDemolitionAmount = value;
+                    NotifyPropertyChanged("AfterDemolitionAmount");
+                }
+            }
+            public event PropertyChangedEventHandler PropertyChanged;
+            private void NotifyPropertyChanged(string info) {
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(info));
+                }
+            }
 
         }
         public DemolitionWindow(ObservableCollection<ProductGroup> productGroupCollection, InventoryOtc inventoryOtc)
         {
             InitializeComponent();
-            InitData(productGroupCollection,inventoryOtc);
+            InventoryOtc = inventoryOtc;
+            InitData(productGroupCollection);
             DataContext = this;
         }
-        private void InitData(ObservableCollection<ProductGroup> productGroupCollection,InventoryOtc inventoryOtc) {
+        private void InitData(ObservableCollection<ProductGroup> productGroupCollection) {
             ProductGroups = productGroupCollection;
             ComboBoxProduct.ItemsSource = ProductGroups;
-            ComboBoxProduct.Text = inventoryOtc.Name;
-            LabelStock.Content = inventoryOtc.Stock.Inventory;
-            AterDemolition = inventoryOtc.Stock.Inventory.ToString();
+            ComboBoxProduct.Text = InventoryOtc.Name;
+            WareHouseInventoryCollection = WareHouseDb.GetWareHouseInventoryById(InventoryOtc.Id);
         }
 
         private void TextAmount_TextChanged(object sender, TextChangedEventArgs e)
         {
             if( String.IsNullOrEmpty((sender as TextBox).Text) ) return;
-            AterDemolition = (Convert.ToInt32(OtcDetail.Instance.InventoryOtc.Stock.Inventory) - Convert.ToInt32((sender as TextBox).Text)).ToString();
         }
 
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
             ProductDb.DemolitionProduct();
         }
+
+      
     }
 }

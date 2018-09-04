@@ -370,7 +370,6 @@ namespace His_Pos.InventoryManagement
 
         private void OtcWareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
             OtcStock.Items.Filter = product => ((OTCStockOverview)product).warId == ((WareStcok)(sender as DataGrid).SelectedItem).warId;
         }
     }
