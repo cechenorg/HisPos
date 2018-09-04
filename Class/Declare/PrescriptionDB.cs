@@ -62,7 +62,7 @@ namespace His_Pos.Class.Declare
             return declareDetails;
         }
 
-        public static List<Ddata> GetPrescriptionXmlByDate(DateTime dateTime)
+        public static List<Ddata> GetPrescriptionXmlByDate(DateTime dateTime, List<ErrorPrescription> errorPrescriptions)
         {
             var ddatas = new List<Ddata>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
@@ -72,26 +72,11 @@ namespace His_Pos.Class.Declare
             {
                 var d = Deserialize<Ddata>(row["HISDECMAS_DETXML"].ToString());
                 ddatas.Add(d);
+                var e = Deserialize<ErrorPrescription>(row["HISDECMAS_ERRORMSG"].ToString());
+                e.PrescriptionId = row["HISDECMAS_ID"].ToString();
+                errorPrescriptions.Add(e);
             }
             return ddatas;
-        }
-
-        public static List<ErrorList> GetPrescriptionErrorLists(DateTime dateTime)
-        {
-            var errorList = new List<ErrorList>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter> { new SqlParameter("DEC_TIME", dateTime) };
-            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
-            foreach (DataRow row in table.Rows)
-            {
-                var e = new ErrorList
-                {
-                    PrescriptionId = row["PRESCRIPTION_ID"].ToString(),
-                    Error = Deserialize<List<Error>>(row["ERRORS"].ToString())
-                };
-                errorList.Add(e);
-            }
-            return errorList;
         }
 
         public static T Deserialize<T>(string s)

@@ -298,6 +298,23 @@ namespace His_Pos.Class.Declare
                         "<ddata>");
             }
         }
+
+        public string SerializeErrorPrescription<T>()
+        {
+            var xmlSerializer = new XmlSerializer(Prescription.EList.GetType());
+            using (var textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, Prescription.EList);
+                var document = XDocument.Parse(ReportService.PrettyXml(textWriter));
+                //document.Descendants()
+                //    .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
+                //    .Remove();
+                return document.ToString()
+                    .Replace(
+                        "<ErrorPrescription xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">",
+                        "<ErrorPrescription>");
+            }
+        }
         private Function function = new Function();
         private void CreatDeclareDataXmlObject()
         {

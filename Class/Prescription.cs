@@ -54,7 +54,7 @@ namespace His_Pos.Class
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
         public ObservableCollection<DeclareMedicine> Medicines { get; set; }
         public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
-        public ErrorList EList = new ErrorList();
+        public ErrorPrescription EList = new ErrorPrescription();
         private bool adjustCaseNull = false;
 
         private List<Error> _errorMessage;

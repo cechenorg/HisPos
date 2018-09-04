@@ -45,16 +45,18 @@ namespace His_Pos.Class.Declare
                 {
                     Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
             });
-                parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG",""));
+                var error = declareData.SerializeObject<ErrorPrescriptions>();
+                parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG",declareData.SerializeErrorPrescription<ErrorPrescription>()));
                 CheckInsertDbTypeUpdate(parameters);
             }
         }
         public void UpdateDeclareFile(DeclareData declareData)
         {
             var declareDate = declareData.Prescription.Treatment.AdjustDate;
+            var file = DeclareFileDb.GetDeclareFileTypeLogIn(declareDate);
             var p = new Pharmacy
             {
-                Ddata = GetDdataList(declareData.Prescription.Treatment.AdjustDate)
+                Ddata = GetDdataList(declareData.Prescription.Treatment.AdjustDate,file.ErrorPrescriptionList.ErrorPrescription)
             };
             var sortedCaseList = SortDdataByCaseId(p);
            
@@ -77,10 +79,7 @@ namespace His_Pos.Class.Declare
             tdata.T14 = GetDateStr(declareDate, false);
             p.Tdata = tdata;
             p.Ddata = sortedCaseList;
-
-            var file = DeclareFileDb.GetDeclareFileTypeLogIn(declareDate);
             file.FileContent = p;
-            file.ErrorPrescriptionList.ErrorList = PrescriptionDB.GetPrescriptionErrorLists(declareDate);
             DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate,DeclareFileType.LOG_IN);
         }
 
@@ -96,12 +95,13 @@ namespace His_Pos.Class.Declare
             return sorted;
         }
 
-        private List<Ddata> GetDdataList(DateTime declareDate)
+        private List<Ddata> GetDdataList(DateTime declareDate,List<ErrorPrescription> e)
         {
-            if (PrescriptionDB.GetPrescriptionXmlByDate(declareDate).Count == 0) return new List<Ddata>();
             //依照藥事服務費點數排序
-            var ddatas = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).OrderBy(d => d.Dbody.D38)
-                .ToList();
+            var ddatas = PrescriptionDB.GetPrescriptionXmlByDate(declareDate, e);
+            if(ddatas.Count == 0 ) return new List<Ddata>();
+
+            ddatas.OrderBy(d => d.Dbody.D38).ToList();
             /*
              * 藥事服務費每人每日81 - 100件內 => 診療項目代碼: 05234D . 支付點數 : 15
              *          每人每日100件以上 => 診療項目代碼: 0502B . 支付點數 : 0

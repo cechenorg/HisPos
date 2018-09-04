@@ -20,22 +20,19 @@ namespace His_Pos.Class.Declare
         public DeclareFile(DataRow row)
         {
             Prescriptions = new ObservableCollection<Prescription>();
-            if (!string.IsNullOrEmpty(row["HISDEC_XML"].ToString()))
-                FileContent = SerializeToTdata(row["[HISDEC_XML]"].ToString());
+                
             if (!string.IsNullOrEmpty(row["FILE_ID"].ToString()))
+            {
                 Id = row["FILE_ID"].ToString();
-            if (!string.IsNullOrEmpty(row["DECLARE_TIME"].ToString()))
+                FileContent = SerializeToTdata(row["[HISDEC_XML]"].ToString());
                 DeclareDate = row["DECLARE_TIME"].ToString();
-            if(!string.IsNullOrEmpty(row["CHRONIC_COUNT"].ToString()))
                 ChronicCount = int.Parse(row["CHRONIC_COUNT"].ToString());
-            if (!string.IsNullOrEmpty(row["NORMAL_COUNT"].ToString()))
                 NormalCount = int.Parse(row["NORMAL_COUNT"].ToString());
-            if (!string.IsNullOrEmpty(row["TOTALPOINT"].ToString()))
                 TotalPoint = double.Parse(row["TOTALPOINT"].ToString());
-            if (!string.IsNullOrEmpty(row["HISDEC_ERROR"].ToString()))
                 ErrorPrescriptionList = SerializeToErrorPrescriptions(row["HISDEC_ERROR"].ToString());
-            if (!string.IsNullOrEmpty(row["IS_DECLARED"].ToString()))
                 IsDeclared = row["IS_DECLARED"].ToString().Equals("1");
+                PhamarcyId = row["PHARMACY_ID"].ToString();
+            }
         }
 
         public string Id { get; set; }
@@ -125,15 +122,15 @@ namespace His_Pos.Class.Declare
             }
         }
 
-        private ErrorPrescriptions _errorPrescriptionList;
+        private ErrorPrescriptions _errorPrescriptionListList;
 
         public ErrorPrescriptions ErrorPrescriptionList
         {
-            get => _errorPrescriptionList;
+            get => _errorPrescriptionListList;
             set
             {
-                _errorPrescriptionList = value;
-                if (_errorPrescriptionList.ErrorList.Count > 0)
+                _errorPrescriptionListList = value;
+                if (_errorPrescriptionListList.ErrorPrescription.Count > 0)
                     HasError = true;
                 OnPropertyChanged(nameof(ErrorPrescriptionList));
             }
@@ -163,6 +160,8 @@ namespace His_Pos.Class.Declare
             }
         }
 
+        public string PhamarcyId { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -182,8 +181,8 @@ namespace His_Pos.Class.Declare
         {
             XmlSerializer serializer = new XmlSerializer(typeof(ErrorPrescriptions));
             MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlStr));
-            ErrorPrescriptions errorPrescriptions = (ErrorPrescriptions)serializer.Deserialize(memStream);
-            return errorPrescriptions;
+            ErrorPrescriptions errorPrescriptionList = (ErrorPrescriptions)serializer.Deserialize(memStream);
+            return errorPrescriptionList;
         }
     }
 }
