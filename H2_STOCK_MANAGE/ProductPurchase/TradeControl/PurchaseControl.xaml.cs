@@ -605,6 +605,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             StoreOrderData.IsDataChanged = true;
         }
+
+        private void ShowDeclareDataOverview(object sender, MouseButtonEventArgs e)
+        {
+            DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
+            declareDataDetailOverview.Show();
+        }
     }
 
     public class HasDeclareDataToVisConverter : IValueConverter

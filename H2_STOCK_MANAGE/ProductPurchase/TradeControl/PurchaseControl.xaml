@@ -37,16 +37,16 @@
             <Label Content="訂單聯絡人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <ComboBox Name="PrincipalCombo" SelectedItem="{Binding Principal, Mode=TwoWay}" ItemsSource="{Binding PrincipalCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"
                       DisplayMemberPath="Name" Width="120" FontFamily="Segoe UI Semibold" FontSize="18" HorizontalContentAlignment="Center" SelectionChanged="Principal_OnSelectionChanged"/>
-            <StackPanel Name="HasPrincipalStack" Orientation="Horizontal" Width="250">
+            <StackPanel Name="HasPrincipalStack" Orientation="Horizontal" Margin="10,0,0,0" Width="250">
                 <Label Content="{Binding Path=Principal.Phone}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="15,0,0,0"/>
             </StackPanel>
             <StackPanel Name="DontHasPrincipalStack" Orientation="Horizontal" Margin="10,0,0,0" Visibility="Collapsed" Width="250">
                 <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人名稱" FontFamily="Segoe UI Semi" FontSize="18"/>
                 <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人電話" FontFamily="Segoe UI Semi" FontSize="18"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="210,0,0,0" Visibility="{Binding DeclareDataCount, Converter={StaticResource HasDeclareDataToVisConverter}}">
+            <StackPanel Orientation="Horizontal" Margin="210,0,0,0" Visibility="{Binding DeclareDataCount, Converter={StaticResource HasDeclareDataToVisConverter}}" MouseLeftButtonDown="ShowDeclareDataOverview">
                 <Image Width="35" Source="../../../Images/User_48px.png"/>
-                <Label Content="{Binding DeclareDataCount}" Foreground="{StaticResource ForeGround}" Width="120" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
+                <Label Content="{Binding DeclareDataCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
         <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
