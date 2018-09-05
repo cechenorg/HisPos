@@ -49,6 +49,9 @@ namespace His_Pos.Class.StoreOrder
                 case "G":
                     Type = OrderType.PROCESSING;
                     break;
+                case "W":
+                    Type = OrderType.WAITING;
+                    break;
             }
 
             Category = new Category(row["STOORD_TYPE"].ToString().Equals("進")? StoreOrderCategory.PURCHASE : StoreOrderCategory.RETURN);
@@ -97,6 +100,9 @@ namespace His_Pos.Class.StoreOrder
                         break;
                     case OrderType.PROCESSING:
                         TypeIcon = new BitmapImage(new Uri(@"..\..\Images\DarkerHisDot.png", UriKind.Relative));
+                        break;
+                    case OrderType.WAITING:
+                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\HisDot.png", UriKind.Relative));
                         break;
                 }
             }

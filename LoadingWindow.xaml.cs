@@ -212,6 +212,15 @@ namespace His_Pos
 
                     //待修改
                     ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+
+                    foreach(StoreOrder stoOrd in tempStoreOrderCollection)
+                    {
+                        if(stoOrd.Type == OrderType.WAITING)
+                        {
+                            //Check Order Status
+                        }
+                    }
+
                     productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
                 }));
             };

@@ -66,6 +66,9 @@ namespace His_Pos.Class.StoreOrder
                 case OrderType.DONE:
                     type = "D";
                     break;
+                case OrderType.WAITING:
+                    type = "W";
+                    break;
             }
             parameters.Add(new SqlParameter("STOORD_FLAG", type));
 

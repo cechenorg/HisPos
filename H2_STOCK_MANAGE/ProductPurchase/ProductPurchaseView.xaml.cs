@@ -287,14 +287,28 @@ namespace His_Pos.ProductPurchase
                     break;
                 }
             }
+
             if (!CheckNoEmptyData()) return;
-            StoreOrderData.Type = OrderType.PROCESSING;
+
+            if(StoreOrderData.Manufactory.Id == "0")
+                StoreOrderData.Type = OrderType.WAITING;
+            else
+                StoreOrderData.Type = OrderType.PROCESSING;
+
             SaveOrder();
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = StoreOrderData;
             StoOrderOverview.ScrollIntoView(StoreOrderData);
 
             SetCurrentControl();
+
+            if (StoreOrderData.Type == OrderType.WAITING)
+                SendStoreOrderToSinde();
+        }
+
+        private void SendStoreOrderToSinde()
+        {
+
         }
 
         //private void UserControl_Unloaded(object sender, RoutedEventArgs e)
