@@ -31,6 +31,7 @@ namespace His_Pos.Class.StoreOrder
             Category = new Category(category);
             Warehouse = wareHouse;
             Principal = new PurchasePrincipal("");
+            DeclareDataCount = 0;
 
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 
@@ -58,11 +59,15 @@ namespace His_Pos.Class.StoreOrder
             Principal = new PurchasePrincipal(row);
 
             Warehouse = new WareHouse(row);
+
+            DeclareDataCount = Int32.Parse(row["DECLARECOUNT"].ToString());
         }
 
         private StoreOrder()
         {
         }
+        
+        public int DeclareDataCount { get; set; }
 
         public bool IsDataChanged { get; set; } = false;
 

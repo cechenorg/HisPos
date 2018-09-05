@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -603,6 +604,20 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             UpdatePricipalStackUi();
 
             StoreOrderData.IsDataChanged = true;
+        }
+    }
+
+    public class HasDeclareDataToVisConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null || (int)value == 0) return Visibility.Collapsed;
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return 0;
         }
     }
 }
