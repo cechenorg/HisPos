@@ -73,7 +73,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 set
                 {
                     demolitionAmount = value;
-                    AfterDemolitionAmount = (Convert.ToInt32(Inventory) - Convert.ToInt32(demolitionAmount)).ToString();
+                    AfterDemolitionAmount = String.IsNullOrEmpty(demolitionAmount) ? "0" :(Convert.ToInt32(Inventory) - Convert.ToInt32(demolitionAmount)).ToString();
                 }
             }
             private string afterDemolitionAmount;
@@ -116,9 +116,27 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.DemolitionProduct();
+            DataTable productDemolitionTable = SetDemolitionTable();
+             ProductDb.DemolitionProduct(productDemolitionTable);
+            MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+            Close();
         }
+        private DataTable SetDemolitionTable() {
+            var demolitionTable = new DataTable();
+            demolitionTable.Columns.Add("PRO_ID", typeof(string));
+            demolitionTable.Columns.Add("PROWAR_ID", typeof(string));
+            demolitionTable.Columns.Add("DemolitionAmount", typeof(int));
 
+            foreach (WareHouseInventory wareHouseInventory in WareHouseInventoryCollection) {
+                var row = demolitionTable.NewRow();
+                row["PRO_ID"] = ProductGroups.Single(pro => pro.name == ComboBoxProduct.Text).id;
+                row["PROWAR_ID"] = wareHouseInventory.warId;
+                row["DemolitionAmount"] = wareHouseInventory.DemolitionAmount;
+                demolitionTable.Rows.Add(row);
+            }
+            return demolitionTable;
+        }
       
     }
 }

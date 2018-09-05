@@ -16,14 +16,39 @@ namespace His_Pos.Service
 
         public DbConnection(string connection) { _connection = new SqlConnection(connection); }
 
-        ///<summary>
-        ///ChangeNameToEnglish()
-        ///</summary>
-        ///<remarks>
-        ///輸入:SQL語法字串
-        ///輸出:執行回傳資料的Datatable
-        ///用途:執行SQL語法取的資料
-        ///</remarks>
+        public void NonQueryBySqlString(string sqlString)
+        {
+            DataTable dataTable = new DataTable();
+            SqlCommand cmd = new SqlCommand(sqlString, _connection);
+            try
+            {
+                _connection.Open();
+                cmd.ExecuteNonQuery();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message);
+            }
+
+        }
+        public DataTable QueryBySqlString(string sqlString)
+        {
+            DataTable dataTable = new DataTable();
+            SqlCommand cmd = new SqlCommand(sqlString, _connection);
+            try {
+                _connection.Open();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dataTable);
+                _connection.Close();
+                da.Dispose();
+                return dataTable;
+            }
+            catch (Exception ex) {
+                throw new InvalidOperationException(ex.Message);
+            }
+           
+        }
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
             var table = new DataTable();

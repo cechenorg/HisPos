@@ -366,6 +366,7 @@ namespace His_Pos.InventoryManagement
         {
             DemolitionWindow demolitionWindow = new DemolitionWindow(ProductGroupCollection, InventoryOtc);
             demolitionWindow.ShowDialog();
+            UpdateUi();
         }
 
         private void OtcWareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)

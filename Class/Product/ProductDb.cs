@@ -385,19 +385,12 @@ namespace His_Pos.Class.Product
             }
             return productGroups;
         }
-        internal static void DemolitionProduct()
-        {
-            //ObservableCollection<ProductGroup> productGroups = new ObservableCollection<ProductGroup>();
-            //var dd = new DbConnection(Settings.Default.SQL_global);
-            //var parameters = new List<SqlParameter>();
-            //parameters.Add(new SqlParameter("PRO_ID", proId));
-            //parameters.Add(new SqlParameter("PROWAR_ID", warId));
-            //var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[DemolitionProduct]", parameters);
-            //foreach (DataRow row in table.Rows)
-            //{
-            //    productGroups.Add(new ProductGroup(row));
-            //}
-            //return productGroups;
+        internal static void DemolitionProduct(DataTable dataTable)
+        { 
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("Product", dataTable));
+            DataTable a = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[DemolitionProduct]", parameters);
         }
         internal static void MergeProduct(string soureProId,string targetProId) {
             var dd = new DbConnection(Settings.Default.SQL_global);

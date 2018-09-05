@@ -31,8 +31,8 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
         public MergeStockWindow(InventoryOtc inventoryOtc)
         {
             InitializeComponent();
-            InitData();
             InventoryOtc = inventoryOtc;
+            InitData();
             DataContext = this;
         }
         private void InitData() {
@@ -50,7 +50,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 
             if (e.Key == Key.Enter)
             {
-                NewItemDialog newItemDialog = new NewItemDialog(InventoryManagementView.Instance.ProductCollection, "", LabelTargetProduct.Text, InventoryOtc.WareHouse);
+                NewItemDialog newItemDialog = new NewItemDialog(InventoryManagementView.Instance.ProductCollection, "", LabelTargetProduct.Text, InventoryOtc.WareHouseId);
                 LabelTargetStock.Content = "0";
                 LabelTargetProductName.Content = string.Empty;
                 if (newItemDialog.ConfirmButtonClicked)
