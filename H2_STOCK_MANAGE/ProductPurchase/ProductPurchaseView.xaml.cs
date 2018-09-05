@@ -102,7 +102,7 @@ namespace His_Pos.ProductPurchase
 
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetProductPurchaseData(this);
-
+            loadingWindow.Topmost = true;
             loadingWindow.Show();
 
             purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
