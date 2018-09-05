@@ -53,6 +53,7 @@ namespace His_Pos.ProductPurchase
         
         private PurchaseControl purchaseControl = new PurchaseControl();
         private ReturnControl returnControl = new ReturnControl();
+        private WaitControl waitControl = new WaitControl();
 
         public StoreOrder StoreOrderData { get; set; }
 
@@ -156,8 +157,16 @@ namespace His_Pos.ProductPurchase
             switch (StoreOrderData.Category.CategoryName)
             {
                 case "進貨":
-                    CurrentControl = purchaseControl;
-                    purchaseControl.SetDataContext(StoreOrderData);
+                    if (StoreOrderData.Type == OrderType.WAITING)
+                    {
+                        CurrentControl = waitControl;
+                        waitControl.SetDataContext(StoreOrderData);
+                    }
+                    else
+                    {
+                        CurrentControl = purchaseControl;
+                        purchaseControl.SetDataContext(StoreOrderData);
+                    }
                     return;
                 case "退貨":
                     CurrentControl = returnControl;

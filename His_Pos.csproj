@@ -396,6 +396,9 @@
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml.cs">
       <DependentUpon>ReturnControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\WaitControl.xaml.cs">
+      <DependentUpon>WaitControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
       <DependentUpon>AuthenticationManageView.xaml</DependentUpon>
@@ -643,6 +646,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\WaitControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

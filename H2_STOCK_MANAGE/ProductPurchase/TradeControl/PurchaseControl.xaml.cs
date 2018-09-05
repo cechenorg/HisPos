@@ -96,14 +96,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private const int PRODUCT_PER_PAGE = 12;
 
-        enum PagingType
-        {
-            INIT,
-            DEL,
-            ADD,
-            SPLIT
-        }
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -153,7 +146,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             switch (StoreOrderData.Type)
             {
                 case OrderType.PROCESSING:
-                    WaitLabel.Visibility = Visibility.Collapsed;
                     Confirm.Visibility = Visibility.Visible;
                     ConfirmToProcess.Visibility = Visibility.Collapsed;
                     DeleteOrder.Visibility = Visibility.Collapsed;
@@ -166,7 +158,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Collapsed;
                     break;
                 case OrderType.UNPROCESSING:
-                    WaitLabel.Visibility = Visibility.Collapsed;
                     Confirm.Visibility = Visibility.Collapsed;
                     ConfirmToProcess.Visibility = Visibility.Visible;
                     DeleteOrder.Visibility = Visibility.Visible;
@@ -177,22 +168,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
-                    break;
-                case OrderType.WAITING:
-                    WaitLabel.Visibility = Visibility.Visible;
-                    Confirm.Visibility = Visibility.Collapsed;
-                    ConfirmToProcess.Visibility = Visibility.Collapsed;
-                    DeleteOrder.Visibility = Visibility.Collapsed;
-                    EmptySpace.Width = 350;
-                    StoreOrderDetail.Columns[11].Visibility = Visibility.Visible;
-                    StoreOrderDetail.Columns[12].Visibility = Visibility.Visible;
-                    StoreOrderDetail.Columns[13].Visibility = Visibility.Visible;
-                    StoreOrderDetail.Columns[5].Visibility = Visibility.Collapsed;
-                    StoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
-                    StoreOrderDetail.Columns[7].Visibility = Visibility.Collapsed;
-
-                    StoreOrderDetail.IsReadOnly = true;
-                    AddNewProduct.IsEnabled = false;
                     break;
             }
 

@@ -3,6 +3,13 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    enum PagingType
+    {
+        INIT,
+        DEL,
+        ADD,
+        SPLIT
+    }
     public enum StoreOrderCategory
     {
         PURCHASE = 0,
