@@ -70,7 +70,8 @@ namespace His_Pos.Class.Declare
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
             foreach (DataRow row in table.Rows)
             {
-                var d = Deserialize<Ddata>(row["HISDECMAS_DETXML"].ToString());
+                var d = new Ddata();
+                d = XmlService.Deserialize<Ddata>(row["HISDECMAS_DETXML"].ToString());
                 ddatas.Add(d);
             }
             return ddatas;
@@ -87,30 +88,11 @@ namespace His_Pos.Class.Declare
                 var e = new ErrorList
                 {
                     PrescriptionId = row["PRESCRIPTION_ID"].ToString(),
-                    Error = Deserialize<List<Error>>(row["ERRORS"].ToString())
+                    Error = XmlService.Deserialize<List<Error>>(row["ERRORS"].ToString())
                 };
                 errorList.Add(e);
             }
             return errorList;
-        }
-
-        public static T Deserialize<T>(string s)
-        {
-            XmlDocument xdoc = new XmlDocument();
-
-            try
-            {
-                xdoc.LoadXml(s);
-                XmlNodeReader reader = new XmlNodeReader(xdoc.DocumentElement);
-                XmlSerializer ser = new XmlSerializer(typeof(T));
-                object obj = ser.Deserialize(reader);
-
-                return (T)obj;
-            }
-            catch
-            {
-                return default(T);
-            }
         }
     }
 }

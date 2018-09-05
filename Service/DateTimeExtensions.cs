@@ -30,6 +30,8 @@ namespace His_Pos.Service
 
         public static DateTime ToUsDate(string datetime)
         {
+            if (string.IsNullOrEmpty(datetime))
+                return new DateTime();
             if (datetime.Length >= 10)
                 return Convert.ToDateTime(datetime.Substring(0, 10));
             if (datetime.Substring(0, 3).Contains("/"))

@@ -6,9 +6,6 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using His_Pos.Class.Person;
-using His_Pos.Class.Product;
-using His_Pos.Properties;
 using His_Pos.RDLC;
 using His_Pos.Service;
 
@@ -16,6 +13,7 @@ namespace His_Pos.Class.Declare
 {
     public class DeclareData 
     {
+        public DeclareData() { }
         public DeclareData(Prescription prescription)
         {
             Prescription = new Prescription();
@@ -281,25 +279,8 @@ namespace His_Pos.Class.Declare
             }
         }
 
-        public string SerializeObject<T>()
-        {
-            CreatDeclareDataXmlObject();
-            var xmlSerializer = new XmlSerializer(DeclareXml.GetType());
-            using (var textWriter = new StringWriter())
-            {
-                xmlSerializer.Serialize(textWriter, DeclareXml);
-                var document = XDocument.Parse(ReportService.PrettyXml(textWriter));
-                //document.Descendants()
-                //    .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
-                //    .Remove();
-                return document.ToString()
-                    .Replace(
-                        "<ddata xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">",
-                        "<ddata>");
-            }
-        }
         private Function function = new Function();
-        private void CreatDeclareDataXmlObject()
+        public void CreatDeclareDataXmlObject()
         {
             var p = Prescription;
             var c = p.Customer;
@@ -400,6 +381,24 @@ namespace His_Pos.Class.Declare
 
                 DeclareXml.Dbody.Pdata.Add(pdata);
                 declareCount++;
+            }
+        }
+
+        public string SerializeObject<T>()
+        {
+            CreatDeclareDataXmlObject();
+            var xmlSerializer = new XmlSerializer(DeclareXml.GetType());
+            using (var textWriter = new StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, DeclareXml);
+                var document = XDocument.Parse(ReportService.PrettyXml(textWriter));
+                //document.Descendants()
+                //    .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
+                //    .Remove();
+                return document.ToString()
+                    .Replace(
+                        "<ddata xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">",
+                        "<ddata>");
             }
         }
 

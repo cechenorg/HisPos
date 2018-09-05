@@ -184,18 +184,32 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
+            ErrorMssageWindow err;
             MessageWindow m;
-            ConfirmWindow c;
+            CurrentPrescription.EList.Error = new List<Error>();
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
-            var declareData = new DeclareData(CurrentPrescription);
-            var declareDb = new DeclareDb();
-            DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
-            declareDb.InsertDb(declareData, declareTrade);
-            //declareDb.InsertInventoryDb(declareData,"處方登陸");
-            m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
-            m.Show();
-            declareDb.UpdateDeclareFile(declareData);
-            //PrintMedBag();
+            if (CurrentPrescription.EList.Error.Count == 0)
+            {
+                var declareData = new DeclareData(CurrentPrescription);
+                var declareDb = new DeclareDb();
+                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+                declareDb.InsertDb(declareData, declareTrade);
+                //declareDb.InsertInventoryDb(declareData,"處方登錄");
+                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+                m.Show();
+                declareDb.UpdateDeclareFile(declareData);
+                //PrintMedBag();
+            }
+            else
+            {
+                var errorMessage = "";
+                foreach (var error in CurrentPrescription.EList.Error)
+                {
+                    errorMessage += error.Content + "\n";
+                }
+                err = new ErrorMssageWindow(errorMessage);
+                err.Show();
+            }
         }
 
         private void PrintMedBag()
@@ -204,7 +218,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
             //File.WriteAllText(ReportService.ReportPath, string.Empty);
             //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
-            for (int i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
             {
                 ReportService.CreatePdf(defaultMedBag,i);
             }
@@ -227,7 +241,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
-            var leaveItem = (sender as DataGridRow).Item;
+            var leaveItem = (sender as DataGridRow)?.Item;
 
             if (leaveItem is IDeletable) (leaveItem as IDeletable).Source = string.Empty;
         }
@@ -247,9 +261,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
-            var medicineCodeAuto = sender as AutoCompleteBox;
-
-            if (medicineCodeAuto is null) return;
+            if (!(sender is AutoCompleteBox medicineCodeAuto)) return;
 
             var result = DeclareMedicines.Where(x =>
                 x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||

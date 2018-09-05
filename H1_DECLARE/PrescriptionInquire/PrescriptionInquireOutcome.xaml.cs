@@ -537,6 +537,8 @@ namespace His_Pos.PrescriptionInquire
             MessageWindow m;
             ConfirmWindow c;
             InquiredPrescription.Prescription.Medicines = DeclareDetails;
+            InquiredPrescription.Prescription.EList.Error.Clear();
+            InquiredPrescription.Prescription.EList.Error = InquiredPrescription.Prescription.CheckPrescriptionData();
             if (InquiredPrescription.Prescription.CheckPrescriptionData().Count == 0)
             {
                 InquiredPrescription.Prescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(InquiredPrescription.Prescription.Customer.Birthday);
@@ -545,7 +547,7 @@ namespace His_Pos.PrescriptionInquire
                 var declareDb = new DeclareDb();
                 DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
                 declareDb.UpdateDeclareData(declareData, declareTrade);
-                //declareDb.InsertInventoryDb(declareData, "處方登陸");
+                //declareDb.InsertInventoryDb(declareData, "處方登錄");
                 m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
                 m.Show();
                 InitDataChanged();
@@ -554,12 +556,13 @@ namespace His_Pos.PrescriptionInquire
             }
             else
             {
-                c = new ConfirmWindow("處方資料有誤:" + InquiredPrescription.Prescription.ErrorMessage + "是否修改或忽略?", MessageType.WARNING);
-                //m = new MessageWindow("處方資料有誤:" + Prescription.ErrorMessage + "是否修改或忽略?", MessageType.ERROR);
-                //var declareData = new DeclareData(Prescription);
-                //var declareDb = new DeclareDb();
-                //declareDb.InsertDb(declareData);
-                c.ShowDialog();
+                var errorMessage = "處方資料錯誤 : \n";
+                foreach (var error in InquiredPrescription.Prescription.EList.Error)
+                {
+                    errorMessage += error.Content + "\n";
+                }
+                m = new MessageWindow(errorMessage, MessageType.ERROR);
+                m.Show();
             }
           
         }

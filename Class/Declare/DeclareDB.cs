@@ -39,13 +39,20 @@ namespace His_Pos.Class.Declare
                 var dataTradeTable = SetDataTradeTable();
                 AddTradeData(declareTrade, dataTradeTable);
                 var xmlStr = declareData.SerializeObject<Ddata>();
+                var errorStr = declareData.Prescription.EList.SerializeObject<ErrorList>();
+                if (string.IsNullOrEmpty(errorStr))
+                    errorStr = "<ErrorPrescription></ErrorPrescription>";
                 parameters.Add(new SqlParameter("DECLARETRADE", dataTradeTable));
                 parameters.Add(new SqlParameter("DETAIL", pDataTable));
                 parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
                 {
                     Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
             });
-                parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG",""));
+
+                parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
+                {
+                    Value = new SqlXml(new XmlTextReader(errorStr, XmlNodeType.Document, null))
+                });
                 CheckInsertDbTypeUpdate(parameters);
             }
         }
@@ -80,6 +87,7 @@ namespace His_Pos.Class.Declare
 
             var file = DeclareFileDb.GetDeclareFileTypeLogIn(declareDate);
             file.FileContent = p;
+            file.ErrorPrescriptionList = new ErrorPrescriptions {ErrorList = new List<ErrorList>()};
             file.ErrorPrescriptionList.ErrorList = PrescriptionDB.GetPrescriptionErrorLists(declareDate);
             DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate,DeclareFileType.LOG_IN);
         }

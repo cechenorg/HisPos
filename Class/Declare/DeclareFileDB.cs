@@ -4,16 +4,8 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using His_Pos.PrescriptionInquire;
 using His_Pos.Properties;
-using His_Pos.RDLC;
 using His_Pos.Service;
 
 namespace His_Pos.Class.Declare
@@ -62,7 +54,10 @@ namespace His_Pos.Class.Declare
                         break;
                 }
             }
-            var xmlStr = SerializeDeclareFile(p);
+            var xmlStr = p.SerializeObject().Replace("<pharmacy xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">", "<pharmacy>");
+            var errorStr = file.ErrorPrescriptionList.SerializeObject().Replace("<ErrorPrescriptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\"", "<ErrorPrescriptions>");
+            if (string.IsNullOrEmpty(errorStr))
+                errorStr = "<ErrorPrescriptions></ErrorPrescriptions>";
             var parameters = new List<SqlParameter>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             parameters.Add(new SqlParameter("SEND_DATE", date));
@@ -71,11 +66,14 @@ namespace His_Pos.Class.Declare
             {
                 Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
             });
-            parameters.Add(new SqlParameter("ERROR", file.ErrorPrescriptionList));
+            parameters.Add(new SqlParameter("ERROR", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader(errorStr, XmlNodeType.Document, null))
+            });
             parameters.Add(new SqlParameter("CHRONIC_COUNT", int.Parse(p.Tdata.T9)));
             parameters.Add(new SqlParameter("NORMAL_COUNT", int.Parse(p.Tdata.T7)));
             parameters.Add(new SqlParameter("TOTAL_POINT", int.Parse(p.Tdata.T12)));
-            parameters.Add(new SqlParameter("TOTAL_POINT", int.Parse(p.Tdata.T12)));
+            file.HasError = file.ErrorPrescriptionList.ErrorList.Count != 0;
             parameters.Add(new SqlParameter("HAS_ERROR", file.HasError));
             parameters.Add(type.Equals(DeclareFileType.UPDATE)
                 ? new SqlParameter("IS_DECLARED", file.IsDeclared)
@@ -95,24 +93,6 @@ namespace His_Pos.Class.Declare
                 file = new DeclareFile(fileTable.Rows[0]);
             return file;
         }
-
-        private static string SerializeDeclareFile(Pharmacy p)
-        {
-            var serializer = new XmlSerializer(typeof(Pharmacy));
-            StringWriter declareFileXml;
-            using (var stringWriter = new StringWriter())
-            {
-                using (var writer = XmlWriter.Create(stringWriter))
-                {
-                    serializer.Serialize(writer, p);
-                    declareFileXml = stringWriter;
-                }
-            }
-            var document = XDocument.Parse(ReportService.PrettyXml(declareFileXml));
-            document.Descendants()
-                .Where(e => e.IsEmpty || string.IsNullOrWhiteSpace(e.Value))
-                .Remove();
-            return document.ToString().Replace("<pharmacy xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">","<pharmacy>");
-        }
+        
     }
 }

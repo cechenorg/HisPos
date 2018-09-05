@@ -374,6 +374,9 @@
     </Compile>
     <Compile Include="H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
     <Compile Include="H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml.cs">
+      <DependentUpon>ErrorMssageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\GenderConverter.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
@@ -581,6 +584,7 @@
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\UsagesFunction.cs" />
+    <Compile Include="Service\XmlService.cs" />
     <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
@@ -610,6 +614,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

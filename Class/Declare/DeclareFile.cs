@@ -9,36 +9,56 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class.Declare
 {
     public class DeclareFile:INotifyPropertyChanged
     {
-        public DeclareFile() { }
+        public DeclareFile()
+        {
+            ErrorPrescriptionList = new ErrorPrescriptions();
+        }
 
         public DeclareFile(DataRow row)
         {
             Prescriptions = new ObservableCollection<Prescription>();
             if (!string.IsNullOrEmpty(row["HISDEC_XML"].ToString()))
-                FileContent = SerializeToTdata(row["[HISDEC_XML]"].ToString());
-            if (!string.IsNullOrEmpty(row["FILE_ID"].ToString()))
-                Id = row["FILE_ID"].ToString();
-            if (!string.IsNullOrEmpty(row["DECLARE_TIME"].ToString()))
-                DeclareDate = row["DECLARE_TIME"].ToString();
-            if(!string.IsNullOrEmpty(row["CHRONIC_COUNT"].ToString()))
-                ChronicCount = int.Parse(row["CHRONIC_COUNT"].ToString());
-            if (!string.IsNullOrEmpty(row["NORMAL_COUNT"].ToString()))
-                NormalCount = int.Parse(row["NORMAL_COUNT"].ToString());
-            if (!string.IsNullOrEmpty(row["TOTALPOINT"].ToString()))
-                TotalPoint = double.Parse(row["TOTALPOINT"].ToString());
+                FileContent = XmlService.Deserialize<Pharmacy>(row["HISDEC_XML"].ToString()); ;
+            if (!string.IsNullOrEmpty(row["HISDEC_ID"].ToString()))
+                Id = row["HISDEC_ID"].ToString();
+            if (!string.IsNullOrEmpty(row["HISDEC_SENTDATE"].ToString()))
+                DeclareDate = row["HISDEC_SENTDATE"].ToString();
+            if(!string.IsNullOrEmpty(row["HISDEC_CHRONIC_COUNT"].ToString()))
+                ChronicCount = int.Parse(row["HISDEC_CHRONIC_COUNT"].ToString());
+            if (!string.IsNullOrEmpty(row["HISDEC_NORMAL_COUNT"].ToString()))
+                NormalCount = int.Parse(row["HISDEC_NORMAL_COUNT"].ToString());
+            if (!string.IsNullOrEmpty(row["HISDEC_TOTALPOINT"].ToString()))
+                TotalPoint = double.Parse(row["HISDEC_TOTALPOINT"].ToString());
             if (!string.IsNullOrEmpty(row["HISDEC_ERROR"].ToString()))
-                ErrorPrescriptionList = SerializeToErrorPrescriptions(row["HISDEC_ERROR"].ToString());
-            if (!string.IsNullOrEmpty(row["IS_DECLARED"].ToString()))
-                IsDeclared = row["IS_DECLARED"].ToString().Equals("1");
+                ErrorPrescriptionList = XmlService.Deserialize<ErrorPrescriptions>(row["HISDEC_ERROR"].ToString());
+            if (!string.IsNullOrEmpty(row["HISDEC_PHARMACY_ID"].ToString()))
+                PhmarcyId = row["HISDEC_PHARMACY_ID"].ToString();
+            if (!string.IsNullOrEmpty(row["HISDEC_IS_DECLARED"].ToString()))
+                IsDeclared = row["HISDEC_IS_DECLARED"].ToString().Equals("1");
+            if (!string.IsNullOrEmpty(row["HISDEC_HAS_ERROR"].ToString()))
+                IsDeclared = row["HISDEC_HAS_ERROR"].ToString().Equals("1");
         }
 
         public string Id { get; set; }
+
+        private string _pharmacyId;
+
+        public string PhmarcyId
+        {
+            get => _pharmacyId;
+            set
+            {
+                _pharmacyId = value;
+                OnPropertyChanged(nameof(PhmarcyId));
+            }
+        }
 
         private string _declareDate;
         public string DeclareDate
@@ -132,9 +152,11 @@ namespace His_Pos.Class.Declare
             get => _errorPrescriptionList;
             set
             {
+                if(value == null)
+                    return;
                 _errorPrescriptionList = value;
-                if (_errorPrescriptionList.ErrorList.Count > 0)
-                    HasError = true;
+                if(_errorPrescriptionList.ErrorList != null)
+                    HasError = _errorPrescriptionList.ErrorList.Count > 0;
                 OnPropertyChanged(nameof(ErrorPrescriptionList));
             }
         }
@@ -171,19 +193,5 @@ namespace His_Pos.Class.Declare
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private Pharmacy SerializeToTdata(string xmlStr)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(Tdata));
-            MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlStr));
-            Pharmacy tData = (Pharmacy)serializer.Deserialize(memStream);
-            return tData;
-        }
-        public ErrorPrescriptions SerializeToErrorPrescriptions(string xmlStr)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(ErrorPrescriptions));
-            MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(xmlStr));
-            ErrorPrescriptions errorPrescriptions = (ErrorPrescriptions)serializer.Deserialize(memStream);
-            return errorPrescriptions;
-        }
     }
 }

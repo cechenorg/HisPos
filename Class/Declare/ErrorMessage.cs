@@ -16,7 +16,7 @@ namespace His_Pos.Class.Declare
         public string Content { get; set; }
     }
 
-    [XmlRoot(ElementName = "ErrorList")]
+    [XmlRoot(ElementName = "ErrorPrescription")]
     public class ErrorList
     {
         [XmlElement(ElementName = "PrescriptionId")]
@@ -28,7 +28,7 @@ namespace His_Pos.Class.Declare
     [XmlRoot(ElementName = "ErrorPrescriptions")]
     public class ErrorPrescriptions
     {
-        [XmlElement(ElementName = "ErrorList")]
+        [XmlElement(ElementName = "ErrorPrescription")]
         public List<ErrorList> ErrorList { get; set; }
     }
 }

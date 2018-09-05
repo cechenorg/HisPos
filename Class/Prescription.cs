@@ -61,8 +61,7 @@ namespace His_Pos.Class
         public List<Error> CheckPrescriptionData()
         {
             _errorMessage = new List<Error>();
-            //Customer.IcCard.CheckIcNumber(Customer.IcCard.IcNumber);
-            Customer.CheckBirthDay(Customer.Birthday);
+            CheckPatientInfo();
             CheckReleaseInstitution();
             CheckDivision();
             CheckDoctor();
@@ -78,6 +77,14 @@ namespace His_Pos.Class
             Treatment.MedicalPersonId = MainWindow.CurrentUser.IcNumber;
             Customer.Id = "1";
             return _errorMessage;
+        }
+
+        private void CheckPatientInfo()
+        {
+            if(string.IsNullOrEmpty(Customer.Name))
+                AddError("0","病患姓名未填寫");
+            //Customer.IcCard.CheckIcNumber(Customer.IcCard.IcNumber);
+            CheckBirthDay(Customer.Birthday);
         }
 
         /*
@@ -113,13 +120,9 @@ namespace His_Pos.Class
         {
             if (!string.IsNullOrEmpty(Treatment.AdjustCase.Id))
                 return Treatment.AdjustCase.Id.StartsWith("D") || Treatment.AdjustCase.Id.StartsWith("5");
-            var m = new MessageWindow("未選擇調劑案件", MessageType.ERROR);
-            if (!adjustCaseNull)
-            {
-                adjustCaseNull = true;
-                m.Show();
-            }
-            return Treatment.AdjustCase.Id.StartsWith("D") || Treatment.AdjustCase.Id.StartsWith("5");
+           
+            AddError("0", "未選擇調劑案件");
+            return false;
         }
 
         /*
@@ -259,6 +262,30 @@ namespace His_Pos.Class
             if (string.IsNullOrEmpty(ChronicSequence) || string.IsNullOrEmpty(ChronicTotal))
             {
                 AddError("0", "未填寫領藥次數(調劑序號/可調劑次數)");
+            }
+        }
+
+        public void CheckBirthDay(string customerBirthday)
+        {
+            if (string.IsNullOrEmpty(customerBirthday))
+            {
+                AddError("0", "病患生日未填寫");
+                return;
+            }
+            Regex birth = new Regex(@"[0-9]{7}");
+            Regex birth2 = new Regex(@"[0-9]{3}/[0-9]{2}/[0-9]{2}");
+            if (birth.IsMatch(customerBirthday))
+            {
+                string year = customerBirthday.Substring(0, 3);
+                string month = customerBirthday.Substring(3, 2);
+                string date = customerBirthday.Substring(5, 2);
+                Customer.Birthday = year + "/" + month + "/" + date;
+            }
+            else if (birth2.IsMatch(customerBirthday))
+                return;
+            else
+            {
+                AddError("0", "生日格式錯誤");
             }
         }
 

@@ -70,24 +70,6 @@ namespace His_Pos.Class.Person
             }
         }
 
-        public string CheckBirthDay(string customerBirthday)
-        {
-            Regex birth = new Regex(@"[0-9]{7}");
-            string errorMessage = "";
-            if (birth.IsMatch(customerBirthday))
-            {
-                string year = customerBirthday.Substring(0, 3);
-                string month = customerBirthday.Substring(3, 2);
-                string date = customerBirthday.Substring(5, 2);
-                Birthday = year + "/" + month + "/" + date;
-            }
-            else
-            {
-                errorMessage += "生日格式錯誤\n";
-            }
-            return errorMessage;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void NotifyPropertyChanged(string info)
