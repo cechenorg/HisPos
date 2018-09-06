@@ -12,27 +12,32 @@
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="280"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid Margin="10,10,0,10" Grid.Column="0" Background="{StaticResource GridBackGround}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="35"/>
                     <RowDefinition/>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-                    <RadioButton Content="未處理" Tag="0" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
+                    <RadioButton Content="未處理" Tag="0" GroupName="OrderType" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
                     <Image Source="/Images/PosDot.png" Width="15"/>
-                    <RadioButton Content="已處理" Tag="1" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
+                    <RadioButton Content="已處理" Tag="1" GroupName="OrderType" Margin="30,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
                     <Image Source="/Images/DarkerHisDot.png" Width="15"/>
-                    <RadioButton Content="全部" Tag="3" Margin="10,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
                 </StackPanel>
-                <DataGrid Name="StoOrderOverview" Grid.Row="1" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridBackGround}">
+                    <RadioButton Content="等待處理" Tag="0" GroupName="OrderType" Margin="20,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
+                    <Image Source="/Images/PosDot.png" Width="15"/>
+                    <RadioButton Content="全部" Tag="3" GroupName="OrderType" Margin="13,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
+                </StackPanel>
+                <DataGrid Name="StoOrderOverview" Grid.Row="2" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
                            ItemsSource="{Binding StoreOrderCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="ShowOrderDetail">
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="290">
+                        <DataGridTemplateColumn Width="270">
                             <DataGridTemplateColumn.CellStyle>
                                 <Style TargetType="DataGridCell">
                                     <Setter Property="Background" Value="Transparent"/>
@@ -53,18 +58,18 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="40"/>
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
                                         <Image Source="{Binding TypeIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="20" Margin="10,0,5,0" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
                                             <Label Content="{Binding Id}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
-                                            <Border BorderBrush="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="1" CornerRadius="6" Margin="25,8,1,5">
+                                            <Border BorderBrush="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="1" CornerRadius="6" Margin="15,8,1,5">
                                                 <TextBlock Text="{Binding Path=Category.CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
                                             </Border>
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                                            <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="130" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                            <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="130" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                             <Label Content="$" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0"/>
                                             <Label Content="{Binding TotalPrice}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
@@ -74,7 +79,7 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}">
+                <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridBackGround}">
                     <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0" MouseLeftButtonDown="AddNewOrder"/>
                     <Rectangle Width="200"/>
                     <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Hidden"/>

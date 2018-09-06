@@ -208,5 +208,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
             declareDataDetailOverview.Show();
         }
+
+        internal void ClearControl()
+        {
+        }
     }
 }
