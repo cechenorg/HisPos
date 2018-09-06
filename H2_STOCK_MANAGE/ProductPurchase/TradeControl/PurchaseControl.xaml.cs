@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,14 +96,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private const int PRODUCT_PER_PAGE = 12;
 
-        enum PagingType
-        {
-            INIT,
-            DEL,
-            ADD,
-            SPLIT
-        }
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -605,11 +599,24 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData.IsDataChanged = true;
         }
 
-        private void PurchaseControl_OnTargetUpdated(object sender, DataTransferEventArgs e)
+        private void ShowDeclareDataOverview(object sender, MouseButtonEventArgs e)
         {
-            if(storeOrderData is null ) return;
+            DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
+            declareDataDetailOverview.Show();
+        }
+    }
 
-            StoreOrderData.IsDataChanged = false;
+    public class HasDeclareDataToVisConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null || (int)value == 0) return Visibility.Collapsed;
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return 0;
         }
     }
 }

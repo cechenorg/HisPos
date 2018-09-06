@@ -53,6 +53,7 @@ namespace His_Pos.ProductPurchase
         
         private PurchaseControl purchaseControl = new PurchaseControl();
         private ReturnControl returnControl = new ReturnControl();
+        private WaitControl waitControl = new WaitControl();
 
         public StoreOrder StoreOrderData { get; set; }
 
@@ -102,7 +103,7 @@ namespace His_Pos.ProductPurchase
 
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetProductPurchaseData(this);
-
+            loadingWindow.Topmost = true;
             loadingWindow.Show();
 
             purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
@@ -156,8 +157,16 @@ namespace His_Pos.ProductPurchase
             switch (StoreOrderData.Category.CategoryName)
             {
                 case "進貨":
-                    CurrentControl = purchaseControl;
-                    purchaseControl.SetDataContext(StoreOrderData);
+                    if (StoreOrderData.Type == OrderType.WAITING)
+                    {
+                        CurrentControl = waitControl;
+                        waitControl.SetDataContext(StoreOrderData);
+                    }
+                    else
+                    {
+                        CurrentControl = purchaseControl;
+                        purchaseControl.SetDataContext(StoreOrderData);
+                    }
                     return;
                 case "退貨":
                     CurrentControl = returnControl;
@@ -261,6 +270,7 @@ namespace His_Pos.ProductPurchase
         {
             if (!CheckNoEmptyData()) return;
             StoreOrderData.Type = OrderType.DONE;
+            StoreOrderData.RecEmp = MainWindow.CurrentUser.Id;
             SaveOrder();
             storeOrderCollection.Remove(StoreOrderData);
             InventoryManagementView.DataChanged = true;
@@ -286,12 +296,28 @@ namespace His_Pos.ProductPurchase
                     break;
                 }
             }
+
             if (!CheckNoEmptyData()) return;
-            StoreOrderData.Type = OrderType.PROCESSING;
+
+            if(StoreOrderData.Manufactory.Id == "0")
+                StoreOrderData.Type = OrderType.WAITING;
+            else
+                StoreOrderData.Type = OrderType.PROCESSING;
+
             SaveOrder();
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = StoreOrderData;
             StoOrderOverview.ScrollIntoView(StoreOrderData);
+
+            SetCurrentControl();
+
+            if (StoreOrderData.Type == OrderType.WAITING)
+                SendStoreOrderToSinde();
+        }
+
+        private void SendStoreOrderToSinde()
+        {
+
         }
 
         //private void UserControl_Unloaded(object sender, RoutedEventArgs e)

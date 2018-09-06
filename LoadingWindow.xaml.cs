@@ -191,6 +191,8 @@ namespace His_Pos
 
         internal void GetProductPurchaseData(ProductPurchaseView productPurchaseView)
         {
+            productPurchaseView.OrderContentControl.IsEnabled = false;
+
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得廠商資料...");
@@ -210,6 +212,15 @@ namespace His_Pos
 
                     //待修改
                     ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+
+                    foreach(StoreOrder stoOrd in tempStoreOrderCollection)
+                    {
+                        if(stoOrd.Type == OrderType.WAITING)
+                        {
+                            //Check Order Status
+                        }
+                    }
+
                     productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
                 }));
             };
@@ -218,6 +229,7 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    productPurchaseView.OrderContentControl.IsEnabled = true;
                     Close();
                 }));
             };

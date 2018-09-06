@@ -387,11 +387,17 @@
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml.cs">
       <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml.cs">
+      <DependentUpon>DeclareDataDetailOverview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml.cs">
       <DependentUpon>PurchaseControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml.cs">
       <DependentUpon>ReturnControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\WaitControl.xaml.cs">
+      <DependentUpon>WaitControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
@@ -631,11 +637,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\WaitControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
