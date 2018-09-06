@@ -203,6 +203,10 @@ namespace His_Pos.ProductPurchase
         private void ClearOrderDetailData()
         {
             StoreOrderData = null;
+
+            purchaseControl.ClearControl();
+            returnControl.ClearControl();
+            waitControl.ClearControl();
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)

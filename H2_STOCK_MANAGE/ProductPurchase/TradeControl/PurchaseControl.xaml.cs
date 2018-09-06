@@ -110,7 +110,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         public PurchaseControl()
         {
             InitializeComponent();
-
             DataContext = this;
         }
 
@@ -199,6 +198,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             int rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
 
             e.Row.Header = rowNum.ToString();
+        }
+
+        internal void ClearControl()
+        {
+            StoreOrderData = null;
+            StoreOrderDetail.ItemsSource = null;
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)

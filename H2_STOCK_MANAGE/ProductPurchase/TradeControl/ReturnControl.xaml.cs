@@ -24,11 +24,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         public ReturnControl()
         {
             InitializeComponent();
+
+            DataContext = this;
         }
 
         internal void SetDataContext(StoreOrder storeOrderData)
         {
             
+        }
+
+        internal void ClearControl()
+        {
+
         }
     }
 }
