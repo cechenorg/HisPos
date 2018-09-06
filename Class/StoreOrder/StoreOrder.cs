@@ -24,7 +24,7 @@ namespace His_Pos.Class.StoreOrder
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
 
-            Id = StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id);
+            Id = StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id, manufactory.Id);
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
