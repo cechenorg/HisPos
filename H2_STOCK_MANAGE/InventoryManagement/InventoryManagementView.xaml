@@ -149,6 +149,14 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
+                    <DataGridTextColumn MinWidth="80" MaxWidth="80" Header="載途量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.OnTheWayAmount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment"  Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="安全量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.SafeAmount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -184,7 +192,7 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
-                <Button Content="+ 新增產品" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0"/>
+                <Button Content="+ 新增產品" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Click="AddNewProduct"/>
                 <Label Content="查詢結果  共" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Name="SearchCount" Content="0" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="筆" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>

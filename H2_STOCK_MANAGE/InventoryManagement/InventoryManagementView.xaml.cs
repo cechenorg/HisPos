@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Data;
+using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.Struct.Product;
 
 namespace His_Pos.InventoryManagement
@@ -232,6 +233,13 @@ namespace His_Pos.InventoryManagement
         private void WareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ProductList.Items.Filter = OrderTypeFilter;
+        }
+
+        private void AddNewProduct(object sender, RoutedEventArgs e)
+        {
+            AddNewProductWindow addNewProductWindow = new AddNewProductWindow();
+
+            addNewProductWindow.Show();
         }
     }
 }
