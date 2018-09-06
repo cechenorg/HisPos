@@ -139,8 +139,7 @@ namespace His_Pos.ProductPurchase
 
             StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
             
-            if (storeOrder.Products is null)
-                storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
+            storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
             StoreOrderData = storeOrder;
 
