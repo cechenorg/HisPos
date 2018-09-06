@@ -51,7 +51,7 @@ namespace His_Pos.Class.Declare
 
                 parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
                 {
-                    Value = new SqlXml(new XmlTextReader(errorStr, XmlNodeType.Document, null))
+                    Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
                 });
                 CheckInsertDbTypeUpdate(parameters);
             }

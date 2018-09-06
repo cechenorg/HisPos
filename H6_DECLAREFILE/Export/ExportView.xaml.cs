@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Division;
 using JetBrains.Annotations;
 
 namespace His_Pos.H6_DECLAREFILE.Export
@@ -27,6 +15,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
     public partial class ExportView : UserControl,INotifyPropertyChanged
     {
         public ObservableCollection<DeclareFile> DeclareFiles { get; set; }
+        public ObservableCollection<Division> Divisions { get; set; }
 
         private DeclareFile _selectedFile;
         public DeclareFile SelectedFile
@@ -36,6 +25,17 @@ namespace His_Pos.H6_DECLAREFILE.Export
             {
                 _selectedFile = value;
                 OnPropertyChanged(nameof(SelectedFile));
+            }
+        }
+
+        private Ddata _selectedPrescription;
+        public Ddata SelectedPrescription
+        {
+            get => _selectedPrescription;
+            set
+            {
+                _selectedPrescription = value;
+                OnPropertyChanged(nameof(SelectedPrescription));
             }
         }
 

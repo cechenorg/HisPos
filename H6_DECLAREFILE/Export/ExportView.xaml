@@ -12,6 +12,8 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <hisPos:BrushColorConverter x:Key="BoolToBrush"/>
+        <hisPos:DivisionConverter x:Key="DivisionConverter"/>
+        <hisPos:DateConverter x:Key="DateConverter"/>
     </UserControl.Resources>
     <Viewbox Name="ExportViewBox" Stretch="Fill">
         <Grid Background="{StaticResource GridDarkerBackGround}" Margin="10">
@@ -67,17 +69,16 @@
                                         <Label Content="慢箋" FontSize="18" FontFamily="Segoe UI Semi"/>
                                         <Label Content="{Binding DeclareFile.ChronicCount}" FontSize="18" FontFamily="Segoe UI Semi"/>-->
                                         <Label Content="一般 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
-                                        <Label Content="{Binding NormalCount}" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                        <Label Content="慢箋 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                        <Label Content="{Binding ChronicCount}" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                        <Image Source="C:\HisPos\Images\Error.png" Visibility="{Binding HasError,Converter={StaticResource BoolToVis}}" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0"/>
+                                        <Label Content="3000" FontSize="16" Width="45" FontFamily="Segoe UI Semi"  HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                        <Label Content="慢箋 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                        <Label Content="{Binding ChronicCount}" FontSize="16" Width="45" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                        <Image Source="C:\HisPos\Images\Error.png" Visibility="{Binding HasError,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
-                <ListBoxItem/>
             </DataGrid>
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
                 <DataGrid
@@ -87,17 +88,15 @@
                         <DataGridCheckBoxColumn
                             Width="70" Header="申報"/>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding }" Header="病患姓名"/>
+                            Width="100" Binding="{Binding SelectedPrescription.Dbody.D20,UpdateSourceTrigger=PropertyChanged}" Header="病患姓名"/>
                         <materialDesign:MaterialDataGridTextColumn
-                            Width="80" Binding="{Binding Description}" Header="科別" />
+                            Width="80" Binding="{Binding SelectedPrescription.Dbody.D13,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DivisionConverter}}" Header="科別" />
                         <materialDesign:MaterialDataGridTextColumn
-                            Width="100" Binding="{Binding Name}"  Header="調劑日期"/>
+                            Width="100" Binding="{Binding SelectedPrescription.Dbody.D23,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateConverter}}"  Header="調劑日期"/>
                         <materialDesign:MaterialDataGridTextColumn
-                            Width="100" Binding="{Binding Name}"  Header="調劑藥師"/>
+                            Width="100" Binding="{Binding SelectedPrescription.Dbody.D25,UpdateSourceTrigger=PropertyChanged}"  Header="調劑藥師"/>
                         <materialDesign:MaterialDataGridTextColumn
-                            Width="80" Binding="{Binding Name}"  Header="藥費"/>
-                        <materialDesign:MaterialDataGridTextColumn
-                            Width="80" Binding="{Binding Name}"  Header="總點數"/>
+                            Width="80" Binding="{Binding SelectedPrescription.Dbody.D18,UpdateSourceTrigger=PropertyChanged}"  Header="總點數"/>
                     </DataGrid.Columns>
                 </DataGrid>
 

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
+using His_Pos.Class.Division;
 
 namespace His_Pos
 {
@@ -127,6 +129,41 @@ namespace His_Pos
                 }
             }
             return new SolidColorBrush(Colors.Transparent);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DivisionConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            ObservableCollection<Division> divisions = DivisionDb.GetData();
+            string divisionName = "";
+            foreach (var d in divisions)
+            {
+                if (d.Id.Equals(value))
+                    divisionName = d.Name;
+            }
+            return divisionName;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DateConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string dateStr = ((string) value);
+            string result = dateStr.Substring(0, 3) + "/" + dateStr.Substring(3, 2) + "/" + dateStr.Substring(5, 2);
+            return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

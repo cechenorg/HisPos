@@ -350,6 +350,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         break;
 
                     case "Usage":
+
                         FindUsagesQuickName(sender);
                         NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineDays", ref nextTextBox);
                         break;
@@ -626,6 +627,27 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     CusHistoryDetailPos.Visibility = Visibility.Visible;
                     CusHistoryDetailPos.ItemsSource = selectedItem.HistoryCollection;
                     break;
+            }
+        }
+
+        private void MedicalNumber_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+           InputNumber(e);
+        }
+
+        private void InputNumber(KeyEventArgs e)
+        {
+            bool shiftKey = (Keyboard.Modifiers & ModifierKeys.Shift) != 0;
+            if (shiftKey == true)  
+            {
+                e.Handled = true;
+            }
+            else                        
+            {
+                if (!((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || e.Key == Key.Delete || e.Key == Key.Back || e.Key == Key.Tab || e.Key == Key.Enter))
+                {
+                    e.Handled = true;
+                }
             }
         }
     }

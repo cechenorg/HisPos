@@ -506,6 +506,7 @@ namespace His_Pos
                     {
                         exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
                         exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
+                        exportView.Divisions = DivisionDb.GetData();
                     }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>

@@ -69,7 +69,7 @@ namespace His_Pos.Class.Declare
                 //0107-08-31
                 _declareDate = value;
                 DeclareYear = _declareDate.Substring(0, 4);
-                DeclareMonth = _declareDate.Substring(5, 2);
+                DeclareMonth = _declareDate.Substring(5, 2).Contains("/") ? _declareDate.Substring(5, 1).PadLeft(2,'0') : _declareDate.Substring(5, 2);
             }
         }
 
