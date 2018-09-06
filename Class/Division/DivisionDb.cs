@@ -13,7 +13,7 @@ namespace His_Pos.Class.Division
         {
             ObservableCollection<Division> divisions = new ObservableCollection<Division>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var divisionTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetDivisionsData]", dbConnection);
+            var divisionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDivisionsData]");
             foreach (DataRow division in divisionTable.Rows)
             {
                 var d = new Division(division);

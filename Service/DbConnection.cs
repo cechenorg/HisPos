@@ -102,10 +102,6 @@ namespace His_Pos.Service
                 _connection.Close();
         }//Log()
 
-        public DataTable SetProcName(string procName,DbConnection connection)
-        {
-            var table = connection.ExecuteProc(procName);
-            return table;
-        }
+     
     }
 }

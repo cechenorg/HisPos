@@ -13,7 +13,7 @@ namespace His_Pos.Class
         {
             ObservableCollection<Hospital> HospitalsCollection = new ObservableCollection<Hospital>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var institutionTable = dbConnection.SetProcName("[HIS_POS_DB].[PrescriptionDecView].[GetHospitalsData]", dbConnection);
+            var institutionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetHospitalsData]");
             foreach (DataRow row in institutionTable.Rows)
             {
                 HospitalsCollection.Add(new Hospital(row,DataSource.InitHospitalData));

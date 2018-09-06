@@ -270,12 +270,13 @@ namespace His_Pos
         {
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("處理商品資料...");
+                ChangeLoadingMessage("讀取商品資料...");
                 string totalWorth = ProductDb.GetTotalWorth();
                 double stockValue = 0;
                 inventoryManagementView.InventoryMedicines = MedicineDb.GetInventoryMedicines();
                 inventoryManagementView.InventoryOtcs = OTCDb.GetInventoryOtcs();
                 inventoryManagementView.ProductCollection = ProductDb.GetItemDialogProduct();
+                ChangeLoadingMessage("載入商品資料...");
                 Dispatcher.Invoke((Action)(() =>
                 {
                     ObservableCollection<Product> products = new ObservableCollection<Product>();

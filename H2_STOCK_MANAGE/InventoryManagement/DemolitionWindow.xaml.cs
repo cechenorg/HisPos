@@ -61,7 +61,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 warName = row["PROWAR_NAME"].ToString();
                 Inventory = row["PRO_INVENTORY"].ToString();
                 DemolitionAmount = "0";
-                AfterDemolitionAmount = "0";
+                AfterDemolitionAmount = (Convert.ToInt32(Inventory) - Convert.ToInt32(demolitionAmount)).ToString();
             }
             public string warId { get; set; }
             public string warName { get; set; }
@@ -116,6 +116,13 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
+            if (WareHouseInventoryCollection.Count(war => Convert.ToInt32(war.AfterDemolitionAmount) < 0) > 0) {
+                MessageWindow messageWindows = new MessageWindow("拆庫後剩餘量不可為負!", MessageType.ERROR);
+                messageWindows.ShowDialog();
+                return;
+            }
+
+
             DataTable productDemolitionTable = SetDemolitionTable();
              ProductDb.DemolitionProduct(productDemolitionTable);
             MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS);
