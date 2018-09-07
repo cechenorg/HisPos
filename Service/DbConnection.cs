@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.Properties;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -68,6 +69,11 @@ namespace His_Pos.Service
                 table.Locale = CultureInfo.InvariantCulture;
                 sqlDapter.Fill(table);
                 _connection.Close();
+                string parameValues = string.Empty;
+                foreach (SqlParameter row in parameterList){
+                    parameValues += row.ParameterName + ":" + row.Value.ToString() + "\r\n";
+                }
+                Log(procName, parameValues);
             }
             catch (Exception ex)
             {
@@ -84,22 +90,13 @@ namespace His_Pos.Service
         ///輸出:
         ///用途:紀錄log
         ///</remarks>
-        public void Log(string system, string functionName, string description)
+        public void Log(string procName, string paramsValues)
         {
-            string sql = @"Insert into TestDB.dbo.WebLog (COMNAME,SYSTEM,USER_ID,FUNCTION_NAME,SYSTIME,DESCRIPTION) 
-                                                   Values(@comname,@system,@userId,@functionName,@systime,@description)";
-
-                _connection.Open();
-                SqlCommand myCommand = new SqlCommand(sql, _connection);
-                myCommand.Parameters.AddWithValue("@comname", Environment.MachineName);
-                myCommand.Parameters.AddWithValue("@system", system);
-               if (MainWindow.CurrentUser.Id == null) MainWindow.CurrentUser.Id = "";
-                myCommand.Parameters.AddWithValue("@userId", MainWindow.CurrentUser.Id);
-                myCommand.Parameters.AddWithValue("@functionName", functionName);
-                myCommand.Parameters.AddWithValue("@systime", Convert.ToDateTime(DateTime.Now));
-                myCommand.Parameters.AddWithValue("@description", description);
-                myCommand.ExecuteNonQuery();
-                _connection.Close();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PROC_NAME", procName));
+            parameters.Add(new SqlParameter("PROC_PARAM", paramsValues));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[LOG].[SETPROCLOG]", parameters);
         }//Log()
 
      
