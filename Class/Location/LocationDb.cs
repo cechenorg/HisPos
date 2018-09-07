@@ -74,9 +74,18 @@ namespace His_Pos.Class
                 parameters.Add(new SqlParameter("LOCD_NAME", location.name));
                 parameters.Add(new SqlParameter("LOCD_ROW", location.locdrow));
                 parameters.Add(new SqlParameter("LOCD_COLUMN", location.locdcolumn));
-                dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[UpdateLocatiobDetail]", parameters);
+                dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[NewLocationDetail]", parameters);
             
         }
+        internal static DataTable UpdateLocationDetail(string id, string newvalue)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", id));
+            parameters.Add(new SqlParameter("NEW_VALUE", newvalue));
+            return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[UpdateLocationDetail]", parameters);
+        }
+
         internal static void DeleteLocationDetail(LocationDetail location)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
@@ -118,14 +127,6 @@ namespace His_Pos.Class
         internal static DataTable GetProductLocation() {
             var dd = new DbConnection(Settings.Default.SQL_global);
             return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetProductLocation]");
-        }
-        internal static DataTable UpdateLocationDetail(string id,string newvalue)
-        {
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("PRO_ID", id));
-            parameters.Add(new SqlParameter("NEW_VALUE", newvalue));
-            return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[UpdateLocationDetail]", parameters);
         }
        
     }

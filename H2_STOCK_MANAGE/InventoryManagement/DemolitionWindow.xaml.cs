@@ -121,10 +121,11 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 messageWindows.ShowDialog();
                 return;
             }
-            string 
+            string newInvId = ProductDb.GetMaxProInvId();
+            string proId = ProductGroups.Single(pro => pro.name == ComboBoxProduct.Text).id;
             foreach (WareHouseInventory wareHouseInventory in WareHouseInventoryCollection)
             {
-                ProductDb.DemolitionProduct();
+                ProductDb.DemolitionProduct(newInvId,proId, wareHouseInventory.warId,wareHouseInventory.DemolitionAmount);
             }
             MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS);
             messageWindow.ShowDialog();
