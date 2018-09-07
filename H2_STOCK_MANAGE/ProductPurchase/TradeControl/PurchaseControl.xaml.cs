@@ -110,7 +110,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         public PurchaseControl()
         {
             InitializeComponent();
-
             DataContext = this;
         }
 
@@ -150,24 +149,26 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     ConfirmToProcess.Visibility = Visibility.Collapsed;
                     DeleteOrder.Visibility = Visibility.Collapsed;
                     EmptySpace.Width = 400;
-                    StoreOrderDetail.Columns[11].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[12].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[13].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[14].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[8].Visibility = Visibility.Collapsed;
                     break;
                 case OrderType.UNPROCESSING:
                     Confirm.Visibility = Visibility.Collapsed;
                     ConfirmToProcess.Visibility = Visibility.Visible;
                     DeleteOrder.Visibility = Visibility.Visible;
                     EmptySpace.Width = 270;
-                    StoreOrderDetail.Columns[11].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[12].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[13].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[14].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[8].Visibility = Visibility.Visible;
                     break;
             }
 
@@ -199,6 +200,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             int rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
 
             e.Row.Header = rowNum.ToString();
+        }
+
+        internal void ClearControl()
+        {
+            StoreOrderData = null;
+            StoreOrderDetail.ItemsSource = null;
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)

@@ -139,8 +139,7 @@ namespace His_Pos.ProductPurchase
 
             StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
             
-            if (storeOrder.Products is null)
-                storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
+            storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
             StoreOrderData = storeOrder;
 
@@ -203,6 +202,10 @@ namespace His_Pos.ProductPurchase
         private void ClearOrderDetailData()
         {
             StoreOrderData = null;
+
+            purchaseControl.ClearControl();
+            returnControl.ClearControl();
+            waitControl.ClearControl();
         }
 
         private void AddNewOrder(object sender, MouseButtonEventArgs e)

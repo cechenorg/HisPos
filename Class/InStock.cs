@@ -11,9 +11,19 @@ namespace His_Pos.Class
 {
     public class InStock : INotifyPropertyChanged
     {
+        private string onTheWayAmount;
+        public string OnTheWayAmount
+        {
+            get { return onTheWayAmount; }
+            set
+            {
+                onTheWayAmount = value;
+                NotifyPropertyChanged("OnTheWayAmount");
+            }
+        }
+
         private double inventory;
        
-
         public double Inventory
         {
             get { return inventory; }
@@ -41,6 +51,7 @@ namespace His_Pos.Class
         {
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
+            OnTheWayAmount = dataRow["PRO_ONTHEWAY"].ToString();
             Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "")
                 ? "0"
                 : dataRow["PRO_INVENTORY"].ToString());
@@ -51,6 +62,7 @@ namespace His_Pos.Class
             BasicAmount = selectedItem.BasicAmount;
             SafeAmount = selectedItem.SafeAmount;
             Inventory = selectedItem.Inventory;
+            OnTheWayAmount = selectedItem.OnTheWayAmount;
         }
 
         public string BasicAmount
