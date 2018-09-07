@@ -385,11 +385,14 @@ namespace His_Pos.Class.Product
             }
             return productGroups;
         }
-        internal static void DemolitionProduct(DataTable dataTable)
+        internal static void DemolitionProduct(string newProInvId,string proId,string proWarId,string demoAmount)
         { 
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("Product", dataTable));
+            parameters.Add(new SqlParameter("NEWPROINV_ID", newProInvId));
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("PROWAR_ID", proWarId));
+            parameters.Add(new SqlParameter("DemolitionAmount", demoAmount));
             DataTable a = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[DemolitionProduct]", parameters);
         }
         internal static void MergeProduct(string soureProId,string targetProId) {
@@ -398,6 +401,12 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("SourcePRO_ID", soureProId));
             parameters.Add(new SqlParameter("TargetPRO_ID", targetProId));
             dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[MergeProduct]", parameters);
+        }
+        internal static string GetMaxProInvId()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetMaxProInvId]");
+            return table.Rows[0][0].ToString();
         }
     }
 }

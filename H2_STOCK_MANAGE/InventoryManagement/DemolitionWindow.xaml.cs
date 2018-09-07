@@ -121,29 +121,16 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 messageWindows.ShowDialog();
                 return;
             }
-
-
-            DataTable productDemolitionTable = SetDemolitionTable();
-             ProductDb.DemolitionProduct(productDemolitionTable);
+            string 
+            foreach (WareHouseInventory wareHouseInventory in WareHouseInventoryCollection)
+            {
+                ProductDb.DemolitionProduct();
+            }
             MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS);
             messageWindow.ShowDialog();
             Close();
         }
-        private DataTable SetDemolitionTable() {
-            var demolitionTable = new DataTable();
-            demolitionTable.Columns.Add("PRO_ID", typeof(string));
-            demolitionTable.Columns.Add("PROWAR_ID", typeof(string));
-            demolitionTable.Columns.Add("DemolitionAmount", typeof(int));
-
-            foreach (WareHouseInventory wareHouseInventory in WareHouseInventoryCollection) {
-                var row = demolitionTable.NewRow();
-                row["PRO_ID"] = ProductGroups.Single(pro => pro.name == ComboBoxProduct.Text).id;
-                row["PROWAR_ID"] = wareHouseInventory.warId;
-                row["DemolitionAmount"] = wareHouseInventory.DemolitionAmount;
-                demolitionTable.Rows.Add(row);
-            }
-            return demolitionTable;
-        }
+      
       
     }
 }
