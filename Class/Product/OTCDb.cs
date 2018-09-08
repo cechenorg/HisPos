@@ -96,6 +96,6 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
-        
+     
     }
 }

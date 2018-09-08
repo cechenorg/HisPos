@@ -167,12 +167,12 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void AddNewOrders(ProductPurchase.ProductPurchaseView productPurchaseView, StoreOrderProductType type, Manufactory manufactory = null)
+        public void AddNewOrders(ProductPurchase.ProductPurchaseView productPurchaseView, StoreOrderProductType type,WareHouse wareHouse, Manufactory manufactory = null)
         {
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("新增新處理單...");
-                ManufactoryDb.AddNewOrderBasicSafe(type, manufactory);
+                ManufactoryDb.AddNewOrderBasicSafe(type, wareHouse, manufactory);
 
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -193,6 +193,8 @@ namespace His_Pos
 
         internal void GetProductPurchaseData(ProductPurchaseView productPurchaseView)
         {
+            productPurchaseView.OrderContentControl.IsEnabled = false;
+
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得廠商資料...");
@@ -212,6 +214,15 @@ namespace His_Pos
 
                     //待修改
                     ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+
+                    foreach(StoreOrder stoOrd in tempStoreOrderCollection)
+                    {
+                        if(stoOrd.Type == OrderType.WAITING)
+                        {
+                            //Check Order Status
+                        }
+                    }
+
                     productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
                 }));
             };
@@ -220,6 +231,7 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    productPurchaseView.OrderContentControl.IsEnabled = true;
                     Close();
                 }));
             };
@@ -260,12 +272,13 @@ namespace His_Pos
         {
             backgroundWorker.DoWork += (s, o) =>
             {
-                ChangeLoadingMessage("處理商品資料...");
+                ChangeLoadingMessage("讀取商品資料...");
                 string totalWorth = ProductDb.GetTotalWorth();
                 double stockValue = 0;
                 inventoryManagementView.InventoryMedicines = MedicineDb.GetInventoryMedicines();
                 inventoryManagementView.InventoryOtcs = OTCDb.GetInventoryOtcs();
-
+                inventoryManagementView.ProductCollection = ProductDb.GetItemDialogProduct();
+                ChangeLoadingMessage("載入商品資料...");
                 Dispatcher.Invoke((Action)(() =>
                 {
                     ObservableCollection<Product> products = new ObservableCollection<Product>();

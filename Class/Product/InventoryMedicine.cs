@@ -24,8 +24,8 @@ namespace His_Pos.Class.Product
             Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
             Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");
             WareHouse = dataRow["PROWAR_NAME"].ToString();
-
-        }
+            WareHouseId = dataRow["PROWAR_ID"].ToString();
+    }
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }
@@ -35,6 +35,7 @@ namespace His_Pos.Class.Product
         public string StockValue { get; set; }
         public string Note { get; set; }
         public string Ingredient { get; set; }
+        public string WareHouseId { get; set; }
         public string WareHouse { get; set; }
     }
 }

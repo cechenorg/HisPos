@@ -545,6 +545,13 @@ namespace His_Pos.PrescriptionInquire
                 var declareData = new DeclareData(InquiredPrescription.Prescription);
                 declareData.DecMasId = InquiredPrescription.DecMasId;
                 var declareDb = new DeclareDb();
+                SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
+                Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();
+                Charge.Content = Charge.Content.ToString() == null ? "0" : Charge.Content.ToString();
+                Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
+                Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
+                Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
+               
                 DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
                 declareDb.UpdateDeclareData(declareData, declareTrade);
                 //declareDb.InsertInventoryDb(declareData, "處方登錄");
@@ -597,5 +604,14 @@ namespace His_Pos.PrescriptionInquire
         {
             isFirst = false;
         }
+
+        private void MedicineTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectionStart = 0;
+            textBox.SelectionLength = textBox.Text.Length;
+        }
+
+      
     }
 }

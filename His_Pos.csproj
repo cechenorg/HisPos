@@ -322,6 +322,7 @@
     <Compile Include="Class\Product\OTCStockOverview.cs" />
     <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
+    <Compile Include="Class\Product\ProductGroup.cs" />
     <Compile Include="Class\Product\ProductPurchaseMedicine.cs" />
     <Compile Include="Class\Product\ProductPurchaseOTC.cs" />
     <Compile Include="Class\Product\ProductTypeMedicine.cs" />
@@ -382,17 +383,29 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml.cs">
+      <DependentUpon>DemolitionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
+      <DependentUpon>MergeStockWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
       <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml.cs">
       <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml.cs">
+      <DependentUpon>DeclareDataDetailOverview.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml.cs">
       <DependentUpon>PurchaseControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml.cs">
       <DependentUpon>ReturnControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\WaitControl.xaml.cs">
+      <DependentUpon>WaitControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
@@ -625,6 +638,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -633,11 +654,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\WaitControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

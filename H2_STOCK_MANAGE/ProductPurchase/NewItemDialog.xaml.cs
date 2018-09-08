@@ -29,27 +29,28 @@ namespace His_Pos.ProductPurchase
         
         public PurchaseProduct SelectedItem;
         public bool ConfirmButtonClicked = false;
-
+        public string WareId;
         public string ManufactoryID;
 
-        public NewItemDialog(Collection<PurchaseProduct> collection, string manId)
+        public NewItemDialog(Collection<PurchaseProduct> collection, string manId, string warId)
         {
             InitializeComponent();
             Title = "新增";
             
             DataCollection = collection;
             ManufactoryID = manId;
+            WareId = warId;
 
             InitCollection();
         }
-        public NewItemDialog(Collection<PurchaseProduct> collection, string manId, string searchText)
+        public NewItemDialog(Collection<PurchaseProduct> collection, string manId, string searchText,string warId)
         {
             InitializeComponent();
             Title = "新增";
 
             DataCollection = collection;
             ManufactoryID = manId;
-
+            WareId = warId;
             SearchText.Text = searchText;
             AllProducts.IsChecked = true;
 
@@ -89,18 +90,24 @@ namespace His_Pos.ProductPurchase
 
             if ((bool) OnlyManufactory.IsChecked)
             {
-                if (String.IsNullOrEmpty(SearchText.Text))
+                if (String.IsNullOrEmpty(SearchText.Text) && (((PurchaseProduct)item).WarId == WareId || WareId == null) )
                     return ((PurchaseProduct)item).Mans.Contains(ManufactoryID);
 
-                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text)) && ((PurchaseProduct)item).Mans.Contains(ManufactoryID))
+                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text)) && ((PurchaseProduct)item).Mans.Contains(ManufactoryID)
+                      && (((PurchaseProduct)item).WarId == WareId || WareId == null)
+                    )
                     return true;
             }
             else
             {
-                if (String.IsNullOrEmpty(SearchText.Text))
+                if (String.IsNullOrEmpty(SearchText.Text)
+                       && (((PurchaseProduct)item).WarId == WareId || WareId == null)
+                    )
                     return true;
 
-                if (((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text))
+                if ((((PurchaseProduct)item).Id.Contains(SearchText.Text) || ((PurchaseProduct)item).Name.Contains(SearchText.Text))
+                    && (((PurchaseProduct)item).WarId == WareId || WareId == null)
+                    )
                     return true;
             }
 

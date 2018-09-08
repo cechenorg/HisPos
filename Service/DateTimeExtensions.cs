@@ -43,7 +43,7 @@ namespace His_Pos.Service
           
             return DateTime.ParseExact(datetime, "yyy/MM/dd", CultureInfo.InvariantCulture).AddYears(1911);
         }
-       
+ 
         /*
          * 計算年齡
          */
@@ -98,12 +98,12 @@ namespace His_Pos.Service
         Data:yy/mm/dd => yyy/mm/dd 
         */
         public static string YearFormatTransfer(string date) {
-            if (date.Split('/')[0].Length == 3)
+            if (date.Split('/')[0].Length == 2)
             {
-                return date;
+                return "0" + date;
             }
             else
-                return "0" + date;
+                return  date;
         }
     }
 }

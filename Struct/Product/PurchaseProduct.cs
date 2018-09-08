@@ -21,7 +21,9 @@ namespace His_Pos.Struct.Product
             LastPrice = Double.Parse(dataRow["LAST_PRICE"].ToString());
             Mans = dataRow["MANS"].ToString();
             Type = dataRow["TYPE"].ToString();
+            WarId = dataRow["PROWAR_ID"].ToString(); 
             Status = Boolean.Parse(dataRow["PRO_STATUS"].ToString());
+            OnTheWayAmount = dataRow["PRO_ONTHEWAY"].ToString(); 
         }
 
         public string Mans;
@@ -29,9 +31,11 @@ namespace His_Pos.Struct.Product
         public string Name { get; }
         public string ChiName;
         public string EngName;
+        public string WarId;
         public double Inventory { get; }
         public string SafeAmount { get; }
         public string BasicAmount { get; }
+        public string OnTheWayAmount { get; }
         public double LastPrice;
         public string Type;
         public bool Status;

@@ -19,16 +19,19 @@ namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
-        public StoreOrder(StoreOrderCategory category, User ordEmp, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
+        public StoreOrder(StoreOrderCategory category, User ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
         {
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
 
-            Id = StoreOrderDb.GetNewOrderId(ordEmp.Id);
+            Id = StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id, manufactory.Id);
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
             Category = new Category(category);
+            Warehouse = wareHouse;
+            Principal = new PurchasePrincipal("");
+            DeclareDataCount = 0;
 
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 
@@ -46,6 +49,9 @@ namespace His_Pos.Class.StoreOrder
                 case "G":
                     Type = OrderType.PROCESSING;
                     break;
+                case "W":
+                    Type = OrderType.WAITING;
+                    break;
             }
 
             Category = new Category(row["STOORD_TYPE"].ToString().Equals("進")? StoreOrderCategory.PURCHASE : StoreOrderCategory.RETURN);
@@ -54,11 +60,19 @@ namespace His_Pos.Class.StoreOrder
             RecEmp = row["REC_EMP"].ToString();
             Manufactory = new Manufactory.Manufactory(row);
             Principal = new PurchasePrincipal(row);
+
+            Warehouse = new WareHouse(row);
+
+            DeclareDataCount = Int32.Parse(row["DECLARECOUNT"].ToString());
         }
 
         private StoreOrder()
         {
         }
+        
+        public int DeclareDataCount { get; set; }
+
+        public bool IsDataChanged { get; set; } = false;
 
         public BitmapImage typeIcon;
 
@@ -86,6 +100,9 @@ namespace His_Pos.Class.StoreOrder
                         break;
                     case OrderType.PROCESSING:
                         TypeIcon = new BitmapImage(new Uri(@"..\..\Images\DarkerHisDot.png", UriKind.Relative));
+                        break;
+                    case OrderType.WAITING:
+                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\HisDot.png", UriKind.Relative));
                         break;
                 }
             }
@@ -125,8 +142,18 @@ namespace His_Pos.Class.StoreOrder
             }
         }
 
-        public PurchasePrincipal Principal { get; set; }
+        private PurchasePrincipal principal;
+        public PurchasePrincipal Principal
+        {
+            get { return principal; }
+            set
+            {
+                principal = value;
+                NotifyPropertyChanged("Principal");
+            }
+        }
 
+        public WareHouse Warehouse { get; set; }
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -150,9 +177,6 @@ namespace His_Pos.Class.StoreOrder
 
             if (Products is null || Products.Count == 0)
                 message += "請填寫商品\n";
-
-            if (type == OrderType.PROCESSING && String.IsNullOrEmpty(RecEmp))
-                message += "請填寫收貨人\n";
 
             foreach (AbstractClass.Product product in Products)
             {
@@ -194,6 +218,8 @@ namespace His_Pos.Class.StoreOrder
             storeOrder.RecEmp = RecEmp;
             storeOrder.Manufactory = Manufactory;
             storeOrder.Products = new ObservableCollection<AbstractClass.Product>();
+            storeOrder.Principal = Principal;
+            storeOrder.Warehouse = Warehouse;
 
             foreach (AbstractClass.Product product in Products)
             {

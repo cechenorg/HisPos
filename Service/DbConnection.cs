@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.Properties;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -16,14 +17,39 @@ namespace His_Pos.Service
 
         public DbConnection(string connection) { _connection = new SqlConnection(connection); }
 
-        ///<summary>
-        ///ChangeNameToEnglish()
-        ///</summary>
-        ///<remarks>
-        ///輸入:SQL語法字串
-        ///輸出:執行回傳資料的Datatable
-        ///用途:執行SQL語法取的資料
-        ///</remarks>
+        public void NonQueryBySqlString(string sqlString)
+        {
+            DataTable dataTable = new DataTable();
+            SqlCommand cmd = new SqlCommand(sqlString, _connection);
+            try
+            {
+                _connection.Open();
+                cmd.ExecuteNonQuery();
+                _connection.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message);
+            }
+
+        }
+        public DataTable QueryBySqlString(string sqlString)
+        {
+            DataTable dataTable = new DataTable();
+            SqlCommand cmd = new SqlCommand(sqlString, _connection);
+            try {
+                _connection.Open();
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                da.Fill(dataTable);
+                _connection.Close();
+                da.Dispose();
+                return dataTable;
+            }
+            catch (Exception ex) {
+                throw new InvalidOperationException(ex.Message);
+            }
+           
+        }
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
             var table = new DataTable();
@@ -43,6 +69,11 @@ namespace His_Pos.Service
                 table.Locale = CultureInfo.InvariantCulture;
                 sqlDapter.Fill(table);
                 _connection.Close();
+                string parameValues = string.Empty;
+                foreach (SqlParameter row in parameterList){
+                    parameValues += row.ParameterName + ":" + row.Value.ToString() + "\r\n";
+                }
+                Log(procName, parameValues);
             }
             catch (Exception ex)
             {
@@ -59,28 +90,15 @@ namespace His_Pos.Service
         ///輸出:
         ///用途:紀錄log
         ///</remarks>
-        public void Log(string system, string functionName, string description)
+        public void Log(string procName, string paramsValues)
         {
-            string sql = @"Insert into TestDB.dbo.WebLog (COMNAME,SYSTEM,USER_ID,FUNCTION_NAME,SYSTIME,DESCRIPTION) 
-                                                   Values(@comname,@system,@userId,@functionName,@systime,@description)";
-
-                _connection.Open();
-                SqlCommand myCommand = new SqlCommand(sql, _connection);
-                myCommand.Parameters.AddWithValue("@comname", Environment.MachineName);
-                myCommand.Parameters.AddWithValue("@system", system);
-               if (MainWindow.CurrentUser.Id == null) MainWindow.CurrentUser.Id = "";
-                myCommand.Parameters.AddWithValue("@userId", MainWindow.CurrentUser.Id);
-                myCommand.Parameters.AddWithValue("@functionName", functionName);
-                myCommand.Parameters.AddWithValue("@systime", Convert.ToDateTime(DateTime.Now));
-                myCommand.Parameters.AddWithValue("@description", description);
-                myCommand.ExecuteNonQuery();
-                _connection.Close();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PROC_NAME", procName));
+            parameters.Add(new SqlParameter("PROC_PARAM", paramsValues));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[LOG].[SETPROCLOG]", parameters);
         }//Log()
 
-        public DataTable SetProcName(string procName,DbConnection connection)
-        {
-            var table = connection.ExecuteProc(procName);
-            return table;
-        }
+     
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,13 +96,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private const int PRODUCT_PER_PAGE = 12;
 
-        enum PagingType
-        {
-            INIT,
-            DEL,
-            ADD
-        }
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -115,24 +110,28 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         public PurchaseControl()
         {
             InitializeComponent();
-
             DataContext = this;
         }
 
         internal void SetDataContext(StoreOrder storeOrder)
         {
             StoreOrderData = storeOrder;
-
-            UpdateOrderDetailUi();
-
+            
             InitPrincipal();
 
+            UpdateOrderDetailUi();
+            
             PreparePaging(PagingType.INIT);
+
+            StoreOrderData.IsDataChanged = false;
         }
 
         private void InitPrincipal()
         {
             PrincipalCollection = ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
+
+            if (StoreOrderData.Principal.Id == "")
+                PrincipalCombo.SelectedIndex = 0;
         }
 
         #region ----- StoreOrderDetail Functions -----
@@ -150,27 +149,46 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     ConfirmToProcess.Visibility = Visibility.Collapsed;
                     DeleteOrder.Visibility = Visibility.Collapsed;
                     EmptySpace.Width = 400;
-                    StoreOrderDetail.Columns[11].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[12].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[13].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[14].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[8].Visibility = Visibility.Collapsed;
                     break;
                 case OrderType.UNPROCESSING:
                     Confirm.Visibility = Visibility.Collapsed;
                     ConfirmToProcess.Visibility = Visibility.Visible;
                     DeleteOrder.Visibility = Visibility.Visible;
                     EmptySpace.Width = 270;
-                    StoreOrderDetail.Columns[11].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[12].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[13].Visibility = Visibility.Collapsed;
+                    StoreOrderDetail.Columns[14].Visibility = Visibility.Collapsed;
                     StoreOrderDetail.Columns[5].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
                     StoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
+                    StoreOrderDetail.Columns[8].Visibility = Visibility.Visible;
                     break;
             }
+
+            UpdatePricipalStackUi();
         }
+
+        private void UpdatePricipalStackUi()
+        {
+            if (StoreOrderData.Principal.Name.Equals("新增負責人"))
+            {
+                HasPrincipalStack.Visibility = Visibility.Collapsed;
+                DontHasPrincipalStack.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                HasPrincipalStack.Visibility = Visibility.Visible;
+                DontHasPrincipalStack.Visibility = Visibility.Collapsed;
+            }
+        }
+
         private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
         {
             if (sender is null) return;
@@ -182,6 +200,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             int rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
 
             e.Row.Header = rowNum.ToString();
+        }
+
+        internal void ClearControl()
+        {
+            StoreOrderData = null;
+            StoreOrderDetail.ItemsSource = null;
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
@@ -214,6 +238,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void StoreOrderDetail_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
+            StoreOrderData.IsDataChanged = true;
+
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;
@@ -291,6 +317,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 StoreOrderData.Products[rowIndex] = newProduct;
             }
+
+            StoreOrderData.IsDataChanged = true;
         }
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -303,15 +331,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!textBox.Name.Equals("FreeAmount"))
                 storeOrderData.CalculateTotalPrice();
+            
+            StoreOrderData.IsDataChanged = true;
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //SetChanged();
             StoreOrderData.Products.Remove((Product)StoreOrderDetail.SelectedItem);
             StoreOrderData.CalculateTotalPrice();
 
             PreparePaging(PagingType.DEL);
+
+            StoreOrderData.IsDataChanged = true;
         }
 
         private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
@@ -328,6 +359,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (left != 0)
                 ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+
+            StoreOrderData.IsDataChanged = true;
+            
+            PreparePaging(PagingType.SPLIT);
         }
 
         private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -338,7 +373,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (e.Key == Key.Enter)
             {
-                NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text);
+                NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text, StoreOrderData.Warehouse.Id);
 
                 if (newItemDialog.ConfirmButtonClicked)
                 {
@@ -377,7 +412,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             var currentRowIndex = GetCurrentRowIndex(sender);
 
-            if (currentRowIndex == -1) return;
+            if (currentRowIndex == -1 || currentRowIndex == StoreOrderDetail.Items.Count - 1) return;
 
             if (!textBox.Text.Equals(storeOrderData.Products[currentRowIndex].Id))
                 textBox.Text = storeOrderData.Products[currentRowIndex].Id;
@@ -387,8 +422,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         #region ----- Paging Functions -----
         private void PreparePaging(PagingType type)
         {
-            TotalPage = (storeOrderData.Products.Count / PRODUCT_PER_PAGE) + ((storeOrderData.Products.Count % PRODUCT_PER_PAGE == 0) ? 0 : 1);
-
+            if (storeOrderData.Products.Count == 0)
+                TotalPage = 1;
+            else
+                TotalPage = (storeOrderData.Products.Count / PRODUCT_PER_PAGE) + ((storeOrderData.Products.Count % PRODUCT_PER_PAGE == 0) ? 0 : 1);
+            
             switch (type)
             {
                 case PagingType.INIT:
@@ -402,6 +440,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     break;
                 case PagingType.ADD:
                     CurrentPage = TotalPage;
+                    break;
+                case PagingType.SPLIT:
                     break;
             }
 
@@ -543,7 +583,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
 
             newItemDialog.ShowDialog();
 
@@ -559,14 +599,31 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private void ComboBox_DropDownOpened(object sender, EventArgs e)
+        private void Principal_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            UpdatePricipalStackUi();
 
+            StoreOrderData.IsDataChanged = true;
         }
 
-        private void ComboBox_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void ShowDeclareDataOverview(object sender, MouseButtonEventArgs e)
         {
+            DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
+            declareDataDetailOverview.Show();
+        }
+    }
 
+    public class HasDeclareDataToVisConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null || (int)value == 0) return Visibility.Collapsed;
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return 0;
         }
     }
 }

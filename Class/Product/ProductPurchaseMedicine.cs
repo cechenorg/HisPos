@@ -22,17 +22,6 @@ namespace His_Pos.Class.Product
 
             switch (dataSource)
             {
-                case DataSource.PRODUCTBASICORSAFE:
-                    Amount = Int16.Parse(dataRow["PRO_BASICQTY"].ToString()) -
-                             Int16.Parse(dataRow["PRO_INVENTORY"].ToString());
-                    Price = "0";
-                    TotalPrice = 0;
-                    Note = "";
-                    Invoice = "";
-                    FreeAmount = 0;
-                    ValidDate = "";
-                    BatchNumber = "";
-                    break;
                 case DataSource.GetStoreOrderDetail:
                     Price = dataRow["STOORDDET_PRICE"].ToString();
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
@@ -42,17 +31,6 @@ namespace His_Pos.Class.Product
                     FreeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
                     ValidDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01"))? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
                     BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
-                    break;
-                case DataSource.GetItemDialogProduct:
-                    Amount = 0;
-                    Price = "0";
-                    TotalPrice = 0;
-                    Note = "";
-                    Invoice = "";
-                    FreeAmount = 0;
-                    ValidDate = "";
-                    BatchNumber = "";
-                    Status = dataRow["PRO_STATUS"].ToString().Equals("1");
                     break;
             }
         }
@@ -266,6 +244,7 @@ namespace His_Pos.Class.Product
             Status = ((IProductPurchase)product).Status;
             LastPrice = ((IProductPurchase)product).LastPrice;
             Stock = ((IProductPurchase)product).Stock;
+
         }
     }
 }

@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Data;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.InventoryManagement
 {
@@ -60,6 +61,7 @@ namespace His_Pos.InventoryManagement
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        public Collection<PurchaseProduct> ProductCollection { get; set; }
         public InventoryManagementView()
         {
             InitializeComponent();
@@ -68,6 +70,12 @@ namespace His_Pos.InventoryManagement
             DataContext = this;
             SetOtcTypeUi();
             WareHouseCollection = WareHouseDb.GetWareHouseData();
+
+            WareHouse wareHouse = new WareHouse();
+            wareHouse.Id = "0";
+            wareHouse.Name = "全部";
+            WareHouseCollection.Insert(0, wareHouse);
+
             WareHouse.SelectedItem = WareHouseCollection[0];
         }
         public void SetOtcTypeUi() {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +9,16 @@ namespace His_Pos.Class.Product
 {
     public class OTCStockOverview
     {
-        public OTCStockOverview(string validDate, string price, string amount)
+        public OTCStockOverview(DataRow row)
         {
-            ValidDate = validDate;
-            Price = price;
-            Amount = amount;
+            warId = row["PROWAR_ID"].ToString();
+            InstockDate = row["INSTOCK_TIME"].ToString();
+            Price = row["PRO_PRICE"].ToString();
+            Amount = row["PRO_AMOUNT"].ToString();
         }
-
-        public string ValidDate { get; }
-        public string Price { get; }
-        public string Amount { get; }
+        public string warId { get; set; }
+        public string InstockDate { get; set; }
+        public string Price { get; set; }
+        public string Amount { get; set; }
     }
 }

@@ -66,6 +66,9 @@ namespace His_Pos.Class.StoreOrder
                 case OrderType.DONE:
                     type = "D";
                     break;
+                case OrderType.WAITING:
+                    type = "W";
+                    break;
             }
             parameters.Add(new SqlParameter("STOORD_FLAG", type));
 
@@ -84,6 +87,12 @@ namespace His_Pos.Class.StoreOrder
                 parameters.Add(new SqlParameter("REC_EMP", storeOrder.RecEmp));
 
             parameters.Add(new SqlParameter("PRINCIPAL_ID", storeOrder.Principal.Id));
+
+            if (storeOrder.Warehouse is null)
+                parameters.Add(new SqlParameter("WAREHOUSE_ID", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("WAREHOUSE_ID", storeOrder.Warehouse.Id));
+
 
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
@@ -116,12 +125,14 @@ namespace His_Pos.Class.StoreOrder
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
         }
 
-        internal static string GetNewOrderId(string OrdEmpId)
+        internal static string GetNewOrderId(string OrdEmpId, string wareId, string manId)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDEMP_ID", OrdEmpId));
+            parameters.Add(new SqlParameter("WARE_ID", wareId));
+            parameters.Add(new SqlParameter("MAN_ID", wareId));
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddNewStoreOrder]", parameters);
 

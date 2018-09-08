@@ -90,6 +90,14 @@ namespace His_Pos.Class.Declare
             file.ErrorPrescriptionList = new ErrorPrescriptions {ErrorList = new List<ErrorList>()};
             file.ErrorPrescriptionList.ErrorList = PrescriptionDB.GetPrescriptionErrorLists(declareDate);
             DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate,DeclareFileType.LOG_IN);
+
+        public void UpdateDeclareData(DeclareData declareData, DeclareTrade declareTrade = null)
+        {
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            AddParameterDData(parameters, declareData); //加入DData sqlparameters
+            var pDataTable = SetUpdatePDataTable(); //設定PData datatable columns
+            AddPData(declareData, pDataTable); //加入PData sqlparameters
         }
 
         private List<Ddata> SortDdataByCaseId(Pharmacy p)
@@ -538,7 +546,33 @@ namespace His_Pos.Class.Declare
             row["XML"] = CreateToXml(declareData).InnerXml.ToString();
             declareMaster.Rows.Add(row);
         }
+        private DataTable SetUpdatePDataTable() {
+            var pDataTable = new DataTable();
+            var columnsDictionary = new Dictionary<string, Type>
+                    {
+                        {"DecMasId", typeof(string)},
+                        {"P10", typeof(int)},
+                        {"P1", typeof(string)},
+                        {"P2", typeof(string)},
+                        {"P7", typeof(double)},
+                        {"P8", typeof(double)},
+                        {"P9", typeof(int)},
+                        {"P3", typeof(double)},
+                        {"P4", typeof(string)},
+                        {"P5", typeof(string)},
+                        {"P6", typeof(string)},
+                        {"P11", typeof(string)},
+                        {"P12", typeof(string)},
+                        {"P13", typeof(string)},
+                        {"PAY_BY_YOURSELF", typeof(string)}
+                    };
+            foreach (var col in columnsDictionary)
+            {
+                pDataTable.Columns.Add(col.Key, col.Value);
+            }
 
+            return pDataTable;
+        }
         private DataTable SetPDataTable()
         {
             var pDataTable = new DataTable();
@@ -607,7 +641,9 @@ namespace His_Pos.Class.Declare
                     : declareData.Prescription.Medicines[i].UsageName;
                 var paySelf = /*declareData.Prescription.Medicines == null ? "0" :*/
                     declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
-                var tagsDictionary = new Dictionary<string, string>
+                if (String.IsNullOrEmpty(declareData.DecMasId))
+                {
+                    var tagsDictionary = new Dictionary<string, string>
                         {
                             {"P1", detail.MedicalOrder},
                             {"P2", detail.MedicalId},
@@ -627,25 +663,67 @@ namespace His_Pos.Class.Declare
                             {"P11", detail.Days.ToString()},
                             {"PAY_BY_YOURSELF", paySelf}
                         };
-                foreach (var tag in tagsDictionary)
-                {
-                    switch (tag.Key)
+                    foreach (var tag in tagsDictionary)
                     {
-                        case "P10":
-                            row[tag.Key] = Convert.ToInt32(tag.Value);
-                            break;
+                        switch (tag.Key)
+                        {
+                            case "P10":
+                                row[tag.Key] = Convert.ToInt32(tag.Value);
+                                break;
 
-                        case "PAY_BY_YOURSELF":
-                            row[tag.Key] = tag.Value;
-                            break;
+                            case "PAY_BY_YOURSELF":
+                                row[tag.Key] = tag.Value;
+                                break;
 
-                        default:
-                            CheckEmptyDataRow(pDataTable, tag.Value, ref row, tag.Key);
-                            break;
+                            default:
+                                CheckEmptyDataRow(pDataTable, tag.Value, ref row, tag.Key);
+                                break;
+                        }
                     }
-                }
 
-                pDataTable.Rows.Add(row);
+                    pDataTable.Rows.Add(row);
+                }
+                else {
+                    var tagsDictionary = new Dictionary<string, string>
+                        {
+                           {"DecMasId", declareData.DecMasId},
+                            {"P1", detail.MedicalOrder},
+                            {"P2", detail.MedicalId},
+                            {"P3", function.SetStrFormat(detail.Dosage, "{0:0000.00}")},
+                            {"P4", detail.Usage},
+                            {"P5", detail.Position},
+                            {"P6", function.ToInvCulture(detail.Percent)},
+                            {"P7", function.SetStrFormat(detail.Total, "{0:00000.0}")},
+                            {"P8", function.SetStrFormat(detail.Price, "{0:0000000.00}")},
+                            {
+                                "P9",
+                                function.SetStrFormatInt(
+                                    Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,
+                                        MidpointRounding.AwayFromZero))), "{0:D8}")
+                            },
+                            {"P10", detail.Sequence.ToString()},
+                            {"P11", detail.Days.ToString()},
+                            {"PAY_BY_YOURSELF", paySelf}
+                        };
+                    foreach (var tag in tagsDictionary)
+                    {
+                        switch (tag.Key)
+                        {
+                            case "P10":
+                                row[tag.Key] = Convert.ToInt32(tag.Value);
+                                break;
+
+                            case "PAY_BY_YOURSELF":
+                                row[tag.Key] = tag.Value;
+                                break;
+
+                            default:
+                                CheckEmptyDataRow(pDataTable, tag.Value, ref row, tag.Key);
+                                break;
+                        }
+                    }
+                    pDataTable.Rows.Add(row);
+                }
             }
 
             if (declareData.Prescription.Treatment.AdjustCase.Id == "3")
@@ -1221,7 +1299,7 @@ namespace His_Pos.Class.Declare
 
         private void CheckEmptyDataRow(DataTable dataTable, string value, ref DataRow row, string rowName)
         {
-            if (value != string.Empty)
+            if (value != string.Empty && rowName != "DecMasId")
             {
                 switch (dataTable.Columns[rowName].DataType.Name)
                 {
