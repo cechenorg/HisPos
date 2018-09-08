@@ -16,7 +16,7 @@ namespace His_Pos.Class.Declare
         {
             ObservableCollection<DeclareFile> declareFiles = new ObservableCollection<DeclareFile>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var divisionTable = dbConnection.SetProcName("[HIS_POS_DB].[DeclareFileExportView].[GetDeclareFilesData]", dbConnection);
+            var divisionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[DeclareFileExportView].[GetDeclareFilesData]");
             foreach (DataRow declareFile in divisionTable.Rows)
             {
                 declareFiles.Add(new DeclareFile(declareFile));

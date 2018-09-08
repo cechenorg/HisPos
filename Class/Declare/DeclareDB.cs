@@ -47,7 +47,7 @@ namespace His_Pos.Class.Declare
                 parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
                 {
                     Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
-            });
+                });
 
                 parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
                 {
@@ -56,6 +56,7 @@ namespace His_Pos.Class.Declare
                 CheckInsertDbTypeUpdate(parameters);
             }
         }
+
         public void UpdateDeclareFile(DeclareData declareData)
         {
             var declareDate = declareData.Prescription.Treatment.AdjustDate;
@@ -64,7 +65,7 @@ namespace His_Pos.Class.Declare
                 Ddata = GetDdataList(declareData.Prescription.Treatment.AdjustDate)
             };
             var sortedCaseList = SortDdataByCaseId(p);
-           
+
             var tdata = new Tdata
             {
                 T1 = "30",
@@ -80,7 +81,7 @@ namespace His_Pos.Class.Declare
                 T11 = sortedCaseList.Count.ToString()
             };
             tdata.T12 = (int.Parse(tdata.T8) + int.Parse(tdata.T10)).ToString();
-            tdata.T13 = GetDateStr(DateTime.Now,true);
+            tdata.T13 = GetDateStr(DateTime.Now, true);
             tdata.T14 = GetDateStr(declareDate, false);
             p.Tdata = tdata;
             p.Ddata = sortedCaseList;
@@ -89,8 +90,8 @@ namespace His_Pos.Class.Declare
             file.FileContent = p;
             file.ErrorPrescriptionList = new ErrorPrescriptions {ErrorList = new List<ErrorList>()};
             file.ErrorPrescriptionList.ErrorList = PrescriptionDB.GetPrescriptionErrorLists(declareDate);
-            DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate,DeclareFileType.LOG_IN);
-
+            DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate, DeclareFileType.LOG_IN);
+        }
         public void UpdateDeclareData(DeclareData declareData, DeclareTrade declareTrade = null)
         {
             var conn = new DbConnection(Settings.Default.SQL_global);
@@ -143,14 +144,14 @@ namespace His_Pos.Class.Declare
             return ddatas;
         }
 
-        private string GetDateStr(DateTime d,bool now)
+        private string GetDateStr(DateTime d, bool now)
         {
-            if(now)
+            if (now)
                 return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + "01";
             return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + d.Day.ToString().PadLeft(2, '0');
         }
 
-        private int CountPrescriptionByCase(List<Ddata> listDdata,int caseType)
+        private int CountPrescriptionByCase(List<Ddata> listDdata, int caseType)
         {
             List<Ddata> normalCaseDdata = new List<Ddata>();
             if (caseType == 1)
@@ -161,18 +162,9 @@ namespace His_Pos.Class.Declare
             }
             else
             {
-                normalCaseDdata = listDdata.Where(d => d.Dhead.D1.Equals("2") ).ToList();
+                normalCaseDdata = listDdata.Where(d => d.Dhead.D1.Equals("2")).ToList();
             }
             return normalCaseDdata.Count;
-        }
-
-        public void UpdateDeclareData(DeclareData declareData, DeclareTrade declareTrade = null)
-        {
-            var conn = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            AddParameterDData(parameters, declareData); //加入DData sqlparameters
-            var pDataTable = SetPDataTable(); //設定PData datatable columns
-            AddPData(declareData, pDataTable); //加入PData sqlparameters
         }
 
         /*
@@ -546,7 +538,8 @@ namespace His_Pos.Class.Declare
             row["XML"] = CreateToXml(declareData).InnerXml.ToString();
             declareMaster.Rows.Add(row);
         }
-        private DataTable SetUpdatePDataTable() {
+        private DataTable SetUpdatePDataTable()
+        {
             var pDataTable = new DataTable();
             var columnsDictionary = new Dictionary<string, Type>
                     {
@@ -683,7 +676,8 @@ namespace His_Pos.Class.Declare
 
                     pDataTable.Rows.Add(row);
                 }
-                else {
+                else
+                {
                     var tagsDictionary = new Dictionary<string, string>
                         {
                            {"DecMasId", declareData.DecMasId},
@@ -742,7 +736,7 @@ namespace His_Pos.Class.Declare
         {
             var percent = CountAdditionPercent(declareData);
             var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            var detail = new DeclareDetail("1",declareData.DayPayCode, percent,
+            var detail = new DeclareDetail("1", declareData.DayPayCode, percent,
                 declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate,
                 currentDate);
             var pData = pDataTable.NewRow();
@@ -814,7 +808,7 @@ namespace His_Pos.Class.Declare
         {
             double percent = 100;
             var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            var detail = new DeclareDetail("9",declareData.MedicalServiceCode, percent,
+            var detail = new DeclareDetail("9", declareData.MedicalServiceCode, percent,
                 declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate,
                 currentDate);
             var pData = pDataTable.NewRow();
