@@ -10,8 +10,9 @@ namespace His_Pos.Class.Declare
     [XmlRoot(ElementName = "ddata")]
     public class Ddata :INotifyPropertyChanged
     {
+        [XmlElement(ElementName = "decId")]
+        public string DecId { get; set; }
         private Dhead _dhead;
-
         [XmlElement(ElementName = "dhead")]
         public Dhead Dhead
         {

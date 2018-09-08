@@ -22,7 +22,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
     {
         public ObservableCollection<DeclareFile> DeclareFiles { get; set; }
         public ObservableCollection<Division> Divisions { get; set; }
-        public ObservableCollection<Ddata> PrescriptionCollection { get; set; }
+        public ObservableCollection<DeclareFileDdata> PrescriptionCollection { get; set; }
         private DeclareFile _selectedFile;
         public DeclareFile SelectedFile
         {
@@ -58,6 +58,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             var load = new LoadingWindow();
             load.GetDeclareFileData(this);
             load.Show();
+            SelectedFile = new DeclareFile();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -71,7 +72,24 @@ namespace His_Pos.H6_DECLAREFILE.Export
         private void DeclareFileList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SelectedFile = (DeclareFile)(sender as DataGrid)?.SelectedItem;
-            PrescriptionCollection = new ObservableCollection<Ddata>(SelectedFile.FileContent.Ddata);
+
+            foreach (var ddata in SelectedFile.FileContent.Ddata)
+            {
+                SelectedFile.PrescriptionDdatas.Add(new DeclareFileDdata(ddata));
+            }
+
+            foreach (var d in SelectedFile.PrescriptionDdatas)
+            {
+                foreach (var errorList in SelectedFile.ErrorPrescriptionList.ErrorList)
+                {
+                    if (errorList.PrescriptionId.Equals(d.DecId) && errorList.Error.Count > 0)
+                    {
+                        d.HasError = true;
+                        d.CanDeclare = false;
+                    }
+                }
+            }
+            PrescriptionCollection = new ObservableCollection<DeclareFileDdata>(SelectedFile.PrescriptionDdatas);
             PrescriptionList.ItemsSource = PrescriptionCollection;
             
         }
@@ -88,6 +106,18 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void CreateDeclareFileClick(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
+        {
+            if (SelectedFile == null) return;
+            foreach (var d in SelectedFile.PrescriptionDdatas)
+            {
+                if (d.HasError)
+                {
+                    d.CanDeclare = false;
+                }
+            }
         }
     }
 }

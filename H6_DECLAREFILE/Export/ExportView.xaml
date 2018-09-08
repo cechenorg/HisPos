@@ -146,6 +146,7 @@
                                 <Style TargetType="{x:Type CheckBox}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
                                     <Setter Property="VerticalAlignment" Value="Center" />
+                                    <Setter Property="IsChecked" Value="{Binding CanDeclare,UpdateSourceTrigger=PropertyChanged}" />
                                 </Style>
                             </DataGridCheckBoxColumn.ElementStyle>
                         </DataGridCheckBoxColumn>
@@ -220,7 +221,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <WrapPanel>
-                        <CheckBox Margin="10" Content="錯誤不申報" FontFamily="Segoe UI Semi" IsChecked="True"/>
+                        <CheckBox Margin="10" Content="錯誤不申報" FontFamily="Segoe UI Semi" IsChecked="True" Checked="ToggleButton_OnChecked"/>
                     </WrapPanel>
                     <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,0" Background="IndianRed" Content="轉出申報檔" Click="CreateDeclareFileClick"/>
                 </Grid>

@@ -253,6 +253,7 @@
     <Compile Include="Class\Declare\DeclareDB.cs" />
     <Compile Include="Class\Declare\DeclareFile.cs" />
     <Compile Include="Class\Declare\DeclareFileDB.cs" />
+    <Compile Include="Class\Declare\DeclareFileDdata.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
     <Compile Include="Class\Declare\ErrorMessage.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />

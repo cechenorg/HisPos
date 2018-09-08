@@ -72,6 +72,7 @@ namespace His_Pos.Class.Declare
             {
                 var d = new Ddata();
                 d = XmlService.Deserialize<Ddata>(row["HISDECMAS_DETXML"].ToString());
+                d.DecId = row["PRESCRIPTION_ID"].ToString();
                 ddatas.Add(d);
             }
             return ddatas;

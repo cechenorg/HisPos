@@ -19,11 +19,12 @@ namespace His_Pos.Class.Declare
         public DeclareFile()
         {
             ErrorPrescriptionList = new ErrorPrescriptions();
+            PrescriptionDdatas = new ObservableCollection<DeclareFileDdata>();
         }
 
         public DeclareFile(DataRow row)
         {
-            Prescriptions = new ObservableCollection<Prescription>();
+            PrescriptionDdatas = new ObservableCollection<DeclareFileDdata>();
             if (!string.IsNullOrEmpty(row["HISDEC_XML"].ToString()))
                 FileContent = XmlService.Deserialize<Pharmacy>(row["HISDEC_XML"].ToString()); ;
             if (!string.IsNullOrEmpty(row["HISDEC_ID"].ToString()))
@@ -130,7 +131,7 @@ namespace His_Pos.Class.Declare
             }
         }
         
-        public ObservableCollection<Prescription> Prescriptions { get; set; }
+        public ObservableCollection<DeclareFileDdata> PrescriptionDdatas { get; set; }
 
         private Pharmacy _fileContent;
 
