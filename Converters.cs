@@ -157,18 +157,5 @@ namespace His_Pos
         }
     }
 
-    public class DateConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            string dateStr = ((string) value);
-            string result = dateStr.Substring(0, 3) + "/" + dateStr.Substring(3, 2) + "/" + dateStr.Substring(5, 2);
-            return result;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    
 }

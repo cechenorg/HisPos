@@ -26,7 +26,7 @@
                 <DatePicker Width="100" Height="30" Name="end" SelectedDateFormat="Short"/>
                 <Label Content="病患姓名" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Name="PatientName" Margin="0,0,10,0" Width="130" FontSize="16"/>
-                <Label Content="調劑業師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Label Content="調劑案件" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="250" FontSize="16"/>

@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.H6_DECLAREFILE.Export"
              xmlns:hisPos="clr-namespace:His_Pos"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              d:DesignHeight="839"
              d:DesignWidth="1365"
              mc:Ignorable="d">
@@ -13,7 +14,6 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <hisPos:BrushColorConverter x:Key="BoolToBrush"/>
         <hisPos:DivisionConverter x:Key="DivisionConverter"/>
-        <hisPos:DateConverter x:Key="DateConverter"/>
     </UserControl.Resources>
     <Viewbox Name="ExportViewBox" Stretch="Fill">
         <Grid Background="{StaticResource GridDarkerBackGround}" Margin="10">
@@ -26,7 +26,7 @@
             </Grid.ColumnDefinitions>
             <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
-                      Height="839">
+                      Height="839" SelectionChanged="DeclareFileList_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="320">
                         <DataGridTemplateColumn.CellStyle>
@@ -64,15 +64,11 @@
                                         <Label Content="{Binding TotalPoint}" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,0,0,5"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" Margin="8,0,0,0">
-                                        <!--<Label Content="一般" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="{Binding DeclareFile.NormalCount}" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="慢箋" FontSize="18" FontFamily="Segoe UI Semi"/>
-                                        <Label Content="{Binding DeclareFile.ChronicCount}" FontSize="18" FontFamily="Segoe UI Semi"/>-->
                                         <Label Content="一般 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
                                         <Label Content="3000" FontSize="16" Width="45" FontFamily="Segoe UI Semi"  HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
                                         <Label Content="慢箋 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="5,0,0,0"/>
                                         <Label Content="{Binding ChronicCount}" FontSize="16" Width="45" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                        <Image Source="C:\HisPos\Images\Error.png" Visibility="{Binding HasError,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0"/>
+                                        <Image Source="../../Images/Error.png" Visibility="{Binding HasError,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0"/>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
@@ -81,25 +77,153 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Label Content="調劑日期" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <DatePicker  Width="100" Height="30" Name="Start" SelectedDateFormat="Short"/>
+                    <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
+                    <DatePicker Width="100" Height="30" Name="End" SelectedDateFormat="Short"/>
+                    <Label Content="病患姓名" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="PatientName" Margin="0,0,10,0" Width="130" FontSize="16"/>
+                    <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <TextBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16"/>
+                    <Button Name="ButtonSearch"  Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="88,0,10,0" Click="SearchButtonClick"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,9,9,9">
+                    <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" />
+                    <controls:AutoCompleteBox Name="ReleasePalace" Background="Transparent" Width="450" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
+                                         Populating="ReleasePalace_Populating"    ValueMemberPath="FullName"    BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" 
+                                                      MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
+                        <controls:AutoCompleteBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Width="100" Content="{Binding Id}" />
+                                    <Label Width="350" Content="{Binding Name}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </controls:AutoCompleteBox.ItemTemplate>
+                    </controls:AutoCompleteBox>
+                    <Label Content="調劑案件" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                    <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="150" FontSize="16"/>
+                </StackPanel>
                 <DataGrid
-                     Name="PrescriptionList" Height="400" MaxHeight="400" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                    CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10,10,10,429">
+                     Name="PrescriptionList" Height="620"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                    CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10">
+                    <DataGrid.Resources>
+                        <Style TargetType="{x:Type ScrollBar}">
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="OverridesDefaultStyle" Value="true" />
+                            <Setter Property="Width" Value="100" />
+                            <Style.Triggers>
+                                <Trigger Property="Orientation" Value="Horizontal">
+                                    <Setter Property="Width" Value="Auto" />
+                                    <Setter Property="Height" Value="15" />
+                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                </Trigger>
+                                <Trigger Property="Orientation" Value="Vertical">
+                                    <Setter Property="Width" Value="15" />
+                                    <Setter Property="Height" Value="Auto" />
+                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Style.Triggers>
+                                <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource GridSelected}" />
+                                </Trigger>
+                            </Style.Triggers>
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="FontSize" Value="16" />
+                            <Setter Property="Height" Value="30" />
+                        </Style>
+                    </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridCheckBoxColumn
-                            Width="70" Header="申報"/>
+                        <DataGridCheckBoxColumn Width="70" Header="申報">
+                            <DataGridCheckBoxColumn.ElementStyle>
+                                <Style TargetType="{x:Type CheckBox}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridCheckBoxColumn.ElementStyle>
+                        </DataGridCheckBoxColumn>
+                                <DataGridTextColumn
+                            Width="100" Binding="{Binding Dbody.D20,UpdateSourceTrigger=PropertyChanged}" Header="病患姓名" FontFamily="Segoe UI Semi">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding SelectedPrescription.Dbody.D20,UpdateSourceTrigger=PropertyChanged}" Header="病患姓名"/>
-                        <materialDesign:MaterialDataGridTextColumn
-                            Width="80" Binding="{Binding SelectedPrescription.Dbody.D13,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DivisionConverter}}" Header="科別" />
-                        <materialDesign:MaterialDataGridTextColumn
-                            Width="100" Binding="{Binding SelectedPrescription.Dbody.D23,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateConverter}}"  Header="調劑日期"/>
-                        <materialDesign:MaterialDataGridTextColumn
-                            Width="100" Binding="{Binding SelectedPrescription.Dbody.D25,UpdateSourceTrigger=PropertyChanged}"  Header="調劑藥師"/>
-                        <materialDesign:MaterialDataGridTextColumn
-                            Width="80" Binding="{Binding SelectedPrescription.Dbody.D18,UpdateSourceTrigger=PropertyChanged}"  Header="總點數"/>
+                            Width="80" Binding="{Binding Dbody.D13,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DivisionConverter}}" Header="科別" FontFamily="Segoe UI Semi">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="100" Binding="{Binding Dbody.D23,UpdateSourceTrigger=PropertyChanged}"  Header="調劑日期" FontFamily="Segoe UI Semi">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="100" Binding="{Binding Dbody.D25,UpdateSourceTrigger=PropertyChanged}"  Header="調劑藥師" FontFamily="Segoe UI Semi">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="100" Binding="{Binding Dbody.D33,UpdateSourceTrigger=PropertyChanged}"  Header="藥品點數" FontFamily="Segoe UI Semi">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="100" Binding="{Binding Dbody.D17,UpdateSourceTrigger=PropertyChanged}"  Header="部分負擔" FontFamily="Segoe UI Semi">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="80" Binding="{Binding Dbody.D18,UpdateSourceTrigger=PropertyChanged}"  Header="總點數" FontFamily="Segoe UI Semi">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Center" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-
+                <Grid Margin="10" Height="50">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <WrapPanel>
+                        <CheckBox Margin="10" Content="錯誤不申報" FontFamily="Segoe UI Semi" IsChecked="True"/>
+                    </WrapPanel>
+                    <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,0" Background="IndianRed" Content="轉出申報檔" Click="CreateDeclareFileClick"/>
+                </Grid>
             </StackPanel>
             </Grid>
     </Viewbox>
