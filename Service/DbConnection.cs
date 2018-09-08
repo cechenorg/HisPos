@@ -69,11 +69,6 @@ namespace His_Pos.Service
                 table.Locale = CultureInfo.InvariantCulture;
                 sqlDapter.Fill(table);
                 _connection.Close();
-                string parameValues = string.Empty;
-                foreach (SqlParameter row in parameterList){
-                    parameValues += row.ParameterName + ":" + row.Value.ToString() + "\r\n";
-                }
-                Log(procName, parameValues);
             }
             catch (Exception ex)
             {
@@ -90,12 +85,17 @@ namespace His_Pos.Service
         ///輸出:
         ///用途:紀錄log
         ///</remarks>
-        public void Log(string procName, string paramsValues)
+        public void Log(string procName, List<SqlParameter> parameterList)
         {
+            string parameValues = string.Empty;
+            foreach (SqlParameter row in parameterList)
+            {
+                parameValues += row.ParameterName + ":" + row.Value.ToString() + "\r\n";
+            }
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PROC_NAME", procName));
-            parameters.Add(new SqlParameter("PROC_PARAM", paramsValues));
+            parameters.Add(new SqlParameter("PROC_PARAM", parameValues));
             var table = dd.ExecuteProc("[HIS_POS_DB].[LOG].[SETPROCLOG]", parameters);
         }//Log()
 
