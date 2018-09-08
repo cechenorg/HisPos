@@ -3,6 +3,7 @@ using His_Pos.Class;
 using His_Pos.Class.Person;
 using System.Data;
 using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class.Pharmacy
 {
@@ -28,6 +29,13 @@ namespace His_Pos.Class.Pharmacy
             MedicalPersonnel = new MedicalPersonnel();
             MedicalPersonnel.IcNumber = xml.SelectSingleNode("d25") == null ? null : xml.SelectSingleNode("d25").InnerText;
         }
+
+        public Pharmacy(Ddata d)
+        {
+            MedicalPersonnel = new MedicalPersonnel();
+            MedicalPersonnel.IcNumber = !string.IsNullOrEmpty(d.Dbody.D25) ? d.Dbody.D25 : string.Empty;
+        }
+
         public MedicalPersonnel MedicalPersonnel { get; set; }
         public string Address { get; set; }
         public string Tel { get; set; }

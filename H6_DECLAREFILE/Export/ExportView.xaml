@@ -14,6 +14,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <hisPos:BrushColorConverter x:Key="BoolToBrush"/>
         <hisPos:DivisionConverter x:Key="DivisionConverter"/>
+        <hisPos:ReleaseInsConverter x:Key="ReleaseInsConverter"/>
     </UserControl.Resources>
     <Viewbox Name="ExportViewBox" Stretch="Fill">
         <Grid Background="{StaticResource GridDarkerBackGround}" Margin="10">
@@ -24,58 +25,67 @@
                 <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="1065"/>
             </Grid.ColumnDefinitions>
-            <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Margin="10">
+                    <Label Content="月份 : "/>
+                    <TextBox Width="30"/>
+                    <Label Content="~"/>
+                    <TextBox Width="30"/>
+                </StackPanel>
+                <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
                       Height="839" SelectionChanged="DeclareFileList_SelectionChanged">
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="320">
-                        <DataGridTemplateColumn.CellStyle>
-                            <Style TargetType="{x:Type DataGridCell}">
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#FF424040"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGridTemplateColumn.CellStyle>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Grid Height="75" Width="320">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="35"/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60"/>
-                                    <ColumnDefinition Width="240"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="60" Background="{Binding IsDeclared,Converter={StaticResource BoolToBrush}}"><!--DarkSeaGreen-->
-                                        <Label Content="{Binding DeclareMonth}" FontSize="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold"/>
-                                        <Label Content="{Binding DeclareYear}" FontSize="14" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" Margin="0,-15,0,0"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="8,0,0,0">
-                                        <Image  Source="C:\HisPos\Images\Ph.png" Width="15" VerticalAlignment="Center" Margin="6,0,0,0"/>
-                                        <Label  Content="{Binding FileContent.Tdata.T2}" FontSize="14" Foreground="Gray" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                        <Image Source="C:\HisPos\Images\Dollar.png" VerticalAlignment="Center" Width="16" Margin="25,0,0,0"/>
-                                        <!--Content="{Binding DeclareFile.TotalPoint}"-->
-                                        <Label Content="{Binding TotalPoint}" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,0,0,5"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" Margin="8,0,0,0">
-                                        <Label Content="一般 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
-                                        <Label Content="3000" FontSize="16" Width="45" FontFamily="Segoe UI Semi"  HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
-                                        <Label Content="慢箋 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                                        <Label Content="{Binding ChronicCount}" FontSize="16" Width="45" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                        <Image Source="../../Images/Error.png" Visibility="{Binding HasError,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0"/>
-                                    </StackPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="320">
+                            <DataGridTemplateColumn.CellStyle>
+                                <Style TargetType="{x:Type DataGridCell}">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="BorderBrush" Value="Transparent"/>
+                                    <Setter Property="Foreground" Value="#FF424040"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGridTemplateColumn.CellStyle>
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid Height="75" Width="320">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="35"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="60"/>
+                                            <ColumnDefinition Width="240"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Width="60" Background="{Binding IsDeclared,Converter={StaticResource BoolToBrush}}">
+                                            <!--DarkSeaGreen-->
+                                            <Label Content="{Binding DeclareMonth}" FontSize="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI SemiBold"/>
+                                            <Label Content="{Binding DeclareYear}" FontSize="14" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" Margin="0,-15,0,0"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Margin="8,0,0,0">
+                                            <Image  Source="C:\HisPos\Images\Ph.png" Width="15" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                                            <Label  Content="{Binding FileContent.Tdata.T2}" FontSize="14" Foreground="Gray" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                            <Image Source="C:\HisPos\Images\Dollar.png" VerticalAlignment="Center" Width="16" Margin="25,0,0,0"/>
+                                            <!--Content="{Binding DeclareFile.TotalPoint}"-->
+                                            <Label Content="{Binding TotalPoint}" FontFamily="Segoe UI SemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Margin="0,0,0,5"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" Margin="8,0,0,0">
+                                            <Label Content="一般 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding NormalCount}" FontSize="16" Width="45" FontFamily="Segoe UI Semi"  HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
+                                            <Label Content="慢箋 :" FontSize="16" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                                            <Label Content="{Binding ChronicCount}" FontSize="16" Width="45" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                            <Image Source="../../Images/Error.png" Visibility="{Binding HasError,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolToVis}}" Width="15" Height="15" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="8,0,0,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <Label Content="調劑日期" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
@@ -103,7 +113,7 @@
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
                     <Label Content="調劑案件" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="150" FontSize="16"/>
+                    <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="150" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
                 </StackPanel>
                 <DataGrid
                      Name="PrescriptionList" Height="620"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
@@ -151,7 +161,7 @@
                             </DataGridCheckBoxColumn.ElementStyle>
                         </DataGridCheckBoxColumn>
                                 <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D20,UpdateSourceTrigger=PropertyChanged}" Header="病患姓名" FontFamily="Segoe UI Semi">
+                            Width="100" Binding="{Binding Dbody.D20,UpdateSourceTrigger=PropertyChanged}" Header="病患姓名" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -160,7 +170,16 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="80" Binding="{Binding Dbody.D13,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DivisionConverter}}" Header="科別" FontFamily="Segoe UI Semi">
+                            Width="150" Binding="{Binding Dbody.D21,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ReleaseInsConverter}}" Header="釋出院所" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="HorizontalAlignment" Value="Left" />
+                                    <Setter Property="VerticalAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn
+                            Width="80" Binding="{Binding Dbody.D13,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DivisionConverter}}" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -169,7 +188,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D23,UpdateSourceTrigger=PropertyChanged}"  Header="調劑日期" FontFamily="Segoe UI Semi">
+                            Width="100" Binding="{Binding Dbody.D23,UpdateSourceTrigger=PropertyChanged}"  Header="調劑日期" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -178,7 +197,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D25,UpdateSourceTrigger=PropertyChanged}"  Header="調劑藥師" FontFamily="Segoe UI Semi">
+                            Width="100" Binding="{Binding Dbody.D25,UpdateSourceTrigger=PropertyChanged}"  Header="調劑藥師" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -187,7 +206,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D33,UpdateSourceTrigger=PropertyChanged}"  Header="藥品點數" FontFamily="Segoe UI Semi">
+                            Width="100" Binding="{Binding Dbody.D33,UpdateSourceTrigger=PropertyChanged}"  Header="藥品點數" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -196,7 +215,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D17,UpdateSourceTrigger=PropertyChanged}"  Header="部分負擔" FontFamily="Segoe UI Semi">
+                            Width="100" Binding="{Binding Dbody.D17,UpdateSourceTrigger=PropertyChanged}"  Header="部分負擔" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -205,7 +224,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="80" Binding="{Binding Dbody.D18,UpdateSourceTrigger=PropertyChanged}"  Header="總點數" FontFamily="Segoe UI Semi">
+                            Width="80" Binding="{Binding Dbody.D18,UpdateSourceTrigger=PropertyChanged}"  Header="總點數" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -217,12 +236,13 @@
                 </DataGrid>
                 <Grid Margin="10" Height="50">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition Width="3.5*"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <WrapPanel>
-                        <CheckBox Margin="10" Content="錯誤不申報" FontFamily="Segoe UI Semi" IsChecked="True" Checked="ToggleButton_OnChecked"/>
+                        <CheckBox Name="ErrorDec" Margin="10" Content="錯誤不申報" FontSize="18" FontFamily="Segoe UI Semibold" IsChecked="True"/>
                     </WrapPanel>
+                    <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,120,0" Background="RoyalBlue" Content="儲存" Click="SaveDeclareFileButtonClick"/>
                     <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,0" Background="IndianRed" Content="轉出申報檔" Click="CreateDeclareFileClick"/>
                 </Grid>
             </StackPanel>

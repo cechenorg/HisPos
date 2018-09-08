@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class.Copayment
 {
@@ -16,6 +17,11 @@ namespace His_Pos.Class.Copayment
             Id = dataRow["HISCOP_ID"].ToString();
             Name = dataRow["HISCOP_NAME"].ToString();
             FullName = dataRow["HISCOP_FULLNAME"].ToString();
+        }
+
+        public Copayment(Ddata d)
+        {
+            Id = !string.IsNullOrEmpty(d.Dbody.D15) ? d.Dbody.D15 : string.Empty;
         }
 
         public int Point { get; set; }

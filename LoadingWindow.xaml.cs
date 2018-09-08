@@ -520,6 +520,9 @@ namespace His_Pos
                         exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
                         exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
                         exportView.Divisions = DivisionDb.GetData();
+                        exportView.Hospitals = HospitalDb.GetData();
+                        exportView.AdjustCases = AdjustCaseDb.GetData();
+                        exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCases;
                     }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>

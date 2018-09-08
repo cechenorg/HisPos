@@ -7,7 +7,7 @@ using His_Pos.Service;
 
 namespace His_Pos.Class
 {
-    public class HospitalDb
+    public static class HospitalDb
     {
         internal static ObservableCollection<Hospital> GetData()
         {

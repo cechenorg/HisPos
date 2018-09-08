@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class
 {
@@ -52,6 +54,18 @@ namespace His_Pos.Class
             SecondDiseaseCode.Id = xml.SelectSingleNode("d9") == null ? null : xml.SelectSingleNode("d9").InnerText;
             TreatmentCase = new TreatmentCase.TreatmentCase(xml);
         }
+
+        public MedicalInfo(Ddata d)
+        {
+            Hospital = new Hospital(d);
+            SpecialCode = new SpecialCode(d);
+            MainDiseaseCode = new DiseaseCode();
+            SecondDiseaseCode = new DiseaseCode();
+            MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dbody.D8) ? d.Dbody.D8 : string.Empty;
+            SecondDiseaseCode.Id = !string.IsNullOrEmpty(d.Dbody.D9) ? d.Dbody.D9 : string.Empty;
+            TreatmentCase = new TreatmentCase.TreatmentCase(d);
+        }
+
         public Hospital Hospital { get; set; }//d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
         public SpecialCode SpecialCode { get; set; }//d26 原處方服務機構之特定治療項目代號
         public DiseaseCode MainDiseaseCode { get; set; }//d8 國際疾病分類碼

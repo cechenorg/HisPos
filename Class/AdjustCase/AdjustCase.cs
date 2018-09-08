@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class.AdjustCase
 {
@@ -16,6 +17,11 @@ namespace His_Pos.Class.AdjustCase
             Id = dataRow["ADJUSTCASE_ID"].ToString();
             Name = dataRow["ADJUSTCASE_NAME"].ToString();
             FullName = dataRow["ADJUSTCASE_FULLNAME"].ToString();
+        }
+
+        public AdjustCase(Ddata d)
+        {
+            Id = !string.IsNullOrEmpty(d.Dhead.D1) ? d.Dhead.D1 : string.Empty;
         }
     }
 }

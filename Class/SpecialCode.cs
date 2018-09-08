@@ -1,4 +1,5 @@
 ﻿using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class
 {
@@ -6,7 +7,12 @@ namespace His_Pos.Class
     {
         public SpecialCode() { }
         public SpecialCode(XmlNode xml) {
-            Id = xml.SelectSingleNode("d21") == null ? null : xml.SelectSingleNode("d21").InnerText;
+            Id = xml.SelectSingleNode("d26") == null ? null : xml.SelectSingleNode("d26").InnerText;
+        }
+
+        public SpecialCode(Ddata d)
+        {
+            Id = !string.IsNullOrEmpty(d.Dbody.D26) ? d.Dbody.D26 : string.Empty;
         }
     }
 }

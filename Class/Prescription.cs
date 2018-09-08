@@ -49,6 +49,17 @@ namespace His_Pos.Class
             ChronicTotal = xml.SelectSingleNode("d36") == null ? null : xml.SelectSingleNode("d36").InnerText;
             OriginalMedicalNumber = xml.SelectSingleNode("d43") == null ? null : xml.SelectSingleNode("d43").InnerText;
         }
+
+        public Prescription(Ddata d)
+        {
+            Customer = new Customer(d);
+            Pharmacy = new Pharmacy.Pharmacy(d);
+            Treatment = new Treatment(d);
+            ChronicSequence = !string.IsNullOrEmpty(d.Dbody.D35) ? d.Dbody.D35 : string.Empty;
+            ChronicTotal = !string.IsNullOrEmpty(d.Dbody.D36) ? d.Dbody.D36 : string.Empty;
+            OriginalMedicalNumber = !string.IsNullOrEmpty(d.Dbody.D43) ? d.Dbody.D43 : string.Empty;
+        }
+
         public Customer Customer { get; set; }
         public Pharmacy.Pharmacy Pharmacy { get; set; } //藥局
         public Treatment Treatment { get; set; } //在醫院拿到的資料

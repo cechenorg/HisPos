@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
+using His_Pos.Class;
 using His_Pos.Class.Division;
 
 namespace His_Pos
@@ -157,5 +158,23 @@ namespace His_Pos
         }
     }
 
-    
+    public class ReleaseInsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            ObservableCollection<Hospital> divisions = HospitalDb.GetData();
+            string divisionName = "";
+            foreach (var d in divisions)
+            {
+                if (d.Id.Equals(value))
+                    divisionName = d.Name;
+            }
+            return divisionName;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

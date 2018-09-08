@@ -2,6 +2,7 @@
 using System;
 using System.Data;
 using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class.Person
 {
@@ -53,6 +54,16 @@ namespace His_Pos.Class.Person
             Gender = IcNumber.Substring(1, 1) == "1" ? true : false;
             Birthday = xml.SelectSingleNode("d6") == null ? null : DateTimeExtensions.BirthdayFormatConverter2(xml.SelectSingleNode("d6")?.InnerText);
         }
+
+        public Customer(Ddata d)
+        {
+            IcCard = new IcCard(d);
+            Name = !string.IsNullOrEmpty(d.Dbody.D20) ? d.Dbody.D20 : string.Empty;
+            IcNumber = !string.IsNullOrEmpty(d.Dbody.D3) ? d.Dbody.D3 : string.Empty;
+            Gender = IcNumber.Substring(1, 1) == "1";
+            Birthday = !string.IsNullOrEmpty(d.Dbody.D6) ? d.Dbody.D6 : string.Empty;
+        }
+
         public string Qname { get; set; }
         private bool _gender;
         public bool Gender

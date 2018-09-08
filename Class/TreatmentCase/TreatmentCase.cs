@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class.TreatmentCase
 {
@@ -19,6 +20,11 @@ namespace His_Pos.Class.TreatmentCase
         public TreatmentCase(XmlNode xml)
         {
             Id = xml.SelectSingleNode("d22") == null ? null : xml.SelectSingleNode("d22").InnerText;
+        }
+
+        public TreatmentCase(Ddata d)
+        {
+            Id = !string.IsNullOrEmpty(d.Dbody.D22) ? d.Dbody.D22 : string.Empty;
         }
     }
 }

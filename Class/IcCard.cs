@@ -4,6 +4,7 @@ using System.ComponentModel;
 using His_Pos.Class.Person;
 using System.Data;
 using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class
 {
@@ -72,6 +73,12 @@ namespace His_Pos.Class
         public Pregnant Pregnant { get; set; } //孕婦檢查項目
         public Vaccination Vaccination { get; set; } //預防接種項目
         private string medicalNumber;
+
+        public IcCard(Ddata d)
+        {
+            IcNumber = !string.IsNullOrEmpty(d.Dbody.D3) ? d.Dbody.D3 : string.Empty;
+            MedicalNumber = !string.IsNullOrEmpty(d.Dbody.D7) ? d.Dbody.D7 : string.Empty;
+        }
 
         public string MedicalNumber
         {

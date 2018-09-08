@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Xml;
 using His_Pos.AbstractClass;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 
 namespace His_Pos.Class
@@ -37,7 +38,15 @@ namespace His_Pos.Class
             Doctor.IcNumber = xml.SelectSingleNode("d24") == null ? null : xml.SelectSingleNode("d24").InnerText;
             Division = new Division.Division(xml);
         }
-    
+
+        public Hospital(Ddata d)
+        {
+            Doctor = new MedicalPersonnel();
+            Id = d.Dbody.D21;
+            Doctor.IcNumber = !string.IsNullOrEmpty(d.Dbody.D24) ? d.Dbody.D24 : string.Empty;
+            Division = new Division.Division(d);
+        }
+
         public MedicalPersonnel Doctor { get; set; }
         public Division.Division Division { get; set; }
     }

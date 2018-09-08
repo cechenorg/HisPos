@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Data;
 using System.Xml;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.Class.Division
 {
@@ -18,6 +19,10 @@ namespace His_Pos.Class.Division
             Name = dataRow["HISDIV_NAME"].ToString();
             FullName = dataRow["HISDIV_FULLNAME"].ToString();
         }
-       
+
+        public Division(Ddata d)
+        {
+            Id = !string.IsNullOrEmpty(d.Dbody.D13) ? d.Dbody.D13 : string.Empty;
+        }
     }
 }
