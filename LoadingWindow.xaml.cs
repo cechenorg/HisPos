@@ -519,10 +519,14 @@ namespace His_Pos
                     {
                         exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
                         exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
-                        exportView.Divisions = DivisionDb.GetData();
-                        exportView.Hospitals = HospitalDb.GetData();
-                        exportView.AdjustCases = AdjustCaseDb.GetData();
-                        exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCases;
+                        exportView.DivisionCollection = DivisionDb.GetData();
+                        exportView.HospitalCollection = HospitalDb.GetData();
+                        exportView.AdjustCaseCollection = AdjustCaseDb.GetData();
+                        exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
+                        exportView.CopaymentCollection = CopaymentDb.GetData();
+                        exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
+                        exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
+                        exportView.DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
                     }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>

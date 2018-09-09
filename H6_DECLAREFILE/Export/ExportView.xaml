@@ -27,10 +27,37 @@
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" Margin="10">
-                    <Label Content="月份 : "/>
-                    <TextBox Width="30"/>
+                    <ComboBox Width="30" Name="StratMonth" MaxDropDownHeight="200">
+                        <ListBoxItem Content="1"/>
+                        <ListBoxItem Content="2"/>
+                        <ListBoxItem Content="3"/>
+                        <ListBoxItem Content="4"/>
+                        <ListBoxItem Content="5"/>
+                        <ListBoxItem Content="6"/>
+                        <ListBoxItem Content="7"/>
+                        <ListBoxItem Content="8"/>
+                        <ListBoxItem Content="9"/>
+                        <ListBoxItem Content="10"/>
+                        <ListBoxItem Content="11"/>
+                        <ListBoxItem Content="12"/>
+                    </ComboBox>
+                    <Label Content="月"/>
                     <Label Content="~"/>
-                    <TextBox Width="30"/>
+                    <ComboBox Width="30" Name="EndMonth" MaxDropDownHeight="200">
+                        <ListBoxItem Content="1"/>
+                        <ListBoxItem Content="2"/>
+                        <ListBoxItem Content="3"/>
+                        <ListBoxItem Content="4"/>
+                        <ListBoxItem Content="5"/>
+                        <ListBoxItem Content="6"/>
+                        <ListBoxItem Content="7"/>
+                        <ListBoxItem Content="8"/>
+                        <ListBoxItem Content="9"/>
+                        <ListBoxItem Content="10"/>
+                        <ListBoxItem Content="11"/>
+                        <ListBoxItem Content="12"/>
+                    </ComboBox>
+                    <Label Content="月"/>
                 </StackPanel>
                 <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
@@ -89,16 +116,23 @@
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
                 <StackPanel Orientation="Horizontal" Margin="10">
                     <Label Content="調劑日期" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <DatePicker  Width="100" Height="30" Name="Start" SelectedDateFormat="Short"/>
+                    <Label Width="80" Height="30" Content="{Binding StartDateStr}" BorderThickness="0,0,0,1" BorderBrush="#89000000" FontSize="16" FontStretch="ExtraExpanded" 
+                           FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"/>
+                    <DatePicker Width="20" Height="30" Name="Start" SelectedDateFormat="Short" SelectedDateChanged="DatePickerSelectedDateChanged"/>
                     <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                    <DatePicker Width="100" Height="30" Name="End" SelectedDateFormat="Short"/>
+                    <Label Width="80"  Height="30" Content="{Binding  EndDateStr}" BorderThickness="0,0,0,1" BorderBrush="#89000000" FontSize="16" FontStretch="ExtraExpanded" 
+                           FontFamily="Segoe UI Semibold"  HorizontalContentAlignment="Center"/>
+                    <DatePicker Width="20" Height="30" Name="End" SelectedDateFormat="Short" SelectedDateChanged="DatePickerSelectedDateChanged"/>
                     <Label Content="病患姓名" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="PatientName" Margin="0,0,10,0" Width="130" FontSize="16"/>
+                    <controls:AutoCompleteBox Name="PatientName" Background="Transparent" Width="130" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
+                                              Populating="PatientNamePopulating"   BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" 
+                                              MinimumPrefixLength="1" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
+                    </controls:AutoCompleteBox>
                     <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                     <TextBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16"/>
                     <Button Name="ButtonSearch"  Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="88,0,10,0" Click="SearchButtonClick"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,9,9,9">
+                <StackPanel Orientation="Horizontal" Margin="10,9,9,9">
                     <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" />
                     <controls:AutoCompleteBox Name="ReleasePalace" Background="Transparent" Width="450" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
                                          Populating="ReleasePalace_Populating"    ValueMemberPath="FullName"    BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" 

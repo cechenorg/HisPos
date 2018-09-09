@@ -489,6 +489,9 @@
     <Compile Include="H5_ATTEND\ClockIn\ClockInView.xaml.cs">
       <DependentUpon>ClockInView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H6_DECLAREFILE\Export\DeclareDdataOutcome.xaml.cs">
+      <DependentUpon>DeclareDdataOutcome.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H6_DECLAREFILE\Export\ExportView.xaml.cs">
       <DependentUpon>ExportView.xaml</DependentUpon>
     </Compile>
@@ -764,6 +767,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H5_ATTEND\ClockIn\ClockInView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H6_DECLAREFILE\Export\DeclareDdataOutcome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

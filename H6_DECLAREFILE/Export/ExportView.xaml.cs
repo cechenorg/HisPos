@@ -11,8 +11,12 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
+using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
+using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Product;
+using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using JetBrains.Annotations;
 
@@ -24,10 +28,12 @@ namespace His_Pos.H6_DECLAREFILE.Export
     /// </summary>
     public partial class ExportView : UserControl,INotifyPropertyChanged
     {
+        public static ExportView Instance;
         public ObservableCollection<DeclareFile> DeclareFiles { get; set; }
-        public ObservableCollection<Hospital> Hospitals { get; set; }
-        public ObservableCollection<Division> Divisions { get; set; }
-        public ObservableCollection<AdjustCase> AdjustCases { get; set; }
+        public ObservableCollection<Hospital> HospitalCollection { get; set; }
+        public ObservableCollection<Division> DivisionCollection { get; set; }
+        public ObservableCollection<AdjustCase> AdjustCaseCollection { get; set; }
+        public ObservableCollection<string> CustomerName = new ObservableCollection<string>();
         public ObservableCollection<DeclareFileDdata> PrescriptionCollection { get; set; }
         private DeclareFile _selectedFile;
         public DeclareFile SelectedFile
@@ -50,6 +56,35 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 OnPropertyChanged(nameof(SelectedPrescription));
             }
         }
+
+        private string _startDateStr;
+
+        public string StartDateStr
+        {
+            get => _startDateStr;
+            set
+            {
+                _startDateStr = value;
+                OnPropertyChanged(nameof(StartDateStr));
+            }
+        }
+
+        private string _endDateStr;
+
+        public string EndDateStr
+        {
+            get => _endDateStr;
+            set
+            {
+                _endDateStr = value;
+                OnPropertyChanged(nameof(EndDateStr));
+            }
+        }
+
+        public ObservableCollection<Copayment> CopaymentCollection { get; set; }
+        public ObservableCollection<PaymentCategory> PaymentCategoryCollection { get; set; }
+        public ObservableCollection<TreatmentCase> TreatmentCaseCollection { get; set; }
+        public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
 
         public ExportView()
         {
@@ -116,35 +151,61 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
         {
-            ObservableCollection<Hospital> tempCollection = new ObservableCollection<Hospital>(Hospitals.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
+            ObservableCollection<Hospital> tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
             ReleasePalace.ItemsSource = tempCollection;
             ReleasePalace.PopulateComplete();
         }
 
         private void SearchButtonClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var sDate = StartDateStr.Equals(string.Empty) ? string.Empty : "0" + SelectedFile.DeclareYear + "/" + StartDateStr;
+
+            var eDate = EndDateStr.Equals(string.Empty) ? string.Empty : "0" + SelectedFile.DeclareYear + "/" + EndDateStr;
+
+            var adjustId = string.Empty;
+            if (AdjustCaseCombo.Text != string.Empty)
+                adjustId = AdjustCaseCombo.Text.Substring(0, 1);
+            var insName = string.Empty;
+            if (ReleasePalace.Text != string.Empty)
+                insName = ReleasePalace.Text.Split(' ')[1];
+            
         }
 
         private void CreateDeclareFileClick(object sender, RoutedEventArgs e)
         {
-            TaiwanCalendar taiwanCalendar = new TaiwanCalendar();
 
-            var sDate = Start.Text == "" ? "" : "0" + taiwanCalendar.GetYear(Convert.ToDateTime(Start.Text)) + "/" + Convert.ToDateTime(Start.Text).ToString("MM/dd");
-
-            var eDate = End.Text == "" ? "" : "0" + taiwanCalendar.GetYear(Convert.ToDateTime(End.Text)) + "/" + Convert.ToDateTime(End.Text).ToString("MM/dd");
-            string adjustId = "";
-            if (AdjustCaseCombo.Text != String.Empty)
-                adjustId = AdjustCaseCombo.Text.Substring(0, 1);
-            string insName = "";
-            if (ReleasePalace.Text != String.Empty)
-                insName = ReleasePalace.Text.Split(' ')[1];
-            
         }
 
         private void SaveDeclareFileButtonClick(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void PatientNamePopulating(object sender, PopulatingEventArgs e)
+        {
+            ObservableCollection<string> tempCollection = new ObservableCollection<string>();
+            foreach (var cusName in PrescriptionCollection)
+            {
+                tempCollection.Add(cusName.Dbody.D20);
+            }
+            CustomerName.Clear();
+            CustomerName = new ObservableCollection<string>(tempCollection.Where(x => x.Contains(PatientName.Text)).Take(50).ToList());
+            PatientName.ItemsSource = CustomerName;
+            PatientName.PopulateComplete();
+        }
+
+        private void DatePickerSelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ////2018/9/9
+            ////2018/19/9
+            ////2018/19/19
+            var d = sender as DatePicker;
+            DateTime date = Convert.ToDateTime(d.SelectedDate);
+            string result = date.Month.ToString().PadLeft(2,'0') + "/" + date.Day.ToString().PadLeft(2,'0');
+            if (d.Name.Equals("Start"))
+                StartDateStr = result;
+            else
+                EndDateStr = result;
         }
     }
 }
