@@ -125,6 +125,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
             string proId = ProductGroups.Single(pro => pro.name == ComboBoxProduct.Text).id;
             foreach (WareHouseInventory wareHouseInventory in WareHouseInventoryCollection)
             {
+                if (wareHouseInventory.DemolitionAmount == "0") continue;
                 ProductDb.DemolitionProduct(newInvId,proId, wareHouseInventory.warId,wareHouseInventory.DemolitionAmount);
             }
             MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS);

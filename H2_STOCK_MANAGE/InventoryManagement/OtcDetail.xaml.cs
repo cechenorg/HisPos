@@ -192,8 +192,10 @@ namespace His_Pos.InventoryManagement
 
             WareStcokCollection = WareHouseDb.GetWareStockById(InventoryOtc.Id);
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
-            if (ProductGroupCollection.Count == 1) ButtonDemolition.IsEnabled = false;
-
+            if (ProductGroupCollection.Count == 1)
+                ButtonDemolition.IsEnabled = false;
+            else
+                ButtonDemolition.IsEnabled = true;
 
 
             UpdateChart();
