@@ -100,18 +100,22 @@ namespace His_Pos.ProductPurchase
             StoOrderOverview.SelectedIndex = 0;
 
             CurrentControl = purchaseControl;
-
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.GetProductPurchaseData(this);
-            loadingWindow.Topmost = true;
-            loadingWindow.Show();
+            InitData();
 
             purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
             purchaseControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
             purchaseControl.Confirm.Click += Confirm_Click;
 
         }
-        
+
+        private void InitData()
+        {
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.GetProductPurchaseData(this);
+            loadingWindow.Topmost = true;
+            loadingWindow.Show();
+        }
+
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
         {
             Window window = Window.GetWindow(this);
@@ -275,15 +279,10 @@ namespace His_Pos.ProductPurchase
             StoreOrderData.Type = OrderType.DONE;
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Id;
             SaveOrder();
-            storeOrderCollection.Remove(StoreOrderData);
+            InitData();
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
             StockTakingView.DataChanged = true;
-
-            if (StoOrderOverview.Items.Count == 0)
-                ClearOrderDetailData();
-            else
-                StoOrderOverview.SelectedIndex = 0;
         }
 
         private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)

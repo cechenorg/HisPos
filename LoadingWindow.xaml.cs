@@ -191,7 +191,7 @@ namespace His_Pos
 
         internal void GetProductPurchaseData(ProductPurchaseView productPurchaseView)
         {
-            productPurchaseView.OrderContentControl.IsEnabled = false;
+            productPurchaseView.AllGrid.IsEnabled = false;
 
             backgroundWorker.DoWork += (s, o) =>
             {
@@ -229,7 +229,11 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    productPurchaseView.OrderContentControl.IsEnabled = true;
+                    productPurchaseView.AllGrid.IsEnabled = true;
+
+                    if (productPurchaseView.StoOrderOverview.Items.Count != 0)
+                        productPurchaseView.StoOrderOverview.SelectedIndex = 0;
+
                     Close();
                 }));
             };
