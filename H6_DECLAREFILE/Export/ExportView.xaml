@@ -26,7 +26,7 @@
                 <ColumnDefinition Width="1065"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical">
-                <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding Path=DeclareFiles,UpdateSourceTrigger=PropertyChanged}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
                       Height="839" SelectionChanged="DeclareFileList_SelectionChanged">
                     <DataGrid.Columns>
@@ -118,7 +118,7 @@
                 </StackPanel>
                 <DataGrid
                      Name="PrescriptionList" Height="620"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                    CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10">
+                    CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10" ItemsSource="{Binding Path=PrescriptionCollection,UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True" />

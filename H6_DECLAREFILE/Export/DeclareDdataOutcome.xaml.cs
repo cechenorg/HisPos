@@ -153,6 +153,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             var loadingWindow = new LoadingWindow();
             loadingWindow.ChangeLoadingMessage("處方申報資料載入中...");
             loadingWindow.Show();
+            ExportView.Instance.DeclareMedicinesData = MedicineDb.GetDeclareMedicineByMasId(declareFileDdata.DecId);
             DivisionCollection = ExportView.Instance.DivisionCollection;
             CopaymentCollection = ExportView.Instance.CopaymentCollection;
             PaymentCategoryCollection = ExportView.Instance.PaymentCategoryCollection;
@@ -160,11 +161,11 @@ namespace His_Pos.H6_DECLAREFILE.Export
             TreatmentCaseCollection = ExportView.Instance.TreatmentCaseCollection;
             HospitalCollection = ExportView.Instance.HospitalCollection;
             DeclareMedicinesData = ExportView.Instance.DeclareMedicinesData;
-            CurrentPrescription.Treatment.MedicalInfo.Hospital = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
-            ReleasePalace.Text = CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName;
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = DivisionCollection.SingleOrDefault(d =>
+            Hospital hospital = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName = hospital.FullName;
+            Division division = DivisionCollection.SingleOrDefault(d =>
                 d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
-            Division.Text = CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName = division.FullName;
             CopaymentCode.ItemsSource = CopaymentCollection;
             CopaymentCode.Text =
                 CopaymentCollection.SingleOrDefault(c => c.Id.Equals(CurrentPrescription.Treatment.Copayment.Id))?.FullName;

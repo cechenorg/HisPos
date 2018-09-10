@@ -73,8 +73,8 @@
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
                 <Label Content="釋出院所"  Foreground="#FF424040" FontSize="16" FontFamily="Segoe UI Semibold" 
                                    BorderThickness="0,0,0,1"/>
-                <TextBox Name="ReleasePalace" Width="380" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold"
-                         FontSize="16" FontStretch="ExtraExpanded" Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Id,UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox Name="ReleasePalace" Width="380" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" IsReadOnly="True"
+                         FontSize="16" FontStretch="ExtraExpanded" Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName,UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="10">
                 <Label Content="就醫科別" Width="auto" Foreground="#FF424040" FontSize="16" FontFamily="Segoe UI Semibold" 

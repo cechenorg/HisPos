@@ -514,20 +514,17 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("申報資料處理中...");
-                exportView.
-                    Dispatcher.Invoke((Action)(() =>
-                    {
-                        exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
-                        exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
-                        exportView.DivisionCollection = DivisionDb.GetData();
-                        exportView.HospitalCollection = HospitalDb.GetData();
-                        exportView.AdjustCaseCollection = AdjustCaseDb.GetData();
-                        exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
-                        exportView.CopaymentCollection = CopaymentDb.GetData();
-                        exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
-                        exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
-                        exportView.DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
-                    }));
+                exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
+                exportView.DivisionCollection = DivisionDb.GetData();
+                exportView.HospitalCollection = HospitalDb.GetData();
+                exportView.AdjustCaseCollection = AdjustCaseDb.GetData();
+                exportView.CopaymentCollection = CopaymentDb.GetData();
+                exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
+                exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    
+                }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {

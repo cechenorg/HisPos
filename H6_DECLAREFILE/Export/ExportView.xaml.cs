@@ -30,12 +30,34 @@ namespace His_Pos.H6_DECLAREFILE.Export
     public partial class ExportView : UserControl,INotifyPropertyChanged
     {
         public static ExportView Instance;
-        public ObservableCollection<DeclareFile> DeclareFiles { get; set; }
+        private ObservableCollection<DeclareFile> _declareFiles;
+
+        public ObservableCollection<DeclareFile> DeclareFiles
+        {
+            get => _declareFiles;
+            set
+            {
+                _declareFiles = value;
+                OnPropertyChanged(nameof(DeclareFiles));
+            }
+        }
+
         public ObservableCollection<Hospital> HospitalCollection { get; set; }
         public ObservableCollection<Division> DivisionCollection { get; set; }
         public ObservableCollection<AdjustCase> AdjustCaseCollection { get; set; }
         public ObservableCollection<string> CustomerName = new ObservableCollection<string>();
-        public ObservableCollection<DeclareFileDdata> PrescriptionCollection { get; set; }
+        private ObservableCollection<DeclareFileDdata> _prescriptionCollection;
+
+        public ObservableCollection<DeclareFileDdata> PrescriptionCollection
+        {
+            get => _prescriptionCollection;
+            set
+            {
+                _prescriptionCollection = value;
+                OnPropertyChanged(nameof(PrescriptionCollection));
+            }
+        }
+
         private DeclareFile _selectedFile;
         public DeclareFile SelectedFile
         {
@@ -90,18 +112,19 @@ namespace His_Pos.H6_DECLAREFILE.Export
         public ExportView()
         {
             InitializeComponent();
-            DataContext = this;
             InitializeDeclareFiles();
-            DeclareFileList.SelectedIndex = 0;
+            Instance = this;
+            DataContext = this;
         }
 
         private void InitializeDeclareFiles()
         {
-            var load = new LoadingWindow();
-            Instance = this;
-            load.GetDeclareFileData(Instance);
-            load.Show();
             SelectedFile = new DeclareFile();
+            var load = new LoadingWindow();
+            load.GetDeclareFileData(this);
+            load.Show();
+            
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -131,7 +154,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 }
             }
             PrescriptionCollection = new ObservableCollection<DeclareFileDdata>(SelectedFile.PrescriptionDdatas);
-            PrescriptionList.ItemsSource = PrescriptionCollection;
             if (ErrorDec.IsChecked == true)
             {
                 foreach (var d in SelectedFile.PrescriptionDdatas)
