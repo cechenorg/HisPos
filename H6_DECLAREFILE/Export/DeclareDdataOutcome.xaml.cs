@@ -125,6 +125,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             set
             {
                 _currentDeclareFileDdata = value;
+                Gender = _currentDeclareFileDdata.Customer.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
                 OnPropertyChanged(nameof(CurrentPrescription));
             }
         }
@@ -139,6 +140,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
         public DeclareDdataOutcome(DeclareFileDdata d, ObservableCollection<Hospital> hospitals)
         {
             InitializeComponent();
+            DataContext = this;
             Hospitals = hospitals;
             CurrentPrescription = new Prescription(d);
             InitData(d);
@@ -158,9 +160,11 @@ namespace His_Pos.H6_DECLAREFILE.Export
             TreatmentCaseCollection = ExportView.Instance.TreatmentCaseCollection;
             HospitalCollection = ExportView.Instance.HospitalCollection;
             DeclareMedicinesData = ExportView.Instance.DeclareMedicinesData;
-            ReleasePalace.Text = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id))?.FullName;
-            Division.ItemsSource = DivisionCollection;
-            Division.Text = DivisionCollection.SingleOrDefault(d => d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id))?.FullName;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
+            ReleasePalace.Text = CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = DivisionCollection.SingleOrDefault(d =>
+                d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
+            Division.Text = CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName;
             CopaymentCode.ItemsSource = CopaymentCollection;
             CopaymentCode.Text =
                 CopaymentCollection.SingleOrDefault(c => c.Id.Equals(CurrentPrescription.Treatment.Copayment.Id))?.FullName;
@@ -203,15 +207,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
             Changed.Foreground = Brushes.Black;
 
             ButtonImportXml.IsEnabled = false;
-        }
-
-        private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
-        {
-            ObservableCollection<Hospital> tempCollection =
-                new ObservableCollection<Hospital>(Hospitals.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50)
-                    .ToList());
-            ReleasePalace.ItemsSource = tempCollection;
-            ReleasePalace.PopulateComplete();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

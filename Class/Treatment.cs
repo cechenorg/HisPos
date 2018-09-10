@@ -74,8 +74,17 @@ namespace His_Pos.Class
             MedicalPersonId = !string.IsNullOrEmpty(d.Dbody.D25) ? d.Dbody.D25 : string.Empty;
         }
 
+        private MedicalInfo _medicalInfo;
         //d8 d9 國際疾病分類碼 d13就醫科別  d21原處方服務機構代號 d22原處方服務機構之案件分類 d24診治醫師代號 d26原處方服務機構之特定治療項目代號
-        public MedicalInfo MedicalInfo { get; set; }
+        public MedicalInfo MedicalInfo
+        {
+            get => _medicalInfo;
+            set
+            {
+                _medicalInfo = value;
+                NotifyPropertyChanged(nameof(MedicalInfo));
+            }
+        }
 
         public PaymentCategory.PaymentCategory PaymentCategory { get; set; } = new PaymentCategory.PaymentCategory();//d5 給付類別
         public Copayment.Copayment Copayment { get; set; } //d15 部分負擔代碼

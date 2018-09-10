@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Service;
+using JetBrains.Annotations;
 
 namespace His_Pos.Class
 {
-    public class Prescription
+    public class Prescription : INotifyPropertyChanged
     {
         public Prescription()
         {
@@ -62,7 +64,18 @@ namespace His_Pos.Class
 
         public Customer Customer { get; set; }
         public Pharmacy.Pharmacy Pharmacy { get; set; } //藥局
-        public Treatment Treatment { get; set; } //在醫院拿到的資料
+        private Treatment _treatment;
+
+        public Treatment Treatment
+        {
+            get => _treatment;
+            set
+            {
+                _treatment = value;
+                OnPropertyChanged(nameof(Treatment));
+            }
+        } //在醫院拿到的資料
+
         public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
         public ObservableCollection<DeclareMedicine> Medicines { get; set; }
@@ -310,6 +323,14 @@ namespace His_Pos.Class
                 Content = content
             };
             _errorMessage.Add(e);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
