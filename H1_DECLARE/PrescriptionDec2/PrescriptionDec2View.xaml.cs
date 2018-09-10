@@ -20,6 +20,7 @@ using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
 using His_Pos.Class.MedBag;
 using His_Pos.RDLC;
+using Prescription = His_Pos.Class.Prescription;
 using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2

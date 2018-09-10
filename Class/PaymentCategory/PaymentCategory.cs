@@ -22,7 +22,7 @@ namespace His_Pos.Class.PaymentCategory
             FullName = dataRow["HISPAYCAT_FULLNAME"].ToString();
         }
 
-        public PaymentCategory(Ddata d)
+        public PaymentCategory(DeclareFileDdata d)
         {
             Id = !string.IsNullOrEmpty(d.Dbody.D5) ? d.Dbody.D5 : string.Empty;
         }

@@ -55,7 +55,7 @@ namespace His_Pos.Class.Person
             Birthday = xml.SelectSingleNode("d6") == null ? null : DateTimeExtensions.BirthdayFormatConverter2(xml.SelectSingleNode("d6")?.InnerText);
         }
 
-        public Customer(Ddata d)
+        public Customer(DeclareFileDdata d)
         {
             IcCard = new IcCard(d);
             Name = !string.IsNullOrEmpty(d.Dbody.D20) ? d.Dbody.D20 : string.Empty;

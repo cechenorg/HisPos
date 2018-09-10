@@ -39,7 +39,7 @@ namespace His_Pos.Class
             Division = new Division.Division(xml);
         }
 
-        public Hospital(Ddata d)
+        public Hospital(DeclareFileDdata d)
         {
             Doctor = new MedicalPersonnel();
             Id = d.Dbody.D21;

@@ -20,7 +20,7 @@ namespace His_Pos.Class.Division
             FullName = dataRow["HISDIV_FULLNAME"].ToString();
         }
 
-        public Division(Ddata d)
+        public Division(DeclareFileDdata d)
         {
             Id = !string.IsNullOrEmpty(d.Dbody.D13) ? d.Dbody.D13 : string.Empty;
         }

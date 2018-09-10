@@ -30,7 +30,7 @@ namespace His_Pos.Class.Pharmacy
             MedicalPersonnel.IcNumber = xml.SelectSingleNode("d25") == null ? null : xml.SelectSingleNode("d25").InnerText;
         }
 
-        public Pharmacy(Ddata d)
+        public Pharmacy(DeclareFileDdata d)
         {
             MedicalPersonnel = new MedicalPersonnel();
             MedicalPersonnel.IcNumber = !string.IsNullOrEmpty(d.Dbody.D25) ? d.Dbody.D25 : string.Empty;

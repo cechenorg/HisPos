@@ -50,7 +50,7 @@ namespace His_Pos.Class
             OriginalMedicalNumber = xml.SelectSingleNode("d43") == null ? null : xml.SelectSingleNode("d43").InnerText;
         }
 
-        public Prescription(Ddata d)
+        public Prescription(DeclareFileDdata d)
         {
             Customer = new Customer(d);
             Pharmacy = new Pharmacy.Pharmacy(d);

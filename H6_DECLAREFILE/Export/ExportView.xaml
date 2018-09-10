@@ -26,39 +26,6 @@
                 <ColumnDefinition Width="1065"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal" Margin="10">
-                    <ComboBox Width="30" Name="StratMonth" MaxDropDownHeight="200">
-                        <ListBoxItem Content="1"/>
-                        <ListBoxItem Content="2"/>
-                        <ListBoxItem Content="3"/>
-                        <ListBoxItem Content="4"/>
-                        <ListBoxItem Content="5"/>
-                        <ListBoxItem Content="6"/>
-                        <ListBoxItem Content="7"/>
-                        <ListBoxItem Content="8"/>
-                        <ListBoxItem Content="9"/>
-                        <ListBoxItem Content="10"/>
-                        <ListBoxItem Content="11"/>
-                        <ListBoxItem Content="12"/>
-                    </ComboBox>
-                    <Label Content="月"/>
-                    <Label Content="~"/>
-                    <ComboBox Width="30" Name="EndMonth" MaxDropDownHeight="200">
-                        <ListBoxItem Content="1"/>
-                        <ListBoxItem Content="2"/>
-                        <ListBoxItem Content="3"/>
-                        <ListBoxItem Content="4"/>
-                        <ListBoxItem Content="5"/>
-                        <ListBoxItem Content="6"/>
-                        <ListBoxItem Content="7"/>
-                        <ListBoxItem Content="8"/>
-                        <ListBoxItem Content="9"/>
-                        <ListBoxItem Content="10"/>
-                        <ListBoxItem Content="11"/>
-                        <ListBoxItem Content="12"/>
-                    </ComboBox>
-                    <Label Content="月"/>
-                </StackPanel>
                 <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
                       Height="839" SelectionChanged="DeclareFileList_SelectionChanged">
@@ -178,6 +145,8 @@
                                     <Setter Property="Background" Value="{StaticResource GridSelected}" />
                                 </Trigger>
                             </Style.Triggers>
+                            <EventSetter Event="MouseDoubleClick" Handler="ShowInquireOutcome"/>
+                            <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="BorderBrush" Value="Transparent" />
                             <Setter Property="FontSize" Value="16" />

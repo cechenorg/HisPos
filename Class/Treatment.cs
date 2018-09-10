@@ -62,7 +62,7 @@ namespace His_Pos.Class
             MedicalPersonId = xml.SelectSingleNode("d25") == null ? null : xml.SelectSingleNode("d25").InnerText;
         }
 
-        public Treatment(Ddata d)
+        public Treatment(DeclareFileDdata d)
         {
             MedicalInfo = new MedicalInfo(d);
             PaymentCategory = new PaymentCategory.PaymentCategory(d);

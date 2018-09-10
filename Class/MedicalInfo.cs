@@ -55,7 +55,7 @@ namespace His_Pos.Class
             TreatmentCase = new TreatmentCase.TreatmentCase(xml);
         }
 
-        public MedicalInfo(Ddata d)
+        public MedicalInfo(DeclareFileDdata d)
         {
             Hospital = new Hospital(d);
             SpecialCode = new SpecialCode(d);

@@ -14,9 +14,9 @@ namespace His_Pos.Class.Declare
     public class DeclareData 
     {
         public DeclareData() { }
-        public DeclareData(Prescription prescription)
+        public DeclareData(Class.Prescription prescription)
         {
-            Prescription = new Prescription();
+            Prescription = new Class.Prescription();
             Prescription = prescription;
             SpecailMaterialPoint = 0;
             DiagnosisPoint = 0;
@@ -29,14 +29,14 @@ namespace His_Pos.Class.Declare
         public DeclareData(DataRow row)
         {
             DecMasId = row["HISDECMAS_ID"].ToString();
-            Prescription = new Prescription(row);
+            Prescription = new Class.Prescription(row);
             DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
             CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
             TotalPoint = Convert.ToInt32(row["HISDECMAS_TOTALPOINT"].ToString());
             DeclareDetails = PrescriptionDB.GetDeclareDetailByMasId(row["HISDECMAS_ID"].ToString());
         }
         public DeclareData(XmlNode xml) { //匯入處方申報檔用
-            Prescription = new Prescription(xml);
+            Prescription = new Class.Prescription(xml);
             DeclareMakeUp = xml.SelectSingleNode("d4") == null ? null : xml.SelectSingleNode("d4").InnerText;
             DeclarePoint = xml.SelectSingleNode("d16") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("d16").InnerText);
             CopaymentPoint = xml.SelectSingleNode("d17") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("d17").InnerText);
@@ -57,7 +57,7 @@ namespace His_Pos.Class.Declare
         }
         
         public string DecMasId { get; set; }
-        public Prescription Prescription { get; set; }
+        public Class.Prescription Prescription { get; set; }
         public ObservableCollection<DeclareDetail> DeclareDetails { get; set; } = new ObservableCollection<DeclareDetail>();
         public string DeclareMakeUp { get; set; }//D4補報註記
         public int DeclarePoint { get; set; }//D16申請點數

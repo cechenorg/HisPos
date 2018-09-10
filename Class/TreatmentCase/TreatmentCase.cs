@@ -22,7 +22,7 @@ namespace His_Pos.Class.TreatmentCase
             Id = xml.SelectSingleNode("d22") == null ? null : xml.SelectSingleNode("d22").InnerText;
         }
 
-        public TreatmentCase(Ddata d)
+        public TreatmentCase(DeclareFileDdata d)
         {
             Id = !string.IsNullOrEmpty(d.Dbody.D22) ? d.Dbody.D22 : string.Empty;
         }

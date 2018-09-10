@@ -285,10 +285,10 @@ namespace His_Pos.Class.Declare
                         {"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
                         {
                             "D14",
-                            DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate)
+                            DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.TreatmentDate)
                         },
                         {"D15", declareData.Prescription.Treatment.Copayment.Id},
-                        {"D23", DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate)},
+                        {"D23", DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.AdjustDate)},
                         {"D25", declareData.Prescription.Treatment.MedicalPersonId},
                         {"D30", declareData.Prescription.Treatment.MedicineDays},
                         {"CUS_ID", declareData.Prescription.Customer.Id}
@@ -423,7 +423,7 @@ namespace His_Pos.Class.Declare
             row["CUS_IDNUM"] = declareData.Prescription.Customer.IcCard.IcNumber;
             row["CUS_GENDER"] = declareData.Prescription.Customer.Gender == true ? "1" : "0";
             Function function = new Function();
-            row["CUS_QNAME"] = function.ChangeNameToEnglish(declareData.Prescription.Customer.Name);
+            row["CUS_QNAME"] = function.ChangeNameToEnglish((string)declareData.Prescription.Customer.Name);
             customerTable.Rows.Add(row);
         }
 
@@ -505,7 +505,7 @@ namespace His_Pos.Class.Declare
                 CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id);
             row["D14"] =
                 CheckXmlDbNullValue(
-                    DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate));
+                    DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.TreatmentDate));
             row["D15"] = declareData.Prescription.Treatment.Copayment.Id;
             row["D16"] = declareData.DeclarePoint.ToString();
             row["D17"] = declareData.Prescription.Treatment.Copayment.Point.ToString();
@@ -513,7 +513,7 @@ namespace His_Pos.Class.Declare
             row["D19"] = CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString());
             row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;
             row["D22"] = declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
-            row["D23"] = DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate);
+            row["D23"] = DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.AdjustDate);
             row["D24"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id;
             row["D25"] = declareData.Prescription.Treatment.MedicalPersonId;
             row["D26"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id);
@@ -975,8 +975,8 @@ namespace His_Pos.Class.Declare
 
             if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
             {
-                if (Convert.ToDecimal(declareData.Prescription.ChronicSequence) >= 2)
-                    dData += function.XmlTagCreator("d43", declareData.Prescription.OriginalMedicalNumber);
+                if (Convert.ToDecimal((string)declareData.Prescription.ChronicSequence) >= 2)
+                    dData += function.XmlTagCreator("d43", (string)declareData.Prescription.OriginalMedicalNumber);
             }
 
             if (treatment.Copayment.Id == "903")
@@ -1056,7 +1056,7 @@ namespace His_Pos.Class.Declare
 
             if (detail.Days.ToString() != string.Empty)
             {
-                if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) < detail.Days)
+                if (Convert.ToInt32((string)declareData.Prescription.Treatment.MedicineDays) < detail.Days)
                     declareData.Prescription.Treatment.MedicineDays = detail.Days.ToString();
             }
 

@@ -19,7 +19,7 @@ namespace His_Pos.Class.AdjustCase
             FullName = dataRow["ADJUSTCASE_FULLNAME"].ToString();
         }
 
-        public AdjustCase(Ddata d)
+        public AdjustCase(DeclareFileDdata d)
         {
             Id = !string.IsNullOrEmpty(d.Dhead.D1) ? d.Dhead.D1 : string.Empty;
         }

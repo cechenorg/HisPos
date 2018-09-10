@@ -10,7 +10,7 @@ namespace His_Pos.Class
             Id = xml.SelectSingleNode("d26") == null ? null : xml.SelectSingleNode("d26").InnerText;
         }
 
-        public SpecialCode(Ddata d)
+        public SpecialCode(DeclareFileDdata d)
         {
             Id = !string.IsNullOrEmpty(d.Dbody.D26) ? d.Dbody.D26 : string.Empty;
         }

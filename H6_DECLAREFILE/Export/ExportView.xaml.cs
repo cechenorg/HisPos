@@ -18,6 +18,7 @@ using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
+using His_Pos.PrescriptionInquire;
 using JetBrains.Annotations;
 
 namespace His_Pos.H6_DECLAREFILE.Export
@@ -97,7 +98,8 @@ namespace His_Pos.H6_DECLAREFILE.Export
         private void InitializeDeclareFiles()
         {
             var load = new LoadingWindow();
-            load.GetDeclareFileData(this);
+            Instance = this;
+            load.GetDeclareFileData(Instance);
             load.Show();
             SelectedFile = new DeclareFile();
         }
@@ -206,6 +208,17 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 StartDateStr = result;
             else
                 EndDateStr = result;
+        }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            PrescriptionList.SelectedItem = (sender as DataGridRow)?.Item;
+        }
+
+        private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
+        {
+            DeclareDdataOutcome ddataOutcome = new DeclareDdataOutcome((DeclareFileDdata)PrescriptionList.SelectedItem, HospitalCollection);
+            ddataOutcome.Show();
         }
     }
 }

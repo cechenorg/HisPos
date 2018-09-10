@@ -19,7 +19,7 @@ namespace His_Pos.Class.Copayment
             FullName = dataRow["HISCOP_FULLNAME"].ToString();
         }
 
-        public Copayment(Ddata d)
+        public Copayment(DeclareFileDdata d)
         {
             Id = !string.IsNullOrEmpty(d.Dbody.D15) ? d.Dbody.D15 : string.Empty;
         }

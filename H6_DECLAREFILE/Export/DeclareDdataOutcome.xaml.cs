@@ -19,6 +19,7 @@ using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using His_Pos.Service;
 using JetBrains.Annotations;
+using Prescription = His_Pos.Class.Prescription;
 
 namespace His_Pos.H6_DECLAREFILE.Export
 {
@@ -116,16 +117,15 @@ namespace His_Pos.H6_DECLAREFILE.Export
             }
         }
 
-        private Ddata _currentDdata;
+        private Prescription _currentDeclareFileDdata;
 
-        public Ddata CurrentDdata
+        public Prescription CurrentPrescription
         {
-            get => _currentDdata;
+            get => _currentDeclareFileDdata;
             set
             {
-                _currentDdata = value;
-                Gender = value.Dbody.D3.Substring(1, 1).Equals("2") ? "女" : "男";
-                OnPropertyChanged(nameof(CurrentDdata));
+                _currentDeclareFileDdata = value;
+                OnPropertyChanged(nameof(CurrentPrescription));
             }
         }
 
@@ -136,16 +136,16 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private ObservableCollection<object> Medicines;
 
-        public DeclareDdataOutcome(Ddata d, ObservableCollection<Hospital> hospitals)
+        public DeclareDdataOutcome(DeclareFileDdata d, ObservableCollection<Hospital> hospitals)
         {
             InitializeComponent();
             Hospitals = hospitals;
-            CurrentDdata = d;
-            InitData();
+            CurrentPrescription = new Prescription(d);
+            InitData(d);
             InitDataChanged();
         }
 
-        private void InitData()
+        private void InitData(DeclareFileDdata declareFileDdata)
         {
             if (ExportView.Instance is null) return;
             var loadingWindow = new LoadingWindow();
@@ -158,25 +158,25 @@ namespace His_Pos.H6_DECLAREFILE.Export
             TreatmentCaseCollection = ExportView.Instance.TreatmentCaseCollection;
             HospitalCollection = ExportView.Instance.HospitalCollection;
             DeclareMedicinesData = ExportView.Instance.DeclareMedicinesData;
-            ReleasePalace.Text = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentDdata.Dbody.D21))?.FullName;
+            ReleasePalace.Text = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id))?.FullName;
             Division.ItemsSource = DivisionCollection;
-            Division.Text = DivisionCollection.SingleOrDefault(d => d.Id.Equals(CurrentDdata.Dbody.D13))?.FullName;
+            Division.Text = DivisionCollection.SingleOrDefault(d => d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id))?.FullName;
             CopaymentCode.ItemsSource = CopaymentCollection;
             CopaymentCode.Text =
-                CopaymentCollection.SingleOrDefault(c => c.Id.Equals(CurrentDdata.Dbody.D15))?.FullName;
+                CopaymentCollection.SingleOrDefault(c => c.Id.Equals(CurrentPrescription.Treatment.Copayment.Id))?.FullName;
             PaymentCategory.ItemsSource = PaymentCategoryCollection;
-            PaymentCategory.Text = PaymentCategoryCollection.SingleOrDefault(p => p.Id.Equals(CurrentDdata.Dbody.D5))
+            PaymentCategory.Text = PaymentCategoryCollection.SingleOrDefault(p => p.Id.Equals(CurrentPrescription.Treatment.PaymentCategory.Id))
                 ?.FullName;
             AdjustCase.ItemsSource = AdjustCaseCollection;
-            AdjustCase.Text = AdjustCaseCollection.SingleOrDefault(a => a.Id.Equals(CurrentDdata.Dhead.D1))?.FullName;
+            AdjustCase.Text = AdjustCaseCollection.SingleOrDefault(a => a.Id.Equals(CurrentPrescription.Treatment.AdjustCase.Id))?.FullName;
             TreatmentCase.ItemsSource = TreatmentCaseCollection;
-            TreatmentCase.Text = TreatmentCaseCollection.SingleOrDefault(t => t.Id.Equals(CurrentDdata.Dhead.D1))
+            TreatmentCase.Text = TreatmentCaseCollection.SingleOrDefault(t => t.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id))
                 ?.FullName;
-            foreach (var p in CurrentDdata.Dbody.Pdata)
-            {
-                if (p.P1.Equals("1") && !p.P2.Contains("MA"))
-                    PrescriptionMedicines.Add(DeclareMedicinesData.SingleOrDefault(m => m.Id.Equals(p.P2)));
-            }
+            //foreach (var p in declareFileDdata.Dbody.Pdata)
+            //{
+            //    if (p.P1.Equals("1") && !p.P2.Contains("MA"))
+            //        PrescriptionMedicines.Add(DeclareMedicinesData.SingleOrDefault(m => m.Id.Equals(p.P2)));
+            //}
 
             PrescriptionSet.ItemsSource = PrescriptionMedicines;
             loadingWindow.Close();
