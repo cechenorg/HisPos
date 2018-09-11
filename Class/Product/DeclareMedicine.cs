@@ -41,7 +41,7 @@ namespace His_Pos.Class.Product
             MedicalCategory = new Medicate(dataRow);
             Stock = new InStock(dataRow);
             Cost = 1;
-            Price = dataRow["PRO_SELL_PRICE"].ToString();
+            //Price = dataRow["PRO_SELL_PRICE"].ToString();
             TotalPrice = 0;
             CountStatus = "";
             FocusColumn = "";

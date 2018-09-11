@@ -28,33 +28,40 @@ namespace His_Pos.Class.Declare
          * 新增DeclareData至資料庫
          */
 
-        public void InsertDb(DeclareData declareData, DeclareTrade declareTrade = null)
+        public void InsertDeclareData(DeclareData declareData)
         {
             var parameters = new List<SqlParameter>();
             AddParameterDData(parameters, declareData); //加入DData sqlparameters
             var pDataTable = SetPDataTable(); //設定PData datatable columns
             AddPData(declareData, pDataTable); //加入PData sqlparameters
-            if (declareTrade != null)
+            
+               
+            var xmlStr = declareData.SerializeObject<Ddata>();
+            var errorStr = declareData.Prescription.EList.SerializeObject<ErrorList>();
+            if (string.IsNullOrEmpty(errorStr))
+                errorStr = "<ErrorPrescription></ErrorPrescription>";
+            parameters.Add(new SqlParameter("DETAIL", pDataTable));
+            parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
             {
-                var dataTradeTable = SetDataTradeTable();
-                AddTradeData(declareTrade, dataTradeTable);
-                var xmlStr = declareData.SerializeObject<Ddata>();
-                var errorStr = declareData.Prescription.EList.SerializeObject<ErrorList>();
-                if (string.IsNullOrEmpty(errorStr))
-                    errorStr = "<ErrorPrescription></ErrorPrescription>";
-                parameters.Add(new SqlParameter("DECLARETRADE", dataTradeTable));
-                parameters.Add(new SqlParameter("DETAIL", pDataTable));
-                parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
-                {
-                    Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
-                });
+                Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
+            });
 
-                parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
-                {
-                    Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
-                });
-                CheckInsertDbTypeUpdate(parameters);
-            }
+            parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
+            });
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
+
+        }
+        public void InsertDeclareTrade(string decMasId,DeclareTrade declareTrade) {
+            var dataTradeTable = SetDataTradeTable();
+            AddTradeData(declareTrade, dataTradeTable);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DECMAS_ID", decMasId));
+            parameters.Add(new SqlParameter("DECLARETRADE", dataTradeTable));
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertTradeData]", parameters);
         }
 
         public void UpdateDeclareFile(DeclareData declareData)
@@ -935,17 +942,7 @@ namespace His_Pos.Class.Declare
          * 判斷InsertDb type為Update
          */
 
-        private void CheckInsertDbTypeUpdate(List<SqlParameter> parameters)
-        {
-            var conn = new DbConnection(Settings.Default.SQL_global);
-            conn.ExecuteProc("[HIS_POS_DB].[SET].[DECLAREDATA]", parameters);
-            //if (type == "Update")
-            //{
-            //    parameters.Add(new SqlParameter("ID", id));
-            //    conn.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEDECLAREDATA]", parameters);
-            //}
-
-        }
+        
 
         private XmlDocument CreateToXml(DeclareData declareData)
         {
