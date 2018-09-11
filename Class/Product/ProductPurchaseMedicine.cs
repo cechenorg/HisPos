@@ -58,6 +58,7 @@ namespace His_Pos.Class.Product
         public string CountStatus { get; set; } = "";
         public string FocusColumn { get; set; } = "";
         public InStock Stock { get; set; }
+        public int OrderAmount { get; set; }
         private string note;
         public string Note
         {

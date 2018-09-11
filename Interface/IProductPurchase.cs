@@ -14,6 +14,7 @@ namespace His_Pos.Interface
         string Note { get; set; }
         InStock Stock { get; set; }
         double LastPrice { get; set; }
+        int OrderAmount { get; set; }
         int FreeAmount { get; set; }
         string Invoice { get; set; }
         string ValidDate { get; set; }

@@ -84,6 +84,7 @@ namespace His_Pos.Class.Product
         public bool Status { get; set; } = false;
         public InStock Stock { get; set; }
         public double LastPrice { get; set; }
+        public int OrderAmount { get; set; }
         public string source;
         public string Source {
             get {
