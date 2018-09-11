@@ -185,6 +185,7 @@ namespace His_Pos.Class.Declare
             var customerTable = SetCustomerTable();
             var declareMasterTable = SetDeclareMasterTable();
             var pDataTable = SetImportPDataTable(); //設定PData datatable columns
+            
             foreach (DeclareData declaredata in declareDataCollection)
             {
                 AddDeclareMaster(declaredata, declareMasterTable);
@@ -572,59 +573,44 @@ namespace His_Pos.Class.Declare
         }
         private DataTable SetPDataTable()
         {
-            var pDataTable = new DataTable();
-            var columnsDictionary = new Dictionary<string, Type>
-                    {
-                        {"P10", typeof(int)},
-                        {"P1", typeof(string)},
-                        {"P2", typeof(string)},
-                        {"P7", typeof(double)},
-                        {"P8", typeof(double)},
-                        {"P9", typeof(int)},
-                        {"P3", typeof(double)},
-                        {"P4", typeof(string)},
-                        {"P5", typeof(string)},
-                        {"P6", typeof(string)},
-                        {"P11", typeof(string)},
-                        {"P12", typeof(string)},
-                        {"P13", typeof(string)},
-                        {"PAY_BY_YOURSELF", typeof(string)}
-                    };
-            foreach (var col in columnsDictionary)
-            {
-                pDataTable.Columns.Add(col.Key, col.Value);
-            }
-
-            return pDataTable;
+            var importPDataTable = new DataTable();
+            importPDataTable.Columns.Add("P10", typeof(int));
+            importPDataTable.Columns.Add("P1", typeof(string));
+            importPDataTable.Columns.Add("P2", typeof(string));
+            importPDataTable.Columns.Add("P7", typeof(double));
+            importPDataTable.Columns.Add("P8", typeof(double));
+            importPDataTable.Columns.Add("P9", typeof(int));
+            importPDataTable.Columns.Add("P3", typeof(double));
+            importPDataTable.Columns.Add("P4", typeof(string));
+            importPDataTable.Columns.Add("P5", typeof(string));
+            importPDataTable.Columns.Add("P6", typeof(string));
+            importPDataTable.Columns.Add("P11", typeof(string));
+            importPDataTable.Columns.Add("P12", typeof(string));
+            importPDataTable.Columns.Add("P13", typeof(string));
+            importPDataTable.Columns.Add("PAY_BY_YOURSELF", typeof(string));
+            return importPDataTable;
         }
 
         private DataTable SetImportPDataTable()
         {
-            var pDataTable = new DataTable();
-            var columnsDictionary = new Dictionary<string, Type>
-                    {
-                        {"DecMasId", typeof(string)},
-                        {"P10", typeof(int)},
-                        {"P1", typeof(string)},
-                        {"P2", typeof(string)},
-                        {"P7", typeof(double)},
-                        {"P8", typeof(double)},
-                        {"P9", typeof(int)},
-                        {"P3", typeof(double)},
-                        {"P4", typeof(string)},
-                        {"P5", typeof(string)},
-                        {"P6", typeof(string)},
-                        {"P11", typeof(string)},
-                        {"P12", typeof(string)},
-                        {"P13", typeof(string)},
-                        {"PAY_BY_YOURSELF", typeof(string)}
-                    };
-            foreach (var col in columnsDictionary)
-            {
-                pDataTable.Columns.Add(col.Key, col.Value);
-            }
 
-            return pDataTable;
+            var importPDataTable = new DataTable();
+            importPDataTable.Columns.Add("DecMasId", typeof(string));
+            importPDataTable.Columns.Add("P10", typeof(int));
+            importPDataTable.Columns.Add("P1", typeof(string));
+            importPDataTable.Columns.Add("P2", typeof(string));
+            importPDataTable.Columns.Add("P7", typeof(double));
+            importPDataTable.Columns.Add("P8", typeof(double));
+            importPDataTable.Columns.Add("P9", typeof(int));
+            importPDataTable.Columns.Add("P3", typeof(double));
+            importPDataTable.Columns.Add("P4", typeof(string));
+            importPDataTable.Columns.Add("P5", typeof(string));
+            importPDataTable.Columns.Add("P6", typeof(string));
+            importPDataTable.Columns.Add("P11", typeof(string));
+            importPDataTable.Columns.Add("P12", typeof(string));
+            importPDataTable.Columns.Add("P13", typeof(string));
+            importPDataTable.Columns.Add("PAY_BY_YOURSELF", typeof(string));
+            return importPDataTable;
         }
 
         private void AddPData(DeclareData declareData, DataTable pDataTable)
@@ -638,90 +624,25 @@ namespace His_Pos.Class.Declare
                     : declareData.Prescription.Medicines[i].UsageName;
                 var paySelf = /*declareData.Prescription.Medicines == null ? "0" :*/
                     declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
-                if (String.IsNullOrEmpty(declareData.DecMasId))
-                {
-                    var tagsDictionary = new Dictionary<string, string>
-                        {
-                            {"P1", detail.MedicalOrder},
-                            {"P2", detail.MedicalId},
-                            {"P3", function.SetStrFormat(detail.Dosage, "{0:0000.00}")},
-                            {"P4", detail.Usage},
-                            {"P5", detail.Position},
-                            {"P6", function.ToInvCulture(detail.Percent)},
-                            {"P7", function.SetStrFormat(detail.Total, "{0:00000.0}")},
-                            {"P8", function.SetStrFormat(detail.Price, "{0:0000000.00}")},
-                            {
-                                "P9",
-                                function.SetStrFormatInt(
-                                    Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,
-                                        MidpointRounding.AwayFromZero))), "{0:D8}")
-                            },
-                            {"P10", detail.Sequence.ToString()},
-                            {"P11", detail.Days.ToString()},
-                            {"PAY_BY_YOURSELF", paySelf}
-                        };
-                    foreach (var tag in tagsDictionary)
-                    {
-                        switch (tag.Key)
-                        {
-                            case "P10":
-                                row[tag.Key] = Convert.ToInt32(tag.Value);
-                                break;
+                if (!String.IsNullOrEmpty(declareData.DecMasId))
+                    row["DecMasId"] = declareData.DecMasId;
+                
 
-                            case "PAY_BY_YOURSELF":
-                                row[tag.Key] = tag.Value;
-                                break;
+                Function function = new Function();
+                row["P1"] = detail.MedicalOrder;
+                row["P2"] = detail.MedicalId;
+                row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
+                row["P4"] = detail.Usage;
+                row["P5"] = detail.Position;
+                row["P6"] = function.ToInvCulture(detail.Percent);
+                row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
+                row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
+                row["P9"] = function.SetStrFormatInt( Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                row["P10"] = detail.Sequence.ToString();
+                row["P11"] = detail.Days.ToString();
+                row["PAY_BY_YOURSELF"] = paySelf;
 
-                            default:
-                                CheckEmptyDataRow(pDataTable, tag.Value, ref row, tag.Key);
-                                break;
-                        }
-                    }
-
-                    pDataTable.Rows.Add(row);
-                }
-                else
-                {
-                    var tagsDictionary = new Dictionary<string, string>
-                        {
-                           {"DecMasId", declareData.DecMasId},
-                            {"P1", detail.MedicalOrder},
-                            {"P2", detail.MedicalId},
-                            {"P3", function.SetStrFormat(detail.Dosage, "{0:0000.00}")},
-                            {"P4", detail.Usage},
-                            {"P5", detail.Position},
-                            {"P6", function.ToInvCulture(detail.Percent)},
-                            {"P7", function.SetStrFormat(detail.Total, "{0:00000.0}")},
-                            {"P8", function.SetStrFormat(detail.Price, "{0:0000000.00}")},
-                            {
-                                "P9",
-                                function.SetStrFormatInt(
-                                    Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,
-                                        MidpointRounding.AwayFromZero))), "{0:D8}")
-                            },
-                            {"P10", detail.Sequence.ToString()},
-                            {"P11", detail.Days.ToString()},
-                            {"PAY_BY_YOURSELF", paySelf}
-                        };
-                    foreach (var tag in tagsDictionary)
-                    {
-                        switch (tag.Key)
-                        {
-                            case "P10":
-                                row[tag.Key] = Convert.ToInt32(tag.Value);
-                                break;
-
-                            case "PAY_BY_YOURSELF":
-                                row[tag.Key] = tag.Value;
-                                break;
-
-                            default:
-                                CheckEmptyDataRow(pDataTable, tag.Value, ref row, tag.Key);
-                                break;
-                        }
-                    }
-                    pDataTable.Rows.Add(row);
-                }
+                pDataTable.Rows.Add(row);
             }
 
             if (declareData.Prescription.Treatment.AdjustCase.Id == "3")
@@ -760,49 +681,23 @@ namespace His_Pos.Class.Declare
                     : declareData.Prescription.Medicines[i].UsageName;
                 var paySelf = declareData.Prescription.Medicines == null ? "0" :
                     declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
-                var tagsDictionary = new Dictionary<string, string>
-                        {
-                            {"DecMasId", declareData.DecMasId},
-                            {"P1", detail.MedicalOrder},
-                            {"P2", detail.MedicalId},
-                            {"P3", function.SetStrFormat(detail.Dosage, "{0:0000.00}")},
-                            {"P4", detail.Usage},
-                            {"P5", detail.Position},
-                            {"P6", function.ToInvCulture(detail.Percent)},
-                            {"P7", function.SetStrFormat(detail.Total, "{0:00000.0}")},
-                            {"P8", function.SetStrFormat(detail.Price, "{0:0000000.00}")},
-                            {
-                                "P9",
-                                function.SetStrFormatInt(
-                                    Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,
-                                        MidpointRounding.AwayFromZero))), "{0:D8}")
-                            },
-                            {"P10", detail.Sequence.ToString()},
-                            {"P11", detail.Days.ToString()},
-                            {"PAY_BY_YOURSELF", paySelf}
-                        };
-                foreach (var tag in tagsDictionary)
-                {
-                    switch (tag.Key)
-                    {
-                        case "P10":
-                            row[tag.Key] = Convert.ToInt32(tag.Value);
-                            break;
 
-                        case "PAY_BY_YOURSELF":
-                            row[tag.Key] = tag.Value;
-                            break;
-
-                        default:
-                            CheckEmptyDataRow(pDataTable, tag.Value, ref row, tag.Key);
-                            break;
-                    }
-                }
-
+                row["DecMasId"] = declareData.DecMasId;
+                row["P1"] = detail.MedicalOrder;
+                row["P2"] = detail.MedicalId;
+                row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
+                row["P4"] = detail.Usage;
+                row["P5"] = detail.Position;
+                row["P6"] = function.ToInvCulture(detail.Percent);
+                row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
+                row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
+                row["P9"] = function.SetStrFormatInt( Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                row["P10"] = detail.Sequence.ToString();
+                row["P11"] = detail.Days.ToString();
+                row["PAY_BY_YOURSELF"] = paySelf;
+                
                 pDataTable.Rows.Add(row);
             }
-
-            AddMedicalServiceCostPData(declareData, pDataTable);
         }
         /*
          * 加入藥事服務費之PData
@@ -843,56 +738,18 @@ namespace His_Pos.Class.Declare
         private void SetMedicalServiceCostDataRow(DataRow pData, DeclareData declareData, DeclareDetail detail)
         {
             var declarecount = declareData.DeclareDetails.Count + 1; //藥事服務醫令序
-            if (string.IsNullOrEmpty(declareData.DecMasId))
-            {
-                var tagsDictionary = new Dictionary<string, object>
-                        {
-                            {"P1", detail.MedicalOrder},
-                            {"P2", detail.MedicalId},
-                            {"P6", function.ToInvCulture(detail.Percent)},
-                            {"P7", function.SetStrFormat(detail.Total, "{0:00000.0}")},
-                            {"P8", function.SetStrFormat(detail.Price, "{0:0000000.00}")},
-                            {
-                                "P9",
-                                function.SetStrFormatInt(
-                                    Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,
-                                        MidpointRounding.AwayFromZero))), "{0:D8}")
-                            },
-                            {"P10", function.SetStrFormatInt(declarecount, "{0:D3}")},
-                            {"P12", detail.StartDate},
-                            {"P13", detail.EndDate}
-                        };
-                foreach (var tag in tagsDictionary)
-                {
-                    pData[tag.Key] = tag.Value;
-                }
-            }
-            else
-            {
-                var tagsDictionary = new Dictionary<string, object>
-                        {
-                            {"DecMasId", declareData.DecMasId},
-                            {"P1", detail.MedicalOrder},
-                            {"P2", detail.MedicalId},
-                            {"P6", function.ToInvCulture(detail.Percent)},
-                            {"P7", function.SetStrFormat(detail.Total, "{0:00000.0}")},
-                            {"P8", function.SetStrFormat(detail.Price, "{0:0000000.00}")},
-                            {
-                                "P9",
-                                function.SetStrFormatInt(
-                                    Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,
-                                        MidpointRounding.AwayFromZero))), "{0:D8}")
-                            },
-                            {"P10", function.SetStrFormatInt(declarecount, "{0:D3}")},
-                            {"P12", detail.StartDate},
-                            {"P13", detail.EndDate}
-                        };
-                foreach (var tag in tagsDictionary)
-                {
-                    pData[tag.Key] = tag.Value;
-                }
+            if (!string.IsNullOrEmpty(declareData.DecMasId)) pData["DecMasId"] = declareData.DecMasId;
 
-            }
+
+                pData["P1"] = detail.MedicalOrder;
+                pData["P2"] = detail.MedicalId;
+                pData["P6"] = function.ToInvCulture(detail.Percent);
+                pData["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
+                pData["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
+                pData["P9"] = function.SetStrFormatInt(  Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,  MidpointRounding.AwayFromZero))), "{0:D8}");
+                pData["P10"] = function.SetStrFormatInt(declarecount, "{0:D3}");
+                pData["P12"] = detail.StartDate;
+                pData["P13"] = detail.EndDate;
         }
 
         /*
@@ -1287,7 +1144,7 @@ namespace His_Pos.Class.Declare
 
         private void CheckEmptyDataRow(DataTable dataTable, string value, ref DataRow row, string rowName)
         {
-            if (value != string.Empty && rowName != "DecMasId")
+            if (value != string.Empty )
             {
                 switch (dataTable.Columns[rowName].DataType.Name)
                 {
@@ -1304,6 +1161,22 @@ namespace His_Pos.Class.Declare
                         break;
                 }
             }
+        }
+        public void SetSameGroupChronic(string decMasId,string continueNum) { //同GROUP慢箋預約
+
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+                parameters.Add(new SqlParameter("DecMasId", decMasId));
+                parameters.Add(new SqlParameter("COUTINUENUM", continueNum));
+                conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[SetSameGroupChronic]", parameters);
+        }
+        public void SetNewGroupChronic(string decMasId)
+        { //同GROUP慢箋預約
+
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            parameters.Add(new SqlParameter("DecMasId", decMasId));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[SetNewGroupChronic]", parameters);
         }
     }
 }

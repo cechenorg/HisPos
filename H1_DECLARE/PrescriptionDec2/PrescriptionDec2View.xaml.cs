@@ -200,15 +200,25 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                    string decMasId =  declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
                 }
-                else if (CurrentPrescription.Treatment.AdjustCase.Id == "02" && string.IsNullOrEmpty(CurrentDecMasId) && !CurrentPrescription.Customer.IcCard.MedicalNumber.Contains("IC")) //第1次的新慢性處方
+                else if (CurrentPrescription.Treatment.AdjustCase.Id == "02" && string.IsNullOrEmpty(CurrentDecMasId)) //第1次的新慢性處方
                 {
                     string decMasId = declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
-                    //塞入chronic.Master 然後算出第2,3次...到最後一次
+                    int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
+                    int end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
+
+                    int intDecMasId = Convert.ToInt32(decMasId) + 1;
+                    for (int i = start;i<= end;i++) {
+                        declareDb.SetSameGroupChronic(intDecMasId.ToString(),i.ToString());
+                        intDecMasId++;
+                    }
                 }
                 else if(CurrentPrescription.Treatment.AdjustCase.Id == "02" && !string.IsNullOrEmpty(CurrentDecMasId)) { //第2次以後的慢性處方
                     declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
-                    //更新慢姓跟狀態 若為最後一次 則再算出下一批慢性
+                    //更新慢姓跟狀態 
+                    if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal) {  //若為最後一次 則再算出下一批慢性
+                        declareDb.SetNewGroupChronic(CurrentDecMasId);
+                    } 
 
                 }
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
