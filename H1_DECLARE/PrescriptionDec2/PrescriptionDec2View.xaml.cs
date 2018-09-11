@@ -197,12 +197,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
                
                 if (CurrentPrescription.Treatment.AdjustCase.Id != "02" && string.IsNullOrEmpty(DecMasId)) {  //一般處方
-                    declareDb.InsertDeclareData(declareData, declareTrade);
+                    declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄");//庫存扣庫
                 }
-                else if (CurrentPrescription.Treatment.AdjustCase.Id == "02" && string.IsNullOrEmpty(DecMasId)) //第1次的慢性處方
+                else if (CurrentPrescription.Treatment.AdjustCase.Id == "02" && string.IsNullOrEmpty(DecMasId) 
+                    && !CurrentPrescription.Customer.IcCard.MedicalNumber.Contains("IC")) //第1次的慢性處方
                 {
-                    declareDb.InsertDeclareData(declareData, declareTrade);
+                    declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄");//庫存扣庫
                     //算出第2,3次
                 }
