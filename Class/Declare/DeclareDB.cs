@@ -28,7 +28,7 @@ namespace His_Pos.Class.Declare
          * 新增DeclareData至資料庫
          */
 
-        public void InsertDeclareData(DeclareData declareData)
+        public string InsertDeclareData(DeclareData declareData)
         {
             var parameters = new List<SqlParameter>();
             AddParameterDData(parameters, declareData); //加入DData sqlparameters
@@ -51,8 +51,8 @@ namespace His_Pos.Class.Declare
                 Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
             });
             var conn = new DbConnection(Settings.Default.SQL_global);
-            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
-
+           DataTable table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
+            return table.Rows[0][0].ToString();//回傳DesMasId
         }
         public void InsertDeclareTrade(string decMasId,DeclareTrade declareTrade) {
             var dataTradeTable = SetDataTradeTable();
@@ -215,19 +215,16 @@ namespace His_Pos.Class.Declare
         /*
          * 藥品扣庫
          */
-        public void InsertInventoryDb(DeclareData declareData, string way)
+        public void InsertInventoryDb(DeclareData declareData, string way,string decMasId)
         {
             var parameters = new List<SqlParameter>();
             var conn = new DbConnection(Settings.Default.SQL_global);
             foreach (DeclareMedicine declareDetail in declareData.Prescription.Medicines)
             {
                 parameters.Clear();
-                if (declareData.DecMasId == null)
-                    parameters.Add(new SqlParameter("MAS_ID", DBNull.Value));
-                else
-                    parameters.Add(new SqlParameter("MAS_ID", declareData.DecMasId));
+                parameters.Add(new SqlParameter("MAS_ID", decMasId));
                 parameters.Add(new SqlParameter("PRO_ID", declareDetail.Id));
-                parameters.Add(new SqlParameter("BUCJLE_VALUE", declareDetail.Amount));
+                parameters.Add(new SqlParameter("BUCKLE_VALUE", declareDetail.Amount));
                 parameters.Add(new SqlParameter("BUCKLE_STATUS", "1"));
                 parameters.Add(new SqlParameter("WAY", way));
                 conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[InsertDeclareDetailBuckle]",
