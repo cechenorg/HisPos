@@ -521,6 +521,7 @@ namespace His_Pos
                 exportView.CopaymentCollection = CopaymentDb.GetData();
                 exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
                 exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
+                exportView.DeclareMedicinesData = MedicineDb.GetDeclareFileMedicineData();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     

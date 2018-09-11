@@ -56,6 +56,7 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
+
         internal static ObservableCollection<DeclareMedicine> GetDeclareMedicineByMasId(string decmasId)
         {
             ObservableCollection<DeclareMedicine> collection = new ObservableCollection<DeclareMedicine>();
@@ -72,6 +73,23 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
+
+        internal static ObservableCollection<DeclareMedicine> GetDeclareFileMedicineData()
+        {
+            ObservableCollection<DeclareMedicine> collection = new ObservableCollection<DeclareMedicine>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[DeclareFileExportView].[GetDeclareFileMedicineData]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new DeclareMedicine(row, "DeclareFile"));
+            }
+
+            return collection;
+        }
+
         //更新藥品檔
         //讀檔xml
         //XmlSerializer serializer = new XmlSerializer(typeof(Class.Product.Table));

@@ -123,8 +123,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
             var load = new LoadingWindow();
             load.GetDeclareFileData(this);
             load.Show();
-            
-            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -68,8 +68,6 @@ namespace His_Pos.Class
             PaymentCategory = new PaymentCategory.PaymentCategory(d);
             Copayment = new Copayment.Copayment(d);
             AdjustCase = new AdjustCase.AdjustCase(d);
-            AdjustDateStr = !string.IsNullOrEmpty(d.Dbody.D23) ? d.Dbody.D23 : string.Empty;
-            TreatDateStr = !string.IsNullOrEmpty(d.Dbody.D14) ? d.Dbody.D14 : string.Empty;
             MedicineDays = !string.IsNullOrEmpty(d.Dbody.D30) ? d.Dbody.D30 : string.Empty;
             MedicalPersonId = !string.IsNullOrEmpty(d.Dbody.D25) ? d.Dbody.D25 : string.Empty;
         }

@@ -102,8 +102,43 @@ namespace His_Pos.H6_DECLAREFILE.Export
             }
         }
 
+        private string _treatDate;
+
+        public string TreatDateStr
+        {
+            get => _treatDate;
+            set
+            {
+                _treatDate = value;
+                OnPropertyChanged(nameof(TreatDateStr));
+            }
+        }
+
+        private string _adjustDateStr;
+        public string AdjustDateStr
+        {
+            get => _adjustDateStr;
+            set
+            {
+                _adjustDateStr = value;
+                OnPropertyChanged(nameof(AdjustDateStr));
+            }
+        }
+        
         public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
-        public ObservableCollection<DeclareMedicine> PrescriptionMedicines { get; set; }
+
+        private ObservableCollection<DeclareMedicine> _prescriptionMedicines;
+
+        public ObservableCollection<DeclareMedicine> PrescriptionMedicines
+        {
+            get => _prescriptionMedicines;
+            set
+            {
+                _prescriptionMedicines = value;
+                OnPropertyChanged(nameof(PrescriptionMedicines));
+            }
+        }
+
         public ObservableCollection<Usage> Usages { get; set; }
         private string _gender;
 
@@ -153,7 +188,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
             var loadingWindow = new LoadingWindow();
             loadingWindow.ChangeLoadingMessage("處方申報資料載入中...");
             loadingWindow.Show();
-            ExportView.Instance.DeclareMedicinesData = MedicineDb.GetDeclareMedicineByMasId(declareFileDdata.DecId);
             DivisionCollection = ExportView.Instance.DivisionCollection;
             CopaymentCollection = ExportView.Instance.CopaymentCollection;
             PaymentCategoryCollection = ExportView.Instance.PaymentCategoryCollection;
@@ -161,11 +195,13 @@ namespace His_Pos.H6_DECLAREFILE.Export
             TreatmentCaseCollection = ExportView.Instance.TreatmentCaseCollection;
             HospitalCollection = ExportView.Instance.HospitalCollection;
             DeclareMedicinesData = ExportView.Instance.DeclareMedicinesData;
-            Hospital hospital = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
+            var hospital = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
             CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName = hospital.FullName;
-            Division division = DivisionCollection.SingleOrDefault(d =>
+            var division = DivisionCollection.SingleOrDefault(d =>
                 d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
             CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName = division.FullName;
+            TreatDateStr = declareFileDdata.Dbody.D14;
+            AdjustDateStr = declareFileDdata.Dbody.D23;
             CopaymentCode.ItemsSource = CopaymentCollection;
             CopaymentCode.Text =
                 CopaymentCollection.SingleOrDefault(c => c.Id.Equals(CurrentPrescription.Treatment.Copayment.Id))?.FullName;
@@ -177,13 +213,31 @@ namespace His_Pos.H6_DECLAREFILE.Export
             TreatmentCase.ItemsSource = TreatmentCaseCollection;
             TreatmentCase.Text = TreatmentCaseCollection.SingleOrDefault(t => t.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id))
                 ?.FullName;
-            //foreach (var p in declareFileDdata.Dbody.Pdata)
-            //{
-            //    if (p.P1.Equals("1") && !p.P2.Contains("MA"))
-            //        PrescriptionMedicines.Add(DeclareMedicinesData.SingleOrDefault(m => m.Id.Equals(p.P2)));
-            //}
-
-            PrescriptionSet.ItemsSource = PrescriptionMedicines;
+            PrescriptionMedicines = new ObservableCollection<DeclareMedicine>();
+            foreach (var p in declareFileDdata.Dbody.Pdata)
+            {
+                if (p.P1.Equals("1"))
+                {
+                    DeclareMedicine d = new DeclareMedicine();
+                    foreach (var medicine in DeclareMedicinesData)
+                    {
+                        if (p.P2.Equals(medicine.Id))
+                            d = medicine;
+                    }
+                    if (!string.IsNullOrEmpty(d.Id))
+                    {
+                        d.Dosage = p.P3.TrimStart('0');
+                        d.UsageName = p.P4;
+                        d.Position = p.P5;
+                        d.Amount = double.Parse(p.P7);
+                        if(p.P8.TrimStart('0').StartsWith("."))
+                            d.HcPrice = "0.00";
+                        d.TotalPrice = double.Parse(p.P8.TrimStart('0'))* double.Parse(p.P7);
+                        d.Days = p.P11;
+                        PrescriptionMedicines.Add(d);
+                    }
+                }
+            }
             loadingWindow.Close();
         }
 
