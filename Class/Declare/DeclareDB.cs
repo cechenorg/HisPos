@@ -1,5 +1,4 @@
-﻿using His_Pos.Class.Declare;
-using His_Pos.Class.Person;
+﻿using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -10,13 +9,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using His_Pos.RDLC;
+
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 
 namespace His_Pos.Class.Declare
@@ -115,7 +110,7 @@ namespace His_Pos.Class.Declare
             var result = normalCaseList.GroupBy(d => d.Dhead.D1);
             foreach (var group in result)
             {
-                sorted.AddRange(@group);
+                sorted.AddRange(group);
             }
             return sorted;
         }
@@ -126,6 +121,7 @@ namespace His_Pos.Class.Declare
             //依照藥事服務費點數排序
             var ddatas = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).OrderBy(d => d.Dbody.D38)
                 .ToList();
+            
             /*
              * 藥事服務費每人每日81 - 100件內 => 診療項目代碼: 05234D . 支付點數 : 15
              *          每人每日100件以上 => 診療項目代碼: 0502B . 支付點數 : 0
