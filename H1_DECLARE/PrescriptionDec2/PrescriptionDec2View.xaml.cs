@@ -30,7 +30,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
-        private string DecMasId = string.Empty;
+        private string CurrentDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
         private bool _isChanged;
         private int _selfCost;
@@ -196,20 +196,20 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var declareDb = new DeclareDb();
                 DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
                
-                if (CurrentPrescription.Treatment.AdjustCase.Id != "02" && string.IsNullOrEmpty(DecMasId)) {  //一般處方
-                    declareDb.InsertDeclareData(declareData);
-                    declareDb.InsertInventoryDb(declareData, "處方登錄");//庫存扣庫
+                if (CurrentPrescription.Treatment.AdjustCase.Id != "02" && string.IsNullOrEmpty(CurrentDecMasId)) {  //一般處方
+                   string decMasId =  declareDb.InsertDeclareData(declareData);
+                    declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
                 }
-                else if (CurrentPrescription.Treatment.AdjustCase.Id == "02" && string.IsNullOrEmpty(DecMasId) 
-                    && !CurrentPrescription.Customer.IcCard.MedicalNumber.Contains("IC")) //第1次的慢性處方
+                else if (CurrentPrescription.Treatment.AdjustCase.Id == "02" && string.IsNullOrEmpty(CurrentDecMasId) && !CurrentPrescription.Customer.IcCard.MedicalNumber.Contains("IC")) //第1次的新慢性處方
                 {
-                    declareDb.InsertDeclareData(declareData);
-                    declareDb.InsertInventoryDb(declareData, "處方登錄");//庫存扣庫
-                    //算出第2,3次
+                    string decMasId = declareDb.InsertDeclareData(declareData);
+                    declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
+                    //塞入chronic.Master 然後算出第2,3次...到最後一次
                 }
-                else if(CurrentPrescription.Treatment.AdjustCase.Id == "02" && !string.IsNullOrEmpty(DecMasId)) { //第2次以後的慢性處方
-                    declareDb.InsertInventoryDb(declareData, "處方登錄");//庫存扣庫
-                    //更新慢性狀態
+                else if(CurrentPrescription.Treatment.AdjustCase.Id == "02" && !string.IsNullOrEmpty(CurrentDecMasId)) { //第2次以後的慢性處方
+                    declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
+                    //更新慢姓跟狀態 若為最後一次 則再算出下一批慢性
+
                 }
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.Show();
