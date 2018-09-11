@@ -279,10 +279,20 @@ namespace His_Pos.ProductPurchase
             StoreOrderData.Type = OrderType.DONE;
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Id;
             SaveOrder();
-            InitData();
+
+            UpdateProductPrice();
+
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
             StockTakingView.DataChanged = true;
+        }
+
+        private void UpdateProductPrice()
+        {
+            foreach (var product in StoreOrderData.Products)
+            {
+                
+            }
         }
 
         private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
