@@ -443,7 +443,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void SelectPage()
         {
-            CurrentDataGrid.ItemsSource = storeOrderData.Products.Skip(PRODUCT_PER_PAGE * (currentPage - 1)).Take(PRODUCT_PER_PAGE).ToList();
+            if(StoreOrderData.type == OrderType.PROCESSING)
+                CurrentDataGrid.ItemsSource = storeOrderData.Products.Skip((PRODUCT_PER_PAGE + 1) * (currentPage - 1)).Take(PRODUCT_PER_PAGE + 1).ToList();
+            else
+                CurrentDataGrid.ItemsSource = storeOrderData.Products.Skip(PRODUCT_PER_PAGE * (currentPage - 1)).Take(PRODUCT_PER_PAGE).ToList();
         }
         private void ChangePage(object sender, RoutedEventArgs e)
         {
