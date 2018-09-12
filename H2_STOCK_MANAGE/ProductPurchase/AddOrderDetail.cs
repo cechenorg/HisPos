@@ -16,7 +16,6 @@ namespace His_Pos.ProductPurchase
     {
         private void AddGoodSales(Manufactory manufactory = null)
         {
-            throw new NotImplementedException();
         }
 
         private void AddBasicOrSafe(StoreOrderProductType type,WareHouse wareHouse, Manufactory manufactory = null)
@@ -39,6 +38,15 @@ namespace His_Pos.ProductPurchase
             //SetChanged();
         }
 
+        private void AddReturn(WareHouse wareHouse, Manufactory manufactory)
+        {
+            StoreOrderCollection.Insert(0, new StoreOrder(StoreOrderCategory.RETURN, MainWindow.CurrentUser, wareHouse, manufactory));
+            StoOrderOverview.SelectedIndex = 0;
+        }
 
+        private void AddReturnByOrder(string OrderId)
+        {
+
+        }
     }
 }

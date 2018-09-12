@@ -239,10 +239,10 @@ namespace His_Pos.ProductPurchase
                         AddGoodSales(addNewOrderDialog.SelectedManufactory);
                         break;
                     case AddOrderType.RETURNBYMANUFACTORY:
-
+                        AddReturn(addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
                         break;
                     case AddOrderType.RETURNBYORDER:
-
+                        AddReturnByOrder(addNewOrderDialog.SelectedOrderId);
                         break;
                 }
             }

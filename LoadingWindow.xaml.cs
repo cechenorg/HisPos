@@ -171,10 +171,21 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("新增新處理單...");
                 ManufactoryDb.AddNewOrderBasicSafe(type, wareHouse, manufactory);
-
+                
+                ChangeLoadingMessage("取得進退貨資料...");
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    //productPurchaseView.UpdateUi();
+                    ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+
+                    foreach (StoreOrder stoOrd in tempStoreOrderCollection)
+                    {
+                        if (stoOrd.Type == OrderType.WAITING)
+                        {
+                            //Check Order Status
+                        }
+                    }
+
+                    productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
                     productPurchaseView.StoOrderOverview.SelectedIndex = 0;
                 }));
             };

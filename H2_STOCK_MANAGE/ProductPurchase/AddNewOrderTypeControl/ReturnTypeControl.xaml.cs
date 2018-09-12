@@ -26,6 +26,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
     public partial class ReturnTypeControl : UserControl
     {
         public Manufactory SelectedManufactory { get; set; }
+        public WareHouse SelectedWareHouse { get; set; }
         public string SelectedOrderId { get; set; }
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection { get; }
         
@@ -48,7 +49,16 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
         
         internal AddOrderType GetOrderType()
         {
-            if((bool)TargetManufactory.IsChecked)
+            if (WareHouseCombo.SelectedItem is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("請輸入庫存名稱", MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return AddOrderType.ERROR;
+            }
+
+            SelectedWareHouse = (WareHouse)WareHouseCombo.SelectedItem;
+
+            if ((bool)TargetManufactory.IsChecked)
             {
                 if(SelectedManufactory is null)
                 {
