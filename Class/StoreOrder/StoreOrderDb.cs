@@ -151,18 +151,29 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", StoOrdId));
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderDetail]", parameters);
-            
+
+            string lastProductId = "";
+
             foreach (DataRow row in table.Rows)
             {
+                AbstractClass.Product product = null;
+                string currentProductId = row["PRO_ID"].ToString();
+
                 switch (row["PRO_TYPE"].ToString())
                 {
                     case "M":
-                        StoreOrderCollection.Add(new ProductPurchaseMedicine(row, DataSource.GetStoreOrderDetail));
+                        product = new ProductPurchaseMedicine(row, DataSource.GetStoreOrderDetail);
                         break;
                     case "O":
-                        StoreOrderCollection.Add(new ProductPurchaseOtc(row, DataSource.GetStoreOrderDetail));
+                        product = new ProductPurchaseOtc(row, DataSource.GetStoreOrderDetail);
                         break;
                 }
+
+                if (lastProductId == currentProductId)
+                    ((IProductPurchase)product).IsFirstBatch = false;
+
+                lastProductId = currentProductId;
+                StoreOrderCollection.Add(product);
             }
             return StoreOrderCollection;
         }

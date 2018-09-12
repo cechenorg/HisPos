@@ -20,6 +20,8 @@ namespace His_Pos.Interface
         string ValidDate { get; set; }
         string BatchNumber { get; set; }
 
+        bool IsFirstBatch { get; set; }
+
         void CopyFilledData(Product product);
     }
 }

@@ -59,6 +59,8 @@ namespace His_Pos.Class.Product
                     Status = dataRow["PRO_STATUS"].ToString().Equals("1");
                     break;
             }
+
+            IsFirstBatch = true;
         }
 
         private ProductPurchaseOtc()
@@ -79,7 +81,8 @@ namespace His_Pos.Class.Product
             LastPrice = selectedItem.LastPrice;
             Stock = new InStock(selectedItem);
         }
-
+        public bool IsFirstBatch { get; set; }
+        public bool InvertIsFirstBatch { get { return !IsFirstBatch; } }
         public string CountStatus { get; set; } = "";
         public string FocusColumn { get; set; } = "";
         public bool Status { get; set; } = false;

@@ -34,6 +34,8 @@ namespace His_Pos.Class.Product
                     BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
                     break;
             }
+
+            IsFirstBatch = true;
         }
 
         private ProductPurchaseMedicine()
@@ -55,6 +57,8 @@ namespace His_Pos.Class.Product
             Stock = new InStock(selectedItem);
         }
 
+        public bool IsFirstBatch { get; set; }
+        public bool InvertIsFirstBatch { get { return !IsFirstBatch; } }
         public bool Status { get; set; } = false;
         public string CountStatus { get; set; } = "";
         public string FocusColumn { get; set; } = "";

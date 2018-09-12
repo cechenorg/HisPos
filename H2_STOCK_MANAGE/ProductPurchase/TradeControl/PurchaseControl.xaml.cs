@@ -154,11 +154,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             DataGrid dataGrid = sender as DataGrid;
 
-            if (dataGrid.Items.Count == e.Row.GetIndex() + 1) return;
+            if (dataGrid.Items.Count == e.Row.GetIndex() + 1 && storeOrderData.type == OrderType.UNPROCESSING) return;
 
             int rowNum = (e.Row.GetIndex() + 1);
 
-            e.Row.Header = rowNum.ToString();
+            if (e.Row.Header is null)
+                e.Row.Header = rowNum.ToString();
         }
         internal void ClearControl()
         {
@@ -374,6 +375,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
 
             StoreOrderData.IsDataChanged = true;
+
+            CurrentDataGrid.Items.Refresh();
         }
         #endregion
 
@@ -464,4 +467,5 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             return 0;
         }
     }
+
 }
