@@ -9,11 +9,20 @@ namespace His_Pos.Class.Person
         {
         }
 
-        public MedicalPersonnel(DataRow row)
+        public MedicalPersonnel(DataRow row,bool isDoctor)
         {
-            Id = row["EMP_ID"].ToString();
-            Name = row["EMP_NAME"].ToString();
-            IcNumber = row["EMP_IDNUM"].ToString();
+            if (isDoctor)
+            {
+                Id = string.Empty;
+                Name = string.Empty;
+                IcNumber = row["HISDECMAS_DOCTOR"].ToString();
+            }
+            else
+            {
+                Id = row["EMP_ID"].ToString();
+                Name = row["EMP_NAME"].ToString();
+                IcNumber = row["EMP_IDNUM"].ToString();
+            }
         }
         public MedicalPersonnel(string id, string name, string icNumber)
         {

@@ -22,7 +22,7 @@ namespace His_Pos.Class.Declare
         [XmlElement(ElementName = "PrescriptionId")]
         public string PrescriptionId { get; set; }
         [XmlElement(ElementName = "Error")]
-        public List<Error> Error { get; set; }
+        public List<Error> Error { get; set; } = new List<Error>();
     }
 
     [XmlRoot(ElementName = "ErrorPrescriptions")]

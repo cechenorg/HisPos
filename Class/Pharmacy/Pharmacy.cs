@@ -14,7 +14,7 @@ namespace His_Pos.Class.Pharmacy
             MedicalPersonnel = new MedicalPersonnel();
         }
         public Pharmacy(DataRow row) {
-            MedicalPersonnel = new MedicalPersonnel(row);
+            MedicalPersonnel = new MedicalPersonnel(row,false);
         }
         public Pharmacy(string id, string name,string address,string tel)
         {
@@ -36,7 +36,18 @@ namespace His_Pos.Class.Pharmacy
             MedicalPersonnel.IcNumber = !string.IsNullOrEmpty(d.Dbody.D25) ? d.Dbody.D25 : string.Empty;
         }
 
-        public MedicalPersonnel MedicalPersonnel { get; set; }
+        private MedicalPersonnel _medicalPersonnel;
+
+        public MedicalPersonnel MedicalPersonnel
+        {
+            get => _medicalPersonnel;
+            set
+            {
+                _medicalPersonnel = value;
+                NotifyPropertyChanged(nameof(MedicalPersonnel));
+            }
+        }
+
         public string Address { get; set; }
         public string Tel { get; set; }
     }

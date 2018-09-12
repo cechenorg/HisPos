@@ -156,8 +156,16 @@ namespace His_Pos.Class.Declare
                 if(value == null)
                     return;
                 _errorPrescriptionList = value;
-                if(_errorPrescriptionList.ErrorList != null)
-                    HasError = _errorPrescriptionList.ErrorList.Count > 0;
+                if (_errorPrescriptionList.ErrorList != null)
+                {
+                    foreach (var p in _errorPrescriptionList.ErrorList)
+                    {
+                        if(p.Error == null)
+                            continue;
+                        else if (p.Error.Count > 0)
+                            HasError = true;
+                    }
+                }
                 OnPropertyChanged(nameof(ErrorPrescriptionList));
             }
         }

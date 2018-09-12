@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.ComponentModel;
+using System.Data;
 using System.Xml;
 using His_Pos.AbstractClass;
 using His_Pos.Class.Declare;
@@ -27,7 +28,7 @@ namespace His_Pos.Class
                     Division = new Division.Division();
                     break;
                 case DataSource.GetHospitalData:
-                    Doctor = new MedicalPersonnel(dataRow);
+                    Doctor = new MedicalPersonnel(dataRow,true);
                     Division = new Division.Division(dataRow);
                     break;
             }
@@ -47,7 +48,28 @@ namespace His_Pos.Class
             Division = new Division.Division(d);
         }
 
-        public MedicalPersonnel Doctor { get; set; }
-        public Division.Division Division { get; set; }
+        private MedicalPersonnel _doctor;
+
+        public MedicalPersonnel Doctor
+        {
+            get => _doctor;
+            set
+            {
+                _doctor = value;
+                NotifyPropertyChanged(nameof(Doctor));
+            }
+        }
+
+        private Division.Division _division;
+
+        public Division.Division Division
+        {
+            get => _division;
+            set
+            {
+                _division = value;
+                NotifyPropertyChanged(nameof(Division));
+            }
+        }
     }
 }

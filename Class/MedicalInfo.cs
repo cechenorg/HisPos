@@ -82,10 +82,54 @@ namespace His_Pos.Class
             }
         } //d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
 
-        public SpecialCode SpecialCode { get; set; }//d26 原處方服務機構之特定治療項目代號
-        public DiseaseCode MainDiseaseCode { get; set; }//d8 國際疾病分類碼
-        public DiseaseCode SecondDiseaseCode { get; set; }//d9 國際疾病分類碼
-        public TreatmentCase.TreatmentCase TreatmentCase { get; set; }//d22 原處方服務機構之案件分類
+        private SpecialCode _specialCode;
+
+        public SpecialCode SpecialCode
+        {
+            get => _specialCode;
+            set
+            {
+                _specialCode = value;
+                OnPropertyChanged(nameof(SpecialCode));
+            }
+        } //d26 原處方服務機構之特定治療項目代號
+
+        private DiseaseCode _mainDiseaseCode;
+
+        public DiseaseCode MainDiseaseCode
+        {
+            get => _mainDiseaseCode;
+            set
+            {
+                _mainDiseaseCode = value;
+                OnPropertyChanged(nameof(MainDiseaseCode));
+            }
+        } //d8 國際疾病分類碼
+
+        private DiseaseCode _secondDiseaseCode;
+
+        public DiseaseCode SecondDiseaseCode
+        {
+            get => _secondDiseaseCode;
+            set
+            {
+                _secondDiseaseCode = value;
+                OnPropertyChanged(nameof(SecondDiseaseCode));
+            }
+        } //d9 國際疾病分類碼
+
+        private TreatmentCase.TreatmentCase _treatmentCase;
+
+        public TreatmentCase.TreatmentCase TreatmentCase
+        {
+            get => _treatmentCase;
+            set
+            {
+                _treatmentCase = value;
+                OnPropertyChanged(nameof(TreatmentCase));
+            }
+        } //d22 原處方服務機構之案件分類
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

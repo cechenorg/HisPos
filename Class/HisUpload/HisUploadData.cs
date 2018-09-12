@@ -32,7 +32,7 @@ namespace His_Pos.Class
             mb1 += "<A12>" + Prescription.Customer.IcNumber + "</A12>";
             mb1 += "<A13>" + Prescription.Customer.Birthday + "</A13>";
             mb1 += "<A14>" + "30" + "</A14>";
-            mb1 += "<A15>" + Prescription.Treatment.MedicalPersonId + "</A15>";
+            mb1 += "<A15>" + Prescription.Pharmacy.MedicalPersonnel.IcNumber + "</A15>";
             mb1 += "<A16>" + SafeCode + "</A16>";
             mb1 += "<A17>" + Prescription.Treatment.TreatmentDate.ToShortDateString() + "</A17>";
             mb1 += "<A18>" + Prescription.OriginalMedicalNumber + "</A18>";

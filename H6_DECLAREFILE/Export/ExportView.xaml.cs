@@ -218,12 +218,9 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void DatePickerSelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            ////2018/9/9
-            ////2018/19/9
-            ////2018/19/19
             var d = sender as DatePicker;
-            DateTime date = Convert.ToDateTime(d.SelectedDate);
-            string result = date.Month.ToString().PadLeft(2,'0') + "/" + date.Day.ToString().PadLeft(2,'0');
+            var date = Convert.ToDateTime(d.SelectedDate);
+            var result = date.Month.ToString().PadLeft(2,'0') + "/" + date.Day.ToString().PadLeft(2,'0');
             if (d.Name.Equals("Start"))
                 StartDateStr = result;
             else
@@ -237,7 +234,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
         {
-            DeclareDdataOutcome ddataOutcome = new DeclareDdataOutcome((DeclareFileDdata)PrescriptionList.SelectedItem, HospitalCollection);
+            DeclareDdataOutcome ddataOutcome = new DeclareDdataOutcome((DeclareFileDdata)PrescriptionList.SelectedItem);
             ddataOutcome.Show();
         }
     }

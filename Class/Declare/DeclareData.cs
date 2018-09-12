@@ -14,9 +14,9 @@ namespace His_Pos.Class.Declare
     public class DeclareData 
     {
         public DeclareData() { }
-        public DeclareData(Class.Prescription prescription)
+        public DeclareData(Prescription prescription)
         {
-            Prescription = new Class.Prescription();
+            Prescription = new Prescription();
             Prescription = prescription;
             SpecailMaterialPoint = 0;
             DiagnosisPoint = 0;
@@ -29,7 +29,7 @@ namespace His_Pos.Class.Declare
         public DeclareData(DataRow row)
         {
             DecMasId = row["HISDECMAS_ID"].ToString();
-            Prescription = new Class.Prescription(row);
+            Prescription = new Prescription(row);
             DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
             CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
             TotalPoint = Convert.ToInt32(row["HISDECMAS_TOTALPOINT"].ToString());
@@ -57,7 +57,7 @@ namespace His_Pos.Class.Declare
         }
         
         public string DecMasId { get; set; }
-        public Class.Prescription Prescription { get; set; }
+        public Prescription Prescription { get; set; }
         public ObservableCollection<DeclareDetail> DeclareDetails { get; set; } = new ObservableCollection<DeclareDetail>();
         public string DeclareMakeUp { get; set; }//D4補報註記
         public int DeclarePoint { get; set; }//D16申請點數
@@ -311,7 +311,7 @@ namespace His_Pos.Class.Declare
                     D21 = CheckXmlEmptyValue(m.Hospital.Id),
                     D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
                     D23 = CheckXmlEmptyValue(DateTimeExtensions.ToSimpleTaiwanDate(t.AdjustDate)),
-                    D25 = t.MedicalPersonId,
+                    D25 = p.Pharmacy.MedicalPersonnel.IcNumber,
                     D30 = t.MedicineDays,
                     D31 = SpecailMaterialPoint.ToString(),
                     D32 = DiagnosisPoint.ToString(),

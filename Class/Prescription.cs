@@ -22,6 +22,7 @@ namespace His_Pos.Class
             Pharmacy = new Pharmacy.Pharmacy();
             Treatment = new Treatment();
             Medicines = new ObservableCollection<DeclareMedicine>();
+            EList = new ErrorList();
         }
      
         public Prescription(Customer customer, Pharmacy.Pharmacy pharmacy, Treatment treatment, ObservableCollection<DeclareMedicine> medicines)
@@ -99,8 +100,8 @@ namespace His_Pos.Class
             CheckPaymentCategory();
             CheckCopayment();
             CheckChronicTimes();
-            Pharmacy = MainWindow.CurrentUser.Pharmacy;
-            Treatment.MedicalPersonId = MainWindow.CurrentUser.IcNumber;
+            Pharmacy = MainWindow.CurrentPharmacy;
+            Pharmacy.MedicalPersonnel.IcNumber = MainWindow.CurrentUser.IcNumber;
             Customer.Id = "1";
             return _errorMessage;
         }
@@ -188,7 +189,7 @@ namespace His_Pos.Class
 
         private void CheckDoctor()
         {
-            if (!string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Doctor.Id)) return;
+            if (!string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Doctor.IcNumber)) return;
 
             if (!CheckHomeCareAndSmokingCessation())
                 AddError("0", "未填寫診治醫師代號");

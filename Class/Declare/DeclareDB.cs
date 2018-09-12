@@ -46,9 +46,10 @@ namespace His_Pos.Class.Declare
                 Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
             });
             var conn = new DbConnection(Settings.Default.SQL_global);
-           DataTable table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
+            var table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId
         }
+
         public void InsertDeclareTrade(string decMasId,DeclareTrade declareTrade) {
             var dataTradeTable = SetDataTradeTable();
             AddTradeData(declareTrade, dataTradeTable);
@@ -290,7 +291,7 @@ namespace His_Pos.Class.Declare
                         },
                         {"D15", declareData.Prescription.Treatment.Copayment.Id},
                         {"D23", DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.AdjustDate)},
-                        {"D25", declareData.Prescription.Treatment.MedicalPersonId},
+                        {"D25", declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber},
                         {"D30", declareData.Prescription.Treatment.MedicineDays},
                         {"CUS_ID", declareData.Prescription.Customer.Id}
                     };
@@ -516,7 +517,7 @@ namespace His_Pos.Class.Declare
             row["D22"] = declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
             row["D23"] = DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.AdjustDate);
             row["D24"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id;
-            row["D25"] = declareData.Prescription.Treatment.MedicalPersonId;
+            row["D25"] = declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber;
             row["D26"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id);
             row["D27"] = string.Empty;
             row["D28"] = string.Empty;
@@ -877,8 +878,8 @@ namespace His_Pos.Class.Declare
                         {"d21", medicalInfo.Hospital.Id},
                         {"d22", medicalInfo.TreatmentCase.Id},
                         {"d23", DateTimeExtensions.ToSimpleTaiwanDate(treatment.AdjustDate)},
-                        {"d24", medicalInfo.Hospital.Doctor.Id},
-                        {"d25", treatment.MedicalPersonId},
+                        {"d24", medicalInfo.Hospital.Doctor.IcNumber},
+                        {"d25", declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber},
                         {"d26", CheckXmlDbNullValue(medicalInfo.SpecialCode.Id)},
                         {"d30", CheckXmlDbNullValue(treatment.MedicineDays)},
                         {"d31", CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString())},
