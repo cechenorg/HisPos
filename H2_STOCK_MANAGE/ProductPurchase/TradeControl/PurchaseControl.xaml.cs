@@ -82,6 +82,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         {
             InitializeComponent();
             DataContext = this;
+
+            CurrentDataGrid = PStoreOrderDetail;
         }
 
         internal void SetDataContext(StoreOrder storeOrder)
@@ -106,21 +108,29 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         #region ----- DataGrid Functions -----
         private void UpdateOrderDetailUi()
         {
+            CurrentDataGrid.ItemsSource = null;
+
             switch (StoreOrderData.Type)
             {
                 case OrderType.PROCESSING:
                     MainGrid.RowDefinitions[2].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[3].Height = new GridLength();
+                    MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
                     MainGrid.RowDefinitions[4].Height = new GridLength(0);
                     MainGrid.RowDefinitions[5].Height = new GridLength(50);
+
+                    CurrentDataGrid = GStoreOrderDetail;
                     break;
                 case OrderType.UNPROCESSING:
-                    MainGrid.RowDefinitions[2].Height = new GridLength();
+                    MainGrid.RowDefinitions[2].Height = new GridLength(1, GridUnitType.Star);
                     MainGrid.RowDefinitions[3].Height = new GridLength(0);
                     MainGrid.RowDefinitions[4].Height = new GridLength(50);
-                    MainGrid.RowDefinitions[5].Height = new GridLength();
+                    MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                    
+                    CurrentDataGrid = PStoreOrderDetail;
                     break;
             }
+
+            CurrentDataGrid.ItemsSource = StoreOrderData.Products;
 
             UpdatePricipalStackUi();
         }

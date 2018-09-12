@@ -98,8 +98,7 @@ namespace His_Pos.ProductPurchase
             Instance = this;
             this.Loaded += UserControl1_Loaded;
             StoOrderOverview.SelectedIndex = 0;
-
-            CurrentControl = purchaseControl;
+            
             InitData();
 
             purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
