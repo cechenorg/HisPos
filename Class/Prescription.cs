@@ -32,6 +32,7 @@ namespace His_Pos.Class
 
         public Prescription(DataRow row)
         {
+            ErrorList EList = new ErrorList();
             Customer = new Customer(row,"fromXml");
             Pharmacy = new Pharmacy.Pharmacy(row);
             Treatment = new Treatment(row);

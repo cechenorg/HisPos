@@ -99,7 +99,7 @@ namespace His_Pos.Class.Declare
             file.ErrorPrescriptionList.ErrorList = PrescriptionDB.GetPrescriptionErrorLists(declareDate);
             DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate, DeclareFileType.LOG_IN);
         }
-        public void UpdateDeclareData(DeclareData declareData, DeclareTrade declareTrade = null)
+        public void UpdateDeclareData(DeclareData declareData)
         {
             var conn = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();

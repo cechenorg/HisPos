@@ -29,14 +29,14 @@ namespace His_Pos.Class.Declare
         public DeclareData(DataRow row)
         {
             DecMasId = row["HISDECMAS_ID"].ToString();
-            Prescription = new Class.Prescription(row);
+            Prescription = new Prescription(row);
             DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
             CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
             TotalPoint = Convert.ToInt32(row["HISDECMAS_TOTALPOINT"].ToString());
             DeclareDetails = PrescriptionDB.GetDeclareDetailByMasId(row["HISDECMAS_ID"].ToString());
         }
         public DeclareData(XmlNode xml) { //匯入處方申報檔用
-            Prescription = new Class.Prescription(xml);
+            Prescription = new Prescription(xml);
             DeclareMakeUp = xml.SelectSingleNode("d4") == null ? null : xml.SelectSingleNode("d4").InnerText;
             DeclarePoint = xml.SelectSingleNode("d16") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("d16").InnerText);
             CopaymentPoint = xml.SelectSingleNode("d17") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("d17").InnerText);

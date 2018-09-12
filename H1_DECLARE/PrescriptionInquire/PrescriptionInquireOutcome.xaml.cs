@@ -130,7 +130,7 @@ namespace His_Pos.PrescriptionInquire
             }
         }
         public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
-        private static DeclareData inquiredPrescription;
+        private static DeclareData inquiredPrescription = new DeclareData();
         public DeclareData InquiredPrescription
         {
             get
@@ -537,6 +537,7 @@ namespace His_Pos.PrescriptionInquire
             MessageWindow m;
             ConfirmWindow c;
             InquiredPrescription.Prescription.Medicines = DeclareDetails;
+            InquiredPrescription.Prescription.EList.Error = new List<Error>();
             InquiredPrescription.Prescription.EList.Error.Clear();
             InquiredPrescription.Prescription.EList.Error = InquiredPrescription.Prescription.CheckPrescriptionData();
             if (InquiredPrescription.Prescription.CheckPrescriptionData().Count == 0)
@@ -545,15 +546,15 @@ namespace His_Pos.PrescriptionInquire
                 var declareData = new DeclareData(InquiredPrescription.Prescription);
                 declareData.DecMasId = InquiredPrescription.DecMasId;
                 var declareDb = new DeclareDb();
-                SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
-                Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();
-                Charge.Content = Charge.Content.ToString() == null ? "0" : Charge.Content.ToString();
-                Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
-                Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
-                Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
+                //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
+                //Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();
+                //Charge.Content = Charge.Content.ToString() == null ? "0" : Charge.Content.ToString();
+                //Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
+                //Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
+                //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
                
-                DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
-                //declareDb.UpdateDeclareData(declareData, declareTrade);
+                //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
+                declareDb.UpdateDeclareData(declareData);
                 m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
                 m.Show();
                 InitDataChanged();
