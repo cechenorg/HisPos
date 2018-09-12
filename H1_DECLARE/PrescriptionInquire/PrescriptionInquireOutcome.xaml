@@ -108,7 +108,7 @@
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="3" Margin="10">
                 <Label Content="調劑藥師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                 <TextBox Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
-                           Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id}" TextChanged="Text_TextChanged"/>
+                           Text="{Binding InquiredPrescription.Prescription.Pharmacy.MedicalPersonnel.Id}" TextChanged="Text_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="4" Margin="10">
                 <Label Content="就醫日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>

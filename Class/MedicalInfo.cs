@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
+using System.Runtime.CompilerServices;
 using System.Xml;
 using His_Pos.Class.Declare;
+using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
+using JetBrains.Annotations;
 
 namespace His_Pos.Class
 {
-    public class MedicalInfo
+    public class MedicalInfo : INotifyPropertyChanged
     {
         public MedicalInfo()
         {
@@ -66,10 +70,28 @@ namespace His_Pos.Class
             TreatmentCase = new TreatmentCase.TreatmentCase(d);
         }
 
-        public Hospital Hospital { get; set; }//d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
+        private Hospital _hospital;
+
+        public Hospital Hospital
+        {
+            get => _hospital;
+            set
+            {
+                _hospital = value;
+                OnPropertyChanged(nameof(Hospital));
+            }
+        } //d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
+
         public SpecialCode SpecialCode { get; set; }//d26 原處方服務機構之特定治療項目代號
         public DiseaseCode MainDiseaseCode { get; set; }//d8 國際疾病分類碼
         public DiseaseCode SecondDiseaseCode { get; set; }//d9 國際疾病分類碼
         public TreatmentCase.TreatmentCase TreatmentCase { get; set; }//d22 原處方服務機構之案件分類
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
