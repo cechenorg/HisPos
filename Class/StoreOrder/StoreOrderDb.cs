@@ -10,6 +10,7 @@ using His_Pos.Class.Product;
 using His_Pos.Interface;
 using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.Struct.StoreOrder;
 
 namespace His_Pos.Class.StoreOrder
 {
@@ -48,6 +49,22 @@ namespace His_Pos.Class.StoreOrder
                 dd.ExecuteProc("[HIS_POS_DB].[SET].[PURCHASEANDRETURN]",parameters);
                 parameters.Clear();
             }
+        }
+
+        internal static Collection<StoreOrderOverview> GetStoreOrderOverview()
+        {
+            Collection<StoreOrderOverview> collection = new Collection<StoreOrderOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderOverview]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new StoreOrderOverview(row));
+            }
+
+            return collection;
         }
 
         internal static void SaveOrderDetail(StoreOrder storeOrder) {

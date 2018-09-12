@@ -15,6 +15,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
+using His_Pos.Class.StoreOrder;
+using His_Pos.Struct.StoreOrder;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
 {
@@ -28,6 +30,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
         
         public ObservableCollection<WareHouse> WareHouseComboCollection { get; }
 
+        public Collection<StoreOrderOverview> StoreOrderOverviewCollection { get; }
+
         public ReturnTypeControl(ObservableCollection<Manufactory> manufactoryAutoCompleteCollection, ObservableCollection<WareHouse> wareHouseComboCollection)
         {
             InitializeComponent();
@@ -35,8 +39,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
 
             ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
             WareHouseComboCollection = wareHouseComboCollection;
-        }
 
+            StoreOrderOverviewCollection = StoreOrderDb.GetStoreOrderOverview();
+
+            WareHouseCombo.SelectedIndex = 0;
+        }
+        
         internal AddOrderType GetOrderType()
         {
             return AddOrderType.ERROR;
@@ -54,6 +62,21 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
         private void ManufactoryAuto_OnGotFocus(object sender, RoutedEventArgs e)
         {
             TargetManufactory.IsChecked = true;
+        }
+
+        public AutoCompleteFilterPredicate<object> ManFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    !((obj as Manufactory)?.Id is null) && (((Manufactory)obj).Id.ToLower().Contains(searchText.ToLower())
+                                                                || ((Manufactory)obj).Name.ToLower().Contains(searchText.ToLower()));
+            }
+        }
+
+        private void OrderOverview_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TargetOrder.IsChecked = true;
         }
     }
 }

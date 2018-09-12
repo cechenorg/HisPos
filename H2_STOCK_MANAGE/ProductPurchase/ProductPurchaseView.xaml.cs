@@ -272,7 +272,7 @@ namespace His_Pos.ProductPurchase
         {
             if (!CheckNoEmptyData()) return;
             StoreOrderData.Type = OrderType.DONE;
-            StoreOrderData.RecEmp = MainWindow.CurrentUser.Id;
+            StoreOrderData.RecEmp = MainWindow.CurrentUser.Name;
             SaveOrder();
 
             InventoryManagementView.DataChanged = true;
@@ -386,10 +386,6 @@ namespace His_Pos.ProductPurchase
         //    else
         //        return (num - 34).ToString();
         //}
-
-        
-
-        
     }
     
 }
