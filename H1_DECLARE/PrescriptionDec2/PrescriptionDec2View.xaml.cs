@@ -215,7 +215,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
                 else if(CurrentPrescription.Treatment.AdjustCase.Id == "02" && !string.IsNullOrEmpty(CurrentDecMasId)) { //第2次以後的慢性處方
                     declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
-                    //更新慢姓跟狀態 
+                    declareData.DecMasId = CurrentDecMasId;
+                    declareDb.UpdateDeclareData(declareData);   //更新慢箋跟重算預約慢箋 
                     if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal) {  //若為最後一次 則再算出下一批慢性
                         declareDb.SetNewGroupChronic(CurrentDecMasId);
                     } 

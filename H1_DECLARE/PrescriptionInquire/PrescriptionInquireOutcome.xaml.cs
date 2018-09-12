@@ -553,8 +553,7 @@ namespace His_Pos.PrescriptionInquire
                 Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
                
                 DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
-                declareDb.UpdateDeclareData(declareData, declareTrade);
-                //declareDb.InsertInventoryDb(declareData, "處方登錄");
+                //declareDb.UpdateDeclareData(declareData, declareTrade);
                 m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
                 m.Show();
                 InitDataChanged();

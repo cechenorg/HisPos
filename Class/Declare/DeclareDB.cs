@@ -106,6 +106,22 @@ namespace His_Pos.Class.Declare
             AddParameterDData(parameters, declareData); //加入DData sqlparameters
             var pDataTable = SetUpdatePDataTable(); //設定PData datatable columns
             AddPData(declareData, pDataTable); //加入PData sqlparameters
+            parameters.Add(new SqlParameter("ID", declareData.DecMasId));
+            var xmlStr = declareData.SerializeObject<Ddata>();
+            var errorStr = declareData.Prescription.EList.SerializeObject<ErrorList>();
+            if (string.IsNullOrEmpty(errorStr))
+                errorStr = "<ErrorPrescription></ErrorPrescription>";
+            parameters.Add(new SqlParameter("DETAIL", pDataTable));
+            parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
+            });
+
+            parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader((string)errorStr, XmlNodeType.Document, null))
+            });
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateDeclareData]", parameters);
         }
 
         private List<Ddata> SortDdataByCaseId(Pharmacy p)
