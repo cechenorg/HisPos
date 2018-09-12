@@ -286,6 +286,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     }
                 }
             }
+            else if ((sender as TextBox).Tag != null && (sender as TextBox).Tag.Equals("CheckInputOnlyNum"))
+            {
+                if (!IsKeyAvailable(e.Key))
+                    e.Handled = true;
+            }
+
         }
         private void AddProduct(TextBox textBox, PurchaseProduct product)
         {
@@ -580,8 +586,17 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             return false;
         }
+
+        private bool IsKeyAvailable(Key key)
+        {
+            if (key >= Key.D0 && key <= Key.D9) return true;
+            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
+            if (key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right || key == Key.OemPeriod || key == Key.Decimal) return true;
+
+            return false;
+        }
         #endregion
-        
+
         private void NewProduct(object sender, RoutedEventArgs e)
         {
             NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);

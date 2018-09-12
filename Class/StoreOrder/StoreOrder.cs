@@ -169,11 +169,6 @@ namespace His_Pos.Class.StoreOrder
         {
             string message = "";
             DateTime datetimevalue;
-            if (String.IsNullOrEmpty(Category.CategoryName))
-                message += "請填寫處理單類別\n";
-
-            if(Manufactory is null || Manufactory.Id is null)
-                message += "請填寫廠商名稱\n";
 
             if (Products is null || Products.Count == 0)
                 message += "請填寫商品\n";
@@ -190,16 +185,13 @@ namespace His_Pos.Class.StoreOrder
 
                     if (!DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue))
                         message += "商品 " + product.Id + " 效期格式不正確\n";
-                    
                 }
-
-                if ( Math.Abs(((IProductPurchase)product).OrderAmount) <= 0)
-                    message += "商品 " + product.Id + " 數量不能為0\n";
-
-                if( (Category.CategoryName.Equals("退貨") || Category.CategoryName.Equals("調貨")) && Math.Abs(((ITrade)product).Amount) > ((IProductPurchase)product).Stock.Inventory)
-                    message += "商品 " + product.Id + " 數量不能超過庫存量\n";
+                else if (type == OrderType.UNPROCESSING)
+                {
+                    if (((IProductPurchase)product).OrderAmount == 0)
+                        message += "商品 " + product.Id + " 預定量不能為0\n";
+                }
             }
-
             return message;
         }
 

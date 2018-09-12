@@ -387,14 +387,7 @@ namespace His_Pos.ProductPurchase
         //        return (num - 34).ToString();
         //}
 
-        //private bool IsKeyAvailable(Key key)
-        //{
-        //    if (key >= Key.D0 && key <= Key.D9) return true;
-        //    if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
-        //    if (key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right || key == Key.OemPeriod || key == Key.Decimal) return true;
-
-        //    return false;
-        //}
+        
 
         
     }
