@@ -26,6 +26,7 @@ namespace His_Pos.Class.Product
                     Price = dataRow["STOORDDET_PRICE"].ToString();
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
                     Amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
+                    OrderAmount = Int32.Parse(dataRow["STOORDDET_ORDERQTY"].ToString());
                     Note = dataRow["PRO_DESCRIPTION"].ToString();
                     Invoice = dataRow["STOORDDET_INVOICE"].ToString();
                     FreeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
@@ -58,7 +59,16 @@ namespace His_Pos.Class.Product
         public string CountStatus { get; set; } = "";
         public string FocusColumn { get; set; } = "";
         public InStock Stock { get; set; }
-        public int OrderAmount { get; set; }
+        public int orderAmount;
+        public int OrderAmount
+        {
+            get { return orderAmount; }
+            set
+            {
+                orderAmount = value;
+                NotifyPropertyChanged("OrderAmount");
+            }
+        }
         private string note;
         public string Note
         {
@@ -228,6 +238,7 @@ namespace His_Pos.Class.Product
             med.ValidDate = ValidDate;
             med.BatchNumber = BatchNumber;
             med.Status = Status;
+            med.OrderAmount = OrderAmount;
 
             return med;
         }

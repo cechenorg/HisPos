@@ -96,6 +96,7 @@ namespace His_Pos.Class.StoreOrder
 
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
+            details.Columns.Add("ORDERQTY", typeof(int));
             details.Columns.Add("QTY", typeof(int));
             details.Columns.Add("PRICE", typeof(string));
             details.Columns.Add("DESCRIPTION", typeof(string));
@@ -109,6 +110,7 @@ namespace His_Pos.Class.StoreOrder
                 var newRow = details.NewRow();
 
                 newRow["PRO_ID"] = product.Id;
+                newRow["ORDERQTY"] = ((IProductPurchase)product).OrderAmount;
                 newRow["QTY"] = ((ITrade)product).Amount;
                 newRow["PRICE"] = ((ITrade)product).Price == "" ? "0" : ((ITrade)product).Price;
                 newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;

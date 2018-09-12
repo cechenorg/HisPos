@@ -39,6 +39,7 @@ namespace His_Pos.Class.Product
                 case DataSource.GetStoreOrderDetail:
                     Price = dataRow["STOORDDET_PRICE"].ToString();
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+                    OrderAmount = Int32.Parse(dataRow["STOORDDET_ORDERQTY"].ToString());
                     Amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
                     Note = dataRow["PRO_DESCRIPTION"].ToString();
                     Invoice = dataRow["STOORDDET_INVOICE"].ToString();
@@ -84,7 +85,6 @@ namespace His_Pos.Class.Product
         public bool Status { get; set; } = false;
         public InStock Stock { get; set; }
         public double LastPrice { get; set; }
-        public int OrderAmount { get; set; }
         public string source;
         public string Source {
             get {
@@ -106,6 +106,16 @@ namespace His_Pos.Class.Product
                 CalculateData("TotalPrice");
                 FocusColumn = "TotalPrice";
                 NotifyPropertyChanged("TotalPrice");
+            }
+        }
+        public int orderAmount;
+        public int OrderAmount
+        {
+            get { return orderAmount; }
+            set
+            {
+                orderAmount = value;
+                NotifyPropertyChanged("OrderAmount");
             }
         }
         public double amount;
@@ -253,6 +263,7 @@ namespace His_Pos.Class.Product
             otc.ValidDate=ValidDate;
             otc.BatchNumber=BatchNumber;
             otc.Status = Status;
+            otc.OrderAmount = OrderAmount;
 
             return otc;
         }
