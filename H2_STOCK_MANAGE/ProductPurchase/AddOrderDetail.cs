@@ -38,5 +38,7 @@ namespace His_Pos.ProductPurchase
 
             //SetChanged();
         }
+
+
     }
 }

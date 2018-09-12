@@ -70,6 +70,8 @@ namespace His_Pos.Class
    
     public enum AddOrderType
     {
+        RETURNBYMANUFACTORY = 1,
+        RETURNBYORDER = 2,
         ADDALLBELOWSAFEAMOUNT = 4,
         ADDBYMANUFACTORY = 5,
         ADDALLTOBASICAMOUNT = 6,

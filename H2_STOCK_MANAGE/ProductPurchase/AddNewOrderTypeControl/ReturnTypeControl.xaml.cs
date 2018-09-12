@@ -26,6 +26,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
     public partial class ReturnTypeControl : UserControl
     {
         public Manufactory SelectedManufactory { get; set; }
+        public string SelectedOrderId { get; set; }
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection { get; }
         
         public ObservableCollection<WareHouse> WareHouseComboCollection { get; }
@@ -47,6 +48,34 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
         
         internal AddOrderType GetOrderType()
         {
+            if((bool)TargetManufactory.IsChecked)
+            {
+                if(SelectedManufactory is null)
+                {
+                    MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR);
+                    messageWindow.ShowDialog();
+
+                    return AddOrderType.ERROR;
+                }
+                else
+                    return AddOrderType.RETURNBYMANUFACTORY;
+            }
+            else if((bool)TargetOrder.IsChecked)
+            {
+                if (OrderOverviewDataGrid.SelectedItem is null)
+                {
+                    MessageWindow messageWindow = new MessageWindow("請選擇單號", MessageType.ERROR);
+                    messageWindow.ShowDialog();
+
+                    return AddOrderType.ERROR;
+                }
+                else
+                {
+                    SelectedOrderId = ((StoreOrderOverview)OrderOverviewDataGrid.SelectedItem).Id;
+                    return AddOrderType.RETURNBYORDER;
+                }
+            }
+            
             return AddOrderType.ERROR;
         }
 

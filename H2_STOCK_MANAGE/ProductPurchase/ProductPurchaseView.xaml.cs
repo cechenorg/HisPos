@@ -238,6 +238,12 @@ namespace His_Pos.ProductPurchase
                     case AddOrderType.ADDBYMANUFACTORYGOODSALES:
                         AddGoodSales(addNewOrderDialog.SelectedManufactory);
                         break;
+                    case AddOrderType.RETURNBYMANUFACTORY:
+
+                        break;
+                    case AddOrderType.RETURNBYORDER:
+
+                        break;
                 }
             }
         }

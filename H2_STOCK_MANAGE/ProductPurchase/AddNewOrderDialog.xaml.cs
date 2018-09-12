@@ -45,6 +45,7 @@ namespace His_Pos.ProductPurchase
         public AddOrderType AddOrderType;
         public Manufactory SelectedManufactory;
         public WareHouse SelectedWareHouse;
+        public string SelectedOrderId;
 
         public ObservableCollection<WareHouse> WareHouseCollection { get; }
 
@@ -75,6 +76,7 @@ namespace His_Pos.ProductPurchase
                 case "R":
                     AddOrderType = returnTypeControl.GetOrderType();
                     SelectedManufactory = returnTypeControl.SelectedManufactory;
+                    SelectedOrderId = returnTypeControl.SelectedOrderId;
                     break;
             }
 
