@@ -186,7 +186,12 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (dataGrid.Items.Count == e.Row.GetIndex() + 1 && storeOrderData.type == OrderType.UNPROCESSING) return;
 
-            int rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
+            int rowNum = 0;
+
+            if(StoreOrderData.Type == OrderType.UNPROCESSING)
+                rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * PRODUCT_PER_PAGE;
+            else if(StoreOrderData.Type == OrderType.PROCESSING)
+                rowNum = (e.Row.GetIndex() + 1) + (CurrentPage - 1) * (PRODUCT_PER_PAGE + 1);
 
             if (e.Row.Header is null)
                 e.Row.Header = rowNum.ToString();
@@ -410,6 +415,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             PreparePaging(PagingType.SPLIT);
         }
+        private void MergeBatchButton_Click(object sender, RoutedEventArgs e)
+        {
+            int currentRow = GetCurrentRowIndex(sender);
+
+            Product product = CurrentDataGrid.Items[currentRow - 1] as Product;
+
+            ((ITrade)StoreOrderData.Products.Single(p => p.Id == product.Id && ((IProductPurchase)p).IsFirstBatch)).Amount += ((ITrade)product).Amount;
+
+            StoreOrderData.Products.Remove(product);
+
+            PreparePaging(PagingType.DEL);
+        }
         #endregion
 
         #region ----- Paging Functions -----
@@ -417,8 +434,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         {
             if (storeOrderData.Products.Count == 0)
                 TotalPage = 1;
-            else
+            else if (StoreOrderData.Type == OrderType.UNPROCESSING)
                 TotalPage = (storeOrderData.Products.Count / PRODUCT_PER_PAGE) + ((storeOrderData.Products.Count % PRODUCT_PER_PAGE == 0) ? 0 : 1);
+            else if (StoreOrderData.Type == OrderType.PROCESSING)
+                TotalPage = (storeOrderData.Products.Count / (PRODUCT_PER_PAGE + 1)) + ((storeOrderData.Products.Count % (PRODUCT_PER_PAGE + 1) == 0) ? 0 : 1);
 
             switch (type)
             {
@@ -593,6 +612,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
             declareDataDetailOverview.Show();
         }
+
     }
 
     public class HasDeclareDataToVisConverter : IValueConverter

@@ -304,7 +304,7 @@
                             <StackPanel Orientation="Horizontal" Width="170">
                                 <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown"/>
                                 <Button x:Name="Split" Content="拆批" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Click="SplitBatchNumber_Click" Visibility="{Binding IsFirstBatch, Converter={StaticResource BoolToVisConverter}}"/>
-                                <Button Content="合批" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Background="MediumPurple" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Visibility="{Binding InvertIsFirstBatch, Converter={StaticResource BoolToVisConverter}}"/>
+                                <Button Content="合批" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" Background="MediumPurple" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Click="MergeBatchButton_Click" Visibility="{Binding InvertIsFirstBatch, Converter={StaticResource BoolToVisConverter}}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
