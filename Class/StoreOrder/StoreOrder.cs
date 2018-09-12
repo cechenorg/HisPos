@@ -193,13 +193,11 @@ namespace His_Pos.Class.StoreOrder
                     
                 }
 
-                if ( Math.Abs(((ITrade)product).Amount) <= 0)
+                if ( Math.Abs(((IProductPurchase)product).OrderAmount) <= 0)
                     message += "商品 " + product.Id + " 數量不能為0\n";
 
                 if( (Category.CategoryName.Equals("退貨") || Category.CategoryName.Equals("調貨")) && Math.Abs(((ITrade)product).Amount) > ((IProductPurchase)product).Stock.Inventory)
                     message += "商品 " + product.Id + " 數量不能超過庫存量\n";
-               
-                
             }
 
             return message;

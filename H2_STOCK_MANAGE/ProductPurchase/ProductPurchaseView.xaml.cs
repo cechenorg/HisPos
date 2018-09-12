@@ -44,10 +44,6 @@ namespace His_Pos.ProductPurchase
         #region ----- Define Variables -----
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
 
-        public ObservableCollection<object> Products;
-
-        public Collection<PurchaseProduct> ProductAutoCompleteCollection;
-
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;
         
@@ -279,19 +275,9 @@ namespace His_Pos.ProductPurchase
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Id;
             SaveOrder();
 
-            UpdateProductPrice();
-
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
             StockTakingView.DataChanged = true;
-        }
-
-        private void UpdateProductPrice()
-        {
-            foreach (var product in StoreOrderData.Products)
-            {
-                
-            }
         }
 
         private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)
@@ -316,6 +302,9 @@ namespace His_Pos.ProductPurchase
                 StoreOrderData.Type = OrderType.PROCESSING;
 
             SaveOrder();
+
+            UpdateOneTheWayAmount();
+
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = StoreOrderData;
             StoOrderOverview.ScrollIntoView(StoreOrderData);
@@ -324,6 +313,20 @@ namespace His_Pos.ProductPurchase
 
             if (StoreOrderData.Type == OrderType.WAITING)
                 SendStoreOrderToSinde();
+        }
+
+        private void UpdateOneTheWayAmount()
+        {
+            foreach(var product in StoreOrderData.Products)
+            {
+                PurchaseProduct purchaseProduct = purchaseControl.ProductCollection.Single(p => p.Id == product.Id && p.WarId == StoreOrderData.Warehouse.Id);
+
+                purchaseControl.ProductCollection.Remove(purchaseProduct);
+
+                purchaseProduct.OnTheWayAmount = (Int32.Parse(purchaseProduct.OnTheWayAmount) + ((IProductPurchase)product).OrderAmount).ToString();
+
+                purchaseControl.ProductCollection.Add(purchaseProduct);
+            }
         }
 
         private void SendStoreOrderToSinde()

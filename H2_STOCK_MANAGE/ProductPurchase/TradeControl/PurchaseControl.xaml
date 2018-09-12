@@ -193,7 +193,7 @@
             </DataGrid.RowHeaderTemplate>
         </DataGrid>
         <DataGrid Name="GStoreOrderDetail" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="3" LoadingRow="StoreOrderDetail_OnLoadingRow" HeadersVisibility="All" CanUserSortColumns="False">
+                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="3" LoadingRow="StoreOrderDetail_OnLoadingRow" HeadersVisibility="All" CanUserSortColumns="False" CanUserAddRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -342,9 +342,8 @@
             <Label Name="TotalAmount" Content="{Binding Path=Products.Count}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Rectangle Name="EmptySpace" Width="295"/>
-            <Button Name="DeleteOrder" Width="120" Content="刪除" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" BorderThickness="0" Background="DimGray"/>
-            <Button Name="ConfirmToProcess" Width="150" Content="轉成進貨單" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="IndianRed" />
-            <Button Name="Confirm" Width="150" Content="確認收貨" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue" Visibility="Collapsed"/>
+            <Button Name="DeleteOrder" Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" BorderThickness="0" Background="DimGray"/>
+            <Button Name="ConfirmToProcess" Width="150" Content="轉成進貨單" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="IndianRed" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
@@ -353,7 +352,7 @@
             <Label Content="{Binding Path=Products.Count}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Rectangle Width="560"/>
-            <Button Width="150" Content="確認收貨" IsEnabled="False" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue"/>
+            <Button Name="Confirm" Width="150" Content="確認收貨" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue"/>
         </StackPanel>
     </Grid>
 </UserControl>
