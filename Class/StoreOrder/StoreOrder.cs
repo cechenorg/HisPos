@@ -229,5 +229,16 @@ namespace His_Pos.Class.StoreOrder
 
             TotalPrice = Math.Round(count, MidpointRounding.AwayFromZero).ToString();
         }
+
+        internal bool CheckIfOrderNotComplete()
+        {
+            foreach(var product in Products)
+            {
+                if (((IProductPurchase)product).OrderAmount > ((ITrade)product).Amount)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -111,8 +111,8 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("TotalPrice");
             }
         }
-        public int orderAmount;
-        public int OrderAmount
+        public double orderAmount;
+        public double OrderAmount
         {
             get { return orderAmount; }
             set
@@ -155,9 +155,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Note");
             }
         }
-        private int freeAmount;
+        private double freeAmount;
 
-        public int FreeAmount
+        public double FreeAmount
         {
             get { return freeAmount; }
             set

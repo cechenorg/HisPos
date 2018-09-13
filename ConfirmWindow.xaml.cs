@@ -33,7 +33,7 @@ namespace His_Pos
 
             InitBtnUi(type);
 
-            Message.Content = message;
+            Message.Text = message;
         }
 
         private void InitBtnUi(MessageType type)

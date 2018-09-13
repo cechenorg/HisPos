@@ -278,9 +278,63 @@ namespace His_Pos.ProductPurchase
         {
             if (!CheckNoEmptyData()) return;
 
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認完成處理單?\n(資料內容將不能修改)", MessageType.ONLYMESSAGE);
+            confirmWindow.ShowDialog();
+            if (!confirmWindow.Confirm) return;
+
             StoreOrderData.Type = OrderType.DONE;
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Name;
             SaveOrder();
+            
+            if (StoreOrderData.CheckIfOrderNotComplete())
+            {
+                confirmWindow = new ConfirmWindow("最後收貨數量少於預訂量, 是否需要將不足部分保留成新訂單?", MessageType.WARNING);
+                confirmWindow.ShowDialog();
+                
+                storeOrderCollection.Remove(StoreOrderData);
+
+                if (confirmWindow.Confirm)
+                {
+                    StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser, StoreOrderData.Warehouse, StoreOrderData.Manufactory);
+                    storeOrder.Type = OrderType.PROCESSING;
+
+                    List<Product> newOrderProduct = StoreOrderData.Products.Where(p => ((ITrade)p).Amount < ((IProductPurchase)p).OrderAmount).ToList();
+
+                    foreach(var product in newOrderProduct)
+                    {
+                        ((IProductPurchase)product).OrderAmount -= ((ITrade)product).Amount;
+                        ((ITrade)product).Amount = 0;
+                        ((IProductPurchase)product).BatchNumber = "";
+                        ((IProductPurchase)product).ValidDate = "";
+                        ((IProductPurchase)product).Invoice = "";
+                        ((IProductPurchase)product).Note = "訂單 " + storeOrder.Id + " 缺貨 待補貨";
+                    }
+                    
+                    int newIndex = storeOrderCollection.Count - 1;
+
+                    for (int x = 0; x < storeOrderCollection.Count; x++)
+                    {
+                        if (storeOrderCollection[x].type == OrderType.PROCESSING)
+                        {
+                            newIndex = x;
+                            break;
+                        }
+                    }
+
+                    StoreOrderData = storeOrder;
+                    
+                    storeOrderCollection.Insert(newIndex, StoreOrderData);
+                    StoOrderOverview.SelectedItem = StoreOrderData;
+                    StoOrderOverview.ScrollIntoView(StoreOrderData);
+
+                    StoreOrderData.Products = new ObservableCollection<Product>(newOrderProduct);
+                    SetCurrentControl();
+                    SaveOrder();
+                }
+            }
+
+            MessageWindow messageWindow = new MessageWindow("處理單已完成, 可前往處方單紀錄查詢!", MessageType.SUCCESS);
+            messageWindow.ShowDialog();
 
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
@@ -305,7 +359,6 @@ namespace His_Pos.ProductPurchase
 
             ConfirmWindow confirmWindow = new ConfirmWindow("是否確認轉成處理單?\n(部分資訊將不能修改)", MessageType.ONLYMESSAGE);
             confirmWindow.ShowDialog();
-
             if (!confirmWindow.Confirm) return;
 
             if (StoreOrderData.Manufactory.Id == "0")

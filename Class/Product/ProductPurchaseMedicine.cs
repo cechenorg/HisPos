@@ -63,8 +63,8 @@ namespace His_Pos.Class.Product
         public string CountStatus { get; set; } = "";
         public string FocusColumn { get; set; } = "";
         public InStock Stock { get; set; }
-        public int orderAmount;
-        public int OrderAmount
+        public double orderAmount;
+        public double OrderAmount
         {
             get { return orderAmount; }
             set
@@ -132,9 +132,9 @@ namespace His_Pos.Class.Product
             }
         }
 
-        private int freeAmount;
+        private double freeAmount;
 
-        public int FreeAmount
+        public double FreeAmount
         {
             get { return freeAmount; }
             set
