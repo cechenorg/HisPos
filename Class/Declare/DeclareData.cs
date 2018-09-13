@@ -334,10 +334,10 @@ namespace His_Pos.Class.Declare
             {
                 if (string.IsNullOrEmpty(m.Hospital.Doctor.Id))
                 {
-                    m.Hospital.Doctor.Id = m.Hospital.Id;
+                    m.Hospital.Doctor.IcNumber = m.Hospital.Id;
                 }
 
-                DeclareXml.Dbody.D24 = m.Hospital.Doctor.Id;
+                DeclareXml.Dbody.D24 = m.Hospital.Doctor.IcNumber;
                 DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode.Id;
             }
 

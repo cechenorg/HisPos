@@ -85,7 +85,7 @@
                     <Label Width="auto" Content="診治醫生" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox x:Name="DoctorId" Width="170" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" 
                              FontSize="14" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper"
-                             Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.Id, Mode=TwoWay}" />
+                             Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="4" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫序號" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />

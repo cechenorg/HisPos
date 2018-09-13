@@ -336,7 +336,7 @@ namespace His_Pos.Class.Declare
                         {"D9", med.SecondDiseaseCode.Id},
                         {"D13", med.Hospital.Division.Id},
                         {"D22", med.TreatmentCase.Id},
-                        {"D24", med.Hospital.Doctor.Id},
+                        {"D24", med.Hospital.Doctor.IcNumber},
                         {"D26", med.SpecialCode.Id},
                         {"D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id}
                     };
@@ -533,7 +533,7 @@ namespace His_Pos.Class.Declare
             row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;
             row["D22"] = declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
             row["D23"] = DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.AdjustDate);
-            row["D24"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Id;
+            row["D24"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber;
             row["D25"] = declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber;
             row["D26"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id);
             row["D27"] = string.Empty;
