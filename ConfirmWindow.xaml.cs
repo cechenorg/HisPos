@@ -30,27 +30,48 @@ namespace His_Pos
         public ConfirmWindow(string message, MessageType type)
         {
             InitializeComponent();
+
+            InitBtnUi(type);
+
+            Message.Content = message;
+        }
+
+        private void InitBtnUi(MessageType type)
+        {
             switch (type)
             {
                 case MessageType.ERROR:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\DeleteDot.png", UriKind.Relative));
+                    Icon.Visibility = Visibility.Visible;
+                    CancelBtn.Background = Brushes.IndianRed;
+                    ConfirmBtn.Background = Brushes.DimGray;
                     break;
                 case MessageType.SUCCESS:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Success.png", UriKind.Relative));
+                    Icon.Visibility = Visibility.Visible;
+                    CancelBtn.Background = Brushes.DimGray;
+                    ConfirmBtn.Background = Brushes.IndianRed;
                     break;
                 case MessageType.WARNING:
-                    Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png",UriKind.Relative));
+                    Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png", UriKind.Relative));
+                    Icon.Visibility = Visibility.Visible;
+                    CancelBtn.Background = Brushes.DimGray;
+                    ConfirmBtn.Background = Brushes.IndianRed;
+                    break;
+                case MessageType.ONLYMESSAGE:
+                    Icon.Visibility = Visibility.Collapsed;
+                    CancelBtn.Background = Brushes.DimGray;
+                    ConfirmBtn.Background = Brushes.IndianRed;
                     break;
             }
-            Message.Content = message;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void ConfirmClick(object sender, RoutedEventArgs e)
         {
             Confirm = true;
             this.Close();

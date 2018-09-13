@@ -5,8 +5,8 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:local="clr-namespace:His_Pos"
             mc:Ignorable="d"
-            Height="390" Width="470"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Background="{x:Null}">
+            Height="340" Width="470"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Grid Background="White">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Background="White">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="300">
@@ -15,10 +15,10 @@
                     <Label VerticalAlignment="Center" Name="Message"/>
                 </ScrollViewer>
             </StackPanel>
-            <Canvas>
-                <Button Canvas.Right="80" Margin="10" Content="是" Click="Button_Click_1" />
-                <Button Canvas.Right="10" Margin="10" Content="否" Click="Button_Click"/>
-            </Canvas>
+            <StackPanel Orientation="Horizontal">
+                <Button Name="CancelBtn" Margin="10,0,0,0" Width="220" Content="否" Click="Cancel_Click"/>
+                <Button Name="ConfirmBtn" Margin="10,0,0,0" Width="220" Content="是" Click="ConfirmClick" />
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

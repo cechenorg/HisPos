@@ -277,6 +277,10 @@ namespace His_Pos.ProductPurchase
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
             if (!CheckNoEmptyData()) return;
+
+            if()
+
+
             StoreOrderData.Type = OrderType.DONE;
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Name;
             SaveOrder();
@@ -301,6 +305,8 @@ namespace His_Pos.ProductPurchase
             }
 
             if (!CheckNoEmptyData()) return;
+
+
 
             if(StoreOrderData.Manufactory.Id == "0")
                 StoreOrderData.Type = OrderType.WAITING;

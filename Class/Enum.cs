@@ -101,7 +101,8 @@ namespace His_Pos.Class
     {
         ERROR = 0,
         SUCCESS = 1,
-        WARNING = 2
+        WARNING = 2,
+        ONLYMESSAGE = 3
     }
 
     public enum MedBagMode
