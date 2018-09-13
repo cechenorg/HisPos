@@ -24,14 +24,23 @@ using His_Pos.Interface;
 using His_Pos.ProductPurchaseRecord;
 using System.ComponentModel;
 using His_Pos.Class.StockTakingOrder;
+using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
 
 namespace His_Pos.InventoryManagement
 {
     /// <summary>
     /// MedicineDetail.xaml 的互動邏輯
     /// </summary>
-    public partial class MedicineDetail : UserControl
+    public partial class MedicineDetail : UserControl, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public InventoryMedicine InventoryMedicine;
         public SeriesCollection SalesCollection { get; set; }
         public string[] Months { get; set; }
@@ -39,13 +48,22 @@ namespace His_Pos.InventoryManagement
         public ObservableCollection<CusOrderOverview> CusOrderOverviewCollection;
         public ObservableCollection<OTCStoreOrderOverview> StoreOrderOverviewCollection;
         public ObservableCollection<OTCStockOverview> MEDStockOverviewCollection;
-        public ObservableCollection<string> MEDUnitChangdedCollection = new ObservableCollection<string>();
-        public ObservableCollection<string> MedIngredientCollection = new ObservableCollection<string>();
+        public ObservableCollection<string> MEDUnitChangdedCollection = new ObservableCollection<string>(); 
        
         public ObservableCollection<ProductUnit> MedUnitCollection;
         public ObservableCollection<ProductDetailManufactory> MEDManufactoryCollection;
         public ObservableCollection<StockTakingOverview> StockTakingOverviewCollection;
+        private ObservableCollection<ProductGroup> productGroupCollection;
+        public ObservableCollection<ProductGroup> ProductGroupCollection
+        {
+            get { return productGroupCollection; }
+            set
+            {
+                productGroupCollection = value;
+                NotifyPropertyChanged("ProductGroupCollection");
+            }
 
+        }
         private bool IsChanged = false;
         private bool IsFirst = true;
         public MedicineDetail()
@@ -88,16 +106,15 @@ namespace His_Pos.InventoryManagement
             MedStock.ItemsSource = MEDStockOverviewCollection;
             UpdateStockOverviewInfo();
             MedUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
-
-            MedIngredientCollection.Clear();
-            string [] split = InventoryMedicine.Ingredient.Split('+');
-            foreach (string row in split) {
-                MedIngredientCollection.Add(row.Trim());
-            }
-            MedIngredient.ItemsSource = MedIngredientCollection;
-
+             
             MEDManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryMedicine.Id);
             MedManufactory.ItemsSource = MEDManufactoryCollection;
+
+            ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
+            if (ProductGroupCollection.Count == 1)
+                ButtonDemolition.IsEnabled = false;
+            else
+                ButtonDemolition.IsEnabled = true;
 
             StockTakingOverviewCollection = ProductDb.GetProductStockTakingDate(InventoryMedicine.Id);
             if(StockTakingOverviewCollection.Count != 0)
@@ -186,13 +203,9 @@ namespace His_Pos.InventoryManagement
             else if (selectedItem is OTCStoreOrderOverview)
                 MedStoOrder.SelectedItem = selectedItem;
             else if (selectedItem is OTCStockOverview)
-                MedStock.SelectedItem = selectedItem;
-            else if (selectedItem is string) 
-                MedIngredient.SelectedItem = selectedItem; 
+                MedStock.SelectedItem = selectedItem; 
             else if (selectedItem is ProductDetailManufactory)
-                MedManufactory.SelectedItem = selectedItem;
-
-
+                MedManufactory.SelectedItem = selectedItem; 
         }
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
@@ -202,9 +215,7 @@ namespace His_Pos.InventoryManagement
             else if (leaveItem is OTCStoreOrderOverview)
                 MedStoOrder.SelectedItem = null;
             else if (leaveItem is OTCStockOverview)
-                MedStock.SelectedItem = null;
-            else if (leaveItem is string)
-                MedIngredient.SelectedItem = null;
+                MedStock.SelectedItem = null; 
             else if (leaveItem is ProductDetailManufactory)
                 MedManufactory.SelectedItem = null;
         }
@@ -350,6 +361,18 @@ namespace His_Pos.InventoryManagement
             MainWindow.Instance.AddNewTab("處理單紀錄");
         }
 
-       
+        private void ButtonDemolition_Click(object sender, RoutedEventArgs e)
+        {
+            DemolitionWindow demolitionWindow = new DemolitionWindow(ProductGroupCollection, InventoryMedicine);
+            demolitionWindow.ShowDialog();
+            UpdateUi();
+        }
+
+        private void ButtonMergeStock_Click(object sender, RoutedEventArgs e)
+        {
+            MergeStockWindow mergeStockWindow = new MergeStockWindow(InventoryMedicine);
+            mergeStockWindow.ShowDialog();
+            UpdateUi();
+        }
     }
 }

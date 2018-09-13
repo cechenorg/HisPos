@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
+using His_Pos.Interface;
 using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchase;
 using His_Pos.Struct.Product;
@@ -25,21 +26,21 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
     /// </summary>
     public partial class MergeStockWindow : Window
     {
-        private InventoryOtc InventoryOtc;
+        private IInventory Inventory ;
         public ObservableCollection<ProductGroup> ProductGroups;
         private string targetProId = string.Empty;
-        public MergeStockWindow(InventoryOtc inventoryOtc)
+        public MergeStockWindow(IInventory inventory)
         {
             InitializeComponent();
-            InventoryOtc = inventoryOtc;
+            Inventory = inventory;
             InitData();
             DataContext = this;
         }
         private void InitData() {
            
-            LabelSourceProduct.Content = InventoryOtc.Id;
-            LabelSourceProductName.Content = InventoryOtc.Name;
-            LabelSourceStock.Content = InventoryOtc.StockValue;
+            LabelSourceProduct.Content = Inventory.Id;
+            LabelSourceProductName.Content = Inventory.Name;
+            LabelSourceStock.Content = Inventory.StockValue;
         }
 
         private void LabelTargetProduct_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -50,7 +51,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 
             if (e.Key == Key.Enter)
             {
-                NewItemDialog newItemDialog = new NewItemDialog(InventoryManagementView.Instance.ProductCollection, "", LabelTargetProduct.Text, InventoryOtc.WareHouseId);
+                NewItemDialog newItemDialog = new NewItemDialog(InventoryManagementView.Instance.ProductCollection, "", LabelTargetProduct.Text, Inventory.WareHouseId);
                 LabelTargetStock.Content = "0";
                 LabelTargetProductName.Content = string.Empty;
                 if (newItemDialog.ConfirmButtonClicked)
@@ -65,7 +66,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.MergeProduct(InventoryOtc.Id, targetProId);
+            ProductDb.MergeProduct(Inventory.Id, targetProId);
             MessageWindow messageWindow = new MessageWindow("併庫成功",Class.MessageType.SUCCESS);
             messageWindow.ShowDialog();
             Close();

@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.Class.Product;
+using His_Pos.Interface;
 using His_Pos.InventoryManagement;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
             }
         }
        
-        private InventoryOtc InventoryOtc;
+        private IInventory Inventory;
         private ObservableCollection<ProductGroup> productGroups;
         public ObservableCollection<ProductGroup> ProductGroups
         {
@@ -95,18 +96,23 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
             }
 
         }
-        public DemolitionWindow(ObservableCollection<ProductGroup> productGroupCollection, InventoryOtc inventoryOtc)
+        public DemolitionWindow(ObservableCollection<ProductGroup> productGroupCollection, IInventory inventory)
         {
             InitializeComponent();
-            InventoryOtc = inventoryOtc;
+            Inventory = inventory;
             InitData(productGroupCollection);
             DataContext = this;
         }
         private void InitData(ObservableCollection<ProductGroup> productGroupCollection) {
             ProductGroups = productGroupCollection;
             ComboBoxProduct.ItemsSource = ProductGroups;
-            ComboBoxProduct.Text = InventoryOtc.Name;
-            WareHouseInventoryCollection = WareHouseDb.GetWareHouseInventoryById(InventoryOtc.Id);
+            ComboBoxProduct.Text = Inventory.Name;
+            if(productGroupCollection.Count(pro => pro.name == Inventory.Name) == 0)
+            {
+                ComboBoxProduct.Text = ((InventoryMedicine)Inventory).ChiName;
+            }
+               
+            WareHouseInventoryCollection = WareHouseDb.GetWareHouseInventoryById(Inventory.Id);
         }
 
         private void TextAmount_TextChanged(object sender, TextChangedEventArgs e)
@@ -122,7 +128,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 return;
             }
             string newInvId = ProductDb.GetMaxProInvId();
-            string proId = ProductGroups.Single(pro => pro.name == ComboBoxProduct.Text).id;
+            string proId =  ProductGroups.Single(pro => pro.id == ((ProductGroup)ComboBoxProduct.SelectedItem).id).id;
             foreach (WareHouseInventory wareHouseInventory in WareHouseInventoryCollection)
             {
                 if (wareHouseInventory.DemolitionAmount == "0") continue;

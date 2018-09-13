@@ -8,8 +8,10 @@ using His_Pos.Class;
 
 namespace His_Pos.Interface
 {
-    interface IInventory
+   public interface IInventory
     {
+        string Id { get; set; }
+        string Name { get; set; }
         InStock Stock { get; set; }
         string Location { get; set; }
         bool Status { get; set; }

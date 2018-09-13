@@ -70,12 +70,7 @@ namespace His_Pos.InventoryManagement
             DataContext = this;
             SetOtcTypeUi();
             WareHouseCollection = WareHouseDb.GetWareHouseData();
-
-            WareHouse wareHouse = new WareHouse();
-            wareHouse.Id = "0";
-            wareHouse.Name = "全部";
-            WareHouseCollection.Insert(0, wareHouse);
-
+            
             WareHouse.SelectedItem = WareHouseCollection[0];
         }
         public void SetOtcTypeUi() {
@@ -157,7 +152,7 @@ namespace His_Pos.InventoryManagement
                            && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter              
                         && ((((IInventory)item).Stock.Inventory == 0 && (bool)NoneInventory.IsChecked) || (((IInventory)item).Stock.Inventory != 0 && (bool)!NoneInventory.IsChecked))
-                          && (((IInventory)item).WareHouse == WareHouse.Text || WareHouse.Text == "全部")
+                          && (((IInventory)item).WareHouse == WareHouse.Text)
                         ) reply = true;
                     if (reply)
                     {
