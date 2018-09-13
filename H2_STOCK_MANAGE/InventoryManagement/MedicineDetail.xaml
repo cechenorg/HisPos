@@ -38,9 +38,9 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="350"/>
                     <ColumnDefinition Width="250"/>
-                    <ColumnDefinition Width="350"/>
                     <ColumnDefinition Width="370"/>
-                    <ColumnDefinition Width="260"/>
+                    <ColumnDefinition Width="250"/>
+                    <ColumnDefinition Width="350"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0" Background="{StaticResource GridBackGround}">
                     <Grid.RowDefinitions>
@@ -126,55 +126,8 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
-                </DataGrid>
-                <DataGrid Name="MedIngredient" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="2" Margin="0,0,10,0">
-                    <DataGrid.Resources>
-                        <Style TargetType="{x:Type ScrollBar}">
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                            <Setter Property="OverridesDefaultStyle" Value="true"/>
-                            <Setter Property="Width" Value="100"/>
-                            <Style.Triggers>
-                                <Trigger Property="Orientation" Value="Horizontal">
-                                    <Setter Property="Width" Value="Auto" />
-                                    <Setter Property="Height" Value="15" />
-                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                                </Trigger>
-                                <Trigger Property="Orientation" Value="Vertical">
-                                    <Setter Property="Width" Value="15"/>
-                                    <Setter Property="Height" Value="Auto" />
-                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.Resources>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                            <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
-                            <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="Height" Value="40"/>
-                        </Style>
-                    </DataGrid.RowStyle>
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn Width="340" Header="成分">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding}" IsEnabled="True"  Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <DockPanel Name="DockUnit" Background="{StaticResource GridBackGround}" Grid.Column="3">
+                </DataGrid> 
+                <DockPanel Name="DockUnit" Background="{StaticResource GridBackGround}" Grid.Column="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
@@ -216,6 +169,57 @@
                         <TextBox Name="MedUnitVipPrice3" Grid.Column="3" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="MedData_TextChanged"/>
                         <TextBox Name="MedUnitEmpPrice3" Grid.Column="4" Grid.Row="4" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Width="60" Height="30" FontSize="16" FontFamily="Segoe UI Semi"  TextChanged="MedData_TextChanged"/>
                     </Grid>
+                </DockPanel>
+                <DockPanel Background="{StaticResource GridBackGround}" Margin="10,0,0,0" Grid.Column="3">
+                    <DataGrid Name="productGroup" Background="Transparent" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding ProductGroupCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                              CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" DockPanel.Dock="Top" Height="155">
+                        <DataGrid.Resources>
+                            <Style TargetType="{x:Type ScrollBar}">
+                                <Setter Property="SnapsToDevicePixels" Value="True"/>
+                                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                                <Setter Property="Width" Value="100"/>
+                                <Style.Triggers>
+                                    <Trigger Property="Orientation" Value="Horizontal">
+                                        <Setter Property="Width" Value="Auto" />
+                                        <Setter Property="Height" Value="15" />
+                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                                    </Trigger>
+                                    <Trigger Property="Orientation" Value="Vertical">
+                                        <Setter Property="Width" Value="15"/>
+                                        <Setter Property="Height" Value="Auto" />
+                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.Resources>
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}">
+                                <Style.Triggers>
+                                    <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Height" Value="40"/>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="群組成員" Width="220" Binding="{Binding name}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="HorizontalAlignment"  Value="Center"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" DockPanel.Dock="Bottom">
+                        <Button Width="100" Name="ButtonDemolition" Content="拆開" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonDemolition_Click"/>
+                        <Rectangle  Width="10"/>
+                        <Button Width="100" Name="ButtonMergeStock" Content="合併" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonMergeStock_Click"/>
+                    </StackPanel>
                 </DockPanel>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Column="4" Margin="10,0,0,0">
                     <Label Content="備註" HorizontalAlignment="Center" Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>

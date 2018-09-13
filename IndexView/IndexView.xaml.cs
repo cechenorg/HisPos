@@ -23,6 +23,11 @@ namespace His_Pos.IndexView
         public IndexView()
         {
             InitializeComponent();
+            Date.Content = DateTime.Today.ToString("yyyy/MM/dd");
+        }
+
+        public void UpdateUI() {
+
         }
     }
 }
