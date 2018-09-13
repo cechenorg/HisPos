@@ -66,7 +66,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="120" Header="病患名稱" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding PatientName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn Width="120" Header="病患名稱" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding PatientName,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -74,7 +74,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="150" Header="調劑日期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding AdjustDate}">
+                    <DataGridTextColumn Width="220" Header="醫療院所" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding HospitalName,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -82,7 +82,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="90" Header="點數" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OldValue}">
+                    <DataGridTextColumn Width="90" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Division.Name,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -90,7 +90,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="90" Header="調劑藥師" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedicalPersonnelName}">
+                    <DataGridTextColumn Width="90" Header="總點數" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Point,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -98,7 +98,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="220" Header="醫療院所" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding HospitalName}">
+                    <DataGridTextColumn Width="90" Header="慢箋狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ChronicStatus,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -106,7 +106,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="90" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivisionName,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn Width="90" Header="調劑藥師" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedicalPersonnelName,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -114,7 +114,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="90" Header="慢箋狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ChronicStatus}">
+                    <DataGridTextColumn Width="150" Header="調劑日期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding AdjustDate,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -125,9 +125,8 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="10,0">
-                <Button Name="ButtonImportXml" Width="120" Height="30" Content="匯入申報檔" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Click="ButtonImportXml_Click" Margin="1138,10,0,10"/>
-                <Button x:Name="ButtonExportXml" Width="120" Height="30" Content="匯出申報檔" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Click="ButtonExportXml_Click" Margin="10,10,20,10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="3" Margin="10,0">
+                <Button x:Name="ButtonImportXml" Width="120" Height="30" Content="匯入申報檔" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Click="ButtonImportXml_Click" Margin="0,10"/>
             </StackPanel>
             
         </Grid>

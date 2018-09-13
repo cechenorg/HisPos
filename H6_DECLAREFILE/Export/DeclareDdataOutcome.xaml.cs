@@ -28,79 +28,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
     /// </summary>
     public partial class DeclareDdataOutcome : Window, INotifyPropertyChanged
     {
-        private bool isFirst = true;
-        public ObservableCollection<Hospital> Hospitals { get; set; }
-        private ObservableCollection<TreatmentCase> _treatmentCaseCollection;
-
-        public ObservableCollection<TreatmentCase> TreatmentCaseCollection
-        {
-            get => _treatmentCaseCollection;
-            set
-            {
-                _treatmentCaseCollection = value;
-                OnPropertyChanged(nameof(TreatmentCaseCollection));
-            }
-        }
-
-        private ObservableCollection<AdjustCase> _adjustCaseCollection;
-
-        public ObservableCollection<AdjustCase> AdjustCaseCollection
-        {
-            get => _adjustCaseCollection;
-            set
-            {
-                _adjustCaseCollection = value;
-                OnPropertyChanged(nameof(AdjustCaseCollection));
-            }
-        }
-
-        private ObservableCollection<PaymentCategory> _paymentCategoryCollection;
-
-        public ObservableCollection<PaymentCategory> PaymentCategoryCollection
-        {
-            get => _paymentCategoryCollection;
-            set
-            {
-                _paymentCategoryCollection = value;
-                OnPropertyChanged(nameof(PaymentCategoryCollection));
-            }
-        }
-
-        private ObservableCollection<Copayment> _copaymentCollection;
-
-        public ObservableCollection<Copayment> CopaymentCollection
-        {
-            get => _copaymentCollection;
-            set
-            {
-                _copaymentCollection = value;
-                OnPropertyChanged(nameof(CopaymentCollection));
-            }
-        }
-
-        private ObservableCollection<Division> _divisionCollection;
-
-        public ObservableCollection<Division> DivisionCollection
-        {
-            get => _divisionCollection;
-            set
-            {
-                _divisionCollection = value;
-                OnPropertyChanged(nameof(DivisionCollection));
-            }
-        }
-
-        private ObservableCollection<Hospital> _hospitalCollection;
-
-        public ObservableCollection<Hospital> HospitalCollection
-        {
-            get => _hospitalCollection;
-            set
-            {
-                _hospitalCollection = value;
-                OnPropertyChanged(nameof(HospitalCollection));
-            }
-        }
+        private bool _isFirst = true;
 
         private string _treatDate;
 
@@ -124,8 +52,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 OnPropertyChanged(nameof(AdjustDateStr));
             }
         }
-        
-        public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
 
         private ObservableCollection<DeclareMedicine> _prescriptionMedicines;
 
@@ -136,6 +62,18 @@ namespace His_Pos.H6_DECLAREFILE.Export
             {
                 _prescriptionMedicines = value;
                 OnPropertyChanged(nameof(PrescriptionMedicines));
+            }
+        }
+
+        private DeclareFileDdata _currentFile;
+
+        public DeclareFileDdata CurrentFile
+        {
+            get => _currentFile;
+            set
+            {
+                _currentFile = value;
+                OnPropertyChanged(nameof(CurrentFile));
             }
         }
 
@@ -172,12 +110,12 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private ObservableCollection<object> Medicines;
 
-        public DeclareDdataOutcome(DeclareFileDdata d, ObservableCollection<Hospital> hospitals)
+        public DeclareDdataOutcome(DeclareFileDdata d)
         {
             InitializeComponent();
             DataContext = this;
-            Hospitals = hospitals;
-            CurrentPrescription = new Prescription(d);
+            CurrentFile = d;
+            CurrentPrescription = new Prescription(CurrentFile);
             InitData(d);
             InitDataChanged();
         }
@@ -188,30 +126,22 @@ namespace His_Pos.H6_DECLAREFILE.Export
             var loadingWindow = new LoadingWindow();
             loadingWindow.ChangeLoadingMessage("處方申報資料載入中...");
             loadingWindow.Show();
-            DivisionCollection = ExportView.Instance.DivisionCollection;
-            CopaymentCollection = ExportView.Instance.CopaymentCollection;
-            PaymentCategoryCollection = ExportView.Instance.PaymentCategoryCollection;
-            AdjustCaseCollection = ExportView.Instance.AdjustCaseCollection;
-            TreatmentCaseCollection = ExportView.Instance.TreatmentCaseCollection;
-            HospitalCollection = ExportView.Instance.HospitalCollection;
-            DeclareMedicinesData = ExportView.Instance.DeclareMedicinesData;
-            var hospital = HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName = hospital.FullName;
-            var division = DivisionCollection.SingleOrDefault(d =>
-                d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName = division.FullName;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName = ExportView.Instance.HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id))?.FullName;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName = ExportView.Instance.DivisionCollection.SingleOrDefault(d =>
+                    d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id))?.FullName;
             TreatDateStr = declareFileDdata.Dbody.D14;
             AdjustDateStr = declareFileDdata.Dbody.D23;
-            CopaymentCode.ItemsSource = CopaymentCollection;
-            CopaymentCode.Text =
-                CopaymentCollection.SingleOrDefault(c => c.Id.Equals(CurrentPrescription.Treatment.Copayment.Id))?.FullName;
-            PaymentCategory.ItemsSource = PaymentCategoryCollection;
-            PaymentCategory.Text = PaymentCategoryCollection.SingleOrDefault(p => p.Id.Equals(CurrentPrescription.Treatment.PaymentCategory.Id))
+            CopaymentCode.ItemsSource = ExportView.Instance.CopaymentCollection;
+            CopaymentCode.SelectedItem =
+                ExportView.Instance.CopaymentCollection.SingleOrDefault(c =>
+                    c.Id.Equals(CurrentPrescription.Treatment.Copayment.Id));
+            PaymentCategory.ItemsSource = ExportView.Instance.PaymentCategoryCollection;
+            PaymentCategory.Text = ExportView.Instance.PaymentCategoryCollection.SingleOrDefault(p => p.Id.Equals(CurrentPrescription.Treatment.PaymentCategory.Id))
                 ?.FullName;
-            AdjustCase.ItemsSource = AdjustCaseCollection;
-            AdjustCase.Text = AdjustCaseCollection.SingleOrDefault(a => a.Id.Equals(CurrentPrescription.Treatment.AdjustCase.Id))?.FullName;
-            TreatmentCase.ItemsSource = TreatmentCaseCollection;
-            TreatmentCase.Text = TreatmentCaseCollection.SingleOrDefault(t => t.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id))
+            AdjustCase.ItemsSource = ExportView.Instance.AdjustCaseCollection;
+            AdjustCase.Text = ExportView.Instance.AdjustCaseCollection.SingleOrDefault(a => a.Id.Equals(CurrentPrescription.Treatment.AdjustCase.Id))?.FullName;
+            TreatmentCase.ItemsSource = ExportView.Instance.TreatmentCaseCollection;
+            TreatmentCase.Text = ExportView.Instance.TreatmentCaseCollection.SingleOrDefault(t => t.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id))
                 ?.FullName;
             PrescriptionMedicines = new ObservableCollection<DeclareMedicine>();
             foreach (var p in declareFileDdata.Dbody.Pdata)
@@ -219,7 +149,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 if (p.P1.Equals("1"))
                 {
                     DeclareMedicine d = new DeclareMedicine();
-                    foreach (var medicine in DeclareMedicinesData)
+                    foreach (var medicine in ExportView.Instance.DeclareMedicinesData)
                     {
                         if (p.P2.Equals(medicine.Id))
                             d = medicine;
@@ -248,7 +178,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void DataChanged()
         {
-            if (isFirst) return;
+            if (_isFirst) return;
 
             Changed.Content = "已修改";
             Changed.Foreground = Brushes.Red;
@@ -355,7 +285,9 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 }
                 else
                 {
-                    PrescriptionMedicines[currentRow] = declareMedicine;
+                    var d = declareMedicine;
+                    PrescriptionMedicines[currentRow].Id = d.Id;
+                    PrescriptionMedicines[currentRow].Name = d.Name;
                 }
             }
             else
@@ -423,11 +355,9 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
-            var medicineCodeAuto = sender as AutoCompleteBox;
+            if (!(sender is AutoCompleteBox medicineCodeAuto)) return;
 
-            if (medicineCodeAuto is null) return;
-
-            var result = DeclareMedicinesData.Where(x =>
+            var result = ExportView.Instance.DeclareMedicinesData.Where(x =>
                 x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
@@ -549,7 +479,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (isFirst) return;
+            if (_isFirst) return;
             CountMedicinesCost();
         }
 
@@ -573,6 +503,11 @@ namespace His_Pos.H6_DECLAREFILE.Export
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _isFirst = false;
         }
     }
 }

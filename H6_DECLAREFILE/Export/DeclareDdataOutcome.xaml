@@ -8,8 +8,8 @@
         xmlns:hisPos="clr-namespace:His_Pos"
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        mc:Ignorable="d"
-        Title="處方詳細資料" Height="650" Width="1200" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" Title="處方詳細資料" Height="650" Width="1200" WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
     <Window.Background>
         <ImageBrush ImageSource="/Images/onlyoneeeeeee.jpg"/>
     </Window.Background>
@@ -230,7 +230,7 @@
                                     FontSize="14"
                                     FontWeight="Bold"
                                     IsEnabled="True"
-                                     GotFocus="TextBox_GotFocus"
+                                    SelectionChanged="Text_TextChanged"
                                     IsTextCompletionEnabled="False"
                                     ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}"
                                     ItemTemplate="{StaticResource MedcineCodeAutoComplete}"
@@ -272,9 +272,9 @@
                                     FontSize="14"
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
-                                    PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                     PreviewMouseLeftButtonUp="Dosage_PreviewMouseLeftButtonUp"
-                                    GotFocus="TextBox_GotFocus"
+                                    IsReadOnly="True"
+                                    Focusable="False"
                                     Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -296,8 +296,8 @@
                                     FontSize="14"
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
-                                    PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                     GotFocus="TextBox_GotFocus"
+                                    IsReadOnly="True"
+                                    Focusable="False"
                                     Text="{Binding UsageName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -318,8 +318,8 @@
                                     FontSize="14"
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
-                                    PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    GotFocus="TextBox_GotFocus"
+                                    IsReadOnly="True"
+                                    Focusable="False"
                                     Text="{Binding Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     TextChanged="NullTextBox_TextChanged" />
                             </DataTemplate>
@@ -341,8 +341,8 @@
                                     FontSize="14"
                                     FontWeight="Bold"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
-                                    PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    GotFocus="TextBox_GotFocus"
+                                    IsReadOnly="True"
+                                    Focusable="False"
                                     Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                     TextChanged="NullTextBox_TextChanged" />
                             </DataTemplate>
@@ -364,7 +364,8 @@
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    GotFocus="TextBox_GotFocus"
+                                    IsReadOnly="True"
+                                    Focusable="False"
                                     IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
                                     PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                     TextChanged="NullTextBox_TextChanged"
@@ -389,20 +390,6 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTemplateColumn
-                        MinWidth="40"
-                        Header="自費"
-                        IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="PaysDataTemplate">
-                                <CheckBox
-                                    x:Name="PaySelf"
-                                    HorizontalAlignment="Center"
-                                    HorizontalContentAlignment="Center"
-                                    IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn
                         MinWidth="60"
                         Header="自費價格"
                         IsReadOnly="True">
@@ -417,11 +404,10 @@
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                    GotFocus="TextBox_GotFocus"
                                     IsEnabled="{Binding PaySelf, UpdateSourceTrigger=PropertyChanged}"
-                                    PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    TextChanged="NullTextBox_TextChanged" />
+                                    IsReadOnly="True"
+                                    Focusable="False"
+                                    Text="{Binding Price,UpdateSourceTrigger=PropertyChanged}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -440,10 +426,9 @@
                                     FontFamily="Segoe UI Semibold"
                                     FontSize="14"
                                     FontWeight="Bold"
-                                     GotFocus="TextBox_GotFocus"
                                     IsReadOnly="True"
-                                    Text="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    TextChanged="MedTotalPrice_TextChanged" />
+                                    Focusable="False"
+                                    Text="{Binding TotalPrice,UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -451,11 +436,11 @@
             </DataGrid>
             <StackPanel Orientation="Horizontal"  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
                 <Label Content="部分負擔" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-                <Label Name="Copayment" Content="{Binding Dbody.D17}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Name="Copayment" Content="{Binding CurrentPrescription.Treatment.Copayment.Point,UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Content="藥品點數" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <Label Name="MedicinePoint" Content="{Binding Dbody.D33}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Name="MedicinePoint" Content="{Binding CurrentFile.Dbody.D33,UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Content="藥事服務點數" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <Label Name="ServicePoint" Content="{Binding Dbody.D38}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Name="ServicePoint" Content="{Binding CurrentFile.Dbody.D38,UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Name="Changed" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="30,0,0,0"/>
             </StackPanel>
             <StackPanel Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Orientation="Horizontal">

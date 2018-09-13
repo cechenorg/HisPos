@@ -48,7 +48,7 @@ namespace His_Pos.Class
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(string info)
+        public void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
             {

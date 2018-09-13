@@ -27,7 +27,7 @@ namespace His_Pos.Class
                     break;
 
                 case DataSource.GetMedicalIcCard:
-                    IcNumber = "";
+                    IcNumber = row["CUS_IDNUM"].ToString();
                     MedicalNumber = row["HISDECMAS_NUMBER"].ToString();
                     break;
             }

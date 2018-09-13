@@ -33,16 +33,16 @@ namespace His_Pos.Class.Person
         {
             Id = row["CUS_ID"].ToString();
             IcNumber = row["CUS_IDNUM"].ToString();
-            Birthday = DateTimeExtensions.BirthdayFormatConverter3(row["CUS_BIRTH"].ToString()).ToString();
+            Birthday = DateTimeExtensions.BirthdayFormatConverter3(row["CUS_BIRTH"].ToString());
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
-            Gender = row["CUS_GENDER"].ToString() == "" || Convert.ToBoolean(row["CUS_GENDER"].ToString());
+            Gender = string.IsNullOrEmpty(row["CUS_GENDER"].ToString()) || Convert.ToBoolean(row["CUS_GENDER"].ToString());
             
-            if (type == "fromXml") 
-             IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
-            if(type == "fromDb")
+            if (type.Equals("fromXml"))
+                IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
+            if(type.Equals("fromDb"))
             {
-              GenderName = row["CUS_GENDER"].ToString() == "True" ? "男" : "女";
+                GenderName = row["CUS_GENDER"].ToString() == "True" ? "男" : "女";
                 IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
             }
              

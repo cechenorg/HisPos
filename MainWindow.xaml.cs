@@ -39,7 +39,6 @@ namespace His_Pos
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
             CurrentPharmacy = new Pharmacy("5932012975", "杏昌藥局", "330桃園市桃園區中正路1100號", "03-3573268");
-
             AddNewTab("首頁");
         }
         

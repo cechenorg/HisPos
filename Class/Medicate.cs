@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 
 namespace His_Pos.Class
 {
@@ -13,7 +14,6 @@ namespace His_Pos.Class
         public Medicate(DataRow dataRow)
         {
             Unit = dataRow["HISMED_UNIT"].ToString();
-            Dosage = "";
             Form = dataRow["HISMED_FORM"].ToString();
         }
 

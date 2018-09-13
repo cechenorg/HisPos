@@ -1,34 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Xml;
-using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
-using His_Pos.Interface;
-using His_Pos.Properties;
-using His_Pos.Service;
-using ComboBox = System.Windows.Controls.ComboBox;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -154,11 +141,6 @@ namespace His_Pos.PrescriptionInquire
                     loadingWindow.Show();
             }
 
-        }
-
-        private void ButtonExportXml_Click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }

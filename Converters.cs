@@ -65,6 +65,23 @@ namespace His_Pos
         }
     }
 
+    public class TaiwanCalenderConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var result = string.Empty;
+            if (value == null) return result;
+            result = (int.Parse(value.ToString().Split('/')[0]) - 1911) + "/" + value.ToString().Split('/')[1] + "/" +
+                     value.ToString().Split('/')[2].Substring(0,2);
+            return result;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return string.Empty;
+        }
+    }
+
     public class DoubleToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

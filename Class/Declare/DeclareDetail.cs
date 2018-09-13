@@ -91,7 +91,7 @@ namespace His_Pos.Class.Declare
         public int Days { get; set; }//p11
         public string StartDate { get; set; }//p12
         public string EndDate { get; set; }//p13
-        public string MedicalPersonnelId { get; set; }//p14
+        public string MedicalPersonnelIcNumber { get; set; }//p14
         public string Form { get; set; }
         public string Name { get; set; }
 
@@ -116,9 +116,9 @@ namespace His_Pos.Class.Declare
             EndDate = end;//p13
         }
 
-        private void SetMedicalPersonnelId(string Id)
+        private void SetMedicalPersonnelIcNumber(string icNum)
         {
-            MedicalPersonnelId = Id;
+            MedicalPersonnelIcNumber = icNum;
         }
 
         private void CountPoint()//p9

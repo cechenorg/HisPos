@@ -49,7 +49,6 @@ namespace His_Pos.Class
             TreatmentDate = treatmentDate;
             AdjustDate = adjustDate;
             MedicineDays = medicineDays;
-            MedicalPersonId = medicalPersonId;
         }
         public Treatment(XmlNode xml) {
             MedicalInfo = new MedicalInfo(xml);
@@ -59,7 +58,6 @@ namespace His_Pos.Class
             AdjustDate = xml.SelectSingleNode("d23") == null ? new DateTime() : DateTime.ParseExact(xml.SelectSingleNode("d23").InnerText, "yyyMMdd", CultureInfo.InvariantCulture).AddYears(1911);
             TreatmentDate = xml.SelectSingleNode("d14") == null ? new DateTime() : DateTime.ParseExact(xml.SelectSingleNode("d14").InnerText, "yyyMMdd", CultureInfo.InvariantCulture).AddYears(1911);
             MedicineDays = xml.SelectSingleNode("d30") == null ? null : xml.SelectSingleNode("d30").InnerText;
-            MedicalPersonId = xml.SelectSingleNode("d25") == null ? null : xml.SelectSingleNode("d25").InnerText;
         }
 
         public Treatment(DeclareFileDdata d)
@@ -69,7 +67,6 @@ namespace His_Pos.Class
             Copayment = new Copayment.Copayment(d);
             AdjustCase = new AdjustCase.AdjustCase(d);
             MedicineDays = !string.IsNullOrEmpty(d.Dbody.D30) ? d.Dbody.D30 : string.Empty;
-            MedicalPersonId = !string.IsNullOrEmpty(d.Dbody.D25) ? d.Dbody.D25 : string.Empty;
         }
 
         private MedicalInfo _medicalInfo;
@@ -84,17 +81,50 @@ namespace His_Pos.Class
             }
         }
 
-        public PaymentCategory.PaymentCategory PaymentCategory { get; set; } = new PaymentCategory.PaymentCategory();//d5 給付類別
-        public Copayment.Copayment Copayment { get; set; } //d15 部分負擔代碼
-        public AdjustCase.AdjustCase AdjustCase { get; set; } //d1 案件分類
-        private string adjustDateStr;
+        private PaymentCategory.PaymentCategory _paymentCategory;
+
+        public PaymentCategory.PaymentCategory PaymentCategory
+        {
+            get => _paymentCategory;
+            set
+            {
+                _paymentCategory = value;
+                NotifyPropertyChanged(nameof(PaymentCategory));
+            }
+        } //d5 給付類別
+
+        private Copayment.Copayment _copayment;
+
+        public Copayment.Copayment Copayment
+        {
+            get => _copayment;
+            set
+            {
+                _copayment = value;
+                NotifyPropertyChanged(nameof(Copayment));
+            }
+        } //d15 部分負擔代碼
+
+        private AdjustCase.AdjustCase _adjustCase;
+
+        public AdjustCase.AdjustCase AdjustCase
+        {
+            get => _adjustCase;
+            set
+            {
+                _adjustCase = value;
+                NotifyPropertyChanged(nameof(AdjustCase));
+            }
+        } //d1 案件分類
+
+        private string _adjustDateStr;
 
         public string AdjustDateStr
         {
             get { return DateTimeExtensions.ToSimpleTaiwanDate(AdjustDate); }
             set
             {
-                adjustDateStr = value;
+                _adjustDateStr = value;
                 NotifyPropertyChanged("AdjustDateStr");
             }
         }
@@ -138,7 +168,6 @@ namespace His_Pos.Class
         }//d23 調劑日期
 
         public string MedicineDays { get; set; }//d30  給藥日份
-        public string MedicalPersonId { get; set; }//d25 醫事人員代號
 
         public event PropertyChangedEventHandler PropertyChanged;
 
