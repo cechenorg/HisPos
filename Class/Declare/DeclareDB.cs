@@ -107,6 +107,7 @@ namespace His_Pos.Class.Declare
             var errorStr = declareData.Prescription.EList.SerializeObject<ErrorList>();
             if (string.IsNullOrEmpty(errorStr))
                 errorStr = "<ErrorPrescription></ErrorPrescription>";
+            parameters.Add(new SqlParameter("EMP_ID", MainWindow.CurrentUser.Id));
             parameters.Add(new SqlParameter("DETAIL", pDataTable));
             parameters.Add(new SqlParameter("XML", SqlDbType.Xml)
             {
@@ -561,7 +562,6 @@ namespace His_Pos.Class.Declare
             var pDataTable = new DataTable();
             var columnsDictionary = new Dictionary<string, Type>
                     {
-                        {"DecMasId", typeof(string)},
                         {"P10", typeof(int)},
                         {"P1", typeof(string)},
                         {"P2", typeof(string)},
@@ -637,8 +637,8 @@ namespace His_Pos.Class.Declare
                     : declareData.Prescription.Medicines[i].UsageName;
                 var paySelf = /*declareData.Prescription.Medicines == null ? "0" :*/
                     declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
-                if (!String.IsNullOrEmpty(declareData.DecMasId))
-                    row["DecMasId"] = declareData.DecMasId;
+                //if (!String.IsNullOrEmpty(declareData.DecMasId))
+                //    row["DecMasId"] = declareData.DecMasId;
                 
 
                 Function function = new Function();
@@ -751,8 +751,6 @@ namespace His_Pos.Class.Declare
         private void SetMedicalServiceCostDataRow(DataRow pData, DeclareData declareData, DeclareDetail detail)
         {
             var declarecount = declareData.DeclareDetails.Count + 1; //藥事服務醫令序
-            if (!string.IsNullOrEmpty(declareData.DecMasId)) pData["DecMasId"] = declareData.DecMasId;
-
 
                 pData["P1"] = detail.MedicalOrder;
                 pData["P2"] = detail.MedicalId;

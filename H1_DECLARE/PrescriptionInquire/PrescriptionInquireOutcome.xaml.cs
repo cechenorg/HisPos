@@ -103,7 +103,7 @@ namespace His_Pos.PrescriptionInquire
             }
         }
         public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
-        private static DeclareData inquiredPrescription;
+        private static DeclareData _inquiredPrescription;
         public DeclareData InquiredPrescription
         {
             get => _inquiredPrescription;
@@ -510,11 +510,13 @@ namespace His_Pos.PrescriptionInquire
             InquiredPrescription.Prescription.EList.Error = new List<Error>();
             InquiredPrescription.Prescription.EList.Error.Clear();
             InquiredPrescription.Prescription.EList.Error = InquiredPrescription.Prescription.CheckPrescriptionData();
+
             if (InquiredPrescription.Prescription.CheckPrescriptionData().Count == 0)
             {
                 InquiredPrescription.Prescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(InquiredPrescription.Prescription.Customer.Birthday);
                 var declareData = new DeclareData(InquiredPrescription.Prescription);
                 declareData.DecMasId = InquiredPrescription.DecMasId;
+                
                 var declareDb = new DeclareDb();
                 //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
                 //Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();

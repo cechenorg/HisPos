@@ -160,6 +160,7 @@ namespace His_Pos.Class.Declare
                     //throw new ArgumentException(Resources.MedicineDaysOutOfRange, "original");
                     break;
                 case "1" when treatmentCaseId == westMedNormal  :
+                case "3":
                     if (medicineDays <= normalDaysLimit)
                     {
                         if (DrugsPoint <= dayPay * medicineDays && medicineDays <= daysLimit)
@@ -205,7 +206,7 @@ namespace His_Pos.Class.Declare
             return false;
         }
 
-        private void SetAssistProjectCopaymentPoint(int copaymentPoint)//部分負擔點數(個人/行政)
+        public void SetAssistProjectCopaymentPoint(int copaymentPoint)//部分負擔點數(個人/行政)
         {
             var copaymentId = Prescription.Treatment.Copayment.Id;
 
@@ -287,8 +288,8 @@ namespace His_Pos.Class.Declare
             var t = p.Treatment;
             var m = t.MedicalInfo;
             var ic = c.IcCard;
-            var year = (int.Parse(c.Birthday.Substring(0, 3)) + 1911).ToString();
-            var cusBirth = year + c.Birthday.Substring(3, 6);
+            var year = c.Birthday.Split('/')[0].Length == 4 ? c.Birthday.Split('/')[0] : (int.Parse(c.Birthday.Substring(0, 3)) + 1911).ToString();
+            var cusBirth = year + "/" + c.Birthday.Split('/')[1] + "/" + c.Birthday.Split('/')[2];
             DeclareXml = new Ddata
             {
                 Dhead = new Dhead { D1 = Prescription.Treatment.AdjustCase.Id },
