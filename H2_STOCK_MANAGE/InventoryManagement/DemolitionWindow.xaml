@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="拆庫" Height="400" Width="500">
+        Title="商品拆開" Height="400" Width="500">
     <Viewbox>
         <Grid Height="400" Width="500">
             <Grid.RowDefinitions>

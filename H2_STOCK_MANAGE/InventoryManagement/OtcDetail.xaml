@@ -234,9 +234,9 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" DockPanel.Dock="Bottom">
-                        <Button Width="100" Name="ButtonDemolition" Content="拆庫" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonDemolition_Click"/>
+                        <Button Width="100" Name="ButtonDemolition" Content="拆開" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonDemolition_Click"/>
                         <Rectangle  Width="10"/>
-                        <Button Width="100" Name="ButtonMergeStock" Content="併庫" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonMergeStock_Click"/>
+                        <Button Width="100" Name="ButtonMergeStock" Content="合併" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonMergeStock_Click"/>
                     </StackPanel>
                 </DockPanel>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Column="4" Margin="10,0,0,0">
