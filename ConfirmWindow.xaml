@@ -16,8 +16,8 @@
                 </ScrollViewer>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button Name="CancelBtn" Margin="10,0,0,0" Width="220" Content="否" Click="Cancel_Click"/>
-                <Button Name="ConfirmBtn" Margin="10,0,0,0" Width="220" Content="是" Click="ConfirmClick" />
+                <Button Name="CancelBtn" Margin="10,0,0,0" Width="220" Content="否" Click="Cancel_Click" BorderThickness="0"/>
+                <Button Name="ConfirmBtn" Margin="10,0,0,0" Width="220" Content="是" Click="ConfirmClick" BorderThickness="0"/>
             </StackPanel>
         </StackPanel>
     </Grid>
