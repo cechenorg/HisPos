@@ -17,6 +17,8 @@ namespace His_Pos.Service
 
         public static string ToSimpleTaiwanDate(DateTime datetime)
         {
+            if (datetime == DateTime.MinValue)
+                return datetime.Year + "/"+ datetime.Month +"/" + datetime.Day;
             var taiwanCalendar = new TaiwanCalendar();
             var year = taiwanCalendar.GetYear(datetime).ToString().PadLeft(3, '0');
             var month = CheckDateLessTen(datetime.Month.ToString());

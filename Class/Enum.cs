@@ -106,7 +106,8 @@ namespace His_Pos.Class
     public enum DeclareFileType
     {
         LOG_IN = 0,
-        UPDATE = 1
+        UPDATE = 1,
+        DECLAREFILE_UPDATE=2
     }
 
     public enum MedBagMode

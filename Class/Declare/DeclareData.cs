@@ -302,7 +302,7 @@ namespace His_Pos.Class.Declare
                     D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id),
                     D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id),
                     D13 = CheckXmlEmptyValue(m.Hospital.Division.Id),
-                    D14 = CheckXmlEmptyValue(DateTimeExtensions.ToSimpleTaiwanDate(t.TreatmentDate)),
+                    D14 = CheckXmlEmptyValue(t.TreatmentDate == DateTime.MinValue?t.TreatDateStr:DateTimeExtensions.ToSimpleTaiwanDate(t.TreatmentDate)),
                     D15 = CheckXmlEmptyValue(t.Copayment.Id),
                     D16 = DeclarePoint.ToString(),
                     D17 = CopaymentPoint.ToString(),
@@ -311,7 +311,7 @@ namespace His_Pos.Class.Declare
                     D20 = c.Name,
                     D21 = CheckXmlEmptyValue(m.Hospital.Id),
                     D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
-                    D23 = CheckXmlEmptyValue(DateTimeExtensions.ToSimpleTaiwanDate(t.AdjustDate)),
+                    D23 = CheckXmlEmptyValue(t.AdjustDate == DateTime.MinValue?t.AdjustDateStr:DateTimeExtensions.ToSimpleTaiwanDate(t.AdjustDate)),
                     D25 = p.Pharmacy.MedicalPersonnel.IcNumber,
                     D30 = t.MedicineDays,
                     D31 = SpecailMaterialPoint.ToString(),
@@ -332,7 +332,7 @@ namespace His_Pos.Class.Declare
             if (!string.IsNullOrEmpty(t.AdjustCase.Id) &&
                 (t.AdjustCase.Id.StartsWith("D") || t.AdjustCase.Id.StartsWith("5")))
             {
-                if (string.IsNullOrEmpty(m.Hospital.Doctor.Id))
+                if (string.IsNullOrEmpty(m.Hospital.Doctor.IcNumber))
                 {
                     m.Hospital.Doctor.IcNumber = m.Hospital.Id;
                 }

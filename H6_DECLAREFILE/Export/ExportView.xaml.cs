@@ -19,6 +19,7 @@ using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using His_Pos.PrescriptionInquire;
+using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.H6_DECLAREFILE.Export
@@ -46,6 +47,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
         public ObservableCollection<Division> DivisionCollection { get; set; }
         public ObservableCollection<AdjustCase> AdjustCaseCollection { get; set; }
         public ObservableCollection<string> CustomerName = new ObservableCollection<string>();
+
         private ObservableCollection<DeclareFileDdata> _prescriptionCollection;
 
         public ObservableCollection<DeclareFileDdata> PrescriptionCollection
@@ -137,6 +139,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
         {
             SelectedFile = (DeclareFile)(sender as DataGrid)?.SelectedItem;
 
+            if (SelectedFile == null) return;
             foreach (var ddata in SelectedFile.FileContent.Ddata)
             {
                 SelectedFile.PrescriptionDdatas.Add(new DeclareFileDdata(ddata));
@@ -151,6 +154,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
                     d.CanDeclare = false;
                 }
             }
+
             PrescriptionCollection = new ObservableCollection<DeclareFileDdata>(SelectedFile.PrescriptionDdatas);
             if (ErrorDec.IsChecked == true)
             {
@@ -234,8 +238,20 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
         {
-            DeclareDdataOutcome ddataOutcome = new DeclareDdataOutcome((DeclareFileDdata)PrescriptionList.SelectedItem);
+            var ddataOutcome = new DeclareDdataOutcome((DeclareFileDdata)PrescriptionList.SelectedItem);
             ddataOutcome.Show();
+        }
+
+        public void UpdateDataFromOutcome(DeclareFileDdata declareFileDdata)
+        {
+            for (var i = 0; i < PrescriptionCollection.Count; i++)
+            {
+                if (PrescriptionCollection[i].DecId != declareFileDdata.DecId) continue;
+                PrescriptionCollection[i] = declareFileDdata;
+                break;
+            }
+            OnPropertyChanged(nameof(PrescriptionCollection));
+            PrescriptionList.Items.Filter = p => true;
         }
     }
 }
