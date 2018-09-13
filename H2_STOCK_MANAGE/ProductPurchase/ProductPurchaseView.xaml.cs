@@ -278,9 +278,6 @@ namespace His_Pos.ProductPurchase
         {
             if (!CheckNoEmptyData()) return;
 
-            if()
-
-
             StoreOrderData.Type = OrderType.DONE;
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Name;
             SaveOrder();
@@ -306,9 +303,12 @@ namespace His_Pos.ProductPurchase
 
             if (!CheckNoEmptyData()) return;
 
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認轉成處理單?\n(部分資訊將不能修改)", MessageType.ONLYMESSAGE);
+            confirmWindow.ShowDialog();
 
+            if (!confirmWindow.Confirm) return;
 
-            if(StoreOrderData.Manufactory.Id == "0")
+            if (StoreOrderData.Manufactory.Id == "0")
                 StoreOrderData.Type = OrderType.WAITING;
             else
                 StoreOrderData.Type = OrderType.PROCESSING;

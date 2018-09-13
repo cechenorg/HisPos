@@ -45,23 +45,27 @@ namespace His_Pos
                     Icon.Visibility = Visibility.Visible;
                     CancelBtn.Background = Brushes.IndianRed;
                     ConfirmBtn.Background = Brushes.DimGray;
+                    Message.Width = 400;
                     break;
                 case MessageType.SUCCESS:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Success.png", UriKind.Relative));
                     Icon.Visibility = Visibility.Visible;
                     CancelBtn.Background = Brushes.DimGray;
                     ConfirmBtn.Background = Brushes.IndianRed;
+                    Message.Width = 400;
                     break;
                 case MessageType.WARNING:
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png", UriKind.Relative));
                     Icon.Visibility = Visibility.Visible;
                     CancelBtn.Background = Brushes.DimGray;
                     ConfirmBtn.Background = Brushes.IndianRed;
+                    Message.Width = 400;
                     break;
                 case MessageType.ONLYMESSAGE:
                     Icon.Visibility = Visibility.Collapsed;
                     CancelBtn.Background = Brushes.DimGray;
                     ConfirmBtn.Background = Brushes.IndianRed;
+                    Message.Width = 450;
                     break;
             }
         }
