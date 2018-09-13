@@ -77,6 +77,7 @@ namespace His_Pos.ProductPurchase
                     AddOrderType = returnTypeControl.GetOrderType();
                     SelectedManufactory = returnTypeControl.SelectedManufactory;
                     SelectedOrderId = returnTypeControl.SelectedOrderId;
+                    SelectedWareHouse = returnTypeControl.SelectedWareHouse;
                     break;
             }
 

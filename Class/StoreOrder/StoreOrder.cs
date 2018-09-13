@@ -24,11 +24,12 @@ namespace His_Pos.Class.StoreOrder
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
 
-            Id = StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id, manufactory.Id);
+            Category = new Category(category);
+
+            Id = StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id, manufactory.Id, Category.CategoryName.Substring(0,1));
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";
-            Category = new Category(category);
             Warehouse = wareHouse;
             Principal = new PurchasePrincipal("");
             DeclareDataCount = 0;

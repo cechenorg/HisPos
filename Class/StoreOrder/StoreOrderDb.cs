@@ -144,7 +144,7 @@ namespace His_Pos.Class.StoreOrder
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
         }
 
-        internal static string GetNewOrderId(string OrdEmpId, string wareId, string manId)
+        internal static string GetNewOrderId(string OrdEmpId, string wareId, string manId, string orderType)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
@@ -152,6 +152,7 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("ORDEMP_ID", OrdEmpId));
             parameters.Add(new SqlParameter("WARE_ID", wareId));
             parameters.Add(new SqlParameter("MAN_ID", manId));
+            parameters.Add(new SqlParameter("ORDERTYPE", orderType));
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddNewStoreOrder]", parameters);
 
