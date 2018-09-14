@@ -81,43 +81,47 @@
                 </DataGrid>
             </StackPanel>
             <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1">
-                <StackPanel Orientation="Horizontal" Margin="10">
-                    <Label Content="調劑日期" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <Label Width="80" Height="30" Content="{Binding StartDateStr}" BorderThickness="0,0,0,1" BorderBrush="#89000000" FontSize="16" FontStretch="ExtraExpanded" 
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" Margin="10" Height="50">
+                            <Label Content="調劑日期" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                            <Label Width="80" Height="30" Content="{Binding StartDateStr}" BorderThickness="0,0,0,1" BorderBrush="#89000000" FontSize="16" FontStretch="ExtraExpanded" 
                            FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"/>
-                    <DatePicker Width="20" Height="30" Name="Start" SelectedDateFormat="Short" SelectedDateChanged="DatePickerSelectedDateChanged"/>
-                    <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                    <Label Width="80"  Height="30" Content="{Binding  EndDateStr}" BorderThickness="0,0,0,1" BorderBrush="#89000000" FontSize="16" FontStretch="ExtraExpanded" 
+                            <DatePicker Width="20" Height="30" Name="Start" SelectedDateFormat="Short" SelectedDateChanged="DatePickerSelectedDateChanged"/>
+                            <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
+                            <Label Width="80"  Height="30" Content="{Binding  EndDateStr}" BorderThickness="0,0,0,1" BorderBrush="#89000000" FontSize="16" FontStretch="ExtraExpanded" 
                            FontFamily="Segoe UI Semibold"  HorizontalContentAlignment="Center"/>
-                    <DatePicker Width="20" Height="30" Name="End" SelectedDateFormat="Short" SelectedDateChanged="DatePickerSelectedDateChanged"/>
-                    <Label Content="病患姓名" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <controls:AutoCompleteBox Name="PatientName" Background="Transparent" Width="130" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
-                                              Populating="PatientNamePopulating"   BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" 
+                            <DatePicker Width="20" Height="30" Name="End" SelectedDateFormat="Short" SelectedDateChanged="DatePickerSelectedDateChanged"/>
+                            <Label Content="病患姓名" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                            <controls:AutoCompleteBox Name="PatientName" Background="Transparent" Width="130" Height="30" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
+                                              Populating="PatientNamePopulating"   BorderThickness="0,0,0,1" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" 
                                               MinimumPrefixLength="1" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
-                    </controls:AutoCompleteBox>
-                    <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <TextBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16"/>
-                    <Button Name="ButtonSearch"  Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="88,0,10,0" Click="SearchButtonClick"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10,9,9,9">
-                    <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" />
-                    <controls:AutoCompleteBox Name="ReleasePalace" Background="Transparent" Width="450" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
+                            </controls:AutoCompleteBox>
+                            <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                            <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="10,0,10,0" Height="50">
+                            <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                            <controls:AutoCompleteBox Name="ReleasePalace" Background="Transparent" Width="450" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
                                          Populating="ReleasePalace_Populating"    ValueMemberPath="FullName"    BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" 
                                                       MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
-                        <controls:AutoCompleteBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <Label Width="100" Content="{Binding Id}" />
-                                    <Label Width="350" Content="{Binding Name}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </controls:AutoCompleteBox.ItemTemplate>
-                    </controls:AutoCompleteBox>
-                    <Label Content="調劑案件" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="150" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                                <controls:AutoCompleteBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Width="100" Content="{Binding Id}" />
+                                            <Label Width="350" Content="{Binding Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </controls:AutoCompleteBox.ItemTemplate>
+                            </controls:AutoCompleteBox>
+                            <Label Content="調劑案件" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                            <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="150" FontSize="16" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding Path=AdjustCaseCollection,UpdateSourceTrigger=PropertyChanged}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Name="ButtonSearch"  Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="88,0,10,0" Click="SearchButtonClick"/>
                 </StackPanel>
                 <DataGrid
-                     Name="PrescriptionList" Height="620"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                     Name="PrescriptionList" Height="630"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
                     CanUserAddRows="False" AutoGenerateColumns="False" materialDesign:DataGridAssist.CellPadding="13 8 8 8" materialDesign:DataGridAssist.ColumnHeaderPadding="8" Margin="10" ItemsSource="{Binding Path=PrescriptionCollection,UpdateSourceTrigger=PropertyChanged}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
@@ -242,10 +246,9 @@
                         <ColumnDefinition Width="3.5*"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <WrapPanel>
+                    <WrapPanel VerticalAlignment="Center">
                         <CheckBox Name="ErrorDec" Margin="10" Content="錯誤不申報" FontSize="18" FontFamily="Segoe UI Semibold" IsChecked="True"/>
                     </WrapPanel>
-                    <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,120,0" Background="RoyalBlue" Content="儲存" Click="SaveDeclareFileButtonClick"/>
                     <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,0" Background="IndianRed" Content="轉出申報檔" Click="CreateDeclareFileClick"/>
                 </Grid>
             </StackPanel>

@@ -9,6 +9,10 @@ namespace His_Pos.Class.Person
         {
         }
 
+        public MedicalPersonnel(DataRow dataRow) : base(dataRow)
+        {
+        }
+
         public MedicalPersonnel(DataRow row,bool isDoctor)
         {
             if (isDoctor)

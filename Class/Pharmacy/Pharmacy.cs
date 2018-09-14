@@ -1,4 +1,5 @@
-﻿using His_Pos.AbstractClass;
+﻿using System.Collections.ObjectModel;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Person;
 using System.Data;
@@ -24,6 +25,7 @@ namespace His_Pos.Class.Pharmacy
             Address = address;
             Tel = tel;
             MedicalPersonnel = new MedicalPersonnel();
+            MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
         }
         public Pharmacy(XmlNode xml) {
             MedicalPersonnel = new MedicalPersonnel();
@@ -45,6 +47,18 @@ namespace His_Pos.Class.Pharmacy
             {
                 _medicalPersonnel = value;
                 NotifyPropertyChanged(nameof(MedicalPersonnel));
+            }
+        }
+
+        private ObservableCollection<MedicalPersonnel> _medicalPersonnelCollection;
+
+        public ObservableCollection<MedicalPersonnel> MedicalPersonnelCollection
+        {
+            get => _medicalPersonnelCollection;
+            set
+            {
+                _medicalPersonnelCollection = value;
+                NotifyPropertyChanged(nameof(MedicalPersonnelCollection));
             }
         }
 

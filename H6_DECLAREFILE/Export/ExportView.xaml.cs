@@ -5,8 +5,10 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using His_Pos.Class;
@@ -15,6 +17,7 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
@@ -45,7 +48,18 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         public ObservableCollection<Hospital> HospitalCollection { get; set; }
         public ObservableCollection<Division> DivisionCollection { get; set; }
-        public ObservableCollection<AdjustCase> AdjustCaseCollection { get; set; }
+        private ObservableCollection<AdjustCase> _adjustCaseCollection;
+
+        public ObservableCollection<AdjustCase> AdjustCaseCollection
+        {
+            get => _adjustCaseCollection;
+            set
+            {
+                _adjustCaseCollection = value;
+                OnPropertyChanged(nameof(AdjustCaseCollection));
+            }
+        }
+
         public ObservableCollection<string> CustomerName = new ObservableCollection<string>();
 
         private ObservableCollection<DeclareFileDdata> _prescriptionCollection;
@@ -184,25 +198,65 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void SearchButtonClick(object sender, RoutedEventArgs e)
         {
-            var sDate = StartDateStr.Equals(string.Empty) ? string.Empty : "0" + SelectedFile.DeclareYear + "/" + StartDateStr;
+            if (PrescriptionList is null) return;
+            PrescriptionList.Items.Filter = CollectionViewSource_Filter;
+        }
 
-            var eDate = EndDateStr.Equals(string.Empty) ? string.Empty : "0" + SelectedFile.DeclareYear + "/" + EndDateStr;
+        private bool CollectionViewSource_Filter(object item)
+        {
+            if (string.IsNullOrEmpty(StartDateStr) && string.IsNullOrEmpty(EndDateStr) && AdjustCaseCombo.SelectedItem == null && ReleasePalace.SelectedItem == null && 
+                HisPerson.SelectedItem == null)
+                return true;
+            bool accepted = true;
+            var sDate = string.Empty;
+            var eDate = string.Empty;
+            if (!string.IsNullOrEmpty(StartDateStr))
+                sDate = StartDateStr.Equals(string.Empty) ? string.Empty : "0" + SelectedFile.DeclareYear + "/" + StartDateStr;
+            if (!string.IsNullOrEmpty(EndDateStr))
+                eDate = EndDateStr.Equals(string.Empty) ? string.Empty : "0" + SelectedFile.DeclareYear + "/" + EndDateStr;
 
             var adjustId = string.Empty;
             if (AdjustCaseCombo.Text != string.Empty)
                 adjustId = AdjustCaseCombo.Text.Substring(0, 1);
-            var insName = string.Empty;
+            var hospitalId = string.Empty;
             if (ReleasePalace.Text != string.Empty)
-                insName = ReleasePalace.Text.Split(' ')[1];
-            
+                hospitalId = ReleasePalace.Text.Split(' ')[1];
+            DeclareFileDdata d = (DeclareFileDdata) item;
+            if (d != null)
+                // If filter is turned on, filter completed items.
+            {
+                if (!string.IsNullOrEmpty(sDate))
+                {
+                    if (!StartDateStr.Split('/')[0].Equals(d.Dbody.D23.Split('/')[1]))
+                        accepted = false;
+                    else if (int.Parse(StartDateStr.Split('/')[1]) > int.Parse(d.Dbody.D23.Split('/')[2]))
+                        accepted = false;
+                    else
+                        accepted = true;
+                }
+                if (!string.IsNullOrEmpty(eDate))
+                {
+                    if (!EndDateStr.Split('/')[0].Equals(d.Dbody.D23.Split('/')[1]))
+                        accepted = false;
+                    else if (int.Parse(EndDateStr.Split('/')[1]) < int.Parse(d.Dbody.D23.Split('/')[2]))
+                        accepted = false;
+                    else
+                        accepted = true;
+                }
+
+                if (!string.IsNullOrEmpty(adjustId))
+                    accepted = d.Dhead.D1.Equals(adjustId);
+
+                if (!string.IsNullOrEmpty(hospitalId))
+                    accepted = d.Dbody.D21.Equals(hospitalId);
+
+                if (HisPerson.SelectedItem != null)
+                    accepted = d.Dbody.D25.Equals(((MedicalPersonnel)HisPerson.SelectedItem).IcNumber);
+            }
+            return accepted;
         }
 
         private void CreateDeclareFileClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void SaveDeclareFileButtonClick(object sender, RoutedEventArgs e)
         {
 
         }
