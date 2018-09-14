@@ -109,7 +109,8 @@ namespace His_Pos.Class.StoreOrder
                 parameters.Add(new SqlParameter("WAREHOUSE_ID", DBNull.Value));
             else
                 parameters.Add(new SqlParameter("WAREHOUSE_ID", storeOrder.Warehouse.Id));
-
+            
+            parameters.Add(new SqlParameter("NOTE", storeOrder.Note));
 
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
