@@ -14,10 +14,13 @@ namespace His_Pos.Interface
         string Note { get; set; }
         InStock Stock { get; set; }
         double LastPrice { get; set; }
-        int FreeAmount { get; set; }
+        double OrderAmount { get; set; }
+        double FreeAmount { get; set; }
         string Invoice { get; set; }
         string ValidDate { get; set; }
         string BatchNumber { get; set; }
+
+        bool IsFirstBatch { get; set; }
 
         void CopyFilledData(Product product);
     }
