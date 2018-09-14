@@ -121,7 +121,7 @@ namespace His_Pos.Class
 
         public string AdjustDateStr
         {
-            get { return DateTimeExtensions.ToSimpleTaiwanDate(AdjustDate); }
+            get { return _adjustDateStr; }
             set
             {
                 _adjustDateStr = value;
@@ -129,14 +129,14 @@ namespace His_Pos.Class
             }
         }
 
-        private string treatDateStr;
+        private string _treatDateStr;
 
         public string TreatDateStr
         {
-            get { return DateTimeExtensions.ToSimpleTaiwanDate(TreatmentDate); }
+            get { return _treatDateStr; }
             set
             {
-                treatDateStr = value;
+                _treatDateStr = value;
                 NotifyPropertyChanged("TreatDateStr");
             }
         }
@@ -149,20 +149,22 @@ namespace His_Pos.Class
             set
             {
                 treatDate = value;
-                TreatDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
+                if(value != DateTime.MinValue)
+                    TreatDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
                 NotifyPropertyChanged("TreatmentDate");
             }
         }
 
-        private DateTime adjustDate;
+        private DateTime _adjustDate;
 
         public DateTime AdjustDate
         {
-            get { return adjustDate; }
+            get { return _adjustDate; }
             set
             {
-                adjustDate = value;
-                AdjustDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
+                _adjustDate = value;
+                if (value != DateTime.MinValue)
+                    AdjustDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
                 NotifyPropertyChanged("AdjustDate");
             }
         }//d23 調劑日期

@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Xml;
+using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.Properties;
 using His_Pos.Service;
 
@@ -24,8 +25,32 @@ namespace His_Pos.Class.Declare
             return declareFiles;
         }
 
-        public static void SetDeclareFileByPharmacyId(DeclareFile file,DateTime date,DeclareFileType type)
+        public static void SetDeclareFileByPharmacyId(DeclareFile file,DateTime date,DeclareData declareData ,DeclareFileType type)
         {
+            var parameters = new List<SqlParameter>();
+            if (type == DeclareFileType.DECLAREFILE_UPDATE)
+            {
+                parameters.Add(new SqlParameter("DECMAS_ID", declareData.DecMasId));
+                var declareDataxmlStr = declareData.SerializeObject<Ddata>();
+                parameters.Add(new SqlParameter("PRESCRIPTION_XML", SqlDbType.Xml)
+                {
+                    Value = new SqlXml(new XmlTextReader(declareDataxmlStr, XmlNodeType.Document, null))
+                });
+                var prescriptionErrorStr = declareData.Prescription.EList.SerializeObject<ErrorList>();
+                if (string.IsNullOrEmpty(prescriptionErrorStr))
+                    prescriptionErrorStr = "<ErrorPrescription></ErrorPrescription>";
+                parameters.Add(new SqlParameter("ERRORMSG", SqlDbType.Xml)
+                {
+                    Value = new SqlXml(new XmlTextReader((string)prescriptionErrorStr, XmlNodeType.Document, null))
+                });
+                parameters.Add(new SqlParameter("DEC_ID", ExportView.Instance.SelectedFile.Id));
+            }
+            else
+            {
+                parameters.Add(new SqlParameter("DECMAS_ID", DBNull.Value));
+                parameters.Add(new SqlParameter("PRESCRIPTION_XML", DBNull.Value));
+                parameters.Add(new SqlParameter("ERRORMSG", DBNull.Value));
+            }
             int[] sequence = { 0, 0, 0, 0};
             var p = file.FileContent;
             foreach (var t in p.Ddata)
@@ -58,7 +83,6 @@ namespace His_Pos.Class.Declare
             var errorStr = file.ErrorPrescriptionList.SerializeObject().Replace("<ErrorPrescriptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\"", "<ErrorPrescriptions>");
             if (string.IsNullOrEmpty(errorStr))
                 errorStr = "<ErrorPrescriptions></ErrorPrescriptions>";
-            var parameters = new List<SqlParameter>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             parameters.Add(new SqlParameter("SEND_DATE", date));
             parameters.Add(new SqlParameter("PHARMACY_ID", p.Tdata.T2));
@@ -77,7 +101,7 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("HAS_ERROR", file.HasError));
             parameters.Add(type.Equals(DeclareFileType.UPDATE)
                 ? new SqlParameter("IS_DECLARED", file.IsDeclared)
-                : new SqlParameter("IS_DECLARED", DBNull.Value));
+                : new SqlParameter("IS_DECLARED", false));
             dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateDeclareFile]", parameters);
         }
 

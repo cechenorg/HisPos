@@ -11,6 +11,7 @@ using System.Data.SqlTypes;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
+using His_Pos.H6_DECLAREFILE.Export;
 
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 
@@ -93,7 +94,7 @@ namespace His_Pos.Class.Declare
             file.FileContent = p;
             file.ErrorPrescriptionList = new ErrorPrescriptions {ErrorList = new List<ErrorList>()};
             file.ErrorPrescriptionList.ErrorList = PrescriptionDB.GetPrescriptionErrorLists(declareDate);
-            DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate, DeclareFileType.LOG_IN);
+            DeclareFileDb.SetDeclareFileByPharmacyId(file, declareDate,declareData,DeclareFileType.LOG_IN);
         }
         public void UpdateDeclareData(DeclareData declareData)
         {
@@ -304,10 +305,10 @@ namespace His_Pos.Class.Declare
                         {"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
                         {
                             "D14",
-                            DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.TreatmentDate)
+                            declareData.Prescription.Treatment.TreatmentDate == DateTime.MinValue?declareData.Prescription.Treatment.TreatDateStr:DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate)
                         },
                         {"D15", declareData.Prescription.Treatment.Copayment.Id},
-                        {"D23", DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.AdjustDate)},
+                        {"D23", declareData.Prescription.Treatment.AdjustDate == DateTime.MinValue?declareData.Prescription.Treatment.AdjustDateStr:DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate)},
                         {"D25", declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber},
                         {"D30", declareData.Prescription.Treatment.MedicineDays},
                         {"CUS_ID", declareData.Prescription.Customer.Id}
@@ -513,7 +514,7 @@ namespace His_Pos.Class.Declare
             row["D1"] = declareData.Prescription.Treatment.AdjustCase.Id;
             row["D4"] = CheckXmlDbNullValue(declareData.DeclareMakeUp);
             row["D5"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.PaymentCategory.Id);
-            row["D6"] = DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth));
+            row["D6"] = Convert.ToDateTime(cusBirth) == DateTime.MinValue? cusBirth:DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth));
             row["D7"] = declareData.Prescription.Customer.IcCard.MedicalNumber;
             row["D8"] = d8;
             row["D9"] = d9;
@@ -523,8 +524,8 @@ namespace His_Pos.Class.Declare
             row["D13"] =
                 CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id);
             row["D14"] =
-                CheckXmlDbNullValue(
-                    DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.TreatmentDate));
+                CheckXmlDbNullValue(declareData.Prescription.Treatment.TreatmentDate == DateTime.MinValue? declareData.Prescription.Treatment.TreatDateStr:
+                    DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate));
             row["D15"] = declareData.Prescription.Treatment.Copayment.Id;
             row["D16"] = declareData.DeclarePoint.ToString();
             row["D17"] = declareData.Prescription.Treatment.Copayment.Point.ToString();
@@ -532,7 +533,7 @@ namespace His_Pos.Class.Declare
             row["D19"] = CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString());
             row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;
             row["D22"] = declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
-            row["D23"] = DateTimeExtensions.ToSimpleTaiwanDate((DateTime)declareData.Prescription.Treatment.AdjustDate);
+            row["D23"] = declareData.Prescription.Treatment.AdjustDate == DateTime.MinValue? declareData.Prescription.Treatment.AdjustDateStr: DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate);
             row["D24"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber;
             row["D25"] = declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber;
             row["D26"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id);
@@ -877,12 +878,12 @@ namespace His_Pos.Class.Declare
                         {"d3", declareData.Prescription.Customer.IcNumber},
                         {"d4", CheckXmlDbNullValue(declareData.DeclareMakeUp)},
                         {"d5", CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
-                        {"d6", DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth))},
+                        {"d6", Convert.ToDateTime(cusBirth) == DateTime.MinValue? cusBirth:DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth))},
                         {"d7", declareData.Prescription.Customer.IcCard.MedicalNumber},
                         {"d8", d8},
                         {"d9", d9},
                         {"d13", CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},
-                        {"d14", CheckXmlDbNullValue(DateTimeExtensions.ToSimpleTaiwanDate(treatment.TreatmentDate))},
+                        {"d14", CheckXmlDbNullValue(treatment.TreatmentDate == DateTime.MinValue?treatment.TreatDateStr:DateTimeExtensions.ToSimpleTaiwanDate(treatment.TreatmentDate))},
                         {"d15", treatment.Copayment.Id},
                         {"d16", declareData.DeclarePoint.ToString()},
                         {"d17", treatment.Copayment.Point.ToString()},
@@ -891,7 +892,7 @@ namespace His_Pos.Class.Declare
                         {"d20", declareData.Prescription.Customer.Name},
                         {"d21", medicalInfo.Hospital.Id},
                         {"d22", medicalInfo.TreatmentCase.Id},
-                        {"d23", DateTimeExtensions.ToSimpleTaiwanDate(treatment.AdjustDate)},
+                        {"d23", treatment.AdjustDate == DateTime.MinValue?treatment.AdjustDateStr:DateTimeExtensions.ToSimpleTaiwanDate(treatment.AdjustDate)},
                         {"d24", medicalInfo.Hospital.Doctor.IcNumber},
                         {"d25", declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber},
                         {"d26", CheckXmlDbNullValue(medicalInfo.SpecialCode.Id)},

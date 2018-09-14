@@ -30,29 +30,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
     {
         private bool _isFirst = true;
 
-        private string _treatDate;
-
-        public string TreatDateStr
-        {
-            get => _treatDate;
-            set
-            {
-                _treatDate = value;
-                OnPropertyChanged(nameof(TreatDateStr));
-            }
-        }
-
-        private string _adjustDateStr;
-        public string AdjustDateStr
-        {
-            get => _adjustDateStr;
-            set
-            {
-                _adjustDateStr = value;
-                OnPropertyChanged(nameof(AdjustDateStr));
-            }
-        }
-
         private ObservableCollection<DeclareMedicine> _prescriptionMedicines;
 
         public ObservableCollection<DeclareMedicine> PrescriptionMedicines
@@ -129,8 +106,9 @@ namespace His_Pos.H6_DECLAREFILE.Export
             CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName = ExportView.Instance.HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id))?.FullName;
             CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName = ExportView.Instance.DivisionCollection.SingleOrDefault(d =>
                     d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id))?.FullName;
-            TreatDateStr = declareFileDdata.Dbody.D14;
-            AdjustDateStr = declareFileDdata.Dbody.D23;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber = declareFileDdata.Dbody.D24;
+            CurrentPrescription.Treatment.TreatDateStr = declareFileDdata.Dbody.D14;
+            CurrentPrescription.Treatment.AdjustDateStr = declareFileDdata.Dbody.D23;
             CopaymentCode.ItemsSource = ExportView.Instance.CopaymentCollection;
             CopaymentCode.SelectedItem =
                 ExportView.Instance.CopaymentCollection.SingleOrDefault(c =>
@@ -508,6 +486,50 @@ namespace His_Pos.H6_DECLAREFILE.Export
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _isFirst = false;
+        }
+
+        private void ButtonUpdatePrescriptionXml_Click(object sender, RoutedEventArgs e)
+        {
+            MessageWindow m;
+            CurrentPrescription.Medicines = PrescriptionMedicines;
+            CurrentPrescription.EList.Error = new List<Error>();
+            CurrentPrescription.EList.Error.Clear();
+            CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
+
+            if (CurrentPrescription.EList.Error.Count == 0)
+            {
+                CurrentPrescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(CurrentPrescription.Customer.Birthday);
+                var declareData = new DeclareData(CurrentPrescription);
+                declareData.DecMasId = CurrentFile.DecId;
+
+                var declareDb = new DeclareDb();
+                //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
+                //Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();
+                //Charge.Content = Charge.Content.ToString() == null ? "0" : Charge.Content.ToString();
+                //Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
+                //Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
+                //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
+
+                //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
+                DeclareFileDb.SetDeclareFileByPharmacyId(ExportView.Instance.SelectedFile, Convert.ToDateTime(ExportView.Instance.SelectedFile.DeclareDate), declareData, DeclareFileType.DECLAREFILE_UPDATE);
+                m = new MessageWindow("處方申報資料修改成功", MessageType.SUCCESS);   
+                m.Show();
+                InitDataChanged();
+                var xmlStr = declareData.SerializeObject<Ddata>();
+                var ddata = XmlService.Deserialize<Ddata>(xmlStr);
+                var declareFileDdata = new DeclareFileDdata(ddata);
+                ExportView.Instance.UpdateDataFromOutcome(declareFileDdata);
+            }
+            else
+            {
+                var errorMessage = "處方資料錯誤 : \n";
+                foreach (var error in CurrentPrescription.EList.Error)
+                {
+                    errorMessage += error.Content + "\n";
+                }
+                m = new MessageWindow(errorMessage, MessageType.ERROR);
+                m.Show();
+            }
         }
     }
 }

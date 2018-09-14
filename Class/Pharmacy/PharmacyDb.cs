@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Class.Person;
 
 namespace His_Pos.Class.Pharmacy
 {
@@ -101,6 +102,19 @@ namespace His_Pos.Class.Pharmacy
 
                 dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
             }
+        }
+
+        internal static ObservableCollection<MedicalPersonnel> GetPharmacyMedicalPersonData()
+        {
+            ObservableCollection<MedicalPersonnel> medicalPersonnels = new ObservableCollection<MedicalPersonnel>();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetPharmacyMedicalPersonData]");
+            foreach (DataRow row in table.Rows)
+            {
+                medicalPersonnels.Add(new MedicalPersonnel(row));
+            }
+
+            return medicalPersonnels;
         }
     }
 }
