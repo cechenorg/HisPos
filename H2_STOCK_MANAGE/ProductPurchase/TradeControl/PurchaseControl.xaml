@@ -19,6 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition Height="50"/>
@@ -51,7 +52,11 @@
                 <Label Content="{Binding DeclareDataCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
-        <DataGrid Name="PStoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
+            <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBox Width="980" Text="{Binding Note}" Margin="10,0,0,5" FontFamily="Segoe UI Semi" FontSize="18"/>
+        </StackPanel>
+        <DataGrid Name="PStoreOrderDetail" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="3" LoadingRow="StoreOrderDetail_OnLoadingRow" HeadersVisibility="All" CanUserSortColumns="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -193,7 +198,7 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
         </DataGrid>
-        <DataGrid Name="GStoreOrderDetail" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" EnableRowVirtualization="False"
+        <DataGrid Name="GStoreOrderDetail" Grid.Row="4" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" EnableRowVirtualization="False"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="3" LoadingRow="StoreOrderDetail_OnLoadingRow" HeadersVisibility="All" CanUserSortColumns="False" CanUserAddRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -329,7 +334,7 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource GridDarkerBackGround}">
             <Button Name="AddNewProduct"  Content="+ 新增品項" Width="120" Background="{StaticResource Shadow}" Foreground="Black"  BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Margin="15,0,0,0" Click="NewProduct"/>
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Name="Total" Content="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
@@ -340,7 +345,7 @@
             <Button Name="DeleteOrder" Width="120" Content="刪除" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" BorderThickness="0" Background="DimGray"/>
             <Button Name="ConfirmToProcess" Width="150" Content="轉成進貨單" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Foreground="White" Background="IndianRed" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="5" Background="{StaticResource GridDarkerBackGround}">
+        <StackPanel Orientation="Horizontal" Grid.Row="6" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Content="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>

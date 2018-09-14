@@ -19,7 +19,7 @@ namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
-        public StoreOrder(StoreOrderCategory category, User ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null)
+        public StoreOrder(StoreOrderCategory category, User ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null, string note = "")
         {
             Type = OrderType.UNPROCESSING;
             TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
@@ -37,6 +37,8 @@ namespace His_Pos.Class.StoreOrder
             Manufactory = (manufactory is null)? new Manufactory.Manufactory() : manufactory;
 
             Products = (products is null)? new ObservableCollection<AbstractClass.Product>() : products;
+
+            Note = note;
         }
 
         public StoreOrder(DataRow row)
@@ -65,6 +67,8 @@ namespace His_Pos.Class.StoreOrder
             Warehouse = new WareHouse(row);
 
             DeclareDataCount = Int32.Parse(row["DECLARECOUNT"].ToString());
+
+            Note = row["STOORD_NOTE"].ToString();
         }
 
         private StoreOrder()
@@ -155,6 +159,7 @@ namespace His_Pos.Class.StoreOrder
         }
 
         public WareHouse Warehouse { get; set; }
+        public string Note { get; set; }
         public ObservableCollection<AbstractClass.Product> Products { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -211,6 +216,7 @@ namespace His_Pos.Class.StoreOrder
             storeOrder.Products = new ObservableCollection<AbstractClass.Product>();
             storeOrder.Principal = Principal;
             storeOrder.Warehouse = Warehouse;
+            storeOrder.Note = Note;
 
             foreach (AbstractClass.Product product in Products)
             {
