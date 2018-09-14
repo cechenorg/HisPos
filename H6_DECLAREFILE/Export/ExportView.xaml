@@ -98,7 +98,7 @@
                                               MinimumPrefixLength="1" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
                             </controls:AutoCompleteBox>
                             <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                            <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" />
+                            <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="10,0,10,0" Height="50">
                             <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
