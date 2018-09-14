@@ -378,6 +378,9 @@
     </Compile>
     <Compile Include="H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
     <Compile Include="H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDec2\ChronicSelectWindow.xaml.cs">
+      <DependentUpon>ChronicSelectWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml.cs">
       <DependentUpon>ErrorMssageWindow.xaml</DependentUpon>
     </Compile>
@@ -637,6 +640,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\ChronicSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -50,6 +50,7 @@ namespace His_Pos.Class.Declare
                 parameters.Add(new SqlParameter("DECMAS_ID", DBNull.Value));
                 parameters.Add(new SqlParameter("PRESCRIPTION_XML", DBNull.Value));
                 parameters.Add(new SqlParameter("ERRORMSG", DBNull.Value));
+                parameters.Add(new SqlParameter("DEC_ID", DBNull.Value));
             }
             int[] sequence = { 0, 0, 0, 0};
             var p = file.FileContent;

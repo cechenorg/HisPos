@@ -104,6 +104,7 @@ namespace His_Pos
                         backgroundWorker.ReportProgress((int)((currentDecCount / totalDecCount) * 100));
                         currentDecCount++;
                     }
+                    ChangeLoadingMessage("匯入資料庫...");
                     declareDb.ImportDeclareData(declareDataCollection, decId);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
