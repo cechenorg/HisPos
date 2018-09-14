@@ -70,8 +70,8 @@
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
                                             <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="130" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
-                                            <Label Content="$" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                            <Label Content="{Binding TotalPrice}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding Products.Count}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="30" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
+                                            <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>
