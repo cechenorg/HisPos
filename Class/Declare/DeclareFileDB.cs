@@ -50,6 +50,7 @@ namespace His_Pos.Class.Declare
                 parameters.Add(new SqlParameter("DECMAS_ID", DBNull.Value));
                 parameters.Add(new SqlParameter("PRESCRIPTION_XML", DBNull.Value));
                 parameters.Add(new SqlParameter("ERRORMSG", DBNull.Value));
+                parameters.Add(new SqlParameter("DEC_ID", DBNull.Value));
             }
             int[] sequence = { 0, 0, 0, 0};
             var p = file.FileContent;
@@ -99,9 +100,12 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("TOTAL_POINT", int.Parse(p.Tdata.T12)));
             file.HasError = file.ErrorPrescriptionList.ErrorList.Count != 0;
             parameters.Add(new SqlParameter("HAS_ERROR", file.HasError));
-            parameters.Add(type.Equals(DeclareFileType.UPDATE)
-                ? new SqlParameter("IS_DECLARED", file.IsDeclared)
-                : new SqlParameter("IS_DECLARED", false));
+            if(type.Equals(DeclareFileType.UPDATE))
+                parameters.Add(new SqlParameter("IS_DECLARED", file.IsDeclared ? "1" : "0"));
+            else
+            {
+                parameters.Add(new SqlParameter("IS_DECLARED", "0"));
+            }
             dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateDeclareFile]", parameters);
         }
 

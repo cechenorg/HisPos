@@ -578,6 +578,10 @@ namespace His_Pos
                     prescriptionDec2View.CopaymentCombo.ItemsSource = prescriptionDec2View.Copayments;
                     prescriptionDec2View.AdjustCaseCombo.ItemsSource = prescriptionDec2View.AdjustCases;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
+                    prescriptionDec2View.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                    prescriptionDec2View.HisPerson.SelectedItem =
+                        MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(m =>
+                            m.Id.Equals(MainWindow.CurrentUser.Id));
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
