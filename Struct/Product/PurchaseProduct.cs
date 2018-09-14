@@ -35,7 +35,7 @@ namespace His_Pos.Struct.Product
         public double Inventory { get; }
         public string SafeAmount { get; }
         public string BasicAmount { get; }
-        public string OnTheWayAmount { get; }
+        public string OnTheWayAmount { get; set; }
         public double LastPrice;
         public string Type;
         public bool Status;

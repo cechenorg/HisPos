@@ -173,10 +173,21 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("新增新處理單...");
                 ManufactoryDb.AddNewOrderBasicSafe(type, wareHouse, manufactory);
-
+                
+                ChangeLoadingMessage("取得進退貨資料...");
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    //productPurchaseView.UpdateUi();
+                    ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+
+                    foreach (StoreOrder stoOrd in tempStoreOrderCollection)
+                    {
+                        if (stoOrd.Type == OrderType.WAITING)
+                        {
+                            //Check Order Status
+                        }
+                    }
+
+                    productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
                     productPurchaseView.StoOrderOverview.SelectedIndex = 0;
                 }));
             };
@@ -193,7 +204,7 @@ namespace His_Pos
 
         internal void GetProductPurchaseData(ProductPurchaseView productPurchaseView)
         {
-            productPurchaseView.OrderContentControl.IsEnabled = false;
+            productPurchaseView.AllGrid.IsEnabled = false;
 
             backgroundWorker.DoWork += (s, o) =>
             {
@@ -231,7 +242,11 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    productPurchaseView.OrderContentControl.IsEnabled = true;
+                    productPurchaseView.AllGrid.IsEnabled = true;
+
+                    if (productPurchaseView.StoOrderOverview.Items.Count != 0)
+                        productPurchaseView.StoOrderOverview.SelectedIndex = 0;
+
                     Close();
                 }));
             };

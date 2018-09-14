@@ -10,6 +10,7 @@ using His_Pos.Class.Product;
 using His_Pos.Interface;
 using His_Pos.Properties;
 using His_Pos.Service;
+using His_Pos.Struct.StoreOrder;
 
 namespace His_Pos.Class.StoreOrder
 {
@@ -48,6 +49,22 @@ namespace His_Pos.Class.StoreOrder
                 dd.ExecuteProc("[HIS_POS_DB].[SET].[PURCHASEANDRETURN]",parameters);
                 parameters.Clear();
             }
+        }
+
+        internal static Collection<StoreOrderOverview> GetStoreOrderOverview()
+        {
+            Collection<StoreOrderOverview> collection = new Collection<StoreOrderOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderOverview]");
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new StoreOrderOverview(row));
+            }
+
+            return collection;
         }
 
         internal static void SaveOrderDetail(StoreOrder storeOrder) {
@@ -96,6 +113,7 @@ namespace His_Pos.Class.StoreOrder
 
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
+            details.Columns.Add("ORDERQTY", typeof(int));
             details.Columns.Add("QTY", typeof(int));
             details.Columns.Add("PRICE", typeof(string));
             details.Columns.Add("DESCRIPTION", typeof(string));
@@ -109,6 +127,7 @@ namespace His_Pos.Class.StoreOrder
                 var newRow = details.NewRow();
 
                 newRow["PRO_ID"] = product.Id;
+                newRow["ORDERQTY"] = ((IProductPurchase)product).OrderAmount;
                 newRow["QTY"] = ((ITrade)product).Amount;
                 newRow["PRICE"] = ((ITrade)product).Price == "" ? "0" : ((ITrade)product).Price;
                 newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
@@ -125,14 +144,15 @@ namespace His_Pos.Class.StoreOrder
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
         }
 
-        internal static string GetNewOrderId(string OrdEmpId, string wareId, string manId)
+        internal static string GetNewOrderId(string OrdEmpId, string wareId, string manId, string orderType)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDEMP_ID", OrdEmpId));
             parameters.Add(new SqlParameter("WARE_ID", wareId));
-            parameters.Add(new SqlParameter("MAN_ID", wareId));
+            parameters.Add(new SqlParameter("MAN_ID", manId));
+            parameters.Add(new SqlParameter("ORDERTYPE", orderType));
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddNewStoreOrder]", parameters);
 
@@ -149,18 +169,29 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", StoOrdId));
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderDetail]", parameters);
-            
+
+            string lastProductId = "";
+
             foreach (DataRow row in table.Rows)
             {
+                AbstractClass.Product product = null;
+                string currentProductId = row["PRO_ID"].ToString();
+
                 switch (row["PRO_TYPE"].ToString())
                 {
                     case "M":
-                        StoreOrderCollection.Add(new ProductPurchaseMedicine(row, DataSource.GetStoreOrderDetail));
+                        product = new ProductPurchaseMedicine(row, DataSource.GetStoreOrderDetail);
                         break;
                     case "O":
-                        StoreOrderCollection.Add(new ProductPurchaseOtc(row, DataSource.GetStoreOrderDetail));
+                        product = new ProductPurchaseOtc(row, DataSource.GetStoreOrderDetail);
                         break;
                 }
+
+                if (lastProductId == currentProductId)
+                    ((IProductPurchase)product).IsFirstBatch = false;
+
+                lastProductId = currentProductId;
+                StoreOrderCollection.Add(product);
             }
             return StoreOrderCollection;
         }

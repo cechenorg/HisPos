@@ -38,6 +38,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
 
             ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
             WareHouseComboCollection = wareHouseComboCollection;
+
+            WareHouseCombo.SelectedIndex = 0;
         }
 
         private void RadioButton_TargetOnChecked(object sender, RoutedEventArgs e)
@@ -50,16 +52,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
             {
                 case "2":
                     Con1.IsEnabled = false;
-                    Con2.IsEnabled = true;
-                    Con3.IsEnabled = true;
-                    Con4.IsEnabled = true;
+
                     Con2.IsChecked = true;
                     break;
                 case "5":
                     Con1.IsEnabled = true;
-                    Con2.IsEnabled = true;
-                    Con3.IsEnabled = true;
-                    Con4.IsEnabled = true;
+                    
+                    Con1.IsChecked = true;
                     break;
             }
         }
@@ -103,6 +102,16 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
         private void ManufactoryAuto_OnGotFocus(object sender, RoutedEventArgs e)
         {
             TargetManufactory.IsChecked = true;
+        }
+
+        public AutoCompleteFilterPredicate<object> ManFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    !((obj as Manufactory)?.Id is null) && (((Manufactory)obj).Id.ToLower().Contains(searchText.ToLower())
+                                                                || ((Manufactory)obj).Name.ToLower().Contains(searchText.ToLower()));
+            }
         }
     }
 }

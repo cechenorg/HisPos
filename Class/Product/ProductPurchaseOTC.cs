@@ -39,6 +39,7 @@ namespace His_Pos.Class.Product
                 case DataSource.GetStoreOrderDetail:
                     Price = dataRow["STOORDDET_PRICE"].ToString();
                     TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+                    OrderAmount = Int32.Parse(dataRow["STOORDDET_ORDERQTY"].ToString());
                     Amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
                     Note = dataRow["PRO_DESCRIPTION"].ToString();
                     Invoice = dataRow["STOORDDET_INVOICE"].ToString();
@@ -58,6 +59,8 @@ namespace His_Pos.Class.Product
                     Status = dataRow["PRO_STATUS"].ToString().Equals("1");
                     break;
             }
+
+            IsFirstBatch = true;
         }
 
         private ProductPurchaseOtc()
@@ -78,7 +81,8 @@ namespace His_Pos.Class.Product
             LastPrice = selectedItem.LastPrice;
             Stock = new InStock(selectedItem);
         }
-
+        public bool IsFirstBatch { get; set; }
+        public bool InvertIsFirstBatch { get { return !IsFirstBatch; } }
         public string CountStatus { get; set; } = "";
         public string FocusColumn { get; set; } = "";
         public bool Status { get; set; } = false;
@@ -105,6 +109,16 @@ namespace His_Pos.Class.Product
                 CalculateData("TotalPrice");
                 FocusColumn = "TotalPrice";
                 NotifyPropertyChanged("TotalPrice");
+            }
+        }
+        public double orderAmount;
+        public double OrderAmount
+        {
+            get { return orderAmount; }
+            set
+            {
+                orderAmount = value;
+                NotifyPropertyChanged("OrderAmount");
             }
         }
         public double amount;
@@ -141,9 +155,9 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Note");
             }
         }
-        private int freeAmount;
+        private double freeAmount;
 
-        public int FreeAmount
+        public double FreeAmount
         {
             get { return freeAmount; }
             set
@@ -252,6 +266,7 @@ namespace His_Pos.Class.Product
             otc.ValidDate=ValidDate;
             otc.BatchNumber=BatchNumber;
             otc.Status = Status;
+            otc.OrderAmount = OrderAmount;
 
             return otc;
         }

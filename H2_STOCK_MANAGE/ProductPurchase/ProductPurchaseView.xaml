@@ -10,7 +10,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <Viewbox Stretch="Fill">
-        <Grid Width="1365" Height="839">
+        <Grid Name="AllGrid" Width="1365" Height="839">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="280"/>
                 <ColumnDefinition/>

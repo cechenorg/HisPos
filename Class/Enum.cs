@@ -71,6 +71,8 @@ namespace His_Pos.Class
    
     public enum AddOrderType
     {
+        RETURNBYMANUFACTORY = 1,
+        RETURNBYORDER = 2,
         ADDALLBELOWSAFEAMOUNT = 4,
         ADDBYMANUFACTORY = 5,
         ADDALLTOBASICAMOUNT = 6,
@@ -100,7 +102,8 @@ namespace His_Pos.Class
     {
         ERROR = 0,
         SUCCESS = 1,
-        WARNING = 2
+        WARNING = 2,
+        ONLYMESSAGE = 3
     }
 
     public enum DeclareFileType
