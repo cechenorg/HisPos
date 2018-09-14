@@ -260,7 +260,7 @@ namespace His_Pos.Class.Product
             Status = ((IProductPurchase)product).Status;
             LastPrice = ((IProductPurchase)product).LastPrice;
             Stock = ((IProductPurchase)product).Stock;
-
+            IsFirstBatch = true;
         }
     }
 }
