@@ -58,9 +58,9 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="0,0,10,0"  Background="{StaticResource GridBackGround}">
                 <RadioButton Content="上班" Tag="0" Margin="35,0,5,0" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
-                <Image Source="/Images/PosDot.png" Width="15"/>
+                <Image Source="/Images/OrangeDot.png" Width="15"/>
                 <RadioButton Content="下班" Tag="1" Margin="45,0,5,0" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked"/>
-                <Image Source="/Images/DarkerHisDot.png" Width="15"/>
+                <Image Source="/Images/BlueDot.png" Width="15"/>
                 <RadioButton Content="全部" Tag="2" Margin="45,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" IsChecked="True"/>
             </StackPanel>
             <DataGrid Name="DataGridClockIn" Grid.Row="2" Grid.Column="1" Grid.RowSpan="1" Margin="0,0,10,10" Background="{StaticResource GridDarkerBackGround}" CanUserAddRows="False" ItemsSource="{Binding EmpClockIns,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"

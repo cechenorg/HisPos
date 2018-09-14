@@ -140,7 +140,7 @@ namespace His_Pos.ViewModel
             switch (newProductTab.Type)
             {
                 case SearchType.OTC:
-                    newTab = new OtcDetailView() { TabName = newProductTab.Id, Icon = "..\\..\\Images\\PosDot.png" };
+                    newTab = new OtcDetailView() { TabName = newProductTab.Id, Icon = "..\\..\\Images\\OrangeDot.png" };
                     break;
                 case SearchType.MED:
                     newTab = new MedicineDetailView() { TabName = newProductTab.Id, Icon = "..\\..\\Images\\HisDot.png" };

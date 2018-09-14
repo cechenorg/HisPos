@@ -33,7 +33,7 @@ namespace His_Pos.H5_ATTEND.ClockIn
             public EmpClockIn(DataRow dataRow) {
                 empName = dataRow["EMP_NAME"].ToString();
                 clocckType = dataRow["EMPATT_TYPE"].ToString();
-                typeIcon = dataRow["EMPATT_TYPE"].ToString().Equals("上班")? new BitmapImage(new Uri(@"..\..\Images\DarkerHisDot.png", UriKind.Relative)) : new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
+                typeIcon = dataRow["EMPATT_TYPE"].ToString().Equals("上班")? new BitmapImage(new Uri(@"..\..\Images\BlueDot.png", UriKind.Relative)) : new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
                 clocckDate = dataRow["EMPATT_DATE"].ToString();
             }
             public BitmapImage typeIcon { get; set; }
