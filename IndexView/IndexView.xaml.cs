@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.Class;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,7 @@ namespace His_Pos.IndexView
         {
             InitializeComponent();
             Date.Content = DateTime.Today.ToString("yyyy/MM/dd");
+            ChronicDb.CaculateChironic();
         }
 
         public void UpdateUI() {

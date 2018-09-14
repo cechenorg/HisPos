@@ -553,7 +553,7 @@ namespace His_Pos.Class.Declare
                 row["D36"] = d36;
             row["D37"] = declareData.MedicalServiceCode;
             row["D38"] = declareData.MedicalServicePoint.ToString();
-            row["D43"] = "";
+            row["D43"] = declareData.Prescription.OriginalMedicalNumber == null ? "" : declareData.Prescription.OriginalMedicalNumber;
             row["XML"] = CreateToXml(declareData).InnerXml.ToString();
             declareMaster.Rows.Add(row);
         }

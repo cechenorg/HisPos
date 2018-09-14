@@ -196,24 +196,24 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var declareDb = new DeclareDb();
                 DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
                
-                if (CurrentPrescription.Treatment.AdjustCase.Id != "02" && string.IsNullOrEmpty(CurrentDecMasId)) {  //一般處方
+                if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(CurrentDecMasId)) {  //一般處方
                    string decMasId =  declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
                 }
-                else if (CurrentPrescription.Treatment.AdjustCase.Id == "02" && string.IsNullOrEmpty(CurrentDecMasId)) //第1次的新慢性處方
+                else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && string.IsNullOrEmpty(CurrentDecMasId)) //第1次的新慢性處方
                 {
                     string decMasId = declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
                     int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
                     int end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
 
-                    int intDecMasId = Convert.ToInt32(decMasId) + 1;
+                    int intDecMasId = Convert.ToInt32(decMasId);
                     for (int i = start;i<= end;i++) {
                         declareDb.SetSameGroupChronic(intDecMasId.ToString(),i.ToString());
                         intDecMasId++;
                     }
                 }
-                else if(CurrentPrescription.Treatment.AdjustCase.Id == "02" && !string.IsNullOrEmpty(CurrentDecMasId)) { //第2次以後的慢性處方
+                else if(CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(CurrentDecMasId)) { //第2次以後的慢性處方
                     declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
                     declareData.DecMasId = CurrentDecMasId;
                     declareDb.UpdateDeclareData(declareData);   //更新慢箋跟重算預約慢箋 
@@ -676,6 +676,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     e.Handled = true;
                 }
             }
+        }
+
+        private void ReleaseHospital_Populating(object sender, PopulatingEventArgs e) { 
+            var tempCollection = new ObservableCollection<Hospital>(HosiHospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList());
+            ReleaseHospital.ItemsSource = tempCollection;
+            ReleaseHospital.PopulateComplete();
         }
     }
 }

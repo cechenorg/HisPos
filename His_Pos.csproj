@@ -242,6 +242,8 @@
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority\Authority.cs" />
     <Compile Include="Class\Authority\AuthorityDb.cs" />
+    <Compile Include="Class\Chronic.cs" />
+    <Compile Include="Class\ChronicDb.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryHis.cs" />
