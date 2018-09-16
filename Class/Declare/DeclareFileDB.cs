@@ -98,14 +98,16 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("CHRONIC_COUNT", int.Parse(p.Tdata.T9)));
             parameters.Add(new SqlParameter("NORMAL_COUNT", int.Parse(p.Tdata.T7)));
             parameters.Add(new SqlParameter("TOTAL_POINT", int.Parse(p.Tdata.T12)));
-            file.HasError = file.ErrorPrescriptionList.ErrorList.Count != 0;
-            parameters.Add(new SqlParameter("HAS_ERROR", file.HasError));
-            if(type.Equals(DeclareFileType.UPDATE))
-                parameters.Add(new SqlParameter("IS_DECLARED", file.IsDeclared ? "1" : "0"));
-            else
+            file.HasError = false;
+            foreach (var e in file.ErrorPrescriptionList.ErrorList)
             {
-                parameters.Add(new SqlParameter("IS_DECLARED", "0"));
+                if (e.Error.Count > 0)
+                    file.HasError = true;
             }
+            parameters.Add(new SqlParameter("HAS_ERROR", file.HasError));
+            parameters.Add(type.Equals(DeclareFileType.UPDATE)
+                ? new SqlParameter("IS_DECLARED", file.IsDeclared ? "1" : "0")
+                : new SqlParameter("IS_DECLARED", "0"));
             dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateDeclareFile]", parameters);
         }
 

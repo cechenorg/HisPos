@@ -312,6 +312,7 @@ namespace His_Pos.Class.Declare
                     D21 = CheckXmlEmptyValue(m.Hospital.Id),
                     D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
                     D23 = CheckXmlEmptyValue(t.AdjustDate == DateTime.MinValue?t.AdjustDateStr:DateTimeExtensions.ToSimpleTaiwanDate(t.AdjustDate)),
+                    D24 = string.IsNullOrEmpty(m.Hospital.Doctor.IcNumber)? m.Hospital.Id: m.Hospital.Doctor.IcNumber,
                     D25 = p.Pharmacy.MedicalPersonnel.IcNumber,
                     D30 = t.MedicineDays,
                     D31 = SpecailMaterialPoint.ToString(),
@@ -393,13 +394,8 @@ namespace His_Pos.Class.Declare
             {
                 xmlSerializer.Serialize(textWriter, DeclareXml);
                 var document = XDocument.Parse(ReportService.PrettyXml(textWriter));
-                //document.Descendants()
-                //    .Where(e => e.IsEmpty || String.IsNullOrWhiteSpace(e.Value))
-                //    .Remove();
-                return document.ToString()
-                    .Replace(
-                        "<ddata xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">",
-                        "<ddata>");
+                document.Root?.RemoveAttributes();
+                return document.ToString();
             }
         }
 
