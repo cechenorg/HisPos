@@ -209,9 +209,9 @@ namespace His_Pos.Class.StoreOrder
                 orderMedicines += "\r\n";
             }
             
-            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=SD;Password=2iixoguu;");
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=SD;Password=2iixoguu;SslMode=none", SqlConnectionType.NySql);
             
-            dd.MySqlNonQueryBySqlString($"call InsertNewOrder( {storeOrderData.Id.Substring(2, 10)}, {storeOrderData.Note}, {orderMedicines})");
+            dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{storeOrderData.Id.Substring(2, 10)}', '{storeOrderData.Note}', '{orderMedicines}')");
 
         }
     }

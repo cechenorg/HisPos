@@ -365,6 +365,9 @@ namespace His_Pos.ProductPurchase
                 StoreOrderData.Type = OrderType.WAITING;
             else
                 StoreOrderData.Type = OrderType.PROCESSING;
+            
+            if (StoreOrderData.Type == OrderType.WAITING)
+                StoreOrderDb.SendOrderToSinde(StoreOrderData);
 
             SaveOrder();
 
@@ -376,8 +379,6 @@ namespace His_Pos.ProductPurchase
 
             SetCurrentControl();
 
-            if (StoreOrderData.Type == OrderType.WAITING)
-                StoreOrderDb.SendOrderToSinde(StoreOrderData);
         }
 
         private void UpdateOneTheWayAmount()
