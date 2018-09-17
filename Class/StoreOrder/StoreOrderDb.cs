@@ -219,9 +219,19 @@ namespace His_Pos.Class.StoreOrder
         {
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=SD;Password=2iixoguu;SslMode=none", SqlConnectionType.NySql);
 
-            dd.MySqlNonQueryBySqlString($"call GetOrderStatus('{orderId.Substring(2, 10)}')");
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{orderId.Substring(2, 10)}')");
 
-            return OrderType.PROCESSING;
+            switch (dataTable.Rows[0]["FLAG"].ToString())
+            {
+                case "0":
+                    return OrderType.WAITING;
+                case "1":
+                    return OrderType.PROCESSING;
+                case "2":
+                    return OrderType.SCRAP;
+                default:
+                    return OrderType.ERROR;
+            }
         }
     }
 }

@@ -66,7 +66,9 @@ namespace His_Pos.Class
         PROCESSING = 1,
         DONE = 2,
         ALL = 3,
-        WAITING = 4
+        WAITING = 4,
+        SCRAP = 5,
+        ERROR = 100
     }
    
     public enum AddOrderType
