@@ -208,8 +208,8 @@ namespace His_Pos.Class.StoreOrder
                 orderMedicines += ((IProductPurchase) product).Note;
                 orderMedicines += "\r\n";
             }
-
-            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229; Port=3310;User Id=SD;Password=2iixoguu;SslMode=none");
+            
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=SD;Password=2iixoguu;");
             
             dd.MySqlNonQueryBySqlString($"call InsertNewOrder( {storeOrderData.Id.Substring(2, 10)}, {storeOrderData.Note}, {orderMedicines})");
 
