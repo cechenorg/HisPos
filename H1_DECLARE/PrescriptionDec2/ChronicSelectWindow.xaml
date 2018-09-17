@@ -16,7 +16,7 @@
                 CellStyle="{StaticResource DataGridCellStyle}"
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 GridLinesVisibility="Horizontal"
-                ItemsSource="{Binding WareHouseInventoryCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                ItemsSource="{Binding ChronicCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -43,6 +43,7 @@
                             <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                         </Trigger>
                     </Style.Triggers>
+                    <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick"/>
                     <Setter Property="Background" Value="Transparent" />
                     <Setter Property="BorderBrush" Value="Transparent" />
                     <Setter Property="FontSize" Value="16" />
@@ -53,7 +54,7 @@
                 <DataGridTemplateColumn Width="30">
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Width="80"
-                        Binding="{Binding warName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding hospital.FullName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         FontWeight="Bold"
@@ -67,7 +68,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="100"
-                        Binding="{Binding Inventory,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding division.FullName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         FontWeight="Bold"
@@ -80,31 +81,40 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn
-                        MinWidth="120"
-                        Header="第幾次領藥">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBox
-                                    MinWidth="120"
-                                    HorizontalContentAlignment="Center"
-                                    BorderBrush="DimGray"
-                                    BorderThickness="0,0,0,1"
-                                    CharacterCasing="Upper"
-                                    FontFamily="Segoe UI Semibold"
-                                    FontSize="14"
-                                    FontWeight="Bold"
-                                    Text="{Binding DemolitionAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                    />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn Width="80"
-                        Binding="{Binding AfterDemolitionAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                <DataGridTextColumn Width="100"
+                        Binding="{Binding TreatDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
                         FontWeight="Bold"
-                        Header="領藥次數"
+                        Header="預計領藥日"
+                        IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="120"
+                        Binding="{Binding ContinueNum,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Header="第幾次領藥"
+                        IsReadOnly="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="120"
+                        Binding="{Binding ContinueTotal,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="Segoe UI Semibold"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Header="總領藥次數"
                         IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">

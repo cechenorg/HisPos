@@ -1,4 +1,5 @@
 ﻿using His_Pos.Properties;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,46 +11,28 @@ namespace His_Pos.Service
     class DbConnection
     {
         private SqlConnection _connection;
-
+        private string _connectionString;
         public DbConnection()
         {
         }
 
-        public DbConnection(string connection) { _connection = new SqlConnection(connection); }
+        public DbConnection(string connection) { _connection = new SqlConnection(connection); _connectionString = connection; }
 
-        public void NonQueryBySqlString(string sqlString)
-        {
-            DataTable dataTable = new DataTable();
-            SqlCommand cmd = new SqlCommand(sqlString, _connection);
+        public void MySqlNonQueryBySqlString(string sqlString)
+        { 
+            MySqlConnection conn = new MySqlConnection(_connectionString);
             try
             {
-                _connection.Open();
+                MySqlCommand cmd = new MySqlCommand(sqlString, conn);
+                conn.Open();
                 cmd.ExecuteNonQuery();
-                _connection.Close();
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException(ex.Message);
-            }
-
-        }
-        public DataTable QueryBySqlString(string sqlString)
-        {
-            DataTable dataTable = new DataTable();
-            SqlCommand cmd = new SqlCommand(sqlString, _connection);
-            try {
-                _connection.Open();
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(dataTable);
-                _connection.Close();
-                da.Dispose();
-                return dataTable;
+                conn.Close();
             }
             catch (Exception ex) {
                 throw new InvalidOperationException(ex.Message);
             }
-           
         }
+       
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
             var table = new DataTable();

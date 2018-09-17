@@ -34,6 +34,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private string CurrentDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
         private bool _isChanged;
+        public static PrescriptionDec2View Instance;
         private int _selfCost;
         private SystemType _cusHhistoryFilterCondition = SystemType.ALL;
 
@@ -140,6 +141,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
             SetDefaultFieldsValue();
             GetPrescriptionData();
         }
@@ -191,9 +193,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             MessageWindow m;
             CurrentPrescription.EList.Error = new List<Error>();
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
+           
             int medDays = 0;
             foreach (var med in CurrentPrescription.Medicines)
             {
+                if (string.IsNullOrEmpty(med.Days)) {
+                    MessageWindow messageWindow = new MessageWindow(med.Id + "的給藥日份不可為空",MessageType.ERROR);
+                    messageWindow.ShowDialog();
+                    return;
+                }
                 if (int.Parse(med.Days) > medDays)
                     medDays = int.Parse(med.Days);
             }
@@ -563,6 +571,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             LoadPatentDataFromIcCard();
+            if (ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) {
+                ChronicSelectWindow chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
+                chronicSelectWindow.ShowDialog();
+            }
         }
 
         private void LoadPatentDataFromIcCard()
