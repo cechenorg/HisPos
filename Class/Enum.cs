@@ -539,6 +539,9 @@ namespace His_Pos.Class
         ErrorCode9140 = 9140
 
     }
-        
-    
+    public enum SqlConnectionType {
+        SqlServer = 0,
+        NySql = 1
+    }
+
 }

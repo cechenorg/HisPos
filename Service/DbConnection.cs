@@ -1,4 +1,5 @@
-﻿using His_Pos.Properties;
+﻿using His_Pos.Class;
+using His_Pos.Properties;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -10,23 +11,30 @@ namespace His_Pos.Service
 {
     class DbConnection
     {
-        private SqlConnection _connection;
-        private string _connectionString;
+        private SqlConnection _sqlServerConnection;
+        private MySqlConnection _sqlMySqlConnection; 
         public DbConnection()
         {
+        } 
+        public DbConnection(string connection, SqlConnectionType connectionType = SqlConnectionType.SqlServer) {
+            switch (connectionType) {
+                case SqlConnectionType.SqlServer:
+                    _sqlServerConnection = new SqlConnection(connection);
+                    break;
+                case SqlConnectionType.NySql:
+                    _sqlMySqlConnection = new MySqlConnection(connection);
+                    break; 
+            }  
         }
 
-        public DbConnection(string connection) { _connection = new SqlConnection(connection); _connectionString = connection; }
-
         public void MySqlNonQueryBySqlString(string sqlString)
-        { 
-            MySqlConnection conn = new MySqlConnection(_connectionString);
+        {  
             try
             {
-                MySqlCommand cmd = new MySqlCommand(sqlString, conn);
-                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sqlString, _sqlMySqlConnection);
+                _sqlMySqlConnection.Open();
                 cmd.ExecuteNonQuery();
-                conn.Close();
+                _sqlMySqlConnection.Close();
             }
             catch (Exception ex) {
                 throw new InvalidOperationException(ex.Message);
@@ -38,8 +46,8 @@ namespace His_Pos.Service
             var table = new DataTable();
             try
             {
-                _connection.Open();
-                var myCommand = new SqlCommand(procName, _connection);
+                _sqlServerConnection.Open();
+                var myCommand = new SqlCommand(procName, _sqlServerConnection);
                 myCommand.CommandType = CommandType.StoredProcedure;
 
                 if (parameterList != null)
@@ -51,7 +59,7 @@ namespace His_Pos.Service
                 var sqlDapter = new SqlDataAdapter(myCommand);
                 table.Locale = CultureInfo.InvariantCulture;
                 sqlDapter.Fill(table);
-                _connection.Close();
+                _sqlServerConnection.Close();
             }
             catch (Exception ex)
             {
