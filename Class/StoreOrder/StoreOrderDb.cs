@@ -204,7 +204,7 @@ namespace His_Pos.Class.StoreOrder
             foreach (var product in storeOrderData.Products)
             {
                 orderMedicines += product.Id.PadRight(12, ' ');
-                orderMedicines += (((ITrade) product).Amount + ((IProductPurchase) product).FreeAmount).ToString().PadLeft(10, ' ');
+                orderMedicines += ((IProductPurchase) product).OrderAmount.ToString().PadLeft(10, ' ');
                 orderMedicines += ((IProductPurchase) product).Note;
                 orderMedicines += "\r\n";
             }
@@ -213,6 +213,15 @@ namespace His_Pos.Class.StoreOrder
             
             dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{storeOrderData.Id.Substring(2, 10)}', '{storeOrderData.Note}', '{orderMedicines}')");
 
+        }
+
+        internal static OrderType GetOrderStatusFromSinde(string orderId)
+        {
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=SD;Password=2iixoguu;SslMode=none", SqlConnectionType.NySql);
+
+            dd.MySqlNonQueryBySqlString($"call GetOrderStatus('{orderId.Substring(2, 10)}')");
+
+            return OrderType.PROCESSING;
         }
     }
 }

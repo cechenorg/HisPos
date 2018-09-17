@@ -231,7 +231,7 @@ namespace His_Pos
                     {
                         if(stoOrd.Type == OrderType.WAITING)
                         {
-                            //Check Order Status
+                            StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
                         }
                     }
 
