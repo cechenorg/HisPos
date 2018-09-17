@@ -330,8 +330,7 @@ namespace His_Pos.Class.Declare
                 DeclareXml.Dbody.D4 = DeclareMakeUp;
             }
 
-            if (!string.IsNullOrEmpty(t.AdjustCase.Id) &&
-                (t.AdjustCase.Id.StartsWith("D") || t.AdjustCase.Id.StartsWith("5")))
+            if (!string.IsNullOrEmpty(t.AdjustCase.Id) && !t.AdjustCase.Id.StartsWith("D") && !t.AdjustCase.Id.StartsWith("5"))
             {
                 if (string.IsNullOrEmpty(m.Hospital.Doctor.IcNumber))
                 {

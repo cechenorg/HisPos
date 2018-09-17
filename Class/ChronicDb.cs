@@ -39,7 +39,13 @@ namespace His_Pos.Class
             else
                 return true;
         }
-
-         
+        internal static void UpdateChronicData(string decMasId) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            ObservableCollection<Chronic> chronics = new ObservableCollection<Chronic>();
+            parameters.Add(new SqlParameter("DecMasId", decMasId));
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateChronicData]", parameters);
+            
+        }
     }
 }

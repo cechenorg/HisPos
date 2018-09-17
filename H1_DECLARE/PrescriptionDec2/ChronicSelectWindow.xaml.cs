@@ -51,12 +51,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             var selectedItem = (sender as DataGridRow).Item;
             string decMasId = ((Chronic)selectedItem).DecMasId;
+            PrescriptionDec2View.Instance.CurrentDecMasId = decMasId;
+
             Prescription prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
-            PrescriptionDec2View.Instance.CurrentPrescription = prescription;
-
-            PrescriptionDec2View.Instance.CurrentPrescription.Medicines = MedicineDb.GetDeclareMedicineByMasId(decMasId);
-            PrescriptionDec2View.Instance.PrescriptionMedicines.ItemsSource = PrescriptionDec2View.Instance.CurrentPrescription.Medicines;
-
+            PrescriptionDec2View.Instance.CurrentPrescription = prescription; 
             PrescriptionDec2View.Instance.DivisionCombo.Text = prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
             PrescriptionDec2View.Instance.AdjustCaseCombo.Text = prescription.Treatment.AdjustCase.FullName;
             PrescriptionDec2View.Instance.TreatmentCaseCombo.Text = prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
@@ -64,6 +62,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             PrescriptionDec2View.Instance.CopaymentCombo.Text = prescription.Treatment.Copayment.FullName;
             PrescriptionDec2View.Instance.SpecialCode.Text = prescription.Treatment.MedicalInfo.SpecialCode.Id;
             
+            PrescriptionDec2View.Instance.CurrentPrescription.Medicines = MedicineDb.GetDeclareMedicineByMasId(decMasId);
+            PrescriptionDec2View.Instance.PrescriptionMedicines.ItemsSource = PrescriptionDec2View.Instance.CurrentPrescription.Medicines;
+
             Close();
         }
     }

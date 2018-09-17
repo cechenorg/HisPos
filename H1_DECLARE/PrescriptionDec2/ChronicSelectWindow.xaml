@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
         mc:Ignorable="d"
-        Title="ChronicSelectWindow" Height="450" Width="600">
-    <Grid>
+        Title="ChronicSelectWindow" Height="450" Width="800">
+  
+        <Grid>
         <DataGrid
                 Grid.Row="1"
                 Margin="10,0,10,10"
@@ -53,7 +54,7 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn Width="30">
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Width="80"
+                <DataGridTextColumn Width="300"
                         Binding="{Binding hospital.FullName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                         FontFamily="Segoe UI Semibold"
                         FontSize="14"
@@ -126,4 +127,5 @@
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
+       
 </Window>

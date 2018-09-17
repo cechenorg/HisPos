@@ -31,7 +31,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
-        private string CurrentDecMasId = string.Empty;
+        public string CurrentDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
         private bool _isChanged;
         public static PrescriptionDec2View Instance;
@@ -233,7 +233,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 else if(CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(CurrentDecMasId)) { //第2次以後的慢性處方
                     declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
                     declareData.DecMasId = CurrentDecMasId;
-                    declareDb.UpdateDeclareData(declareData); //更新慢箋跟重算預約慢箋 
+                    declareDb.UpdateDeclareData(declareData); //更新慢箋
+                    ChronicDb.UpdateChronicData(CurrentDecMasId);//重算預約慢箋 
                     if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal) {  //若為最後一次 則再算出下一批慢性
                         declareDb.SetNewGroupChronic(CurrentDecMasId);
                     } 
