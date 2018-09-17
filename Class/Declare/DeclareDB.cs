@@ -122,11 +122,10 @@ namespace His_Pos.Class.Declare
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateDeclareData]", parameters);
         }
 
-        private List<Ddata> SortDdataByCaseId(Pharmacy p)
+        public List<Ddata> SortDdataByCaseId(Pharmacy p)
         {
-            var normalCaseList = p.Ddata.OrderBy(d => d.Dbody.D38);
             var sorted = new List<Ddata>();
-            var result = normalCaseList.GroupBy(d => d.Dhead.D1);
+            var result = p.Ddata.GroupBy(d => d.Dhead.D1);
             foreach (var group in result)
             {
                 sorted.AddRange(group);
@@ -137,33 +136,40 @@ namespace His_Pos.Class.Declare
         private List<Ddata> GetDdataList(DateTime declareDate)
         {
             if (PrescriptionDB.GetPrescriptionXmlByDate(declareDate).Count == 0) return new List<Ddata>();
-            //依照藥事服務費點數排序
-            var ddatas = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).OrderBy(d => d.Dbody.D38)
+            //依調劑藥師分組
+            var ddatas = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).GroupBy(d => d.Dbody.D25)
                 .ToList();
-            
-            /*
-             * 藥事服務費每人每日81 - 100件內 => 診療項目代碼: 05234D . 支付點數 : 15
-             *          每人每日100件以上 => 診療項目代碼: 0502B . 支付點數 : 0
-             */
-            for (var i = 0; i < ddatas.Count; i++)
+            var result = new List<Ddata>();
+            //每位調劑藥師處方排序
+            foreach (var group in ddatas)
             {
-                if (i < 80)
+                var tmpGroup = group.OrderBy(d => d.Dbody.D38);//依藥事服務費點數排序
+                var count = 1;
+                foreach (var tmpG in tmpGroup)
                 {
-                    ddatas[i].Dbody.D37 = "0502B";
-                    ddatas[i].Dbody.D38 = "48";
+                    //每人每日1 - 80件內 => 診療項目代碼: 05202B . 支付點數 : 48
+                    if (count < 80)
+                    {
+                        tmpG.Dbody.D37 = "0502B";
+                        tmpG.Dbody.D38 = "48";
+                    }
+                    //每人每日81 - 100件內 => 診療項目代碼: 05234D . 支付點數 : 15
+                    else if (count < 100 && count >= 80)
+                    {
+                        tmpG.Dbody.D37 = "05234D";
+                        tmpG.Dbody.D38 = "15";
+                    }
+                    //每人每日100件以上 => 診療項目代碼: 0502B . 支付點數 : 0
+                    else
+                    { 
+                        tmpG.Dbody.D37 = "0502B";
+                        tmpG.Dbody.D38 = "0";
+                    }
+                    count++;
                 }
-                else if (i < 100 && i >= 80)
-                {
-                    ddatas[i].Dbody.D37 = "05234D";
-                    ddatas[i].Dbody.D38 = "15";
-                }
-                else
-                {
-                    ddatas[i].Dbody.D37 = "0502B";
-                    ddatas[i].Dbody.D38 = "0";
-                }
+                result.AddRange(tmpGroup);
             }
-            return ddatas;
+            return result;
         }
 
         private string GetDateStr(DateTime d, bool now)
@@ -173,7 +179,12 @@ namespace His_Pos.Class.Declare
             return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + d.Day.ToString().PadLeft(2, '0');
         }
 
-        private int CountPrescriptionByCase(List<Ddata> listDdata, int caseType)
+        public override string ToString()
+        {
+            return base.ToString();
+        }
+
+        public int CountPrescriptionByCase(List<Ddata> listDdata, int caseType)
         {
             List<Ddata> normalCaseDdata = new List<Ddata>();
             if (caseType == 1)
@@ -382,42 +393,42 @@ namespace His_Pos.Class.Declare
 
             row["CUS_ID"] = Convert.ToInt32(declareTrade.CusId);
 
-            if (String.IsNullOrEmpty(declareTrade.EmpId))
+            if (string.IsNullOrEmpty(declareTrade.EmpId))
                 row["EMP_ID"] = DBNull.Value;
             else
                 row["EMP_ID"] = declareTrade.EmpId;
 
-            if (String.IsNullOrEmpty(declareTrade.PaySelf))
+            if (string.IsNullOrEmpty(declareTrade.PaySelf))
                 row["PAYSELF"] = DBNull.Value;
             else
                 row["PAYSELF"] = Convert.ToInt32(declareTrade.PaySelf);
 
-            if (String.IsNullOrEmpty(declareTrade.Deposit))
+            if (string.IsNullOrEmpty(declareTrade.Deposit))
                 row["DEPOSIT"] = DBNull.Value;
             else
                 row["DEPOSIT"] = Convert.ToInt32(declareTrade.Deposit);
 
-            if (String.IsNullOrEmpty(declareTrade.ReceiveMoney))
+            if (string.IsNullOrEmpty(declareTrade.ReceiveMoney))
                 row["RECEIVE_MONEY"] = DBNull.Value;
             else
                 row["RECEIVE_MONEY"] = Convert.ToInt32(declareTrade.ReceiveMoney);
 
-            if (String.IsNullOrEmpty(declareTrade.CopayMent))
+            if (string.IsNullOrEmpty(declareTrade.CopayMent))
                 row["COPAYMENT"] = DBNull.Value;
             else
                 row["COPAYMENT"] = Convert.ToInt32(declareTrade.CopayMent);
 
-            if (String.IsNullOrEmpty(declareTrade.PayMoney))
+            if (string.IsNullOrEmpty(declareTrade.PayMoney))
                 row["PAYMONEY"] = DBNull.Value;
             else
                 row["PAYMONEY"] = Convert.ToInt32(declareTrade.PayMoney);
 
-            if (String.IsNullOrEmpty(declareTrade.Change))
+            if (string.IsNullOrEmpty(declareTrade.Change))
                 row["CHANGE"] = DBNull.Value;
             else
                 row["CHANGE"] = Convert.ToInt32(declareTrade.Change);
 
-            if (String.IsNullOrEmpty(declareTrade.PayWay))
+            if (string.IsNullOrEmpty(declareTrade.PayWay))
                 row["PAYWAY"] = DBNull.Value;
             else
                 row["PAYWAY"] = declareTrade.PayWay;
@@ -544,11 +555,11 @@ namespace His_Pos.Class.Declare
             row["D31"] = CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString());
             row["D32"] = CheckXmlDbNullValue(declareData.DiagnosisPoint.ToString());
             row["D33"] = CheckXmlDbNullValue(declareData.DrugsPoint.ToString());
-            if (String.IsNullOrEmpty(d35))
+            if (string.IsNullOrEmpty(d35))
                 row["D35"] = DBNull.Value;
             else
                 row["D35"] = d35;
-            if (String.IsNullOrEmpty(d36))
+            if (string.IsNullOrEmpty(d36))
                 row["D36"] = DBNull.Value;
             else
                 row["D36"] = d36;
@@ -1120,7 +1131,7 @@ namespace His_Pos.Class.Declare
             xmlsumx.LoadXml(xmlsum);
 
             //匯出xml檔案
-            function.ExportXml(xmlsumx, "匯出申報XML檔案");
+            //function.ExportXml(xmlsumx, "匯出申報XML檔案");
         }
 
         /*

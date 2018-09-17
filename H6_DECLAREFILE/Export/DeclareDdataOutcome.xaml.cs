@@ -9,13 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
-using His_Pos.Class.AdjustCase;
-using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
-using His_Pos.Class.Division;
-using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Product;
-using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using His_Pos.Service;
 using JetBrains.Annotations;
@@ -85,7 +80,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             InitializeComponent();
         }
 
-        private ObservableCollection<object> Medicines;
+        private ObservableCollection<object> _medicines;
 
         public DeclareDdataOutcome(DeclareFileDdata d)
         {
@@ -124,27 +119,27 @@ namespace His_Pos.H6_DECLAREFILE.Export
             PrescriptionMedicines = new ObservableCollection<DeclareMedicine>();
             foreach (var p in declareFileDdata.Dbody.Pdata)
             {
-                if (p.P1.Equals("1"))
+                if (!p.P1.Equals("1")) continue;
+                var d = new DeclareMedicine();
+                foreach (var medicine in ExportView.Instance.DeclareMedicinesData)
                 {
-                    DeclareMedicine d = new DeclareMedicine();
-                    foreach (var medicine in ExportView.Instance.DeclareMedicinesData)
-                    {
-                        if (p.P2.Equals(medicine.Id))
-                            d = medicine;
-                    }
-                    if (!string.IsNullOrEmpty(d.Id))
-                    {
-                        d.Dosage = p.P3.TrimStart('0');
-                        d.UsageName = p.P4;
-                        d.Position = p.P5;
-                        d.Amount = double.Parse(p.P7);
-                        if(p.P8.TrimStart('0').StartsWith("."))
-                            d.HcPrice = "0.00";
-                        d.TotalPrice = double.Parse(p.P8.TrimStart('0'))* double.Parse(p.P7);
-                        d.Days = p.P11;
-                        PrescriptionMedicines.Add(d);
-                    }
+                    if (p.P2.Equals(medicine.Id))
+                        d = medicine;
                 }
+
+                if (string.IsNullOrEmpty(d.Id)) continue;
+
+                d.Dosage = p.P3.TrimStart('0');
+                d.UsageName = p.P4;
+                d.Position = p.P5;
+                d.Amount = double.Parse(p.P7);
+
+                if(p.P8.TrimStart('0').StartsWith("."))
+                    d.HcPrice = "0.00";
+
+                d.TotalPrice = double.Parse(p.P8.TrimStart('0'))* double.Parse(p.P7);
+                d.Days = p.P11;
+                PrescriptionMedicines.Add(d);
             }
             loadingWindow.Close();
         }
@@ -205,7 +200,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
         }
 
 
-        private void DataGridRow_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
             var leaveItem = (sender as DataGridRow)?.Item;
 
@@ -264,6 +259,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 else
                 {
                     var d = declareMedicine;
+                    if (d == null) return;
                     PrescriptionMedicines[currentRow].Id = d.Id;
                     PrescriptionMedicines[currentRow].Name = d.Name;
                 }
@@ -285,14 +281,9 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
                     NewFunction.FindChildGroup<TextBox>(PrescriptionSet, textBox.Name, ref temp);
 
-                    for (int x = 0; x < temp.Count; x++)
-                    {
+                    for (var x = 0; x < temp.Count; x++)
                         if (temp[x].Equals(textBox))
-                        {
                             return x;
-                        }
-                    }
-
                     break;
                 }
                 case CheckBox checkBox:
@@ -301,14 +292,9 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
                     NewFunction.FindChildGroup<CheckBox>(PrescriptionSet, checkBox.Name, ref temp);
 
-                    for (int x = 0; x < temp.Count; x++)
-                    {
+                    for (var x = 0; x < temp.Count; x++)
                         if (temp[x].Equals(checkBox))
-                        {
                             return x;
-                        }
-                    }
-
                     break;
                 }
                 case AutoCompleteBox _:
@@ -317,13 +303,8 @@ namespace His_Pos.H6_DECLAREFILE.Export
                     var autoCompleteBox = sender as AutoCompleteBox;
                     NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionSet, autoCompleteBox.Name, ref temp);
                     for (var x = 0; x < temp.Count; x++)
-                    {
                         if (temp[x].Equals(sender))
-                        {
                             return x;
-                        }
-                    }
-
                     break;
                 }
             }
@@ -339,9 +320,9 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
-            Medicines = new ObservableCollection<object>(result.ToList());
+            _medicines = new ObservableCollection<object>(result.ToList());
 
-            medicineCodeAuto.ItemsSource = Medicines;
+            medicineCodeAuto.ItemsSource = _medicines;
             medicineCodeAuto.ItemFilter = MedicineFilter;
             medicineCodeAuto.PopulateComplete();
         }
@@ -351,17 +332,10 @@ namespace His_Pos.H6_DECLAREFILE.Export
             get
             {
                 return (searchText, obj) =>
-                    (obj as DeclareMedicine)?.Id is null
-                        ? false
-                        : (obj as DeclareMedicine).Id.ToLower().Contains(searchText.ToLower())
-                          || (obj as DeclareMedicine).ChiName.ToLower().Contains(searchText.ToLower()) ||
-                          (obj as DeclareMedicine).EngName.ToLower().Contains(searchText.ToLower());
+                    !((obj as DeclareMedicine)?.Id is null) && (((DeclareMedicine) obj).Id.ToLower().Contains(searchText.ToLower())
+                                                                || ((DeclareMedicine) obj).ChiName.ToLower().Contains(searchText.ToLower()) ||
+                                                                ((DeclareMedicine) obj).EngName.ToLower().Contains(searchText.ToLower()));
             }
-        }
-
-        private void TextBox_GotFocus(object sender, EventArgs e)
-        {
-            DataChanged();
         }
 
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -428,59 +402,32 @@ namespace His_Pos.H6_DECLAREFILE.Export
         private void FindUsagesQuickName(object sender)
         {
             var currentRow = GetCurrentRowIndex(sender);
-            if (sender is TextBox t && !string.IsNullOrEmpty(t.Text))
+            if (!(sender is TextBox t) || string.IsNullOrEmpty(t.Text)) return;
+
+            if (Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text)) == null) return;
             {
-                if (Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text)) != null)
-                {
-                    PrescriptionMedicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
-                    if (PrescriptionMedicines[currentRow].Usage != null)
-                        t.Text = PrescriptionMedicines[currentRow].Usage.Name;
-                }
+                PrescriptionMedicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
+                if (PrescriptionMedicines[currentRow].Usage != null)
+                    t.Text = PrescriptionMedicines[currentRow].Usage.Name;
             }
         }
 
         private void Dosage_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (sender is TextBox textBox)
-            {
-                textBox.SelectionStart = 0;
-                textBox.SelectionLength = textBox.Text.Length;
-            }
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectionStart = 0;
+            textBox.SelectionLength = textBox.Text.Length;
         }
 
         private void NullTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var t = sender as TextBox;
-            if (string.IsNullOrEmpty(t.Text))
+            if (sender is TextBox t && string.IsNullOrEmpty(t.Text))
                 t.Text = "0";
-        }
-
-        private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (_isFirst) return;
-            CountMedicinesCost();
-        }
-
-        private void CountMedicinesCost()
-        {
-            double medicinesHcCost = 0;//健保給付總藥價
-            double medicinesSelfCost = 0;//自費藥總藥價
-            double purchaseCosts = 0;//藥品總進貨成本
-            foreach (var medicine in PrescriptionMedicines)
-            {
-                if (!medicine.PaySelf)
-                    medicinesHcCost += medicine.TotalPrice;
-                else
-                {
-                    medicinesSelfCost += medicine.TotalPrice;
-                }
-                purchaseCosts += medicine.Cost * medicine.Amount;
-            }
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -499,26 +446,25 @@ namespace His_Pos.H6_DECLAREFILE.Export
             if (CurrentPrescription.EList.Error.Count == 0)
             {
                 CurrentPrescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(CurrentPrescription.Customer.Birthday);
-                var declareData = new DeclareData(CurrentPrescription);
-                declareData.DecMasId = CurrentFile.DecId;
+                var declareData = new DeclareData(CurrentPrescription) {DecMasId = CurrentFile.DecId};
 
-                var declareDb = new DeclareDb();
-                //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
-                //Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();
-                //Charge.Content = Charge.Content.ToString() == null ? "0" : Charge.Content.ToString();
-                //Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
-                //Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
-                //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
-
-                //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
+                var xmlStr = declareData.SerializeObject<Ddata>();
+                var ddata = XmlService.Deserialize<Ddata>(xmlStr);
+                var declareFileDdata = new DeclareFileDdata(ddata) {DecId = CurrentFile.DecId};
+                for (var i = 0; i < ExportView.Instance.SelectedFile.FileContent.Ddata.Count; i++)
+                {
+                    if (!ExportView.Instance.SelectedFile.FileContent.Ddata[i].DecId
+                        .Equals(declareFileDdata.DecId)) continue;
+                    ExportView.Instance.SelectedFile.FileContent.Ddata[i].Dhead = declareFileDdata.Dhead;
+                    ExportView.Instance.SelectedFile.FileContent.Ddata[i].Dbody = declareFileDdata.Dbody;
+                    ExportView.Instance.SelectedFile.PrescriptionDdatas[i].Dhead = declareFileDdata.Dhead;
+                    ExportView.Instance.SelectedFile.PrescriptionDdatas[i].Dbody = declareFileDdata.Dbody;
+                }
                 DeclareFileDb.SetDeclareFileByPharmacyId(ExportView.Instance.SelectedFile, Convert.ToDateTime(ExportView.Instance.SelectedFile.DeclareDate), declareData, DeclareFileType.DECLAREFILE_UPDATE);
                 m = new MessageWindow("處方申報資料修改成功", MessageType.SUCCESS);   
                 m.Show();
                 InitDataChanged();
-                var xmlStr = declareData.SerializeObject<Ddata>();
-                var ddata = XmlService.Deserialize<Ddata>(xmlStr);
-                var declareFileDdata = new DeclareFileDdata(ddata);
-                ExportView.Instance.UpdateDataFromOutcome(declareFileDdata);
+                Close();
             }
             else
             {

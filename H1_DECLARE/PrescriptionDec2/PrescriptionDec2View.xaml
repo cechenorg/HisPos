@@ -318,7 +318,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
                         <RadioButton Tag="1" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="交易" FontFamily="Segoe UI Semibold" FontSize="16" Checked="RadioButton_Checked" />
-                        <Image Width="18" Source="/Images/PosDot.png" />
+                        <Image Width="18" Source="/Images/OrangeDot.png" />
                         <RadioButton Tag="0" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="調劑" FontFamily="Segoe UI Semibold" FontSize="16" Checked="RadioButton_Checked" />
                         <Image Width="18" Source="/Images/HisDot.png" />
                         <RadioButton Tag="2" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="全部顯示" FontFamily="Segoe UI Semibold" 

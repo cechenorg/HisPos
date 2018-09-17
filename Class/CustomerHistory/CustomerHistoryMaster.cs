@@ -24,7 +24,7 @@ namespace His_Pos.Class.CustomerHistory
             switch (Type)
             {
                 case SystemType.POS:
-                    TypeIcon = new BitmapImage(new Uri(@"..\..\Images\PosDot.png", UriKind.Relative));
+                    TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
                     break;
 
                 case SystemType.HIS:

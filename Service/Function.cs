@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Xml;
+using System.Xml.Linq;
 using His_Pos.Class;
 using His_Pos.Properties;
 using His_Pos.Service;
@@ -93,60 +94,17 @@ namespace His_Pos
             string date = (int.Parse(selectedDate.Year.ToString()) - 1911) + month + day;
             return date;
         }
-
-        public void FindChildGroup<T>(DependencyObject parent, string childName, ref List<T> list) where T : DependencyObject
-        {
-            // Checks should be made, but preferably one time before calling.
-            // And here it is assumed that the programmer has taken into
-            // account all of these conditions and checks are not needed.
-            //if ((parent == null) || (childName == null) || (<Type T is not inheritable from FrameworkElement>))
-            //{
-            //    return;
-            //}
-            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
-
-            for (int i = 0; i < childrenCount; i++)
-            {
-                // Get the child
-                var child = VisualTreeHelper.GetChild(parent, i);
-
-                // Compare on conformity the type
-
-                // Not compare - go next
-                if (!(child is T childTest))
-                {
-                    // Go the deep
-                    FindChildGroup(child, childName, ref list);
-                }
-                else
-                {
-                    // If match, then check the name of the item
-                    FrameworkElement childElement = childTest as FrameworkElement;
-
-                    Debug.Assert(childElement != null, nameof(childElement) + " != null");
-                    if (childElement.Name == childName)
-                    {
-                        // Found
-                        list.Add(childTest);
-                    }
-
-                    // We are looking for further, perhaps there are
-                    // children with the same name
-                    FindChildGroup(child, childName, ref list);
-                }
-            }
-        }
+        
         public string GetDateFormat(string date) {
             if (date.Length == 1) date = "0" + date;
             return date;
         }
 
-        public string ExportXml(XmlDocument xml, string FileTypeName) {
-            Function function = new Function();
+        public string ExportXml(XDocument xml, string FileTypeName) {
             var twc = new TaiwanCalendar();
             var year = twc.GetYear(DateTime.Now).ToString();
-            var month = function.GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
-            var day = function.GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
+            var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
+            var day = GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
             var pathsplit = Environment.CurrentDirectory.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
             var path = pathsplit[0];
             for (var i = 1; i < pathsplit.Length; i++)
@@ -169,12 +127,12 @@ namespace His_Pos
             writer.Close();
             //壓縮XML
             if (File.Exists(path_file + ".zip")) File.Delete(path_file + ".zip");
-            var psi = new System.Diagnostics.Process();
+            var psi = new Process();
             psi.StartInfo.FileName = "makecab.exe";
             psi.StartInfo.Arguments = path_file + ".xml " + path_file + ".zip";
             psi.Start();
 
-            psi.WaitForInputIdle();
+            //psi.WaitForInputIdle();
             //設定要等待相關的處理序結束的時間 
             psi.WaitForExit();
             return path_file + ".xml";

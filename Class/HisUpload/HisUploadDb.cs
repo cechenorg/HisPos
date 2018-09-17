@@ -34,25 +34,25 @@ namespace His_Pos.Class.HisUpload
             return xml;
         }
         public void HisUploadData() {
-            Function function = new Function();
-            XmlDocument xml = ExportUploadData();
-            string filepath = function.ExportXml(xml,"匯出健保資料XML檔案");
-            StringBuilder pUploadFileName = new StringBuilder();
-            pUploadFileName.Append(filepath);
-            StringBuilder fFileSize = new StringBuilder();
-            long length = new System.IO.FileInfo(filepath).Length;
-            fFileSize.Append(length);
-            StringBuilder pNumber = new StringBuilder();
-            StringBuilder pBuffer = new StringBuilder();
-            int iBufferLen = xml.InnerText.Length;
-            HisApiBase.csOpenCom(0);
-           int res = HisApiBase.csUploadData(pUploadFileName, fFileSize, pNumber, pBuffer, ref iBufferLen);
-            HisApiBase.csCloseCom();
+           // Function function = new Function();
+           // XmlDocument xml = ExportUploadData();
+           // string filepath = function.ExportXml(xml, "匯出健保資料XML檔案");
+           // StringBuilder pUploadFileName = new StringBuilder();
+           // pUploadFileName.Append(filepath);
+           // StringBuilder fFileSize = new StringBuilder();
+           // long length = new System.IO.FileInfo(filepath).Length;
+           // fFileSize.Append(length);
+           // StringBuilder pNumber = new StringBuilder();
+           // StringBuilder pBuffer = new StringBuilder();
+           // int iBufferLen = xml.InnerText.Length;
+           // HisApiBase.csOpenCom(0);
+           //int res = HisApiBase.csUploadData(pUploadFileName, fFileSize, pNumber, pBuffer, ref iBufferLen);
+           // HisApiBase.csCloseCom();
 
 
-            parameters.Clear();
-            parameters.Add(new SqlParameter("XML", xml.ToString()));
-            conn.ExecuteProc("[HIS_POS_DB].[SET].[UPLOADDATAMASTER]", parameters);
+           // parameters.Clear();
+           // parameters.Add(new SqlParameter("XML", xml.ToString()));
+           // conn.ExecuteProc("[HIS_POS_DB].[SET].[UPLOADDATAMASTER]", parameters);
         }
 
     }
