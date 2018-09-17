@@ -40,7 +40,22 @@ namespace His_Pos.Service
                 throw new InvalidOperationException(ex.Message);
             }
         }
-       
+        public DataTable MySqlQueryBySqlString(string sqlString) {
+            var table = new DataTable();
+            try
+            {
+                _sqlMySqlConnection.Open();
+                MySqlCommand cmd = new MySqlCommand(sqlString, _sqlMySqlConnection);
+                var sqlDapter = new MySqlDataAdapter(cmd);
+                sqlDapter.Fill(table);
+                _sqlMySqlConnection.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException(ex.Message);
+            }
+            return table;
+        }
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
             var table = new DataTable();
