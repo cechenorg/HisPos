@@ -13,8 +13,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
             <RowDefinition/>
-            <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
@@ -44,7 +44,11 @@
                 <Label Content="{Binding DeclareDataCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
-        <DataGrid Name="StoreOrderDetail" Grid.Row="2" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
+            <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <Label Width="980" Content="{Binding Note}" Margin="10,0,0,0" FontFamily="Segoe UI Semi" FontSize="18"/>
+        </StackPanel>
+        <DataGrid Name="StoreOrderDetail" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" HeadersVisibility="All" CanUserSortColumns="False" CanUserAddRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
@@ -111,15 +115,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="70" Header="數量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Width="70" Header="贈量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FreeAmount}">
+                <DataGridTextColumn Width="70" Header="採購量" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding OrderAmount}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -142,26 +138,6 @@
                 </DataTemplate>
             </DataGrid.RowHeaderTemplate>
         </DataGrid>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkestBackGround}">
-            <Rectangle Width="270"/>
-            <Button Tag="First" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Click="ChangePage">
-                <TextBlock Text="&lt;&lt;" Margin="0,-5,0,0" Foreground="Black"/>
-            </Button>
-            <Button Tag="Minus" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Margin="10,0,0,0" Click="ChangePage">
-                <TextBlock Text="&lt;" Margin="0,-5,0,0" Foreground="Black"/>
-            </Button>
-            <TextBox Text="{Binding CurrentPage, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="60" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,7"
-                     HorizontalContentAlignment="Center" LostFocus="ChangeCurrentPage_LostFocus" PreviewKeyDown="ChangeCurrentPage_PreviewKeyDown"
-                     InputMethod.IsInputMethodEnabled="False"/>
-            <Label Content="/" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding TotalPage, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=UserControl}}" Width="60" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Button Tag="Plus" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Margin="10,0,0,0" Click="ChangePage">
-                <TextBlock Text="&gt;" Margin="0,-5,0,0" Foreground="Black"/>
-            </Button>
-            <Button Tag="Last" Width="60" FontFamily="Segoe UI Semibold" FontSize="22" BorderThickness="0" Background="{StaticResource Shadow}" Margin="10,0,0,0" Click="ChangePage">
-                <TextBlock Text="&gt;&gt;" Margin="0,-5,0,0" Foreground="Black"/>
-            </Button>
-        </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Name="Total" Content="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
