@@ -174,7 +174,17 @@ namespace His_Pos.Class.StoreOrder
 
         public WareHouse Warehouse { get; set; }
         public string Note { get; set; }
-        public ObservableCollection<AbstractClass.Product> Products { get; set; }
+        private ObservableCollection<AbstractClass.Product> products;
+
+        public ObservableCollection<AbstractClass.Product> Products
+        {
+            get { return products; }
+            set
+            {
+                products = value;
+                products.CollectionChanged += (s, a) => NotifyPropertyChanged("ProductCount");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
