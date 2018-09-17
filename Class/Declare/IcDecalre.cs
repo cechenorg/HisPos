@@ -1,0 +1,220 @@
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
+
+namespace His_Pos.Class.Declare
+{
+    [XmlRoot(ElementName = "RECS")]
+    public class IcRecordList
+    {
+        public List<IcRecord> RecordList { get; set; } = new List<IcRecord>();
+    }
+
+    [XmlRoot(ElementName = "REC")]
+    public class IcRecord
+    {
+        public Header HeaderMessage { get; set; }
+        public MainMessage MainMessage { get; set; }
+    }
+
+    [XmlRoot(ElementName = "MSH")]
+    public class Header
+    {
+        /*
+         * V : 必填欄位 ~ : 不填欄位 * : 選填欄位
+         * 資料格式 :
+         * 1:正常上傳
+         * 2:異常上傳
+         * 3:補正上傳 (正常資料)
+         * 4:補正上傳 (異常資料))
+         */
+        //V
+        [XmlElement(ElementName = "A00")]
+        public string DataType { get; set; }//資料型態
+
+        //V
+        [XmlElement(ElementName = "A01")]
+        public string DataFormat { get; set; }//資料格式
+
+        //V
+        [XmlElement(ElementName = "A02")]
+        public string UploadVersion { get; set; }//上傳版本 (就醫上傳版本現階段均為1.0)
+    }
+
+    [XmlRoot(ElementName = "MB")]
+    public class MainMessage
+    {
+        [XmlElement(ElementName = "MB1")]
+        public IcData IcMessage { get; set; }
+        [XmlElement(ElementName = "MB2")]
+        public List<MedicalData> MedicalMessageList { get; set; } = new List<MedicalData>();
+    }
+
+    [XmlRoot(ElementName = "MB1")]
+    public class IcData
+    {
+        //1,3 V  2,4 ~ 
+        [XmlElement(ElementName = "A16")]
+        public string SamCode { get; set; }//安全模組代碼
+
+        //1,3 V  2,4 ~
+        [XmlElement(ElementName = "A11")]
+        public string CardNo { get; set; }//卡片號碼 (get by HISAPI : csGetCardNo)
+
+        //V
+        [XmlElement(ElementName = "A12")]
+        public string IcNumber { get; set; }//身分證號或 身分證明文件號碼
+
+        //V
+        [XmlElement(ElementName = "A13")]
+        public string BirthDay { get; set; }//出生日期
+
+        //*
+        [XmlElement(ElementName = "A20")]
+        public string NewbornBirthDay { get; set; }//健保資料段 7-1.新生兒出生日期
+
+        //*
+        [XmlElement(ElementName = "A21")]
+        public string NewbornBabyMark { get; set; }//健保資料段 7-2.新生兒胞胎註記
+
+        /*
+         * 2.不須累計就醫序號及不扣除就醫可用次數之註記：
+         * AA同一療程之項目以六次以內治療為限者
+         * AB以同一療程之項目屬"非"六次以內治療為限者
+         * AC預防保健
+         * AD職業傷害或職業病
+         * AE慢性病連續處方箋領藥
+         * AF藥局調劑
+         * AH居家照護（第二次以後）
+         * CA其他規定不須累計就醫序號即不扣除就醫次數者
+         */
+
+        //V
+        [XmlElement(ElementName = "A23")]
+        public string TreatmentCategory { get; set; }//健保資料段 8-1.就醫類別
+
+        //*
+        [XmlElement(ElementName = "A24")]
+        public string NewbornTreatmentMark { get; set; }//健保資料段 8-2.新生兒就醫註記
+
+        //V
+        [XmlElement(ElementName = "A17")]
+        public string TreatmentDateTime { get; set; } //健保資料段 8-3.就診日期時間 (get by HISAPI : hisGetSeqNumber256)
+
+        //V
+        [XmlElement(ElementName = "A19")]
+        public string MakeUpMark { get; set; }//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+        //*
+        [XmlElement(ElementName = "A18")]
+        public string MedicalNumber { get; set; }//健保資料段 8-5.就醫序號(get by HISAPI : hisGetSeqNumber256)
+
+        //V
+        [XmlElement(ElementName = "A14")]
+        public string PharmacyId { get; set; }//健保資料段 8-6.醫療院所代碼
+
+        //V
+        [XmlElement(ElementName = "A15")]
+        public string MedicalPersonIcNumber { get; set; }//健保資料段 8-7-1.醫事人員身分證號
+
+        //1,3 V  2,4 ~
+        [XmlElement(ElementName = "A22")]
+        public string SecuritySignature { get; set; }//健保資料段 8-7-2安全簽章
+
+        //V (AC *)
+        [XmlElement(ElementName = "A25")]
+        public string MainDiagnosisCode { get; set; }//健保資料段 8-8.主要診斷碼
+
+        //*
+        [XmlElement(ElementName = "A26")]
+        public string SecondDiagnosisCode { get; set; }//健保資料段 8-8.主要診斷碼
+
+        //V
+        [XmlElement(ElementName = "A31")]
+        public string OutpatientFee { get; set; }//健保資料段 8-10-1.門診醫療費用 （當次） (get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+        //* (AE V)
+        [XmlElement(ElementName = "A32")]
+        public string OutpatientCopaymentFee { get; set; }//健保資料段 8-10-2.門診部分負擔費用（當次）(get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+        //*
+        [XmlElement(ElementName = "A33")]
+        public string HospitalizationFee { get; set; }//健保資料段 8-10-3.住院醫療費用(當次)(get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+        //*
+        [XmlElement(ElementName = "A34")]
+        public string HospitalizationCopaymentFeeLess { get; set; }// 健保資料段 8-10-4.住院部分負擔費用（當次急性30天、慢性180天以下）(get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+        //*
+        [XmlElement(ElementName = "A35")]
+        public string HospitalizationCopaymentFeeMore { get; set; }//健保資料段8-10-5.住院部分負擔費用（當次急性31天、慢性181天以上）(get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+        //~ (AC*) 
+        [XmlElement(ElementName = "A41")]
+        public string HealthServiceProjectMark { get; set; }//健保資料段 12-1.保健服務項目註記
+
+        //~ (AC*) 
+        [XmlElement(ElementName = "A42")]
+        public string HealthServiceExamDate { get; set; }//健保資料段 12-2. 保健服務檢查日期
+
+        //~ (AC*) 
+        [XmlElement(ElementName = "A43")]
+        public string HealthServiceHospitalId { get; set; }//健保資料段 12-3. 保健服務醫療院所代碼
+
+        //~ (AC*) 
+        [XmlElement(ElementName = "A44")]
+        public string ExamProjectCode { get; set; }//健保資料段 12-4.檢查項目代碼
+
+        //~ (AC*) 
+        [XmlElement(ElementName = "A51")]
+        public string PrenatalExamDate { get; set; }//健保資料段 15-1. 產檢檢查日期
+
+        //~ (AC*) 
+        [XmlElement(ElementName = "A52")]
+        public string PrenatalExamHospitalId { get; set; }//健保資料段 15-2. 產檢醫療院所代碼
+
+        //~ (AC*) 
+        [XmlElement(ElementName = "A53")]
+        public string PrenatalExamProjectCode { get; set; }//健保資料段 15-3. 產檢檢查項目代碼
+
+    }
+
+    [XmlRoot(ElementName = "MB2")]
+    public class MedicalData
+    { 
+        //V (AC AH *)
+        [XmlElement(ElementName = " A71")]
+        public string MedicalOrderTreatDateTime { get; set; }//醫療專區 1-1.醫令就診日期時間
+
+        //V (AC AH *)
+        [XmlElement(ElementName = "A72")]
+        public string MedicalOrderCategory { get; set; }//醫療專區 1-2-1醫令類別
+
+        //V (AC AH *)
+        [XmlElement(ElementName = "A73")]
+        public string TreatmentProjectCode { get; set; }//醫療專區 1-2-2.診療項目代號
+
+        //*
+        [XmlElement(ElementName = "A74")]
+        public string TreatmentPosition { get; set; }//醫療專區 1-2-3診療部位
+
+        //V (AC AH *)
+        [XmlElement(ElementName = "A75")]
+        public string Usage { get; set; }//醫療專區 1-2-4.用法
+
+        //V (AC AH *)
+        [XmlElement(ElementName = "A76")]
+        public string Days { get; set; }// 醫療專區 1-2-5天數
+
+        //V (AC AH *)
+        [XmlElement(ElementName = "A77")]
+        public string TotalAmount { get; set; }//醫療專區 1-2-6.總量
+
+        //V (AC AH *)
+        [XmlElement(ElementName = "A78")]
+        public string PrescriptionDeliveryMark { get; set; }//醫療專區 1-2-7交付處方註記
+
+        //1,3 V 2,4 ~
+        [XmlElement(ElementName = "A79")]
+        public string PrescriptionSignature { get; set; }//醫療專區 1-2-8處方簽章
+    }
+}

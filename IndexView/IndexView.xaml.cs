@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.IndexView
 {
@@ -29,6 +30,12 @@ namespace His_Pos.IndexView
         }
 
         public void UpdateUI() {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            IcRecordList icRecordList = new IcRecordList();
 
         }
     }

@@ -101,6 +101,7 @@ namespace His_Pos.Class.Declare
             file.HasError = false;
             foreach (var e in file.ErrorPrescriptionList.ErrorList)
             {
+                if(e.Error == null) continue;
                 if (e.Error.Count > 0)
                     file.HasError = true;
             }

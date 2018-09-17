@@ -158,7 +158,7 @@
                 <StackPanel Grid.Row="2" Grid.Column="4" Margin="8" Orientation="Horizontal">
                     <Label Content="特定治療" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox x:Name="SpecialCode" Width="170" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
-                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id, Mode=TwoWay}" 
+                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
                              InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="MedicalNumber_PreviewKeyDown" />
                 </StackPanel>
             </Grid>
