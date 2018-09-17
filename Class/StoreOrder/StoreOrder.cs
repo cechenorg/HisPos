@@ -59,11 +59,11 @@ namespace His_Pos.Class.StoreOrder
 
             Category = new Category(row["STOORD_TYPE"].ToString().Equals("進")? StoreOrderCategory.PURCHASE : StoreOrderCategory.RETURN);
             OrdEmp = row["ORD_EMP"].ToString();
-            TotalPrice = Double.Parse(row["TOTAL"].ToString()).ToString("0.##");
+            initProductCount = Int32.Parse(row["TOTAL"].ToString());
             RecEmp = row["REC_EMP"].ToString();
             Manufactory = new Manufactory.Manufactory(row);
             Principal = new PurchasePrincipal(row);
-
+            TotalPrice = "0";
             Warehouse = new WareHouse(row);
 
             DeclareDataCount = Int32.Parse(row["DECLARECOUNT"].ToString());
@@ -74,7 +74,21 @@ namespace His_Pos.Class.StoreOrder
         private StoreOrder()
         {
         }
-        
+
+        private int initProductCount;
+        public int ProductCount
+        {
+            get
+            {
+                if (Products is null)
+                    return initProductCount;
+                else
+                {
+                    return Products.Count;
+                }
+            }
+        }
+
         public int DeclareDataCount { get; set; }
 
         public bool IsDataChanged { get; set; } = false;
@@ -160,7 +174,17 @@ namespace His_Pos.Class.StoreOrder
 
         public WareHouse Warehouse { get; set; }
         public string Note { get; set; }
-        public ObservableCollection<AbstractClass.Product> Products { get; set; }
+        private ObservableCollection<AbstractClass.Product> products;
+
+        public ObservableCollection<AbstractClass.Product> Products
+        {
+            get { return products; }
+            set
+            {
+                products = value;
+                products.CollectionChanged += (s, a) => NotifyPropertyChanged("ProductCount");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)

@@ -377,7 +377,7 @@ namespace His_Pos.ProductPurchase
             SetCurrentControl();
 
             if (StoreOrderData.Type == OrderType.WAITING)
-                SendStoreOrderToSinde();
+                StoreOrderDb.SendOrderToSinde(StoreOrderData);
         }
 
         private void UpdateOneTheWayAmount()
@@ -392,11 +392,6 @@ namespace His_Pos.ProductPurchase
 
                 purchaseControl.ProductCollection.Add(purchaseProduct);
             }
-        }
-
-        private void SendStoreOrderToSinde()
-        {
-
         }
 
         //private void UserControl_Unloaded(object sender, RoutedEventArgs e)

@@ -196,5 +196,23 @@ namespace His_Pos.Class.StoreOrder
             }
             return StoreOrderCollection;
         }
+
+        internal static void SendOrderToSinde(StoreOrder storeOrderData)
+        {
+            string orderMedicines = "";
+
+            foreach (var product in storeOrderData.Products)
+            {
+                orderMedicines += product.Id.PadRight(12, ' ');
+                orderMedicines += (((ITrade) product).Amount + ((IProductPurchase) product).FreeAmount).ToString().PadLeft(10, ' ');
+                orderMedicines += ((IProductPurchase) product).Note;
+                orderMedicines += "\r\n";
+            }
+
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229; Port=3310;User Id=SD;Password=2iixoguu;SslMode=none");
+            
+            dd.NonQueryBySqlString($"call InsertNewOrder( {storeOrderData.Id.Substring(2, 10)}, {storeOrderData.Note}, {orderMedicines})");
+
+        }
     }
 }
