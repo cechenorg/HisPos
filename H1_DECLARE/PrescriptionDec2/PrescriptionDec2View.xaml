@@ -144,7 +144,7 @@
                     <Label Content="調劑案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="AdjustCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" FontFamily="Segoe UI Semibold" 
                               FontSize="14" IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" 
-                              SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay}">
+                              SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay}" SelectionChanged="AdjustCaseCombo_SelectionChanged">
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
@@ -397,33 +397,32 @@
                         <RowDefinition />
                         <RowDefinition />
                         <RowDefinition />
-                    </Grid.RowDefinitions>
+                    </Grid.RowDefinitions> 
                     <StackPanel Grid.Row="0" Margin="8" Orientation="Horizontal">
-                        <Label Width="100" HorizontalAlignment="Right" Content="押金 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="120" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" 
-                                 Foreground="{StaticResource ForeGround}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
-                    </StackPanel>
+                        <Label Width="60" Content="部分 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                        <TextBox Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                                 MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
+                        <Label Width="60" Margin="20,0,0,0" Content="應收 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                        <TextBox Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                                 MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Charge, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
+                    </StackPanel> 
                     <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
-                        <Label Width="100" Content="自費 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="120" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                        <Label Width="60" HorizontalAlignment="Right" Content="押金 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                        <TextBox Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" 
+                                 Foreground="{StaticResource ForeGround}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
+                        <Label Width="60" Margin="20,0,0,0" Content="自費 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                        <TextBox Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
                                  MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding SelfCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
                     </StackPanel>
-                    <StackPanel Grid.Row="2" Margin="8" Orientation="Horizontal">
-                        <Label Width="100" Content="部分負擔 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="120" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                                 MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="3" Margin="8" Orientation="Horizontal">
-                        <Label Width="100" Content="應收金額 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="120" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                                 MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Charge, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
-                    </StackPanel>
-                    <StackPanel Grid.Row="4" Background="{StaticResource Shadow}" Orientation="Horizontal">
+                    <StackPanel Grid.Row="2"  Orientation="Horizontal">
                         <Label Width="60" Margin="10,0,0,0" VerticalAlignment="Center" Content="已付 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                         <TextBox Width="90" Height="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
                                  MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Pay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
                         <Label Width="60" Margin="20,0,0,0" VerticalAlignment="Center" Content="找零 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                         <Label Width="90" Height="35" HorizontalContentAlignment="Center" Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Margin="8" Orientation="Horizontal">
+                        <CheckBox Name="IsSendToServer" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"  />
                     </StackPanel>
                     <StackPanel Grid.Row="5" Margin="8" Orientation="Horizontal">
                         <Button Width="125" Background="{StaticResource Shadow}" BorderThickness="0" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" />

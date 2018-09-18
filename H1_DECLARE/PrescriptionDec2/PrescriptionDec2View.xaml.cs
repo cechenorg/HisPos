@@ -31,6 +31,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
+        public bool IsSend = false;
         public string CurrentDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
         private bool _isChanged;
@@ -189,6 +190,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
+            IsSend = false;
             ErrorMssageWindow err;
             MessageWindow m;
             CurrentPrescription.EList.Error = new List<Error>();
@@ -212,14 +214,23 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var declareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
                 DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
-               
+                string decMasId;
                 if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(CurrentDecMasId)) {  //一般處方
-                   string decMasId =  declareDb.InsertDeclareData(declareData);
+                    decMasId =  declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
                 }
                 else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && string.IsNullOrEmpty(CurrentDecMasId)) //第1次的新慢性處方
                 {
-                    string decMasId = declareDb.InsertDeclareData(declareData);
+
+                    if ((bool)IsSendToServer.IsChecked)
+                    {
+                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription, CurrentPrescription.Medicines);
+                        chronicSendToServerWindow.ShowDialog();
+                    }
+                    else
+                        IsSend = true;
+                    if (!IsSend) return;
+                    decMasId = declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
                     int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
                     int end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
@@ -231,6 +242,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     }
                 }
                 else if(CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(CurrentDecMasId)) { //第2次以後的慢性處方
+
+                    if ((bool)IsSendToServer.IsChecked)
+                    {
+                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription, CurrentPrescription.Medicines);
+                        chronicSendToServerWindow.ShowDialog();
+                    }
+                    else
+                        IsSend = true;
+                    if (!IsSend) return;
+                    decMasId = CurrentDecMasId;
                     declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
                     declareData.DecMasId = CurrentDecMasId;
                     declareDb.UpdateDeclareData(declareData); //更新慢箋
@@ -238,8 +259,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal) {  //若為最後一次 則再算出下一批慢性
                         declareDb.SetNewGroupChronic(CurrentDecMasId);
                     } 
-
-                }
+                } 
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.Show();
                 declareDb.UpdateDeclareFile(declareData);
@@ -704,6 +724,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var tempCollection = new ObservableCollection<Hospital>(HosiHospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList());
             ReleaseHospital.ItemsSource = tempCollection;
             ReleaseHospital.PopulateComplete();
+        }
+
+        private void AdjustCaseCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            IsSendToServer.IsChecked = false;
+            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" ? true : false;
+            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" ? true : false;
         }
     }
 }
