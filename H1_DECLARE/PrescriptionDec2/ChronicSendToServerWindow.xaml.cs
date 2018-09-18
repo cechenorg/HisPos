@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.Class.Product;
+using His_Pos.ProductPurchase;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -69,10 +70,20 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
 
         private void ButtonSubmmit_Click(object sender, RoutedEventArgs e) {
             PrescriptionDec2View.Instance.IsSend = true;
+            TransferToStoreOrder();
+
+
             Close();
         }
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
            // CurrentPrescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
         }
+
+        private void TransferToStoreOrder() { 
+            MainWindow.Instance.AddNewTab("處理單管理");
+
+            ProductPurchaseView.Instance.AddOrderByPrescription(PrescriptionData, Prescription);
+        }
+
     }
 }

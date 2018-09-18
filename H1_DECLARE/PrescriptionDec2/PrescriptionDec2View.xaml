@@ -149,7 +149,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Content="領藥次數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <TextBox x:Name="ChronicSequence" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
+                    <TextBox x:Name="ChronicSequence" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14"  TextChanged="ChronicSequence_TextChanged"
                              MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.ChronicSequence, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     <Label Content=" / " FontFamily="Segoe UI Semibold" FontSize="16" />
                     <TextBox x:Name="ChronicTotal" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 

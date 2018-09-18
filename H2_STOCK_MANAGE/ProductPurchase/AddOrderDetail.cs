@@ -9,6 +9,7 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 
 namespace His_Pos.ProductPurchase
 {
@@ -49,7 +50,7 @@ namespace His_Pos.ProductPurchase
 
         }
 
-        public void AddOrderByPrescription(Prescription prescription, ObservableCollection<DeclareMedicine> declareMedicines)
+        public void AddOrderByPrescription(Prescription prescription, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> declareMedicines)
         {
             
         }

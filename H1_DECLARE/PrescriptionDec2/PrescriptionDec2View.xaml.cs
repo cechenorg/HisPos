@@ -23,6 +23,7 @@ using His_Pos.Class.Person;
 using His_Pos.RDLC;
 using Prescription = His_Pos.Class.Prescription;
 using Visibility = System.Windows.Visibility;
+using System.Windows.Data;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -730,6 +731,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             IsSendToServer.IsChecked = false;
             IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" ? true : false;
             IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" ? true : false;
+            
+        }
+
+        private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e) {
+            if (Convert.ToInt32(ChronicSequence.Text) > 1)
+            {
+                Binding myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
+                BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+            }
+            else {
+                Binding myBinding = new Binding("CurrentPrescription.Customer.IcCard.MedicalNumber");
+                BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+            }
         }
     }
 }
