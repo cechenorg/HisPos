@@ -152,7 +152,7 @@ namespace His_Pos.Class.StoreOrder
 
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=SD;Password=2iixoguu;SslMode=none", SqlConnectionType.NySql);
 
-            DataTable dataTable = dd.MySqlQueryBySqlString($"call ('{orderId.Substring(2, 10)}')");
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId.Substring(2, 10)}')");
             
             foreach (DataRow row in dataTable.Rows)
             {
