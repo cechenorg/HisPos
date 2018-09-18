@@ -41,9 +41,28 @@ namespace His_Pos.ProductPurchase
     /// 
     public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
     {
+        #region ----- Define Inner Class -----
+        public struct SindeOrderDetail
+        {
+            public SindeOrderDetail(DataRow row)
+            {
+                Type = row["TYPE"].ToString();
+                Id = row["PRO_ID"].ToString();
+                Amount = Double.Parse(row["AMOUNT"].ToString());
+                Price = Double.Parse(row["PRICE"].ToString());
+                BatchNum = row["BATCHNUM"].ToString();
+            }
+            public string Type { get; }
+            public string Id { get; }
+            public double Amount { get; }
+            public double Price { get; }
+            public string BatchNum { get; }
+        }
+        #endregion
+
         #region ----- Define Variables -----
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
-
+        private Collection<PurchaseProduct> ProductCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;
         
@@ -140,13 +159,44 @@ namespace His_Pos.ProductPurchase
             
             storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
+            if (storeOrder.Type == OrderType.PROCESSING && storeOrder.Manufactory.Id.Equals("0"))
+                CheckSindeOrderDetail(storeOrder);
+
             StoreOrderData = storeOrder;
 
             SetCurrentControl();
         }
 
+        private void CheckSindeOrderDetail(StoreOrder storeOrder)
+        {
+            Collection<SindeOrderDetail> orderDetails = StoreOrderDb.GetOrderDetailFromSinde(storeOrder.Id);
+
+            ObservableCollection<Product> tempProducts = new ObservableCollection<Product>();
+
+            foreach (var detail in orderDetails)
+            {
+                PurchaseProduct tmeProduct = ProductCollection.Single(p => p.Id.Equals(detail.Id) && p.WarId.Equals(storeOrder.Warehouse.Id));
+
+                Product product;
+
+                if (detail.Type.Equals("O"))
+                    product = new ProductPurchaseOtc(tmeProduct);
+                else if(detail.Type.Equals("M"))
+                    product = new ProductPurchaseMedicine(tmeProduct);
+                else
+                    continue;
+
+                ((IProductPurchase) product).Note = ((IProductPurchase) storeOrder.Products.Single(p => p.Id.Equals(product.Id))).Note;
+                
+                tempProducts.Add(product);
+            }
+
+            storeOrder.Products = tempProducts;
+        }
+
         internal void SetControlProduct(Collection<PurchaseProduct> tempProduct)
         {
+            ProductCollection = tempProduct;
             purchaseControl.ProductCollection = tempProduct;
         }
 

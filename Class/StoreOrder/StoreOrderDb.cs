@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using His_Pos.Class.Product;
 using His_Pos.Interface;
+using His_Pos.ProductPurchase;
 using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.Struct.StoreOrder;
@@ -143,6 +144,21 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("DETAILS", details));
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
+        }
+
+        internal static Collection<ProductPurchaseView.SindeOrderDetail> GetOrderDetailFromSinde(string orderId)
+        {
+            ObservableCollection<ProductPurchaseView.SindeOrderDetail> collection = new ObservableCollection<ProductPurchaseView.SindeOrderDetail>();
+
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3310;User Id=SD;Password=2iixoguu;SslMode=none", SqlConnectionType.NySql);
+
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call ('{orderId.Substring(2, 10)}')");
+            
+            foreach (DataRow row in dataTable.Rows)
+            {
+                collection.Add(new ProductPurchaseView.SindeOrderDetail(row));
+            }
+            return collection;
         }
 
         internal static string GetNewOrderId(string OrdEmpId, string wareId, string manId, string orderType)

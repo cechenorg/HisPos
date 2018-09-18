@@ -98,7 +98,8 @@ namespace His_Pos.Class
         GetMedicalIcCard = 9,
         InitMedicalIcCard = 10,
         GetHospitalData = 11,
-        InitHospitalData = 12
+        InitHospitalData = 12,
+
     }
     public enum MessageType
     {
