@@ -48,5 +48,10 @@ namespace His_Pos.ProductPurchase
         {
 
         }
+
+        public void AddOrderByPrescription(Prescription prescription, ObservableCollection<DeclareMedicine> declareMedicines)
+        {
+            
+        }
     }
 }
