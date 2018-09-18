@@ -161,17 +161,15 @@ namespace His_Pos.ProductPurchase
             
             storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
-            if (storeOrder.Type == OrderType.PROCESSING && storeOrder.Manufactory.Id.Equals("0"))
-                CheckSindeOrderDetail(storeOrder);
-
             StoreOrderData = storeOrder;
 
             SetCurrentControl();
         }
 
-        private void CheckSindeOrderDetail(StoreOrder storeOrder)
+        public void CheckSindeOrderDetail(StoreOrder storeOrder)
         {
             Collection<SindeOrderDetail> orderDetails = StoreOrderDb.GetOrderDetailFromSinde(storeOrder.Id);
+            storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
             ObservableCollection<Product> tempProducts = new ObservableCollection<Product>();
 
@@ -199,10 +197,13 @@ namespace His_Pos.ProductPurchase
                 tempProducts.Add(product);
             }
 
-            if(orderDetails.Count > 0)
-                storeOrder.Note += orderDetails[0].ForeignOrderId;
+            storeOrder.Note += orderDetails[0].ForeignOrderId;
 
             storeOrder.Products = tempProducts;
+
+            StoreOrderData = storeOrder;
+
+            SaveOrder();
         }
 
         internal void SetControlProduct(Collection<PurchaseProduct> tempProduct)
