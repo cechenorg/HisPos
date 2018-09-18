@@ -11,7 +11,7 @@ namespace His_Pos.Class {
             DecMasId = row["HISDECMAS_ID"].ToString();
             ContinueNum = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ContinueTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
-            TreatDate = row["HISDECMAS_TREATDATE"].ToString();
+            TreatDate = Convert.ToDateTime(row["HISDECMAS_TREATDATE"].ToString()).ToString("yyyy/MM/dd");
             hospital = new Hospital(row,DataSource.InitHospitalData);
             division = new Division.Division(row);
         } 
