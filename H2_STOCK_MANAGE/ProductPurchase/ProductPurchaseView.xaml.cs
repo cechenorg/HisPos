@@ -51,12 +51,14 @@ namespace His_Pos.ProductPurchase
                 Amount = Double.Parse(row["AMOUNT"].ToString());
                 Price = Double.Parse(row["PRICE"].ToString());
                 BatchNum = row["BATCHNUM"].ToString();
+                ForeignOrderId = row["FOREIGN_ID"].ToString();
             }
             public string Type { get; }
             public string Id { get; }
             public double Amount { get; }
             public double Price { get; }
             public string BatchNum { get; }
+            public string ForeignOrderId { get; }
         }
         #endregion
 
@@ -159,17 +161,15 @@ namespace His_Pos.ProductPurchase
             
             storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
-            if (storeOrder.Type == OrderType.PROCESSING && storeOrder.Manufactory.Id.Equals("0"))
-                CheckSindeOrderDetail(storeOrder);
-
             StoreOrderData = storeOrder;
 
             SetCurrentControl();
         }
 
-        private void CheckSindeOrderDetail(StoreOrder storeOrder)
+        public void CheckSindeOrderDetail(StoreOrder storeOrder)
         {
             Collection<SindeOrderDetail> orderDetails = StoreOrderDb.GetOrderDetailFromSinde(storeOrder.Id);
+            storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
             ObservableCollection<Product> tempProducts = new ObservableCollection<Product>();
 
@@ -186,12 +186,24 @@ namespace His_Pos.ProductPurchase
                 else
                     continue;
 
-                ((IProductPurchase) product).Note = ((IProductPurchase) storeOrder.Products.Single(p => p.Id.Equals(product.Id))).Note;
+                ((IProductPurchase) product).BatchNumber = detail.BatchNum;
+                ((IProductPurchase)product).OrderAmount = -(detail.Amount);
+                ((ITrade)product).Price = (Double.Parse(detail.Price.ToString()) / -detail.Amount).ToString("##.00");
+                ((ITrade)product).TotalPrice = Double.Parse(detail.Price.ToString());
+
+                Product noteProduct = storeOrder.Products.SingleOrDefault(p => p.Id.Equals(product.Id));
+                ((IProductPurchase) product).Note = (noteProduct is null)? "" : ((IProductPurchase)noteProduct).Note;
                 
                 tempProducts.Add(product);
             }
 
+            storeOrder.Note += orderDetails[0].ForeignOrderId;
+
             storeOrder.Products = tempProducts;
+
+            StoreOrderData = storeOrder;
+
+            SaveOrder();
         }
 
         internal void SetControlProduct(Collection<PurchaseProduct> tempProduct)
@@ -239,7 +251,7 @@ namespace His_Pos.ProductPurchase
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    Saving.Visibility = Visibility.Hidden;
+                    Saving.Visibility = Visibility.Collapsed;
                 }));
             };
 
@@ -497,6 +509,10 @@ namespace His_Pos.ProductPurchase
         //    else
         //        return (num - 34).ToString();
         //}
+        private void ReloadBtn_Click(object sender, MouseButtonEventArgs e)
+        {
+            InitData();
+        }
     }
     
 }

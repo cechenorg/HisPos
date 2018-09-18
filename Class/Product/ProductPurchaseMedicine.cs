@@ -233,16 +233,16 @@ namespace His_Pos.Class.Product
             med.LastPrice = LastPrice;
             med.Source = Source;
             med.Cost = Cost;
-            med.TotalPrice = TotalPrice;
-            med.Amount = Amount;
-            med.Price = Price;
-            med.Note = Note;
-            med.FreeAmount = FreeAmount;
-            med.Invoice = Invoice;
-            med.ValidDate = ValidDate;
-            med.BatchNumber = BatchNumber;
+            med.totalPrice = TotalPrice;
+            med.amount = Amount;
+            med.price = Price;
+            med.note = Note;
+            med.freeAmount = FreeAmount;
+            med.invoice = Invoice;
+            med.validDate = ValidDate;
+            med.batchNumber = BatchNumber;
             med.Status = Status;
-            med.OrderAmount = OrderAmount;
+            med.orderAmount = OrderAmount;
 
             return med;
         }

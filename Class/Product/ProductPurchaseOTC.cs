@@ -259,16 +259,16 @@ namespace His_Pos.Class.Product
             otc.LastPrice=LastPrice;
             otc.Source=Source;
             otc.Cost=Cost;
-            otc.TotalPrice=TotalPrice;
-            otc.Amount=Amount;
-            otc.Price=Price;
-            otc.Note=Note;
-            otc.FreeAmount=FreeAmount;
-            otc.Invoice=Invoice;
-            otc.ValidDate=ValidDate;
-            otc.BatchNumber=BatchNumber;
+            otc.totalPrice=TotalPrice;
+            otc.amount=Amount;
+            otc.price=Price;
+            otc.note=Note;
+            otc.freeAmount=FreeAmount;
+            otc.invoice=Invoice;
+            otc.validDate=ValidDate;
+            otc.batchNumber=BatchNumber;
             otc.Status = Status;
-            otc.OrderAmount = OrderAmount;
+            otc.orderAmount = OrderAmount;
 
             return otc;
         }

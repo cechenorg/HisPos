@@ -387,6 +387,14 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             Product product = CurrentDataGrid.Items[currentRow - 1] as Product;
 
+            if (!((IProductPurchase) product).BatchNumber.Equals(""))
+            {
+                MessageWindow messageWindow = new MessageWindow("此商品有批號無法合批!", MessageType.ERROR);
+                messageWindow.ShowDialog();
+
+                return;
+            }
+
             ((ITrade)StoreOrderData.Products.Single(p => p.Id == product.Id && ((IProductPurchase)p).IsFirstBatch)).Amount += ((ITrade)product).Amount;
 
             StoreOrderData.Products.Remove(product);
