@@ -51,12 +51,14 @@ namespace His_Pos.ProductPurchase
                 Amount = Double.Parse(row["AMOUNT"].ToString());
                 Price = Double.Parse(row["PRICE"].ToString());
                 BatchNum = row["BATCHNUM"].ToString();
+                ForeignOrderId = row["FOREIGN_ID"].ToString();
             }
             public string Type { get; }
             public string Id { get; }
             public double Amount { get; }
             public double Price { get; }
             public string BatchNum { get; }
+            public string ForeignOrderId { get; }
         }
         #endregion
 
@@ -186,10 +188,19 @@ namespace His_Pos.ProductPurchase
                 else
                     continue;
 
-                ((IProductPurchase) product).Note = ((IProductPurchase) storeOrder.Products.Single(p => p.Id.Equals(product.Id))).Note;
+                ((IProductPurchase) product).BatchNumber = detail.BatchNum;
+                ((IProductPurchase)product).OrderAmount = -(detail.Amount);
+                ((ITrade)product).Price = (Double.Parse(detail.Price.ToString()) / -detail.Amount).ToString("##.00");
+                ((ITrade)product).TotalPrice = Double.Parse(detail.Price.ToString());
+
+                Product noteProduct = storeOrder.Products.SingleOrDefault(p => p.Id.Equals(product.Id));
+                ((IProductPurchase) product).Note = (noteProduct is null)? "" : ((IProductPurchase)noteProduct).Note;
                 
                 tempProducts.Add(product);
             }
+
+            if(orderDetails.Count > 0)
+                storeOrder.Note += orderDetails[0].ForeignOrderId;
 
             storeOrder.Products = tempProducts;
         }
