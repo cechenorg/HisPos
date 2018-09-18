@@ -81,8 +81,9 @@
                 </DataGrid>
                 <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridBackGround}">
                     <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0" MouseLeftButtonDown="AddNewOrder"/>
-                    <Rectangle Width="200"/>
-                    <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Hidden"/>
+                    <Rectangle Width="185"/>
+                    <Image Name="Saving" gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Collapsed"/>
+                    <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0" MouseLeftButtonDown="ReloadBtn_Click"/>
                 </StackPanel>
             </Grid>
             <ContentControl Name="OrderContentControl" Grid.Column="1" Margin="0,10,10,10" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}"/>

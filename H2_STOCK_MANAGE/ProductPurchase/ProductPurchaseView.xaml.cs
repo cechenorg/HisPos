@@ -239,7 +239,7 @@ namespace His_Pos.ProductPurchase
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    Saving.Visibility = Visibility.Hidden;
+                    Saving.Visibility = Visibility.Collapsed;
                 }));
             };
 
@@ -497,6 +497,10 @@ namespace His_Pos.ProductPurchase
         //    else
         //        return (num - 34).ToString();
         //}
+        private void ReloadBtn_Click(object sender, MouseButtonEventArgs e)
+        {
+            InitData();
+        }
     }
     
 }
