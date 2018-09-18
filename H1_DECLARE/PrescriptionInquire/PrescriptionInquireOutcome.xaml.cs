@@ -286,7 +286,7 @@ namespace His_Pos.PrescriptionInquire
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
             if (!(sender is AutoCompleteBox medicineCodeAuto)) return;
-
+            if (DeclareMedicinesData == null) return;
             var result = DeclareMedicinesData.Where(x =>
                 x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
