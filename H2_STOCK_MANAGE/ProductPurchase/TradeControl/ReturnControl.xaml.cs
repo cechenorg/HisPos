@@ -16,8 +16,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
+using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
+using His_Pos.ProductPurchase;
 using His_Pos.Struct.Manufactory;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 {
@@ -27,6 +30,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
     public partial class ReturnControl : UserControl, INotifyPropertyChanged
     {
         #region ----- Define Variables -----
+        public Collection<PurchaseProduct> ProductCollection { get; set; }
+
         private Collection<PurchasePrincipal> principalCollection;
         public Collection<PurchasePrincipal> PrincipalCollection
         {
@@ -143,6 +148,22 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             CurrentDataGrid.ItemsSource = null;
         }
         #endregion
+
+        private void NewProduct(object sender, RoutedEventArgs e)
+        {
+            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
+
+            newItemDialog.ShowDialog();
+
+            if (newItemDialog.ConfirmButtonClicked)
+            {
+                //SetChanged();
+                if (newItemDialog.SelectedItem.Type.Equals("M"))
+                    StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem));
+                else
+                    StoreOrderData.Products.Add(new ProductPurchaseOtc(newItemDialog.SelectedItem));
+            }
+        }
 
         private void Principal_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {

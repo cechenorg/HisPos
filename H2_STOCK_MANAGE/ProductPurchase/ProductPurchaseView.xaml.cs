@@ -159,6 +159,7 @@ namespace His_Pos.ProductPurchase
         {
             ProductCollection = tempProduct;
             purchaseControl.ProductCollection = tempProduct;
+            returnControl.ProductCollection = tempProduct;
         }
 
         public void CheckSindeOrderDetail(StoreOrder storeOrder)
