@@ -573,7 +573,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var res = HisApiBase.hisGetBasicData(icStringBuilder,ref strLength);
             if (res == 0)
             {
-               
+                //res = HisApiBase.hisGetSeqNumber256();
             }
             HisApiBase.csCloseCom();
             CurrentPrescription.Customer.Name = "林連義進";

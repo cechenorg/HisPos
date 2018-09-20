@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace His_Pos.Class.Declare.IcDataUpload
 {
     public class IcDataUploadService
+    {
+        public IcDataUpload IcDataUploadTable { get; set; }
+
+    }
+    public class IcDataUpload
     {
         public List<IcRecord> IcDataList { get; set; }
     }
@@ -38,7 +39,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
          */
         //V
         [XmlElement(ElementName = "A00")]
-        public string DataType { get; set; }//資料型態
+        public string DataType { get; set; } = "1";//資料型態
 
         //V
         [XmlElement(ElementName = "A01")]
@@ -46,7 +47,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
 
         //V
         [XmlElement(ElementName = "A02")]
-        public string UploadVersion { get; set; }//上傳版本 (就醫上傳版本現階段均為1.0)
+        public string UploadVersion { get; set; } = "1.0";//上傳版本 (就醫上傳版本現階段均為1.0)
     }
 
     [XmlRoot(ElementName = "MB")]
@@ -85,18 +86,6 @@ namespace His_Pos.Class.Declare.IcDataUpload
         [XmlElement(ElementName = "A21")]
         public string NewbornBabyMark { get; set; }//健保資料段 7-2.新生兒胞胎註記
 
-        /*
-         * 2.不須累計就醫序號及不扣除就醫可用次數之註記：
-         * AA同一療程之項目以六次以內治療為限者
-         * AB以同一療程之項目屬"非"六次以內治療為限者
-         * AC預防保健
-         * AD職業傷害或職業病
-         * AE慢性病連續處方箋領藥
-         * AF藥局調劑
-         * AH居家照護（第二次以後）
-         * CA其他規定不須累計就醫序號即不扣除就醫次數者
-         */
-
         //V
         [XmlElement(ElementName = "A23")]
         public string TreatmentCategory { get; set; }//健保資料段 8-1.就醫類別
@@ -129,7 +118,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
         [XmlElement(ElementName = "A22")]
         public string SecuritySignature { get; set; }//健保資料段 8-7-2安全簽章
 
-        //V (AC *)
+        //V
         [XmlElement(ElementName = "A25")]
         public string MainDiagnosisCode { get; set; }//健保資料段 8-8.主要診斷碼
 
@@ -141,7 +130,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
         [XmlElement(ElementName = "A31")]
         public string OutpatientFee { get; set; }//健保資料段 8-10-1.門診醫療費用 （當次） (get by HISAPI : hisGetTreatmentNoNeedHPC)
 
-        //* (AE V)
+        //*
         [XmlElement(ElementName = "A32")]
         public string OutpatientCopaymentFee { get; set; }//健保資料段 8-10-2.門診部分負擔費用（當次）(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
@@ -157,48 +146,20 @@ namespace His_Pos.Class.Declare.IcDataUpload
         [XmlElement(ElementName = "A35")]
         public string HospitalizationCopaymentFeeMore { get; set; }//健保資料段8-10-5.住院部分負擔費用（當次急性31天、慢性181天以上）(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
-        //~ (AC*) 
-        [XmlElement(ElementName = "A41")]
-        public string HealthServiceProjectMark { get; set; }//健保資料段 12-1.保健服務項目註記
-
-        //~ (AC*) 
-        [XmlElement(ElementName = "A42")]
-        public string HealthServiceExamDate { get; set; }//健保資料段 12-2. 保健服務檢查日期
-
-        //~ (AC*) 
-        [XmlElement(ElementName = "A43")]
-        public string HealthServiceHospitalId { get; set; }//健保資料段 12-3. 保健服務醫療院所代碼
-
-        //~ (AC*) 
-        [XmlElement(ElementName = "A44")]
-        public string ExamProjectCode { get; set; }//健保資料段 12-4.檢查項目代碼
-
-        //~ (AC*) 
-        [XmlElement(ElementName = "A51")]
-        public string PrenatalExamDate { get; set; }//健保資料段 15-1. 產檢檢查日期
-
-        //~ (AC*) 
-        [XmlElement(ElementName = "A52")]
-        public string PrenatalExamHospitalId { get; set; }//健保資料段 15-2. 產檢醫療院所代碼
-
-        //~ (AC*) 
-        [XmlElement(ElementName = "A53")]
-        public string PrenatalExamProjectCode { get; set; }//健保資料段 15-3. 產檢檢查項目代碼
-
     }
 
     [XmlRoot(ElementName = "MB2")]
     public class MedicalData
     {
-        //V (AC AH *)
+        //V 
         [XmlElement(ElementName = " A71")]
         public string MedicalOrderTreatDateTime { get; set; }//醫療專區 1-1.醫令就診日期時間
 
-        //V (AC AH *)
+        //V 
         [XmlElement(ElementName = "A72")]
         public string MedicalOrderCategory { get; set; }//醫療專區 1-2-1醫令類別
 
-        //V (AC AH *)
+        //V 
         [XmlElement(ElementName = "A73")]
         public string TreatmentProjectCode { get; set; }//醫療專區 1-2-2.診療項目代號
 
@@ -206,24 +167,33 @@ namespace His_Pos.Class.Declare.IcDataUpload
         [XmlElement(ElementName = "A74")]
         public string TreatmentPosition { get; set; }//醫療專區 1-2-3診療部位
 
-        //V (AC AH *)
+        //V 
         [XmlElement(ElementName = "A75")]
         public string Usage { get; set; }//醫療專區 1-2-4.用法
 
-        //V (AC AH *)
+        //V 
         [XmlElement(ElementName = "A76")]
         public string Days { get; set; }// 醫療專區 1-2-5天數
 
-        //V (AC AH *)
+        //V 
         [XmlElement(ElementName = "A77")]
         public string TotalAmount { get; set; }//醫療專區 1-2-6.總量
 
-        //V (AC AH *)
+        //V
         [XmlElement(ElementName = "A78")]
         public string PrescriptionDeliveryMark { get; set; }//醫療專區 1-2-7交付處方註記
 
         //1,3 V 2,4 ~
         [XmlElement(ElementName = "A79")]
         public string PrescriptionSignature { get; set; }//醫療專區 1-2-8處方簽章
+
+        //V
+        [XmlElement(ElementName = "A80")]
+        public string AllergyMedicineUploadMark { get; set; }//醫療專區 過敏藥物上傳註記
+
+
+        //1,3 V 2,4 ~
+        [XmlElement(ElementName = "A81")]
+        public string AllergyMedicine { get; set; }//過敏藥物
     }
 }
