@@ -119,6 +119,7 @@ namespace His_Pos.ProductPurchase
             InitData();
 
             purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
+            purchaseControl.DeleteOrder2.Click += DeleteOrder_Click;
             purchaseControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
             purchaseControl.Confirm.Click += Confirm_Click;
 
@@ -481,6 +482,12 @@ namespace His_Pos.ProductPurchase
         private void DeleteOrder_Click(object sender, RoutedEventArgs e)
         {
             if (StoreOrderData == null) return;
+
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確定將處理單作廢?", MessageType.WARNING);
+            confirmWindow.ShowDialog();
+
+            if (!confirmWindow.Confirm) return;
+            
             StoreOrderDb.DeleteOrder(StoreOrderData.Id);
             StoreOrderCollection.Remove(StoreOrderData);
 
