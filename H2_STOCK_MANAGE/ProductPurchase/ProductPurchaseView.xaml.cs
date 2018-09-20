@@ -115,14 +115,9 @@ namespace His_Pos.ProductPurchase
             Instance = this;
             this.Loaded += UserControl1_Loaded;
             StoOrderOverview.SelectedIndex = 0;
-            
+
             InitData();
-
-            purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
-            purchaseControl.DeleteOrder2.Click += DeleteOrder_Click;
-            purchaseControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
-            purchaseControl.Confirm.Click += Confirm_Click;
-
+            InitDetailControl();
         }
 
         #region ----- Init View -----
@@ -132,6 +127,18 @@ namespace His_Pos.ProductPurchase
             loadingWindow.GetProductPurchaseData(this);
             loadingWindow.Topmost = true;
             loadingWindow.Show();
+        }
+        private void InitDetailControl()
+        {
+            purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
+            purchaseControl.DeleteOrder2.Click += DeleteOrder_Click;
+            purchaseControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
+            purchaseControl.Confirm.Click += Confirm_Click;
+
+            returnControl.DeleteOrder.Click += DeleteOrder_Click;
+            returnControl.DeleteOrder2.Click += DeleteOrder_Click;
+            returnControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
+            returnControl.Confirm.Click += Confirm_Click;
         }
 
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
