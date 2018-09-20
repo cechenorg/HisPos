@@ -15,7 +15,10 @@
                     <Label VerticalAlignment="Center" Name="Message" FontSize="16" FontFamily="Segoe UI Semibold"/>
                 </ScrollViewer>
             </StackPanel>
-            <Button Margin="10" Content="OK" Click="ButtonBase_OnClick" Height="30"/>
+            <StackPanel Orientation="Horizontal">
+                <Button Margin="10" Content="修改" Background="RoyalBlue" Click="ButtonBase_OnClick" Height="30" Width="200"/>
+                <Button Margin="10" Content="異常登錄" Background="IndianRed" Click="ErrorLogInClick" Width="200"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

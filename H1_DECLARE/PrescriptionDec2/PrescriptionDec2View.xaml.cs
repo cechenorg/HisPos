@@ -13,15 +13,15 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
 using His_Pos.Class.MedBag;
-using His_Pos.Class.Person;
+using His_Pos.HisApi;
 using His_Pos.RDLC;
-using Prescription = His_Pos.Class.Prescription;
 using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
@@ -191,7 +191,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             MessageWindow m;
             CurrentPrescription.EList.Error = new List<Error>();
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
-            int medDays = 0;
+            var medDays = 0;
             foreach (var med in CurrentPrescription.Medicines)
             {
                 if (int.Parse(med.Days) > medDays)
@@ -203,21 +203,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 var declareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
-                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+                var declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
                
                 if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(CurrentDecMasId)) {  //一般處方
-                   string decMasId =  declareDb.InsertDeclareData(declareData);
+                   var decMasId =  declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
                 }
                 else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && string.IsNullOrEmpty(CurrentDecMasId)) //第1次的新慢性處方
                 {
-                    string decMasId = declareDb.InsertDeclareData(declareData);
+                    var decMasId = declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
-                    int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
-                    int end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
+                    var start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
+                    var end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
 
-                    int intDecMasId = Convert.ToInt32(decMasId);
-                    for (int i = start;i<= end;i++) {
+                    var intDecMasId = Convert.ToInt32(decMasId);
+                    for (var i = start;i<= end;i++) {
                         declareDb.SetSameGroupChronic(intDecMasId.ToString(),i.ToString());
                         intDecMasId++;
                     }
@@ -262,14 +262,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
-            var selectedItem = (sender as DataGridRow).Item;
+            var selectedItem = (sender as DataGridRow)?.Item;
 
-            if (selectedItem is IDeletable)
+            if (selectedItem is IDeletable deletable)
             {
                 if (CurrentPrescription.Medicines.Contains(selectedItem))
-                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+                    deletable.Source = "/Images/DeleteDot.png";
 
-                PrescriptionMedicines.SelectedItem = selectedItem;
+                PrescriptionMedicines.SelectedItem = deletable;
                 return;
             }
             PrescriptionMedicines.SelectedIndex = CurrentPrescription.Medicines.Count;
@@ -279,7 +279,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             var leaveItem = (sender as DataGridRow)?.Item;
 
-            if (leaveItem is IDeletable) (leaveItem as IDeletable).Source = string.Empty;
+            if (leaveItem is IDeletable deletable) deletable.Source = string.Empty;
         }
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -333,6 +333,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (CurrentPrescription.Medicines.Count == currentRow)
                 {
                     var m = CurrentPrescription.Medicines[currentRow - 1];
+                    Debug.Assert(declareMedicine != null, nameof(declareMedicine) + " != null");
                     declareMedicine.UsageName = m.UsageName;
                     declareMedicine.Dosage = m.Dosage;
                     declareMedicine.Days = m.Days;
@@ -567,16 +568,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadPatentDataFromIcCard()
         {
-            //_res = HisApiBase.csOpenCom(0);
-            //if (_res != 0) return;
-            //_res = HisApiBase.csVerifySAMDC();
-            //if (_res != 0) return;
-            //GetBasicData();
-            //if (!_currentCustomer.CheckCustomerExist(_currentCustomer.IdNumber))
-            //{
-            //    _currentCustomer.InsertCustomerData(_currentCustomer);
-            //}
-            //HisApiBase.csCloseCom();
+            var strLength = 72;
+            var icStringBuilder = new StringBuilder(strLength, 500);
+            var res = HisApiBase.hisGetBasicData(icStringBuilder,ref strLength);
+            if (res == 0)
+            {
+               
+            }
+            HisApiBase.csCloseCom();
             CurrentPrescription.Customer.Name = "林連義進";
             CurrentPrescription.Customer.Birthday = "037/10/01";
             CurrentPrescription.Customer.IcNumber = "S18824769A";
@@ -673,8 +672,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void InputNumber(KeyEventArgs e)
         {
-            bool shiftKey = (Keyboard.Modifiers & ModifierKeys.Shift) != 0;
-            if (shiftKey == true)  
+            var shiftKey = (Keyboard.Modifiers & ModifierKeys.Shift) != 0;
+            if (shiftKey)  
             {
                 e.Handled = true;
             }

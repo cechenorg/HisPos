@@ -20,6 +20,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class ErrorMssageWindow : Window
     {
+        public bool ErrorLogIn = false;
         public ErrorMssageWindow()
         {
             InitializeComponent();
@@ -33,7 +34,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
+        }
+
+        private void ErrorLogInClick(object sender, RoutedEventArgs e)
+        {
+            ErrorLogIn = true;
+            Close();
         }
     }
 }

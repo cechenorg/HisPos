@@ -258,7 +258,8 @@
     <Compile Include="Class\Declare\DeclareFileDdata.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
     <Compile Include="Class\Declare\ErrorMessage.cs" />
-    <Compile Include="Class\Declare\IcDecalre.cs" />
+    <Compile Include="Class\Declare\IcDataUpload\IcDataUpload.cs" />
+    <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />

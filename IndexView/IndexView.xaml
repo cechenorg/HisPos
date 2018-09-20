@@ -413,7 +413,6 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-                <Button Content="每日上傳測試" Grid.Column="2" HorizontalAlignment="Left" Margin="277,356,0,0" VerticalAlignment="Top" Width="126" Click="Button_Click"/>
             </Grid>
         </Grid>
     </Viewbox>

@@ -1,8 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace His_Pos.Class.Declare
+namespace His_Pos.Class.Declare.IcDataUpload
 {
+    public class IcDataUploadService
+    {
+        public List<IcRecord> IcDataList { get; set; }
+    }
+
     [XmlRoot(ElementName = "RECS")]
     public class IcRecordList
     {
@@ -180,7 +189,7 @@ namespace His_Pos.Class.Declare
 
     [XmlRoot(ElementName = "MB2")]
     public class MedicalData
-    { 
+    {
         //V (AC AH *)
         [XmlElement(ElementName = " A71")]
         public string MedicalOrderTreatDateTime { get; set; }//醫療專區 1-1.醫令就診日期時間

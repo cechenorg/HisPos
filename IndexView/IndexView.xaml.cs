@@ -32,11 +32,5 @@ namespace His_Pos.IndexView
         public void UpdateUI() {
 
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            IcRecordList icRecordList = new IcRecordList();
-
-        }
     }
 }
