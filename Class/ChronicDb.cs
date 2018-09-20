@@ -1,4 +1,5 @@
-﻿using His_Pos.Properties;
+﻿using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.Properties;
 using His_Pos.Service;
 using System;
 using System.Collections.Generic;
@@ -44,8 +45,18 @@ namespace His_Pos.Class
             var parameters = new List<SqlParameter>();
             ObservableCollection<Chronic> chronics = new ObservableCollection<Chronic>();
             parameters.Add(new SqlParameter("DecMasId", decMasId));
-            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateChronicData]", parameters);
-            
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateChronicData]", parameters); 
         }
+        internal static void InsertChronicDetail(string decMasId, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> prescriptionSendDatas) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            foreach (ChronicSendToServerWindow.PrescriptionSendData row in prescriptionSendDatas) {
+                parameters.Clear();
+                parameters.Add(new SqlParameter("@DecMasId", decMasId));
+                parameters.Add(new SqlParameter("@PRO_ID", row.MedId));
+                parameters.Add(new SqlParameter("@AMOUNT", row.SendAmount));
+                DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[InsertChronicDetail]", parameters);
+            }
+    }
     }
 }

@@ -24,6 +24,7 @@ using His_Pos.RDLC;
 using Prescription = His_Pos.Class.Prescription;
 using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
+using System.Globalization;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -214,55 +215,68 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 var declareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
-                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+                //DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
                 string decMasId;
-                if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(CurrentDecMasId)) {  //一般處方
-                    decMasId =  declareDb.InsertDeclareData(declareData);
-                    declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
-                }
-                else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && string.IsNullOrEmpty(CurrentDecMasId)) //第1次的新慢性處方
-                {
-
-                    if ((bool)IsSendToServer.IsChecked)
-                    {
-                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription, CurrentPrescription.Medicines);
-                        chronicSendToServerWindow.ShowDialog();
-                    }
-                    else
-                        IsSend = true;
-                    if (!IsSend) return;
+                if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(CurrentDecMasId) && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                {  //一般處方
                     decMasId = declareDb.InsertDeclareData(declareData);
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
-                    int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
-                    int end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
-
-                    int intDecMasId = Convert.ToInt32(decMasId);
-                    for (int i = start;i<= end;i++) {
-                        declareDb.SetSameGroupChronic(intDecMasId.ToString(),i.ToString());
-                        intDecMasId++;
-                    }
                 }
-                else if(CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(CurrentDecMasId)) { //第2次以後的慢性處方
+                else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(CurrentDecMasId))
+                { //第2次以後的慢性處方
 
                     if ((bool)IsSendToServer.IsChecked)
                     {
-                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription, CurrentPrescription.Medicines);
+                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow( CurrentPrescription, CurrentPrescription.Medicines);
                         chronicSendToServerWindow.ShowDialog();
+                        if (!IsSend) return;
                     }
-                    else
-                        IsSend = true;
-                    if (!IsSend) return;
-                    decMasId = CurrentDecMasId;
-                    declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
+                    if (IsSend)
+                        ChronicDb.InsertChronicDetail(CurrentDecMasId, ChronicSendToServerWindow.Instance.Prescription);
+
+                    if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                        declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
+
                     declareData.DecMasId = CurrentDecMasId;
                     declareDb.UpdateDeclareData(declareData); //更新慢箋
                     ChronicDb.UpdateChronicData(CurrentDecMasId);//重算預約慢箋 
-                    if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal) {  //若為最後一次 則再算出下一批慢性
+                    if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal)
+                    {  //若為最後一次 則再算出下一批慢性
                         declareDb.SetNewGroupChronic(CurrentDecMasId);
-                    } 
+                    }
+                }
+                else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && string.IsNullOrEmpty(CurrentDecMasId)) //第1次的新慢性處方
+                {
+                    if ((bool)IsSendToServer.IsChecked)
+                    {
+                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription, CurrentPrescription.Medicines);
+                        chronicSendToServerWindow.ShowDialog();
+                        if (!IsSend) return;
+                    }
+                    decMasId = declareDb.InsertDeclareData(declareData);
+                    if (IsSend) 
+                        ChronicDb.InsertChronicDetail(decMasId, ChronicSendToServerWindow.Instance.Prescription);
+                    
+
+                    if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                        declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫                     
+
+                    int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
+                    int end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
+                    int intDecMasId = Convert.ToInt32(decMasId);
+                    for (int i = start; i <= end; i++)
+                    {
+                        declareDb.SetSameGroupChronic(intDecMasId.ToString(), i.ToString());
+                        intDecMasId++;
+                    }
+
                 } 
+                else {
+                    m = new MessageWindow("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR);
+                    m.ShowDialog();
+                }
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
-                m.Show();
+                m.ShowDialog();
                 declareDb.UpdateDeclareFile(declareData);
                 //PrintMedBag();
             }
@@ -729,8 +743,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void AdjustCaseCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             IsSendToServer.IsChecked = false;
-            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" ? true : false;
-            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" ? true : false;
+            IsSendToServer.IsEnabled = (((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) ? true : false;
+            IsSendToServer.IsChecked = (((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) ? true : false;
             
         }
 
@@ -745,5 +759,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
             }
         }
+
+        private void DatePickerTreatment_SelectionChanged(object sender, RoutedEventArgs e) { 
+
+            ButtonSubmmit.Content = DatePickerTreatment.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)  ? "調劑" : "預約慢箋";
+            IsSendToServer.IsChecked = false;
+            if(AdjustCaseCombo.SelectedItem != null)
+            {
+                IsSendToServer.IsEnabled = (((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) ? true : false;
+                IsSendToServer.IsChecked = (((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) ? true : false;
+            } 
+        }
+
     }
 }
