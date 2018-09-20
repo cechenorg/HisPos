@@ -119,6 +119,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     MainGrid.RowDefinitions[6].Height = new GridLength(50);
 
                     CurrentDataGrid = GStoreOrderDetail;
+
+                    if (StoreOrderData.Manufactory.Id.Equals("0"))
+                        GStoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
+                    else
+                        GStoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
                     break;
                 case OrderType.UNPROCESSING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
@@ -127,6 +132,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     MainGrid.RowDefinitions[6].Height = new GridLength(0);
                     
                     CurrentDataGrid = PStoreOrderDetail;
+
+                    if (StoreOrderData.Manufactory.Id.Equals("0"))
+                        PStoreOrderDetail.Columns[10].Visibility = Visibility.Collapsed;
+                    else
+                        PStoreOrderDetail.Columns[10].Visibility = Visibility.Visible;
                     break;
             }
 
