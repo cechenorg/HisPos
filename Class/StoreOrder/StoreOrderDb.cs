@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -150,9 +151,11 @@ namespace His_Pos.Class.StoreOrder
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
         }
 
-        internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string id)
+        internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string proId, string wareId)
         {
-            throw new NotImplementedException();
+            Collection<ReturnControl.BatchNumOverview> collection = new BindingList<ReturnControl.BatchNumOverview>();
+
+            return collection;
         }
 
         internal static Collection<ProductPurchaseView.SindeOrderDetail> GetOrderDetailFromSinde(string orderId)

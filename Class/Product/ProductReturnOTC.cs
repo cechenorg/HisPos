@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.Interface;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.Class.Product
 {
@@ -21,6 +22,23 @@ namespace His_Pos.Class.Product
             BatchLimit = Double.Parse(row["BATCHLIMIT"].ToString());
             ReturnPrice = Double.Parse(row["PRICE"].ToString());
             ReturnTotalPrice = Double.Parse(row["TOTAL"].ToString());
+        }
+
+        public ProductReturnOTC(PurchaseProduct selectedItem)
+        {
+            Id = selectedItem.Id;
+            Name = selectedItem.Name;
+            ChiName = selectedItem.ChiName;
+            EngName = selectedItem.EngName;
+
+            Stock = new InStock(selectedItem);
+
+            Note = "";
+            ReturnAmount = 0;
+            BatchNumber = "";
+            BatchLimit = 0;
+            ReturnPrice = 0;
+            ReturnTotalPrice = 0;
         }
 
         public string Note { get; set; }

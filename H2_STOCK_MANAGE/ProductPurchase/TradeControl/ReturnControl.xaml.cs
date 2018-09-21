@@ -37,10 +37,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         {
             public BatchNumOverview(DataRow row)
             {
-                BatchNumber = row[""].ToString();
-                IsSelected = Boolean.Parse(row[""].ToString());
-                Amount = Double.Parse(row[""].ToString());
-                SelectedAmount = Double.Parse(row[""].ToString());
+                BatchNumber = row["PRO_BATCHNUM"].ToString();
+                IsSelected = false;
+                Amount = Double.Parse(row["PRO_AMOUNT"].ToString());
+                SelectedAmount = 0;
             }
 
             public string BatchNumber { get; }
@@ -179,23 +179,25 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             if (newItemDialog.ConfirmButtonClicked)
             {
 
-                Collection<BatchNumOverview> batchNumOverviews = StoreOrderDb.GetBatchNumOverview(newItemDialog.SelectedItem.Id);
+                Collection<BatchNumOverview> batchNumOverviews = StoreOrderDb.GetBatchNumOverview(newItemDialog.SelectedItem.Id, StoreOrderData.Warehouse.Id);
 
                 if (batchNumOverviews.Count > 1)
                 {
-                    BatchNumberDialog batchNumberDialog = new BatchNumberDialog();
+                    BatchNumberDialog batchNumberDialog = new BatchNumberDialog(batchNumOverviews);
                     batchNumberDialog.ShowDialog();
+
                 }
                 else
                 {
                     Product newProduct;
 
                     if (newItemDialog.SelectedItem.Type.Equals("M"))
-                        newProduct = new ProductPurchaseMedicine(newItemDialog.SelectedItem);
+                        newProduct = new ProductReturnMedicine(newItemDialog.SelectedItem);
                     else
-                        newProduct = new ProductPurchaseOtc(newItemDialog.SelectedItem);
+                        newProduct = new ProductReturnOTC(newItemDialog.SelectedItem);
 
-                    ((IProductPurchase) newProduct).BatchNumber = batchNumOverviews[0].BatchNumber;
+                    ((IProductReturn) newProduct).BatchNumber = batchNumOverviews[0].BatchNumber;
+                    ((IProductReturn)newProduct).BatchLimit = batchNumOverviews[0].Amount;
 
                     StoreOrderData.Products.Add(newProduct);
                 }
