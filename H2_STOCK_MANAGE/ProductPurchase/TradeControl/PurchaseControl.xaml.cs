@@ -153,7 +153,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     break;
                 case OrderType.WAITING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[4].Height = new GridLength(0)
+                    MainGrid.RowDefinitions[4].Height = new GridLength(0);
                     MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
                     MainGrid.RowDefinitions[6].Height = new GridLength(0);
                     MainGrid.RowDefinitions[7].Height = new GridLength(0);
