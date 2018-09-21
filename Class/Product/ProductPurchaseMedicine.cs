@@ -23,15 +23,15 @@ namespace His_Pos.Class.Product
             switch (dataSource)
             {
                 case DataSource.GetStoreOrderDetail:
-                    Price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
-                    TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
-                    Amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
-                    OrderAmount = Int32.Parse(dataRow["STOORDDET_ORDERQTY"].ToString());
-                    Note = dataRow["PRO_DESCRIPTION"].ToString();
-                    Invoice = dataRow["STOORDDET_INVOICE"].ToString();
-                    FreeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
-                    ValidDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01"))? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
-                    BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
+                    price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
+                    totalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+                    amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
+                    orderAmount = Int32.Parse(dataRow["STOORDDET_ORDERQTY"].ToString());
+                    note = dataRow["PRO_DESCRIPTION"].ToString();
+                    invoice = dataRow["STOORDDET_INVOICE"].ToString();
+                    freeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
+                    validDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01"))? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
+                    batchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
                     break;
             }
 

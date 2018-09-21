@@ -125,6 +125,7 @@ namespace His_Pos.Class.StoreOrder
             details.Columns.Add("BATCHNUMBER", typeof(string));
             details.Columns.Add("FREEQTY", typeof(int));
             details.Columns.Add("INVOICE", typeof(string));
+            details.Columns.Add("TOTAL", typeof(string));
             DateTime datetimevalue;
             foreach (var product in storeOrder.Products)
             {
@@ -139,6 +140,7 @@ namespace His_Pos.Class.StoreOrder
                 newRow["BATCHNUMBER"] = ((IProductPurchase) product).BatchNumber;
                 newRow["FREEQTY"] = ((IProductPurchase)product).FreeAmount;
                 newRow["INVOICE"] = ((IProductPurchase)product).Invoice;
+                newRow["TOTAL"] = ((ITrade)product).TotalPrice.ToString();
 
                 details.Rows.Add(newRow);
             }
