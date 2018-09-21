@@ -133,7 +133,7 @@ namespace His_Pos.Class.StoreOrder
                 newRow["PRO_ID"] = product.Id;
                 newRow["ORDERQTY"] = ((IProductPurchase)product).OrderAmount;
                 newRow["QTY"] = ((ITrade)product).Amount;
-                newRow["PRICE"] = ((ITrade)product).Price == "" ? "0" : ((ITrade)product).Price;
+                newRow["PRICE"] = ((ITrade) product).Price.ToString();
                 newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
                 newRow["VALIDDATE"] = ( DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue) ) ? ((IProductPurchase)product).ValidDate:string.Empty ;
                 newRow["BATCHNUMBER"] = ((IProductPurchase) product).BatchNumber;

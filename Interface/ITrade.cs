@@ -11,7 +11,7 @@ namespace His_Pos.Interface
         double Cost { get; set; }
         double TotalPrice { get; set; }
         double Amount { get; set; }
-        string Price { get; set; }
+        double Price { get; set; }
 
         string CountStatus { get; set; }
         string FocusColumn { get; set; }

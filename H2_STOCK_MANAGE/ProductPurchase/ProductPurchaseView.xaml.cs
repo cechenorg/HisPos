@@ -183,7 +183,7 @@ namespace His_Pos.ProductPurchase
 
                 ((IProductPurchase)product).BatchNumber = detail.BatchNum;
                 ((IProductPurchase)product).OrderAmount = -(detail.Amount);
-                ((ITrade)product).Price = (Double.Parse(detail.Price.ToString()) / -detail.Amount).ToString("##.00");
+                ((ITrade)product).Price = detail.Price / -detail.Amount;
                 ((ITrade)product).TotalPrice = Double.Parse(detail.Price.ToString());
 
                 Product noteProduct = storeOrder.Products.SingleOrDefault(p => p.Id.Equals(product.Id));
