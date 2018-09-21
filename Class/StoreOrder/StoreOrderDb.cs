@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 using His_Pos.Interface;
@@ -182,14 +183,40 @@ namespace His_Pos.Class.StoreOrder
             return table.Rows[0]["STOORD_ID"].ToString();
         }
 
-        public static ObservableCollection<AbstractClass.Product> GetStoreOrderCollectionById(string StoOrdId)
+        internal static ObservableCollection<AbstractClass.Product> GetOrderReturnDetailById(string ordId)
         {
             ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("STOORD_ID", StoOrdId));
+            parameters.Add(new SqlParameter("STOORD_ID", ordId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderReturnDetail]", parameters);
+            
+            foreach (DataRow row in table.Rows)
+            {
+                switch (row["PRO_TYPE"].ToString())
+                {
+                    case "M":
+                        StoreOrderCollection.Add(new ProductReturnMedicine(row));
+                        break;
+                    case "O":
+                        StoreOrderCollection.Add(new ProductReturnOTC(row));
+                        break;
+                }
+            }
+            return StoreOrderCollection;
+        }
+
+        public static ObservableCollection<AbstractClass.Product> GetOrderPurchaseDetailById(string ordId)
+        {
+            ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", ordId));
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderDetail]", parameters);
 

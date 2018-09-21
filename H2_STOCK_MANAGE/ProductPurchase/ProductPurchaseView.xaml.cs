@@ -165,7 +165,7 @@ namespace His_Pos.ProductPurchase
         public void CheckSindeOrderDetail(StoreOrder storeOrder)
         {
             Collection<SindeOrderDetail> orderDetails = StoreOrderDb.GetOrderDetailFromSinde(storeOrder.Id);
-            storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
+            storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
 
             ObservableCollection<Product> tempProducts = new ObservableCollection<Product>();
 
@@ -216,9 +216,17 @@ namespace His_Pos.ProductPurchase
             if (dataGrid.SelectedItem is null) return;
 
             StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
-            
-            storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
+            switch (StoreOrderData.Category.CategoryName)
+            {
+                case "進貨":
+                    storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+                    return;
+                case "退貨":
+                    storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
+                    return;
+            }
+            
             StoreOrderData = storeOrder;
 
             SetCurrentControl();
