@@ -207,14 +207,14 @@ namespace His_Pos.Class.StoreOrder
             {
                 if (type == OrderType.PROCESSING)
                 {
-                    if(product is ProductPurchaseMedicine && String.IsNullOrEmpty(((IProductPurchase)product).BatchNumber) )
-                        message += "請填寫商品 " + product.Id + " 批號\n";
+                    //if(product is ProductPurchaseMedicine && String.IsNullOrEmpty(((IProductPurchase)product).BatchNumber) )
+                    //    message += "請填寫商品 " + product.Id + " 批號\n";
 
-                    if (String.IsNullOrEmpty(((IProductPurchase)product).Invoice))
-                        message += "請填寫商品 " + product.Id + " 發票號碼\n";
+                    //if (String.IsNullOrEmpty(((IProductPurchase)product).Invoice))
+                    //    message += "請填寫商品 " + product.Id + " 發票號碼\n";
 
-                    if (!DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue))
-                        message += "商品 " + product.Id + " 效期格式不正確\n";
+                    //if (!DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue))
+                    //    message += "商品 " + product.Id + " 效期格式不正確\n";
                 }
                 else if (type == OrderType.UNPROCESSING)
                 {

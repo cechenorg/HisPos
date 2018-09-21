@@ -15,12 +15,12 @@ namespace His_Pos.Class.Product
         {
             Stock = new InStock(row);
 
-            Note = row[""].ToString();
-            ReturnAmount = Double.Parse(row[""].ToString());
-            BatchNumber = row[""].ToString();
-            BatchLimit = Double.Parse(row[""].ToString());
-            ReturnPrice = Double.Parse(row[""].ToString());
-            ReturnTotalPrice = Double.Parse(row[""].ToString());
+            Note = row["PRO_NOTE"].ToString();
+            ReturnAmount = Double.Parse(row["AMOUNT"].ToString());
+            BatchNumber = row["BATCHNUMBER"].ToString();
+            BatchLimit = Double.Parse(row["BATCHLIMIT"].ToString());
+            ReturnPrice = Double.Parse(row["PRICE"].ToString());
+            ReturnTotalPrice = Double.Parse(row["TOTAL"].ToString());
         }
 
         public string Note { get; set; }

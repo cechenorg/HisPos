@@ -121,9 +121,29 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     CurrentDataGrid = GStoreOrderDetail;
 
                     if (StoreOrderData.Manufactory.Id.Equals("0"))
+                    {
+                        GStoreOrderDetail.Columns[3].Visibility = Visibility.Collapsed;
+                        GStoreOrderDetail.Columns[4].Visibility = Visibility.Visible;
                         GStoreOrderDetail.Columns[6].Visibility = Visibility.Collapsed;
+                        GStoreOrderDetail.Columns[7].Visibility = Visibility.Visible;
+                        GStoreOrderDetail.Columns[8].Visibility = Visibility.Collapsed;
+                        GStoreOrderDetail.Columns[9].Visibility = Visibility.Collapsed;
+                        GStoreOrderDetail.Columns[10].Visibility = Visibility.Visible;
+                        GStoreOrderDetail.Columns[11].Visibility = Visibility.Collapsed;
+                        GStoreOrderDetail.Columns[12].Visibility = Visibility.Visible;
+                    }
                     else
+                    {
+                        GStoreOrderDetail.Columns[3].Visibility = Visibility.Visible;
+                        GStoreOrderDetail.Columns[4].Visibility = Visibility.Collapsed;
                         GStoreOrderDetail.Columns[6].Visibility = Visibility.Visible;
+                        GStoreOrderDetail.Columns[7].Visibility = Visibility.Collapsed;
+                        GStoreOrderDetail.Columns[8].Visibility = Visibility.Visible;
+                        GStoreOrderDetail.Columns[9].Visibility = Visibility.Visible;
+                        GStoreOrderDetail.Columns[10].Visibility = Visibility.Collapsed;
+                        GStoreOrderDetail.Columns[11].Visibility = Visibility.Visible;
+                        GStoreOrderDetail.Columns[12].Visibility = Visibility.Collapsed;
+                    }
                     break;
                 case OrderType.UNPROCESSING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);

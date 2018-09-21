@@ -217,14 +217,14 @@ namespace His_Pos.ProductPurchase
 
             StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
 
-            switch (StoreOrderData.Category.CategoryName)
+            switch (storeOrder.Category.CategoryName)
             {
                 case "進貨":
                     storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
-                    return;
+                    break;
                 case "退貨":
                     storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
-                    return;
+                    break;
             }
             
             StoreOrderData = storeOrder;
