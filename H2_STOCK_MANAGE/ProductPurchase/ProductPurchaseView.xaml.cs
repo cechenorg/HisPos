@@ -70,7 +70,6 @@ namespace His_Pos.ProductPurchase
         
         private PurchaseControl purchaseControl = new PurchaseControl();
         private ReturnControl returnControl = new ReturnControl();
-        private WaitControl waitControl = new WaitControl();
 
         public StoreOrder StoreOrderData { get; set; }
 
@@ -253,7 +252,6 @@ namespace His_Pos.ProductPurchase
 
             purchaseControl.ClearControl();
             returnControl.ClearControl();
-            waitControl.ClearControl();
         }
 
         private void UpdateOneTheWayAmount()
