@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,10 +15,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
+using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.Struct.Manufactory;
 using His_Pos.Struct.Product;
@@ -29,6 +32,24 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
     /// </summary>
     public partial class ReturnControl : UserControl, INotifyPropertyChanged
     {
+        #region ----- Define Inner Class -----
+        public struct BatchNumOverview
+        {
+            public BatchNumOverview(DataRow row)
+            {
+                BatchNumber = row[""].ToString();
+                IsSelected = Boolean.Parse(row[""].ToString());
+                Amount = Double.Parse(row[""].ToString());
+                SelectedAmount = Double.Parse(row[""].ToString());
+            }
+
+            public string BatchNumber { get; }
+            public bool IsSelected { get; }
+            public double Amount { get; }
+            public double SelectedAmount { get; }
+        }
+        #endregion
+
         #region ----- Define Variables -----
         public Collection<PurchaseProduct> ProductCollection { get; set; }
 
@@ -157,11 +178,27 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (newItemDialog.ConfirmButtonClicked)
             {
-                //SetChanged();
-                if (newItemDialog.SelectedItem.Type.Equals("M"))
-                    StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem));
+
+                Collection<BatchNumOverview> batchNumOverviews = StoreOrderDb.GetBatchNumOverview(newItemDialog.SelectedItem.Id);
+
+                if (batchNumOverviews.Count > 1)
+                {
+                    BatchNumberDialog batchNumberDialog = new BatchNumberDialog();
+                    batchNumberDialog.ShowDialog();
+                }
                 else
-                    StoreOrderData.Products.Add(new ProductPurchaseOtc(newItemDialog.SelectedItem));
+                {
+                    Product newProduct;
+
+                    if (newItemDialog.SelectedItem.Type.Equals("M"))
+                        newProduct = new ProductPurchaseMedicine(newItemDialog.SelectedItem);
+                    else
+                        newProduct = new ProductPurchaseOtc(newItemDialog.SelectedItem);
+
+                    ((IProductPurchase) newProduct).BatchNumber = batchNumOverviews[0].BatchNumber;
+
+                    StoreOrderData.Products.Add(newProduct);
+                }
             }
         }
 

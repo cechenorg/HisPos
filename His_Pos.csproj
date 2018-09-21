@@ -420,6 +420,9 @@
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml.cs">
       <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\BatchNumberDialog.xaml.cs">
+      <DependentUpon>BatchNumberDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml.cs">
       <DependentUpon>DeclareDataDetailOverview.xaml</DependentUpon>
     </Compile>
@@ -692,6 +695,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\ProductPurchase\BatchNumberDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

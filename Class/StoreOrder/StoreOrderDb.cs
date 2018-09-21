@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.Class.Product;
+using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.Properties;
@@ -144,6 +145,11 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("DETAILS", details));
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
+        }
+
+        internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string id)
+        {
+            throw new NotImplementedException();
         }
 
         internal static Collection<ProductPurchaseView.SindeOrderDetail> GetOrderDetailFromSinde(string orderId)
