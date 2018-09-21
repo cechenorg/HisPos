@@ -237,16 +237,8 @@ namespace His_Pos.ProductPurchase
             switch (StoreOrderData.Category.CategoryName)
             {
                 case "進貨":
-                    if (StoreOrderData.Type == OrderType.WAITING)
-                    {
-                        CurrentControl = waitControl;
-                        waitControl.SetDataContext(StoreOrderData);
-                    }
-                    else
-                    {
-                        CurrentControl = purchaseControl;
-                        purchaseControl.SetDataContext(StoreOrderData);
-                    }
+                    CurrentControl = purchaseControl;
+                    purchaseControl.SetDataContext(StoreOrderData);
                     return;
                 case "退貨":
                     CurrentControl = returnControl;
