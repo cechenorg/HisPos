@@ -27,7 +27,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             public PrescriptionSendData(DeclareMedicine declareMedicine) {
                 MedId = declareMedicine.Id;
                 MedName = declareMedicine.Name;
-                Stock = "";
+                Stock = ChronicDb.GetResidualAmountById(MedId);
                 TreatAmount = declareMedicine.Amount.ToString();
                 SendAmount = "0";
             }

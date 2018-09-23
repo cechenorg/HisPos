@@ -52,11 +52,19 @@ namespace His_Pos.Class
             var parameters = new List<SqlParameter>();
             foreach (ChronicSendToServerWindow.PrescriptionSendData row in prescriptionSendDatas) {
                 parameters.Clear();
-                parameters.Add(new SqlParameter("@DecMasId", decMasId));
-                parameters.Add(new SqlParameter("@PRO_ID", row.MedId));
-                parameters.Add(new SqlParameter("@AMOUNT", row.SendAmount));
+                parameters.Add(new SqlParameter("DecMasId", decMasId));
+                parameters.Add(new SqlParameter("PRO_ID", row.MedId));
+                parameters.Add(new SqlParameter("AMOUNT", row.SendAmount));
                 DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[InsertChronicDetail]", parameters);
-            }
-    }
+            } 
+         }
+        internal static string GetResidualAmountById(string proId ) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>(); 
+                parameters.Add(new SqlParameter("PRO_ID", proId)); 
+                DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetResidualAmountById]", parameters);
+            return dataTable.Rows[0][0].ToString();
+        }
+        
     }
 }
