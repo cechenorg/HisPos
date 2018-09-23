@@ -569,11 +569,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void LoadPatentDataFromIcCard()
         {
             var strLength = 72;
-            var icStringBuilder = new StringBuilder(strLength, 500);
-            var res = HisApiBase.hisGetBasicData(icStringBuilder,ref strLength);
+            var icData = new byte[72];
+            var res = HisApiBase.hisGetBasicData(icData,ref strLength);
+
             if (res == 0)
             {
-                //res = HisApiBase.hisGetSeqNumber256();
+
+                strLength = 498;
+                icData = new byte[498];
+                res = HisApiBase.hisGetSeqNumber256(icData,strLength);
             }
             HisApiBase.csCloseCom();
             CurrentPrescription.Customer.Name = "林連義進";
