@@ -88,7 +88,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
 
         //V
         [XmlElement(ElementName = "A23")]
-        public string TreatmentCategory { get; set; }//健保資料段 8-1.就醫類別
+        public string TreatmentCategory { get; set; } = "AF";//健保資料段 8-1.就醫類別
 
         //*
         [XmlElement(ElementName = "A24")]

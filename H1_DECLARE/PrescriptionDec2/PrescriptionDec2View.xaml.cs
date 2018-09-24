@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -19,6 +20,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.MedBag;
 using His_Pos.HisApi;
 using His_Pos.RDLC;
@@ -31,6 +33,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
+        private bool isMedicalNumberGet = false;
+        private bool isIcCardGet = false;
         private string CurrentDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
         private bool _isChanged;
@@ -187,6 +191,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
+            LogInIcData();
+            CreatIcUploadData();
             ErrorMssageWindow err;
             MessageWindow m;
             CurrentPrescription.EList.Error = new List<Error>();
@@ -246,6 +252,83 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 err = new ErrorMssageWindow(errorMessage);
                 err.Show();
             }
+        }
+
+        private void LogInIcData()
+        {
+            //寫卡
+        }
+
+        private void CreatIcUploadData()
+        {
+            ConvertData cs = new ConvertData();
+            var strLength = 0;
+            byte[] icData;
+            int res = -1;
+            var icRecord = new IcRecord {HeaderMessage = {DataFormat = "1"}};
+            icRecord.MainMessage.IcMessage.SamCode = Directory.GetFiles(@"C:\NHI\SAM\COMX1")[0].Substring(10, 12);
+            icRecord.MainMessage.IcMessage.CardNo = CurrentPrescription.Customer.IcCard.CardNo;
+            icRecord.MainMessage.IcMessage.IcNumber = CurrentPrescription.Customer.IcNumber;
+            icRecord.MainMessage.IcMessage.BirthDay = CurrentPrescription.Customer.Birthday;
+            var birthYear = Convert.ToInt32(CurrentPrescription.Customer.Birthday.Substring(0, 3)) + 1911;
+            var birth = new DateTime(birthYear, Convert.ToInt32(CurrentPrescription.Customer.Birthday.Substring(3, 2)), Convert.ToInt32(CurrentPrescription.Customer.Birthday.Substring(5, 2)));
+            var ageOfDays = new TimeSpan(DateTime.Today.Ticks - birth.Ticks).Days;
+            //新生兒就醫
+            if (ageOfDays < 60)
+            {
+                strLength = 498;
+                icData = new byte[498];
+                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData,ref strLength);
+                if (res == 0)
+                {
+                    //取得新生兒就醫註記
+                    byte[] cBabyTreat = new byte[1];
+                    cBabyTreat[0] = icData[86];
+                    icRecord.MainMessage.IcMessage.NewbornTreatmentMark = Encoding.GetEncoding(950).GetString(cBabyTreat);
+
+                    strLength = 78;
+                    icData = new byte[78];
+                    byte[] cBabyMark = new byte[1];
+                    byte[] cNewbornBirt = new byte[7];
+                    res = HisApiBase.hisGetRegisterBasic(icData, ref strLength);
+                    //取得新生兒胞胎註記
+                    cBabyMark[0] = icData[77];
+                    icRecord.MainMessage.IcMessage.NewbornBabyMark = Encoding.GetEncoding(950).GetString(cBabyMark);
+                    //取得新生兒出生日期
+                    Array.Copy(icData, 70, cNewbornBirt, 0, 7);
+                    icRecord.MainMessage.IcMessage.NewbornBirthDay = Encoding.GetEncoding(950).GetString(cNewbornBirt);
+                }
+                else
+                {
+                    //無法取得新生兒就醫註記
+                }
+            }
+            strLength = 13;
+            icData = new byte[13];
+            res = HisApiBase.csGetDateTime(icData,ref strLength);
+            if (res == 0)
+            {
+                icRecord.MainMessage.IcMessage.TreatmentDateTime = Encoding.GetEncoding(950).GetString(icData);
+            }
+            else
+            {
+                icRecord.MainMessage.IcMessage.TreatmentDateTime =
+                    (DateTime.Now.Year - 1911) + DateTime.Now.Month.ToString().PadLeft(2, '0') +
+                    DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0');
+            }
+            icRecord.MainMessage.IcMessage.MakeUpMark = "1";
+            icRecord.MainMessage.IcMessage.MedicalNumber = "\0";
+            strLength = 10;
+            icData = new byte[10];
+            res = HisApiBase.csGetHospID(icData, ref strLength);
+            icRecord.MainMessage.IcMessage.PharmacyId = res == 0 ? Encoding.GetEncoding(950).GetString(icData) : MainWindow.CurrentPharmacy.Id;
+            //取得醫事人員卡身分證字號
+            //strLength = 10;
+            //icData = new byte[10];
+            //res = HisApiBase.hpcGetHPCSSN(icData, ref strLength);
+            //icRecord.MainMessage.IcMessage.MedicalPersonIcNumber = Encoding.GetEncoding(950).GetString(icData);
+            icRecord.MainMessage.IcMessage.MedicalPersonIcNumber = MainWindow.CurrentUser.IcNumber;
+
         }
 
         private void PrintMedBag()
@@ -571,24 +654,34 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var strLength = 72;
             var icData = new byte[72];
             var res = HisApiBase.hisGetBasicData(icData,ref strLength);
-
             if (res == 0)
             {
-
-                strLength = 498;
-                icData = new byte[498];
-                res = HisApiBase.hisGetSeqNumber256(icData,strLength);
+                isIcCardGet = true;
+                BasicData basicData = new BasicData(icData);
+                CurrentPrescription.Customer.Name = basicData.Name;
+                CurrentPrescription.Customer.Birthday = basicData.Birthday;
+                CurrentPrescription.Customer.IcNumber = basicData.IcNumber;
+                CurrentPrescription.Customer.Gender = basicData.Gender;
+                CurrentPrescription.Customer.IcCard = new IcCard(basicData);
+                CurrentPrescription.Customer.Id = "1";
+                strLength = 7;
+                icData = new byte[7];
+                res = HisApiBase.hisGetLastSeqNum(icData, ref strLength);
+                if (res == 0)
+                {
+                    isMedicalNumberGet = true;
+                }
             }
-            HisApiBase.csCloseCom();
-            CurrentPrescription.Customer.Name = "林連義進";
-            CurrentPrescription.Customer.Birthday = "037/10/01";
-            CurrentPrescription.Customer.IcNumber = "S18824769A";
-            CheckPatientGender();
-            CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
-            CurrentPrescription.Customer.Id = "1";
-            PatientName.Text = CurrentPrescription.Customer.Name;
-            PatientId.Text = CurrentPrescription.Customer.IcNumber;
-            PatientBirthday.Text = CurrentPrescription.Customer.Birthday;
+            else
+            {
+                CurrentPrescription.Customer.Name = "林連義進";
+                CurrentPrescription.Customer.Birthday = "0371001";
+                CurrentPrescription.Customer.IcNumber = "S18824769A";
+                CheckPatientGender();
+                CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
+                CurrentPrescription.Customer.Id = "1";
+            }
+
             CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
             CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
             CusHistoryMaster.SelectedIndex = 0;
