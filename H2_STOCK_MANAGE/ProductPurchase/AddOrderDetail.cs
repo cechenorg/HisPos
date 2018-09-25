@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
@@ -51,7 +52,7 @@ namespace His_Pos.ProductPurchase
 
         }
 
-        public void AddOrderByPrescription(Prescription prescription, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> declareMedicines)
+        public void AddOrderByPrescription(string declareId, DeclareData declareData, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> declareMedicines)
         {
             ObservableCollection<Product> products = new ObservableCollection<Product>();
 
