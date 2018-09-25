@@ -26,6 +26,7 @@ using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
 using System.Globalization;
 using His_Pos.ProductPurchase;
+using His_Pos.Class.StoreOrder;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -217,7 +218,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 var declareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
-                //DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
                 string decMasId;
                 if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(CurrentDecMasId) && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                 {  //一般處方
@@ -236,6 +237,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (IsSend) {
                         MainWindow.Instance.AddNewTab("處理單管理");
                         //ProductPurchaseView.Instance.AddOrderByPrescription(CurrentDecMasId, declareData, PrescriptionSendData);
+
+                        //StoreOrderDb.SaveOrderDeclareData(storeOrder.Id, prescription.);
+
+                        //送到singde
+                        StoreOrderDb.SendDeclareOrderToSingde(declareData, declareTrade, PrescriptionSendData);
                     }
                     if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                         declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫

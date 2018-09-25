@@ -8,7 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.AbstractClass;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Product;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
@@ -286,6 +288,100 @@ namespace His_Pos.Class.StoreOrder
                 default:
                     return OrderType.ERROR;
             }
+        }
+        internal static void SendDeclareOrderToSingde(DeclareData declareData, DeclareTrade declareTrade, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> PrescriptionSendData) {
+            string Rx_id = MainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY
+            string Rx_order = declareData.Prescription.Treatment.AdjustDateStr.Replace("/",""); // 調劑日期(7)病歷號(9)
+            string Pt_name = declareData.Prescription.Customer.Name; // 藥袋名稱(病患姓名)
+            string Upload_data = DateTime.Now.ToString(" yyyy - MM - dd hh:mm:ss "); //更新時間( 2014 - 01 - 24 21:13:03 )
+            string Upload_status = string.Empty; //	列印判斷
+            string Prt_date = string.Empty; //列印日期
+            string Inv_flag = "0"; //轉單處理確認0未處理 1已處理 2不處理
+            string Batch_sht = string.Empty; //出貨單號
+            string Inv_chk = "0"; //  庫存確認 是1 否0
+            string Inv_msg = ""; //庫存確認
+
+            string empty = string.Empty;
+            StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
+
+            //第一行
+            Dtl_data.Append(declareData.Prescription.MedicalRecordId.PadRight(8,' ')); //藥局病例號
+            Dtl_data.Append(declareData.Prescription.Customer.Name.PadRight(20,' ')); //病患姓名
+            Dtl_data.Append(declareData.Prescription.Customer.IcCard.IcNumber.PadRight(10, ' ')); //身分證字號
+            Dtl_data.Append(declareData.Prescription.Customer.Birthday.Replace("/","").PadRight(7, ' ')); //出生年月日
+            string gender = declareData.Prescription.Customer.IcCard.IcNumber.Substring(1, 1) == "1" ? "1" : "2";
+            Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
+            Dtl_data.Append(declareData.Prescription.Customer.ContactInfo.Tel.PadRight(20, ' ')); //電話
+            Dtl_data.AppendLine();
+            //第二行   
+            Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.Hospital.Id.PadRight(10, ' ')); //院所代號
+            Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber.PadRight(10, ' ')); //診治醫師代號 (同院所代號)
+            Dtl_data.Append(empty.PadRight(20, ' ')); //空
+            Dtl_data.Append(MainWindow.CurrentUser.Id.PadRight(10, ' ')); //藥師代號
+            Dtl_data.Append(MainWindow.CurrentUser.Name.PadRight(20, ' ')); //藥師姓名
+            Dtl_data.AppendLine();
+            //第三行
+            Dtl_data.Append(declareData.Prescription.Treatment.TreatDateStr.Replace("/","").PadRight(7, ' ')); //處方日(就診日期)
+            Dtl_data.Append(declareData.Prescription.Treatment.AdjustDateStr.Replace("/", "").PadRight(7, ' ')); //調劑日期
+            Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id.PadRight(2, ' ')); //案件
+            Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id.PadRight(2, ' ')); //科別
+            Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id.PadRight(10, ' ')); //主診斷
+            Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id.PadRight(40, ' ')); //次診斷
+            Dtl_data.Append(declareData.Prescription.Customer.IcCard.MedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
+            Dtl_data.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
+            Dtl_data.Append(declareData.Prescription.ChronicTotal.PadRight(1, ' ')); //可調劑次數
+            Dtl_data.Append(declareData.Prescription.ChronicSequence.PadRight(1, ' ')); //本次調劑次數
+            Dtl_data.Append(declareTrade.PaySelf.PadRight(8, ' ')); //自費金額
+
+            double medCost = 0;
+            foreach (DeclareMedicine declareMedicine in declareData.Prescription.Medicines) {
+                medCost += declareMedicine.TotalPrice;
+            } 
+            Dtl_data.Append(medCost.ToString().PadRight(8, ' ')); //藥品費
+
+            string medicalPay = "0";
+            if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) <= 13)
+                medicalPay = "48";
+            if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) >= 14 && Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) < 28)
+                medicalPay = "59";
+            if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) >= 28)
+                medicalPay = "69";
+
+            Dtl_data.Append(medicalPay.PadRight(4, ' ')); //藥事費
+            Dtl_data.Append(declareTrade.CopayMent.PadRight(4, ' ')); //部分負擔
+            Dtl_data.AppendLine();
+            //第四行
+            foreach (DeclareMedicine declareMedicine in declareData.Prescription.Medicines)
+            {
+                Dtl_data.Append(declareMedicine.Id.PadRight(13, ' ')); //健保碼
+                Dtl_data.Append(declareMedicine.MedicalCategory.Dosage.PadRight(8, ' ')); //每次使用數量
+                Dtl_data.Append(declareMedicine.Usage.Id.PadRight(9, ' ')); //使用頻率
+                Dtl_data.Append(declareMedicine.Days.PadRight(10, ' ')); //使用天數
+                Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
+                Dtl_data.Append(declareMedicine.Position.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+                Dtl_data.Append(declareMedicine.PaySelf == true && declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
+                Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
+                Dtl_data.AppendLine();
+            }
+
+            StringBuilder Drug_chk = new StringBuilder(); //修正傳輸藥品的清單
+            int tempId;
+            foreach (ChronicSendToServerWindow.PrescriptionSendData row in PrescriptionSendData) {
+                tempId = 0;
+                for (int i = 1;i <= declareData.Prescription.Medicines.Count; i++) {
+                    if(row.MedId == declareData.Prescription.Medicines[i].Id)
+                    {
+                        tempId = i + 3;
+                        break;
+                    }
+                }
+                Drug_chk.Append(tempId.ToString().PadRight(1, ' '));
+                Drug_chk.Append(row.MedId.PadRight(12, ' '));
+                Drug_chk.Append(row.SendAmount.PadRight(13, ' '));
+                Drug_chk.AppendLine();
+            }
+
+
         }
     }
 }

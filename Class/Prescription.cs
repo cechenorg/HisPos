@@ -63,7 +63,6 @@ namespace His_Pos.Class
             ChronicTotal = !string.IsNullOrEmpty(d.Dbody.D36) ? d.Dbody.D36 : string.Empty;
             OriginalMedicalNumber = !string.IsNullOrEmpty(d.Dbody.D43) ? d.Dbody.D43 : string.Empty;
         }
-
         public Customer Customer { get; set; }
         public Pharmacy.Pharmacy Pharmacy { get; set; } //藥局
         private Treatment _treatment;
@@ -78,6 +77,7 @@ namespace His_Pos.Class
             }
         } //在醫院拿到的資料
 
+        public string MedicalRecordId { get; set; }
         public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
         public ObservableCollection<DeclareMedicine> Medicines { get; set; }
