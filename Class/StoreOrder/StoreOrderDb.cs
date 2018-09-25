@@ -198,13 +198,15 @@ namespace His_Pos.Class.StoreOrder
             return table.Rows[0]["ID"].ToString();
         }
 
+        
+
         internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string proId, string wareId)
         {
             Collection<ReturnControl.BatchNumOverview> collection = new BindingList<ReturnControl.BatchNumOverview>();
 
             return collection;
         }
-
+        
         internal static Collection<ProductPurchaseView.SindeOrderDetail> GetOrderDetailFromSinde(string orderId)
         {
             ObservableCollection<ProductPurchaseView.SindeOrderDetail> collection = new ObservableCollection<ProductPurchaseView.SindeOrderDetail>();
@@ -330,6 +332,22 @@ namespace His_Pos.Class.StoreOrder
                     return OrderType.PROCESSING;
                 case "2":
                     return OrderType.SCRAP;
+                default:
+                    return OrderType.ERROR;
+            }
+        }
+        internal static OrderType GetDeclareOrderStatusFromSinde(string orderId)
+        {
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetDeclareOrderStatus('{orderId}')");
+
+            switch (dataTable.Rows[0]["FLAG"].ToString())
+            {
+                case "0":
+                    return OrderType.WAITING;
+                case "1":
+                    return OrderType.PROCESSING;
                 default:
                     return OrderType.ERROR;
             }

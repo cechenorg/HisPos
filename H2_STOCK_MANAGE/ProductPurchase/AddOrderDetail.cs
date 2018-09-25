@@ -51,6 +51,5 @@ namespace His_Pos.ProductPurchase
         {
 
         }
-        
     }
 }
