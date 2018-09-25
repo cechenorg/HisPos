@@ -41,15 +41,35 @@ namespace His_Pos.ProductPurchase
     /// 
     public partial class ProductPurchaseView : UserControl, INotifyPropertyChanged
     {
+        #region ----- Define Inner Class -----
+        public struct SindeOrderDetail
+        {
+            public SindeOrderDetail(DataRow row)
+            {
+                Type = row["TYPE"].ToString();
+                Id = row["PRO_ID"].ToString();
+                Amount = Double.Parse(row["AMOUNT"].ToString());
+                Price = Double.Parse(row["PRICE"].ToString());
+                BatchNum = row["BATCHNUM"].ToString();
+                ForeignOrderId = row["FOREIGN_ID"].ToString();
+            }
+            public string Type { get; }
+            public string Id { get; }
+            public double Amount { get; }
+            public double Price { get; }
+            public string BatchNum { get; }
+            public string ForeignOrderId { get; }
+        }
+        #endregion
+
         #region ----- Define Variables -----
         public ObservableCollection<Manufactory> ManufactoryAutoCompleteCollection;
-
+        private Collection<PurchaseProduct> ProductCollection;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         public static ProductPurchaseView Instance;
         
         private PurchaseControl purchaseControl = new PurchaseControl();
         private ReturnControl returnControl = new ReturnControl();
-        private WaitControl waitControl = new WaitControl();
 
         public StoreOrder StoreOrderData { get; set; }
 
@@ -94,21 +114,30 @@ namespace His_Pos.ProductPurchase
             Instance = this;
             this.Loaded += UserControl1_Loaded;
             StoOrderOverview.SelectedIndex = 0;
-            
+
             InitData();
-
-            purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
-            purchaseControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
-            purchaseControl.Confirm.Click += Confirm_Click;
-
+            InitDetailControl();
         }
 
+        #region ----- Init View -----
         private void InitData()
         {
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetProductPurchaseData(this);
             loadingWindow.Topmost = true;
             loadingWindow.Show();
+        }
+        private void InitDetailControl()
+        {
+            purchaseControl.DeleteOrder.Click += DeleteOrder_Click;
+            purchaseControl.DeleteOrder2.Click += DeleteOrder_Click;
+            purchaseControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
+            purchaseControl.Confirm.Click += Confirm_Click;
+
+            returnControl.DeleteOrder.Click += DeleteOrder_Click;
+            returnControl.DeleteOrder2.Click += DeleteOrder_Click;
+            returnControl.ConfirmToProcess.Click += ConfirmToProcess_OnClick;
+            returnControl.Confirm.Click += Confirm_Click;
         }
 
         void UserControl1_Loaded(object sender, RoutedEventArgs e)
@@ -125,6 +154,56 @@ namespace His_Pos.ProductPurchase
             }
         }
 
+        internal void SetControlProduct(Collection<PurchaseProduct> tempProduct)
+        {
+            ProductCollection = tempProduct;
+            purchaseControl.ProductCollection = tempProduct;
+            returnControl.ProductCollection = tempProduct;
+        }
+
+        public void CheckSindeOrderDetail(StoreOrder storeOrder)
+        {
+            Collection<SindeOrderDetail> orderDetails = StoreOrderDb.GetOrderDetailFromSinde(storeOrder.Id);
+            storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+
+            ObservableCollection<Product> tempProducts = new ObservableCollection<Product>();
+
+            foreach (var detail in orderDetails)
+            {
+                PurchaseProduct tmeProduct = ProductCollection.Single(p => p.Id.Equals(detail.Id) && p.WarId.Equals(storeOrder.Warehouse.Id));
+
+                Product product;
+
+                if (detail.Type.Equals("O"))
+                    product = new ProductPurchaseOtc(tmeProduct);
+                else if (detail.Type.Equals("M"))
+                    product = new ProductPurchaseMedicine(tmeProduct);
+                else
+                    continue;
+
+                ((IProductPurchase)product).BatchNumber = detail.BatchNum;
+                ((IProductPurchase)product).OrderAmount = -(detail.Amount);
+                ((ITrade)product).TotalPrice = Double.Parse(detail.Price.ToString());
+                ((ITrade)product).Amount = -(detail.Amount);
+                //((ITrade)product).Price = detail.Price / -detail.Amount;
+
+                Product noteProduct = storeOrder.Products.SingleOrDefault(p => p.Id.Equals(product.Id));
+                ((IProductPurchase)product).Note = (noteProduct is null) ? "" : ((IProductPurchase)noteProduct).Note;
+
+                tempProducts.Add(product);
+            }
+
+            storeOrder.Note += orderDetails[0].ForeignOrderId;
+
+            storeOrder.Products = tempProducts;
+
+            StoreOrderData = storeOrder;
+
+            SaveOrder();
+        }
+        #endregion
+
+        #region ----- Change Detail -----
         private void ShowOrderDetail(object sender, SelectionChangedEventArgs e)
         {
             if (StoreOrderData != null && StoreOrderData.IsDataChanged)
@@ -137,17 +216,20 @@ namespace His_Pos.ProductPurchase
             if (dataGrid.SelectedItem is null) return;
 
             StoreOrder storeOrder = (StoreOrder)dataGrid.SelectedItem;
-            
-            storeOrder.Products = StoreOrderDb.GetStoreOrderCollectionById(storeOrder.Id);
 
+            switch (storeOrder.Category.CategoryName)
+            {
+                case "進貨":
+                    storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+                    break;
+                case "退貨":
+                    storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
+                    break;
+            }
+            
             StoreOrderData = storeOrder;
 
             SetCurrentControl();
-        }
-
-        internal void SetControlProduct(Collection<PurchaseProduct> tempProduct)
-        {
-            purchaseControl.ProductCollection = tempProduct;
         }
 
         private void SetCurrentControl()
@@ -155,16 +237,8 @@ namespace His_Pos.ProductPurchase
             switch (StoreOrderData.Category.CategoryName)
             {
                 case "進貨":
-                    if (StoreOrderData.Type == OrderType.WAITING)
-                    {
-                        CurrentControl = waitControl;
-                        waitControl.SetDataContext(StoreOrderData);
-                    }
-                    else
-                    {
-                        CurrentControl = purchaseControl;
-                        purchaseControl.SetDataContext(StoreOrderData);
-                    }
+                    CurrentControl = purchaseControl;
+                    purchaseControl.SetDataContext(StoreOrderData);
                     return;
                 case "退貨":
                     CurrentControl = returnControl;
@@ -173,81 +247,30 @@ namespace His_Pos.ProductPurchase
             }
         }
 
-        private void SaveOrder()
-        {
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
-            Saving.Visibility = Visibility.Visible;
-
-            StoreOrder saveOrder = StoreOrderData.Clone() as StoreOrder;
-
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                StoreOrderDb.SaveOrderDetail(saveOrder);
-            };
-
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Saving.Visibility = Visibility.Hidden;
-                }));
-            };
-
-            backgroundWorker.RunWorkerAsync();
-
-            StoreOrderData.IsDataChanged = false;
-        }
-
         private void ClearOrderDetailData()
         {
             StoreOrderData = null;
 
             purchaseControl.ClearControl();
             returnControl.ClearControl();
-            waitControl.ClearControl();
         }
 
-        private void AddNewOrder(object sender, MouseButtonEventArgs e)
+        private void UpdateOneTheWayAmount()
         {
-            AddNewOrderDialog addNewOrderDialog = new AddNewOrderDialog(ManufactoryAutoCompleteCollection);
-
-            addNewOrderDialog.ShowDialog();
-
-            if (addNewOrderDialog.ConfirmButtonClicked)
+            foreach (var product in StoreOrderData.Products)
             {
-                switch (addNewOrderDialog.AddOrderType)
-                {
-                    case AddOrderType.ADDALLBELOWSAFEAMOUNT:
-                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.SelectedWareHouse);
-                        break;
-                    case AddOrderType.ADDBYMANUFACTORY:
-                        AddNewOrderByUm(addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
-                        break;
-                    case AddOrderType.ADDALLTOBASICAMOUNT:
-                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.SelectedWareHouse);
-                        break;
-                    case AddOrderType.ADDALLGOODSALES:
-                        AddGoodSales();
-                        break;
-                    case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
-                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
-                        break;
-                    case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
-                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
-                        break;
-                    case AddOrderType.ADDBYMANUFACTORYGOODSALES:
-                        AddGoodSales(addNewOrderDialog.SelectedManufactory);
-                        break;
-                    case AddOrderType.RETURNBYMANUFACTORY:
-                        AddReturn(addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
-                        break;
-                    case AddOrderType.RETURNBYORDER:
-                        AddReturnByOrder(addNewOrderDialog.SelectedOrderId);
-                        break;
-                }
+                PurchaseProduct purchaseProduct = purchaseControl.ProductCollection.Single(p => p.Id == product.Id && p.WarId == StoreOrderData.Warehouse.Id);
+
+                purchaseControl.ProductCollection.Remove(purchaseProduct);
+
+                purchaseProduct.OnTheWayAmount = (Int32.Parse(purchaseProduct.OnTheWayAmount) + ((IProductPurchase)product).OrderAmount).ToString();
+
+                purchaseControl.ProductCollection.Add(purchaseProduct);
             }
         }
+        #endregion
 
+        #region ----- Order Filter -----
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton radioButton = sender as RadioButton;
@@ -272,8 +295,9 @@ namespace His_Pos.ProductPurchase
                 return true;
             return false;
         }
-        
+        #endregion
 
+        #region ----- Detail Control function -----
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
             if (!CheckNoEmptyData()) return;
@@ -285,12 +309,12 @@ namespace His_Pos.ProductPurchase
             StoreOrderData.Type = OrderType.DONE;
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Name;
             SaveOrder();
-            
+
             if (StoreOrderData.CheckIfOrderNotComplete())
             {
                 confirmWindow = new ConfirmWindow("最後收貨數量少於預訂量, 是否需要將不足部分保留成新訂單?", MessageType.WARNING);
                 confirmWindow.ShowDialog();
-                
+
                 storeOrderCollection.Remove(StoreOrderData);
 
                 if (confirmWindow.Confirm)
@@ -300,7 +324,7 @@ namespace His_Pos.ProductPurchase
 
                     List<Product> newOrderProduct = StoreOrderData.Products.Where(p => ((ITrade)p).Amount < ((IProductPurchase)p).OrderAmount).ToList();
 
-                    foreach(var product in newOrderProduct)
+                    foreach (var product in newOrderProduct)
                     {
                         ((IProductPurchase)product).Note = "訂 " + ((IProductPurchase)product).OrderAmount + "只到貨" + ((ITrade)product).Amount;
                         ((IProductPurchase)product).OrderAmount -= ((ITrade)product).Amount;
@@ -309,7 +333,7 @@ namespace His_Pos.ProductPurchase
                         ((IProductPurchase)product).ValidDate = "";
                         ((IProductPurchase)product).Invoice = "";
                     }
-                    
+
                     int newIndex = storeOrderCollection.Count - 1;
 
                     for (int x = 0; x < storeOrderCollection.Count; x++)
@@ -322,7 +346,7 @@ namespace His_Pos.ProductPurchase
                     }
 
                     StoreOrderData = storeOrder;
-                    
+
                     storeOrderCollection.Insert(newIndex, StoreOrderData);
                     StoOrderOverview.SelectedItem = StoreOrderData;
                     StoOrderOverview.ScrollIntoView(StoreOrderData);
@@ -366,6 +390,9 @@ namespace His_Pos.ProductPurchase
             else
                 StoreOrderData.Type = OrderType.PROCESSING;
 
+            if (StoreOrderData.Type == OrderType.WAITING)
+                StoreOrderDb.SendOrderToSinde(StoreOrderData);
+
             SaveOrder();
 
             UpdateOneTheWayAmount();
@@ -376,36 +403,93 @@ namespace His_Pos.ProductPurchase
 
             SetCurrentControl();
 
-            if (StoreOrderData.Type == OrderType.WAITING)
-                SendStoreOrderToSinde();
         }
 
-        private void UpdateOneTheWayAmount()
+        private void DeleteOrder_Click(object sender, RoutedEventArgs e)
         {
-            foreach(var product in StoreOrderData.Products)
+            if (StoreOrderData == null) return;
+
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確定將處理單作廢?", MessageType.WARNING);
+            confirmWindow.ShowDialog();
+
+            if (!confirmWindow.Confirm) return;
+
+            StoreOrderDb.DeleteOrder(StoreOrderData.Id);
+            StoreOrderCollection.Remove(StoreOrderData);
+
+            if (StoOrderOverview.Items.Count == 0)
+                ClearOrderDetailData();
+            else
+                StoOrderOverview.SelectedIndex = 0;
+        }
+        #endregion
+
+        #region ----- Alter Order function -----
+        private void SaveOrder()
+        {
+            BackgroundWorker backgroundWorker = new BackgroundWorker();
+            Saving.Visibility = Visibility.Visible;
+
+            StoreOrder saveOrder = StoreOrderData.Clone() as StoreOrder;
+
+            backgroundWorker.DoWork += (s, o) =>
             {
-                PurchaseProduct purchaseProduct = purchaseControl.ProductCollection.Single(p => p.Id == product.Id && p.WarId == StoreOrderData.Warehouse.Id);
+                StoreOrderDb.SaveOrderDetail(saveOrder);
+            };
 
-                purchaseControl.ProductCollection.Remove(purchaseProduct);
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Saving.Visibility = Visibility.Collapsed;
+                }));
+            };
 
-                purchaseProduct.OnTheWayAmount = (Int32.Parse(purchaseProduct.OnTheWayAmount) + ((IProductPurchase)product).OrderAmount).ToString();
+            backgroundWorker.RunWorkerAsync();
 
-                purchaseControl.ProductCollection.Add(purchaseProduct);
+            StoreOrderData.IsDataChanged = false;
+        }
+
+        private void AddNewOrder(object sender, MouseButtonEventArgs e)
+        {
+            AddNewOrderDialog addNewOrderDialog = new AddNewOrderDialog(ManufactoryAutoCompleteCollection);
+
+            addNewOrderDialog.ShowDialog();
+
+            if (addNewOrderDialog.ConfirmButtonClicked)
+            {
+                switch (addNewOrderDialog.AddOrderType)
+                {
+                    case AddOrderType.ADDALLBELOWSAFEAMOUNT:
+                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.SelectedWareHouse);
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORY:
+                        AddNewOrderByUm(addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
+                        break;
+                    case AddOrderType.ADDALLTOBASICAMOUNT:
+                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.SelectedWareHouse);
+                        break;
+                    case AddOrderType.ADDALLGOODSALES:
+                        AddGoodSales();
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYBELOWSAFEAMOUNT:
+                        AddBasicOrSafe(StoreOrderProductType.SAFE, addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYTOBASICAMOUNT:
+                        AddBasicOrSafe(StoreOrderProductType.BASIC, addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
+                        break;
+                    case AddOrderType.ADDBYMANUFACTORYGOODSALES:
+                        AddGoodSales(addNewOrderDialog.SelectedManufactory);
+                        break;
+                    case AddOrderType.RETURNBYMANUFACTORY:
+                        AddReturn(addNewOrderDialog.SelectedWareHouse, addNewOrderDialog.SelectedManufactory);
+                        break;
+                    case AddOrderType.RETURNBYORDER:
+                        AddReturnByOrder(addNewOrderDialog.SelectedOrderId);
+                        break;
+                }
             }
         }
-
-        private void SendStoreOrderToSinde()
-        {
-
-        }
-
-        //private void UserControl_Unloaded(object sender, RoutedEventArgs e)
-        //{
-        //    if (StoreOrderData != null && IsChanged)
-        //    {
-        //        SaveOrder();
-        //    }
-        //}
 
         private bool CheckNoEmptyData()
         {
@@ -419,19 +503,13 @@ namespace His_Pos.ProductPurchase
             }
             return true;
         }
-
-        private void DeleteOrder_Click(object sender, RoutedEventArgs e)
-        {
-            if (StoreOrderData == null) return;
-            StoreOrderDb.DeleteOrder(StoreOrderData.Id);
-            StoreOrderCollection.Remove(StoreOrderData);
-
-            if (StoOrderOverview.Items.Count == 0)
-                ClearOrderDetailData();
-            else
-                StoOrderOverview.SelectedIndex = 0;
-        }
+        #endregion
         
+        private void ReloadBtn_Click(object sender, MouseButtonEventArgs e)
+        {
+            InitData();
+        }
+
         private void NotifyPropertyChanged(string info)
         {
             if (PropertyChanged != null)
@@ -439,18 +517,6 @@ namespace His_Pos.ProductPurchase
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-
-        //private string GetCharFromKey(Key key)
-        //{
-        //    if (key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right) return "0";
-
-        //    int num = (int)key;
-
-        //    if (num > 50)
-        //        return (num - 74).ToString();
-        //    else
-        //        return (num - 34).ToString();
-        //}
     }
     
 }

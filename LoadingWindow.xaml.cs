@@ -222,8 +222,7 @@ namespace His_Pos
                     productPurchaseView.ManufactoryAutoCompleteCollection = tempManufactories;
 
                     productPurchaseView.SetControlProduct(tempProduct);
-
-
+                    
                     //待修改
                     ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
 
@@ -231,7 +230,10 @@ namespace His_Pos
                     {
                         if(stoOrd.Type == OrderType.WAITING)
                         {
-                            //Check Order Status
+                            stoOrd.Type = StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
+
+                            if(stoOrd.Type == OrderType.PROCESSING)
+                                productPurchaseView.CheckSindeOrderDetail(stoOrd);
                         }
                     }
 

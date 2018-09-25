@@ -5,10 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 
 namespace His_Pos.ProductPurchase
 {
@@ -47,6 +50,50 @@ namespace His_Pos.ProductPurchase
         private void AddReturnByOrder(string OrderId)
         {
 
+        }
+
+        public void AddOrderByPrescription(string declareId, DeclareData declareData, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> declareMedicines)
+        {
+            ObservableCollection<Product> products = new ObservableCollection<Product>();
+
+            int newIndex = storeOrderCollection.Count - 1;
+
+            for (int x = 0; x < storeOrderCollection.Count; x++)
+            {
+                if (storeOrderCollection[x].type == OrderType.PROCESSING)
+                {
+                    newIndex = x - 1;
+                    break;
+                }
+            }
+
+            foreach(var med in declareMedicines)
+            {
+                products.Add(new ProductPurchaseMedicine(ProductCollection.Single(p => p.Id.Equals(med.MedId) && p.WarId.Equals("0"))));
+            }
+
+            Manufactory manufactory = ManufactoryAutoCompleteCollection.Single(m => m.Id.Equals("0"));
+
+            StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser, new WareHouse() { Id = "0" }, manufactory, products);
+
+            storeOrder.Type = OrderType.WAITING;
+            storeOrder.DeclareDataCount = 1;
+
+            //對應關係存到DB
+            //StoreOrderDb.SaveOrderDeclareData(storeOrder.Id, prescription.);
+
+            //送到sinde
+            //StoreOrderDb.SendDeclareOrderToSinde(StoreOrderData);
+
+            SaveOrder();
+
+            UpdateOneTheWayAmount();
+
+            storeOrderCollection.Insert(newIndex, StoreOrderData);
+            StoOrderOverview.SelectedItem = StoreOrderData;
+            StoOrderOverview.ScrollIntoView(StoreOrderData);
+
+            SetCurrentControl();
         }
     }
 }

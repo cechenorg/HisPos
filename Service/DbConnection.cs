@@ -1,4 +1,6 @@
-﻿using His_Pos.Properties;
+﻿using His_Pos.Class;
+using His_Pos.Properties;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,54 +11,58 @@ namespace His_Pos.Service
 {
     class DbConnection
     {
-        private SqlConnection _connection;
-
+        private SqlConnection _sqlServerConnection;
+        private MySqlConnection _sqlMySqlConnection; 
         public DbConnection()
         {
+        } 
+        public DbConnection(string connection, SqlConnectionType connectionType = SqlConnectionType.SqlServer) {
+            switch (connectionType) {
+                case SqlConnectionType.SqlServer:
+                    _sqlServerConnection = new SqlConnection(connection);
+                    break;
+                case SqlConnectionType.NySql:
+                    _sqlMySqlConnection = new MySqlConnection(connection);
+                    break; 
+            }  
         }
 
-        public DbConnection(string connection) { _connection = new SqlConnection(connection); }
-
-        public void NonQueryBySqlString(string sqlString)
-        {
-            DataTable dataTable = new DataTable();
-            SqlCommand cmd = new SqlCommand(sqlString, _connection);
+        public void MySqlNonQueryBySqlString(string sqlString)
+        {  
             try
             {
-                _connection.Open();
+                MySqlCommand cmd = new MySqlCommand(sqlString, _sqlMySqlConnection);
+                _sqlMySqlConnection.Open();
                 cmd.ExecuteNonQuery();
-                _connection.Close();
+                _sqlMySqlConnection.Close();
+            }
+            catch (Exception ex) {
+                throw new InvalidOperationException(ex.Message);
+            }
+        }
+        public DataTable MySqlQueryBySqlString(string sqlString) {
+            var table = new DataTable();
+            try
+            {
+                _sqlMySqlConnection.Open();
+                MySqlCommand cmd = new MySqlCommand(sqlString, _sqlMySqlConnection);
+                var sqlDapter = new MySqlDataAdapter(cmd);
+                sqlDapter.Fill(table);
+                _sqlMySqlConnection.Close();
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException(ex.Message);
             }
-
-        }
-        public DataTable QueryBySqlString(string sqlString)
-        {
-            DataTable dataTable = new DataTable();
-            SqlCommand cmd = new SqlCommand(sqlString, _connection);
-            try {
-                _connection.Open();
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(dataTable);
-                _connection.Close();
-                da.Dispose();
-                return dataTable;
-            }
-            catch (Exception ex) {
-                throw new InvalidOperationException(ex.Message);
-            }
-           
+            return table;
         }
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
             var table = new DataTable();
             try
             {
-                _connection.Open();
-                var myCommand = new SqlCommand(procName, _connection);
+                _sqlServerConnection.Open();
+                var myCommand = new SqlCommand(procName, _sqlServerConnection);
                 myCommand.CommandType = CommandType.StoredProcedure;
 
                 if (parameterList != null)
@@ -68,7 +74,7 @@ namespace His_Pos.Service
                 var sqlDapter = new SqlDataAdapter(myCommand);
                 table.Locale = CultureInfo.InvariantCulture;
                 sqlDapter.Fill(table);
-                _connection.Close();
+                _sqlServerConnection.Close();
             }
             catch (Exception ex)
             {

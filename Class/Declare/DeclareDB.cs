@@ -795,7 +795,7 @@ namespace His_Pos.Class.Declare
 
             if (declareData.Prescription.Treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId) &&
                 Convert.ToInt32(declareData.Prescription.ChronicSequence) > 1)
-                parameters.Add(new SqlParameter("D43", declareData.Prescription.OriginalMedicalNumber));
+                parameters.Add(new SqlParameter("D43", declareData.Prescription.OriginalMedicalNumber == null ? "" : declareData.Prescription.OriginalMedicalNumber));
             else
             {
                 parameters.Add(new SqlParameter("D43", DBNull.Value));

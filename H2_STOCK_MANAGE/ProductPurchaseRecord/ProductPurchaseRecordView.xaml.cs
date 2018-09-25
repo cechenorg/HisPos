@@ -117,7 +117,7 @@ namespace His_Pos.ProductPurchaseRecord
             StoreOrderData = storeOrder;
 
             if (StoreOrderData.Products is null)
-                StoreOrderData.Products = StoreOrderDb.GetStoreOrderCollectionById(StoreOrderData.Id);
+                StoreOrderData.Products = StoreOrderDb.GetOrderPurchaseDetailById(StoreOrderData.Id);
            
 
             StoreOrderDetail.ItemsSource = StoreOrderData.Products;

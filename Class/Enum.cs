@@ -66,7 +66,9 @@ namespace His_Pos.Class
         PROCESSING = 1,
         DONE = 2,
         ALL = 3,
-        WAITING = 4
+        WAITING = 4,
+        SCRAP = 5,
+        ERROR = 100
     }
    
     public enum AddOrderType
@@ -96,7 +98,8 @@ namespace His_Pos.Class
         GetMedicalIcCard = 9,
         InitMedicalIcCard = 10,
         GetHospitalData = 11,
-        InitHospitalData = 12
+        InitHospitalData = 12,
+
     }
     public enum MessageType
     {
@@ -539,6 +542,9 @@ namespace His_Pos.Class
         ErrorCode9140 = 9140
 
     }
-        
-    
+    public enum SqlConnectionType {
+        SqlServer = 0,
+        NySql = 1
+    }
+
 }

@@ -114,19 +114,55 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             {
                 case OrderType.PROCESSING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
-                    MainGrid.RowDefinitions[5].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[6].Height = new GridLength(50);
+                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[7].Height = new GridLength(50);
+                    MainGrid.RowDefinitions[8].Height = new GridLength(0);
+                    
+                    if (StoreOrderData.Manufactory.Id.Equals("0"))
+                    {
+                        CurrentDataGrid = WStoreOrderDetail;
 
-                    CurrentDataGrid = GStoreOrderDetail;
+                        MainGrid.RowDefinitions[4].Height = new GridLength(0);
+                        MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
+                        
+                        CurrentDataGrid.Columns[4].Visibility = Visibility.Collapsed;
+                        CurrentDataGrid.Columns[5].Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        CurrentDataGrid = GStoreOrderDetail;
+
+                        MainGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
+                        MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                    }
                     break;
                 case OrderType.UNPROCESSING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
                     MainGrid.RowDefinitions[4].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[5].Height = new GridLength(50);
-                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
-                    
+                    MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[6].Height = new GridLength(50);
+                    MainGrid.RowDefinitions[7].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[8].Height = new GridLength(0);
+
                     CurrentDataGrid = PStoreOrderDetail;
+
+                    if (StoreOrderData.Manufactory.Id.Equals("0"))
+                        PStoreOrderDetail.Columns[10].Visibility = Visibility.Collapsed;
+                    else
+                        PStoreOrderDetail.Columns[10].Visibility = Visibility.Visible;
+                    break;
+                case OrderType.WAITING:
+                    MainGrid.RowDefinitions[3].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[4].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
+                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[7].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[8].Height = new GridLength(50);
+
+                    CurrentDataGrid = WStoreOrderDetail;
+
+                    CurrentDataGrid.Columns[4].Visibility = Visibility.Visible;
+                    CurrentDataGrid.Columns[5].Visibility = Visibility.Collapsed;
                     break;
             }
 
@@ -386,6 +422,14 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             int currentRow = GetCurrentRowIndex(sender);
 
             Product product = CurrentDataGrid.Items[currentRow - 1] as Product;
+
+            if (!((IProductPurchase) product).BatchNumber.Equals(""))
+            {
+                MessageWindow messageWindow = new MessageWindow("此商品有批號無法合批!", MessageType.ERROR);
+                messageWindow.ShowDialog();
+
+                return;
+            }
 
             ((ITrade)StoreOrderData.Products.Single(p => p.Id == product.Id && ((IProductPurchase)p).IsFirstBatch)).Amount += ((ITrade)product).Amount;
 

@@ -99,6 +99,7 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("NORMAL_COUNT", int.Parse(p.Tdata.T7)));
             parameters.Add(new SqlParameter("TOTAL_POINT", int.Parse(p.Tdata.T12)));
             file.HasError = false;
+
             foreach (var e in file.ErrorPrescriptionList.ErrorList)
             {
                 if(e.Error == null) continue;
