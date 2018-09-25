@@ -230,9 +230,16 @@ namespace His_Pos
                     {
                         if(stoOrd.Type == OrderType.WAITING)
                         {
-                            stoOrd.Type = StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
+                            if (stoOrd.DeclareDataCount > 0)
+                            {
+                                stoOrd.Type = StoreOrderDb.GetDeclareOrderStatusFromSinde(stoOrd.Id);
+                            }
+                            else
+                            {
+                                stoOrd.Type = StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
+                            }
 
-                            if(stoOrd.Type == OrderType.PROCESSING)
+                            if (stoOrd.Type == OrderType.PROCESSING)
                                 productPurchaseView.CheckSindeOrderDetail(stoOrd);
                         }
                     }
