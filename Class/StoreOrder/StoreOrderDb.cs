@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
+using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.Properties;
@@ -123,6 +126,7 @@ namespace His_Pos.Class.StoreOrder
             details.Columns.Add("BATCHNUMBER", typeof(string));
             details.Columns.Add("FREEQTY", typeof(int));
             details.Columns.Add("INVOICE", typeof(string));
+            details.Columns.Add("TOTAL", typeof(string));
             DateTime datetimevalue;
             foreach (var product in storeOrder.Products)
             {
@@ -131,12 +135,13 @@ namespace His_Pos.Class.StoreOrder
                 newRow["PRO_ID"] = product.Id;
                 newRow["ORDERQTY"] = ((IProductPurchase)product).OrderAmount;
                 newRow["QTY"] = ((ITrade)product).Amount;
-                newRow["PRICE"] = ((ITrade)product).Price == "" ? "0" : ((ITrade)product).Price;
+                newRow["PRICE"] = ((ITrade) product).Price.ToString();
                 newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
                 newRow["VALIDDATE"] = ( DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue) ) ? ((IProductPurchase)product).ValidDate:string.Empty ;
                 newRow["BATCHNUMBER"] = ((IProductPurchase) product).BatchNumber;
                 newRow["FREEQTY"] = ((IProductPurchase)product).FreeAmount;
                 newRow["INVOICE"] = ((IProductPurchase)product).Invoice;
+                newRow["TOTAL"] = ((ITrade)product).TotalPrice.ToString();
 
                 details.Rows.Add(newRow);
             }
@@ -144,6 +149,13 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("DETAILS", details));
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
+        }
+
+        internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string proId, string wareId)
+        {
+            Collection<ReturnControl.BatchNumOverview> collection = new BindingList<ReturnControl.BatchNumOverview>();
+
+            return collection;
         }
 
         internal static Collection<ProductPurchaseView.SindeOrderDetail> GetOrderDetailFromSinde(string orderId)
@@ -176,14 +188,40 @@ namespace His_Pos.Class.StoreOrder
             return table.Rows[0]["STOORD_ID"].ToString();
         }
 
-        public static ObservableCollection<AbstractClass.Product> GetStoreOrderCollectionById(string StoOrdId)
+        internal static ObservableCollection<AbstractClass.Product> GetOrderReturnDetailById(string ordId)
         {
             ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("STOORD_ID", StoOrdId));
+            parameters.Add(new SqlParameter("STOORD_ID", ordId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderReturnDetail]", parameters);
+            
+            foreach (DataRow row in table.Rows)
+            {
+                switch (row["PRO_TYPE"].ToString())
+                {
+                    case "M":
+                        StoreOrderCollection.Add(new ProductReturnMedicine(row));
+                        break;
+                    case "O":
+                        StoreOrderCollection.Add(new ProductReturnOTC(row));
+                        break;
+                }
+            }
+            return StoreOrderCollection;
+        }
+
+        public static ObservableCollection<AbstractClass.Product> GetOrderPurchaseDetailById(string ordId)
+        {
+            ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORD_ID", ordId));
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderDetail]", parameters);
 

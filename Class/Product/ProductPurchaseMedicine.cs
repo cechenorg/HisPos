@@ -23,15 +23,15 @@ namespace His_Pos.Class.Product
             switch (dataSource)
             {
                 case DataSource.GetStoreOrderDetail:
-                    Price = dataRow["STOORDDET_PRICE"].ToString();
-                    TotalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
-                    Amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
-                    OrderAmount = Int32.Parse(dataRow["STOORDDET_ORDERQTY"].ToString());
-                    Note = dataRow["PRO_DESCRIPTION"].ToString();
-                    Invoice = dataRow["STOORDDET_INVOICE"].ToString();
-                    FreeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
-                    ValidDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01"))? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
-                    BatchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
+                    price = Double.Parse(dataRow["STOORDDET_PRICE"].ToString());
+                    totalPrice = Double.Parse(dataRow["STOORDDET_SUBTOTAL"].ToString());
+                    amount = Int32.Parse(dataRow["STOORDDET_QTY"].ToString());
+                    orderAmount = Int32.Parse(dataRow["STOORDDET_ORDERQTY"].ToString());
+                    note = dataRow["PRO_DESCRIPTION"].ToString();
+                    invoice = dataRow["STOORDDET_INVOICE"].ToString();
+                    freeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
+                    validDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01"))? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
+                    batchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
                     break;
             }
 
@@ -45,7 +45,7 @@ namespace His_Pos.Class.Product
         public ProductPurchaseMedicine(PurchaseProduct selectedItem) : base (selectedItem)
         {
             Amount = 0;
-            Price = "0";
+            Price = 0;
             TotalPrice = 0;
             Note = "";
             Invoice = "";
@@ -120,8 +120,8 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("Amount");
             }
         }
-        private string price;
-        public string Price
+        private double price;
+        public double Price
         {
             get { return price; }
             set
@@ -182,8 +182,7 @@ namespace His_Pos.Class.Product
 
         public void CalculateData(string inputSource)
         {
-            double dprice;
-            if (!double.TryParse(price, out dprice)) return;
+            double dprice = price;
             if (totalPrice == amount * dprice || dprice == totalPrice / amount) return;
 
             bool isColumnChanged;
@@ -199,7 +198,7 @@ namespace His_Pos.Class.Product
                 return;
             else if (inputSource.Equals("Amount") && totalPrice != 0 && amount != 0 && !CountStatus.Equals("*"))
             {
-                Price = (totalPrice / amount).ToString();
+                Price = totalPrice / amount;
             }
             else if (!inputSource.Equals("TotalPrice"))
             {
@@ -208,7 +207,7 @@ namespace His_Pos.Class.Product
             }
             else if (amount != 0)
             {
-                Price = (totalPrice / amount).ToString();
+                Price = totalPrice / amount;
             }
         }
 

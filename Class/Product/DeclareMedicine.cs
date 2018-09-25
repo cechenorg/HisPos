@@ -20,7 +20,7 @@ namespace His_Pos.Class.Product
             Ingredient = "";
             MedicalCategory = new Medicate();
             Cost = 0;
-            Price = "";
+            Price = 0;
             TotalPrice = 0;
             Amount = 0;
             CountStatus = "";
@@ -39,7 +39,7 @@ namespace His_Pos.Class.Product
             {
                 Ingredient = string.Empty;
                 Cost = 0;
-                Price = string.Empty;
+                Price = 0;
                 TotalPrice = 0;
                 Amount = 0;
                 CountStatus = string.Empty;
@@ -63,7 +63,7 @@ namespace His_Pos.Class.Product
                 Stock = new InStock(dataRow);
                 Cost = 1;
                 if (dataRow.Table.Columns.Contains("PRO_SELL_PRICE"))
-                    Price = dataRow["PRO_SELL_PRICE"].ToString();
+                    Price = Double.Parse(dataRow["PRO_SELL_PRICE"].ToString());
                 TotalPrice = 0;
                 CountStatus = string.Empty;
                 FocusColumn = string.Empty;
@@ -110,9 +110,9 @@ namespace His_Pos.Class.Product
         public Medicate MedicalCategory { get; set; }
         public InStock Stock { get; set; }
         public double Cost { get; set; }
-        private string price;
+        private double price;
 
-        public string Price
+        public double Price
         {
             get { return price; }
             set
@@ -233,9 +233,7 @@ namespace His_Pos.Class.Product
         {
             if (PaySelf)
             {
-                if (string.IsNullOrEmpty(Price))
-                    return;
-                TotalPrice = Amount * double.Parse(Price);
+                TotalPrice = Amount * Price;
             }
             else
             {

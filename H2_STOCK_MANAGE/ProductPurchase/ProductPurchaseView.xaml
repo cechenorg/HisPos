@@ -86,7 +86,7 @@
                     <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0" MouseLeftButtonDown="ReloadBtn_Click"/>
                 </StackPanel>
             </Grid>
-            <ContentControl Name="OrderContentControl" Grid.Column="1" Margin="0,10,10,10" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}"/>
+            <ContentControl Name="OrderContentControl" Grid.Column="1" Margin="0,10,10,10" Content="{Binding CurrentControl, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
         </Grid>
     </Viewbox>
 </UserControl>
