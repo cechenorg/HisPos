@@ -60,18 +60,18 @@ namespace His_Pos.Class
             CardReleaseDate = basicData.CardReleaseDate;
         }
 
-        private string icNumber;
+        private string _icNumber;
 
         public string IcNumber
         {
-            get { return icNumber; }
+            get => _icNumber;
             set
             {
-                icNumber = value;
+                _icNumber = value;
                 NotifyPropertyChanged("IcNumber");
             }
         }//身分證字號
-        public string CardNo { get; set; };
+        public string CardNo { get; set; }
         public IcMarks IcMarks { get; set; } = new IcMarks();//卡片註銷註記.保險對象身分註記.新生兒出生日期.新生兒胞胎註記
         public string CardReleaseDate { get; set; }//發卡日期
         public string ValidityPeriod { get; set; }//卡片有效期限
@@ -90,7 +90,7 @@ namespace His_Pos.Class
 
         public string MedicalNumber
         {
-            get { return medicalNumber; }
+            get => medicalNumber;
             set
             {
                 medicalNumber = value;
