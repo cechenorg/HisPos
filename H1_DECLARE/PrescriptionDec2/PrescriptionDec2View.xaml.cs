@@ -235,13 +235,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         if (!IsSend) return;
                     }
                     if (IsSend) {
-                        MainWindow.Instance.AddNewTab("處理單管理");
-                        //ProductPurchaseView.Instance.AddOrderByPrescription(CurrentDecMasId, declareData, PrescriptionSendData);
-
-                        //StoreOrderDb.SaveOrderDeclareData(storeOrder.Id, prescription.);
-
+                        string storId = StoreOrderDb.SaveOrderDeclareData(CurrentDecMasId, PrescriptionSendData);
                         //送到singde
-                        StoreOrderDb.SendDeclareOrderToSingde(declareData, declareTrade, PrescriptionSendData);
+                        StoreOrderDb.SendDeclareOrderToSingde(CurrentDecMasId, storId,declareData, declareTrade, PrescriptionSendData);
                     }
                     if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                         declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
@@ -639,6 +635,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentPrescription.Customer.Name = "林連義進";
             CurrentPrescription.Customer.Birthday = "037/10/01";
             CurrentPrescription.Customer.IcNumber = "S18824769A";
+            CurrentPrescription.Customer.ContactInfo.Tel = "";
             CheckPatientGender();
             CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", "3", new NewbornsData()), "91/07/25", "108/01/01", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
             CurrentPrescription.Customer.Id = "1";

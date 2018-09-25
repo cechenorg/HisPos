@@ -77,7 +77,7 @@ namespace His_Pos.Class
             }
         } //在醫院拿到的資料
 
-        public string MedicalRecordId { get; set; }
+        public string MedicalRecordId = "";
         public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
         public ObservableCollection<DeclareMedicine> Medicines { get; set; }

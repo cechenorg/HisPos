@@ -185,7 +185,7 @@ namespace His_Pos.Class.StoreOrder
                 newRow["DESCRIPTION"] = "";
                 newRow["VALIDDATE"] = "";
                 newRow["BATCHNUMBER"] = "";
-                newRow["FREEQTY"] = "";
+                newRow["FREEQTY"] = 0;
                 newRow["INVOICE"] = "";
                 newRow["TOTAL"] = "0";
 
@@ -337,7 +337,7 @@ namespace His_Pos.Class.StoreOrder
                     return OrderType.ERROR;
             }
         }
-        internal static void SendDeclareOrderToSingde(DeclareData declareData, DeclareTrade declareTrade, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> PrescriptionSendData) {
+        internal static void SendDeclareOrderToSingde(string CurrentDecMasId, string storId, DeclareData declareData, DeclareTrade declareTrade, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> PrescriptionSendData) {
             string Rx_id = MainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY
             string Rx_order = declareData.Prescription.Treatment.AdjustDateStr.Replace("/",""); // 調劑日期(7)病歷號(9)
             string Pt_name = declareData.Prescription.Customer.Name; // 藥袋名稱(病患姓名)
@@ -345,7 +345,7 @@ namespace His_Pos.Class.StoreOrder
             string Upload_status = string.Empty; //	列印判斷
             string Prt_date = string.Empty; //列印日期
             string Inv_flag = "0"; //轉單處理確認0未處理 1已處理 2不處理
-            string Batch_sht = string.Empty; //出貨單號
+            string Batch_sht = storId; //出貨單號
             string Inv_chk = "0"; //  庫存確認 是1 否0
             string Inv_msg = ""; //庫存確認
 
@@ -353,7 +353,7 @@ namespace His_Pos.Class.StoreOrder
             StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
 
             //第一行
-            Dtl_data.Append(declareData.Prescription.MedicalRecordId.PadRight(8,' ')); //藥局病例號
+            Dtl_data.Append(CurrentDecMasId.PadRight(8,' ')); //藥局病例號
             Dtl_data.Append(declareData.Prescription.Customer.Name.PadRight(20,' ')); //病患姓名
             Dtl_data.Append(declareData.Prescription.Customer.IcCard.IcNumber.PadRight(10, ' ')); //身分證字號
             Dtl_data.Append(declareData.Prescription.Customer.Birthday.Replace("/","").PadRight(7, ' ')); //出生年月日
@@ -403,34 +403,30 @@ namespace His_Pos.Class.StoreOrder
             {
                 Dtl_data.Append(declareMedicine.Id.PadRight(13, ' ')); //健保碼
                 Dtl_data.Append(declareMedicine.MedicalCategory.Dosage.PadRight(8, ' ')); //每次使用數量
-                Dtl_data.Append(declareMedicine.Usage.Id.PadRight(9, ' ')); //使用頻率
+                Dtl_data.Append(declareMedicine.Usage.Name.PadRight(9, ' ')); //使用頻率
                 Dtl_data.Append(declareMedicine.Days.PadRight(10, ' ')); //使用天數
                 Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
                 Dtl_data.Append(declareMedicine.Position.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
                 Dtl_data.Append(declareMedicine.PaySelf == true && declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
                 Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
-                Dtl_data.AppendLine();
-            }
-
-            StringBuilder Drug_chk = new StringBuilder(); //修正傳輸藥品的清單
-            int tempId;
-            foreach (ChronicSendToServerWindow.PrescriptionSendData row in PrescriptionSendData) {
-                tempId = 0;
-                for (int i = 1;i <= declareData.Prescription.Medicines.Count; i++) {
-                    if(row.MedId == declareData.Prescription.Medicines[i].Id)
-                    {
-                        tempId = i + 3;
+                string amount = string.Empty;
+                foreach (ChronicSendToServerWindow.PrescriptionSendData row in PrescriptionSendData)
+                { 
+                    if (row.MedId == declareMedicine.Id) {
+                        amount = row.SendAmount;
                         break;
                     }
                 }
-                Drug_chk.Append(tempId.ToString().PadRight(1, ' '));
-                Drug_chk.Append(row.MedId.PadRight(12, ' '));
-                Drug_chk.Append(row.SendAmount.PadRight(13, ' '));
-                Drug_chk.AppendLine();
+                Dtl_data.Append(amount.PadRight(8, ' ')); //訂購量
+                Dtl_data.AppendLine();
             }
+            
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
-
+            dd.MySqlNonQueryBySqlString($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{declareData.Prescription.Customer.Name}','{Dtl_data}')");
         }
+
+
         internal static OrderType GetDeclareOrderStatusFromSinde(string orderId)
         {
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
