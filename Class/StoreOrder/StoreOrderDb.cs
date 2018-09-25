@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
@@ -149,6 +150,52 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("DETAILS", details));
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
+        }
+
+        internal static string SaveOrderDeclareData(string declareId, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> declareMedicines)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DEC_ID", declareId));
+            parameters.Add(new SqlParameter("ORD_EMP_ID", MainWindow.CurrentUser.Id));
+            parameters.Add(new SqlParameter("WAREHOUSE_ID", '0'));
+
+            DataTable details = new DataTable();
+            details.Columns.Add("PRO_ID", typeof(string));
+            details.Columns.Add("ORDERQTY", typeof(int));
+            details.Columns.Add("QTY", typeof(int));
+            details.Columns.Add("PRICE", typeof(string));
+            details.Columns.Add("DESCRIPTION", typeof(string));
+            details.Columns.Add("VALIDDATE", typeof(string));
+            details.Columns.Add("BATCHNUMBER", typeof(string));
+            details.Columns.Add("FREEQTY", typeof(int));
+            details.Columns.Add("INVOICE", typeof(string));
+            details.Columns.Add("TOTAL", typeof(string));
+            DateTime datetimevalue;
+            foreach (var product in declareMedicines)
+            {
+                var newRow = details.NewRow();
+
+                newRow["PRO_ID"] = product.MedId;
+                newRow["ORDERQTY"] = Int32.Parse(product.SendAmount);
+                newRow["QTY"] = 0;
+                newRow["PRICE"] = "0";
+                newRow["DESCRIPTION"] = "";
+                newRow["VALIDDATE"] = "";
+                newRow["BATCHNUMBER"] = "";
+                newRow["FREEQTY"] = "";
+                newRow["INVOICE"] = "";
+                newRow["TOTAL"] = "0";
+
+                details.Rows.Add(newRow);
+            }
+
+            parameters.Add(new SqlParameter("DETAILS", details));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddDeclareOrder]", parameters);
+
+            return table.Rows[0]["ID"].ToString();
         }
 
         internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string proId, string wareId)
