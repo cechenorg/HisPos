@@ -433,6 +433,9 @@ namespace His_Pos.Class.StoreOrder
 
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetDeclareOrderStatus('{orderId}')");
 
+            if (dataTable.Rows.Count == 0)
+                return OrderType.ERROR;
+
             switch (dataTable.Rows[0]["FLAG"].ToString())
             {
                 case "0":
