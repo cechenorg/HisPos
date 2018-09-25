@@ -34,6 +34,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
         public bool IsSend = false;
+        public ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>  PrescriptionSendData = new ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>();
         public string CurrentDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
         private bool _isChanged;
@@ -227,13 +228,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
                     if ((bool)IsSendToServer.IsChecked)
                     {
-                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow( CurrentPrescription, CurrentPrescription.Medicines);
+                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow( CurrentPrescription.Medicines);
                         chronicSendToServerWindow.ShowDialog();
                         if (!IsSend) return;
                     }
-                    if (IsSend)
-                        ChronicDb.InsertChronicDetail(CurrentDecMasId, ChronicSendToServerWindow.Instance.Prescription);
-
+                    if (IsSend) {
+                          //PrescriptionSendData CurrentDecMasId
+                    }
                     if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                         declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
 
@@ -249,13 +250,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 {
                     if ((bool)IsSendToServer.IsChecked)
                     {
-                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription, CurrentPrescription.Medicines);
+                        ChronicSendToServerWindow chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription.Medicines);
                         chronicSendToServerWindow.ShowDialog();
                         if (!IsSend) return;
                     }
                     decMasId = declareDb.InsertDeclareData(declareData);
                     if (IsSend) 
-                        ChronicDb.InsertChronicDetail(decMasId, ChronicSendToServerWindow.Instance.Prescription);
+                        //ChronicDb.InsertChronicDetail(decMasId, ChronicSendToServerWindow.Instance.Prescription);
                     
 
                     if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))

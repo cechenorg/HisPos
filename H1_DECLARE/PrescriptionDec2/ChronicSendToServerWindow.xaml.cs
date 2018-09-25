@@ -52,11 +52,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
                 NotifyPropertyChanged("Prescription");
             }
         }
-        private Prescription PrescriptionData; 
         public static ChronicSendToServerWindow Instance;
-        public ChronicSendToServerWindow(Prescription prescriptionData,ObservableCollection<DeclareMedicine> medicines) {
-            InitializeComponent(); 
-            PrescriptionData = prescriptionData;
+        public ChronicSendToServerWindow(ObservableCollection<DeclareMedicine> medicines) {
+            InitializeComponent();
             foreach (DeclareMedicine row in medicines) {
                 Prescription.Add(new PrescriptionSendData(row));
             } 
@@ -70,18 +68,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
 
         private void ButtonSubmmit_Click(object sender, RoutedEventArgs e) {  
             PrescriptionDec2View.Instance.IsSend = true;
-            TransferToStoreOrder(); 
+            PrescriptionDec2View.Instance.PrescriptionSendData = Prescription;
             Close();
         }
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
            // CurrentPrescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
         }
-
-        private void TransferToStoreOrder() { 
-            MainWindow.Instance.AddNewTab("處理單管理");
-
-           // ProductPurchaseView.Instance.AddOrderByPrescription(PrescriptionData, Prescription);
-        }
-
+        
     }
 }

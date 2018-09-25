@@ -47,17 +47,7 @@ namespace His_Pos.Class
             parameters.Add(new SqlParameter("DecMasId", decMasId));
             DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateChronicData]", parameters); 
         }
-        internal static void InsertChronicDetail(string decMasId, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> prescriptionSendDatas) {
-            var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            foreach (ChronicSendToServerWindow.PrescriptionSendData row in prescriptionSendDatas) {
-                parameters.Clear();
-                parameters.Add(new SqlParameter("DecMasId", decMasId));
-                parameters.Add(new SqlParameter("PRO_ID", row.MedId));
-                parameters.Add(new SqlParameter("AMOUNT", row.SendAmount));
-                DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[InsertChronicDetail]", parameters);
-            } 
-         }
+        
         internal static string GetResidualAmountById(string proId ) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>(); 
