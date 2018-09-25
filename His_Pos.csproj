@@ -272,7 +272,6 @@
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
     <Compile Include="Class\Declare\ErrorMessage.cs" />
     <Compile Include="Class\Declare\IcDataUpload\ConvertData.cs" />
-    <Compile Include="Class\Declare\IcDataUpload\IcDataStructs.cs" />
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadService.cs" />
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
@@ -634,6 +633,7 @@
     </Compile>
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
+    <Compile Include="Struct\IcData\IcDataStructs.cs" />
     <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />

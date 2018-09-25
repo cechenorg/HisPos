@@ -251,5 +251,13 @@ namespace His_Pos
                 }
             }
         }
+
+        public string ByteArrayToString(int length,byte[] pBuffer,int startIndex)
+        {
+            var tmpByteArr = new byte[length];
+            Array.Copy(pBuffer, startIndex, tmpByteArr, 0, length);
+            var result = Encoding.GetEncoding(950).GetString(tmpByteArr);
+            return result;
+        }
     }
 }

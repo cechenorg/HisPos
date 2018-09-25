@@ -43,10 +43,11 @@
                 <Label VerticalAlignment="Center" Content="藥品毛利 : " FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                 <Label x:Name="PrescriptionProfit" Width="60" Height="30" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center" 
                        Content="{Binding MedProfit, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Foreground="#FF424040" />
-                <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="125" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" 
-                          SelectedItem="{Binding CurrentPrescription.Pharmacy.MedicalPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
-                <Button MinWidth="130" Background="RoyalBlue" BorderThickness="0" Click="Button_Click" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" />
+                <Label Width="auto" Content="就醫序號" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                <TextBox x:Name="MedicalNumber" Width="150" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" materialDesign:HintAssist.Hint="慢箋填原處方序號"
+                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.Customer.IcCard.MedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                         InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="MedicalNumber_PreviewKeyDown" />
+                <Button MinWidth="130" Background="RoyalBlue" BorderThickness="0" Click="Button_Click" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="7,0,0,0"/>
             </StackPanel>
             <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}">
                 <Grid.ColumnDefinitions>
@@ -91,10 +92,9 @@
                              Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="4" Margin="8" Orientation="Horizontal">
-                    <Label Width="auto" Content="就醫序號" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <TextBox x:Name="MedicalNumber" Width="170" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" materialDesign:HintAssist.Hint="慢箋請填原處方就醫序號"
-                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.Customer.IcCard.MedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="MedicalNumber_PreviewKeyDown" />
+                    <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
+                    <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="170" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" 
+                              SelectedItem="{Binding CurrentPrescription.Pharmacy.MedicalPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal">
                     <Label Content="處方案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />

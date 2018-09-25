@@ -6,6 +6,7 @@ using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Struct.IcData;
 
 namespace His_Pos.Class
 {

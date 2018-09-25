@@ -28,6 +28,7 @@ using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
 using System.Globalization;
 using His_Pos.ProductPurchase;
+using His_Pos.Struct.IcData;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -38,7 +39,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     {
         private bool isMedicalNumberGet = false;
         private bool isIcCardGet = false;
-        private string CurrentDecMasId = string.Empty;
         public bool IsSend = false;
         public ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>  PrescriptionSendData = new ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>();
         public string CurrentDecMasId = string.Empty;
@@ -281,7 +281,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.SetSameGroupChronic(intDecMasId.ToString(), i.ToString());
                         intDecMasId++;
                     }
-
                 } 
                 else {
                     m = new MessageWindow("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR);
@@ -311,74 +310,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void CreatIcUploadData()
         {
-            ConvertData cs = new ConvertData();
-            var strLength = 0;
-            byte[] icData;
-            int res = -1;
-            var icRecord = new IcRecord {HeaderMessage = {DataFormat = "1"}};
-            icRecord.MainMessage.IcMessage.SamCode = Directory.GetFiles(@"C:\NHI\SAM\COMX1")[0].Substring(10, 12);
-            icRecord.MainMessage.IcMessage.CardNo = CurrentPrescription.Customer.IcCard.CardNo;
-            icRecord.MainMessage.IcMessage.IcNumber = CurrentPrescription.Customer.IcNumber;
-            icRecord.MainMessage.IcMessage.BirthDay = CurrentPrescription.Customer.Birthday;
-            var birthYear = Convert.ToInt32(CurrentPrescription.Customer.Birthday.Substring(0, 3)) + 1911;
-            var birth = new DateTime(birthYear, Convert.ToInt32(CurrentPrescription.Customer.Birthday.Substring(3, 2)), Convert.ToInt32(CurrentPrescription.Customer.Birthday.Substring(5, 2)));
-            var ageOfDays = new TimeSpan(DateTime.Today.Ticks - birth.Ticks).Days;
-            //新生兒就醫
-            if (ageOfDays < 60)
-            {
-                strLength = 498;
-                icData = new byte[498];
-                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData,ref strLength);
-                if (res == 0)
-                {
-                    //取得新生兒就醫註記
-                    byte[] cBabyTreat = new byte[1];
-                    cBabyTreat[0] = icData[86];
-                    icRecord.MainMessage.IcMessage.NewbornTreatmentMark = Encoding.GetEncoding(950).GetString(cBabyTreat);
-
-                    strLength = 78;
-                    icData = new byte[78];
-                    byte[] cBabyMark = new byte[1];
-                    byte[] cNewbornBirt = new byte[7];
-                    res = HisApiBase.hisGetRegisterBasic(icData, ref strLength);
-                    //取得新生兒胞胎註記
-                    cBabyMark[0] = icData[77];
-                    icRecord.MainMessage.IcMessage.NewbornBabyMark = Encoding.GetEncoding(950).GetString(cBabyMark);
-                    //取得新生兒出生日期
-                    Array.Copy(icData, 70, cNewbornBirt, 0, 7);
-                    icRecord.MainMessage.IcMessage.NewbornBirthDay = Encoding.GetEncoding(950).GetString(cNewbornBirt);
-                }
-                else
-                {
-                    //無法取得新生兒就醫註記
-                }
-            }
-            strLength = 13;
-            icData = new byte[13];
-            res = HisApiBase.csGetDateTime(icData,ref strLength);
-            if (res == 0)
-            {
-                icRecord.MainMessage.IcMessage.TreatmentDateTime = Encoding.GetEncoding(950).GetString(icData);
-            }
-            else
-            {
-                icRecord.MainMessage.IcMessage.TreatmentDateTime =
-                    (DateTime.Now.Year - 1911) + DateTime.Now.Month.ToString().PadLeft(2, '0') +
-                    DateTime.Now.Day.ToString().PadLeft(2, '0') + DateTime.Now.Hour.ToString().PadLeft(2, '0') + DateTime.Now.Minute.ToString().PadLeft(2, '0') + DateTime.Now.Second.ToString().PadLeft(2, '0');
-            }
-            icRecord.MainMessage.IcMessage.MakeUpMark = "1";
-            icRecord.MainMessage.IcMessage.MedicalNumber = "\0";
-            strLength = 10;
-            icData = new byte[10];
-            res = HisApiBase.csGetHospID(icData, ref strLength);
-            icRecord.MainMessage.IcMessage.PharmacyId = res == 0 ? Encoding.GetEncoding(950).GetString(icData) : MainWindow.CurrentPharmacy.Id;
-            //取得醫事人員卡身分證字號
-            //strLength = 10;
-            //icData = new byte[10];
-            //res = HisApiBase.hpcGetHPCSSN(icData, ref strLength);
-            //icRecord.MainMessage.IcMessage.MedicalPersonIcNumber = Encoding.GetEncoding(950).GetString(icData);
-            icRecord.MainMessage.IcMessage.MedicalPersonIcNumber = MainWindow.CurrentUser.IcNumber;
-
+            
         }
 
         private void PrintMedBag()
@@ -733,6 +665,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
                 CurrentPrescription.Customer.Id = "1";
             }
+
+
 
             CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
             CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
