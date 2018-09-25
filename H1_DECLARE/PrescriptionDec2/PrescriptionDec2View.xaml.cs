@@ -633,14 +633,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void FindUsagesQuickName(object sender)
         {
             var currentRow = GetCurrentRowIndex(sender);
-            if (sender is TextBox t && !string.IsNullOrEmpty(t.Text))
+            if (!(sender is TextBox t) || string.IsNullOrEmpty(t.Text)) return;
+            if (Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text)) == null) return;
             {
-                if (Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text)) != null)
-                {
-                    CurrentPrescription.Medicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
-                    if (CurrentPrescription.Medicines[currentRow].Usage != null)
-                        t.Text = CurrentPrescription.Medicines[currentRow].Usage.Name;
-                }
+                CurrentPrescription.Medicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
+                if (CurrentPrescription.Medicines[currentRow].Usage != null)
+                    t.Text = CurrentPrescription.Medicines[currentRow].Usage.Name;
             }
         }
 
