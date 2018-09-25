@@ -160,7 +160,7 @@ namespace His_Pos.Class.StoreOrder
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DEC_ID", declareId));
             parameters.Add(new SqlParameter("ORD_EMP_ID", MainWindow.CurrentUser.Id));
-            parameters.Add(new SqlParameter("WAREHOUSE_ID", '0'));
+            parameters.Add(new SqlParameter("WAREHOUSE_ID", '1'));
 
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
@@ -173,7 +173,7 @@ namespace His_Pos.Class.StoreOrder
             details.Columns.Add("FREEQTY", typeof(int));
             details.Columns.Add("INVOICE", typeof(string));
             details.Columns.Add("TOTAL", typeof(string));
-            DateTime datetimevalue;
+
             foreach (var product in declareMedicines)
             {
                 var newRow = details.NewRow();
