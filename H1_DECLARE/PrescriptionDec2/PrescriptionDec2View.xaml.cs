@@ -245,7 +245,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     declareData.DecMasId = CurrentDecMasId;
                     declareDb.UpdateDeclareData(declareData); //更新慢箋
                     ChronicDb.UpdateChronicData(CurrentDecMasId);//重算預約慢箋 
-                    if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal)
+                    if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal && ButtonSubmmit.Content.ToString() ==  "調劑")
                     {  //若為最後一次 則再算出下一批慢性
                         declareDb.SetNewGroupChronic(CurrentDecMasId);
                     }
@@ -261,11 +261,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     decMasId = declareDb.InsertDeclareData(declareData);
                     if (IsSend)
                     {
-                        MainWindow.Instance.AddNewTab("處理單管理");
-                     //   ProductPurchaseView.Instance.AddOrderByPrescription(decMasId, declareData, PrescriptionSendData);
+                        string storId = StoreOrderDb.SaveOrderDeclareData(decMasId, PrescriptionSendData);
+                        //送到singde
+                        StoreOrderDb.SendDeclareOrderToSingde(decMasId, storId, declareData, declareTrade, PrescriptionSendData);
                     }
 
-                    if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                    if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                         declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫                     
 
                     int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;

@@ -60,8 +60,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             PrescriptionDec2View.Instance.TreatmentCaseCombo.Text = prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
             PrescriptionDec2View.Instance.PaymentCategoryCombo.Text = prescription.Treatment.PaymentCategory.FullName;
             PrescriptionDec2View.Instance.CopaymentCombo.Text = prescription.Treatment.Copayment.FullName;
-            PrescriptionDec2View.Instance.SpecialCode.Text = prescription.Treatment.MedicalInfo.SpecialCode.Id;
-            
+            PrescriptionDec2View.Instance.SpecialCode.Text = prescription.Treatment.MedicalInfo.SpecialCode.Id; 
+            PrescriptionDec2View.Instance.DatePickerPrecription.Text = prescription.Treatment.TreatmentDate.ToString("yyyy/MM/dd");
+            PrescriptionDec2View.Instance.DatePickerTreatment.Text = prescription.Treatment.AdjustDate.ToString("yyyy/MM/dd");
+
             PrescriptionDec2View.Instance.CurrentPrescription.Medicines = MedicineDb.GetDeclareMedicineByMasId(decMasId);
             PrescriptionDec2View.Instance.PrescriptionMedicines.ItemsSource = PrescriptionDec2View.Instance.CurrentPrescription.Medicines;
 

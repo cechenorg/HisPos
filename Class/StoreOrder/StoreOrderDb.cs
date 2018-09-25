@@ -337,6 +337,7 @@ namespace His_Pos.Class.StoreOrder
                     return OrderType.ERROR;
             }
         }
+        
         internal static void SendDeclareOrderToSingde(string CurrentDecMasId, string storId, DeclareData declareData, DeclareTrade declareTrade, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> PrescriptionSendData) {
             string Rx_id = MainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY
             string Rx_order = declareData.Prescription.Treatment.AdjustDateStr.Replace("/",""); // 調劑日期(7)病歷號(9)
@@ -349,12 +350,14 @@ namespace His_Pos.Class.StoreOrder
             string Inv_chk = "0"; //  庫存確認 是1 否0
             string Inv_msg = ""; //庫存確認
 
+         
+
             string empty = string.Empty;
             StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
-
             //第一行
             Dtl_data.Append(CurrentDecMasId.PadRight(8,' ')); //藥局病例號
             Dtl_data.Append(declareData.Prescription.Customer.Name.PadRight(20,' ')); //病患姓名
+            Dtl_data.Append(empty.PadRight(NewFunction.HowManyChinese(declareData.Prescription.Customer.Name), ' ')); //空白
             Dtl_data.Append(declareData.Prescription.Customer.IcCard.IcNumber.PadRight(10, ' ')); //身分證字號
             Dtl_data.Append(declareData.Prescription.Customer.Birthday.Replace("/","").PadRight(7, ' ')); //出生年月日
             string gender = declareData.Prescription.Customer.IcCard.IcNumber.Substring(1, 1) == "1" ? "1" : "2";
@@ -367,6 +370,7 @@ namespace His_Pos.Class.StoreOrder
             Dtl_data.Append(empty.PadRight(20, ' ')); //空
             Dtl_data.Append(MainWindow.CurrentUser.Id.PadRight(10, ' ')); //藥師代號
             Dtl_data.Append(MainWindow.CurrentUser.Name.PadRight(20, ' ')); //藥師姓名
+            Dtl_data.Append(empty.PadRight(NewFunction.HowManyChinese(MainWindow.CurrentUser.Name), ' ')); //空白
             Dtl_data.AppendLine();
             //第三行
             Dtl_data.Append(declareData.Prescription.Treatment.TreatDateStr.Replace("/","").PadRight(7, ' ')); //處方日(就診日期)
@@ -402,7 +406,7 @@ namespace His_Pos.Class.StoreOrder
             foreach (DeclareMedicine declareMedicine in declareData.Prescription.Medicines)
             {
                 Dtl_data.Append(declareMedicine.Id.PadRight(13, ' ')); //健保碼
-                Dtl_data.Append(declareMedicine.MedicalCategory.Dosage.PadRight(8, ' ')); //每次使用數量
+                Dtl_data.Append(declareMedicine.MedicalCategory.Dosage.PadRight(7, ' ')); //每次使用數量
                 Dtl_data.Append(declareMedicine.Usage.Name.PadRight(9, ' ')); //使用頻率
                 Dtl_data.Append(declareMedicine.Days.PadRight(10, ' ')); //使用天數
                 Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
@@ -423,7 +427,7 @@ namespace His_Pos.Class.StoreOrder
             
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
-            dd.MySqlNonQueryBySqlString($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{declareData.Prescription.Customer.Name}','{Dtl_data}')");
+            dd.MySqlNonQueryBySqlString($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{declareData.Prescription.Customer.Name}','{Dtl_data}','{declareData.Prescription.Treatment.AdjustDateStr.Replace("/","")}')");
         }
 
 

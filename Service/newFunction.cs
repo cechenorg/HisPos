@@ -127,5 +127,21 @@ namespace His_Pos.Service
 
             return foundChild;
         }
+        public static int HowManyChinese(string words) {
+            string TmmP;
+            int count = 0;
+            for (int i = 0; i < words.Length; i++)
+            {
+                TmmP = words.Substring(i, 1);
+
+                byte[] sarr = System.Text.Encoding.GetEncoding("gb2312").GetBytes(TmmP);
+
+                if (sarr.Length == 2)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
     }
 }

@@ -66,7 +66,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             Close();
         }
 
-        private void ButtonSubmmit_Click(object sender, RoutedEventArgs e) {  
+        private void ButtonSubmmit_Click(object sender, RoutedEventArgs e) {
+            foreach (PrescriptionSendData prescriptionSendData in Prescription) {
+                if (prescriptionSendData.SendAmount == "0") {
+                    MessageWindow messageWindow = new MessageWindow("傳輸量不可為0",MessageType.ERROR);
+                    messageWindow.ShowDialog();
+                    return;
+                }
+            }
             PrescriptionDec2View.Instance.IsSend = true;
             PrescriptionDec2View.Instance.PrescriptionSendData = Prescription;
             Close();
