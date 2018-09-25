@@ -25,6 +25,7 @@ using Prescription = His_Pos.Class.Prescription;
 using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
 using System.Globalization;
+using His_Pos.ProductPurchase;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -233,7 +234,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         if (!IsSend) return;
                     }
                     if (IsSend) {
-                          //PrescriptionSendData CurrentDecMasId
+                        MainWindow.Instance.AddNewTab("處理單管理");
+                        //ProductPurchaseView.Instance.AddOrderByPrescription(CurrentDecMasId, declareData, PrescriptionSendData);
                     }
                     if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                         declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
@@ -255,9 +257,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         if (!IsSend) return;
                     }
                     decMasId = declareDb.InsertDeclareData(declareData);
-                    if (IsSend) 
-                        //ChronicDb.InsertChronicDetail(decMasId, ChronicSendToServerWindow.Instance.Prescription);
-                    
+                    if (IsSend)
+                    {
+                        MainWindow.Instance.AddNewTab("處理單管理");
+                     //   ProductPurchaseView.Instance.AddOrderByPrescription(decMasId, declareData, PrescriptionSendData);
+                    }
 
                     if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                         declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫                     
@@ -771,6 +775,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 IsSendToServer.IsChecked = (((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) ? true : false;
             } 
         }
-
+       
     }
 }
