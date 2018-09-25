@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
@@ -151,18 +152,66 @@ namespace His_Pos.Class.StoreOrder
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[SaveStoreOrder]", parameters);
         }
 
+        internal static string SaveOrderDeclareData(string declareId, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> declareMedicines)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DEC_ID", declareId));
+            parameters.Add(new SqlParameter("ORD_EMP_ID", MainWindow.CurrentUser.Id));
+            parameters.Add(new SqlParameter("WAREHOUSE_ID", '0'));
+
+            DataTable details = new DataTable();
+            details.Columns.Add("PRO_ID", typeof(string));
+            details.Columns.Add("ORDERQTY", typeof(int));
+            details.Columns.Add("QTY", typeof(int));
+            details.Columns.Add("PRICE", typeof(string));
+            details.Columns.Add("DESCRIPTION", typeof(string));
+            details.Columns.Add("VALIDDATE", typeof(string));
+            details.Columns.Add("BATCHNUMBER", typeof(string));
+            details.Columns.Add("FREEQTY", typeof(int));
+            details.Columns.Add("INVOICE", typeof(string));
+            details.Columns.Add("TOTAL", typeof(string));
+            DateTime datetimevalue;
+            foreach (var product in declareMedicines)
+            {
+                var newRow = details.NewRow();
+
+                newRow["PRO_ID"] = product.MedId;
+                newRow["ORDERQTY"] = Int32.Parse(product.SendAmount);
+                newRow["QTY"] = 0;
+                newRow["PRICE"] = "0";
+                newRow["DESCRIPTION"] = "";
+                newRow["VALIDDATE"] = "";
+                newRow["BATCHNUMBER"] = "";
+                newRow["FREEQTY"] = "";
+                newRow["INVOICE"] = "";
+                newRow["TOTAL"] = "0";
+
+                details.Rows.Add(newRow);
+            }
+
+            parameters.Add(new SqlParameter("DETAILS", details));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddDeclareOrder]", parameters);
+
+            return table.Rows[0]["ID"].ToString();
+        }
+
+        
+
         internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string proId, string wareId)
         {
             Collection<ReturnControl.BatchNumOverview> collection = new BindingList<ReturnControl.BatchNumOverview>();
 
             return collection;
         }
-
+        
         internal static Collection<ProductPurchaseView.SindeOrderDetail> GetOrderDetailFromSinde(string orderId)
         {
             ObservableCollection<ProductPurchaseView.SindeOrderDetail> collection = new ObservableCollection<ProductPurchaseView.SindeOrderDetail>();
 
-            var dd = new DbConnection("Database = rx_center; Server = 192.168.0.98; Port = 3306; User Id = SD; Password = 1234; SslMode = none", SqlConnectionType.NySql);
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId.Substring(2, 10)}')");
             
@@ -263,7 +312,7 @@ namespace His_Pos.Class.StoreOrder
                 orderMedicines += "\r\n";
             }
             
-            var dd = new DbConnection("Database=rx_center;Server=192.168.0.98;Port=3306;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
             
             dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{storeOrderData.Id.Substring(2, 10)}', '{storeOrderData.Note}', '{orderMedicines}')");
 
@@ -271,7 +320,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static OrderType GetOrderStatusFromSinde(string orderId)
         {
-            var dd = new DbConnection("Database=rx_center;Server=192.168.0.98;Port=3306;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{orderId.Substring(2, 10)}')");
 
@@ -283,6 +332,22 @@ namespace His_Pos.Class.StoreOrder
                     return OrderType.PROCESSING;
                 case "2":
                     return OrderType.SCRAP;
+                default:
+                    return OrderType.ERROR;
+            }
+        }
+        internal static OrderType GetDeclareOrderStatusFromSinde(string orderId)
+        {
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetDeclareOrderStatus('{orderId}')");
+
+            switch (dataTable.Rows[0]["FLAG"].ToString())
+            {
+                case "0":
+                    return OrderType.WAITING;
+                case "1":
+                    return OrderType.PROCESSING;
                 default:
                     return OrderType.ERROR;
             }

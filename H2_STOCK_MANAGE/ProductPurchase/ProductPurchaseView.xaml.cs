@@ -52,6 +52,7 @@ namespace His_Pos.ProductPurchase
                 Price = Double.Parse(row["PRICE"].ToString());
                 BatchNum = row["BATCHNUM"].ToString();
                 ForeignOrderId = row["FOREIGN_ID"].ToString();
+                ValidDate = row["VALIDDATE"].ToString();
             }
             public string Type { get; }
             public string Id { get; }
@@ -59,6 +60,7 @@ namespace His_Pos.ProductPurchase
             public double Price { get; }
             public string BatchNum { get; }
             public string ForeignOrderId { get; }
+            public string ValidDate { get; }
         }
         #endregion
 
@@ -183,6 +185,7 @@ namespace His_Pos.ProductPurchase
 
                 ((IProductPurchase)product).BatchNumber = detail.BatchNum;
                 ((IProductPurchase)product).OrderAmount = -(detail.Amount);
+                ((IProductPurchase)product).ValidDate = detail.ValidDate;
                 ((ITrade)product).TotalPrice = Double.Parse(detail.Price.ToString());
                 ((ITrade)product).Amount = -(detail.Amount);
                 //((ITrade)product).Price = detail.Price / -detail.Amount;
