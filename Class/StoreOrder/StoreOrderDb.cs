@@ -209,7 +209,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<ProductPurchaseView.SindeOrderDetail> collection = new ObservableCollection<ProductPurchaseView.SindeOrderDetail>();
 
-            var dd = new DbConnection("Database = rx_center; Server = 192.168.0.98; Port = 3306; User Id = SD; Password = 1234; SslMode = none", SqlConnectionType.NySql);
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId.Substring(2, 10)}')");
             
@@ -310,7 +310,7 @@ namespace His_Pos.Class.StoreOrder
                 orderMedicines += "\r\n";
             }
             
-            var dd = new DbConnection("Database=rx_center;Server=192.168.0.98;Port=3306;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
             
             dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{storeOrderData.Id.Substring(2, 10)}', '{storeOrderData.Note}', '{orderMedicines}')");
 
@@ -318,7 +318,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static OrderType GetOrderStatusFromSinde(string orderId)
         {
-            var dd = new DbConnection("Database=rx_center;Server=192.168.0.98;Port=3306;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{orderId.Substring(2, 10)}')");
 
