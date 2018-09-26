@@ -355,7 +355,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (e.Key == Key.Enter)
             {
-                NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text, StoreOrderData.Warehouse.Id);
+                NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.PURCHASE, ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text, StoreOrderData.Warehouse.Id);
 
                 if (newItemDialog.ConfirmButtonClicked)
                 {
@@ -492,7 +492,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.PURCHASE, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
 
             newItemDialog.ShowDialog();
 

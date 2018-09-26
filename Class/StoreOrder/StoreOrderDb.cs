@@ -205,6 +205,19 @@ namespace His_Pos.Class.StoreOrder
         {
             Collection<ReturnControl.BatchNumOverview> collection = new BindingList<ReturnControl.BatchNumOverview>();
 
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("WARE_ID", wareId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetBatchNumOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new ReturnControl.BatchNumOverview(row));
+            }
+
             return collection;
         }
         

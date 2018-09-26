@@ -172,7 +172,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.RETURN, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
 
             newItemDialog.ShowDialog();
 
