@@ -203,7 +203,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string proId, string wareId)
         {
-            Collection<ReturnControl.BatchNumOverview> collection = new BindingList<ReturnControl.BatchNumOverview>();
+            Collection<ReturnControl.BatchNumOverview> collection = new Collection<ReturnControl.BatchNumOverview>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
 

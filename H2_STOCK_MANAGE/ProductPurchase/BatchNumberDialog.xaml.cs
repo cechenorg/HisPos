@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
+using His_Pos.Struct.StoreOrder;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
 {
@@ -21,7 +22,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
     /// </summary>
     public partial class BatchNumberDialog : Window
     {
-        public Collection<ReturnControl.BatchNumOverview> BatchNumOverviews { get; }
+        public Collection<ReturnControl.BatchNumOverview> BatchNumOverviews { get; set; }
         public bool IsConfirmClicked { get; set; } = false;
         
         public BatchNumberDialog(Collection<ReturnControl.BatchNumOverview> batchNumOverviews)

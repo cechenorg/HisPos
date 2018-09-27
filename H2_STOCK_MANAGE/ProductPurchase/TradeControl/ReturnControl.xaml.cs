@@ -24,6 +24,7 @@ using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.Struct.Manufactory;
 using His_Pos.Struct.Product;
+using His_Pos.Struct.StoreOrder;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 {
@@ -33,7 +34,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
     public partial class ReturnControl : UserControl, INotifyPropertyChanged
     {
         #region ----- Define Inner Class -----
-        public struct BatchNumOverview
+        public class BatchNumOverview
         {
             public BatchNumOverview(DataRow row)
             {
@@ -44,6 +45,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             public string BatchNumber { get; }
             public double Amount { get; }
+
             public double SelectedAmount { get; set; }
         }
         #endregion
