@@ -12,22 +12,18 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
-using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.MedBag;
 using His_Pos.HisApi;
 using His_Pos.RDLC;
 using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
-using System.Globalization;
-using His_Pos.ProductPurchase;
+using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Struct.IcData;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
@@ -37,9 +33,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
-        private bool isMedicalNumberGet = false;
-        private bool isIcCardGet = false;
-        public bool IsSend = false;
+        private bool isMedicalNumberGet;//是否取得就醫序號
+        private bool isIcCardGet;//健保卡是否讀取成功
+        public bool IsSend;
+        private SeqNumber seq;//取得之就醫序號資料
+        private List<string> _prescriptionSignatureList = new List<string>();
+        private ObservableCollection<TreatmentDataNoNeedHpc> TreatRecCollection { get; set; }
         public ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>  PrescriptionSendData = new ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>();
         public string CurrentDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
@@ -47,7 +46,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public static PrescriptionDec2View Instance;
         private int _selfCost;
         private SystemType _cusHhistoryFilterCondition = SystemType.ALL;
-
         public int SelfCost
         {
             get => _selfCost;
@@ -305,7 +303,53 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LogInIcData()
         {
-            //寫卡
+            var strLength = 296;
+            var icData = new byte[296];
+            var cs = new ConvertData();
+            var cTreatItem = cs.StringToBytes("AF\0", 3);
+            //新生兒就醫註記,長度兩個char
+            var cBabyTreat = TreatRecCollection.Count > 0 ? cs.StringToBytes(TreatRecCollection[0].NewbornTreatmentMark+"\0", 3) : cs.StringToBytes(" ", 2);
+            //補卡註記,長度一個char
+            var cTreatAfterCheck = new byte[] { 1 };
+            var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+            if (res == 0)
+            {
+                isMedicalNumberGet = true;
+                seq = new SeqNumber(icData);
+                var icPrescripList = new List<IcPrescriptData>();
+                foreach (var med in CurrentPrescription.Medicines)
+                {
+                    icPrescripList.Add(new IcPrescriptData(med));
+                }
+
+                var icPrescripDataWrite = string.Empty;
+                foreach (var icPrescript in icPrescripList)
+                {
+                    icPrescripDataWrite += icPrescript.DataStr;
+                }
+                byte[] pData = cs.StringToBytes(icPrescripDataWrite, 3660);
+                byte[] pDateTime = new byte[14];
+                pDateTime = cs.StringToBytes(seq.TreatDateTime + "\0", 14);
+                byte[] pDataInput = pDateTime.Concat(pData).ToArray();
+                byte[] pPatientId = new byte[10];
+                byte[] pPatientBitrhDay = new byte[10];
+                strLength = 72;
+                icData = new byte[72];
+                HisApiBase.hisGetBasicData(icData, ref strLength);
+                Array.Copy(icData, 32, pPatientId, 0, 10);
+                Array.Copy(icData, 42, pPatientBitrhDay, 0, 7);
+                int iWriteCount = icPrescripList.Count;
+                strLength = 40* iWriteCount;
+                icData = new byte[strLength];
+                res = HisApiBase.hisWriteMultiPrescriptSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput, ref iWriteCount, icData, ref strLength);
+                var startIndex = 0;
+                for (var i = 0; i < iWriteCount; i++)
+                {
+                    _prescriptionSignatureList.Add(cs.ByToString(icData,startIndex,40));
+                    startIndex += 40;
+                }
+            }
+
         }
 
         private void CreatIcUploadData()
@@ -641,7 +685,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (res == 0)
             {
                 isIcCardGet = true;
-                BasicData basicData = new BasicData(icData);
+                var basicData = new BasicData(icData);
                 CurrentPrescription.Customer.Name = basicData.Name;
                 CurrentPrescription.Customer.Birthday = basicData.Birthday;
                 CurrentPrescription.Customer.IcNumber = basicData.IcNumber;
@@ -655,6 +699,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 {
                     isMedicalNumberGet = true;
                 }
+                strLength = 498;
+                icData = new byte[498];
+                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+                if (res == 0)
+                {
+                    int startIndex = 84;
+                    for (int i = 0; i < 6; i++)
+                    {
+                        TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
+                        startIndex += 69;
+                    }
+                }
             }
             else
             {
@@ -665,8 +721,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
                 CurrentPrescription.Customer.Id = "1";
             }
-
-
 
             CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
             CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
