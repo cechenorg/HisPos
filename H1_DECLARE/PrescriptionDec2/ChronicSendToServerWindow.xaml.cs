@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.Class.Product;
+using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using System;
 using System.Collections.Generic;
@@ -37,12 +38,31 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             public string Stock { get; set; }
             public string TreatAmount { get; set; }
             public string SendAmount { get; set; }
+            private string source;
+
+            public string Source
+            {
+                get { return source; }
+                set
+                {
+                    source = value;
+                    NotifyPropertyChanged("Source");
+                }
+            }
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            private void NotifyPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+
         }
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+      
         private ObservableCollection<PrescriptionSendData> prescription = new ObservableCollection<PrescriptionSendData>();
         public ObservableCollection<PrescriptionSendData> Prescription {
             get => prescription;
@@ -81,6 +101,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
            // CurrentPrescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
         }
-        
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+                if (Prescription.Contains(selectedItem))
+                    (selectedItem as PrescriptionSendData).Source = "/Images/DeleteDot.png"; 
+                MedicinesList.SelectedItem = selectedItem; 
+        } 
+
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var leaveItem = (sender as DataGridRow)?.Item;
+             (leaveItem as PrescriptionSendData).Source = string.Empty;
+        }
     }
 }
