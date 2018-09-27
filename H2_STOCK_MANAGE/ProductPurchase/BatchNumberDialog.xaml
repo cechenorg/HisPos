@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H2_STOCK_MANAGE.ProductPurchase"
         mc:Ignorable="d"
-        Title="退貨批號選擇" Height="350" Width="450">
+        Title="退貨批號選擇" Height="350" Width="450" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -71,6 +71,6 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="確認" Grid.Row="1" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold"/>
+        <Button Content="確認" Grid.Row="1" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold" Click="Confirm_Click"/>
     </Grid>
 </Window>

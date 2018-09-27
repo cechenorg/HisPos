@@ -184,6 +184,26 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     BatchNumberDialog batchNumberDialog = new BatchNumberDialog(batchNumOverviews);
                     batchNumberDialog.ShowDialog();
 
+                    if (!batchNumberDialog.IsConfirmClicked) return;
+
+                    foreach( var batch in batchNumberDialog.BatchNumOverviews)
+                    {
+                        if (batch.SelectedAmount <= 0) continue;
+
+                        Product newProduct;
+
+                        if (newItemDialog.SelectedItem.Type.Equals("M"))
+                            newProduct = new ProductReturnMedicine(newItemDialog.SelectedItem);
+                        else
+                            newProduct = new ProductReturnOTC(newItemDialog.SelectedItem);
+
+                        ((IProductReturn)newProduct).BatchNumber = batch.BatchNumber;
+                        ((IProductReturn)newProduct).BatchLimit = batch.Amount;
+                        ((IProductReturn)newProduct).ReturnAmount = batch.SelectedAmount;
+
+                        StoreOrderData.Products.Add(newProduct);
+                    }
+
                 }
                 else
                 {

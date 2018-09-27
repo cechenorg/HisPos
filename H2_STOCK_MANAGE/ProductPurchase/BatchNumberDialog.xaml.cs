@@ -22,6 +22,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
     public partial class BatchNumberDialog : Window
     {
         public Collection<ReturnControl.BatchNumOverview> BatchNumOverviews { get; }
+        public bool IsConfirmClicked { get; set; } = false;
         
         public BatchNumberDialog(Collection<ReturnControl.BatchNumOverview> batchNumOverviews)
         {
@@ -31,5 +32,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
             BatchNumOverviews = batchNumOverviews;
         }
 
+        private void Confirm_Click(object sender, RoutedEventArgs e)
+        {
+            IsConfirmClicked = true;
+            Close();
+        }
     }
 }
