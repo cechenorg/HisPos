@@ -205,28 +205,64 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData.IsDataChanged = true;
 
         }
-        private void AddProduct(TextBox textBox, PurchaseProduct product)
+        private void CheckAndAddProductByBatchOverview(TextBox textBox, PurchaseProduct selectedItem, bool isFirst = true)
         {
-            Product newProduct;
+            Collection<BatchNumOverview> batchNumOverviews = StoreOrderDb.GetBatchNumOverview(selectedItem.Id, StoreOrderData.Warehouse.Id);
 
-            if (product.Type.Equals("M"))
-                newProduct = new ProductReturnMedicine(product);
-            else
-                newProduct = new ProductReturnOTC(product);
-
-            int rowIndex = GetCurrentRowIndex(textBox);
-
-            if (rowIndex == CurrentDataGrid.Items.Count - 1)
+            if (batchNumOverviews.Count > 1)
             {
-                StoreOrderData.Products.Add(newProduct);
+                BatchNumberDialog batchNumberDialog = new BatchNumberDialog(batchNumOverviews);
+                batchNumberDialog.ShowDialog();
 
-                textBox.Text = "";
+                if (!batchNumberDialog.IsConfirmClicked) return;
+
+                foreach (var batch in batchNumberDialog.BatchNumOverviews)
+                {
+                    if (batch.SelectedAmount <= 0) continue;
+
+                    AddProductByBatchOverview(textBox, selectedItem, batch, isFirst);
+                    isFirst = false;
+                }
             }
             else
             {
-                ((IProductReturn)newProduct).CopyFilledData(StoreOrderData.Products[rowIndex]);
+                AddProductByBatchOverview(textBox, selectedItem, batchNumOverviews[0], isFirst);
+            }
+        }
 
-                StoreOrderData.Products[rowIndex] = newProduct;
+        private void AddProductByBatchOverview(TextBox textBox, PurchaseProduct purchaseProduct, BatchNumOverview batchNumOverview, bool isFirst)
+        {
+            Product newProduct;
+
+            if (purchaseProduct.Type.Equals("M"))
+                newProduct = new ProductReturnMedicine(purchaseProduct);
+            else
+                newProduct = new ProductReturnOTC(purchaseProduct);
+
+            ((IProductReturn)newProduct).BatchNumber = batchNumOverview.BatchNumber;
+            ((IProductReturn)newProduct).BatchLimit = batchNumOverview.Amount;
+            ((ITrade)newProduct).Amount = batchNumOverview.SelectedAmount;
+
+            int rowIndex = GetCurrentRowIndex(textBox);
+
+            if(isFirst)
+            {
+                if (rowIndex == CurrentDataGrid.Items.Count - 1)
+                {
+                    StoreOrderData.Products.Add(newProduct);
+
+                    textBox.Text = "";
+                }
+                else
+                {
+                    ((IProductReturn)newProduct).CopyFilledData(StoreOrderData.Products[rowIndex]);
+
+                    StoreOrderData.Products[rowIndex] = newProduct;
+                }
+            }
+            else
+            {
+                StoreOrderData.Products.Insert(rowIndex, newProduct);
             }
 
             StoreOrderData.IsDataChanged = true;
@@ -261,7 +297,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 if (newItemDialog.ConfirmButtonClicked)
                 {
-                    AddProduct(textBox, newItemDialog.SelectedItem);
+                    CheckAndAddProductByBatchOverview( textBox, newItemDialog.SelectedItem);
                 }
             }
         }
@@ -362,53 +398,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (newItemDialog.ConfirmButtonClicked)
             {
+                List<TextBox> temp = new List<TextBox>();
+                NewFunction.FindChildGroup<TextBox>(CurrentDataGrid, "Id", ref temp);
 
-                Collection<BatchNumOverview> batchNumOverviews = StoreOrderDb.GetBatchNumOverview(newItemDialog.SelectedItem.Id, StoreOrderData.Warehouse.Id);
-
-                if (batchNumOverviews.Count > 1)
-                {
-                    BatchNumberDialog batchNumberDialog = new BatchNumberDialog(batchNumOverviews);
-                    batchNumberDialog.ShowDialog();
-
-                    if (!batchNumberDialog.IsConfirmClicked) return;
-
-                    foreach( var batch in batchNumberDialog.BatchNumOverviews)
-                    {
-                        if (batch.SelectedAmount <= 0) continue;
-
-                        Product newProduct;
-
-                        if (newItemDialog.SelectedItem.Type.Equals("M"))
-                            newProduct = new ProductReturnMedicine(newItemDialog.SelectedItem);
-                        else
-                            newProduct = new ProductReturnOTC(newItemDialog.SelectedItem);
-
-                        ((IProductReturn)newProduct).BatchNumber = batch.BatchNumber;
-                        ((IProductReturn)newProduct).BatchLimit = batch.Amount;
-                        ((ITrade)newProduct).Amount = batch.SelectedAmount;
-
-                        StoreOrderData.Products.Add(newProduct);
-
-                        StoreOrderData.IsDataChanged = true;
-                    }
-
-                }
-                else
-                {
-                    Product newProduct;
-
-                    if (newItemDialog.SelectedItem.Type.Equals("M"))
-                        newProduct = new ProductReturnMedicine(newItemDialog.SelectedItem);
-                    else
-                        newProduct = new ProductReturnOTC(newItemDialog.SelectedItem);
-
-                    ((IProductReturn) newProduct).BatchNumber = batchNumOverviews[0].BatchNumber;
-                    ((IProductReturn)newProduct).BatchLimit = batchNumOverviews[0].Amount;
-
-                    StoreOrderData.Products.Add(newProduct);
-
-                    StoreOrderData.IsDataChanged = true;
-                }
+                CheckAndAddProductByBatchOverview(temp.Last(), newItemDialog.SelectedItem, false);
             }
         }
 
