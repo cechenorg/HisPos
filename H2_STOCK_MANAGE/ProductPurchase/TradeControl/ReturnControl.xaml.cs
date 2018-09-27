@@ -22,6 +22,7 @@ using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
+using His_Pos.Service;
 using His_Pos.Struct.Manufactory;
 using His_Pos.Struct.Product;
 using His_Pos.Struct.StoreOrder;
@@ -204,6 +205,153 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData.IsDataChanged = true;
 
         }
+        private void AddProduct(TextBox textBox, PurchaseProduct product)
+        {
+            Product newProduct;
+
+            if (product.Type.Equals("M"))
+                newProduct = new ProductReturnMedicine(product);
+            else
+                newProduct = new ProductReturnOTC(product);
+
+            int rowIndex = GetCurrentRowIndex(textBox);
+
+            if (rowIndex == CurrentDataGrid.Items.Count - 1)
+            {
+                StoreOrderData.Products.Add(newProduct);
+
+                textBox.Text = "";
+            }
+            else
+            {
+                ((IProductReturn)newProduct).CopyFilledData(StoreOrderData.Products[rowIndex]);
+
+                StoreOrderData.Products[rowIndex] = newProduct;
+            }
+
+            StoreOrderData.IsDataChanged = true;
+        }
+        #endregion
+
+        #region ----- P StoreOrderDetail Functions -----
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
+
+            if (textBox is null) return;
+
+            if (textBox.Text == String.Empty)
+                textBox.Text = "0";
+
+            if (!textBox.Name.Equals("FreeAmount"))
+                storeOrderData.CalculateTotalPrice();
+
+            StoreOrderData.IsDataChanged = true;
+        }
+
+        private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            if (e.Key == Key.Enter)
+            {
+                NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.RETURN, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id, textBox.Text);
+
+                if (newItemDialog.ConfirmButtonClicked)
+                {
+                    AddProduct(textBox, newItemDialog.SelectedItem);
+                }
+            }
+        }
+
+        private void Id_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            textBox.SelectAll();
+        }
+
+        private void Id_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            e.Handled = true;
+
+            textBox.Focus();
+        }
+
+        private void Id_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+
+            TextBox textBox = sender as TextBox;
+
+            var currentRowIndex = GetCurrentRowIndex(sender);
+
+            if (currentRowIndex == -1 || currentRowIndex == CurrentDataGrid.Items.Count - 1) return;
+
+            if (!textBox.Text.Equals(storeOrderData.Products[currentRowIndex].Id))
+                textBox.Text = storeOrderData.Products[currentRowIndex].Id;
+        }
+        #endregion
+
+        #region ----- Service Functions -----
+        private int GetCurrentRowIndex(object sender)
+        {
+            if (sender is Button)
+            {
+                Button btn = sender as Button;
+
+                List<Button> temp = new List<Button>();
+                NewFunction.FindChildGroup<Button>(CurrentDataGrid, btn.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(btn))
+                    {
+                        return x;
+                    }
+                }
+            }
+            else if (sender is TextBox)
+            {
+                TextBox tb = sender as TextBox;
+
+                List<TextBox> temp = new List<TextBox>();
+                NewFunction.FindChildGroup<TextBox>(CurrentDataGrid, tb.Name, ref temp);
+                for (int x = 0; x < temp.Count; x++)
+                {
+                    if (temp[x].Equals(tb))
+                    {
+                        return x;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        private bool IsNumbers(Key key)
+        {
+            if (key >= Key.D0 && key <= Key.D9) return true;
+            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
+
+            return false;
+        }
+
+        private bool IsKeyAvailable(Key key)
+        {
+            if (key >= Key.D0 && key <= Key.D9) return true;
+            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
+            if (key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right || key == Key.OemPeriod || key == Key.Decimal) return true;
+
+            return false;
+        }
         #endregion
 
         private void NewProduct(object sender, RoutedEventArgs e)
@@ -269,12 +417,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             UpdatePricipalStackUi();
 
             StoreOrderData.IsDataChanged = true;
-        }
-
-        private void ShowDeclareDataOverview(object sender, MouseButtonEventArgs e)
-        {
-            DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
-            declareDataDetailOverview.Show();
         }
         
     }

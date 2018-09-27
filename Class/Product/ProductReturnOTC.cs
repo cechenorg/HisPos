@@ -177,5 +177,13 @@ namespace His_Pos.Class.Product
                 Price = totalPrice / amount;
             }
         }
+
+        public void CopyFilledData(AbstractClass.Product product)
+        {
+            Amount = ((ITrade)product).Amount;
+            Price = ((ITrade)product).Price;
+            TotalPrice = ((ITrade)product).TotalPrice;
+            Note = ((IProductReturn)product).Note;
+        }
     }
 }

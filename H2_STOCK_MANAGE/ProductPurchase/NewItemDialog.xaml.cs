@@ -50,7 +50,7 @@ namespace His_Pos.ProductPurchase
 
             InitCollection();
 
-            if( SearchText.Equals("") )
+            if( !SearchText.Text.Equals("") )
             {
                 AllProducts.IsChecked = true;
 

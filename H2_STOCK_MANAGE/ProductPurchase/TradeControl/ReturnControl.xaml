@@ -45,10 +45,6 @@
                 <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人名稱" FontFamily="Segoe UI Semi" FontSize="18"/>
                 <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人電話" FontFamily="Segoe UI Semi" FontSize="18"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="210,0,0,0" Visibility="{Binding DeclareDataCount, Converter={StaticResource HasDeclareDataToVisConverter}}" MouseLeftButtonDown="ShowDeclareDataOverview">
-                <Image Width="35" Source="../../../Images/User_48px.png"/>
-                <Label Content="{Binding DeclareDataCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-            </StackPanel>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
@@ -101,7 +97,8 @@
                 <DataGridTemplateColumn MinWidth="110" Header="商品代碼">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Price" Text="{Binding Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2"/>
+                            <TextBox x:Name="Id" Text="{Binding Id, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"
+                                     HorizontalContentAlignment="Center" PreviewKeyDown="Id_PreviewKeyDown" GotFocus="Id_GotFocus" LostFocus="Id_LostFocus" PreviewMouseLeftButtonDown="Id_MouseLeftButtonUp"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

@@ -364,7 +364,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void Id_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is null) return;
 
