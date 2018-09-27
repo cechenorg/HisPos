@@ -30,5 +30,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
 
             BatchNumOverviews = batchNumOverviews;
         }
+
     }
 }

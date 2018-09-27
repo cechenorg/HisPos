@@ -38,15 +38,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             public BatchNumOverview(DataRow row)
             {
                 BatchNumber = row["PRO_BATCHNUM"].ToString();
-                IsSelected = false;
                 Amount = Double.Parse(row["PRO_AMOUNT"].ToString());
                 SelectedAmount = 0;
             }
 
             public string BatchNumber { get; }
-            public bool IsSelected { get; }
             public double Amount { get; }
-            public double SelectedAmount { get; }
+            public double SelectedAmount { get; set; }
         }
         #endregion
 
