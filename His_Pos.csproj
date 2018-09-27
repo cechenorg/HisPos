@@ -631,7 +631,6 @@
     <Compile Include="Service\XmlService.cs" />
     <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
-    <Compile Include="Struct\StoreOrder\BatchNumOverview.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />

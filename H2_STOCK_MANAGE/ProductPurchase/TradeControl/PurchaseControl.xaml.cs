@@ -320,6 +320,15 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             StoreOrderData.IsDataChanged = true;
         }
+
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            StoreOrderData.Products.Remove((Product)CurrentDataGrid.SelectedItem);
+            StoreOrderData.CalculateTotalPrice();
+
+            StoreOrderData.IsDataChanged = true;
+
+        }
         #endregion
 
         #region ----- P StoreOrderDetail Functions -----
@@ -336,15 +345,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 storeOrderData.CalculateTotalPrice();
             
             StoreOrderData.IsDataChanged = true;
-        }
-
-        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            StoreOrderData.Products.Remove((Product)CurrentDataGrid.SelectedItem);
-            StoreOrderData.CalculateTotalPrice();
-            
-            StoreOrderData.IsDataChanged = true;
-            
         }
 
         private void Id_PreviewKeyDown(object sender, KeyEventArgs e)

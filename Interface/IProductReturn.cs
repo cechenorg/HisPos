@@ -11,10 +11,7 @@ namespace His_Pos.Interface
     {
         string Note { get; set; }
         InStock Stock { get; set; }
-        double ReturnAmount { get; set; }
         string BatchNumber { get; set; }
         double BatchLimit { get; set; }
-        double ReturnPrice { get; set; }
-        double ReturnTotalPrice { get; set; }
     }
 }

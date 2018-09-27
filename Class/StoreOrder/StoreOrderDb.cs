@@ -129,23 +129,47 @@ namespace His_Pos.Class.StoreOrder
             details.Columns.Add("FREEQTY", typeof(int));
             details.Columns.Add("INVOICE", typeof(string));
             details.Columns.Add("TOTAL", typeof(string));
-            DateTime datetimevalue;
-            foreach (var product in storeOrder.Products)
+
+            if(storeOrder.Category.CategoryName.Equals("進貨"))
             {
-                var newRow = details.NewRow();
+                DateTime datetimevalue;
+                foreach (var product in storeOrder.Products)
+                {
+                    var newRow = details.NewRow();
 
-                newRow["PRO_ID"] = product.Id;
-                newRow["ORDERQTY"] = ((IProductPurchase)product).OrderAmount;
-                newRow["QTY"] = ((ITrade)product).Amount;
-                newRow["PRICE"] = ((ITrade) product).Price.ToString();
-                newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
-                newRow["VALIDDATE"] = ( DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue) ) ? ((IProductPurchase)product).ValidDate:string.Empty ;
-                newRow["BATCHNUMBER"] = ((IProductPurchase) product).BatchNumber;
-                newRow["FREEQTY"] = ((IProductPurchase)product).FreeAmount;
-                newRow["INVOICE"] = ((IProductPurchase)product).Invoice;
-                newRow["TOTAL"] = ((ITrade)product).TotalPrice.ToString();
+                    newRow["PRO_ID"] = product.Id;
+                    newRow["ORDERQTY"] = ((IProductPurchase)product).OrderAmount;
+                    newRow["QTY"] = ((ITrade)product).Amount;
+                    newRow["PRICE"] = ((ITrade)product).Price.ToString();
+                    newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
+                    newRow["VALIDDATE"] = (DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue)) ? ((IProductPurchase)product).ValidDate : string.Empty;
+                    newRow["BATCHNUMBER"] = ((IProductPurchase)product).BatchNumber;
+                    newRow["FREEQTY"] = ((IProductPurchase)product).FreeAmount;
+                    newRow["INVOICE"] = ((IProductPurchase)product).Invoice;
+                    newRow["TOTAL"] = ((ITrade)product).TotalPrice.ToString();
 
-                details.Rows.Add(newRow);
+                    details.Rows.Add(newRow);
+                }
+            }
+            else if (storeOrder.Category.CategoryName.Equals("退貨"))
+            {
+                foreach (var product in storeOrder.Products)
+                {
+                    var newRow = details.NewRow();
+
+                    newRow["PRO_ID"] = product.Id;
+                    newRow["ORDERQTY"] = 0;
+                    newRow["QTY"] = ((ITrade)product).Amount;
+                    newRow["PRICE"] = ((ITrade)product).Price.ToString();
+                    newRow["DESCRIPTION"] = ((IProductReturn)product).Note;
+                    newRow["VALIDDATE"] = "";
+                    newRow["BATCHNUMBER"] = ((IProductReturn)product).BatchNumber;
+                    newRow["FREEQTY"] = 0;
+                    newRow["INVOICE"] = "";
+                    newRow["TOTAL"] = ((ITrade)product).TotalPrice.ToString();
+
+                    details.Rows.Add(newRow);
+                }
             }
 
             parameters.Add(new SqlParameter("DETAILS", details));

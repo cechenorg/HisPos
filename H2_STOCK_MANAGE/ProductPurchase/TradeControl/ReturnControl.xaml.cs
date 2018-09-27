@@ -168,6 +168,42 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData = null;
             CurrentDataGrid.ItemsSource = null;
         }
+
+        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is IDeletable)
+            {
+                if (StoreOrderData.Products.Contains(selectedItem))
+                {
+                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+                }
+
+                CurrentDataGrid.SelectedItem = selectedItem;
+                return;
+            }
+
+            CurrentDataGrid.SelectedIndex = StoreOrderData.Products.Count;
+        }
+
+        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var leaveItem = (sender as DataGridRow).Item;
+
+            if (leaveItem is IDeletable)
+            {
+                (leaveItem as IDeletable).Source = string.Empty;
+            }
+        }
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            StoreOrderData.Products.Remove((Product)CurrentDataGrid.SelectedItem);
+            StoreOrderData.CalculateTotalPrice();
+
+            StoreOrderData.IsDataChanged = true;
+
+        }
         #endregion
 
         private void NewProduct(object sender, RoutedEventArgs e)
@@ -201,9 +237,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                         ((IProductReturn)newProduct).BatchNumber = batch.BatchNumber;
                         ((IProductReturn)newProduct).BatchLimit = batch.Amount;
-                        ((IProductReturn)newProduct).ReturnAmount = batch.SelectedAmount;
+                        ((ITrade)newProduct).Amount = batch.SelectedAmount;
 
                         StoreOrderData.Products.Add(newProduct);
+
+                        StoreOrderData.IsDataChanged = true;
                     }
 
                 }
@@ -220,6 +258,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     ((IProductReturn)newProduct).BatchLimit = batchNumOverviews[0].Amount;
 
                     StoreOrderData.Products.Add(newProduct);
+
+                    StoreOrderData.IsDataChanged = true;
                 }
             }
         }
@@ -236,5 +276,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
             declareDataDetailOverview.Show();
         }
+        
     }
 }
