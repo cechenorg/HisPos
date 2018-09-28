@@ -160,7 +160,7 @@ namespace His_Pos.Class.StoreOrder
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DEC_ID", declareId));
             parameters.Add(new SqlParameter("ORD_EMP_ID", MainWindow.CurrentUser.Id));
-            parameters.Add(new SqlParameter("WAREHOUSE_ID", '0'));
+            parameters.Add(new SqlParameter("WAREHOUSE_ID", '1'));
 
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
@@ -355,9 +355,8 @@ namespace His_Pos.Class.StoreOrder
             string empty = string.Empty;
             StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
             //第一行
-            Dtl_data.Append(CurrentDecMasId.PadRight(8,' ')); //藥局病例號
-            Dtl_data.Append(declareData.Prescription.Customer.Name.PadRight(20,' ')); //病患姓名
-            Dtl_data.Append(empty.PadRight(NewFunction.HowManyChinese(declareData.Prescription.Customer.Name), ' ')); //空白
+            Dtl_data.Append(CurrentDecMasId.PadLeft(8,'0')); //藥局病例號
+            Dtl_data.Append(declareData.Prescription.Customer.Name.PadRight(20 - NewFunction.HowManyChinese(declareData.Prescription.Customer.Name), ' ')); //病患姓名 
             Dtl_data.Append(declareData.Prescription.Customer.IcCard.IcNumber.PadRight(10, ' ')); //身分證字號
             Dtl_data.Append(declareData.Prescription.Customer.Birthday.Replace("/","").PadRight(7, ' ')); //出生年月日
             string gender = declareData.Prescription.Customer.IcCard.IcNumber.Substring(1, 1) == "1" ? "1" : "2";
@@ -369,8 +368,7 @@ namespace His_Pos.Class.StoreOrder
             Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber.PadRight(10, ' ')); //診治醫師代號 (同院所代號)
             Dtl_data.Append(empty.PadRight(20, ' ')); //空
             Dtl_data.Append(MainWindow.CurrentUser.Id.PadRight(10, ' ')); //藥師代號
-            Dtl_data.Append(MainWindow.CurrentUser.Name.PadRight(20, ' ')); //藥師姓名
-            Dtl_data.Append(empty.PadRight(NewFunction.HowManyChinese(MainWindow.CurrentUser.Name), ' ')); //空白
+            Dtl_data.Append(MainWindow.CurrentUser.Name.PadRight(20- NewFunction.HowManyChinese(MainWindow.CurrentUser.Name), ' ')); //藥師姓名 
             Dtl_data.AppendLine();
             //第三行
             Dtl_data.Append(declareData.Prescription.Treatment.TreatDateStr.Replace("/","").PadRight(7, ' ')); //處方日(就診日期)
@@ -403,12 +401,13 @@ namespace His_Pos.Class.StoreOrder
             Dtl_data.Append(declareTrade.CopayMent.PadRight(4, ' ')); //部分負擔
             Dtl_data.AppendLine();
             //第四行
+            int i = 1;
             foreach (DeclareMedicine declareMedicine in declareData.Prescription.Medicines)
             {
-                Dtl_data.Append(declareMedicine.Id.PadRight(13, ' ')); //健保碼
-                Dtl_data.Append(declareMedicine.MedicalCategory.Dosage.PadRight(7, ' ')); //每次使用數量
-                Dtl_data.Append(declareMedicine.Usage.Name.PadRight(9, ' ')); //使用頻率
-                Dtl_data.Append(declareMedicine.Days.PadRight(10, ' ')); //使用天數
+                Dtl_data.Append(declareMedicine.Id.PadRight(12, ' ')); //健保碼
+                Dtl_data.Append(declareMedicine.MedicalCategory.Dosage.PadLeft(8, ' ')); //每次使用數量
+                Dtl_data.Append(declareMedicine.Usage.Name.PadRight(16, ' ')); //使用頻率
+                Dtl_data.Append(declareMedicine.Days.PadRight(3, ' ')); //使用天數
                 Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
                 Dtl_data.Append(declareMedicine.Position.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
                 Dtl_data.Append(declareMedicine.PaySelf == true && declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
@@ -422,7 +421,9 @@ namespace His_Pos.Class.StoreOrder
                     }
                 }
                 Dtl_data.Append(amount.PadRight(8, ' ')); //訂購量
-                Dtl_data.AppendLine();
+                if(i != declareData.Prescription.Medicines.Count)
+                    Dtl_data.AppendLine();
+                i++;
             }
             
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);

@@ -24,7 +24,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
     /// </summary>
     public partial class ChronicSendToServerWindow : Window , INotifyPropertyChanged {
 
-        public class PrescriptionSendData {
+        public class PrescriptionSendData:INotifyPropertyChanged {
             public PrescriptionSendData(DeclareMedicine declareMedicine) {
                 MedId = declareMedicine.Id;
                 MedName = declareMedicine.Name;
