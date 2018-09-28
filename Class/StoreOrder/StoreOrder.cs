@@ -224,7 +224,9 @@ namespace His_Pos.Class.StoreOrder
                 else if (type == OrderType.UNPROCESSING && Category.CategoryName.Equals("退貨"))
                 {
                     if (((ITrade)product).Amount == 0)
-                        message += "商品 " + product.Id + " 預定量不能為0\n";
+                        message += "商品 " + product.Id + " 退貨量不能為0\n";
+                    else if (((ITrade)product).Amount > ((IProductReturn)product).BatchLimit)
+                        message += "商品 " + product.Id + " 退貨量不能高於庫存量\n";
                 }
             }
             return message;

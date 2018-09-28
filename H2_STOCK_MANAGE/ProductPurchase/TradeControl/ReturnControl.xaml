@@ -173,7 +173,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <DataGrid Name="GStoreOrderDetail" Grid.Row="4" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding Products}" FrozenColumnCount="3">
+                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" ItemsSource="{Binding Products}" FrozenColumnCount="3" CanUserAddRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
