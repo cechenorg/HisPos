@@ -282,9 +282,6 @@ namespace His_Pos.Class.Product
             FreeAmount = ((IProductPurchase)product).FreeAmount;
             ValidDate = ((IProductPurchase)product).ValidDate;
             BatchNumber = ((IProductPurchase)product).BatchNumber;
-            Status = ((IProductPurchase)product).Status;
-            LastPrice = ((IProductPurchase)product).LastPrice;
-            Stock = ((IProductPurchase)product).Stock;
             IsFirstBatch = true;
         }
     }

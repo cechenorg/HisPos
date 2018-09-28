@@ -209,6 +209,8 @@ namespace His_Pos
 
             backgroundWorker.DoWork += (s, o) =>
             {
+                StoreOrderDb.GetNewStoreOrderBySingde();
+
                 ChangeLoadingMessage("取得廠商資料...");
                 ObservableCollection<Manufactory> tempManufactories = ManufactoryDb.GetManufactoryData();
 

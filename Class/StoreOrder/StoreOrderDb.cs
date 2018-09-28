@@ -129,23 +129,47 @@ namespace His_Pos.Class.StoreOrder
             details.Columns.Add("FREEQTY", typeof(int));
             details.Columns.Add("INVOICE", typeof(string));
             details.Columns.Add("TOTAL", typeof(string));
-            DateTime datetimevalue;
-            foreach (var product in storeOrder.Products)
+
+            if(storeOrder.Category.CategoryName.Equals("進貨"))
             {
-                var newRow = details.NewRow();
+                DateTime datetimevalue;
+                foreach (var product in storeOrder.Products)
+                {
+                    var newRow = details.NewRow();
 
-                newRow["PRO_ID"] = product.Id;
-                newRow["ORDERQTY"] = ((IProductPurchase)product).OrderAmount;
-                newRow["QTY"] = ((ITrade)product).Amount;
-                newRow["PRICE"] = ((ITrade) product).Price.ToString();
-                newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
-                newRow["VALIDDATE"] = ( DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue) ) ? ((IProductPurchase)product).ValidDate:string.Empty ;
-                newRow["BATCHNUMBER"] = ((IProductPurchase) product).BatchNumber;
-                newRow["FREEQTY"] = ((IProductPurchase)product).FreeAmount;
-                newRow["INVOICE"] = ((IProductPurchase)product).Invoice;
-                newRow["TOTAL"] = ((ITrade)product).TotalPrice.ToString();
+                    newRow["PRO_ID"] = product.Id;
+                    newRow["ORDERQTY"] = ((IProductPurchase)product).OrderAmount;
+                    newRow["QTY"] = ((ITrade)product).Amount;
+                    newRow["PRICE"] = ((ITrade)product).Price.ToString();
+                    newRow["DESCRIPTION"] = ((IProductPurchase)product).Note;
+                    newRow["VALIDDATE"] = (DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue)) ? ((IProductPurchase)product).ValidDate : string.Empty;
+                    newRow["BATCHNUMBER"] = ((IProductPurchase)product).BatchNumber;
+                    newRow["FREEQTY"] = ((IProductPurchase)product).FreeAmount;
+                    newRow["INVOICE"] = ((IProductPurchase)product).Invoice;
+                    newRow["TOTAL"] = ((ITrade)product).TotalPrice.ToString();
 
-                details.Rows.Add(newRow);
+                    details.Rows.Add(newRow);
+                }
+            }
+            else if (storeOrder.Category.CategoryName.Equals("退貨"))
+            {
+                foreach (var product in storeOrder.Products)
+                {
+                    var newRow = details.NewRow();
+
+                    newRow["PRO_ID"] = product.Id;
+                    newRow["ORDERQTY"] = 0;
+                    newRow["QTY"] = ((ITrade)product).Amount;
+                    newRow["PRICE"] = ((ITrade)product).Price.ToString();
+                    newRow["DESCRIPTION"] = ((IProductReturn)product).Note;
+                    newRow["VALIDDATE"] = "";
+                    newRow["BATCHNUMBER"] = ((IProductReturn)product).BatchNumber;
+                    newRow["FREEQTY"] = 0;
+                    newRow["INVOICE"] = "";
+                    newRow["TOTAL"] = ((ITrade)product).TotalPrice.ToString();
+
+                    details.Rows.Add(newRow);
+                }
             }
 
             parameters.Add(new SqlParameter("DETAILS", details));
@@ -173,7 +197,7 @@ namespace His_Pos.Class.StoreOrder
             details.Columns.Add("FREEQTY", typeof(int));
             details.Columns.Add("INVOICE", typeof(string));
             details.Columns.Add("TOTAL", typeof(string));
-            DateTime datetimevalue;
+
             foreach (var product in declareMedicines)
             {
                 var newRow = details.NewRow();
@@ -199,11 +223,79 @@ namespace His_Pos.Class.StoreOrder
             return table.Rows[0]["ID"].ToString();
         }
 
-        
+        internal static void GetNewStoreOrderBySingde()
+        {
+            var sindgdeConnection = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var localConnection = new DbConnection(Settings.Default.SQL_global);
+
+            DataTable dataTable = sindgdeConnection.MySqlQueryBySqlString("call GetNewStoreOrderBySingde('9999999999')");
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                var parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("ORDER_ID", row["sht_no"].ToString()));
+                parameters.Add(new SqlParameter("NOTE", row["sht_memo"].ToString()));
+                parameters.Add(new SqlParameter("ORDER_DATE", row["upload_date"]));
+                
+                string[] drugs = row["drug_list"].ToString().Split(new [] { "\r\n" }, StringSplitOptions.None);
+
+                DataTable details = new DataTable();
+                details.Columns.Add("PRO_ID", typeof(string));
+                details.Columns.Add("ORDERQTY", typeof(int));
+                details.Columns.Add("QTY", typeof(int));
+                details.Columns.Add("PRICE", typeof(string));
+                details.Columns.Add("DESCRIPTION", typeof(string));
+                details.Columns.Add("VALIDDATE", typeof(string));
+                details.Columns.Add("BATCHNUMBER", typeof(string));
+                details.Columns.Add("FREEQTY", typeof(int));
+                details.Columns.Add("INVOICE", typeof(string));
+                details.Columns.Add("TOTAL", typeof(string));
+
+                foreach (var drug in drugs)
+                {
+                    var newRow = details.NewRow();
+
+                    newRow["PRO_ID"] = drug.Substring(0,12).Trim();
+                    newRow["ORDERQTY"] = Double.Parse(drug.Substring(12, 10).Trim());
+                    newRow["QTY"] = 0;
+                    newRow["PRICE"] = "0";
+                    newRow["DESCRIPTION"] = (drug.Length >= 22)? drug.Substring(22).Trim() : "";
+                    newRow["VALIDDATE"] = "";
+                    newRow["BATCHNUMBER"] = "";
+                    newRow["FREEQTY"] = 0;
+                    newRow["INVOICE"] = "";
+                    newRow["TOTAL"] = "0";
+
+                    details.Rows.Add(newRow);
+                }
+
+                parameters.Add(new SqlParameter("DETAILS", details));
+
+                var table = localConnection.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[InsertNewStoreOrderFromSingde]", parameters);
+
+                if (table.Rows[0]["RESULT"].ToString().Equals("SUCCESS"))
+                {
+                    sindgdeConnection.MySqlQueryBySqlString($"call UpdateStoreOrderSyncFlag('{row["sht_no"].ToString()}')");
+                }
+            }
+        }
 
         internal static Collection<ReturnControl.BatchNumOverview> GetBatchNumOverview(string proId, string wareId)
         {
-            Collection<ReturnControl.BatchNumOverview> collection = new BindingList<ReturnControl.BatchNumOverview>();
+            Collection<ReturnControl.BatchNumOverview> collection = new Collection<ReturnControl.BatchNumOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("WARE_ID", wareId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetBatchNumOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new ReturnControl.BatchNumOverview(row));
+            }
 
             return collection;
         }
@@ -214,7 +306,9 @@ namespace His_Pos.Class.StoreOrder
 
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
-            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId.Substring(2, 10)}')");
+            string id = (orderId.Length > 10) ? orderId.Substring(2, 10) : orderId;
+
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{id}')");
             
             foreach (DataRow row in dataTable.Rows)
             {
@@ -323,7 +417,10 @@ namespace His_Pos.Class.StoreOrder
         {
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
-            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{orderId.Substring(2, 10)}')");
+            string id = (orderId.Length > 10) ? orderId.Substring(2, 10) : orderId;
+
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{id}')");
+
 
             switch (dataTable.Rows[0]["FLAG"].ToString())
             {
@@ -437,6 +534,9 @@ namespace His_Pos.Class.StoreOrder
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetDeclareOrderStatus('{orderId}')");
+
+            if (dataTable.Rows.Count == 0)
+                return OrderType.ERROR;
 
             switch (dataTable.Rows[0]["FLAG"].ToString())
             {

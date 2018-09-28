@@ -320,6 +320,15 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             StoreOrderData.IsDataChanged = true;
         }
+
+        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            StoreOrderData.Products.Remove((Product)CurrentDataGrid.SelectedItem);
+            StoreOrderData.CalculateTotalPrice();
+
+            StoreOrderData.IsDataChanged = true;
+
+        }
         #endregion
 
         #region ----- P StoreOrderDetail Functions -----
@@ -338,15 +347,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData.IsDataChanged = true;
         }
 
-        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            StoreOrderData.Products.Remove((Product)CurrentDataGrid.SelectedItem);
-            StoreOrderData.CalculateTotalPrice();
-            
-            StoreOrderData.IsDataChanged = true;
-            
-        }
-
         private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (sender is null) return;
@@ -355,7 +355,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (e.Key == Key.Enter)
             {
-                NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, textBox.Text, StoreOrderData.Warehouse.Id);
+                NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.PURCHASE, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id, textBox.Text);
 
                 if (newItemDialog.ConfirmButtonClicked)
                 {
@@ -364,7 +364,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void Id_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is null) return;
 
@@ -492,7 +492,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void NewProduct(object sender, RoutedEventArgs e)
         {
-            NewItemDialog newItemDialog = new NewItemDialog(ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
+            NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.PURCHASE, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id);
 
             newItemDialog.ShowDialog();
 

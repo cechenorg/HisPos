@@ -106,7 +106,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox x:Name="Id" Text="{Binding Id, Mode=OneTime, UpdateSourceTrigger=PropertyChanged}" InputMethod.IsInputMethodEnabled="False" Width="110" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"
-                                     HorizontalContentAlignment="Center" PreviewKeyDown="Id_PreviewKeyDown" GotFocus="TextBox_GotFocus" LostFocus="Id_LostFocus" PreviewMouseLeftButtonDown="Id_MouseLeftButtonUp"/>
+                                     HorizontalContentAlignment="Center" PreviewKeyDown="Id_PreviewKeyDown" GotFocus="Id_GotFocus" LostFocus="Id_LostFocus" PreviewMouseLeftButtonDown="Id_MouseLeftButtonUp"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

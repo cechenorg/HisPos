@@ -398,7 +398,8 @@ namespace His_Pos.ProductPurchase
 
             SaveOrder();
 
-            UpdateOneTheWayAmount();
+            if(StoreOrderData.Category.CategoryName.Equals("進貨"))
+                UpdateOneTheWayAmount();
 
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = StoreOrderData;
