@@ -38,8 +38,8 @@
             TreatmentFee = f.ByteArrayToString(8, pBuffer, startIndex + 31);
             TreatmentCopaymentFee = f.ByteArrayToString(8, pBuffer, startIndex + 39);
             HospitalizationFee = f.ByteArrayToString(8, pBuffer, startIndex + 47);
-            HospitalCopayFeeUnderDaysLimit = f.ByteArrayToString(8, pBuffer, startIndex + 55);
-            HospitalCopayFeeOverDaysLimit = f.ByteArrayToString(8, pBuffer, startIndex + 63);
+            HospitalCopayFeeUnderDaysLimit = f.ByteArrayToString(7, pBuffer, startIndex + 55);
+            HospitalCopayFeeOverDaysLimit = f.ByteArrayToString(7, pBuffer, startIndex + 62);
         }
     }
 }

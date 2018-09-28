@@ -100,7 +100,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
 
         //V
         [XmlElement(ElementName = "A19")]
-        public string MakeUpMark { get; set; }//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
+        public string MakeUpMark { get; set; } = "1";//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
         //*
         [XmlElement(ElementName = "A18")]
@@ -187,12 +187,12 @@ namespace His_Pos.Class.Declare.IcDataUpload
         [XmlElement(ElementName = "A79")]
         public string PrescriptionSignature { get; set; }//醫療專區 1-2-8處方簽章
 
-        //V
+        //*
         [XmlElement(ElementName = "A80")]
         public string AllergyMedicineUploadMark { get; set; }//醫療專區 過敏藥物上傳註記
 
 
-        //1,3 V 2,4 ~
+        //*
         [XmlElement(ElementName = "A81")]
         public string AllergyMedicine { get; set; }//過敏藥物
     }
