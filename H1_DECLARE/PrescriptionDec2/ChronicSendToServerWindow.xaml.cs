@@ -99,7 +99,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             Close();
         }
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-           // CurrentPrescription.Medicines.RemoveAt(PrescriptionMedicines.SelectedIndex);
+            Prescription.RemoveAt(MedicinesList.SelectedIndex);
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
