@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -25,7 +26,9 @@ using His_Pos.RDLC;
 using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Struct.IcData;
 
@@ -291,7 +294,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (isIcCardGet)
                 {
                     LogInIcData();
-                    CreatIcUploadData();
                 }
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.ShowDialog();
@@ -310,39 +312,34 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void LogInIcData()
+        public void LogInIcData()
         {
             var cs = new ConvertData();
-            
             var icPrescripList = new List<IcPrescriptData>();
             foreach (var med in CurrentPrescription.Medicines)
             {
                 icPrescripList.Add(new IcPrescriptData(med));
             }
-            var icPrescripDataWrite = string.Empty;
-            foreach (var icPrescript in icPrescripList)
-            {
-                icPrescripDataWrite += icPrescript.DataStr;
-            }
-            var pData = cs.StringToBytes(icPrescripDataWrite, 3660);
-            var pDateTime = cs.StringToBytes(seq.TreatDateTime + "\0", 14);
-            var pDataInput = pDateTime.Concat(pData).ToArray();
             var pPatientId = new byte[10];
             var pPatientBitrhDay = new byte[10];
             var strLength = 72;
-             var icData = new byte[72];
-            HisApiBase.hisGetBasicData(icData, ref strLength);
-            Array.Copy(icData, 32, pPatientId, 0, 10);
-            Array.Copy(icData, 42, pPatientBitrhDay, 0, 7);
-            var iWriteCount = icPrescripList.Count;
-            strLength = 40 * iWriteCount;
-            icData = new byte[strLength];
-            HisApiBase.hisWriteMultiPrescriptSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput, ref iWriteCount, icData, ref strLength);
-            var startIndex = 0;
-            for (var i = 0; i < iWriteCount; i++)
+            var icData = new byte[72];
+            var res = HisApiBase.hisGetBasicData(icData, ref strLength);
+            if (res == 0)
             {
-                _prescriptionSignatureList.Add(cs.ByToString(icData, startIndex, 40));
-                startIndex += 40;
+                Array.Copy(icData, 32, pPatientId, 0, 10);
+                Array.Copy(icData, 42, pPatientBitrhDay, 0, 7);
+                var pDateTime = cs.StringToBytes(seq.TreatDateTime + " ", 14);
+                foreach (var icPrescript in icPrescripList)
+                {
+                    var pData = cs.StringToBytes(icPrescript.DataStr, 61);
+                    var pDataInput = pDateTime.Concat(pData).ToArray();
+                    strLength = 40;
+                    icData = new byte[40];
+                    res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput, icData, ref strLength);
+                    _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                }
+                CreatIcUploadData();
             }
         }
 
@@ -409,11 +406,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 medicalDatas.Add(medicalData);
             }
             icRecord.MainMessage.MedicalMessageList = medicalDatas;
-            //serialize
-            XmlSerializer writer = new XmlSerializer(icRecord.GetType());
-            StreamWriter file = new StreamWriter("data.xml");
-            writer.Serialize(file, icRecord);
-            file.Close();
+            icRecord.SerializeObject();
         }
 
         private void PrintMedBag()
@@ -729,14 +722,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            LoadPatentDataFromIcCard();
+            LoadingWindow loading = new LoadingWindow();
+            loading.Show();
+            loading.LoadIcData(Instance);
             if (ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) {
                 ChronicSelectWindow chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
                 chronicSelectWindow.ShowDialog();
             }
         }
 
-        private void LoadPatentDataFromIcCard()
+        public void LoadPatentDataFromIcCard()
         {
             var strLength = 72;
             var icData = new byte[72];
@@ -799,12 +794,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 CurrentPrescription.Customer.Id = "1";
             }
 
-            CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
-            CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
-            CusHistoryMaster.SelectedIndex = 0;
-            if (string.IsNullOrEmpty(CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                !string.IsNullOrEmpty(MedicalNumber.Text))
-                CurrentPrescription.Customer.IcCard.MedicalNumber = MedicalNumber.Text;
+            //CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
+            //CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
+            //CusHistoryMaster.SelectedIndex = 0;
+            //if (string.IsNullOrEmpty(CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+            //    !string.IsNullOrEmpty(MedicalNumber.Text))
+            //    CurrentPrescription.Customer.IcCard.MedicalNumber = MedicalNumber.Text;
         }
 
         private void CheckPatientGender()

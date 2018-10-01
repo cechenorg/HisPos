@@ -22,7 +22,9 @@ namespace His_Pos.Class.Declare.IcDataUpload
     [XmlRoot(ElementName = "REC")]
     public class IcRecord
     {
+        [XmlElement(ElementName = "MSH")]
         public Header HeaderMessage { get; set; }
+        [XmlElement(ElementName = "MB")]
         public MainMessage MainMessage { get; set; }
     }
 
@@ -152,7 +154,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
     public class MedicalData
     {
         //V 
-        [XmlElement(ElementName = " A71")]
+        [XmlElement(ElementName = "A71")]
         public string MedicalOrderTreatDateTime { get; set; }//醫療專區 1-1.醫令就診日期時間
 
         //V 

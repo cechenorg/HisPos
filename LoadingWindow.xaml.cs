@@ -35,6 +35,7 @@ using His_Pos.PrescriptionInquire;
 using System.Xml;
 using His_Pos.Class.Declare;
 using System.Threading;
+using His_Pos.Class.CustomerHistory;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE;
 using His_Pos.H6_DECLAREFILE.Export;
@@ -687,6 +688,35 @@ namespace His_Pos
                     medBagManageView.MedBagManageViewBox.IsEnabled = true;
                     var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
                     m.Show();
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        public void LoadIcData(PrescriptionDec2View prescriptionDec2View)
+        {
+            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("卡片資料讀取中...");
+                prescriptionDec2View.LoadPatentDataFromIcCard();
+                prescriptionDec2View.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    prescriptionDec2View.CusHistoryMaster.ItemsSource = prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
+                    prescriptionDec2View.CusHistoryMaster.SelectedIndex = 0;
+                    if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                        !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                        prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
+                }));
+                
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
                     Close();
                 }));
             };

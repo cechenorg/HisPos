@@ -49,6 +49,7 @@ namespace His_Pos.Service
                     document.Descendants()
                         .Where(e => e.IsEmpty || string.IsNullOrWhiteSpace(e.Value))
                         .Remove();
+                    document.Root?.RemoveAttributes();
                     return document.ToString();
                 }
             }
