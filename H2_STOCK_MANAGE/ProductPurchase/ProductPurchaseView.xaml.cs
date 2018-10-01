@@ -398,8 +398,16 @@ namespace His_Pos.ProductPurchase
 
             SaveOrder();
 
-            if(StoreOrderData.Category.CategoryName.Equals("進貨"))
-                UpdateOneTheWayAmount();
+            if (StoreOrderData.Category.CategoryName.Equals("進貨"))
+            {
+                if (StoreOrderData.Products.Count > 100)
+                {
+                    InitData();
+                    return;
+                }
+                else
+                    UpdateOneTheWayAmount();
+            }
 
             storeOrderCollection.Move(oldIndex, newIndex);
             StoOrderOverview.SelectedItem = StoreOrderData;
