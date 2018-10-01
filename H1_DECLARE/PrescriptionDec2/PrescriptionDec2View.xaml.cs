@@ -36,6 +36,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
         public bool IsSend = false;
+        public static string IndexViewDecMasId = string.Empty;
         public ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>  PrescriptionSendData = new ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>();
         public string CurrentDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
@@ -145,11 +146,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public PrescriptionDec2View()
         {
-            InitializeComponent();
+            InitializeComponent(); 
             DataContext = this;
             Instance = this;
             SetDefaultFieldsValue();
             GetPrescriptionData();
+            if (!String.IsNullOrEmpty(IndexViewDecMasId)) {
+                SetValueByDecMasId(IndexViewDecMasId);
+                IndexViewDecMasId = string.Empty;
+            }
+
         }
 
         private void SetDefaultFieldsValue()
@@ -218,12 +224,30 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 var declareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
-                DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+                string medEntryName = string.Empty;
+                switch (CurrentPrescription.Treatment.MedicalInfo.Hospital.Id) {
+                    case "3532016964": //瀚群骨科
+                        medEntryName = "骨科調劑藥費";
+                        break;
+                    default:
+                        medEntryName = "調劑藥費";
+                        break;
+                }  
+                   
+            DeclareTrade declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
                 string decMasId;
                 if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(CurrentDecMasId) && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                 {  //一般處方
                     decMasId = declareDb.InsertDeclareData(declareData);
+
+                    ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", decMasId);
+                    ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", decMasId); 
+                        foreach (DeclareMedicine med in declareData.Prescription.Medicines) {
+                        ProductDb.InsertEntry(medEntryName, "-" + ProductDb.GetBucklePrice(med.Id,med.Amount), "PRO_ID", med.Id);
+                    }
+                    
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
+                    
                 }
                 else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(CurrentDecMasId))
                 { //第2次以後的慢性處方
@@ -239,8 +263,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         //送到singde
                         StoreOrderDb.SendDeclareOrderToSingde(CurrentDecMasId, storId,declareData, declareTrade, PrescriptionSendData);
                     }
-                    if (!(bool)IsSendToServer.IsChecked && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                    if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) {
+                        ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", CurrentDecMasId);
+                        ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", CurrentDecMasId);
+                        foreach (DeclareMedicine med in declareData.Prescription.Medicines)
+                        {
+                            ProductDb.InsertEntry(medEntryName, "-" +  ProductDb.GetBucklePrice(med.Id, med.Amount), "PRO_ID", med.Id);
+                        }
                         declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
+                    }
+                        
 
                     declareData.DecMasId = CurrentDecMasId;
                     declareDb.UpdateDeclareData(declareData); //更新慢箋
@@ -266,8 +298,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         StoreOrderDb.SendDeclareOrderToSingde(decMasId, storId, declareData, declareTrade, PrescriptionSendData);
                     }
 
-                    if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
-                        declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫                     
+                    if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) {
+                        ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", CurrentDecMasId);
+                        ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", CurrentDecMasId);
+                        foreach (DeclareMedicine med in declareData.Prescription.Medicines)
+                        {
+                            ProductDb.InsertEntry(medEntryName, "-" + ProductDb.GetBucklePrice(med.Id, med.Amount), "PRO_ID", med.Id);
+                        }
+                        declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫    
+                    }
+                                        
 
                     int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
                     int end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
@@ -744,7 +784,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void ReleaseHospital_Populating(object sender, PopulatingEventArgs e) { 
+        private void ReleaseHospital_Populating(object sender, PopulatingEventArgs e) {
+            if (HosiHospitals is null) HosiHospitals = HospitalDb.GetData(); 
             var tempCollection = new ObservableCollection<Hospital>(HosiHospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList());
             ReleaseHospital.ItemsSource = tempCollection;
             ReleaseHospital.PopulateComplete();
@@ -779,6 +820,24 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 IsSendToServer.IsChecked = (((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) ? true : false;
             } 
         }
-       
+        public void SetValueByDecMasId(string decMasId) {
+            CurrentDecMasId = decMasId;
+
+            Prescription prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
+            CurrentPrescription = prescription;
+            DivisionCombo.Text = prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
+            AdjustCaseCombo.Text = prescription.Treatment.AdjustCase.FullName;
+            TreatmentCaseCombo.Text = prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+            PaymentCategoryCombo.Text = prescription.Treatment.PaymentCategory.FullName;
+            CopaymentCombo.Text = prescription.Treatment.Copayment.FullName;
+            SpecialCode.Text = prescription.Treatment.MedicalInfo.SpecialCode.Id;
+            ReleaseHospital.Text = prescription.Treatment.MedicalInfo.Hospital.Id;
+
+            DatePickerPrecription.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.TreatmentDate);
+            DatePickerTreatment.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.AdjustDate); 
+            CurrentPrescription.Medicines = MedicineDb.GetDeclareMedicineByMasId(decMasId);
+            PrescriptionMedicines.ItemsSource = PrescriptionDec2View.Instance.CurrentPrescription.Medicines;
+
+        }
     }
 }

@@ -546,7 +546,7 @@ namespace His_Pos.Class.StoreOrder
             }
         }
 
-        internal static void AddDailyOrder(StoreOrderCategory storeOrderCategory, ObservableCollection<IndexView.IndexView.ProductPurchaseList> declareMedicines)
+        internal static void AddDailyOrder(StoreOrderCategory storeOrderCategory, List<IndexView.IndexView.ProductPurchaseList> declareMedicines)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
 
@@ -571,7 +571,7 @@ namespace His_Pos.Class.StoreOrder
                 var newRow = details.NewRow();
 
                 newRow["PRO_ID"] = product.proId;
-                newRow["ORDERQTY"] = Int32.Parse(product.PurchaseAmount);
+                newRow["ORDERQTY"] = Int32.Parse((storeOrderCategory == StoreOrderCategory.PURCHASE) ? product.PurchaseAmount : product.ReturnAmount);
                 newRow["QTY"] = 0;
                 newRow["PRICE"] = "0";
                 newRow["DESCRIPTION"] = "";
@@ -586,7 +586,7 @@ namespace His_Pos.Class.StoreOrder
 
             parameters.Add(new SqlParameter("DETAILS", details));
 
-            dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddDeclareOrder]", parameters);
+            dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[InsertNewStoreOrderFromDaily]", parameters);
         }
     }
 }

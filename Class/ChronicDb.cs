@@ -56,8 +56,7 @@ namespace His_Pos.Class
         }
         internal static ObservableCollection<IndexView.IndexView.DailyTakeChronicList> DailyTakeChronic() {
             var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>(); 
-            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyTakeChronic]", parameters);
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyTakeChronic]");
             ObservableCollection<IndexView.IndexView.DailyTakeChronicList> collection = new ObservableCollection<IndexView.IndexView.DailyTakeChronicList>();
             foreach(DataRow row in dataTable.Rows)
             {
@@ -65,5 +64,10 @@ namespace His_Pos.Class
             }
             return collection;
         }
+        internal static void UpdateDailyChronic() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+             dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateDailyChronic]");
+        }
+        
     }
 }

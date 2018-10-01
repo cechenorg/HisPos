@@ -23,7 +23,10 @@
                         <RowDefinition Height="50"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Name="Date" Grid.Row="0" Grid.Column="0" Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="20,0,0,0">
+                        <Label Name="Date"  Foreground="DimGray" FontSize="25" FontFamily="Segoe UI Semibold"  VerticalAlignment="Center" Padding="0"/>
+                    </StackPanel>
+                 
                     <DataGrid Name="Alert"   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
                         <DataGrid.Resources>
@@ -127,7 +130,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="80" MaxWidth="100" Header="醫院/科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.Inventory, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Width="180" Header="醫院/科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.Inventory, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -150,9 +153,11 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
                         <RowDefinition/>
+                        <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <Label   Grid.Row="0" Name="EveryDayStock"  Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
-                    <DataGrid Name="StoreProductList"   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                    <Label  Content="每日進退貨" Grid.Row="0" Name="EveryDayStock"  Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
+                    
+                        <DataGrid Name="StoreProductList"   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" ItemsSource="{Binding ProductListCollection,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
@@ -237,6 +242,12 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="20,0,0,0">
+                        <Rectangle Width="480"/>
+                        <Button   Width="100" Content="轉進退貨單" Grid.Row="2" Click="TransferToStoord_Click"/>
+                    </StackPanel>
+                   
                 </Grid>
               
             </Grid>
@@ -280,6 +291,7 @@
                                         <Setter Property="Background" Value="{StaticResource GridSelected}"/>
                                     </Trigger>
                                 </Style.Triggers>
+                                <EventSetter Event="MouseDoubleClick" Handler="ShowPrescription_MouseDoubleClick"/>
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="FontSize" Value="14"/>
                                 <Setter Property="Height" Value="40"/>
@@ -311,7 +323,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="200" Header="科別/醫院" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivInsName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Width="260" Header="科別/醫院" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivInsName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />

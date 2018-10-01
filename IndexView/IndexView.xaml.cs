@@ -1,5 +1,7 @@
 ﻿using His_Pos.Class;
 using His_Pos.Class.Product;
+using His_Pos.Class.StoreOrder;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,12 +32,13 @@ namespace His_Pos.IndexView
         }
         public class DailyTakeChronicList {
             public DailyTakeChronicList(DataRow row) {
+                DecMasId = row["HISDECMAS_ID"].ToString();
                 TakeDays = row["DAYS"].ToString();
                 CusName = row["CUS_NAME"].ToString();
                 CusTel = row["CUS_TEL"].ToString();
                 DivInsName = row["DIVINS_NAME"].ToString();
             }
-
+            public string DecMasId { get; set; }
             public string TakeDays{ get; set; }
             public string CusName { get; set; }
             public string CusTel { get; set; }
@@ -92,8 +95,26 @@ namespace His_Pos.IndexView
             ProductListCollection = ProductDb.DailyPurchaseReturn();
             DailyTakeChronicListCollection = ChronicDb.DailyTakeChronic();
         }
-        public void UpdateUI() {
+       
 
+        private void TransferToStoord_Click(object sender, RoutedEventArgs e) {
+            if(ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList().Count != 0)
+                StoreOrderDb.AddDailyOrder(StoreOrderCategory.PURCHASE, ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList());
+            if(ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList().Count != 0)
+                StoreOrderDb.AddDailyOrder(StoreOrderCategory.RETURN, ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList());
+            ChronicDb.UpdateDailyChronic();
+            MessageWindow messageWindow = new MessageWindow("已轉出進退貨單",MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+            MainWindow.Instance.AddNewTab("處理單管理");
+            InitData();
+        }
+
+     
+
+        private void ShowPrescription_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            var selectedItem = (sender as DataGridRow).Item;
+            MainWindow.Instance.AddNewTab("處方登錄");
+            PrescriptionDec2View.IndexViewDecMasId = ((DailyTakeChronicList)selectedItem).DecMasId;
         }
     }
 }
