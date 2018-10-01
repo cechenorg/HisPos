@@ -227,7 +227,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", decMasId);
                     ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", decMasId);
                     foreach (DeclareMedicine med in declareData.Prescription.Medicines) {
-                        ProductDb.InsertEntry("調劑藥費", ProductDb.GetBucklePrice(med.Id,med.Amount), "PRO_ID", med.Id);
+                        ProductDb.InsertEntry("調劑藥費", "-" + ProductDb.GetBucklePrice(med.Id,med.Amount), "PRO_ID", med.Id);
                     }
                     
                     declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
@@ -252,7 +252,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", CurrentDecMasId);
                         foreach (DeclareMedicine med in declareData.Prescription.Medicines)
                         {
-                            ProductDb.InsertEntry("調劑藥費", ProductDb.GetBucklePrice(med.Id, med.Amount), "PRO_ID", med.Id);
+                            ProductDb.InsertEntry("調劑藥費","-" +  ProductDb.GetBucklePrice(med.Id, med.Amount), "PRO_ID", med.Id);
                         }
                         declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
                     }
@@ -287,7 +287,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", CurrentDecMasId);
                         foreach (DeclareMedicine med in declareData.Prescription.Medicines)
                         {
-                            ProductDb.InsertEntry("調劑藥費", ProductDb.GetBucklePrice(med.Id, med.Amount), "PRO_ID", med.Id);
+                            ProductDb.InsertEntry("調劑藥費", "-" + ProductDb.GetBucklePrice(med.Id, med.Amount), "PRO_ID", med.Id);
                         }
                         declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫    
                     }
