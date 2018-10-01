@@ -104,7 +104,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <TextBox Width="130" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
+                    <TextBox Name="DatePickerPrecription" Width="130" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
                              Text="{Binding CurrentPrescription.Treatment.TreatDateStr, UpdateSourceTrigger=PropertyChanged}"  />
                     <DatePicker x:Name="TreatmentDate" Width="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Focusable="False" 
                                 FontFamily="Segoe UI Semi" Foreground="Transparent" IsHitTestVisible="True" IsTodayHighlighted="False" 
@@ -114,7 +114,7 @@
                     <Label Width="auto" Content="調劑日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox  Name="DatePickerTreatment" SelectionChanged="DatePickerTreatment_SelectionChanged" Width="130" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
                              Text="{Binding CurrentPrescription.Treatment.AdjustDateStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <DatePicker Width="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semi" 
+                    <DatePicker Name="AdjustDate" Width="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semi" 
                                 Foreground="Transparent" SelectedDate="{Binding CurrentPrescription.Treatment.AdjustDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="3" Margin="8" Orientation="Horizontal">
@@ -198,10 +198,10 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="30">
+                    <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Name="DeleteDot" Width="18" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Source="{Binding Source, NotifyOnSourceUpdated=True}" />
+                                <Image Name="DeleteDot" Width="30" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Source="{Binding Source, NotifyOnSourceUpdated=True}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -219,7 +219,7 @@
                     <DataGridTextColumn MinWidth="400" Binding="{Binding Name}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="藥品名稱" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
                                 <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>

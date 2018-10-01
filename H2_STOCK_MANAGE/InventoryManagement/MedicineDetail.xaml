@@ -79,6 +79,9 @@
                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" >
                         <CheckBox  Name="IsFrozen" Content="冷藏藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10" Click="MedData_TextChanged"/>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="3" >
+                        <CheckBox  Name="IsCommon" Content="常備藥" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10" Click="MedData_TextChanged"/>
+                    </StackPanel>
                 </Grid>
                 <DataGrid Name="MedManufactory" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           CellStyle="{StaticResource DataGridCellStyle}" AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="1" Margin="10,0,10,0">

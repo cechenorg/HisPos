@@ -154,5 +154,10 @@ namespace His_Pos
                 e.TabItem.IsPinned = viewModel.IsPinned;
             }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

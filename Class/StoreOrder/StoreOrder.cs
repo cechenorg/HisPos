@@ -216,10 +216,17 @@ namespace His_Pos.Class.StoreOrder
                     //if (!DateTime.TryParse(((IProductPurchase)product).ValidDate, out datetimevalue))
                     //    message += "商品 " + product.Id + " 效期格式不正確\n";
                 }
-                else if (type == OrderType.UNPROCESSING)
+                else if (type == OrderType.UNPROCESSING && Category.CategoryName.Equals("進貨"))
                 {
                     if (((IProductPurchase)product).OrderAmount == 0)
                         message += "商品 " + product.Id + " 預定量不能為0\n";
+                }
+                else if (type == OrderType.UNPROCESSING && Category.CategoryName.Equals("退貨"))
+                {
+                    if (((ITrade)product).Amount == 0)
+                        message += "商品 " + product.Id + " 退貨量不能為0\n";
+                    else if (((ITrade)product).Amount > ((IProductReturn)product).BatchLimit)
+                        message += "商品 " + product.Id + " 退貨量不能高於庫存量\n";
                 }
             }
             return message;

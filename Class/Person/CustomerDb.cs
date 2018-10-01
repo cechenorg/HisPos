@@ -16,7 +16,7 @@ namespace His_Pos.Class.Person
         public static bool CheckCustomerExist(string idCardNumber, Customer customer)
         {
             var listparam1 = new List<SqlParameter>();
-            var idnum = new SqlParameter("@CUS_IDNUM", idCardNumber);
+            var idnum = new SqlParameter("CUS_IDNUM", idCardNumber);
             listparam1.Add(idnum);
             var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CHECKCUSTOMER]", listparam1);
@@ -29,14 +29,14 @@ namespace His_Pos.Class.Person
         public static void InsertCustomerData(Customer newCustomer)
         {
             var listparam = new List<SqlParameter>();
-            var name = new SqlParameter("@NAME", newCustomer.Name);
-            var qname = new SqlParameter("@QNAME", newCustomer.Qname);
-            var birth = new SqlParameter("@BIRTH", Convert.ToDateTime(newCustomer.Birthday));
-            var addr = new SqlParameter("@ADDR", newCustomer.ContactInfo.Address);
-            var tel = new SqlParameter("@TEL", newCustomer.ContactInfo.Tel);
-            var idnum = new SqlParameter("@IDNUM", newCustomer.IcNumber);
-            var email = new SqlParameter("@EMAIL", newCustomer.ContactInfo.Email);
-            var gender = new SqlParameter("@GENDER", newCustomer.Gender);
+            var name = new SqlParameter("NAME", newCustomer.Name);
+            var qname = new SqlParameter("QNAME", newCustomer.Qname);
+            var birth = new SqlParameter("BIRTH", Convert.ToDateTime(newCustomer.Birthday));
+            var addr = new SqlParameter("ADDR", newCustomer.ContactInfo.Address);
+            var tel = new SqlParameter("TEL", newCustomer.ContactInfo.Tel);
+            var idnum = new SqlParameter("IDNUM", newCustomer.IcNumber);
+            var email = new SqlParameter("EMAIL", newCustomer.ContactInfo.Email);
+            var gender = new SqlParameter("GENDER", newCustomer.Gender);
             listparam.Add(name);
             listparam.Add(qname);
             listparam.Add(birth);

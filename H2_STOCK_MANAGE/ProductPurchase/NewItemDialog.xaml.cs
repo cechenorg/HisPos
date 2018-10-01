@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using His_Pos.Interface;
 using His_Pos.Struct.Product;
+using His_Pos.Class.StoreOrder;
 
 namespace His_Pos.ProductPurchase
 {
@@ -26,23 +27,50 @@ namespace His_Pos.ProductPurchase
     public partial class NewItemDialog : Window
     {
         private Collection<PurchaseProduct> DataCollection;
-        
+
         public PurchaseProduct SelectedItem;
         public bool ConfirmButtonClicked = false;
         public string WareId;
         public string ManufactoryID;
 
-        public NewItemDialog(Collection<PurchaseProduct> collection, string manId, string warId)
+        private bool IsZeroShow = true;
+        
+        public NewItemDialog(StoreOrderCategory category, Collection<PurchaseProduct> collection, string manId, string warId, string searchText = "")
         {
             InitializeComponent();
             Title = "新增";
-            
+
             DataCollection = collection;
             ManufactoryID = manId;
             WareId = warId;
+            SearchText.Text = searchText;
+
+            if (category == StoreOrderCategory.RETURN)
+                IsZeroShow = false;
 
             InitCollection();
+
+            if( !SearchText.Text.Equals("") )
+            {
+                AllProducts.IsChecked = true;
+
+                if (SearchResult.Items.Count == 0)
+                {
+                    MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR);
+                    messageWindow.ShowDialog();
+                    Close();
+                }
+                else if (SearchResult.Items.Count == 1)
+                {
+                    SelectedItem = (PurchaseProduct)SearchResult.Items[0];
+                    ConfirmButtonClicked = true;
+                    Close();
+                }
+                else
+                    ShowDialog();
+            }
         }
+        
         public NewItemDialog(Collection<PurchaseProduct> collection, string manId, string searchText,string warId)
         {
             InitializeComponent();
@@ -87,6 +115,12 @@ namespace His_Pos.ProductPurchase
             if (!((bool) IsStatusTrue.IsChecked ||
                   ((PurchaseProduct)item).Status))
                 return false;
+
+            if(!IsZeroShow)
+            {
+                if ((((PurchaseProduct)item).Inventory <= 0))
+                    return false;
+            }
 
             if ((bool) OnlyManufactory.IsChecked)
             {

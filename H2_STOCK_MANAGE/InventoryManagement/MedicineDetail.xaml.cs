@@ -88,6 +88,7 @@ namespace His_Pos.InventoryManagement
             MedEngName.Text = InventoryMedicine.EngName.Trim();
             IsControl.IsChecked = InventoryMedicine.Control;
             IsFrozen.IsChecked = InventoryMedicine.Frozen;
+            IsCommon.IsChecked = InventoryMedicine.Common;
             MedSafeAmount.Text = InventoryMedicine.Stock.SafeAmount;
             MedLocation.Text = InventoryMedicine.Location;
             MedBasicAmount.Text = InventoryMedicine.Stock.BasicAmount;
@@ -332,6 +333,7 @@ namespace His_Pos.InventoryManagement
 
             InventoryMedicine.Control = (bool)IsControl.IsChecked;
             InventoryMedicine.Frozen = (bool)IsFrozen.IsChecked;
+            InventoryMedicine.Common = (bool)IsCommon.IsChecked;
             InventoryMedicine.ChiName = MedChiName.Text;
             InventoryMedicine.EngName = MedEngName.Text;
             InventoryMedicine.Name = InventoryMedicine.EngName.Contains(" ") ? InventoryMedicine.EngName.Split(' ')[0] + " " + InventoryMedicine.EngName.Split(' ')[1] + "... " + InventoryMedicine.ChiName : InventoryMedicine.ChiName;

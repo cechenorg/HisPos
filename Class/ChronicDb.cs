@@ -12,8 +12,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class
 {
-    public static class ChronicDb
-    {
+    public static class ChronicDb {
         internal static void CaculateChironic() { //假設病人1-3沒領  要幫他算出2-1~2-3
             var dd = new DbConnection(Settings.Default.SQL_global);
             dd.ExecuteProc("[HIS_POS_DB].[Index].[CaculateChironic]");
@@ -23,7 +22,7 @@ namespace His_Pos.Class
             var parameters = new List<SqlParameter>();
             ObservableCollection<Chronic> chronics = new ObservableCollection<Chronic>();
             parameters.Add(new SqlParameter("CUS_ID", cusId));
-           DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetChronicDeclareById]",parameters);
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetChronicDeclareById]", parameters);
             foreach (DataRow row in dataTable.Rows) {
                 chronics.Add(new Chronic(row));
             }
@@ -45,15 +44,29 @@ namespace His_Pos.Class
             var parameters = new List<SqlParameter>();
             ObservableCollection<Chronic> chronics = new ObservableCollection<Chronic>();
             parameters.Add(new SqlParameter("DecMasId", decMasId));
-            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateChronicData]", parameters); 
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateChronicData]", parameters);
         }
-        
-        internal static string GetResidualAmountById(string proId ) {
+
+        internal static string GetResidualAmountById(string proId) {
             var dd = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>(); 
-                parameters.Add(new SqlParameter("PRO_ID", proId)); 
-                DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetResidualAmountById]", parameters);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetResidualAmountById]", parameters);
             return dataTable.Rows[0][0].ToString();
+        }
+        internal static ObservableCollection<IndexView.IndexView.DailyTakeChronicList> DailyTakeChronic() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyTakeChronic]");
+            ObservableCollection<IndexView.IndexView.DailyTakeChronicList> collection = new ObservableCollection<IndexView.IndexView.DailyTakeChronicList>();
+            foreach(DataRow row in dataTable.Rows)
+            {
+                collection.Add(new IndexView.IndexView.DailyTakeChronicList(row));
+            }
+            return collection;
+        }
+        internal static void UpdateDailyChronic() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+             dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateDailyChronic]");
         }
         
     }

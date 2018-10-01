@@ -24,9 +24,10 @@ namespace His_Pos.Class
             Copayment = new Copayment.Copayment(row);
             AdjustCase = new AdjustCase.AdjustCase(row);
             MedicineDays = "0";
-            TreatmentDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_TREATDATE"].ToString().Substring(1, 9));
+            TreatmentDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_PRESCRIPTIONDATE"].ToString().Substring(1, 9));
             TreatmentDate.ToShortDateString();
-            AdjustDate = DateTime.Today;
+            AdjustDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_TREATDATE"].ToString().Substring(1, 9));
+            AdjustDate.ToShortDateString();
             PaymentCategory = new PaymentCategory.PaymentCategory(row);
         }
 

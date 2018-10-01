@@ -217,6 +217,10 @@ namespace His_Pos.Class.Product
             lastMonthSalesLineSeries.Values = lastYearMonthSales;
         }
 
+        internal static string GetBucklePrice(string id, double amount) {
+            throw new NotImplementedException();
+        }
+
         internal static ObservableCollection<StockTakingOverview> GetProductStockTakingDate(string proId)
         {
             ObservableCollection<StockTakingOverview> collection = new ObservableCollection<StockTakingOverview>();
@@ -352,9 +356,10 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("BASICQTY", ((InventoryMedicine)product).Stock.BasicAmount));
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryMedicine)product).Location));
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryMedicine)product).Note));
-                parameters.Add(new SqlParameter("@STATUS", ((InventoryMedicine)product).Status));
-                parameters.Add(new SqlParameter("@CONTROL", ((InventoryMedicine)product).Control));
-                parameters.Add(new SqlParameter("@FROZEN", ((InventoryMedicine)product).Frozen));
+                parameters.Add(new SqlParameter("STATUS", ((InventoryMedicine)product).Status));
+                parameters.Add(new SqlParameter("CONTROL", ((InventoryMedicine)product).Control));
+                parameters.Add(new SqlParameter("FROZEN", ((InventoryMedicine)product).Frozen));
+                parameters.Add(new SqlParameter("COMMON", ((InventoryMedicine)product).Common));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
             }
             else if (type == "InventoryOtc") {
@@ -365,9 +370,9 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("BASICQTY", ((InventoryOtc)product).Stock.BasicAmount));
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryOtc)product).Location));
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryOtc)product).Note));
-                parameters.Add(new SqlParameter("@STATUS", ((InventoryOtc)product).Status));
-                parameters.Add(new SqlParameter("@CONTROL", DBNull.Value));
-                parameters.Add(new SqlParameter("@FROZEN", DBNull.Value));
+                parameters.Add(new SqlParameter("STATUS", ((InventoryOtc)product).Status));
+                parameters.Add(new SqlParameter("CONTROL", DBNull.Value));
+                parameters.Add(new SqlParameter("COMMON", DBNull.Value));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
 
             }
@@ -408,5 +413,34 @@ namespace His_Pos.Class.Product
             var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetMaxProInvId]");
             return table.Rows[0][0].ToString();
         }
+
+        internal static ObservableCollection<IndexView.IndexView.ProductPurchaseList> DailyPurchaseReturn() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyPurchaseReturn]");
+            ObservableCollection<IndexView.IndexView.ProductPurchaseList> collection = new ObservableCollection<IndexView.IndexView.ProductPurchaseList>();
+            foreach (DataRow row in table.Rows) {
+                collection.Add(new IndexView.IndexView.ProductPurchaseList(row));
+            }
+            return collection;
+        }
+        internal static void InsertEntry(string entryName,string entryValue,string entrySource,string entrySourceId) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ENTRY_NAME", entryName));
+            parameters.Add(new SqlParameter("ENTRY_VALUE", entryValue));
+            parameters.Add(new SqlParameter("ENTRY_SOURCE", entrySource));
+            parameters.Add(new SqlParameter("ENTRY_SOURCE_ID", entrySourceId)); 
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[InsertEntry]");
+             
+        }
+        internal static string GetBucklePrice(string proId,string buckleAmount) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("PROWAR_ID", "1"));
+            parameters.Add(new SqlParameter("BuckleAmount", buckleAmount)); 
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetBucklePrice]");
+            return table.Rows[0][0].ToString();
+        }
     }
-}
+} 

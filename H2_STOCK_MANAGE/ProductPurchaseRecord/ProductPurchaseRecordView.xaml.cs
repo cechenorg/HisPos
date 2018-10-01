@@ -28,6 +28,7 @@ namespace His_Pos.ProductPurchaseRecord
     /// </summary>
     public partial class ProductPurchaseRecordView : UserControl, INotifyPropertyChanged
     {
+        #region ----- Define Variables -----
         public static ProductPurchaseRecordView Instance;
         public ObservableCollection<StoreOrder> storeOrderCollection;
         private StoreOrder storeOrderData;
@@ -55,33 +56,34 @@ namespace His_Pos.ProductPurchaseRecord
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        #endregion
         public ProductPurchaseRecordView()
         {
             InitializeComponent();
             Instance = this;
-            Focusable = true;
             UpdateUi();
             InitUser();
             InitManufactory();
             DataContext = this;
             PassValueSearchData();
         }
-        private void InitManufactory() {
+    
+        #region ----- Init Data -----
+        public void UpdateUi()
+        {
+            DataChanged = false;
+            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
+            StoOrderOverview.ItemsSource = storeOrderCollection;
+            StoOrderOverview.SelectedIndex = 0;
+        }
+        private void InitManufactory()
+        {
             //foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
             //{
             //    ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
             //}
             Manufactory.ItemsSource = ManufactoryAutoCompleteCollection;
             Manufactory.ItemFilter = ManufactoryFilter;
-        }
-        public AutoCompleteFilterPredicate<object> ManufactoryFilter
-        {
-            get
-            {
-                return (searchText, obj) =>
-                    ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
-                                                               || (obj as Manufactory).Name.Contains(searchText);
-            }
         }
         private void InitUser()
         {
@@ -91,48 +93,43 @@ namespace His_Pos.ProductPurchaseRecord
             ReceiveEmp.ItemsSource = UserAutoCompleteCollection;
             ReceiveEmp.ItemFilter = UserFilter;
         }
+        public void PassValueSearchData()
+        {
+            if (Proid != null)
+            {
+                TextBoxId.Text = Proid;
+                SearchData();
+                Proid = null;
+            }
+        }
+        #endregion
+
+        #region ----- Filter -----
+        public AutoCompleteFilterPredicate<object> ManufactoryFilter
+        {
+            get
+            {
+                return (searchText, obj) =>
+                    ((obj as Manufactory).Id is null) ? true : (obj as Manufactory).Id.Contains(searchText)
+                                                               || (obj as Manufactory).Name.Contains(searchText);
+            }
+        }
+
         public AutoCompleteFilterPredicate<object> UserFilter
         {
             get
             {
                 return (searchText, obj) =>
                     ((obj as Person).Id is null) ? true : (obj as Person).Id.Contains(searchText)
-                    || (obj as Person).Name.Contains(searchText);
+                                                          || (obj as Person).Name.Contains(searchText);
             }
-        }
-        public void UpdateUi() {
-            DataChanged = false;
-            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
-            StoOrderOverview.ItemsSource = storeOrderCollection;
-            StoOrderOverview.SelectedIndex = 0;
-        }
-
-        private void ShowOrderDetail(object sender, RoutedEventArgs e)
-        {
-            StoreOrder storeOrder = (StoreOrder)(sender as DataGridCell).DataContext;
-            UpdateOrderDetailData(storeOrder);
-        }
-        private void UpdateOrderDetailData(StoreOrder storeOrder)
-        {
-            StoreOrderData = storeOrder;
-
-            if (StoreOrderData.Products is null)
-                StoreOrderData.Products = StoreOrderDb.GetOrderPurchaseDetailById(StoreOrderData.Id);
-           
-
-            StoreOrderDetail.ItemsSource = StoreOrderData.Products;
-            TotalAmount.Content = StoreOrderData.Products.Count.ToString();
-        }
-
-        private void ID_SourceUpdated(object sender, DataTransferEventArgs e)
-        {
-
         }
         public bool StoOrderOverviewFilter(object item)
         {
             bool reply = false;
-            int id = Convert.ToInt32(((StoreOrder)item).Id.Substring(1,8));
-            switch (((StoreOrder)item).Category.CategoryName) {
+            int id = Convert.ToInt32(((StoreOrder)item).Id.Substring(1, 8));
+            switch (((StoreOrder)item).Category.CategoryName)
+            {
                 case "進貨":
                     if (
                         ((bool)RadioButtonPurchase.IsChecked || (bool)RadioButtonAll.IsChecked)
@@ -144,28 +141,64 @@ namespace His_Pos.ProductPurchaseRecord
                         ) reply = true;
                     break;
                 case "退貨":
-                        if (
-                           ((bool)RadioButtonReturns.IsChecked || (bool)RadioButtonAll.IsChecked)
-                           && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
-                           && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
-                           && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
-                           && (((StoreOrder)item).RecEmp.Contains(ReceiveEmp.Text) || ReceiveEmp.Text == string.Empty)
-                           && (id <= edate && id >= sdate)
-                           ) reply = true;
+                    if (
+                       ((bool)RadioButtonReturns.IsChecked || (bool)RadioButtonAll.IsChecked)
+                       && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
+                       && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
+                       && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                       && (((StoreOrder)item).RecEmp.Contains(ReceiveEmp.Text) || ReceiveEmp.Text == string.Empty)
+                       && (id <= edate && id >= sdate)
+                       ) reply = true;
                     break;
-                case "調貨":
-                        if (
-                           ((bool)RadioButtonTransfer.IsChecked || (bool)RadioButtonAll.IsChecked)
-                           && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
-                           && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
-                           && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
-                           && (((StoreOrder)item).RecEmp.Contains(ReceiveEmp.Text) || ReceiveEmp.Text == string.Empty)
-                           && (id <= edate && id >= sdate)
-                           ) reply = true;
+                    //case "調貨":
+                    //        if (
+                    //           ((bool)RadioButtonTransfer.IsChecked || (bool)RadioButtonAll.IsChecked)
+                    //           && (((StoreOrder)item).Id.Contains(TextBoxId.Text) || TextBoxId.Text == string.Empty)
+                    //           && (((StoreOrder)item).Manufactory.Name.Contains(Manufactory.Text) || Manufactory.Text == string.Empty)
+                    //           && (((StoreOrder)item).OrdEmp.Contains(OrdEmp.Text) || OrdEmp.Text == string.Empty)
+                    //           && (((StoreOrder)item).RecEmp.Contains(ReceiveEmp.Text) || ReceiveEmp.Text == string.Empty)
+                    //           && (id <= edate && id >= sdate)
+                    //           ) reply = true;
                     break;
             }
             return reply;
         }
+        #endregion
+
+        #region ----- Change Order -----
+        private void StoOrderOverview_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGrid dataGrid = sender as DataGrid;
+
+            if(dataGrid is null) return;
+
+            StoreOrder storeOrder = (StoreOrder) dataGrid.SelectedItem;
+
+            switch (storeOrder.Category.CategoryName)
+            {
+                case "進貨":
+                    storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+                    break;
+                case "退貨":
+                    storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
+                    break;
+            }
+
+            StoreOrderData = storeOrder;
+        }
+        private void UpdateOrderDetailData(StoreOrder storeOrder)
+        {
+            StoreOrderData = storeOrder;
+
+            if (StoreOrderData.Products is null)
+                StoreOrderData.Products = StoreOrderDb.GetOrderPurchaseDetailById(StoreOrderData.Id);
+
+
+            StoreOrderDetail.ItemsSource = StoreOrderData.Products;
+            TotalAmount.Content = StoreOrderData.Products.Count.ToString();
+        }
+        #endregion
+        
         private void Search_Click(object sender, RoutedEventArgs e)
         {
             SearchData();
@@ -173,7 +206,6 @@ namespace His_Pos.ProductPurchaseRecord
 
         private void SearchData()
         {
-            
             sdate = datestart.SelectedDate.ToString() != "" ?Convert.ToInt32(((DateTime)datestart.SelectedDate).ToString("yyyyMMdd")) : 0;
             edate = dateend.SelectedDate.ToString() != "" ?Convert.ToInt32(((DateTime)dateend.SelectedDate).ToString("yyyyMMdd")) : 99999999;
             StoOrderOverview.Items.Filter = StoOrderOverviewFilter;
@@ -187,13 +219,6 @@ namespace His_Pos.ProductPurchaseRecord
             SearchData();
         }
 
-        public void PassValueSearchData() {
-            if (Proid != null)
-            {
-                TextBoxId.Text = Proid;
-                SearchData();
-                Proid = null;
-            }
-        }
+        
     }
 }
