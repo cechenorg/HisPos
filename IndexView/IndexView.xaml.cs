@@ -95,5 +95,9 @@ namespace His_Pos.IndexView
         public void UpdateUI() {
 
         }
+
+        private void TransferToStoord_Click(object sender, RoutedEventArgs e) {
+           // ProductListCollection
+        }
     }
 }

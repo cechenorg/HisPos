@@ -150,9 +150,11 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
                         <RowDefinition/>
+                        <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
-                    <Label   Grid.Row="0" Name="EveryDayStock"  Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
-                    <DataGrid Name="StoreProductList"   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                    <Label  Content="每日進退貨" Grid.Row="0" Name="EveryDayStock"  Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
+                    
+                        <DataGrid Name="StoreProductList"   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" ItemsSource="{Binding ProductListCollection,UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
@@ -237,6 +239,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button   Width="100" Content="轉進退貨單" Grid.Row="2" Click="TransferToStoord_Click"/>
                 </Grid>
               
             </Grid>
