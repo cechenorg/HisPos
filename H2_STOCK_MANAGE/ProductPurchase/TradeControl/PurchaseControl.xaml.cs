@@ -508,6 +508,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void Principal_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (StoreOrderData is null) return;
+
             UpdatePricipalStackUi();
 
             StoreOrderData.IsDataChanged = true;

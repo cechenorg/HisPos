@@ -322,19 +322,23 @@ namespace His_Pos.ProductPurchase
 
                 if (confirmWindow.Confirm)
                 {
-                    StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser, StoreOrderData.Warehouse, StoreOrderData.Manufactory, null, "訂單 " + StoreOrderData.Id + " 缺貨 待補貨");
+                    StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser,
+                        StoreOrderData.Warehouse, StoreOrderData.Manufactory, null,
+                        "訂單 " + StoreOrderData.Id + " 缺貨 待補貨");
                     storeOrder.Type = OrderType.PROCESSING;
 
-                    List<Product> newOrderProduct = StoreOrderData.Products.Where(p => ((ITrade)p).Amount < ((IProductPurchase)p).OrderAmount).ToList();
+                    List<Product> newOrderProduct = StoreOrderData.Products
+                        .Where(p => ((ITrade) p).Amount < ((IProductPurchase) p).OrderAmount).ToList();
 
                     foreach (var product in newOrderProduct)
                     {
-                        ((IProductPurchase)product).Note = "訂 " + ((IProductPurchase)product).OrderAmount + "只到貨" + ((ITrade)product).Amount;
-                        ((IProductPurchase)product).OrderAmount -= ((ITrade)product).Amount;
-                        ((ITrade)product).Amount = 0;
-                        ((IProductPurchase)product).BatchNumber = "";
-                        ((IProductPurchase)product).ValidDate = "";
-                        ((IProductPurchase)product).Invoice = "";
+                        ((IProductPurchase) product).Note =
+                            "訂 " + ((IProductPurchase) product).OrderAmount + "只到貨" + ((ITrade) product).Amount;
+                        ((IProductPurchase) product).OrderAmount -= ((ITrade) product).Amount;
+                        ((ITrade) product).Amount = 0;
+                        ((IProductPurchase) product).BatchNumber = "";
+                        ((IProductPurchase) product).ValidDate = "";
+                        ((IProductPurchase) product).Invoice = "";
                     }
 
                     int newIndex = storeOrderCollection.Count - 1;
@@ -358,6 +362,16 @@ namespace His_Pos.ProductPurchase
                     SetCurrentControl();
                     SaveOrder();
                 }
+            }
+            else
+            {
+                storeOrderCollection.Remove(StoreOrderData);
+
+                if(StoOrderOverview.Items.Count != 0)
+                    StoOrderOverview.SelectedIndex = 0;
+                else
+                    ClearOrderDetailData();
+
             }
 
             MessageWindow messageWindow = new MessageWindow("處理單已完成, 可前往處方單紀錄查詢!", MessageType.SUCCESS);

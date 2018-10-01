@@ -166,10 +166,25 @@ namespace His_Pos.ProductPurchaseRecord
         #endregion
 
         #region ----- Change Order -----
-        private void ShowOrderDetail(object sender, RoutedEventArgs e)
+        private void StoOrderOverview_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            StoreOrder storeOrder = (StoreOrder)(sender as DataGridCell).DataContext;
-            UpdateOrderDetailData(storeOrder);
+            DataGrid dataGrid = sender as DataGrid;
+
+            if(dataGrid is null) return;
+
+            StoreOrder storeOrder = (StoreOrder) dataGrid.SelectedItem;
+
+            switch (storeOrder.Category.CategoryName)
+            {
+                case "進貨":
+                    storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+                    break;
+                case "退貨":
+                    storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
+                    break;
+            }
+
+            StoreOrderData = storeOrder;
         }
         private void UpdateOrderDetailData(StoreOrder storeOrder)
         {
@@ -203,5 +218,7 @@ namespace His_Pos.ProductPurchaseRecord
             if(StoOrderOverview != null)
             SearchData();
         }
+
+        
     }
 }
