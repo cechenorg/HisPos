@@ -446,9 +446,7 @@ namespace His_Pos.Class.StoreOrder
             string Batch_sht = storId; //出貨單號
             string Inv_chk = "0"; //  庫存確認 是1 否0
             string Inv_msg = ""; //庫存確認
-
-         
-
+            
             string empty = string.Empty;
             StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
             //第一行
@@ -527,8 +525,7 @@ namespace His_Pos.Class.StoreOrder
 
             dd.MySqlNonQueryBySqlString($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{declareData.Prescription.Customer.Name}','{Dtl_data}','{declareData.Prescription.Treatment.AdjustDateStr.Replace("/","")}')");
         }
-
-
+        
         internal static OrderType GetDeclareOrderStatusFromSinde(string orderId)
         {
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
@@ -547,6 +544,49 @@ namespace His_Pos.Class.StoreOrder
                 default:
                     return OrderType.ERROR;
             }
+        }
+
+        internal static void AddDailyOrder(StoreOrderCategory storeOrderCategory, ObservableCollection<IndexView.IndexView.ProductPurchaseList> declareMedicines)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ORDER_TYPE", (storeOrderCategory == StoreOrderCategory.PURCHASE)? "進" : "退"));
+            parameters.Add(new SqlParameter("ORDEMP", MainWindow.CurrentUser.Id));
+            
+            DataTable details = new DataTable();
+            details.Columns.Add("PRO_ID", typeof(string));
+            details.Columns.Add("ORDERQTY", typeof(int));
+            details.Columns.Add("QTY", typeof(int));
+            details.Columns.Add("PRICE", typeof(string));
+            details.Columns.Add("DESCRIPTION", typeof(string));
+            details.Columns.Add("VALIDDATE", typeof(string));
+            details.Columns.Add("BATCHNUMBER", typeof(string));
+            details.Columns.Add("FREEQTY", typeof(int));
+            details.Columns.Add("INVOICE", typeof(string));
+            details.Columns.Add("TOTAL", typeof(string));
+
+            foreach (var product in declareMedicines)
+            {
+                var newRow = details.NewRow();
+
+                newRow["PRO_ID"] = product.proId;
+                newRow["ORDERQTY"] = Int32.Parse(product.PurchaseAmount);
+                newRow["QTY"] = 0;
+                newRow["PRICE"] = "0";
+                newRow["DESCRIPTION"] = "";
+                newRow["VALIDDATE"] = "";
+                newRow["BATCHNUMBER"] = "";
+                newRow["FREEQTY"] = 0;
+                newRow["INVOICE"] = "";
+                newRow["TOTAL"] = "0";
+
+                details.Rows.Add(newRow);
+            }
+
+            parameters.Add(new SqlParameter("DETAILS", details));
+
+            dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddDeclareOrder]", parameters);
         }
     }
 }
