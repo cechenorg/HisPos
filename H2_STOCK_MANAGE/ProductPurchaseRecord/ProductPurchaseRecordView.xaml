@@ -86,7 +86,6 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
                         <RadioButton Name="RadioButtonPurchase" Content="進貨" Tag="0" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
-                        <RadioButton Name="RadioButtonTransfer" Content="調貨" Tag="1" Margin="5,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
                         <RadioButton Name="RadioButtonReturns" Content="退貨" Tag="1" Margin="5,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
                         <RadioButton Name="RadioButtonAll" Content="全部" Tag="2" Margin="5,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked" />
                     </StackPanel>
