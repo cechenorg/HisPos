@@ -6,9 +6,13 @@
              xmlns:local="clr-namespace:His_Pos.ProductPurchaseRecord"
              xmlns:local2="clr-namespace:His_Pos.Class.StoreOrder"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
+             xmlns:tradeControl="clr-namespace:His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365"
             >
+    <UserControl.Resources>
+        <tradeControl:HasDeclareDataToVisConverter x:Key="HasDeclareDataToVisConverter"/>
+    </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
@@ -135,37 +139,37 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"/>
                         <RowDefinition Height="50"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition/>
                         <RowDefinition Height="50"/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
-                        <Label Name="ID" Content="{Binding Path=StoreOrderData.Id,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,0,0"/>
-                        <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-                        <Label Content="{Binding Path=StoreOrderData.Manufactory.Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                        <Label Name="Phone"  Content="{Binding Path=StoreOrderData.Manufactory.Telphone,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                        <Label Name="ID" Content="{Binding Id}" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+                        <Label Content="庫別 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+                        <Label Content="{Binding Path=Warehouse.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="130" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+                        <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                        <Label Content="{Binding Path=Manufactory.Name}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+                        <Label Content="{Binding Path=Manufactory.Telphone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
                     </StackPanel>
-                    <Grid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="0" >
-                            <Label Content="處理單類別" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                            <Label Content="{Binding Path=StoreOrderData.Category.CategoryName,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
+                        <TextBlock Text="{Binding Path=Category.CategoryName}" Foreground="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="22" VerticalAlignment="Center" Margin="25,0,0,0"/>
+                        <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <Label Content="{Binding OrdEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
+                        <Label Content="收貨人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <Label Content="{Binding RecEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
+                        <Label Content="訂單聯絡人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <Label/>
+                        <Label Content="{Binding Path=Principal.Phone}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="15,0,0,0"/>
+                        <StackPanel Orientation="Horizontal" Margin="210,0,0,0" Visibility="{Binding DeclareDataCount, Converter={StaticResource HasDeclareDataToVisConverter}}">
+                            <Image Width="35" Source="../../../Images/User_48px.png"/>
+                            <Label Content="{Binding DeclareDataCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0" >
-                            <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                            <Label Name="PurchaseEmp" Content="{Binding Path=StoreOrderData.OrdEmp,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="0" >
-                            <Label Content="收貨人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                            <Label Content="{Binding Path=StoreOrderData.RecEmp,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="Black" Width="120" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
-                        </StackPanel>
-                    </Grid>
-                    <DataGrid Name="StoreOrderDetail" Grid.Row="2" CanUserAddRows="False" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
+                        <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <Label Width="980" Content="{Binding Note}" Margin="10,0,0,5" FontFamily="Segoe UI Semi" FontSize="18"/>
+                    </StackPanel>
+                    <DataGrid Name="StoreOrderDetail" Grid.Row="3" CanUserAddRows="False" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                           AutoGenerateColumns="False">
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
@@ -263,7 +267,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridDarkerBackGround}">
+                    <StackPanel Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkerBackGround}">
                         <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
                         <Label Name="Total" Content="{Binding Path=StoreOrderData.TotalPrice,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                         <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
