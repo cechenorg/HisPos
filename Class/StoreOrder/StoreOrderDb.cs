@@ -450,7 +450,7 @@ namespace His_Pos.Class.StoreOrder
             string empty = string.Empty;
             StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
             //第一行
-            Dtl_data.Append(CurrentDecMasId.PadLeft(8,'0')); //藥局病例號
+            Dtl_data.Append(CurrentDecMasId.PadLeft(8,'0')); //藥局病歷號
             Dtl_data.Append(declareData.Prescription.Customer.Name.PadRight(20 - NewFunction.HowManyChinese(declareData.Prescription.Customer.Name), ' ')); //病患姓名 
             Dtl_data.Append(declareData.Prescription.Customer.IcCard.IcNumber.PadRight(10, ' ')); //身分證字號
             Dtl_data.Append(declareData.Prescription.Customer.Birthday.Replace("/","").PadRight(7, ' ')); //出生年月日

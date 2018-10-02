@@ -3,6 +3,7 @@ using System;
 using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
+using His_Pos.Struct.IcData;
 
 namespace His_Pos.Class.Person
 {
@@ -13,10 +14,15 @@ namespace His_Pos.Class.Person
             IcCard = new IcCard();
         }
 
-        public Customer(IcCard icCard)
+        public Customer(BasicData basicData)
         {
-            IcCard = icCard;
+            Name = basicData.Name;
+            Birthday = basicData.Birthday;
+            IcNumber = basicData.IcNumber;
+            Gender = basicData.Gender;
+            IcCard = new IcCard(basicData);
         }
+
         public Customer(Customer customer)
         {
             Id = customer.Id;
@@ -27,7 +33,6 @@ namespace His_Pos.Class.Person
             Gender = customer.Gender;
             GenderName = customer.GenderName;
             IcCard = customer.IcCard;
-          
         }
         public Customer(DataRow row,string type)
         {

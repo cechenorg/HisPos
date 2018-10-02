@@ -10,22 +10,6 @@ namespace His_Pos.Class.Person
 {
     public static class CustomerDb
     {
-        /*
-         *檢查顧客是否存在
-         */
-        public static bool CheckCustomerExist(string idCardNumber, Customer customer)
-        {
-            var listparam1 = new List<SqlParameter>();
-            var idnum = new SqlParameter("CUS_IDNUM", idCardNumber);
-            listparam1.Add(idnum);
-            var dd = new DbConnection(Settings.Default.SQL_local);
-            var table = dd.ExecuteProc("[HIS_POS_DB].[GET].[CHECKCUSTOMER]", listparam1);
-            if (table.Rows.Count == 0) return false;
-            customer.Id = table.Rows[0]["CUS_ID"].ToString();
-            customer.ContactInfo = new ContactInfo(table.Rows[0]["CUS_ADDR"].ToString(), table.Rows[0]["CUS_EMAIL"].ToString(), table.Rows[0]["CUS_TEL"].ToString());
-            return true;
-        }
-
         public static void InsertCustomerData(Customer newCustomer)
         {
             var listparam = new List<SqlParameter>();
@@ -60,11 +44,10 @@ namespace His_Pos.Class.Person
             var dd = new DbConnection(Settings.Default.SQL_global);
 
             var parameters = new List<SqlParameter>();
-           
             parameters.Add(new SqlParameter("CUS_NAME", customer.Name));
             parameters.Add(new SqlParameter("CUS_BIRTH", customer.Birthday));
             parameters.Add(new SqlParameter("CUS_IDNUM", customer.IcNumber));
-          var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[CheckCustomerExist]", parameters);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[CheckCustomerExist]", parameters);
             return table.Rows[0][0].ToString();
         }
         internal static ObservableCollection<Customer> GetCustomerData()

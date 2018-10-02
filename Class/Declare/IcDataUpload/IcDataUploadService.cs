@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
+using His_Pos.Struct.IcData;
 
 namespace His_Pos.Class.Declare.IcDataUpload
 {
@@ -22,6 +23,11 @@ namespace His_Pos.Class.Declare.IcDataUpload
     [XmlRoot(ElementName = "REC")]
     public class IcRecord
     {
+        public IcRecord(Header header, MainMessage main)
+        {
+            HeaderMessage = header;
+            MainMessage = main;
+        }
         [XmlElement(ElementName = "MSH")]
         public Header HeaderMessage { get; set; }
         [XmlElement(ElementName = "MB")]
@@ -55,6 +61,10 @@ namespace His_Pos.Class.Declare.IcDataUpload
     [XmlRoot(ElementName = "MB")]
     public class MainMessage
     {
+        public MainMessage(IcData icData)
+        {
+            IcMessage = icData;
+        }
         [XmlElement(ElementName = "MB1")]
         public IcData IcMessage { get; set; }
         [XmlElement(ElementName = "MB2")]
@@ -64,6 +74,22 @@ namespace His_Pos.Class.Declare.IcDataUpload
     [XmlRoot(ElementName = "MB1")]
     public class IcData
     {
+        public IcData(SeqNumber seq,Prescription currentPrescription,BasicData customerData,DeclareData currentDeclareData)
+        {
+            SamCode = seq.SamId;
+            CardNo = currentPrescription.Customer.IcCard.CardNo;
+            IcNumber = currentPrescription.Customer.IcCard.IcNumber;
+            BirthDay = customerData.Birthday;
+            TreatmentDateTime = seq.TreatDateTime;
+            MedicalNumber = seq.MedicalNumber;
+            PharmacyId = seq.InstitutionId;
+            MedicalPersonIcNumber = currentPrescription.Pharmacy.MedicalPersonnel.IcNumber;
+            SecuritySignature = seq.SecuritySignature;
+            MainDiagnosisCode = currentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
+            OutpatientFee = (currentDeclareData.DrugsPoint + currentDeclareData.SpecailMaterialPoint +
+                             currentDeclareData.CopaymentPoint).ToString();
+            OutpatientCopaymentFee = currentDeclareData.CopaymentPoint.ToString();
+        }
         //1,3 V  2,4 ~ 
         [XmlElement(ElementName = "A16")]
         public string SamCode { get; set; }//安全模組代碼

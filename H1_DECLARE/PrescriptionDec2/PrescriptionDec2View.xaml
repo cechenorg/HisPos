@@ -47,7 +47,7 @@
                 <TextBox x:Name="MedicalNumber" Width="150" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" materialDesign:HintAssist.Hint="慢箋填原處方序號"
                          MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.Customer.IcCard.MedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                          InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="MedicalNumber_PreviewKeyDown" />
-                <Button MinWidth="130" Background="RoyalBlue" BorderThickness="0" Click="Button_Click" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="7,0,0,0"/>
+                <Button MinWidth="130" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="7,0,0,0"/>
             </StackPanel>
             <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}">
                 <Grid.ColumnDefinitions>

@@ -36,9 +36,12 @@ using System.Xml;
 using His_Pos.Class.Declare;
 using System.Threading;
 using His_Pos.Class.CustomerHistory;
+using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE;
 using His_Pos.H6_DECLAREFILE.Export;
+using His_Pos.HisApi;
+using His_Pos.Struct.IcData;
 
 namespace His_Pos
 {
@@ -709,17 +712,20 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("卡片資料讀取中...");
-                prescriptionDec2View.LoadPatentDataFromIcCard();
-                prescriptionDec2View.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(MainWindow.CurrentUser.Id);
+                LoadPatentDataFromIcCard(prescriptionDec2View);
                 Dispatcher.Invoke((Action)(() =>
                 {
+                    prescriptionDec2View.CurrentPrescription.Customer.Id = CustomerDb.CheckCustomerExist(prescriptionDec2View.CurrentPrescription.Customer);
+                    prescriptionDec2View.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(prescriptionDec2View.CurrentPrescription.Customer.Id);
                     prescriptionDec2View.CusHistoryMaster.ItemsSource = prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
                     prescriptionDec2View.CusHistoryMaster.SelectedIndex = 0;
                     if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
                         !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
                         prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
+                    if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                        !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                        prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
                 }));
-                
             };
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
@@ -730,6 +736,74 @@ namespace His_Pos
                 }));
             };
             backgroundWorker.RunWorkerAsync();
+        }
+
+        public void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
+        {
+            var strLength = 72;
+            var icData = new byte[72];
+            var res = HisApiBase.hisGetBasicData(icData, ref strLength);
+            icData.CopyTo(prescriptionDec2View._basicDataArr, 0);
+            if (res == 0)
+            {
+                prescriptionDec2View._isIcCardGet = true;
+                prescriptionDec2View._cusBasicData = new BasicData(icData);
+                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View._cusBasicData);
+                prescriptionDec2View.CurrentPrescription.Customer.Id = "1";
+                strLength = 296;
+                icData = new byte[296];
+                var cs = new ConvertData();
+                var cTreatItem = cs.StringToBytes("AF\0", 3);
+                //新生兒就醫註記,長度兩個char
+                var cBabyTreat = prescriptionDec2View.TreatRecCollection.Count > 0 ? cs.StringToBytes(prescriptionDec2View.TreatRecCollection[0].NewbornTreatmentMark + "\0", 3) : cs.StringToBytes(" ", 2);
+                //補卡註記,長度一個char
+                var cTreatAfterCheck = new byte[] { 1 };
+                res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+                if (res == 0)
+                {
+                    prescriptionDec2View._isMedicalNumberGet = true;
+                    prescriptionDec2View._seq = new SeqNumber(icData);
+                    prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View._seq.MedicalNumber;
+                }
+                strLength = 7;
+                icData = new byte[7];
+                res = HisApiBase.hisGetLastSeqNum(icData, ref strLength);
+                if (res == 0)
+                {
+                    prescriptionDec2View._isMedicalNumberGet = true;
+                }
+                strLength = 498;
+                icData = new byte[498];
+                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+                if (res == 0)
+                {
+                    var startIndex = 84;
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (icData[startIndex + 3] == 32)
+                            break;
+                        prescriptionDec2View.TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
+                        startIndex += 69;
+                    }
+                }
+            }
+            else
+            {
+                /*
+                 * prescriptionDec2View.CurrentPrescription.Customer.Name = prescriptionDec2View.PatientName.Text;
+                 * if(prescriptionDec2View.PatientBirthday.Text.Length == 7)
+                 *   prescriptionDec2View.CurrentPrescription.Customer.Birthday = prescriptionDec2View.PatientBirthday.Text.Substring(0, 3) + "-" +
+                 * prescriptionDec2View.PatientBirthday.Text.Substring(3, 2) + "-" +
+                   prescriptionDec2View.PatientBirthday.Text.Substring(5, 2);
+                 * prescriptionDec2View.CurrentPrescription.Customer.IcNumber = prescriptionDec2View.PatientId.Text;
+                 */
+
+                prescriptionDec2View.CurrentPrescription.Customer.Name = "許文章";
+                prescriptionDec2View.CurrentPrescription.Customer.Birthday = "0371001";
+                prescriptionDec2View.CurrentPrescription.Customer.IcNumber = "S88824769A";
+                prescriptionDec2View.CheckPatientGender();
+                prescriptionDec2View.CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
+            }
         }
     }
 }
