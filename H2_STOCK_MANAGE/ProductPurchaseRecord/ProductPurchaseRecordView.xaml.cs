@@ -46,6 +46,8 @@ namespace His_Pos.ProductPurchaseRecord
             }
         }
 
+        private DataGrid CurrentDataGrid { get; set; }
+
         public static bool DataChanged { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -170,32 +172,34 @@ namespace His_Pos.ProductPurchaseRecord
         {
             DataGrid dataGrid = sender as DataGrid;
 
-            if(dataGrid is null) return;
+            if(dataGrid is null || dataGrid.SelectedItem is null) return;
 
             StoreOrder storeOrder = (StoreOrder) dataGrid.SelectedItem;
+
+            CurrentDataGrid = null;
 
             switch (storeOrder.Category.CategoryName)
             {
                 case "進貨":
                     storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+                    CurrentDataGrid = PStoreOrderDetail;
+
+                    DetailGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
+                    DetailGrid.RowDefinitions[4].Height = new GridLength(0);
                     break;
                 case "退貨":
                     storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
+                    CurrentDataGrid = RStoreOrderDetail;
+
+                    DetailGrid.RowDefinitions[3].Height = new GridLength(0);
+                    DetailGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
                     break;
             }
 
+            CurrentDataGrid.ItemsSource = storeOrder.Products;
+            storeOrder.CalculateTotalPrice();
+
             StoreOrderData = storeOrder;
-        }
-        private void UpdateOrderDetailData(StoreOrder storeOrder)
-        {
-            StoreOrderData = storeOrder;
-
-            if (StoreOrderData.Products is null)
-                StoreOrderData.Products = StoreOrderDb.GetOrderPurchaseDetailById(StoreOrderData.Id);
-
-
-            StoreOrderDetail.ItemsSource = StoreOrderData.Products;
-            TotalAmount.Content = StoreOrderData.Products.Count.ToString();
         }
         #endregion
         
