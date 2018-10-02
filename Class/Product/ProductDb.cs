@@ -217,9 +217,7 @@ namespace His_Pos.Class.Product
             lastMonthSalesLineSeries.Values = lastYearMonthSales;
         }
 
-        internal static string GetBucklePrice(string id, double amount) {
-            throw new NotImplementedException();
-        }
+     
 
         internal static ObservableCollection<StockTakingOverview> GetProductStockTakingDate(string proId)
         {
@@ -430,7 +428,7 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("ENTRY_VALUE", entryValue));
             parameters.Add(new SqlParameter("ENTRY_SOURCE", entrySource));
             parameters.Add(new SqlParameter("ENTRY_SOURCE_ID", entrySourceId)); 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[InsertEntry]");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[InsertEntry]",parameters);
              
         }
         internal static string GetBucklePrice(string proId,string buckleAmount) {
@@ -439,7 +437,7 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_ID", proId));
             parameters.Add(new SqlParameter("PROWAR_ID", "1"));
             parameters.Add(new SqlParameter("BuckleAmount", buckleAmount)); 
-            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetBucklePrice]");
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetBucklePrice]",parameters);
             return table.Rows[0][0].ToString();
         }
     }

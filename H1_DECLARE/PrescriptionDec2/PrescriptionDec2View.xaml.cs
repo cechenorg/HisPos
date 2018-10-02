@@ -225,12 +225,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var declareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
                 string medEntryName = string.Empty;
+                string medServiceName = string.Empty;
                 switch (CurrentPrescription.Treatment.MedicalInfo.Hospital.Id) {
                     case "3532016964": //瀚群骨科
-                        medEntryName = "骨科調劑藥費";
+                        medEntryName = "骨科調劑耗用";
+                        medServiceName = "骨科藥服費";
                         break;
                     default:
-                        medEntryName = "調劑藥費";
+                        medEntryName = "調劑耗用";
+                        medServiceName = "藥服費";
                         break;
                 }  
                    
@@ -241,12 +244,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     decMasId = declareDb.InsertDeclareData(declareData);
 
                     ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", decMasId);
-                    ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", decMasId); 
-                        foreach (DeclareMedicine med in declareData.Prescription.Medicines) {
-                        ProductDb.InsertEntry(medEntryName, "-" + ProductDb.GetBucklePrice(med.Id,med.Amount), "PRO_ID", med.Id);
+                    ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", decMasId);
+                    ProductDb.InsertEntry(medServiceName,declareData.MedicalServicePoint.ToString(),"DecMasId",decMasId);
+                    if (medEntryName != "骨科調劑耗用")
+                    {
+                        int medTotalPrice = 0;
+                        foreach (DeclareMedicine med in declareData.Prescription.Medicines)
+                        {
+                            medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
+                        }
+                        ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice.ToString(), "DecMasId", decMasId);
+                        declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
                     }
-                    
-                    declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫
+                       
                     
                 }
                 else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(CurrentDecMasId))
@@ -266,11 +276,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) {
                         ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", CurrentDecMasId);
                         ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", CurrentDecMasId);
-                        foreach (DeclareMedicine med in declareData.Prescription.Medicines)
-                        {
-                            ProductDb.InsertEntry(medEntryName, "-" +  ProductDb.GetBucklePrice(med.Id, med.Amount), "PRO_ID", med.Id);
+                        ProductDb.InsertEntry(medServiceName, declareData.MedicalServicePoint.ToString(), "DecMasId", CurrentDecMasId);
+                        if (medEntryName != "骨科調劑耗用") {
+                            int medTotalPrice = 0;
+                            foreach (DeclareMedicine med in declareData.Prescription.Medicines)
+                            {
+                                medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
+                            }
+                            ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice.ToString(), "DecMasId", CurrentDecMasId);
+                            declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
                         }
-                        declareDb.InsertInventoryDb(declareData, "處方登錄", CurrentDecMasId);//庫存扣庫
+                            
                     }
                         
 
@@ -301,11 +317,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) {
                         ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", CurrentDecMasId);
                         ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", CurrentDecMasId);
-                        foreach (DeclareMedicine med in declareData.Prescription.Medicines)
-                        {
-                            ProductDb.InsertEntry(medEntryName, "-" + ProductDb.GetBucklePrice(med.Id, med.Amount), "PRO_ID", med.Id);
+                        ProductDb.InsertEntry(medServiceName, declareData.MedicalServicePoint.ToString(), "DecMasId", decMasId);
+                        if (medEntryName != "骨科調劑耗用") {
+                            int medTotalPrice = 0;
+                            foreach (DeclareMedicine med in declareData.Prescription.Medicines)  {
+                                medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
+                            }
+                            ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice.ToString(), "DecMasId", decMasId);
+                            declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫    
                         }
-                        declareDb.InsertInventoryDb(declareData, "處方登錄", decMasId);//庫存扣庫    
+                            
                     }
                                         
 
