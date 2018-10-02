@@ -399,10 +399,17 @@ namespace His_Pos.Class.StoreOrder
         {
             string orderMedicines = "";
 
+            bool isPurchace = storeOrderData.Category.CategoryName.Equals("進");
+
             foreach (var product in storeOrderData.Products)
             {
                 orderMedicines += product.Id.PadRight(12, ' ');
-                orderMedicines += ((IProductPurchase) product).OrderAmount.ToString().PadLeft(10, ' ');
+
+                if(isPurchace)
+                    orderMedicines += ((IProductPurchase) product).OrderAmount.ToString().PadLeft(10, ' ');
+                else
+                    orderMedicines += (-((ITrade)product).Amount).ToString().PadLeft(10, ' ');
+
                 orderMedicines += ((IProductPurchase) product).Note;
                 orderMedicines += "\r\n";
             }
