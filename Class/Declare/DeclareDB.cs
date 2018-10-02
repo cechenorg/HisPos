@@ -254,6 +254,8 @@ namespace His_Pos.Class.Declare
                 parameters.Add(new SqlParameter("BUCKLE_VALUE", declareDetail.Amount));
                 parameters.Add(new SqlParameter("BUCKLE_STATUS", "1"));
                 parameters.Add(new SqlParameter("WAY", way));
+                parameters.Add(new SqlParameter("PROWAR_ID", "1"));
+                
                 conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[InsertDeclareDetailBuckle]",
                     parameters);
             }
