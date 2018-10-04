@@ -359,6 +359,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 if (newItemDialog.ConfirmButtonClicked)
                 {
+                    if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
+                    {
+                        MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING);
+                        messageWindow.ShowDialog();
+                        return;
+                    }
+
                     AddProduct(textBox, newItemDialog.SelectedItem);
                 }
             }
@@ -498,6 +505,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (newItemDialog.ConfirmButtonClicked)
             {
+                if(StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
+                {
+                    MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING);
+                    messageWindow.ShowDialog();
+                    return;
+                }
+
                 //SetChanged();
                 if (newItemDialog.SelectedItem.Type.Equals("M"))
                     StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem));

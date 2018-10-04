@@ -232,6 +232,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void AddProductByBatchOverview(TextBox textBox, PurchaseProduct purchaseProduct, BatchNumOverview batchNumOverview, bool isFirst)
         {
+            if (StoreOrderData.Products.Count(p => p.Id.Equals(purchaseProduct.Id) && ((IProductReturn)p).BatchNumber.Equals(batchNumOverview.BatchNumber)) > 0)
+            {
+                MessageWindow messageWindow = new MessageWindow($"處理單內已經有{purchaseProduct.Id}(批號 {batchNumOverview.BatchNumber})!", MessageType.WARNING);
+                messageWindow.ShowDialog();
+                return;
+            }
+
             Product newProduct;
 
             if (purchaseProduct.Type.Equals("M"))
