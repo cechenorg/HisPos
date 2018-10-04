@@ -67,10 +67,14 @@
                     <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" />
                     <Label Name="PatientBirthday" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" 
                            Foreground="{StaticResource ForeGround}" Content="{Binding InquiredPrescription.Prescription.Customer.Birthday, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource TaiwanCalenderConverter}}" />
-                    <StackPanel Orientation="Horizontal" Height="30" Margin="255,0,0,0">
+                    <StackPanel Orientation="Horizontal" Height="30" Margin="10,0,0,0">
                         <Label Content="調劑藥師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch" HorizontalAlignment="Right"/>
                         <TextBox Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalAlignment="Right"
                                  HorizontalContentAlignment="Center"  Text="{Binding InquiredPrescription.Prescription.Pharmacy.MedicalPersonnel.IcNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged"/>
+                        <Label Content="過卡狀態" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch" HorizontalAlignment="Right"/>
+                        <Label Width="110" MinWidth="50" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalAlignment="Right"
+                                 HorizontalContentAlignment="Center"  Content=""/>
+                        <Button Content ="補卡" Click="MakeUp_ButtonClick"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>

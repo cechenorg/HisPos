@@ -584,6 +584,10 @@ namespace His_Pos.PrescriptionInquire
             textBox.SelectionLength = textBox.Text.Length;
         }
 
-      
+
+        private void MakeUp_ButtonClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
