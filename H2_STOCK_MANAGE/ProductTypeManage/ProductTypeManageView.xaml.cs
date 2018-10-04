@@ -183,6 +183,8 @@ namespace His_Pos.ProductTypeManage
             PieChartPushOut();
             InitLineChart(((ProductTypeManageMaster)(sender as DataGrid).SelectedItem).Id);
             UpdateDetailUi();
+
+            InitTypeDataChanged();
         }
 
         private void UpdateDetailUi()
@@ -275,6 +277,8 @@ namespace His_Pos.ProductTypeManage
 
             SmallType.Text = ((ProductTypeManageDetail) (sender as DataGrid).SelectedItem).Name;
             SmallTypeEngName.Text = ((ProductTypeManageDetail)(sender as DataGrid).SelectedItem).EngName;
+
+            InitTypeDataChanged();
         }
 
         private void LineChartRange_OnClick(object sender, RoutedEventArgs e)
@@ -300,8 +304,14 @@ namespace His_Pos.ProductTypeManage
         {
             if (TypeDetail.SelectedItem != null)
             {
+                BigType.Text = ((ProductTypeManageMaster)TypeMaster.SelectedItem).Name;
+                BigTypeEngName.Text = ((ProductTypeManageMaster)TypeMaster.SelectedItem).EngName;
+
                 SmallType.Text = ((ProductTypeManageDetail)TypeDetail.SelectedItem).Name;
+                SmallTypeEngName.Text = ((ProductTypeManageDetail)TypeDetail.SelectedItem).EngName;
             }
+
+            InitTypeDataChanged();
         }
 
         private void ConfirmTypeChange(object sender, RoutedEventArgs e)
@@ -323,6 +333,8 @@ namespace His_Pos.ProductTypeManage
                 
                 MessageWindow messageWindow = new MessageWindow("修改成功!", MessageType.SUCCESS);
                 messageWindow.ShowDialog();
+
+                InitTypeDataChanged();
             }
         }
 
@@ -452,7 +464,20 @@ namespace His_Pos.ProductTypeManage
 
         private void TypeDataChanged()
         {
+            CancelBtn.IsEnabled = true;
+            ConfirmBtn.IsEnabled = true;
+
             ChangedLabel.Foreground = Brushes.Red;
+            ChangedLabel.Content = "已修改";
+        }
+
+        private void InitTypeDataChanged()
+        {
+            CancelBtn.IsEnabled = false;
+            ConfirmBtn.IsEnabled = false;
+
+            ChangedLabel.Foreground = Brushes.DimGray;
+            ChangedLabel.Content = "未修改";
         }
     }
 }
