@@ -270,9 +270,18 @@ namespace His_Pos.Class.StoreOrder
 
         internal bool CheckIfOrderNotComplete()
         {
-            foreach(var product in Products)
+            var productGroups = Products.GroupBy(p => p.Id);
+
+            foreach(var group in productGroups)
             {
-                if (((IProductPurchase)product).OrderAmount > ((ITrade)product).Amount)
+                double totalAmount = 0;
+
+                foreach(var product in group)
+                {
+                    totalAmount += ((ITrade)product).Amount;
+                }
+
+                if (((IProductPurchase)group.First()).OrderAmount > totalAmount)
                     return true;
             }
 

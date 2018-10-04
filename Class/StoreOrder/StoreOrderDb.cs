@@ -158,7 +158,7 @@ namespace His_Pos.Class.StoreOrder
                     var newRow = details.NewRow();
 
                     newRow["PRO_ID"] = product.Id;
-                    newRow["ORDERQTY"] = 0;
+                    newRow["ORDERQTY"] = ((IProductReturn)product).BatchLimit;
                     newRow["QTY"] = ((ITrade)product).Amount;
                     newRow["PRICE"] = ((ITrade)product).Price.ToString();
                     newRow["DESCRIPTION"] = ((IProductReturn)product).Note;
