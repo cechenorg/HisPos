@@ -144,14 +144,15 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridBackGround}">
-                        <StackPanel Orientation="Horizontal" Width="670">
-                            <TextBox Name="BigType" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                        <StackPanel Orientation="Horizontal" Width="600">
+                            <TextBox Name="BigType" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="20,0,0,0" TextChanged="Type_TextChanged"/>
                             <TextBox Name="BigTypeEngName" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Foreground="Red" Margin="10,0,0,0"/>
                             <Label Content="-" FontSize="30" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="10,0,10,0"/>
                             <TextBox Name="SmallType" FontSize="25" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center"/>
                             <TextBox Name="SmallTypeEngName" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Foreground="Red" Margin="10,0,0,0"/>
                         </StackPanel>
-                        <Button Margin="0,0,20,0" Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="CancelTypeChange"/>
+                        <Label Name="ChangedLabel" Content="未修改" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                        <Button Margin="0,0,20,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="CancelTypeChange"/>
                         <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Click="ConfirmTypeChange"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">

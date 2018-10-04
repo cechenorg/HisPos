@@ -32,6 +32,7 @@ namespace His_Pos.ProductTypeManage
     /// </summary>
     public partial class ProductTypeManageView : UserControl, INotifyPropertyChanged
     {
+        #region ----- Define Variables -----
         public string[] Months { get; set; }
         public string[] Days { get; set; }
 
@@ -90,6 +91,16 @@ namespace His_Pos.ProductTypeManage
 
         public LineSeries MonthSalesLineSeries { get; set; }
         public LineSeries LastMonthSalesLineSeries { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
 
         public ProductTypeManageView()
         {
@@ -160,15 +171,6 @@ namespace His_Pos.ProductTypeManage
             ProductDb.GetProductTypeManage(TypeManageMasters, TypeManageDetails);
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
-
         private void TypeMaster_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((sender as DataGrid) is null || (sender as DataGrid).SelectedItem is null) return;
@@ -200,11 +202,6 @@ namespace His_Pos.ProductTypeManage
                 SmallType.IsEnabled = false;
                 SmallTypeEngName.IsEnabled = false;
             }
-        }
-
-        private void InitTypeTextBox(string bigTypeName)
-        {
-            
         }
 
         private void InitLineChart(string typeId)
@@ -446,6 +443,16 @@ namespace His_Pos.ProductTypeManage
         {
             ItemChangeTypeWindow itemChangeTypeWindow = new ItemChangeTypeWindow();
             itemChangeTypeWindow.ShowDialog();
+        }
+
+        private void Type_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TypeDataChanged();
+        }
+
+        private void TypeDataChanged()
+        {
+            ChangedLabel.Foreground = Brushes.Red;
         }
     }
 }

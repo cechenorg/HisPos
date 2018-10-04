@@ -254,6 +254,7 @@ namespace His_Pos.ProductPurchase
         {
             StoreOrderData = null;
 
+            CurrentControl = null;
             purchaseControl.ClearControl();
             returnControl.ClearControl();
         }
