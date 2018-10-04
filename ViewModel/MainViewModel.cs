@@ -25,6 +25,7 @@ using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.IndexView;
+using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
 
 namespace His_Pos.ViewModel
 {
@@ -200,6 +201,8 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.匯出申報檔):
                     break;
+                case nameof(FeatureItem.分錄查詢):
+                    break;
                 default:
                     return;
             }
@@ -299,6 +302,10 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.匯出申報檔):
                     newTab = new Export() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
+                case nameof(FeatureItem.分錄查詢):
+                    newTab = new EntrySearch() { TabName = MainWindow.HisFeatures[6].Functions[0], Icon = MainWindow.HisFeatures[6].Icon };
+                    break;
+                    
                 default:
                     return;
             }

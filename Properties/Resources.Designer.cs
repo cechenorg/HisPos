@@ -205,6 +205,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 分錄查詢 的當地語系化字串。
+        /// </summary>
+        internal static string EntrySearch {
+            get {
+                return ResourceManager.GetString("EntrySearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 處方作業 的當地語系化字串。
         /// </summary>
         internal static string hisPrescription {

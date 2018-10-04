@@ -67,6 +67,8 @@ namespace His_Pos
 
             HisFeatures.Add(new Feature(@"..\Images\DeclareFile.png", Properties.Resources.DeclareFile,
                 new string[] { Properties.Resources.DeclareFileExport }));
+            HisFeatures.Add(new Feature(@"..\Images\DeclareFile.png", Properties.Resources.EntrySearch,
+              new string[] { Properties.Resources.EntrySearch }));
         }
         
         private void InitializeMenu()

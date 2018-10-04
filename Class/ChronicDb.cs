@@ -64,10 +64,21 @@ namespace His_Pos.Class
             }
             return collection;
         }
+        internal static ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall> DailyChronicPhoneCall()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyChronicPhoneCall]");
+            ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall> collection = new ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                collection.Add(new IndexView.IndexView.DailtChronicPhoneCall(row));
+            }
+            return collection;
+        }
         internal static void UpdateDailyChronic() {
             var dd = new DbConnection(Settings.Default.SQL_global);
              dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateDailyChronic]");
         }
-        
+         
     }
 }

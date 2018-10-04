@@ -79,7 +79,7 @@
                     </Grid.RowDefinitions>
                     <Label   Grid.Row="0" Content="今日需通知領藥"  Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
                     <DataGrid Name="ChironicPhoneCall"   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="1">
+                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="1" ItemsSource="{Binding DailtChronicPhoneCallCollection,UpdateSourceTrigger=PropertyChanged}">
                         <DataGrid.Resources>
                             <Style TargetType="{x:Type ScrollBar}">
                                 <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -114,7 +114,7 @@
                         <DataGrid.Columns>
                             <DataGridTemplateColumn MinWidth="30" MaxWidth="30">
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn MinWidth="50" MaxWidth="50" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                            <DataGridTextColumn MinWidth="50" MaxWidth="50" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CusName}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -122,7 +122,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="100" MaxWidth="100" Header="電話" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                            <DataGridTextColumn  Width="80" Header="電話" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Phone}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -130,7 +130,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="180" Header="醫院/科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.Inventory, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Width="250" Header="醫院/科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivInsName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -138,7 +138,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Path=Stock.SafeAmount, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn MinWidth="70" MaxWidth="70" Header="狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Status, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />

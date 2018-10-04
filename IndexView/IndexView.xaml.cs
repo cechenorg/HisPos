@@ -30,6 +30,21 @@ namespace His_Pos.IndexView
         private void NotifyPropertyChanged(string propertyName) {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        public class DailtChronicPhoneCall {
+
+            public DailtChronicPhoneCall(DataRow row) {
+                CusId = row["CUS_ID"].ToString();
+                CusName = row["CUS_NAME"].ToString();
+                Phone = row["CUS_TEL"].ToString();
+                DivInsName = row["DIVINS_NAME"].ToString();
+                Status = row["STATUS"].ToString() == "N" ? "未聯絡" : "已聯絡";
+            }
+            public string CusId { get; set; }
+            public string CusName { get; set; }
+            public string Phone { get; set; }
+            public string DivInsName { get; set; }
+            public string Status { get; set; }
+        }
         public class DailyTakeChronicList {
             public DailyTakeChronicList(DataRow row) {
                 DecMasId = row["HISDECMAS_ID"].ToString();
@@ -81,6 +96,17 @@ namespace His_Pos.IndexView
                 NotifyPropertyChanged("DailyTakeChronicListCollection");
             }
         }
+        private ObservableCollection<DailtChronicPhoneCall> dailtChronicPhoneCallCollection;
+        public ObservableCollection<DailtChronicPhoneCall> DailtChronicPhoneCallCollection
+        {
+            get => dailtChronicPhoneCallCollection;
+            set
+            {
+                dailtChronicPhoneCallCollection = value;
+                NotifyPropertyChanged("DailtChronicPhoneCallCollection");
+            }
+        }
+
         
         public IndexView()
         {
@@ -94,6 +120,7 @@ namespace His_Pos.IndexView
         public void InitData() { 
             ProductListCollection = ProductDb.DailyPurchaseReturn();
             DailyTakeChronicListCollection = ChronicDb.DailyTakeChronic();
+            DailtChronicPhoneCallCollection = ChronicDb.DailyChronicPhoneCall();
         }
        
 
