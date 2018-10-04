@@ -7,6 +7,13 @@
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Margin" Value="5,10,5,10" />
         </Style>
+        <Style x:Key="AutoCompleteBoxStyle" TargetType="{x:Type controls:AutoCompleteBox}">
+            <Style.Resources>
+                <Style TargetType="{x:Type ListBox}">
+                    <Setter Property="MaxHeight" Value="200" />
+                </Style>
+            </Style.Resources>
+        </Style>
         <DataTemplate x:Key="MedcineCodeAutoComplete">
             <StackPanel Orientation="Horizontal">
                 <Label x:Name="Promid" Width="100" Content="{Binding Id}" />
@@ -27,8 +34,6 @@
                 <RowDefinition Height="300" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Margin="9" Orientation="Horizontal">
-                <Image Name="IcPatientGender" Width="25" Margin="20,0,15,0" Source="../../Images/Genders.png" />
-                <Label Name="PatientGender" Width="50" Margin="0,0,15,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" />
                 <Image Name="IcPatientName" Width="25" Margin="20,0,15,0" Source="../../Images/User_48px.png" />
                 <TextBox Name="PatientName" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Image Name="IcPatientId" Width="30" Source="../../Images/ID_Card.png" />
@@ -43,11 +48,13 @@
                 <Label VerticalAlignment="Center" Content="藥品毛利 : " FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                 <Label x:Name="PrescriptionProfit" Width="60" Height="30" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center" 
                        Content="{Binding MedProfit, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Foreground="#FF424040" />
-                <Label Width="auto" Content="就醫序號" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                <TextBox x:Name="MedicalNumber" Width="150" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" materialDesign:HintAssist.Hint="慢箋填原處方序號"
+                <Label Width="auto" Content="處方就醫序號" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                <TextBox x:Name="MedicalNumber" Width="50" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14"
                          MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.Customer.IcCard.MedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                          InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="MedicalNumber_PreviewKeyDown" />
-                <Button MinWidth="130" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="7,0,0,0"/>
+                <Label Width="auto" Content="卡片狀態" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                <Label x:Name="IcCardStatus" Width="112" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" Content="未置入卡片"/>
+                <Button MinWidth="128" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="5,0,0,0"/>
             </StackPanel>
             <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}">
                 <Grid.ColumnDefinitions>
@@ -64,7 +71,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8" Orientation="Horizontal">
                     <Label VerticalAlignment="Center" Content="釋出院所" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <controls:AutoCompleteBox x:Name="ReleaseHospital" Width="450" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" 
+                    <controls:AutoCompleteBox x:Name="ReleaseHospital" Width="450" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Style="{StaticResource AutoCompleteBoxStyle}"
                                               Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" FontSize="16" FontStretch="ExtraExpanded" 
                                               ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" MinimumPrefixLength="4" 
                                               SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay}" ValueMemberPath="FullName"
@@ -209,7 +216,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineCodeDataTemplate">
                                 <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" MaxHeight="50" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" 
-                                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" DropDownClosed="MedicineCodeAuto_DropDownClosed" 
+                                                          Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" DropDownClosed="MedicineCodeAuto_DropDownClosed" Style="{StaticResource AutoCompleteBoxStyle}"
                                                           FilterMode="Contains" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsEnabled="True" IsTextCompletionEnabled="False" 
                                                           ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" 
                                                           MinimumPrefixLength="2" Populating="MedicineCodeAuto_Populating" Text="{Binding Id, Mode=TwoWay}" ValueMemberPath="Id" />

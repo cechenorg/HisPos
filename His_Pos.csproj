@@ -407,6 +407,9 @@
       <DependentUpon>ErrorMssageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\GenderConverter.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml.cs">
+      <DependentUpon>IcErrorCodeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
@@ -679,6 +682,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

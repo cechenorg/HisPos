@@ -740,15 +740,17 @@ namespace His_Pos
 
         public void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
         {
+
             var strLength = 72;
             var icData = new byte[72];
             var res = HisApiBase.hisGetBasicData(icData, ref strLength);
-            icData.CopyTo(prescriptionDec2View._basicDataArr, 0);
+            icData.CopyTo(prescriptionDec2View.BasicDataArr, 0);
             if (res == 0)
             {
-                prescriptionDec2View._isIcCardGet = true;
-                prescriptionDec2View._cusBasicData = new BasicData(icData);
-                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View._cusBasicData);
+                prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
+                prescriptionDec2View.IsIcCardGet = true;
+                prescriptionDec2View.CusBasicData = new BasicData(icData);
+                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
                 prescriptionDec2View.CurrentPrescription.Customer.Id = "1";
                 strLength = 296;
                 icData = new byte[296];
@@ -759,33 +761,98 @@ namespace His_Pos
                 //補卡註記,長度一個char
                 var cTreatAfterCheck = new byte[] { 1 };
                 res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+                //取得就醫序號
                 if (res == 0)
                 {
-                    prescriptionDec2View._isMedicalNumberGet = true;
-                    prescriptionDec2View._seq = new SeqNumber(icData);
-                    prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View._seq.MedicalNumber;
+                    prescriptionDec2View.IsMedicalNumberGet = true;
+                    prescriptionDec2View.Seq = new SeqNumber(icData);
+                    prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.Seq.MedicalNumber;
                 }
-                strLength = 7;
-                icData = new byte[7];
-                res = HisApiBase.hisGetLastSeqNum(icData, ref strLength);
-                if (res == 0)
+                //未取得就醫序號
+                else
                 {
-                    prescriptionDec2View._isMedicalNumberGet = true;
-                }
-                strLength = 498;
-                icData = new byte[498];
-                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
-                if (res == 0)
-                {
-                    var startIndex = 84;
-                    for (var i = 0; i < 6; i++)
+                    string errMsg;
+                    switch (res)
                     {
-                        if (icData[startIndex + 3] == 32)
+                        case 4000:
+                            errMsg = "讀卡機程序逾時";
                             break;
-                        prescriptionDec2View.TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
-                        startIndex += 69;
+                        case 4013:
+                            errMsg = "未置入健保IC卡";
+                            break;
+                        case 4029:
+                            errMsg = "IC卡權限不足";
+                            break;
+                        case 4033:
+                            errMsg = "所置入非健保IC卡";
+                            break;
+                        case 4050:
+                            errMsg = "安全模組尚未與IDC認證";
+                            break;
+                        case 4061:
+                            errMsg = "網路不通";
+                            break;
+                        case 4071:
+                            errMsg = "健保IC卡與IDC認證失敗";
+                            break;
+                        case 5001:
+                            errMsg = "就醫可用次數不足";
+                            break;
+                        case 5002:
+                            errMsg = "卡片已註銷";
+                            break;
+                        case 5003:
+                            errMsg = "卡片已過有限期限";
+                            break;
+                        case 5004:
+                            errMsg = "新生兒依附就醫已逾60日";
+                            break;
+                        case 5005:
+                            errMsg = "讀卡機的就診日期時間讀取失敗";
+                            break;
+                        case 5006:
+                            errMsg = "讀取安全模組內的「醫療院所代碼」失敗";
+                            break;
+                        case 5007:
+                            errMsg = "寫入一組新的「就醫資料登錄」失敗";
+                            break;
+                        case 5008:
+                            errMsg = "安全模組簽章失敗";
+                            break;
+                        case 5009:
+                            errMsg = "投保單位無權限";
+                            break;
+                        case 5010:
+                            errMsg = "同一天看診兩科(含)以上";
+                            break;
+                        case 5012:
+                            errMsg = "此人未在保";
+                            break;
+                        case 9129:
+                            errMsg = "持卡人於非所限制的醫療院所就診";
+                            break;
+                        default:
+                            errMsg = string.Empty;
+                            break;
                     }
+                    var e = new IcErrorCodeWindow(prescriptionDec2View.IsMedicalNumberGet, errMsg);
+                    e.Show();
                 }
+                ////取得就醫紀錄
+                //strLength = 498;
+                //icData = new byte[498];
+                //res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+                //if (res == 0)
+                //{
+                //    var startIndex = 84;
+                //    for (var i = 0; i < 6; i++)
+                //    {
+                //        if (icData[startIndex + 3] == 32)
+                //            break;
+                //        prescriptionDec2View.TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
+                //        startIndex += 69;
+                //    }
+                //}
             }
             else
             {
@@ -797,7 +864,7 @@ namespace His_Pos
                    prescriptionDec2View.PatientBirthday.Text.Substring(5, 2);
                  * prescriptionDec2View.CurrentPrescription.Customer.IcNumber = prescriptionDec2View.PatientId.Text;
                  */
-
+                
                 prescriptionDec2View.CurrentPrescription.Customer.Name = "許文章";
                 prescriptionDec2View.CurrentPrescription.Customer.Birthday = "0371001";
                 prescriptionDec2View.CurrentPrescription.Customer.IcNumber = "S88824769A";
