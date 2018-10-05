@@ -28,6 +28,7 @@ namespace His_Pos.Class.Product
             Usage = new Usage();
             days = "";
             Position = "";
+            IsBuckle = true;
             source = "";
         }
 
@@ -88,6 +89,7 @@ namespace His_Pos.Class.Product
             IsFrozMed = Boolean.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
             HcPrice = dataRow["HISMED_PRICE"].ToString();
             Note = dataRow["HISMED_NOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_NOTE"].ToString();
+            IsBuckle = true;
         }
         
         public bool IsControlMed { get; set; }
@@ -228,7 +230,7 @@ namespace His_Pos.Class.Product
         }
 
         public string Note { get; set; }
-
+        public bool IsBuckle { get; set; }
         private void CalculateTotalPrice()
         {
             if (PaySelf)
@@ -290,6 +292,7 @@ namespace His_Pos.Class.Product
                 Days = Days,
                 Position = Position,
                 Source = Source,
+                IsBuckle = IsBuckle,
             };
             return declareMedicine;
         }

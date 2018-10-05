@@ -248,6 +248,8 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             foreach (DeclareMedicine declareDetail in declareData.Prescription.Medicines)
             {
+                DeclareMedicine med = declareData.Prescription.Medicines.Single(medicine => medicine.Id == declareDetail.Id);
+                if (!med.IsBuckle) continue;
                 parameters.Clear();
                 parameters.Add(new SqlParameter("MAS_ID", decMasId));
                 parameters.Add(new SqlParameter("PRO_ID", declareDetail.Id));

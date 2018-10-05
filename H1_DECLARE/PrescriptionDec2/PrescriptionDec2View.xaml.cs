@@ -35,6 +35,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
+        private string SelectedMedId;
         public bool IsSend = false;
         private DeclareData _currentDeclareData;
         public static string IndexViewDecMasId = string.Empty;
@@ -252,13 +253,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         int medTotalPrice = 0;
                         foreach (DeclareMedicine med in _currentDeclareData.Prescription.Medicines)
                         {
-                            medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
+                            if (med.IsBuckle)
+                                medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
                         }
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice.ToString(), "DecMasId", decMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", decMasId);//庫存扣庫
                     }
-                       
-                    
                 }
                 else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(_currentDecMasId))
                 { //第2次以後的慢性處方
@@ -282,7 +282,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             int medTotalPrice = 0;
                             foreach (DeclareMedicine med in _currentDeclareData.Prescription.Medicines)
                             {
-                                medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
+                                if (med.IsBuckle)
+                                    medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
                             }
                             ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice.ToString(), "DecMasId", _currentDecMasId);
                             declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _currentDecMasId);//庫存扣庫
@@ -322,6 +323,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         if (medEntryName != "骨科調劑耗用") {
                             int medTotalPrice = 0;
                             foreach (DeclareMedicine med in _currentDeclareData.Prescription.Medicines)  {
+                                if(med.IsBuckle)
                                 medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
                             }
                             ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice.ToString(), "DecMasId", decMasId);
@@ -860,6 +862,25 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentPrescription.Medicines = MedicineDb.GetDeclareMedicineByMasId(decMasId);
             PrescriptionMedicines.ItemsSource = PrescriptionDec2View.Instance.CurrentPrescription.Medicines;
 
+        }
+        private void IsBuckle_Click(object sender, RoutedEventArgs e) {
+           
+            for (int i = 0;i < CurrentPrescription.Medicines.Count ;i++) {
+                if (CurrentPrescription.Medicines[i].Id == SelectedMedId)
+                    CurrentPrescription.Medicines[i].IsBuckle = !CurrentPrescription.Medicines[i].IsBuckle;
+            }
+           
+        }
+        private void MedContextMenu_Opened(object sender, RoutedEventArgs e) {
+            var temp = (sender as ContextMenu);
+            MenuItem menuitem = temp.Items[0] as MenuItem;
+            SelectedMedId = ((DeclareMedicine)PrescriptionMedicines.SelectedItem).Id;
+            if (((DeclareMedicine)PrescriptionMedicines.SelectedItem).IsBuckle)
+                menuitem.Header = "申報不扣庫";
+            else 
+                menuitem.Header = "申報扣庫";
+            
+                
         }
     }
 }
