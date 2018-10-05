@@ -11,12 +11,17 @@ using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.Service;
+using His_Pos.Struct.IcData;
 
 namespace His_Pos.PrescriptionInquire
 {
@@ -26,6 +31,7 @@ namespace His_Pos.PrescriptionInquire
     public partial class PrescriptionInquireOutcome : Window, INotifyPropertyChanged
     {
         private bool _isFirst = true;
+        private DeclareData _currentDeclareData;
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -514,8 +520,8 @@ namespace His_Pos.PrescriptionInquire
             if (InquiredPrescription.Prescription.CheckPrescriptionData().Count == 0)
             {
                 InquiredPrescription.Prescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(InquiredPrescription.Prescription.Customer.Birthday);
-                var declareData = new DeclareData(InquiredPrescription.Prescription);
-                declareData.DecMasId = InquiredPrescription.DecMasId;
+                _currentDeclareData = new DeclareData(InquiredPrescription.Prescription);
+                _currentDeclareData.DecMasId = InquiredPrescription.DecMasId;
                 
                 var declareDb = new DeclareDb();
                 //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
@@ -526,7 +532,7 @@ namespace His_Pos.PrescriptionInquire
                 //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
                
                 //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
-                declareDb.UpdateDeclareData(declareData);
+                declareDb.UpdateDeclareData(_currentDeclareData);
                 m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
                 m.Show();
                 InitDataChanged();
@@ -584,10 +590,139 @@ namespace His_Pos.PrescriptionInquire
             textBox.SelectionLength = textBox.Text.Length;
         }
 
-
         private void MakeUp_ButtonClick(object sender, RoutedEventArgs e)
         {
-
+            if(!InquiredPrescription.Prescription.IsGetIcCard)
+                LogInIcData();
         }
+
+        #region 每日上傳.讀寫卡相關函數
+        private void LogInIcData()
+        {
+            var treatRecCollection = new ObservableCollection<TreatmentDataNoNeedHpc>();//就醫紀錄
+            var prescriptionSignatureList = new List<string>();//處方簽章
+            var basicDataArr = new byte[72];
+            var strLength = 72;
+            var icData = new byte[72];
+            var res = HisApiBase.hisGetBasicData(icData, ref strLength);//讀取基本資料
+            if (res == 0)
+            {
+                icData.CopyTo(basicDataArr, 0);
+                InquiredPrescription.Prescription.IsGetIcCard = true;
+                var cusBasicData = new BasicData(icData);
+                ////取得就醫紀錄
+                strLength = 498;
+                icData = new byte[498];
+                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);//取得就醫紀錄
+                if (res == 0)
+                {
+                    var startIndex = 84;
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (icData[startIndex + 3] == 32)
+                            break;
+                        treatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
+                        startIndex += 69;
+                    }
+                }
+                strLength = 296;
+                icData = new byte[296];
+                var cs = new ConvertData();
+                var cTreatItem = cs.StringToBytes("AF\0", 3);
+                //新生兒就醫註記,長度兩個char
+                var cBabyTreat = treatRecCollection.Count > 0 ? cs.StringToBytes(treatRecCollection[0].NewbornTreatmentMark + "\0", 3) : cs.StringToBytes(" ", 2);
+                //補卡註記,長度一個char
+                var cTreatAfterCheck = new byte[] { 1 };
+                res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+                //取得就醫序號
+                if (res == 0)
+                {
+                    var seq = new SeqNumber(icData);
+                    InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = seq.MedicalNumber;
+                    var icPrescripList = new List<IcPrescriptData>();
+                    foreach (var med in InquiredPrescription.Prescription.Medicines)
+                    {
+                        icPrescripList.Add(new IcPrescriptData(med));
+                    }
+                    var pPatientId = new byte[10];
+                    var pPatientBitrhDay = new byte[10];
+                    Array.Copy(basicDataArr, 32, pPatientId, 0, 10);
+                    Array.Copy(basicDataArr, 42, pPatientBitrhDay, 0, 7);
+                    var pDateTime = cs.StringToBytes(seq.TreatDateTime + " ", 14);
+                    foreach (var icPrescript in icPrescripList)
+                    {
+                        var pData = cs.StringToBytes(icPrescript.DataStr, 61);
+                        var pDataInput = pDateTime.Concat(pData).ToArray();
+                        strLength = 40;
+                        icData = new byte[40];
+                        res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput, icData, ref strLength);
+                        if (res == 0)
+                            prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                    }
+                    CreatIcUploadData(cusBasicData,seq,prescriptionSignatureList);
+                }
+                //未取得就醫序號
+                else
+                {
+                    var e = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), res));
+                    e.Show();
+                }
+            }
+            else
+            {
+                var m = new MessageWindow(Enum.GetName(typeof(ErrorCode), res),MessageType.WARNING);
+                m.Show();
+            }
+        }
+
+        private void CreatIcUploadData(BasicData cusBasicData,SeqNumber seq, List<string> prescriptionSignatureList)
+        {
+            var medicalDatas = new List<MedicalData>();
+            var icData = new IcData(seq, InquiredPrescription.Prescription, cusBasicData, _currentDeclareData);
+            var mainMessage = new MainMessage(icData);
+            var headerMessage = new Header { DataFormat = "1" };
+            var icRecord = new IcRecord(headerMessage, mainMessage);
+
+            for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
+            {
+                if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
+                    continue;
+                var medicalData = new MedicalData
+                {
+                    MedicalOrderTreatDateTime = seq.TreatDateTime,
+                    MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
+                    TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
+                    Usage = _currentDeclareData.DeclareDetails[i].Usage,
+                    Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
+                    TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
+                    PrescriptionSignature = prescriptionSignatureList[i],
+                };
+                if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
+                    medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
+                switch (medicalData.MedicalOrderCategory)
+                {
+                    case "1":
+                    case "A":
+                        medicalData.PrescriptionDeliveryMark = "02";
+                        break;
+                    case "2":
+                    case "B":
+                        medicalData.PrescriptionDeliveryMark = "06";
+                        break;
+                    case "3":
+                    case "C":
+                    case "4":
+                    case "D":
+                    case "5":
+                    case "E":
+                        medicalData.PrescriptionDeliveryMark = "04";
+                        break;
+                }
+                medicalDatas.Add(medicalData);
+            }
+            icRecord.MainMessage.MedicalMessageList = medicalDatas;
+            icRecord.SerializeObject();
+        }
+        #endregion
     }
 }

@@ -55,7 +55,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         #region 健保卡作業相關變數
         public bool IsMedicalNumberGet;//是否取得就醫序號
-        public bool IsIcCardGet;//健保卡是否讀取成功
         public readonly byte[] BasicDataArr = new byte[72];
         public BasicData CusBasicData;
         public SeqNumber Seq;//取得之就醫序號資料
@@ -358,7 +357,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     m.ShowDialog();
                 }
 
-                if (IsIcCardGet)
+                if (CurrentPrescription.IsGetIcCard)
                 {
                     LogInIcData();
                 }
@@ -777,7 +776,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
         {
             CheckIcCardStatus();
-            if (IsIcCardGet)
+            if (CurrentPrescription.IsGetIcCard)
             {
                 var loading = new LoadingWindow();
                 loading.Show();
@@ -806,16 +805,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void CheckIcCardStatus()
         {
+            //Create Thread
             var cardStatus = HisApiBase.hisGetCardStatus(2);
             if (cardStatus == 0 || cardStatus != 9)
             {
-                IsIcCardGet = false;
+                CurrentPrescription.IsGetIcCard = false;
                 var status = cardStatus == 0 ? "卡片未置入" : "所置入非健保卡";
                 SetCardStatusContent(status);
             }
             else
             {
-                IsIcCardGet = true;
+                CurrentPrescription.IsGetIcCard = true;
             }
         }
 

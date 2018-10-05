@@ -738,9 +738,8 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
+        private void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
         {
-
             var strLength = 72;
             var icData = new byte[72];
             var res = HisApiBase.hisGetBasicData(icData, ref strLength);
@@ -748,7 +747,7 @@ namespace His_Pos
             if (res == 0)
             {
                 prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
-                prescriptionDec2View.IsIcCardGet = true;
+                prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
                 prescriptionDec2View.CusBasicData = new BasicData(icData);
                 prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
                 prescriptionDec2View.CurrentPrescription.Customer.Id = "1";
@@ -771,71 +770,7 @@ namespace His_Pos
                 //未取得就醫序號
                 else
                 {
-                    string errMsg;
-                    switch (res)
-                    {
-                        case 4000:
-                            errMsg = "讀卡機程序逾時";
-                            break;
-                        case 4013:
-                            errMsg = "未置入健保IC卡";
-                            break;
-                        case 4029:
-                            errMsg = "IC卡權限不足";
-                            break;
-                        case 4033:
-                            errMsg = "所置入非健保IC卡";
-                            break;
-                        case 4050:
-                            errMsg = "安全模組尚未與IDC認證";
-                            break;
-                        case 4061:
-                            errMsg = "網路不通";
-                            break;
-                        case 4071:
-                            errMsg = "健保IC卡與IDC認證失敗";
-                            break;
-                        case 5001:
-                            errMsg = "就醫可用次數不足";
-                            break;
-                        case 5002:
-                            errMsg = "卡片已註銷";
-                            break;
-                        case 5003:
-                            errMsg = "卡片已過有限期限";
-                            break;
-                        case 5004:
-                            errMsg = "新生兒依附就醫已逾60日";
-                            break;
-                        case 5005:
-                            errMsg = "讀卡機的就診日期時間讀取失敗";
-                            break;
-                        case 5006:
-                            errMsg = "讀取安全模組內的「醫療院所代碼」失敗";
-                            break;
-                        case 5007:
-                            errMsg = "寫入一組新的「就醫資料登錄」失敗";
-                            break;
-                        case 5008:
-                            errMsg = "安全模組簽章失敗";
-                            break;
-                        case 5009:
-                            errMsg = "投保單位無權限";
-                            break;
-                        case 5010:
-                            errMsg = "同一天看診兩科(含)以上";
-                            break;
-                        case 5012:
-                            errMsg = "此人未在保";
-                            break;
-                        case 9129:
-                            errMsg = "持卡人於非所限制的醫療院所就診";
-                            break;
-                        default:
-                            errMsg = string.Empty;
-                            break;
-                    }
-                    var e = new IcErrorCodeWindow(prescriptionDec2View.IsMedicalNumberGet, errMsg);
+                    var e = new IcErrorCodeWindow(prescriptionDec2View.IsMedicalNumberGet, Enum.GetName(typeof(ErrorCode), res));
                     e.Show();
                 }
                 ////取得就醫紀錄

@@ -42,6 +42,7 @@ namespace His_Pos.Class
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
             ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
+
         }
 
         public Prescription(XmlNode xml)
@@ -80,6 +81,16 @@ namespace His_Pos.Class
         public string MedicalRecordId = "";
         public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
+        private bool _isGetIcCard;
+        public bool IsGetIcCard //健保卡是否讀取成功
+        {
+            get => _isGetIcCard;
+            set
+            {
+                _isGetIcCard = value;
+                OnPropertyChanged(nameof(IsGetIcCard));
+            }
+        }
         public ObservableCollection<DeclareMedicine> Medicines { get; set; }
         public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
         public ErrorList EList = new ErrorList();
