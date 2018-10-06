@@ -13,7 +13,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -56,7 +55,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         #region 健保卡作業相關變數
         public bool IsMedicalNumberGet;//是否取得就醫序號
-        public bool IsIcCardGet;//健保卡是否讀取成功
         public readonly byte[] BasicDataArr = new byte[72];
         public BasicData CusBasicData;
         public SeqNumber Seq;//取得之就醫序號資料
@@ -359,7 +357,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     m.ShowDialog();
                 }
 
-                if (IsIcCardGet)
+                if (CurrentPrescription.IsGetIcCard)
                 {
                     LogInIcData();
                 }
@@ -777,22 +775,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
         {
-            var t1 = new Thread(CheckIcCardStatus);
-            t1.Start();
-            if (t1.Join(1000))
+            CheckIcCardStatus();
+            if (CurrentPrescription.IsGetIcCard)
             {
-                if (IsIcCardGet)
+                var loading = new LoadingWindow();
+                loading.Show();
+                loading.LoadIcData(Instance);
+                if (ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id))
                 {
-                    var loading = new LoadingWindow();
-                    loading.Show();
-                    loading.LoadIcData(Instance);
-                    if (ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id))
-                    {
-                        var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
-                        chronicSelectWindow.ShowDialog();
-                    }
+                    var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
+                    chronicSelectWindow.ShowDialog();
                 }
-                t1.Abort();
             }
             else
             {
@@ -812,19 +805,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void CheckIcCardStatus()
         {
-            Thread.Sleep(10000);
+            //Create Thread
             var cardStatus = HisApiBase.hisGetCardStatus(2);
             if (cardStatus == 0 || cardStatus != 9)
             {
-                var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料", MessageType.WARNING);
-                m.Show();
-                IsIcCardGet = false;
+                CurrentPrescription.IsGetIcCard = false;
                 var status = cardStatus == 0 ? "卡片未置入" : "所置入非健保卡";
                 SetCardStatusContent(status);
             }
             else
             {
-                IsIcCardGet = true;
+                CurrentPrescription.IsGetIcCard = true;
             }
         }
 
