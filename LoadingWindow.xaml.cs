@@ -807,5 +807,25 @@ namespace His_Pos
                 prescriptionDec2View.CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
             }
         }
+
+        public void LoginIcData(PrescriptionDec2View prescriptionDec2View)
+        {
+            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("卡片資料寫入中...");
+                prescriptionDec2View.LogInIcData();
+                Dispatcher.Invoke(prescriptionDec2View.CreatIcUploadData);
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
     }
 }

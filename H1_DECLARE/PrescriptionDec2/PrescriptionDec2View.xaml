@@ -53,7 +53,7 @@
                          MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.Customer.IcCard.MedicalNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                          InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="MedicalNumber_PreviewKeyDown" />
                 <Label Width="auto" Content="卡片狀態" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                <Label x:Name="IcCardStatus" Width="112" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" Content="未置入卡片"/>
+                <Label x:Name="IcCardStatus" Width="112" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" VerticalContentAlignment="Bottom" Content="{Binding CardStatus,UpdateSourceTrigger=PropertyChanged}"/>
                 <Button MinWidth="128" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="5,0,0,0"/>
             </StackPanel>
             <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}">

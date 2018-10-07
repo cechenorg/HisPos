@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -38,6 +39,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         #region View相關變數
         private readonly bool _isFirst = true;
         private bool _isChanged;
+        private string _cardStatus;
+        public string CardStatus
+        {
+            get => _cardStatus;
+            set
+            {
+                _cardStatus = value;
+                NotifyPropertyChanged(nameof(CardStatus));
+            }
+        }
         public static PrescriptionDec2View Instance;
         public CustomerHistoryMaster CurrentCustomerHistoryMaster { get; set; }
         private SystemType _cusHhistoryFilterCondition = SystemType.ALL;
@@ -304,7 +315,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             
                     }
 
-
                     _currentDeclareData.DecMasId = _currentDecMasId;
                     declareDb.UpdateDeclareData(_currentDeclareData); //更新慢箋
                     ChronicDb.UpdateChronicData(_currentDecMasId);//重算預約慢箋 
@@ -356,10 +366,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     m = new MessageWindow("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR);
                     m.ShowDialog();
                 }
-
                 if (CurrentPrescription.IsGetIcCard)
                 {
-                    LogInIcData();
+                    var loading = new LoadingWindow();
+                    loading.LoginIcData(Instance);
                 }
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.ShowDialog();
@@ -379,7 +389,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
 
         #region 每日上傳.讀寫卡相關函數
-        private void LogInIcData()
+        public void LogInIcData()
         {
             var cs = new ConvertData();
             var icPrescripList = new List<IcPrescriptData>();
@@ -402,10 +412,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (res == 0)
                     PrescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
             }
-            CreatIcUploadData();
         }
 
-        private void CreatIcUploadData()
+        public void CreatIcUploadData()
         {
             var medicalDatas = new List<MedicalData>();
             var icData = new IcData(Seq, _currentPrescription, CusBasicData, _currentDeclareData);
@@ -452,6 +461,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             icRecord.MainMessage.MedicalMessageList = medicalDatas;
             icRecord.SerializeObject();
+
         }
         #endregion
 
@@ -775,20 +785,29 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
         {
-            CheckIcCardStatus();
-            if (CurrentPrescription.IsGetIcCard)
+            var loading = new LoadingWindow();
+            var t1 = new Thread(CheckIcCardStatus);
+            SetCardStatusContent("卡片檢查中...");
+            t1.Start();
+            if (t1.Join(8000))
             {
-                var loading = new LoadingWindow();
-                loading.Show();
-                loading.LoadIcData(Instance);
-                if (ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id))
+                loading.Close();
+                if (CurrentPrescription.IsGetIcCard)
                 {
-                    var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
-                    chronicSelectWindow.ShowDialog();
+                    loading = new LoadingWindow();
+                    loading.Show();
+                    loading.LoadIcData(Instance);
+                    if (ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id))
+                    {
+                        var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
+                        chronicSelectWindow.ShowDialog();
+                    }
                 }
             }
             else
             {
+                t1.Abort();
+                loading.Close();
                 if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
                        string.IsNullOrEmpty(PatientId.Text))
                 {
@@ -805,23 +824,36 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void CheckIcCardStatus()
         {
-            //Create Thread
             var cardStatus = HisApiBase.hisGetCardStatus(2);
-            if (cardStatus == 0 || cardStatus != 9)
+            if (cardStatus == 0 || cardStatus == 9 || cardStatus == 4000)
             {
                 CurrentPrescription.IsGetIcCard = false;
-                var status = cardStatus == 0 ? "卡片未置入" : "所置入非健保卡";
-                SetCardStatusContent(status);
+                switch (cardStatus)
+                {
+                    case 0:
+                        SetCardStatusContent("卡片未置入");
+                        break;
+                    case 9:
+                        SetCardStatusContent("非健保卡");
+                        break;
+                    case 4000:
+                        SetCardStatusContent("讀卡機逾時");
+                        break;
+                    default:
+                        SetCardStatusContent("網路異常");
+                        break;
+                }
             }
             else
             {
+                SetCardStatusContent("讀取中...");
                 CurrentPrescription.IsGetIcCard = true;
             }
         }
 
         public void SetCardStatusContent(string content)
         {
-            IcCardStatus.Content = content;
+            CardStatus = content;
         }
 
         public void CheckPatientGender()
