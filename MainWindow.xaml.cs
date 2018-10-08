@@ -9,13 +9,14 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using ChromeTabs;
 using His_Pos.Class;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
-using His_Pos.Class.Pharmacy;
 using His_Pos.Resource;
 using His_Pos.Service;
 using His_Pos.ViewModel;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
+using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
 
 namespace His_Pos
 {
@@ -157,6 +158,8 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //var d = new DeclareDb();
+            //d.StartDailyUpload();
             Application.Current.Shutdown();
         }
     }

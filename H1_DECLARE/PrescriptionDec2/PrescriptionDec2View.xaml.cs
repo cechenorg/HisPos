@@ -69,7 +69,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public readonly byte[] BasicDataArr = new byte[72];
         public BasicData CusBasicData;
         public SeqNumber Seq;//取得之就醫序號資料
-        public readonly List<string> PrescriptionSignatureList = new List<string>();//處方簽章
+        private readonly List<string> _prescriptionSignatureList = new List<string>();//處方簽章
         public ObservableCollection<TreatmentDataNoNeedHpc> TreatRecCollection { get; set; } = new ObservableCollection<TreatmentDataNoNeedHpc>();//就醫紀錄
         #endregion
 
@@ -371,6 +371,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     var loading = new LoadingWindow();
                     loading.LoginIcData(Instance);
                 }
+                else
+                {
+
+                }
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                 m.ShowDialog();
                 declareDb.UpdateDeclareFile(_currentDeclareData);
@@ -410,7 +414,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var icData = new byte[40];
                 var res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput, icData, ref strLength);
                 if (res == 0)
-                    PrescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                    _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
             }
         }
 
@@ -434,7 +438,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     Usage = _currentDeclareData.DeclareDetails[i].Usage,
                     Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
                     TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
-                    PrescriptionSignature = PrescriptionSignatureList[i],
+                    PrescriptionSignature = _prescriptionSignatureList[i],
                 };
                 if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
                     medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
@@ -461,7 +465,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             icRecord.MainMessage.MedicalMessageList = medicalDatas;
             icRecord.SerializeObject();
-
+            var d = new DeclareDb();
+            d.InsertDailyUpload(icRecord.SerializeObject());
         }
         #endregion
 
@@ -725,7 +730,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(string propertyName)
+        public void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -791,7 +796,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             t1.Start();
             if (t1.Join(8000))
             {
-                loading.Close();
                 if (CurrentPrescription.IsGetIcCard)
                 {
                     loading = new LoadingWindow();
@@ -803,11 +807,26 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         chronicSelectWindow.ShowDialog();
                     }
                 }
+                else
+                {
+                    if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
+                        string.IsNullOrEmpty(PatientId.Text))
+                    {
+                        var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料", MessageType.WARNING);
+                        m.Show();
+                    }
+                    else
+                    {
+                        CurrentPrescription.Customer.Id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
+                        if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
+                        var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
+                        chronicSelectWindow.ShowDialog();
+                    }
+                }
             }
             else
             {
                 t1.Abort();
-                loading.Close();
                 if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
                        string.IsNullOrEmpty(PatientId.Text))
                 {

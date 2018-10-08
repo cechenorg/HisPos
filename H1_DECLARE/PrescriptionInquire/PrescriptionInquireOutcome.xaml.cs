@@ -721,7 +721,8 @@ namespace His_Pos.PrescriptionInquire
                 medicalDatas.Add(medicalData);
             }
             icRecord.MainMessage.MedicalMessageList = medicalDatas;
-            icRecord.SerializeObject();
+            var d = new DeclareDb();
+            d.InsertDailyUpload(icRecord.SerializeObject());
         }
         #endregion
     }

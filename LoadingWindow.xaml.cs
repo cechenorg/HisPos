@@ -731,6 +731,7 @@ namespace His_Pos
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    prescriptionDec2View.NotifyPropertyChanged(nameof(prescriptionDec2View.CurrentPrescription));
                     prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
                     Close();
                 }));
@@ -774,20 +775,20 @@ namespace His_Pos
                     e.Show();
                 }
                 ////取得就醫紀錄
-                //strLength = 498;
-                //icData = new byte[498];
-                //res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
-                //if (res == 0)
-                //{
-                //    var startIndex = 84;
-                //    for (var i = 0; i < 6; i++)
-                //    {
-                //        if (icData[startIndex + 3] == 32)
-                //            break;
-                //        prescriptionDec2View.TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
-                //        startIndex += 69;
-                //    }
-                //}
+                strLength = 498;
+                icData = new byte[498];
+                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+                if (res == 0)
+                {
+                    var startIndex = 84;
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (icData[startIndex + 3] == 32)
+                            break;
+                        prescriptionDec2View.TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
+                        startIndex += 69;
+                    }
+                }
             }
             else
             {

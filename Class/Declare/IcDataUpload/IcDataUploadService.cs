@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using System.Xml.Serialization;
 using His_Pos.Struct.IcData;
 
@@ -11,13 +12,13 @@ namespace His_Pos.Class.Declare.IcDataUpload
     }
     public class IcDataUpload
     {
-        public List<IcRecord> IcDataList { get; set; }
+        public IcRecordList IcDataList { get; set; }
     }
 
     [XmlRoot(ElementName = "RECS")]
     public class IcRecordList
     {
-        public List<IcRecord> RecordList { get; set; } = new List<IcRecord>();
+        public List<IcRecord> RecordList { get; set; }
     }
 
     [XmlRoot(ElementName = "REC")]
@@ -28,6 +29,12 @@ namespace His_Pos.Class.Declare.IcDataUpload
             HeaderMessage = header;
             MainMessage = main;
         }
+
+        public IcRecord(DataRow row)
+        {
+            
+        }
+
         [XmlElement(ElementName = "MSH")]
         public Header HeaderMessage { get; set; }
         [XmlElement(ElementName = "MB")]

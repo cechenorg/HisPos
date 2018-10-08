@@ -16,6 +16,8 @@ using System.Windows.Media;
 using System.Xml;
 using System.Xml.Linq;
 using His_Pos.Class;
+using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.HisApi;
 using His_Pos.Properties;
 using His_Pos.Service;
 using Newtonsoft.Json;
@@ -113,7 +115,7 @@ namespace His_Pos
                 if (pathsplit[i] == "System") break;
             }
 
-            path += "\\" + FileTypeName; // "匯出健保資料XML檔案"  "匯出申報XML檔案"
+            path += "\\" + FileTypeName; // "健保資料上傳"  "匯出申報XML檔案"
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
             var path_file = path_ym + "\\" + day + "\\" + year + month + day;
@@ -131,30 +133,15 @@ namespace His_Pos
             psi.StartInfo.FileName = "makecab.exe";
             psi.StartInfo.Arguments = path_file + ".xml " + path_file + ".zip";
             psi.Start();
-
             //psi.WaitForInputIdle();
             //設定要等待相關的處理序結束的時間 
             psi.WaitForExit();
-            return path_file + ".xml";
-            //StringBuilder pUploadFileName = new StringBuilder();
-            //pUploadFileName.Append(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml");
-            //StringBuilder fFileSize = new StringBuilder();
-            //long length = new System.IO.FileInfo(path + "\\" + year + month + "\\" + day + "\\" + year + month + day + ".xml").Length;
-            //fFileSize.Append(length);
-            //StringBuilder pNumber = new StringBuilder();
-            //fFileSize.Append(count);
-            //StringBuilder pBuffer = new StringBuilder();
-            //int iBufferLen = xml.InnerText.Length;
-            //int port = 5; ;
-            //HisApi.HisApiBase.csOpenCom(0);
-            //HisApi.HisApiBase.csUploadData(pUploadFileName, fFileSize, pNumber, pBuffer, ref iBufferLen);
-            //HisApi.HisApiBase.csCloseCom();
+            return path_file;
         }
+
         /*
          * 判斷輸入是否為數字
          */
-
-
         public static bool IsNumeric(string input)
         {
             try
@@ -225,8 +212,7 @@ namespace His_Pos
                         }
                     }
                 }
-                else
-                    return string.Empty;
+                return string.Empty;
             }
        
         }
@@ -258,6 +244,22 @@ namespace His_Pos
             Array.Copy(pBuffer, startIndex, tmpByteArr, 0, length);
             var result = Encoding.GetEncoding(950).GetString(tmpByteArr);
             return result;
+        }
+
+        public void DailyUpload(XDocument dailyUpload)
+        {
+            var filePath = ExportXml(dailyUpload, "每日上傳");
+            var fileName = filePath + ".xml";
+            var cs = new ConvertData();
+            var fileNameArr = cs.StringToBytes(fileName, fileName.Length);
+            var currentFile = Directory.GetFiles(filePath)[0];//每日上傳檔案
+            var fileInfo = new FileInfo(currentFile);
+            var fileSize = cs.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
+            var element = dailyUpload.Root.Element("REC");
+            var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
+            var pBuffer = new byte[50];
+            var iBufferLength = 50;
+            HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
         }
     }
 }
