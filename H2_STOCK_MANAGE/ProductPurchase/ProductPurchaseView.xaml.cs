@@ -107,6 +107,14 @@ namespace His_Pos.ProductPurchase
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
         #endregion
 
         public ProductPurchaseView()
@@ -114,7 +122,7 @@ namespace His_Pos.ProductPurchase
             InitializeComponent();
             DataContext = this;
             Instance = this;
-            this.Loaded += UserControl1_Loaded;
+            Loaded += UserControl1_Loaded;
             StoOrderOverview.SelectedIndex = 0;
 
             InitData();
@@ -541,12 +549,10 @@ namespace His_Pos.ProductPurchase
             InitData();
         }
 
-        private void NotifyPropertyChanged(string info)
+        
+        private void ProductPurchaseView_OnUnloaded(object sender, RoutedEventArgs e)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            Instance = null;
         }
     }
     
