@@ -71,9 +71,28 @@ namespace His_Pos
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var result = string.Empty;
-            if (value == null) return result;
+            if (string.IsNullOrEmpty(value.ToString())) return result;
             result = (int.Parse(value.ToString().Split('/')[0]) - 1911) + "/" + value.ToString().Split('/')[1] + "/" +
                      value.ToString().Split('/')[2].Substring(0,2);
+            return result;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return string.Empty;
+        }
+    }
+
+    public class BirthDayConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var result = string.Empty;
+            if (string.IsNullOrEmpty(value.ToString())) return result;
+            var year = (int.Parse(value.ToString().Split('/')[0]) - 1911).ToString().PadLeft(3,'0');
+            var month = value.ToString().Split('/')[1];
+            var date = value.ToString().Split('/')[2].Substring(0, 2).Trim().PadLeft(2,'0');
+            result = year + month + date;
             return result;
         }
 

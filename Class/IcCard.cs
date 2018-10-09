@@ -24,7 +24,7 @@ namespace His_Pos.Class
             switch (source)
             {
                 case DataSource.InitMedicalIcCard:
-                    IcNumber = "";
+                    IcNumber = row["CUS_IDNUM"].ToString();
                     MedicalNumber = "";
                     break;
 

@@ -1,4 +1,13 @@
-﻿<UserControl x:Class="His_Pos.H1_DECLARE.PrescriptionDec2.PrescriptionDec2View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:hisPos="clr-namespace:His_Pos" xmlns:local="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" x:Name="PreDec2" d:DesignHeight="839" d:DesignWidth="1365" mc:Ignorable="d">
+﻿<UserControl x:Class="His_Pos.H1_DECLARE.PrescriptionDec2.PrescriptionDec2View" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:hisPos="clr-namespace:His_Pos" 
+             xmlns:local="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             x:Name="PreDec2" d:DesignHeight="839" d:DesignWidth="1365" mc:Ignorable="d">
     <UserControl.Resources>
         <Style x:Key="CenterGridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -24,6 +33,7 @@
         <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter" />
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
         <hisPos:NullTextBoxConverter x:Key="NullTextBoxConverter" />
+        <hisPos:BirthDayConverter x:Key="BirthDayConverter" />
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">
         <Grid Width="1365" Height="839">
@@ -42,7 +52,7 @@
                          Text="{Binding CurrentPrescription.Customer.IcCard.IcNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" />
                 <TextBox Name="PatientBirthday" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" 
-                         Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Customer.Birthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                         Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Customer.Birthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BirthDayConverter}}" />
                 <Label Margin="0,0,15,0" VerticalAlignment="Bottom" HorizontalContentAlignment="Left" VerticalContentAlignment="Bottom" Content="格式:0990101" 
                        FontFamily="Segoe UI Semi" FontSize="15" Foreground="{StaticResource ForeGround}" />
                 <Label VerticalAlignment="Center" Content="藥品毛利 : " FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
@@ -429,7 +439,6 @@
                         <Label Width="90" Height="35" HorizontalContentAlignment="Center" Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.RowSpan="2" Margin="8" Orientation="Vertical">
-                        <CheckBox Name="IsMakeUpCard" IsEnabled="False" Content="補卡"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"  />
                         <CheckBox Name="IsSendToServer" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"  />
                     </StackPanel>
                     <StackPanel Grid.Row="5" Margin="8" Orientation="Horizontal">

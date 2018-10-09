@@ -715,10 +715,17 @@ namespace His_Pos
                 LoadPatentDataFromIcCard(prescriptionDec2View);
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionDec2View.CurrentPrescription.Customer.Id = CustomerDb.CheckCustomerExist(prescriptionDec2View.CurrentPrescription.Customer);
-                    prescriptionDec2View.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(prescriptionDec2View.CurrentPrescription.Customer.Id);
-                    prescriptionDec2View.CusHistoryMaster.ItemsSource = prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
-                    prescriptionDec2View.CusHistoryMaster.SelectedIndex = 0;
+                    prescriptionDec2View.CustomerCollection =
+                        CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
+                    CustomerSelectWindow customerSelect = new CustomerSelectWindow(prescriptionDec2View.CustomerCollection);
+                    customerSelect.Show();
+                    //if (prescriptionDec2View.CustomerCollection.Count == 1)
+                    //    prescriptionDec2View.CurrentPrescription.Customer = prescriptionDec2View.CustomerCollection[0];
+                    //else
+                    //{
+                    //    CustomerSelectWindow customerSelect = new CustomerSelectWindow(prescriptionDec2View.CustomerCollection);
+                    //    customerSelect.Show();
+                    //}
                     if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
                         !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
                         prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
@@ -750,8 +757,7 @@ namespace His_Pos
                 prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
                 prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
                 prescriptionDec2View.CusBasicData = new BasicData(icData);
-                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
-                prescriptionDec2View.CurrentPrescription.Customer.Id = "1";
+                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData) {Id = "1"};
                 strLength = 296;
                 icData = new byte[296];
                 var cs = new ConvertData();
@@ -767,14 +773,14 @@ namespace His_Pos
                     prescriptionDec2View.IsMedicalNumberGet = true;
                     prescriptionDec2View.Seq = new SeqNumber(icData);
                     prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.Seq.MedicalNumber;
+                    prescriptionDec2View.NotifyPropertyChanged(nameof(prescriptionDec2View.CurrentPrescription.Customer.IcCard));
                 }
                 //未取得就醫序號
                 else
                 {
-                    var e = new IcErrorCodeWindow(prescriptionDec2View.IsMedicalNumberGet, Enum.GetName(typeof(ErrorCode), res));
-                    e.Show();
+                    prescriptionDec2View.GetMedicalNumberErrorCode = res;
                 }
-                ////取得就醫紀錄
+                //取得就醫紀錄
                 strLength = 498;
                 icData = new byte[498];
                 res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
@@ -800,13 +806,17 @@ namespace His_Pos
                    prescriptionDec2View.PatientBirthday.Text.Substring(5, 2);
                  * prescriptionDec2View.CurrentPrescription.Customer.IcNumber = prescriptionDec2View.PatientId.Text;
                  */
-                
+                prescriptionDec2View.CurrentPrescription.Customer.Id = "1";
                 prescriptionDec2View.CurrentPrescription.Customer.Name = "許文章";
                 prescriptionDec2View.CurrentPrescription.Customer.Birthday = "0371001";
                 prescriptionDec2View.CurrentPrescription.Customer.IcNumber = "S88824769A";
                 prescriptionDec2View.CheckPatientGender();
                 prescriptionDec2View.CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
             }
+            prescriptionDec2View.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(prescriptionDec2View.CurrentPrescription.Customer.Id);
+            prescriptionDec2View.CusHistoryMaster.ItemsSource = prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
+            if(prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Count > 0)
+                prescriptionDec2View.CusHistoryMaster.SelectedIndex = 0;
         }
 
         public void LoginIcData(PrescriptionDec2View prescriptionDec2View)
