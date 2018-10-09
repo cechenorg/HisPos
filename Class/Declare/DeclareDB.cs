@@ -514,9 +514,6 @@ namespace His_Pos.Class.Declare
                 d9 = string.Empty,
                 d35 = declareData.Prescription.ChronicSequence,
                 d36 = declareData.Prescription.ChronicTotal;
-            string year = (int.Parse(declareData.Prescription.Customer.Birthday.Substring(0, 3)) + 1911)
-                .ToString();
-            string cusBirth = year + declareData.Prescription.Customer.Birthday.Substring(3, 6);
             if (declareData.Prescription.Treatment.MedicalInfo.MainDiseaseCode != null)
             {
                 d8 = declareData.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
@@ -530,7 +527,7 @@ namespace His_Pos.Class.Declare
             row["D1"] = declareData.Prescription.Treatment.AdjustCase.Id;
             row["D4"] = CheckXmlDbNullValue(declareData.DeclareMakeUp);
             row["D5"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.PaymentCategory.Id);
-            row["D6"] = Convert.ToDateTime(cusBirth) == DateTime.MinValue? cusBirth:DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth));
+            row["D6"] = DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Customer.Birthday, false);
             row["D7"] = declareData.Prescription.Customer.IcCard.MedicalNumber;
             row["D8"] = d8;
             row["D9"] = d9;
@@ -571,7 +568,7 @@ namespace His_Pos.Class.Declare
             row["D37"] = declareData.MedicalServiceCode;
             row["D38"] = declareData.MedicalServicePoint.ToString();
             row["D43"] = declareData.Prescription.OriginalMedicalNumber == null ? "" : declareData.Prescription.OriginalMedicalNumber;
-            row["XML"] = CreateToXml(declareData).InnerXml.ToString();
+            row["XML"] = CreateToXml(declareData).InnerXml;
             declareMaster.Rows.Add(row);
         }
         private DataTable SetUpdatePDataTable()
@@ -751,8 +748,7 @@ namespace His_Pos.Class.Declare
         private double CountAdditionPercent(DeclareData declareData)
         {
             double percent = 100;
-            var cusBirth = declareData.Prescription.Customer.Birthday;
-            var month = DateTimeExtensions.CalculateAge(DateTimeExtensions.ToUsDate(cusBirth));
+            var month = DateTimeExtensions.CalculateAge(declareData.Prescription.Customer.Birthday);
             if (month < 0.5) percent = 160;
             if (month > 0.5 && month <= 2) percent = 130;
             if (month > 2 && month <= 6) percent = 120;
@@ -852,8 +848,8 @@ namespace His_Pos.Class.Declare
 
             if (treatment.Copayment.Id == "903")
                 dData += function.XmlTagCreator("d44",
-                    CheckXmlDbNullValue(declareData.Prescription.Customer.IcCard.IcMarks.NewbornsData
-                        .Birthday)); //新生兒註記就醫
+                    CheckXmlDbNullValue(DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Customer.IcCard.IcMarks.NewbornsData
+                        .Birthday, false))); //新生兒註記就醫
             dData += "</dhead>";
             return dData;
         }
@@ -869,9 +865,6 @@ namespace His_Pos.Class.Declare
                 d9 = string.Empty,
                 d35 = declareData.Prescription.ChronicSequence,
                 d36 = declareData.Prescription.ChronicTotal;
-            string year = (int.Parse(declareData.Prescription.Customer.Birthday.Substring(0, 3)) + 1911)
-                .ToString();
-            string cusBirth = year + declareData.Prescription.Customer.Birthday.Substring(3, 6);
             if (medicalInfo.MainDiseaseCode != null)
             {
                 d8 = medicalInfo.MainDiseaseCode.Id;
@@ -886,7 +879,7 @@ namespace His_Pos.Class.Declare
                         {"d3", declareData.Prescription.Customer.IcNumber},
                         {"d4", CheckXmlDbNullValue(declareData.DeclareMakeUp)},
                         {"d5", CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
-                        {"d6", Convert.ToDateTime(cusBirth) == DateTime.MinValue? cusBirth:DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth))},
+                        {"d6", DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Customer.Birthday,false)},
                         {"d7", declareData.Prescription.Customer.IcCard.MedicalNumber},
                         {"d8", d8},
                         {"d9", d9},

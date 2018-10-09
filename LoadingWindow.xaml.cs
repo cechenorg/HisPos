@@ -808,7 +808,7 @@ namespace His_Pos
                  */
                 prescriptionDec2View.CurrentPrescription.Customer.Id = "1";
                 prescriptionDec2View.CurrentPrescription.Customer.Name = "許文章";
-                prescriptionDec2View.CurrentPrescription.Customer.Birthday = "0371001";
+                prescriptionDec2View.CurrentPrescription.Customer.Birthday = new DateTime(1948,10,01);
                 prescriptionDec2View.CurrentPrescription.Customer.IcNumber = "S88824769A";
                 prescriptionDec2View.CheckPatientGender();
                 prescriptionDec2View.CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());

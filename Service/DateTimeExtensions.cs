@@ -77,31 +77,6 @@ namespace His_Pos.Service
             return age;
         }
 
-        public static string BirthdayFormatConverter2(string birthday)
-        {
-            return int.Parse(birthday.Substring(0, 3)) + 1911 + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
-        }
-
-        public static string BirthdayFormatConverter3(string birthday)
-        {
-            string year;
-            string month;
-            string date;
-            if (birthday.Contains("-"))
-            {
-                year = birthday.Split('-')[0];
-                month = birthday.Split('-')[1];
-                date = birthday.Split('-')[2].Substring(0, 2);
-            }
-            else
-            {
-                year = birthday.Split('/')[0];
-                month = birthday.Split('/')[1];
-                date = birthday.Split('/')[2].Substring(0,2);
-            }
-            return year + "/" + month + "/" + date;
-        }
-
         private static string CheckDateLessTen(string dateStr)
         {
             return dateStr.PadLeft(2, '0');
@@ -118,5 +93,15 @@ namespace His_Pos.Service
             else
                 return  date;
         }
+
+        public static string ConvertToTaiwanCalender(DateTime d,bool needSplit)
+        {
+            var year = (d.Year - 1911).ToString().PadLeft(3, '0');
+            var month = (d.Month).ToString().PadLeft(2, '0');
+            var day = (d.Day).ToString().PadLeft(2, '0');
+            if (needSplit)
+                return year + "/" + month + "/" + day;
+            return year + month + day;
+        } 
     }
 }

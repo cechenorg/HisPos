@@ -279,8 +279,6 @@
     <Compile Include="Class\Employee\EmployeeDb.cs" />
     <Compile Include="Class\FunctionDb.cs" />
     <Compile Include="Class\HisApiData\MedicalInformation.cs" />
-    <Compile Include="Class\HisUpload\HisUploadData.cs" />
-    <Compile Include="Class\HisUpload\HisUploadDb.cs" />
     <Compile Include="Class\IcCardPay.cs" />
     <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\InStock.cs" />

@@ -519,7 +519,6 @@ namespace His_Pos.PrescriptionInquire
 
             if (InquiredPrescription.Prescription.CheckPrescriptionData().Count == 0)
             {
-                InquiredPrescription.Prescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(InquiredPrescription.Prescription.Customer.Birthday);
                 _currentDeclareData = new DeclareData(InquiredPrescription.Prescription);
                 _currentDeclareData.DecMasId = InquiredPrescription.DecMasId;
                 

@@ -445,7 +445,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
             if (CurrentPrescription.EList.Error.Count == 0)
             {
-                CurrentPrescription.Customer.Birthday = DateTimeExtensions.YearFormatTransfer(CurrentPrescription.Customer.Birthday);
                 var declareData = new DeclareData(CurrentPrescription) {DecMasId = CurrentFile.DecId};
 
                 var xmlStr = declareData.SerializeObject<Ddata>();

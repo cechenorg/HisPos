@@ -88,7 +88,7 @@ namespace His_Pos.Class.Declare
 
         private void CountDeclareDeatailPoint()
         {
-            var cusAge = DateTimeExtensions.CalculateAge(DateTimeExtensions.ToUsDate(Prescription.Customer.Birthday));
+            var cusAge = DateTimeExtensions.CalculateAge(Prescription.Customer.Birthday);
             var medFormCount = CountOralLiquidAgent();
             var dayPay = CountDayPayAmount(cusAge, medFormCount);
             SetMedicalServiceCode(dayPay);//判斷藥事服務費項目代碼
@@ -288,8 +288,6 @@ namespace His_Pos.Class.Declare
             var t = p.Treatment;
             var m = t.MedicalInfo;
             var ic = c.IcCard;
-            var year = c.Birthday.Split('/')[0].Length == 4 ? c.Birthday.Split('/')[0] : (int.Parse(c.Birthday.Substring(0, 3)) + 1911).ToString();
-            var cusBirth = year + "/" + c.Birthday.Split('/')[1] + "/" + c.Birthday.Split('/')[2];
             DeclareXml = new Ddata
             {
                 Dhead = new Dhead { D1 = Prescription.Treatment.AdjustCase.Id },
@@ -297,7 +295,7 @@ namespace His_Pos.Class.Declare
                 {
                     D3 = c.IcNumber,
                     D5 = t.PaymentCategory.Id,
-                    D6 = DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth)),
+                    D6 = DateTimeExtensions.ConvertToTaiwanCalender(c.Birthday,false),
                     D7 = CheckXmlEmptyValue(ic.MedicalNumber),
                     D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id),
                     D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id),
@@ -322,7 +320,7 @@ namespace His_Pos.Class.Declare
                     D36 = CheckXmlEmptyValue(p.ChronicTotal),
                     D37 = MedicalServiceCode,
                     D38 = MedicalServicePoint.ToString(),
-                    D44 = ic.IcMarks.NewbornsData.Birthday
+                    D44 = DateTimeExtensions.ConvertToTaiwanCalender(ic.IcMarks.NewbornsData.Birthday, false)
                 }
             };
             if (!string.IsNullOrEmpty(DeclareMakeUp))

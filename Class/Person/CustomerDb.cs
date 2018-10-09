@@ -16,7 +16,7 @@ namespace His_Pos.Class.Person
             var listparam = new List<SqlParameter>();
             var name = new SqlParameter("NAME", newCustomer.Name);
             var qname = new SqlParameter("QNAME", newCustomer.Qname);
-            var birth = new SqlParameter("BIRTH", Convert.ToDateTime(newCustomer.Birthday.Replace("/","-")));
+            var birth = new SqlParameter("BIRTH", newCustomer.Birthday);
             var addr = new SqlParameter("ADDR", newCustomer.ContactInfo.Address);
             var tel = new SqlParameter("TEL", newCustomer.ContactInfo.Tel);
             var idnum = new SqlParameter("IDNUM", newCustomer.IcNumber);
@@ -46,7 +46,9 @@ namespace His_Pos.Class.Person
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("CUS_NAME", customer.Name));
-            parameters.Add(new SqlParameter("CUS_BIRTH", customer.Birthday.Replace("/","-")));
+            parameters.Add(customer.Birthday.Year!=1
+                ? new SqlParameter("CUS_BIRTH", customer.Birthday)
+                : new SqlParameter("CUS_BIRTH", DBNull.Value));
             parameters.Add(new SqlParameter("CUS_IDNUM", customer.IcNumber));
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[CheckCustomerExist]", parameters);
             return table.Rows[0][0].ToString();
@@ -80,7 +82,9 @@ namespace His_Pos.Class.Person
                 parameters.Add(new SqlParameter("CUS_NAME", c.Name));
                 parameters.Add(new SqlParameter("CUS_TEL", DBNull.Value));
             }
-            parameters.Add(new SqlParameter("CUS_BIRTH", c.Birthday.Replace("/","-")));
+            parameters.Add(c.Birthday.Year != 1
+                ? new SqlParameter("CUS_BIRTH", c.Birthday)
+                : new SqlParameter("CUS_BIRTH", DBNull.Value));
             parameters.Add(new SqlParameter("CUS_IDNUM", c.IcNumber));
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[LoadCustomerData]", parameters);
             foreach (DataRow row in table.Rows)

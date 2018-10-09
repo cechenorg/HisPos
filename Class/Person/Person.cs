@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 
 namespace His_Pos.Class.Person
 {
@@ -10,9 +12,9 @@ namespace His_Pos.Class.Person
         public Person()
         {
             id = "";
-            icNumber = "";
-            name = "";
-            birthday = "";
+            _icNumber = "";
+            _name = "";
+            _birthday = new DateTime();
         }
 
         public Person(DataRow dataRow)
@@ -20,65 +22,63 @@ namespace His_Pos.Class.Person
             Id = dataRow["EMP_ID"].ToString();
             Name = dataRow["EMP_NAME"].ToString();
             IcNumber = dataRow["EMP_IDNUM"].ToString();
-            Birthday = dataRow["EMP_BIRTH"].ToString();
+            Birthday = dataRow["EMP_BIRTH"].ConvertTo<DateTime>();
         }
 
         private string id;
 
         public string Id
         {
-            get { return id; }
+            get => id;
             set
             {
                 id = value;
-                NotifyPropertyChanged("Id");
+                OnPropertyChanged(nameof(Id));
             }
         }
 
-        private string name;
+        private string _name;
 
         public string Name
         {
-            get { return name; }
+            get => _name;
             set
             {
-                name = value;
-                NotifyPropertyChanged("Name");
+                _name = value;
+                OnPropertyChanged(nameof(Name));
             }
         }
 
-        private string icNumber;
+        private string _icNumber;
 
         public string IcNumber
         {
-            get { return icNumber; }
+            get => _icNumber;
             set
             {
-                icNumber = value;
-                NotifyPropertyChanged("IcNumber");
+                _icNumber = value;
+               OnPropertyChanged(nameof(IcNumber));
             }
         }
 
-        private string birthday;
+        private DateTime _birthday;
 
-        public string Birthday
+        public DateTime Birthday
         {
-            get { return birthday; }
+            get => _birthday;
             set
             {
-                birthday = value;
-                NotifyPropertyChanged("Birthday");
+                _birthday = value;
+               OnPropertyChanged(nameof(Birthday));
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public void NotifyPropertyChanged(string info)
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

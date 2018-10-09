@@ -7,6 +7,7 @@ using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Division;
+using His_Pos.Service;
 
 namespace His_Pos
 {
@@ -87,12 +88,9 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var result = string.Empty;
-            if (string.IsNullOrEmpty(value.ToString())) return result;
-            var year = (int.Parse(value.ToString().Split('/')[0]) - 1911).ToString().PadLeft(3,'0');
-            var month = value.ToString().Split('/')[1];
-            var date = value.ToString().Split('/')[2].Substring(0, 2).Trim().PadLeft(2,'0');
-            result = year + month + date;
+            var result = value.ConvertTo<DateTime>().Year != 1
+                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), false)
+                : string.Empty;
             return result;
         }
 
