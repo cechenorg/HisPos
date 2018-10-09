@@ -201,7 +201,7 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.匯出申報檔):
                     break;
-                case nameof(FeatureItem.分錄查詢):
+                case nameof(FeatureItem.庫存現值查詢):
                     break;
                 default:
                     return;
@@ -302,7 +302,7 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.匯出申報檔):
                     newTab = new Export() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
-                case nameof(FeatureItem.分錄查詢):
+                case nameof(FeatureItem.庫存現值查詢):
                     newTab = new EntrySearch() { TabName = MainWindow.HisFeatures[6].Functions[0], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
                     

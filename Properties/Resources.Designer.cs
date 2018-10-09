@@ -205,7 +205,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 分錄查詢 的當地語系化字串。
+        ///   查詢類似 庫存現值查詢 的當地語系化字串。
         /// </summary>
         internal static string EntrySearch {
             get {

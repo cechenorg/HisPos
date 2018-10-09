@@ -265,6 +265,6 @@
     <value>&lt;? xml version = "1.0" encoding = "Big5" ?&gt;</value>
   </data>
   <data name="EntrySearch" xml:space="preserve">
-    <value>分錄查詢</value>
+    <value>庫存現值查詢</value>
   </data>
 </root>

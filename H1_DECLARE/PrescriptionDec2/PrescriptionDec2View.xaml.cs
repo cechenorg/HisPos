@@ -247,6 +247,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
                     ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", decMasId);
                     ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", decMasId);
+                    ProductDb.InsertEntry("配藥收入", _currentDeclareData.DrugsPoint.ToString(), "DecMasId", decMasId);
                     ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),"DecMasId",decMasId);
                     if (medEntryName != "骨科調劑耗用")
                     {
@@ -277,6 +278,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) {
                         ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                         ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
+                        ProductDb.InsertEntry("配藥收入", _currentDeclareData.DrugsPoint.ToString(), "DecMasId", _currentDecMasId);
                         ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _currentDecMasId);
                         if (medEntryName != "骨科調劑耗用") {
                             int medTotalPrice = 0;
@@ -319,6 +321,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) {
                         ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                         ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
+                        ProductDb.InsertEntry("配藥收入", _currentDeclareData.DrugsPoint.ToString(), "DecMasId", decMasId);
                         ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", decMasId);
                         if (medEntryName != "骨科調劑耗用") {
                             int medTotalPrice = 0;

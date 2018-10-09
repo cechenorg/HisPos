@@ -76,6 +76,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         public ChronicSendToServerWindow(ObservableCollection<DeclareMedicine> medicines) {
             InitializeComponent();
             foreach (DeclareMedicine row in medicines) {
+                if(row.IsBuckle)
                 Prescription.Add(new PrescriptionSendData(row));
             } 
             DataContext = this;

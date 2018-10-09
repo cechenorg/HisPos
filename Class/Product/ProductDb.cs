@@ -18,6 +18,7 @@ using His_Pos.Class.ProductType;
 using His_Pos.Struct.Product;
 using LiveCharts;
 using LiveCharts.Wpf;
+using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
 
 namespace His_Pos.Class.Product
 {
@@ -440,5 +441,20 @@ namespace His_Pos.Class.Product
             var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetBucklePrice]",parameters);
             return table.Rows[0][0].ToString();
         }
+        internal static void UpdateDailyStockValue() {
+            var dd = new DbConnection(Settings.Default.SQL_global); 
+              dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateDailyStockValue]"); 
+        }
+        internal static ObservableCollection<EntrySearchView.DailyStockValue> GetDailyStockValue() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[Index].[GetDailyStockValue]");
+            ObservableCollection<EntrySearchView.DailyStockValue> collection = new ObservableCollection<EntrySearchView.DailyStockValue>();
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new EntrySearchView.DailyStockValue(row));
+            }
+            return collection;
+        }
+        
     }
 } 

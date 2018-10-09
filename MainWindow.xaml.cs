@@ -11,6 +11,7 @@ using ChromeTabs;
 using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.Class.Pharmacy;
+using His_Pos.Class.Product;
 using His_Pos.Resource;
 using His_Pos.Service;
 using His_Pos.ViewModel;
@@ -67,7 +68,7 @@ namespace His_Pos
 
             HisFeatures.Add(new Feature(@"..\Images\DeclareFile.png", Properties.Resources.DeclareFile,
                 new string[] { Properties.Resources.DeclareFileExport }));
-            HisFeatures.Add(new Feature(@"..\Images\cute.jpg", Properties.Resources.EntrySearch,
+            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.EntrySearch,
               new string[] { Properties.Resources.EntrySearch }));
         }
         
@@ -159,6 +160,7 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            ProductDb.UpdateDailyStockValue();
             Application.Current.Shutdown();
         }
     }
