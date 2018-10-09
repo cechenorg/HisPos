@@ -19,7 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using His_Pos.WebService;
 namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 {
     /// <summary>
@@ -73,7 +73,8 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
 
-       
+            WebServicesSoapClient webService = new WebServicesSoapClient();
+            string aa = webService.HelloWorld();
             SaveFileDialog saveFileDialog1 = new SaveFileDialog(); 
             saveFileDialog1.Filter = "csv|*.csv ";
             saveFileDialog1.FilterIndex = 2;

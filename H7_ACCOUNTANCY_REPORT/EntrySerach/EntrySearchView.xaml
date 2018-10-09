@@ -109,7 +109,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2" Margin="10"  Orientation="Horizontal">
-            <Rectangle Width="1250"/>
+            <Rectangle Width="125"/>
             <Button Content="列印" Name="ButtonPrint" Click="ButtonPrint_Click" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16"/>
         </StackPanel>
     </Grid>
