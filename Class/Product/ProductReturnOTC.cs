@@ -143,6 +143,7 @@ namespace His_Pos.Class.Product
             otc.price = Price;
             otc.note = Note;
             otc.batchNumber = BatchNumber;
+            otc.BatchLimit = BatchLimit;
 
             return otc;
         }
