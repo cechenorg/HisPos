@@ -45,6 +45,20 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", Id));
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[DeleteOrder]", parameters);
         }
+
+        internal static StoreOrder AddReturnOrderByPurchace(string orderId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("OLD_ORDER_ID", orderId));
+            parameters.Add(new SqlParameter("ORDER_EMP", MainWindow.CurrentUser.Id));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddReturnOrderByPurchaseId]", parameters);
+
+            return new StoreOrder(table.Rows[0]);
+        }
+
         internal static void PurchaseAndReturn(StoreOrder storeOrder) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();

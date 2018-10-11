@@ -50,7 +50,10 @@ namespace His_Pos.ProductPurchase
 
         private void AddReturnByOrder(string OrderId)
         {
+            StoreOrder newStoreOrder = StoreOrderDb.AddReturnOrderByPurchace(OrderId);
 
+            StoreOrderCollection.Insert(0, newStoreOrder);
+            StoOrderOverview.SelectedIndex = 0;
         }
 
     }
