@@ -19,7 +19,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using His_Pos.WebService;
 using System.Net;
 
 namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
@@ -75,23 +74,23 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
 
-            //string targetUrl = "https://localhost:5001/api/values/5";
+            string targetUrl = "http://localhost/WebApiTest/api/send/YAYA";
 
-            //HttpWebRequest request = HttpWebRequest.Create(targetUrl) as HttpWebRequest;
-            //request.Method = "GET";
-            //request.ContentType = "application/x-www-form-urlencoded";
-            //request.Timeout = 30000;
+            HttpWebRequest request = HttpWebRequest.Create(targetUrl) as HttpWebRequest;
+            request.Method = "GET";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.Timeout = 30000;
 
-            //string result = "";
-            //// 取得回應資料
-            //using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-            //{
-            //    using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-            //    {
-            //        result = sr.ReadToEnd();
-            //    }
-            //}
-             
+            string result = "";
+            // 取得回應資料
+            using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
+            {
+                using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                {
+                    result = sr.ReadToEnd();
+                }
+            }
+
 
             SaveFileDialog saveFileDialog1 = new SaveFileDialog(); 
             saveFileDialog1.Filter = "csv|*.csv ";

@@ -382,11 +382,6 @@
     <Compile Include="ConfirmWindow.xaml.cs">
       <DependentUpon>ConfirmWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Connected Services\WebService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Converters.cs" />
     <Compile Include="DockingWindow.xaml.cs">
       <DependentUpon>DockingWindow.xaml</DependentUpon>
@@ -966,10 +961,6 @@
     <EmbeddedResource Include="RDLC\MedBagReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Connected Services\WebService\His_Pos.WebService.HelloWorldResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Connected Services\WebService\WebService.wsdl" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -1081,24 +1072,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\cute.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Connected Services\WebService\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\WebService\WebService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\WebService\configuration91.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\WebService\configuration.svcinfo" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Connected Services\WebService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
