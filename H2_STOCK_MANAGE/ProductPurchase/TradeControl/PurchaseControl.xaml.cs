@@ -184,19 +184,19 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            if (sender is null) return;
+        //private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        //{
+        //    if (sender is null) return;
 
-            DataGrid dataGrid = sender as DataGrid;
+        //    DataGrid dataGrid = sender as DataGrid;
 
-            if (dataGrid.Items.Count == e.Row.GetIndex() + 1 && storeOrderData.type == OrderType.UNPROCESSING) return;
+        //    if (dataGrid.Items.Count == e.Row.GetIndex() + 1 && storeOrderData.type == OrderType.UNPROCESSING) return;
 
-            int rowNum = (e.Row.GetIndex() + 1);
+        //    int rowNum = (e.Row.GetIndex() + 1);
 
-            if (e.Row.Header is null)
-                e.Row.Header = rowNum.ToString();
-        }
+        //    if (e.Row.Header is null)
+        //        e.Row.Header = rowNum.ToString();
+        //}
         internal void ClearControl()
         {
             StoreOrderData = null;
@@ -534,7 +534,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
             declareDataDetailOverview.Show();
         }
-
+        
     }
 
     public class HasDeclareDataToVisConverter : IValueConverter

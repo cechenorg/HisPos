@@ -60,6 +60,7 @@ namespace His_Pos
         {
             if(e.Key == Key.Enter)
             {
+
                 Close();
             }
         }

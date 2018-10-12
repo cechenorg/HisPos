@@ -436,8 +436,13 @@ namespace His_Pos.ProductPurchase
                     UpdateOneTheWayAmount();
             }
 
+            ObservableCollection<Product> tempProducts = StoreOrderData.Products;
+
             storeOrderCollection.Move(oldIndex, newIndex);
+            StoOrderOverview.SelectedItem = StoreOrderData;
             StoOrderOverview.ScrollIntoView(StoreOrderData);
+
+            StoreOrderData.Products = tempProducts;
 
             SetCurrentControl();
 
