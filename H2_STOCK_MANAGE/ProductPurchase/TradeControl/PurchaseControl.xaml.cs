@@ -343,7 +343,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!textBox.Name.Equals("FreeAmount"))
                 storeOrderData.CalculateTotalPrice();
-            
+
             StoreOrderData.IsDataChanged = true;
         }
 
