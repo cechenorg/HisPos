@@ -276,6 +276,8 @@
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
+    <Compile Include="Class\Entry\Entry.cs" />
+    <Compile Include="Class\Entry\EntryDb.cs" />
     <Compile Include="Class\FunctionDb.cs" />
     <Compile Include="Class\HisUpload\HisUploadData.cs" />
     <Compile Include="Class\HisUpload\HisUploadDb.cs" />
@@ -524,6 +526,9 @@
       <DependentUpon>ExportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H6_DECLAREFILE\Export\Export.cs" />
+    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
+      <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearch.cs" />
     <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
       <DependentUpon>EntrySearchView.xaml</DependentUpon>
@@ -821,6 +826,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H6_DECLAREFILE\Export\ExportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

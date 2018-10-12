@@ -74,24 +74,6 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
 
-            string targetUrl = "http://localhost/WebApiTest/api/send/YAYA";
-
-            HttpWebRequest request = HttpWebRequest.Create(targetUrl) as HttpWebRequest;
-            request.Method = "GET";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.Timeout = 30000;
-
-            string result = "";
-            // 取得回應資料
-            using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-            {
-                using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-                {
-                    result = sr.ReadToEnd();
-                }
-            }
-
-
             SaveFileDialog saveFileDialog1 = new SaveFileDialog(); 
             saveFileDialog1.Filter = "csv|*.csv ";
             saveFileDialog1.FilterIndex = 2;
@@ -105,6 +87,12 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 
             }
 
+        }
+
+        private void showEntryDetail(object sender, MouseButtonEventArgs e) {
+            var selectedItem = (sender as DataGridRow).Item;
+            EntryDetailWindow entryDetailWindow = new EntryDetailWindow( ((DailyStockValue)selectedItem).Date);
+            entryDetailWindow.ShowDialog();
         }
     }
 }
