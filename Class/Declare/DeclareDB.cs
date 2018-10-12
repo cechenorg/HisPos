@@ -44,11 +44,11 @@ namespace His_Pos.Class.Declare
             {
                 Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
             });
-
             parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
             {
                 Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
             });
+            parameters.Add(new SqlParameter("HISDECMAS_GETCARD", declareData.Prescription.IsGetIcCard));
             var conn = new DbConnection(Settings.Default.SQL_global);
             var table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId

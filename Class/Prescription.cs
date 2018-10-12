@@ -305,7 +305,7 @@ namespace His_Pos.Class
 
         public void CheckBirthDay(DateTime customerBirthday)
         {
-            if (customerBirthday < DateTime.Now)
+            if (customerBirthday >= DateTime.Now)
             {
                 AddError("0", "生日不可超過現在時間");
             }

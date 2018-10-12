@@ -96,7 +96,16 @@ namespace His_Pos
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return string.Empty;
+            if (value.ToString().Length < 7) return string.Empty;
+            else
+            {
+                var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
+                var month = int.Parse(value.ToString().Substring(3, 2));
+                var date = int.Parse(value.ToString().Substring(5, 2));
+                var result = new DateTime(year, month, date);
+                return result;
+            }
+            
         }
     }
 

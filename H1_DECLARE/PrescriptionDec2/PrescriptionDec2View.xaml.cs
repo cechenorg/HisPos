@@ -372,14 +372,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 {
                     //var loading = new LoadingWindow();
                     //loading.LoginIcData(Instance);
+                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+                    m.ShowDialog();
                 }
                 else
                 {
                     var icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
                     icErrorWindow.Show();
+                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+                    m.ShowDialog();
                 }
-                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
-                m.ShowDialog();
+                
                 //declareDb.UpdateDeclareFile(_currentDeclareData);
                 //PrintMedBag();
             }

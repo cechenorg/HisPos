@@ -215,14 +215,14 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn Width="50" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Name="DeleteDot" Width="30" MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Source="{Binding Source, NotifyOnSourceUpdated=True}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="130" Header="健保代碼">
+                    <DataGridTemplateColumn Width="130" Header="健保代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineCodeDataTemplate">
                                 <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" MaxHeight="50" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" 

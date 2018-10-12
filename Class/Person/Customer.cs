@@ -41,7 +41,7 @@ namespace His_Pos.Class.Person
         {
             Id = row["CUS_ID"].ToString();
             IcNumber = row["CUS_IDNUM"].ToString();
-            Birthday = row["CUS_BIRTH"].ConvertTo<DateTime>();
+            Birthday = row.Field<DateTime?>("CUS_BIRTH")??new DateTime();
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
             Gender = string.IsNullOrEmpty(row["CUS_GENDER"].ToString()) || Convert.ToBoolean(row["CUS_GENDER"].ToString());
