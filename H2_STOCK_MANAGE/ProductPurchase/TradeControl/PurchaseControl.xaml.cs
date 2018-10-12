@@ -409,26 +409,24 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         #region ----- G StoreOrderDetail Functions -----
         private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is null) return;
+            if (GStoreOrderDetail.SelectedItem is null) return;
 
-            var currentRowIndex = GetCurrentRowIndex(sender);
+            double left = ((ITrade)GStoreOrderDetail.SelectedItem).Amount % 2;
 
-            double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
+            ((ITrade)GStoreOrderDetail.SelectedItem).Amount = ((int)((ITrade)GStoreOrderDetail.SelectedItem).Amount / 2);
 
-            ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
-
-            StoreOrderData.Products.Insert(currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
+            StoreOrderData.Products.Insert(GStoreOrderDetail.SelectedIndex + 1, ((ICloneable)GStoreOrderDetail.SelectedItem).Clone() as Product);
 
             if (left != 0)
-                ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+                ((ITrade)GStoreOrderDetail.SelectedItem).Amount += left;
 
             StoreOrderData.IsDataChanged = true;
         }
         private void MergeBatchButton_Click(object sender, RoutedEventArgs e)
         {
-            int currentRow = GetCurrentRowIndex(sender);
+            if (GStoreOrderDetail.SelectedItem is null) return;
 
-            Product product = CurrentDataGrid.Items[currentRow - 1] as Product;
+            Product product = GStoreOrderDetail.SelectedItem as Product;
 
             if (!((IProductPurchase) product).BatchNumber.Equals(""))
             {
