@@ -62,6 +62,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                                                                 ((DeclareMedicine)obj).EngName.ToLower().Contains(searchText.ToLower()));
             }
         }
+        public IcErrorCodeWindow icErrorWindow;
         #endregion
 
         #region 健保卡作業相關變數
@@ -370,8 +371,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //}
                 if (CurrentPrescription.IsGetIcCard)
                 {
-                    //var loading = new LoadingWindow();
-                    //loading.LoginIcData(Instance);
+                    var loading = new LoadingWindow();
+                    loading.LoginIcData(Instance);
                     m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                     m.ShowDialog();
                 }
@@ -430,6 +431,57 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var icData = new IcData(Seq, _currentPrescription, CusBasicData, _currentDeclareData);
             var mainMessage = new MainMessage(icData);
             var headerMessage = new Header {DataFormat = "1"};
+            var icRecord = new IcRecord(headerMessage, mainMessage);
+
+            for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            {
+                if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
+                    continue;
+                var medicalData = new MedicalData
+                {
+                    MedicalOrderTreatDateTime = Seq.TreatDateTime,
+                    MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
+                    TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
+                    Usage = _currentDeclareData.DeclareDetails[i].Usage,
+                    Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
+                    TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
+                    PrescriptionSignature = _prescriptionSignatureList[i],
+                };
+                if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
+                    medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
+                switch (medicalData.MedicalOrderCategory)
+                {
+                    case "1":
+                    case "A":
+                        medicalData.PrescriptionDeliveryMark = "02";
+                        break;
+                    case "2":
+                    case "B":
+                        medicalData.PrescriptionDeliveryMark = "06";
+                        break;
+                    case "3":
+                    case "C":
+                    case "4":
+                    case "D":
+                    case "5":
+                    case "E":
+                        medicalData.PrescriptionDeliveryMark = "04";
+                        break;
+                }
+                medicalDatas.Add(medicalData);
+            }
+            icRecord.MainMessage.MedicalMessageList = medicalDatas;
+            icRecord.SerializeObject();
+            var d = new DeclareDb();
+            d.InsertDailyUpload(icRecord.SerializeObject());
+        }
+
+        public void CreatIcErrorUploadData()
+        {
+            var medicalDatas = new List<MedicalData>();
+            var icData = new IcData(Seq, _currentPrescription, CusBasicData, _currentDeclareData);
+            var mainMessage = new MainMessage(icData);
+            var headerMessage = new Header { DataFormat = "2" };
             var icRecord = new IcRecord(headerMessage, mainMessage);
 
             for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
@@ -796,7 +848,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
         {
-            var loading = new LoadingWindow();
             var t1 = new Thread(CheckIcCardStatus);
             SetCardStatusContent("卡片檢查中...");
             t1.Start();
@@ -804,7 +855,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 if (CurrentPrescription.IsGetIcCard)
                 {
-                    loading = new LoadingWindow();
+                    var loading = new LoadingWindow();
                     loading.Show();
                     loading.LoadIcData(Instance);
                     if (ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id))
@@ -1044,6 +1095,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DatePickerTreatment.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.AdjustDate); 
             CurrentPrescription.Medicines = MedicineDb.GetDeclareMedicineByMasId(decMasId);
             PrescriptionMedicines.ItemsSource = Instance.CurrentPrescription.Medicines;
+        }
+
+        private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+
+            var textBox = sender as TextBox;
+
+            if (e.Key == Key.Enter)
+            {
+                
+            }
         }
     }
 }

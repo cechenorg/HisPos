@@ -131,14 +131,14 @@
                     <Label Width="auto" Content="調劑日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox  Name="DatePickerTreatment" SelectionChanged="DatePickerTreatment_SelectionChanged" Width="130" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
                              Text="{Binding CurrentPrescription.Treatment.AdjustDateStr, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <DatePicker Name="AdjustDate" Width="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semi" 
+                    <DatePicker Name="AdjustDate" Width="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Focusable="False" FontFamily="Segoe UI Semi" 
                                 Foreground="Transparent" SelectedDate="{Binding CurrentPrescription.Treatment.AdjustDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Content="主要診斷" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox x:Name="MainDiagnosis" Width="170" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
                              MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" 
-                             Text="{Binding CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id, Mode=TwoWay}" />
+                             Text="{Binding CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id, Mode=TwoWay}" PreviewKeyDown="DiseaseCode_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="4" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="次要診斷" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
