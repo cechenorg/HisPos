@@ -86,8 +86,8 @@
                             <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
                         </Trigger>
                     </Style.Triggers>
-                    <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
-                    <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
+                    <EventSetter Event="GotFocus" Handler="DataGridRow_MouseEnter"/>
+                    <EventSetter Event="LostFocus" Handler="DataGridRow_MouseLeave"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="FontSize" Value="16"/>
@@ -201,7 +201,7 @@
             </DataGrid.RowHeaderTemplate>
         </DataGrid>
         <DataGrid Name="GStoreOrderDetail" Grid.Row="4" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False">
+                  AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -228,8 +228,8 @@
                             <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
                         </Trigger>
                     </Style.Triggers>
-                    <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
-                    <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
+                    <EventSetter Event="GotFocus" Handler="DataGridRow_MouseEnter"/>
+                    <EventSetter Event="LostFocus" Handler="DataGridRow_MouseLeave"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="FontSize" Value="16"/>
@@ -364,8 +364,8 @@
                             <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
                         </Trigger>
                     </Style.Triggers>
-                    <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter"/>
-                    <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave"/>
+                    <EventSetter Event="GotFocus" Handler="DataGridRow_MouseEnter"/>
+                    <EventSetter Event="LostFocus" Handler="DataGridRow_MouseLeave"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="BorderBrush" Value="Transparent"/>
                     <Setter Property="FontSize" Value="16"/>

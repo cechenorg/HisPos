@@ -68,6 +68,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         public DataGrid CurrentDataGrid { get; set; }
 
+        private Product CurrentProduct { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -196,6 +198,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         //    if (e.Row.Header is null)
         //        e.Row.Header = rowNum.ToString();
+
+        //    e.Row.Header = e.Row.GetIndex();
         //}
 
         internal void ClearControl()
@@ -203,9 +207,11 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             StoreOrderData = null;
             CurrentDataGrid.ItemsSource = null;
         }
-        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        private void DataGridRow_MouseEnter(object sender, EventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
+            
+            CurrentProduct = selectedItem as Product;
 
             if (selectedItem is IDeletable)
             {
@@ -221,7 +227,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             CurrentDataGrid.SelectedIndex = StoreOrderData.Products.Count;
         }
 
-        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        private void DataGridRow_MouseLeave(object sender, EventArgs e)
         {
             var leaveItem = (sender as DataGridRow).Item;
 
@@ -278,14 +284,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 {
                     UIElement secondChild = (UIElement)VisualTreeHelper.GetChild(firstChild, 0);
 
-                    if (secondChild is AutoCompleteBox)
-                    {
-                        secondChild.FindChild<TextBox>("Text").Focus();
-                    }
-                    else
-                    {
-                        secondChild.Focus();
-                    }
+                    secondChild.Focus();
                 }
             }
             else if ((sender as TextBox).Tag != null && (sender as TextBox).Tag.Equals("CheckInputOnlyNum"))
@@ -303,10 +302,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 newProduct = new ProductPurchaseMedicine(product);
             else
                 newProduct = new ProductPurchaseOtc(product);
-
-            int rowIndex = GetCurrentRowIndex(textBox);
-
-            if (rowIndex == CurrentDataGrid.Items.Count - 1)
+            
+            if (CurrentProduct is null)
             {
                 StoreOrderData.Products.Add(newProduct);
 
@@ -314,9 +311,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
             else
             {
-                ((IProductPurchase)newProduct).CopyFilledData(StoreOrderData.Products[rowIndex]);
+                ((IProductPurchase)newProduct).CopyFilledData(CurrentProduct);
 
-                StoreOrderData.Products[rowIndex] = newProduct;
+                CurrentProduct = newProduct;
             }
 
             StoreOrderData.IsDataChanged = true;
@@ -398,12 +395,10 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             TextBox textBox = sender as TextBox;
 
-            var currentRowIndex = GetCurrentRowIndex(sender);
+            if (CurrentProduct is null) return;
 
-            if (currentRowIndex == -1 || currentRowIndex == CurrentDataGrid.Items.Count - 1) return;
-
-            if (!textBox.Text.Equals(storeOrderData.Products[currentRowIndex].Id))
-                textBox.Text = storeOrderData.Products[currentRowIndex].Id;
+            if (!textBox.Text.Equals(CurrentProduct.Id))
+                textBox.Text = CurrentProduct.Id;
         }
         #endregion
 
@@ -444,40 +439,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         #endregion
 
         #region ----- Service Functions -----
-        private int GetCurrentRowIndex(object sender)
-        {
-            if (sender is Button)
-            {
-                Button btn = sender as Button;
-
-                List<Button> temp = new List<Button>();
-                NewFunction.FindChildGroup<Button>(CurrentDataGrid, btn.Name, ref temp);
-                for (int x = 0; x < temp.Count; x++)
-                {
-                    if (temp[x].Equals(btn))
-                    {
-                        return x;
-                    }
-                }
-            }
-            else if (sender is TextBox)
-            {
-                TextBox tb = sender as TextBox;
-
-                List<TextBox> temp = new List<TextBox>();
-                NewFunction.FindChildGroup<TextBox>(CurrentDataGrid, tb.Name, ref temp);
-                for (int x = 0; x < temp.Count; x++)
-                {
-                    if (temp[x].Equals(tb))
-                    {
-                        return x;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
+        
         private bool IsNumbers(Key key)
         {
             if (key >= Key.D0 && key <= Key.D9) return true;
