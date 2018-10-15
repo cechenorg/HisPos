@@ -197,6 +197,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         //    if (e.Row.Header is null)
         //        e.Row.Header = rowNum.ToString();
         //}
+
         internal void ClearControl()
         {
             StoreOrderData = null;
