@@ -371,6 +371,7 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryOtc)product).Note));
                 parameters.Add(new SqlParameter("STATUS", ((InventoryOtc)product).Status));
                 parameters.Add(new SqlParameter("CONTROL", DBNull.Value));
+                parameters.Add(new SqlParameter("FROZEN",DBNull.Value));
                 parameters.Add(new SqlParameter("COMMON", DBNull.Value));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
 

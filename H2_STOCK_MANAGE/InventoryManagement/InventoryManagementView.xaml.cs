@@ -236,5 +236,9 @@ namespace His_Pos.InventoryManagement
 
             addNewProductWindow.Show();
         }
+
+        private void ProductList_LoadingRow(object sender, DataGridRowEventArgs e) {
+            e.Row.Header = e.Row.GetIndex();
+        }
     }
 }

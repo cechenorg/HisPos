@@ -67,6 +67,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
         public EntrySearchView()
         {
             InitializeComponent();
+            ProductDb.UpdateDailyStockValue();
             DailyStockValueCollection = ProductDb.GetDailyStockValue();
             DataContext = this;
 
@@ -80,11 +81,16 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
             saveFileDialog1.RestoreDirectory = true; 
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                StreamWriter sw = new StreamWriter(saveFileDialog1.FileName);
-                sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "配藥收入" + "\t" + "期末現值");            // 寫入文字
-                sw.Close();
-
-
+                using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.CreateNew))
+                {
+                    StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
+                    sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "配藥收入" + "\t" + "期末現值");
+                    foreach (DailyStockValue row in DailyStockValueCollection)
+                    {
+                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t" + row.MedIncomeValue + "\t" + row.FinalStockValue);
+                    }
+                    sw.Close();
+                } 
             }
 
         }
