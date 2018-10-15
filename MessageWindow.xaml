@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:His_Pos"
         mc:Ignorable="d"
         Title="MessageWindow" Width="350" Height="200" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
-    <Grid>
+    <Grid Name="MainGrid" PreviewKeyDown="Grid_PreviewKeyDown">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="150">
                 <Image Name="Icon"  Height="50" Width="50" Margin="30,0,20,0"/>

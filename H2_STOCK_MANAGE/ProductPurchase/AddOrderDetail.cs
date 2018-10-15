@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
@@ -49,7 +50,11 @@ namespace His_Pos.ProductPurchase
 
         private void AddReturnByOrder(string OrderId)
         {
+            StoreOrder newStoreOrder = StoreOrderDb.AddReturnOrderByPurchace(OrderId);
 
+            StoreOrderCollection.Insert(0, newStoreOrder);
+            StoOrderOverview.SelectedIndex = 0;
         }
+
     }
 }

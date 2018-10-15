@@ -55,5 +55,14 @@ namespace His_Pos
         {
             Message.HorizontalContentAlignment = alignment;
         }
+
+        private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+
+                Close();
+            }
+        }
     }
 }
