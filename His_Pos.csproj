@@ -276,6 +276,7 @@
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadService.cs" />
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
+    <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCodeDb.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />

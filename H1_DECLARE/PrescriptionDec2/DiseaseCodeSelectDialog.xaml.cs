@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.Class.DiseaseCode;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -20,9 +22,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class DiseaseCodeSelectDialog : Window
     {
-        public DiseaseCodeSelectDialog()
+        public DiseaseCodeSelectDialog(string id)
         {
             InitializeComponent();
+            DiseaseCodeDb.GetDiseaseCodeById(id);
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

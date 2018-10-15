@@ -826,7 +826,15 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("卡片資料寫入中...");
                 prescriptionDec2View.LogInIcData();
-                Dispatcher.Invoke(prescriptionDec2View.CreatIcUploadData);
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    if (prescriptionDec2View.IsMedicalNumberGet || string.IsNullOrEmpty(prescriptionDec2View.icErrorWindow.SelectedItem.Id))
+                        prescriptionDec2View.CreatIcUploadData();
+                    else
+                    {
+                        prescriptionDec2View.CreatIcErrorUploadData();
+                    }
+                }));
             };
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
             {

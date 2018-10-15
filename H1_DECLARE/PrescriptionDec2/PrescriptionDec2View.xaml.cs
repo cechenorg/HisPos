@@ -27,7 +27,6 @@ using System.Windows.Data;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.Person;
 using His_Pos.Struct.IcData;
-using His_Pos.Class.StoreOrder;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -378,8 +377,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
                 else
                 {
-                    var icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
+                    icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
                     icErrorWindow.Show();
+                    var loading = new LoadingWindow();
+                    loading.LoginIcData(Instance);
                     m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
                     m.ShowDialog();
                 }
@@ -475,11 +476,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var d = new DeclareDb();
             d.InsertDailyUpload(icRecord.SerializeObject());
         }
-
+        //異常上傳
         public void CreatIcErrorUploadData()
         {
             var medicalDatas = new List<MedicalData>();
-            var icData = new IcData(Seq, _currentPrescription, CusBasicData, _currentDeclareData);
+            var icData = new IcData(CurrentPrescription,icErrorWindow.SelectedItem,_currentDeclareData);
             var mainMessage = new MainMessage(icData);
             var headerMessage = new Header { DataFormat = "2" };
             var icRecord = new IcRecord(headerMessage, mainMessage);
@@ -490,13 +491,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     continue;
                 var medicalData = new MedicalData
                 {
-                    MedicalOrderTreatDateTime = Seq.TreatDateTime,
+                    MedicalOrderTreatDateTime = icData.TreatmentDateTime,
                     MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
                     TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
                     Usage = _currentDeclareData.DeclareDetails[i].Usage,
                     Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
                     TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
-                    PrescriptionSignature = _prescriptionSignatureList[i],
                 };
                 if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
                     medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
@@ -1105,7 +1105,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             if (e.Key == Key.Enter)
             {
-                
+                //DiseaseCodeSelectDialog disease = new DiseaseCodeSelectDialog();
             }
         }
     }

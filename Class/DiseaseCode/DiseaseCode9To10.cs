@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace His_Pos.Class.DiseaseCode
 {
-    class DiseaseCodeDb
+    public class DiseaseCode9To10
     {
-        public static void GetDiseaseCodeById(string id)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }
