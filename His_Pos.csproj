@@ -640,6 +640,15 @@
     </Compile>
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
+    <Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">
+      <DependentUpon>DatabaseControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SystemSettings\SettingControl\MyPharmacyControl.xaml.cs">
+      <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SystemSettings\SettingControl\PrinterControl.xaml.cs">
+      <DependentUpon>PrinterControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SystemSettings\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
@@ -950,6 +959,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SystemSettings\SettingControl\DatabaseControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SystemSettings\SettingControl\MyPharmacyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SystemSettings\SettingControl\PrinterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SystemSettings\SettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -994,7 +1015,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="packages\" />
-    <Folder Include="SystemSettings\SettingControl\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
