@@ -439,6 +439,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 報表系統 的當地語系化字串。
+        /// </summary>
+        internal static string ReportSystem {
+            get {
+                return ResourceManager.GetString("ReportSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 非藥事居家照護或協助辦理門診戒菸計畫且直接交付指示用藥、提供「戒菸個案追蹤」或「戒菸衛教暨個案管理」者，需填寫原處方服務機構之特定治療項目代號 的當地語系化字串。
         /// </summary>
         internal static string SpecialTreatmentCodeNull {

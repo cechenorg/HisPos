@@ -17,7 +17,7 @@ namespace His_Pos.Class.Employee
             Gender = "";
             IdNum = "";
             Department = "";
-            Position = "";
+            Position = "店員";
             Birth = DateTime.Now.ToString();
             Address = "";
             Tel = "";

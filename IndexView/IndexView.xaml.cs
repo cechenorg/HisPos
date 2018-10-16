@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,12 +34,14 @@ namespace His_Pos.IndexView
         public class DailtChronicPhoneCall {
 
             public DailtChronicPhoneCall(DataRow row) {
+                DecMasId = row["HISDECMAS_ID"].ToString();
                 CusId = row["CUS_ID"].ToString();
                 CusName = row["CUS_NAME"].ToString();
                 Phone = row["CUS_TEL"].ToString();
                 DivInsName = row["DIVINS_NAME"].ToString();
-                Status = row["STATUS"].ToString() == "N" ? "未聯絡" : "已聯絡";
+                Status = row["STATUS"].ToString() == "0" ? "未聯絡" : "已聯絡";
             }
+            public string DecMasId { get; set; }
             public string CusId { get; set; }
             public string CusName { get; set; }
             public string Phone { get; set; }
@@ -111,7 +114,7 @@ namespace His_Pos.IndexView
         public IndexView()
         {
             InitializeComponent();
-            Date.Content = DateTime.Today.ToString("yyyy/MM/dd");
+           // Date.Content = DateTime.Today.ToString("yyyy/MM/dd");
             ChronicDb.CaculateChironic();
             InitData();
             DataContext = this;
@@ -142,6 +145,12 @@ namespace His_Pos.IndexView
             var selectedItem = (sender as DataGridRow).Item;
             MainWindow.Instance.AddNewTab("處方登錄");
             PrescriptionDec2View.IndexViewDecMasId = ((DailyTakeChronicList)selectedItem).DecMasId;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (ChironicPhoneCall.SelectedItem is null) return;
+            DailtChronicPhoneCall a =  (DailtChronicPhoneCall)ChironicPhoneCall.SelectedItem;
+            ChronicDb.UpdateChronicPhoneCall(a.DecMasId,a.Status);
         }
     }
 }

@@ -264,6 +264,9 @@
   <data name="XmlDeclare" xml:space="preserve">
     <value>&lt;? xml version = "1.0" encoding = "Big5" ?&gt;</value>
   </data>
+  <data name="ReportSystem" xml:space="preserve">
+    <value>報表系統</value>
+  </data>
   <data name="EntrySearch" xml:space="preserve">
     <value>庫存現值查詢</value>
   </data>

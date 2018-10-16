@@ -76,5 +76,16 @@ namespace His_Pos.Class.Authority
             parameters.Add(new SqlParameter("LEAVE", details));
             dd.ExecuteProc("[HIS_POS_DB].[AuthenticationManageView].[ConfirmLeaveRecord]", parameters);
         }
+        internal static Collection<string> GetTabAuthByGroupId(string groupId) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>(); 
+            parameters.Add(new SqlParameter("GroupId", groupId));
+           DataTable table = dd.ExecuteProc("[HIS_POS_DB].[LoginView].[GetTabAuthByGroupId]", parameters);
+            Collection<string> collection = new Collection<string>();
+            foreach (DataRow row in table.Rows) {
+                collection.Add(row["AUTH_NAME"].ToString());
+            }
+            return collection;
+        } 
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using ChromeTabs;
 using His_Pos.Class;
+using His_Pos.Class.Authority;
 using His_Pos.Class.Person;
 using His_Pos.Class.Pharmacy;
 using His_Pos.Class.Product;
@@ -25,6 +28,7 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+        
         public static Pharmacy CurrentPharmacy;
         public static MainWindow MainWindowInstance;
         public MainWindow(User userLogin)
@@ -68,17 +72,22 @@ namespace His_Pos
 
             HisFeatures.Add(new Feature(@"..\Images\DeclareFile.png", Properties.Resources.DeclareFile,
                 new string[] { Properties.Resources.DeclareFileExport }));
-            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.EntrySearch,
+            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.ReportSystem,
               new string[] { Properties.Resources.EntrySearch }));
         }
         
         private void InitializeMenu()
         {
+            
             for (int i = 0; i < HisFeatures.Count; i++)
             {
-                (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelText(HisFeatures[i].Title);
-                (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelImage(HisFeatures[i].Icon);
-                SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem), HisFeatures[i].Functions);
+               
+                    (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelText(HisFeatures[i].Title);
+                    (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelImage(HisFeatures[i].Icon);
+                    SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem), HisFeatures[i].Functions);
+                if ((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem)._count != 0)
+                    (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).Visibility = Visibility.Visible;
+                
             }
         }
 
@@ -86,11 +95,15 @@ namespace His_Pos
         {
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
-        
+
+            Collection<string> tabAuth = AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
             foreach (var t in itemsName)
             {
-                var newItem = new MenuItem();
-                features.NewMenuItem(t,newItem, FeaturesItemMouseDown);
+                if (tabAuth.Count(tab => tab == t) != 0)
+                {
+                    var newItem = new MenuItem();
+                    features.NewMenuItem(t, newItem, FeaturesItemMouseDown);
+                }
             }
         }
 

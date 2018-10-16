@@ -1,4 +1,5 @@
 ﻿using His_Pos.Class.Employee;
+using His_Pos.Class.Person;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -25,6 +26,20 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
     public partial class EmployeeManageView : UserControl, INotifyPropertyChanged
     {
         private bool isFirst = true;
+
+        public Collection<string> positionCollection;
+        public Collection<string> PositionCollection
+        {
+            get
+            {
+                return positionCollection;
+            }
+            set
+            {
+                positionCollection = value;
+                NotifyPropertyChanged("PositionCollection");
+            }
+        }
         public ObservableCollection<CustomItem> oc;
         public ObservableCollection<CustomItem> OC
         {
@@ -106,7 +121,8 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             InitializeComponent();
             GetEmployeeData();
             DataContext = this;
-            
+            PositionCollection = CustomerDb.GetPositionData();
+
             OC = new ObservableCollection<CustomItem>()
         {
         new CustomItem(){Name="DI", Checked=true,

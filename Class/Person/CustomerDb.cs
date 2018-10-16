@@ -77,5 +77,15 @@ namespace His_Pos.Class.Person
             }
             return data;
         }
+        internal static Collection<string> GetPositionData() {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetPositionData]");
+            Collection<string> data = new Collection<string>();
+            foreach (DataRow row in table.Rows)
+            {
+                data.Add(row["AUTHGROUP_NAME"].ToString());
+            }
+            return data;
+        } 
     }
 }

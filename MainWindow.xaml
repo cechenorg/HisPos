@@ -214,13 +214,13 @@
                         </Style>
                     </ScrollViewer.Resources>
                     <StackPanel Orientation="Vertical" Height="Auto">
-                        <resource:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown"/>
+                        <resource:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>
