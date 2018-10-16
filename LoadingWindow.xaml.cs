@@ -554,9 +554,11 @@ namespace His_Pos
                 exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
                 exportView.DeclareMedicinesData = MedicineDb.GetDeclareFileMedicineData();
                 Dispatcher.Invoke((Action)(() =>
-                    {
-                        exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
-                    }));
+                {
+                    exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
+                    exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                    exportView.ReleasePalace.ItemsSource = exportView.HospitalCollection;
+                }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {

@@ -7,6 +7,7 @@ using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Division;
+using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.Service;
 
 namespace His_Pos
@@ -201,9 +202,8 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ObservableCollection<Division> divisions = DivisionDb.GetData();
             string divisionName = "";
-            foreach (var d in divisions)
+            foreach (var d in ExportView.Instance.DivisionCollection)
             {
                 if (d.Id.Equals(value))
                     divisionName = d.Name;
@@ -221,9 +221,8 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ObservableCollection<Hospital> divisions = HospitalDb.GetData();
             string divisionName = "";
-            foreach (var d in divisions)
+            foreach (var d in ExportView.Instance.HospitalCollection)
             {
                 if (d.Id.Equals(value))
                     divisionName = d.Name;

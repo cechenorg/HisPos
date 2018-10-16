@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,6 +26,7 @@ using His_Pos.RDLC;
 using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
 using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Class.DiseaseCode;
 using His_Pos.Class.Person;
 using His_Pos.Struct.IcData;
 
@@ -1105,7 +1107,42 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             if (e.Key == Key.Enter)
             {
-                //DiseaseCodeSelectDialog disease = new DiseaseCodeSelectDialog();
+                if (textBox != null && textBox.Text.Length < 3)
+                {
+                    var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING);
+                    m.Show();
+                    return;
+                }
+                if (textBox != null)
+                {
+                    if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).Count == 1)
+                    {
+                        var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
+                        if (selectedDiseaseCode.Id.Equals("查無疾病代碼"))
+                        {
+                            var m = new MessageWindow("查無疾病代碼", MessageType.WARNING);
+                            m.Show();
+                            return;
+                        }
+                        DependencyObject dpobj = textBox;
+                        var name = dpobj.GetValue(NameProperty) as string;
+                        if (name.Equals("MainDiagnosis"))
+                            CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = selectedDiseaseCode;
+                        else
+                        {
+                            CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = selectedDiseaseCode;
+                        }
+                    }
+                    else
+                    {
+                        var disease = new DiseaseCodeSelectDialog(textBox.Text);
+                        disease.Show();
+                    }
+                }
+                else
+                {
+                    return;
+                }
             }
         }
     }
