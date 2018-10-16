@@ -7,6 +7,60 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="620">
     <Grid Background="LightGray">
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="本地資料庫" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <Rectangle Width="210"/>
+            <Image Source="../../Images/Declared.png" Width="20"/>
+            <Label Content="連線成功" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Button Content="測試連線" Background="{StaticResource DarkShadow}" BorderThickness="0" Margin="10,0,0,0"/>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="50,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="主機IP" Grid.Row="0" Grid.Column="0" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center"/>
+            <Label Content="Port" Grid.Row="0" Grid.Column="1" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center"/>
+            <Label Content="帳號" Grid.Row="1" Grid.Column="0" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center"/>
+            <Label Content="密碼" Grid.Row="1" Grid.Column="1" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Label Content="遠端伺服器" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <Rectangle Width="210"/>
+            <Image Source="../../Images/Declared.png" Width="20"/>
+            <Label Content="連線成功" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
+            <Button Content="測試連線" Background="{StaticResource DarkShadow}" BorderThickness="0" Margin="10,0,0,0"/>
+        </StackPanel>
+        <Grid Grid.Row="3" Margin="50,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Content="主機IP" Grid.Row="0" Grid.Column="0" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center"/>
+            <Label Content="Port" Grid.Row="0" Grid.Column="1" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center"/>
+            <Label Content="帳號" Grid.Row="1" Grid.Column="0" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center"/>
+            <Label Content="密碼" Grid.Row="1" Grid.Column="1" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center"/>
+        </Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Right">
+            <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <Button Name="CancelBtn" Margin="0,0,20,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" IsEnabled="False"/>
+            <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" IsEnabled="False" Margin="0,0,10,0"/>
+        </StackPanel>
     </Grid>
 </UserControl>

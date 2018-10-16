@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SystemSettings"
         mc:Ignorable="d"
-        Title="設定" Height="500" Width="800" WindowStartupLocation="CenterScreen">
+        Title="設定" Height="500" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
