@@ -5,42 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SystemSettings"
         mc:Ignorable="d"
-        Title="設定" Height="500" Width="800">
+        Title="設定" Height="500" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="180"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <DataGrid Grid.Column="0" Background="{StaticResource MenuBarBackGround}" HeadersVisibility="None" GridLinesVisibility="None" ItemsSource="{Binding}">
-            <DataGrid.Columns>
-                <DataGridTemplateColumn Width="270">
-                    <DataGridTemplateColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="#FF424040"/>
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTemplateColumn.CellStyle>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid Height="70">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <Image Source="{Binding TypeIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="20" Margin="10,0,5,0" Grid.Column="0" />
-                                <Label Grid.Column="1"/>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Grid Background="{StaticResource MenuBarBackGround}">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Name="MyPharmacyStack" Orientation="Horizontal" Grid.Row="0" MouseLeftButtonDown="SettingTab_OnMouseLeftButtonDown">
+                <Image Source="../Images/MyPharmacy.png" Width="35" Margin="15,0,0,5"/>
+                <Label Content="藥局設定" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Foreground="DarkGray"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" MouseLeftButtonDown="SettingTab_OnMouseLeftButtonDown">
+                <Image Source="../Images/Printer.png" Width="35" Margin="15,0,0,0"/>
+                <Label Content="印表機設定" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Foreground="DarkGray"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" MouseLeftButtonDown="SettingTab_OnMouseLeftButtonDown">
+                <Image Source="../Images/Database.png" Width="35" Margin="18,0,0,0"/>
+                <Label Content="資料庫設定" VerticalAlignment="Center" Margin="7,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" Foreground="DarkGray"/>
+            </StackPanel>
+        </Grid>
         <ContentControl Grid.Column="1"/>
     </Grid>
 </Window>
