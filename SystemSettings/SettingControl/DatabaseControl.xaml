@@ -51,7 +51,7 @@
             <Label Content="帳號" Grid.Row="1" Grid.Column="0" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Text="{Binding Account, Mode=TwoWay}" Width="180" Grid.Row="1" Grid.Column="1" Margin="10,0,0,5" FontSize="20" FontFamily="Segoe UI Semi" TextChanged="Textbox_OnTextChanged" InputMethod.IsInputMethodEnabled="False"/>
             <Label Content="密碼" Grid.Row="1" Grid.Column="2" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <PasswordBox Width="150" Grid.Row="1" Grid.Column="3" Margin="8,0,0,5" HorizontalAlignment="Left" FontSize="20" FontFamily="Segoe UI Semi" PasswordChanged="PasswordBox_OnPasswordChanged" InputMethod.IsInputMethodEnabled="False"/>
+            <PasswordBox Name="LocalPasswordBox" Width="150" Grid.Row="1" Grid.Column="3" Margin="8,0,0,5" HorizontalAlignment="Left" FontSize="20" FontFamily="Segoe UI Semi" PasswordChanged="PasswordBox_OnPasswordChanged" InputMethod.IsInputMethodEnabled="False"/>
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Label Content="遠端伺服器" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
@@ -88,7 +88,7 @@
             <Label Content="帳號" Grid.Row="1" Grid.Column="0" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Right"/>
             <TextBox Text="{Binding Account, Mode=TwoWay}" Width="180" Grid.Row="1" Grid.Column="1" Margin="10,0,0,5" FontSize="20" FontFamily="Segoe UI Semi" TextChanged="Textbox_OnTextChanged" InputMethod.IsInputMethodEnabled="False"/>
             <Label Content="密碼" Grid.Row="1" Grid.Column="2" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-            <PasswordBox Width="150" Grid.Row="1" Grid.Column="3" Margin="8,0,0,5" HorizontalAlignment="Left" FontSize="20" FontFamily="Segoe UI Semi" PasswordChanged="PasswordBox_OnPasswordChanged" InputMethod.IsInputMethodEnabled="False"/>
+            <PasswordBox Name="GlobalPasswordBox" Width="150" Grid.Row="1" Grid.Column="3" Margin="8,0,0,5" HorizontalAlignment="Left" FontSize="20" FontFamily="Segoe UI Semi" PasswordChanged="PasswordBox_OnPasswordChanged" InputMethod.IsInputMethodEnabled="False"/>
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Right">
             <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>

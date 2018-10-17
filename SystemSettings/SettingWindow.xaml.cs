@@ -79,6 +79,7 @@ namespace His_Pos.SystemSettings
                     CurrentControl = printerControl;
                     break;
                 case SettingTabs.Database:
+                    databaseControl.ClearDataChangedStatus();
                     CurrentControl = databaseControl;
                     break;
             }

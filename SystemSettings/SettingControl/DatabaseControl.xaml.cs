@@ -28,7 +28,7 @@ namespace His_Pos.SystemSettings.SettingControl
     public partial class DatabaseControl : UserControl
     {
         #region ----- Define Struct -----
-        public struct ConnectionData
+        public class ConnectionData
         {
             public ConnectionData(string iPAddr, string port, string account, string password)
             {
@@ -84,10 +84,12 @@ namespace His_Pos.SystemSettings.SettingControl
             string localConnection = Properties.Settings.Default.SQL_local;
             match = reg.Match(localConnection);
             LocalConnection = new ConnectionData(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value);
-            
+            LocalPasswordBox.Password = LocalConnection.Password;
+
             string globalConnection = Properties.Settings.Default.SQL_global;
             match = reg.Match(globalConnection);
             GlobalConnection = new ConnectionData(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value);
+            GlobalPasswordBox.Password = GlobalConnection.Password;
         }
 
         #endregion
@@ -120,11 +122,21 @@ namespace His_Pos.SystemSettings.SettingControl
             }
         }
 
+        public void ClearDataChangedStatus()
+        {
+            IsDataChanged = false;
+
+            UpdateDataChangedUi();
+        }
+
         #endregion
 
         #region ----- Check Connection -----
         private void CheckConnection(ConnectionTarget connectionTarget)
         {
+            if(!CheckConnectionFormat(connectionTarget))
+                return;
+
             DbConnection connection;
 
             switch (connectionTarget)
@@ -159,6 +171,31 @@ namespace His_Pos.SystemSettings.SettingControl
             WaitingConnectionUi(connectionTarget);
 
             backgroundWorker.RunWorkerAsync();
+        }
+
+        private bool CheckConnectionFormat(ConnectionTarget connectionTarget)
+        {
+            Regex IPReg = new Regex(@"[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
+            Match IPMatch;
+
+            switch (connectionTarget)
+            {
+                case ConnectionTarget.LOCAL:
+                    IPMatch = IPReg.Match(LocalConnection.IPAddr);
+                    break;
+                case ConnectionTarget.GLOBAL:
+                    IPMatch = IPReg.Match(GlobalConnection.IPAddr);
+                    break;
+                default:
+                    return false;
+            }
+
+            if (IPMatch.Success) return true;
+
+            MessageWindow messageWindow = new MessageWindow("IP 格式錯誤!", MessageType.ERROR);
+            messageWindow.ShowDialog();
+
+            return false;
         }
 
         private void WaitingConnectionUi(ConnectionTarget connectionTarget)
@@ -213,6 +250,24 @@ namespace His_Pos.SystemSettings.SettingControl
             }
         }
 
+        #endregion
+
+        #region ----- Service Function -----
+        private bool IsNumbers(Key key)
+        {
+            if (key >= Key.D0 && key <= Key.D9) return true;
+            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
+
+            return false;
+        }
+        private bool IsKeyAvailable(Key key)
+        {
+            if (key >= Key.D0 && key <= Key.D9) return true;
+            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
+            if (key == Key.Back || key == Key.Delete || key == Key.Left || key == Key.Right || key == Key.OemPeriod || key == Key.Decimal) return true;
+
+            return false;
+        }
         #endregion
 
         private void Textbox_OnTextChanged(object sender, TextChangedEventArgs e)
