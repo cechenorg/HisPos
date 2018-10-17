@@ -27,7 +27,7 @@ namespace His_Pos.SystemSettings.SettingControl
     /// </summary>
     public partial class DatabaseControl : UserControl
     {
-        #region ----- Define Struct -----
+        #region ----- Define Inner Class -----
         public class ConnectionData
         {
             public ConnectionData(string iPAddr, string port, string account, string password)
@@ -62,6 +62,9 @@ namespace His_Pos.SystemSettings.SettingControl
         public ConnectionData GlobalConnection { get; set; }
 
         public bool IsDataChanged { get; set; } = false;
+
+        BackgroundWorker LocalConnectionWorker = new BackgroundWorker();
+        BackgroundWorker GlobalConnectionWorker = new BackgroundWorker();
         #endregion
 
         public DatabaseControl()
@@ -90,6 +93,9 @@ namespace His_Pos.SystemSettings.SettingControl
             match = reg.Match(globalConnection);
             GlobalConnection = new ConnectionData(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value);
             GlobalPasswordBox.Password = GlobalConnection.Password;
+
+            LocalConnectionWorker.WorkerSupportsCancellation = true;
+            GlobalConnectionWorker.WorkerSupportsCancellation = true;
         }
 
         #endregion
@@ -138,39 +144,45 @@ namespace His_Pos.SystemSettings.SettingControl
                 return;
 
             DbConnection connection;
+            BackgroundWorker currentWorker;
 
             switch (connectionTarget)
             {
                 case ConnectionTarget.LOCAL:
                     connection = new DbConnection(LocalConnection.ToString());
+                    currentWorker = LocalConnectionWorker;
                     break;
                 case ConnectionTarget.GLOBAL:
                     connection = new DbConnection(GlobalConnection.ToString());
+                    currentWorker = GlobalConnectionWorker;
                     break;
                 default:
                     return;
             }
 
+            if(currentWorker.IsBusy)
+                currentWorker.CancelAsync();
+
             bool connectionState = false;
-
-            BackgroundWorker backgroundWorker = new BackgroundWorker();
-
-            backgroundWorker.DoWork += (s, o) =>
+            
+            currentWorker.DoWork += (s, o) =>
             {
                 connectionState = connection.CheckConnection();
             };
 
-            backgroundWorker.RunWorkerCompleted += (s, o) =>
+            currentWorker.RunWorkerCompleted += (s, o) =>
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    
+
                     UpdateConnectionMessage(connectionTarget, connectionState);
                 }));
             };
 
             WaitingConnectionUi(connectionTarget);
 
-            backgroundWorker.RunWorkerAsync();
+            currentWorker.RunWorkerAsync();
         }
 
         private bool CheckConnectionFormat(ConnectionTarget connectionTarget)
@@ -196,6 +208,25 @@ namespace His_Pos.SystemSettings.SettingControl
             messageWindow.ShowDialog();
 
             return false;
+        }
+
+        private void ResetConnectionStatus(ConnectionTarget connectionTarget)
+        {
+            switch (connectionTarget)
+            {
+                case ConnectionTarget.LOCAL:
+                    LSuccessStack.Visibility = Visibility.Collapsed;
+                    LConnectingStack.Visibility = Visibility.Hidden;
+                    LErrorStack.Visibility = Visibility.Collapsed;
+                    break;
+                case ConnectionTarget.GLOBAL:
+                    GSuccessStack.Visibility = Visibility.Collapsed;
+                    GConnectingStack.Visibility = Visibility.Hidden;
+                    GErrorStack.Visibility = Visibility.Collapsed;
+                    break;
+                default:
+                    return;
+            }
         }
 
         private void WaitingConnectionUi(ConnectionTarget connectionTarget)
@@ -272,11 +303,25 @@ namespace His_Pos.SystemSettings.SettingControl
 
         private void Textbox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
+            if (sender is null) return;
+
+            Control control = sender as Control;
+
+            ConnectionTarget connectionTarget = (ConnectionTarget)Int16.Parse(control.Tag.ToString());
+            ResetConnectionStatus(connectionTarget);
+
             DataHasChanged();
         }
-
+        
         private void PasswordBox_OnPasswordChanged(object sender, RoutedEventArgs e)
         {
+            if (sender is null) return;
+
+            PasswordBox passwordBox = sender as PasswordBox;
+
+            ConnectionTarget connectionTarget = (ConnectionTarget)Int16.Parse(passwordBox.Tag.ToString());
+            ResetConnectionStatus(connectionTarget);
+
             DataHasChanged();
         }
 
