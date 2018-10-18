@@ -7,6 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="620">
     <Grid Background="LightGray">
-
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
     </Grid>
 </UserControl>

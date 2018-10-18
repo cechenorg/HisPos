@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,16 @@ namespace His_Pos.SystemSettings.SettingControl
         public PrinterControl()
         {
             InitializeComponent();
+
+            //foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
+            //{
+            //    MessageBox.Show(printer);
+            //}
+
+            for (int i = 0; i < PrinterSettings.InstalledPrinters.Count; i++)
+            {
+                
+            }
         }
     }
 }
