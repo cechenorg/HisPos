@@ -160,8 +160,11 @@ namespace His_Pos.SystemSettings.SettingControl
                     return;
             }
 
-            if(currentWorker.IsBusy)
+            if (currentWorker.IsBusy)
+            {
                 currentWorker.CancelAsync();
+                currentWorker = new BackgroundWorker();
+            }
 
             bool connectionState = false;
             
@@ -174,8 +177,6 @@ namespace His_Pos.SystemSettings.SettingControl
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    
-
                     UpdateConnectionMessage(connectionTarget, connectionState);
                 }));
             };
@@ -215,11 +216,13 @@ namespace His_Pos.SystemSettings.SettingControl
             switch (connectionTarget)
             {
                 case ConnectionTarget.LOCAL:
+                    if(LConnectingStack.Visibility == Visibility.Visible) return;
                     LSuccessStack.Visibility = Visibility.Collapsed;
                     LConnectingStack.Visibility = Visibility.Hidden;
                     LErrorStack.Visibility = Visibility.Collapsed;
                     break;
                 case ConnectionTarget.GLOBAL:
+                    if (GConnectingStack.Visibility == Visibility.Visible) return;
                     GSuccessStack.Visibility = Visibility.Collapsed;
                     GConnectingStack.Visibility = Visibility.Hidden;
                     GErrorStack.Visibility = Visibility.Collapsed;
