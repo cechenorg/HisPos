@@ -374,7 +374,7 @@ namespace His_Pos.ProductPurchase
 
             }
 
-            MessageWindow messageWindow = new MessageWindow("處理單已完成, 可前往處方單紀錄查詢!", MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("處理單已完成, 可前往處方單紀錄查詢!", MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
 
             InventoryManagementView.DataChanged = true;
@@ -523,7 +523,7 @@ namespace His_Pos.ProductPurchase
 
             if (errorMessage != String.Empty)
             {
-                MessageWindow messageWindow = new MessageWindow(errorMessage, MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow(errorMessage, MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return false;
             }

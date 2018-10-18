@@ -50,7 +50,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
 
             if (!errors.Equals(""))
             {
-                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR, true);
                 messageWindow.ShowDialog();
 
                 return;

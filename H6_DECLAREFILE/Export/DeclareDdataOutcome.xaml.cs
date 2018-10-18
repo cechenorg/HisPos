@@ -460,8 +460,8 @@ namespace His_Pos.H6_DECLAREFILE.Export
                     ExportView.Instance.SelectedFile.PrescriptionDdatas[i].Dbody = declareFileDdata.Dbody;
                 }
                 DeclareFileDb.SetDeclareFileByPharmacyId(ExportView.Instance.SelectedFile, Convert.ToDateTime(ExportView.Instance.SelectedFile.DeclareDate), declareData, DeclareFileType.DECLAREFILE_UPDATE);
-                m = new MessageWindow("處方申報資料修改成功", MessageType.SUCCESS);   
-                m.Show();
+                m = new MessageWindow("處方申報資料修改成功", MessageType.SUCCESS, true);   
+                m.ShowDialog();
                 InitDataChanged();
                 Close();
             }
@@ -472,8 +472,8 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 {
                     errorMessage += error.Content + "\n";
                 }
-                m = new MessageWindow(errorMessage, MessageType.ERROR);
-                m.Show();
+                m = new MessageWindow(errorMessage, MessageType.ERROR, true);
+                m.ShowDialog();
             }
         }
     }

@@ -123,7 +123,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
             if (WareHouseInventoryCollection.Count(war => Convert.ToInt32(war.AfterDemolitionAmount) < 0) > 0) {
-                MessageWindow messageWindows = new MessageWindow("拆庫後剩餘量不可為負!", MessageType.ERROR);
+                MessageWindow messageWindows = new MessageWindow("拆庫後剩餘量不可為負!", MessageType.ERROR,true);
                 messageWindows.ShowDialog();
                 return;
             }
@@ -134,7 +134,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 if (wareHouseInventory.DemolitionAmount == "0") continue;
                 ProductDb.DemolitionProduct(newInvId,proId, wareHouseInventory.warId,wareHouseInventory.DemolitionAmount);
             }
-            MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
             Close();
         }

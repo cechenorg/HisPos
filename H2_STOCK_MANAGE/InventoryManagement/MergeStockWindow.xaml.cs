@@ -67,7 +67,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
             ProductDb.MergeProduct(Inventory.Id, targetProId);
-            MessageWindow messageWindow = new MessageWindow("併庫成功",Class.MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("併庫成功",Class.MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
             Close();
         }

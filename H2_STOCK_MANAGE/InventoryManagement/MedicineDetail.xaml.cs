@@ -321,7 +321,7 @@ namespace His_Pos.InventoryManagement
             if (!check)
             {
                 var errors = _errorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
-                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR, true);
                 messageWindow.ShowDialog();
             }
             return check;
@@ -351,8 +351,8 @@ namespace His_Pos.InventoryManagement
                                           ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
                 ProductDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
             }
-            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS);
-            messageWindow.Show();
+            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS, true);
+            messageWindow.ShowDialog();
             InitVariables();
         }
      

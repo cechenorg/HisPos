@@ -311,7 +311,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
             loadingWindow.Show();
             
             SaveMedBagData();
-            var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
+            var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS,false);
             m.Show();
         }
 
@@ -385,7 +385,7 @@ namespace His_Pos.H1_DECLARE.MedBagManage
 
         private bool CheckMedBagCollectionEmpty()
         {
-            var m = new MessageWindow("未新增藥袋", MessageType.WARNING);
+            var m = new MessageWindow("未新增藥袋", MessageType.WARNING, true);
             m.SetLabelFontSize(16);
             m.SetLabelContentAlignment(HorizontalAlignment.Center);
             if (MedBagCollection.Count == 0)

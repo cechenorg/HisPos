@@ -140,7 +140,7 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
         {
             AuthorityDb.AuthLeaveConfirm(AuthLeaveRecords.Where(al => al.IsSelected).ToList());
 
-            MessageWindow messageWindow = new MessageWindow("審核成功!", MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("審核成功!", MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
 
             WorkScheduleManageView.DataChanged = true;

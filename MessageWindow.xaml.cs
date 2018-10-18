@@ -25,7 +25,7 @@ namespace His_Pos
             InitializeComponent();
         }
 
-        public MessageWindow(string message, MessageType type)
+        public MessageWindow(string message, MessageType type,bool buttonFocus)
         {
             InitializeComponent();
             switch (type) {
@@ -40,6 +40,8 @@ namespace His_Pos
                     break;
             }
             Message.Content = message;
+            if(buttonFocus)
+                OkButton.Focus();
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

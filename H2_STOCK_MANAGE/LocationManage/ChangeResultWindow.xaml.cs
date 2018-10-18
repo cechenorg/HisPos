@@ -62,7 +62,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
             foreach (var item in changeItems) {
                 LocationDb.UpdateLocationDetail(item.id,item.newvalue);
             }
-            MessageWindow messageWindow = new MessageWindow("更新成功!",MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("更新成功!",MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
             Close();
         }

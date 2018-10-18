@@ -136,7 +136,7 @@ namespace His_Pos.H5_ATTEND.ClockIn
         {
             if (IsDataEmpty())
             {
-                MessageWindow messageWindow = new MessageWindow("帳號或密碼未填!", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("帳號或密碼未填!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
@@ -145,7 +145,7 @@ namespace His_Pos.H5_ATTEND.ClockIn
             
             switch (WorkScheduleDb.UserClockIn(UserId.Text, UserPassword.Password, inout)) {
                 case "上班打卡成功":
-                    MessageWindow messageWindow = new MessageWindow("上班打卡成功!", MessageType.SUCCESS);
+                    MessageWindow messageWindow = new MessageWindow("上班打卡成功!", MessageType.SUCCESS, true);
                     messageWindow.ShowDialog();
                     ClearUi();
                     break;
@@ -162,12 +162,12 @@ namespace His_Pos.H5_ATTEND.ClockIn
                 //    UserPassword.Password = string.Empty;
                 //    break;
                 case "下班打卡成功":
-                    messageWindow = new MessageWindow("下班打卡成功!", MessageType.SUCCESS);
+                    messageWindow = new MessageWindow("下班打卡成功!", MessageType.SUCCESS, true);
                     messageWindow.ShowDialog();
                     ClearUi();
                     break;
                 case "打卡失敗":
-                    messageWindow = new MessageWindow("帳號或密碼錯誤!", MessageType.ERROR);
+                    messageWindow = new MessageWindow("帳號或密碼錯誤!", MessageType.ERROR, true);
                     messageWindow.ShowDialog();
 
                     UserPassword.Password = "";

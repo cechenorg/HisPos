@@ -125,7 +125,7 @@ namespace His_Pos.LocationManage
                 LocationDb.DeleteLocation(selectItem.id.ToString());
             }
             else {
-                MessageWindow messageWindow = new MessageWindow("此櫃位尚有商品，無法刪除",MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("此櫃位尚有商品，無法刪除",MessageType.ERROR, true);
                 messageWindow.ShowDialog();
             }
            

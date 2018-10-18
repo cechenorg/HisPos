@@ -89,7 +89,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         private void ButtonSubmmit_Click(object sender, RoutedEventArgs e) {
             foreach (PrescriptionSendData prescriptionSendData in Prescription) {
                 if (prescriptionSendData.SendAmount == "0") {
-                    MessageWindow messageWindow = new MessageWindow("傳輸量不可為0",MessageType.ERROR);
+                    MessageWindow messageWindow = new MessageWindow("傳輸量不可為0",MessageType.ERROR, true);
                     messageWindow.ShowDialog();
                     return;
                 }

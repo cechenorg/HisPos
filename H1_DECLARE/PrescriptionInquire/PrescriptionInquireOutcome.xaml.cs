@@ -532,8 +532,8 @@ namespace His_Pos.PrescriptionInquire
                
                 //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
                 declareDb.UpdateDeclareData(_currentDeclareData);
-                m = new MessageWindow("處方修改成功", MessageType.SUCCESS);
-                m.Show();
+                m = new MessageWindow("處方修改成功", MessageType.SUCCESS, true);
+                m.ShowDialog();
                 InitDataChanged();
                 PrescriptionOverview prescriptionOverview = new PrescriptionOverview(InquiredPrescription);
                 PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview);
@@ -545,8 +545,8 @@ namespace His_Pos.PrescriptionInquire
                 {
                     errorMessage += error.Content + "\n";
                 }
-                m = new MessageWindow(errorMessage, MessageType.ERROR);
-                m.Show();
+                m = new MessageWindow(errorMessage, MessageType.ERROR, true);
+                m.ShowDialog();
             }
           
         }
@@ -669,8 +669,8 @@ namespace His_Pos.PrescriptionInquire
             }
             else
             {
-                var m = new MessageWindow(Enum.GetName(typeof(ErrorCode), res),MessageType.WARNING);
-                m.Show();
+                var m = new MessageWindow(Enum.GetName(typeof(ErrorCode), res),MessageType.WARNING, true);
+                m.ShowDialog();
             }
         }
 

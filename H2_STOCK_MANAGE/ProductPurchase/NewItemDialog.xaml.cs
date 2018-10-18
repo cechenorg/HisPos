@@ -56,7 +56,7 @@ namespace His_Pos.ProductPurchase
 
                 if (SearchResult.Items.Count == 0)
                 {
-                    MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR);
+                    MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR, true);
                     messageWindow.ShowDialog();
                     Close();
                 }
@@ -86,7 +86,7 @@ namespace His_Pos.ProductPurchase
 
             if(SearchResult.Items.Count == 0)
             {
-                MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 Close();
             }
@@ -152,7 +152,7 @@ namespace His_Pos.ProductPurchase
         {
             if (SearchResult.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇一個項目!", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇一個項目!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }

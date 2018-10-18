@@ -19,12 +19,18 @@ using His_Pos.Class.Product;
 using static His_Pos.ProductPurchase.ProductPurchaseView;
 using His_Pos.Interface;
 using System.ComponentModel;
+using System.Data;
 using System.Globalization;
 using System.Windows.Threading;
 using His_Pos.PrintDocuments;
 using His_Pos.Service;
 using System.Windows.Markup;
 using His_Pos.Class.Person;
+using His_Pos.RDLC;
+using MaterialDesignThemes.Wpf;
+using Microsoft.Reporting.WinForms;
+using Newtonsoft.Json;
+using Visibility = System.Windows.Visibility;
 
 namespace His_Pos.StockTaking
 {
@@ -219,7 +225,7 @@ namespace His_Pos.StockTaking
         {
             if (!CheckTakingResult(takingCollection))
             {
-                MessageWindow messageWindow = new MessageWindow("尚有品項未填寫盤點數量!", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("尚有品項未填寫盤點數量!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
@@ -380,25 +386,50 @@ namespace His_Pos.StockTaking
 
         private void Print_OnClick(object sender, RoutedEventArgs e)
         {
-            var pageSize = new Size(8.26 * 96, 11.69 * 96);
-            var document = new FixedDocument();
-            document.DocumentPaginator.PageSize = pageSize;
-
-            Collection<FixedPage> stockTakingDocuments = ConvertDataToDoc(pageSize);
-            
-            foreach( var page in stockTakingDocuments)
+            foreach (var product in takingCollection)
             {
-                var pageContent = new PageContent();
-                pageContent.Child = page;
-                document.Pages.Add(pageContent);
+                if (product is StockTakingOTC otc)
+                {
+                    foreach (var batch in otc.BatchNumbersCollection)
+                    {
+                        InventoryObject invObj = new InventoryObject(otc.Id, otc.Name, otc.Category, batch.BatchNumber, batch.Amount, otc.Inventory, otc.ValidDate, otc.Location);
+                        InventoryChecking.InventoryObjectList.Add(invObj);
+                    }
+                }
+                else if(product is StockTakingMedicine med)
+                {
+                    foreach (var batch in med.BatchNumbersCollection)
+                    {
+                        InventoryObject invObj = new InventoryObject(med.Id, med.Name, med.Category, batch.BatchNumber, batch.Amount, med.Inventory, med.ValidDate, med.Location);
+                        InventoryChecking.InventoryObjectList.Add(invObj);
+                    }
+                }
             }
+            InventoryChecking.t.MergeData(InventoryChecking.GetInventoryObjectList(), "InventoryObject");
+            InventoryChecking.t.MergeData(InventoryChecking.GetBatchNumberList(), "BatchNumber");
+            ReportWindow r = new ReportWindow(InventoryChecking.t);
+            r.ShowDialog();
 
-            if (NewFunction.DocumentPrinter(document, "盤點單" + DateTime.Now.ToShortDateString()))
-            {
-                CountFilledResult();
-                ProductDb.SaveStockTaking(takingCollection, false);
-                NextStatus();
-            }   
+
+            //var pageSize = new Size(8.26 * 96, 11.69 * 96);
+            //var document = new FixedDocument();
+            //document.DocumentPaginator.PageSize = pageSize;
+
+            //Collection<FixedPage> stockTakingDocuments = ConvertDataToDoc(pageSize);
+
+            //foreach( var page in stockTakingDocuments)
+            //{
+            //    var pageContent = new PageContent();
+            //    pageContent.Child = page;
+            //    document.Pages.Add(pageContent);
+            //}
+
+            //if (NewFunction.DocumentPrinter(document, "盤點單" + DateTime.Now.ToShortDateString()))
+            //{
+            //    CountFilledResult();
+            //    ProductDb.SaveStockTaking(takingCollection, false);
+            //    NextStatus();
+            //}   
         }
 
         private Collection<FixedPage> ConvertDataToDoc(Size pageSize)
@@ -529,6 +560,7 @@ namespace His_Pos.StockTaking
 
             NextStatus();
         }
+        
     }
     public class IsResultEqualConverter : IValueConverter
     {
@@ -544,4 +576,5 @@ namespace His_Pos.StockTaking
             return "";
         }
     }
+    
 }

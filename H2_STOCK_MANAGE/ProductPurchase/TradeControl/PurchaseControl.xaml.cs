@@ -425,7 +425,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!((IProductPurchase) product).BatchNumber.Equals(""))
             {
-                MessageWindow messageWindow = new MessageWindow("此商品有批號無法合批!", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("此商品有批號無法合批!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
 
                 return;

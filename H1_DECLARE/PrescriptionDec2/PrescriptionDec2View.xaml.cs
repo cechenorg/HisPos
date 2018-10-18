@@ -241,7 +241,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             foreach (var med in CurrentPrescription.Medicines)
             {
                 if (string.IsNullOrEmpty(med.Days)) {
-                    var messageWindow = new MessageWindow(med.Id + "的給藥日份不可為空",MessageType.ERROR);
+                    var messageWindow = new MessageWindow(med.Id + "的給藥日份不可為空",MessageType.ERROR, true);
                     messageWindow.ShowDialog();
                     return;
                 }
@@ -374,7 +374,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 {
                     var loading = new LoadingWindow();
                     loading.LoginIcData(Instance);
-                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS,true);
                     m.ShowDialog();
                 }
                 else
@@ -383,7 +383,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     icErrorWindow.Show();
                     var loading = new LoadingWindow();
                     loading.LoginIcData(Instance);
-                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS);
+                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                     m.ShowDialog();
                 }
                 
@@ -871,8 +871,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
                         string.IsNullOrEmpty(PatientId.Text))
                     {
-                        var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料", MessageType.WARNING);
-                        m.Show();
+                        var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料", MessageType.WARNING, true);
+                        m.ShowDialog();
                     }
                     else
                     {
@@ -897,7 +897,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
                        string.IsNullOrEmpty(PatientId.Text))
                 {
-                    var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料",MessageType.WARNING);
+                    var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料",MessageType.WARNING, true);
                     m.Show();
                     return;
                 }
@@ -1109,8 +1109,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 if (textBox != null && textBox.Text.Length < 3)
                 {
-                    var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING);
-                    m.Show();
+                    var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING, true);
+                    m.ShowDialog();
                     return;
                 }
                 if (textBox != null)
@@ -1120,13 +1120,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
                         if (selectedDiseaseCode.Id.Equals("查無疾病代碼"))
                         {
-                            var m = new MessageWindow("查無疾病代碼", MessageType.WARNING);
-                            m.Show();
+                            var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true);
+                            m.Owner = Application.Current.MainWindow;
+                            m.ShowDialog();
                             return;
                         }
-                        DependencyObject dpobj = textBox;
-                        var name = dpobj.GetValue(NameProperty) as string;
-                        if (name.Equals("MainDiagnosis"))
+                        DependencyObject textBoxDependency = textBox;
+                        if (textBoxDependency.GetValue(NameProperty) is string name && name.Equals("MainDiagnosis"))
                             CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = selectedDiseaseCode;
                         else
                         {
@@ -1138,10 +1138,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         var disease = new DiseaseCodeSelectDialog(textBox.Text);
                         disease.Show();
                     }
-                }
-                else
-                {
-                    return;
                 }
             }
         }

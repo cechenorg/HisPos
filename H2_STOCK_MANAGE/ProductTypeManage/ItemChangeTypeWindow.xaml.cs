@@ -195,19 +195,19 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
         {
             if (DataGridSource.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇項目", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇項目", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
             if (ComboBoxSourceSmall.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
             if (ComboBoxTargetSmall.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
@@ -229,19 +229,19 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
         {
             if (DataGridTarget.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇項目", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇項目", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
             if (ComboBoxTargetSmall.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
             if (ComboBoxSourceSmall.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }

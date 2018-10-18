@@ -120,7 +120,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 if (label is Label) {
                     if (((Label)label).Foreground == Brushes.Yellow) {
                         deactivate = false;
-                        MessageWindow messageWindow = new MessageWindow("此櫃位尚有商品 不可刪除",MessageType.ERROR);
+                        MessageWindow messageWindow = new MessageWindow("此櫃位尚有商品 不可刪除",MessageType.ERROR,true);
                         messageWindow.ShowDialog();
                         deactivate = true;
                         CheckColumnRule();
@@ -302,7 +302,7 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
                 }
                 else
                 {
-                    MessageWindow messageWindow = new MessageWindow(reply, MessageType.ERROR);
+                    MessageWindow messageWindow = new MessageWindow(reply, MessageType.ERROR, true);
                     messageWindow.ShowDialog();
                 }
             }

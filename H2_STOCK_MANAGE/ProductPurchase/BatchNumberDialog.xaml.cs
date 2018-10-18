@@ -37,7 +37,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
         {
             if(!IsReturnAmountValid())
             {
-                MessageWindow messageWindow = new MessageWindow("退貨量不可高於庫存量!", Class.MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("退貨量不可高於庫存量!", Class.MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }

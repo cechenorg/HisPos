@@ -51,7 +51,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
         {
             if (WareHouseCombo.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請輸入庫存名稱", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請輸入庫存名稱", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return AddOrderType.ERROR;
             }
@@ -62,7 +62,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
             {
                 if(SelectedManufactory is null)
                 {
-                    MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR);
+                    MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR, true);
                     messageWindow.ShowDialog();
 
                     return AddOrderType.ERROR;
@@ -74,7 +74,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
             {
                 if (OrderOverviewDataGrid.SelectedItem is null)
                 {
-                    MessageWindow messageWindow = new MessageWindow("請選擇單號", MessageType.ERROR);
+                    MessageWindow messageWindow = new MessageWindow("請選擇單號", MessageType.ERROR, true);
                     messageWindow.ShowDialog();
 
                     return AddOrderType.ERROR;

@@ -93,7 +93,7 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
 
             if( error.Length != 0 )
             {
-                MessageWindow messageWindow = new MessageWindow(error, Class.MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow(error, Class.MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return false;
             }

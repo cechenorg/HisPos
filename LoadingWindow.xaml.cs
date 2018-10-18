@@ -112,15 +112,15 @@ namespace His_Pos
                     declareDb.ImportDeclareData(declareDataCollection, decId);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS);
-                        mainWindow.Show();
+                        MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS, true);
+                        mainWindow.ShowDialog();
                     }));
                 }
                 else {
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MessageWindow mainWindow = new MessageWindow("申報檔已存在!", MessageType.ERROR);
-                        mainWindow.Show();
+                        MessageWindow mainWindow = new MessageWindow("申報檔已存在!", MessageType.ERROR, true);
+                        mainWindow.ShowDialog();
                     }));
                 }
                
@@ -700,8 +700,8 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     medBagManageView.MedBagManageViewBox.IsEnabled = true;
-                    var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
-                    m.Show();
+                    var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS, true);
+                    m.ShowDialog();
                     Close();
                 }));
             };

@@ -75,7 +75,7 @@ namespace His_Pos.StockTaking
         {
             if (SearchResult.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇一個項目!", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇一個項目!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }

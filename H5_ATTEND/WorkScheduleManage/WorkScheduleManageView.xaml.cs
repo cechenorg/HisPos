@@ -324,7 +324,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
                 UpdateStartEditUi();
             else
             {
-                MessageWindow messageWindow = new MessageWindow("日期已過 無法排班!", Class.MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("日期已過 無法排班!", Class.MessageType.ERROR, true);
                 messageWindow.ShowDialog();
             }
         }
@@ -414,7 +414,7 @@ namespace His_Pos.H5_ATTEND.WorkScheduleManage
 
             if (leaveWindow.LeaveComplete)
             {
-                MessageWindow messageWindow = new MessageWindow(leaveWindow.CompleteResult, (leaveWindow.CompleteResult.Contains("無法新增"))? MessageType.ERROR:MessageType.SUCCESS);
+                MessageWindow messageWindow = new MessageWindow(leaveWindow.CompleteResult, (leaveWindow.CompleteResult.Contains("無法新增"))? MessageType.ERROR:MessageType.SUCCESS, true);
                 messageWindow.ShowDialog();
 
                 AuthenticationManageView.DataChanged = true;

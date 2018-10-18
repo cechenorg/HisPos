@@ -59,7 +59,7 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
             {
             ProductDb.ChangeProductType(item.id, item.newvalue);
             }
-            MessageWindow messageWindow = new MessageWindow("更新成功!", MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("更新成功!", MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
             Close();
         }

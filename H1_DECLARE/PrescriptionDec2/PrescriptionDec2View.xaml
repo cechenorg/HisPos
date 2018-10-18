@@ -138,13 +138,13 @@
                     <Label Content="主要診斷" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox x:Name="MainDiagnosis" Width="170" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
                              MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" 
-                             Text="{Binding CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id, Mode=TwoWay}" PreviewKeyDown="DiseaseCode_PreviewKeyDown"/>
+                             Text="{Binding CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.FullName,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="DiseaseCode_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="4" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="次要診斷" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox x:Name="SeconDiagnosis" Width="170" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
                              MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" 
-                             Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id, Mode=TwoWay}" />
+                             Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.FullName,UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="DiseaseCode_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="0" Margin="8" Orientation="Horizontal">
                     <Label Content="給付類別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
