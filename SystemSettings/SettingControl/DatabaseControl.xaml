@@ -33,7 +33,7 @@
             </StackPanel>
             <Button Content="測試連線" Tag="1" Background="{StaticResource DarkShadow}" BorderThickness="0" Margin="10,0,0,0" Click="CheckConnection_OnClick"/>
         </StackPanel>
-        <Grid Grid.Row="1" Margin="50,0,0,0" DataContext="{Binding LocalConnection}">
+        <Grid Grid.Row="1" Margin="50,0,0,0" DataContext="{Binding LocalConnection, UpdateSourceTrigger=PropertyChanged}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition/>
@@ -70,7 +70,7 @@
             </StackPanel>
             <Button Content="測試連線" Tag="2" Background="{StaticResource DarkShadow}" BorderThickness="0" Margin="10,0,0,0" Click="CheckConnection_OnClick"/>
         </StackPanel>
-        <Grid Grid.Row="3" Margin="50,0,0,0" DataContext="{Binding GlobalConnection}">
+        <Grid Grid.Row="3" Margin="50,0,0,0" DataContext="{Binding GlobalConnection, UpdateSourceTrigger=PropertyChanged}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition/>
@@ -92,8 +92,8 @@
         </Grid>
         <StackPanel Orientation="Horizontal" Grid.Row="5" HorizontalAlignment="Right">
             <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
-            <Button Name="CancelBtn" Margin="0,0,20,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" IsEnabled="False"/>
-            <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" IsEnabled="False" Margin="0,0,10,0"/>
+            <Button Name="CancelBtn" Margin="0,0,20,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" IsEnabled="False" Click="InitConnection_Click"/>
+            <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" IsEnabled="False" Margin="0,0,10,0" Click="ConfirmConnectionChange_Click"/>
         </StackPanel>
     </Grid>
 </UserControl>

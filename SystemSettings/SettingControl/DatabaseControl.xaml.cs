@@ -25,7 +25,7 @@ namespace His_Pos.SystemSettings.SettingControl
     /// <summary>
     /// DatabaseControl.xaml 的互動邏輯
     /// </summary>
-    public partial class DatabaseControl : UserControl
+    public partial class DatabaseControl : UserControl, INotifyPropertyChanged
     {
         #region ----- Define Inner Class -----
         public class ConnectionData
@@ -58,13 +58,42 @@ namespace His_Pos.SystemSettings.SettingControl
             GLOBAL = 2
         }
 
-        public ConnectionData LocalConnection { get; set; }
-        public ConnectionData GlobalConnection { get; set; }
+        private ConnectionData localConnection;
+        public ConnectionData LocalConnection
+        {
+            get { return localConnection; }
+            set
+            {
+                localConnection = value;
+                NotifyPropertyChanged("LocalConnection");
+            }
+        }
+
+        private ConnectionData globalConnection;
+        public ConnectionData GlobalConnection
+        {
+            get { return globalConnection; }
+            set
+            {
+                globalConnection = value;
+                NotifyPropertyChanged("GlobalConnection");
+            }
+        }
 
         public bool IsDataChanged { get; set; } = false;
 
         BackgroundWorker LocalConnectionWorker = new BackgroundWorker();
         BackgroundWorker GlobalConnectionWorker = new BackgroundWorker();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         #endregion
 
         public DatabaseControl()
@@ -78,7 +107,6 @@ namespace His_Pos.SystemSettings.SettingControl
         }
 
         #region ----- Init Data -----
-
         private void InitConnectioData()
         {
             Regex reg = new Regex(@"Data Source=([0-9.]*),([0-9]*);Persist Security Info=True;User ID=([a-zA-Z0-9]*);Password=([a-zA-Z0-9]*)");
@@ -337,6 +365,25 @@ namespace His_Pos.SystemSettings.SettingControl
             ConnectionTarget connectionTarget = (ConnectionTarget)Int16.Parse(button.Tag.ToString());
 
             CheckConnection(connectionTarget);
+        }
+
+        private void InitConnection_Click(object sender, RoutedEventArgs e)
+        {
+            InitConnectioData();
+
+            CheckConnection(ConnectionTarget.LOCAL);
+            CheckConnection(ConnectionTarget.GLOBAL);
+
+            ClearDataChangedStatus();
+        }
+
+        private void ConfirmConnectionChange_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.SQL_global = GlobalConnection.ToString();
+            Properties.Settings.Default.SQL_local = LocalConnection.ToString();
+
+            Properties.Settings.Default.Save();
+            ClearDataChangedStatus();
         }
     }
 }
