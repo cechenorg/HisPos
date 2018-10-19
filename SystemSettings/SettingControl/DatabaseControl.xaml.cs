@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -42,6 +43,8 @@ namespace His_Pos.SystemSettings.SettingControl
             public string Port { get; set; }
             public string Account { get; set; }
             public string Password { get; set; }
+
+            public bool ConnectionPass { get; set; } = false;
 
             public override string ToString()
             {
@@ -166,9 +169,9 @@ namespace His_Pos.SystemSettings.SettingControl
         #endregion
 
         #region ----- Check Connection -----
-        private void CheckConnection(ConnectionTarget connectionTarget)
+        private void CheckConnection(ConnectionTarget connectionTarget, bool showError = false)
         {
-            if(!CheckConnectionFormat(connectionTarget))
+            if(!CheckConnectionFormat(connectionTarget, showError))
                 return;
 
             DbConnection connection;
@@ -214,7 +217,7 @@ namespace His_Pos.SystemSettings.SettingControl
             currentWorker.RunWorkerAsync();
         }
 
-        private bool CheckConnectionFormat(ConnectionTarget connectionTarget)
+        private bool CheckConnectionFormat(ConnectionTarget connectionTarget, bool showError)
         {
             Regex IPReg = new Regex(@"[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}");
             Match IPMatch;
@@ -233,8 +236,11 @@ namespace His_Pos.SystemSettings.SettingControl
 
             if (IPMatch.Success) return true;
 
-            MessageWindow messageWindow = new MessageWindow("IP 格式錯誤!", MessageType.ERROR);
-            messageWindow.ShowDialog();
+            if (showError)
+            {
+                MessageWindow messageWindow = new MessageWindow("IP 格式錯誤!", MessageType.ERROR);
+                messageWindow.ShowDialog();
+            }
 
             return false;
         }
@@ -248,12 +254,16 @@ namespace His_Pos.SystemSettings.SettingControl
                     LSuccessStack.Visibility = Visibility.Collapsed;
                     LConnectingStack.Visibility = Visibility.Hidden;
                     LErrorStack.Visibility = Visibility.Collapsed;
+
+                    localConnection.ConnectionPass = false;
                     break;
                 case ConnectionTarget.GLOBAL:
                     if (GConnectingStack.Visibility == Visibility.Visible) return;
                     GSuccessStack.Visibility = Visibility.Collapsed;
                     GConnectingStack.Visibility = Visibility.Hidden;
                     GErrorStack.Visibility = Visibility.Collapsed;
+
+                    globalConnection.ConnectionPass = false;
                     break;
                 default:
                     return;
@@ -287,12 +297,16 @@ namespace His_Pos.SystemSettings.SettingControl
                         LSuccessStack.Visibility = Visibility.Visible;
                         LConnectingStack.Visibility = Visibility.Collapsed;
                         LErrorStack.Visibility = Visibility.Collapsed;
+
+                        localConnection.ConnectionPass = true;
                     }
                     else
                     {
                         LSuccessStack.Visibility = Visibility.Collapsed;
                         LConnectingStack.Visibility = Visibility.Collapsed;
                         LErrorStack.Visibility = Visibility.Visible;
+
+                        localConnection.ConnectionPass = false;
                     }
                     break;
                 case ConnectionTarget.GLOBAL:
@@ -301,12 +315,16 @@ namespace His_Pos.SystemSettings.SettingControl
                         GSuccessStack.Visibility = Visibility.Visible;
                         GConnectingStack.Visibility = Visibility.Collapsed;
                         GErrorStack.Visibility = Visibility.Collapsed;
+
+                        globalConnection.ConnectionPass = true;
                     }
                     else
                     {
                         GSuccessStack.Visibility = Visibility.Collapsed;
                         GConnectingStack.Visibility = Visibility.Collapsed;
                         GErrorStack.Visibility = Visibility.Visible;
+
+                        globalConnection.ConnectionPass = false;
                     }
                     break;
             }
@@ -364,7 +382,17 @@ namespace His_Pos.SystemSettings.SettingControl
 
             ConnectionTarget connectionTarget = (ConnectionTarget)Int16.Parse(button.Tag.ToString());
 
-            CheckConnection(connectionTarget);
+            switch (connectionTarget)
+            {
+                case ConnectionTarget.LOCAL:
+                    LocalConnection.Password = LocalPasswordBox.Password;
+                    break;
+                case ConnectionTarget.GLOBAL:
+                    GlobalConnection.Password = GlobalPasswordBox.Password;
+                    break;
+            }
+
+            CheckConnection(connectionTarget, true);
         }
 
         private void InitConnection_Click(object sender, RoutedEventArgs e)
@@ -377,13 +405,42 @@ namespace His_Pos.SystemSettings.SettingControl
             ClearDataChangedStatus();
         }
 
-        private void ConfirmConnectionChange_Click(object sender, RoutedEventArgs e)
+        public void ConfirmConnectionChange_Click(object sender, RoutedEventArgs e)
         {
+            GlobalConnection.Password = GlobalPasswordBox.Password;
             Properties.Settings.Default.SQL_global = GlobalConnection.ToString();
+
+            LocalConnection.Password = LocalPasswordBox.Password;
             Properties.Settings.Default.SQL_local = LocalConnection.ToString();
 
             Properties.Settings.Default.Save();
+
+            SaveConnectionToFile();
+
             ClearDataChangedStatus();
+        }
+
+        private void SaveConnectionToFile()
+        {
+            string filePath = "C:\\Program Files\\HISPOS\\settings.singde";
+
+            string leftLines = "";
+
+            using (StreamReader fileReader = new StreamReader(filePath))
+            {
+                fileReader.ReadLine();
+                fileReader.ReadLine();
+
+                leftLines = fileReader.ReadToEnd();
+            }
+
+            using (TextWriter fileWriter = new StreamWriter(filePath, false))
+            {
+                fileWriter.WriteLine("L " + Properties.Settings.Default.SQL_local);
+                fileWriter.WriteLine("G " + Properties.Settings.Default.SQL_global);
+
+                fileWriter.Write(leftLines);
+            }
         }
     }
 }

@@ -20,7 +20,7 @@
             <Label Content="本地資料庫" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <Rectangle Width="210"/>
             <StackPanel Name="LConnectingStack" Width="100" Orientation="Horizontal" Visibility="Collapsed">
-                <Image gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35"/>
+                <Image gif:ImageBehavior.AnimatedSource="../../Images/loading.gif" Width="35"/>
                 <Label Content="連線中" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
             </StackPanel>
             <StackPanel Name="LSuccessStack" Width="100" Orientation="Horizontal" Visibility="Collapsed">
@@ -57,7 +57,7 @@
             <Label Content="遠端伺服器" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
             <Rectangle Width="210"/>
             <StackPanel Name="GConnectingStack" Width="100" Orientation="Horizontal" Visibility="Collapsed">
-                <Image gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35"/>
+                <Image gif:ImageBehavior.AnimatedSource="../../Images/loading.gif" Width="35"/>
                 <Label Content="連線中" VerticalAlignment="Center" FontSize="18" FontFamily="Segoe UI Semibold"/>
             </StackPanel>
             <StackPanel Name="GSuccessStack" Width="100" Orientation="Horizontal" Visibility="Collapsed">

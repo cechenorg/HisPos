@@ -8,5 +8,14 @@
     <Setting Name="SQL_global" Type="System.String" Scope="User">
       <Value Profile="(Default)">Data Source=59.124.201.229,59087;Persist Security Info=True;User ID=singde;Password=city1234</Value>
     </Setting>
+    <Setting Name="MedBagPrinter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ReceiptPrinter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ReportPrinter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>
