@@ -66,7 +66,7 @@
                 <Label x:Name="IcCardStatus" Width="112" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" VerticalContentAlignment="Bottom" Content="{Binding CardStatus,UpdateSourceTrigger=PropertyChanged}"/>
                 <Button MinWidth="128" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="5,0,0,0"/>
             </StackPanel>
-            <Grid Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}">
+            <Grid Name="TrementGrid" Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
                     <ColumnDefinition />
@@ -98,9 +98,9 @@
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫科別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" 
-                              FontFamily="Segoe UI Semibold" FontSize="14" IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" 
-                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay}" />
+                    <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="False"
+                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="True"
+                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay}" KeyUp="DivisionCombo_KeyUp" KeyDown="DivisionCombo_OnKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="診治醫生" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />

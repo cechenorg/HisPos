@@ -10,7 +10,7 @@
     <UserControl.Resources>
         <local:IsResultEqualConverter x:Key="IsResultEqualConverter"/>
     </UserControl.Resources>
-    <Viewbox Stretch="Fill">
+    <Viewbox Stretch="Fill" Name="StockTakingViewBox">
         <Grid Name="ViewGrid" Width="1365" Height="839">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>

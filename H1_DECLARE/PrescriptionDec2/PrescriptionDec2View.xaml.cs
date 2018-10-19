@@ -386,7 +386,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                     m.ShowDialog();
                 }
-                
                 //declareDb.UpdateDeclareFile(_currentDeclareData);
                 //PrintMedBag();
             }
@@ -1139,6 +1138,33 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         disease.Show();
                     }
                 }
+            }
+        }
+
+        private void DivisionCombo_KeyUp(object sender, KeyEventArgs e)
+        {
+            DivisionCombo.IsDropDownOpen = true;
+            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(DivisionCombo.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (string.IsNullOrEmpty(DivisionCombo.Text)) return true;
+                if (((Division) o).FullName.Contains(DivisionCombo.Text) || ((Division)o).Id.Contains(DivisionCombo.Text))
+                {
+                    return true;
+                }
+                return false;
+            });
+            itemsViewOriginal.Refresh();
+        }
+
+        private void DivisionCombo_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            ComboBox c = sender as ComboBox;
+            if (e.Key == Key.Enter)
+            {
+                if (c.SelectedIndex != -1)
+                    CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = c.Items[0] as Division;
             }
         }
     }

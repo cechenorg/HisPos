@@ -33,42 +33,23 @@ namespace His_Pos.Class.Product
         }
     }
 
-    public class Batch
-    {
-        public string Number { get; set; }
-        public double Amount { get; set; }
-        public double Price { get; set; }
-        public Batch(string number, double amount, double price)
-        {
-            Number = number;
-            Amount = amount;
-            Price = price;
-        }
-    }
-
     public static class InventoryChecking
     {
         public static DataTable t  = new DataTable("InventoryDataSet");
 
         public static List<InventoryObject> InventoryObjectList = new List<InventoryObject>();
 
-        public static List<Batch> BatchNumbersList = new List<Batch>();
 
         public static List<InventoryObject> GetInventoryObjectList()
         {
             return InventoryObjectList;
         }
 
-        public static List<Batch> GetBatchNumberList()
-        {
-            return BatchNumbersList;
-        }
-
-        public static void MergeData(this DataTable table, IEnumerable<object> data, string segName)
+        public static void MergeData(IEnumerable<object> data)
         {
             var json = JsonConvert.SerializeObject(data);
-            var t = JsonConvert.DeserializeObject<DataTable>(json);
-            table.MergeData(t, segName);
+            t = JsonConvert.DeserializeObject<DataTable>(json);
+          
         }
 
         public static void MergeData(this DataTable table, DataTable toAdd, string segName)

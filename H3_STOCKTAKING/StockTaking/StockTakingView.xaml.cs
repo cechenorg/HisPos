@@ -21,6 +21,7 @@ using His_Pos.Interface;
 using System.ComponentModel;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Windows.Threading;
 using His_Pos.PrintDocuments;
 using His_Pos.Service;
@@ -405,10 +406,18 @@ namespace His_Pos.StockTaking
                     }
                 }
             }
-            InventoryChecking.t.MergeData(InventoryChecking.GetInventoryObjectList(), "InventoryObject");
-            InventoryChecking.t.MergeData(InventoryChecking.GetBatchNumberList(), "BatchNumber");
-            ReportWindow r = new ReportWindow(InventoryChecking.t);
-            r.ShowDialog();
+            InventoryChecking.MergeData(InventoryChecking.GetInventoryObjectList());
+            ReportViewer rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.DataSources.Add(new ReportDataSource("InventoryDataSet", InventoryChecking.t));
+            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\InventoryCheckSheet.rdlc";
+            rptViewer.LocalReport.Refresh();
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.Show();
+            loadingWindow.PrintInventoryCheckSheet(rptViewer, Instance);
+            //ReportWindow r = new ReportWindow(InventoryChecking.t);
+            //r.ShowDialog();
 
 
             //var pageSize = new Size(8.26 * 96, 11.69 * 96);
@@ -432,6 +441,7 @@ namespace His_Pos.StockTaking
             //}   
         }
 
+        
         private Collection<FixedPage> ConvertDataToDoc(Size pageSize)
         {
             Collection<FixedPage> documents = new Collection<FixedPage>();

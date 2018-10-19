@@ -42,6 +42,7 @@ using His_Pos.H6_DECLAREFILE;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.HisApi;
 using His_Pos.Struct.IcData;
+using Microsoft.Reporting.WinForms;
 
 namespace His_Pos
 {
@@ -847,6 +848,47 @@ namespace His_Pos
                 }));
             };
             backgroundWorker.RunWorkerAsync();
+        }
+
+        public void PrintInventoryCheckSheet(ReportViewer rptViewer,StockTakingView stockTakingView)
+        {
+            stockTakingView.StockTakingViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("產生盤點單...");
+                CreatePdf(rptViewer);
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    stockTakingView.StockTakingViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+        private static void CreatePdf(ReportViewer viewer)
+        {
+            var deviceInfo = "<DeviceInfo>" +
+                             "  <OutputFormat>PDF</OutputFormat>" +
+                             "  <PageWidth>" + 21 + "cm</PageWidth>" +
+                             "  <PageHeight>" + 29.7 + "cm</PageHeight>" +
+                             "  <MarginTop>0cm</MarginTop>" +
+                             "  <MarginLeft>0cm</MarginLeft>" +
+                             "  <MarginRight>0cm</MarginRight>" +
+                             "  <MarginBottom>0cm</MarginBottom>" +
+                             "</DeviceInfo>";
+            var bytes = viewer.LocalReport.Render("PDF", deviceInfo);
+
+            using (var fs = new FileStream("output.pdf", FileMode.Create))
+            {
+                fs.Write(bytes, 0, bytes.Length);
+            }
         }
     }
 }
