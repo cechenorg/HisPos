@@ -367,8 +367,9 @@
     <Compile Include="Class\Product\StockTakingOTC.cs" />
     <Compile Include="Class\ProductType\ProductType.cs" />
     <Compile Include="Class\Product\ProductUnit.cs" />
+    <Compile Include="Class\SpecialCode\SpecialCodeDb.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrder.cs" />
-    <Compile Include="Class\SpecialCode.cs" />
+    <Compile Include="Class\SpecialCode\SpecialCode.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrderDb.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrderProduct.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOverview.cs" />

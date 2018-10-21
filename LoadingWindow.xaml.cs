@@ -37,6 +37,7 @@ using His_Pos.Class.Declare;
 using System.Threading;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Class.SpecialCode;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE;
 using His_Pos.H6_DECLAREFILE.Export;
@@ -587,6 +588,7 @@ namespace His_Pos
                 prescriptionDec2View.PaymentCategories = PaymentCategroyDb.GetData();
                 prescriptionDec2View.Copayments = CopaymentDb.GetData();
                 prescriptionDec2View.AdjustCases = AdjustCaseDb.GetData();
+                prescriptionDec2View.SpecialCodes = SpecialCodeDb.GetData();
                 prescriptionDec2View.Usages = UsageDb.GetUsages();
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -596,6 +598,7 @@ namespace His_Pos
                     prescriptionDec2View.PaymentCategoryCombo.ItemsSource = prescriptionDec2View.PaymentCategories;
                     prescriptionDec2View.CopaymentCombo.ItemsSource = prescriptionDec2View.Copayments;
                     prescriptionDec2View.AdjustCaseCombo.ItemsSource = prescriptionDec2View.AdjustCases;
+                    prescriptionDec2View.SpecialCode.ItemsSource = prescriptionDec2View.SpecialCodes;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
                     prescriptionDec2View.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                     var isMedicalPerson = false;

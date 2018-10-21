@@ -16,7 +16,7 @@ namespace His_Pos.Class
         public MedicalInfo()
         {
             Hospital = new Hospital();
-            SpecialCode = new SpecialCode();
+            SpecialCode = new SpecialCode.SpecialCode();
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             TreatmentCase = new TreatmentCase.TreatmentCase();
@@ -25,7 +25,7 @@ namespace His_Pos.Class
         public MedicalInfo(DataRow row)
         {
             Hospital = new Hospital(row,DataSource.GetHospitalData);
-            SpecialCode = new SpecialCode();
+            SpecialCode = new SpecialCode.SpecialCode();
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             TreatmentCase = new TreatmentCase.TreatmentCase(row);
@@ -33,7 +33,7 @@ namespace His_Pos.Class
             SecondDiseaseCode = new DiseaseCode.DiseaseCode { Id = row["HISINT_ID2"].ToString() };
         }
 
-        public MedicalInfo(Hospital hospital, SpecialCode specialCode, List<DiseaseCode.DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)
+        public MedicalInfo(Hospital hospital, SpecialCode.SpecialCode specialCode, List<DiseaseCode.DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)
         {
             Hospital = hospital;
             SpecialCode = specialCode;
@@ -51,7 +51,7 @@ namespace His_Pos.Class
         }
         public MedicalInfo(XmlNode xml) {
             Hospital = new Hospital(xml);
-            SpecialCode = new SpecialCode(xml);
+            SpecialCode = new SpecialCode.SpecialCode(xml);
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = xml.SelectSingleNode("d8") == null ? null : xml.SelectSingleNode("d8").InnerText;
@@ -62,7 +62,7 @@ namespace His_Pos.Class
         public MedicalInfo(DeclareFileDdata d)
         {
             Hospital = new Hospital(d);
-            SpecialCode = new SpecialCode(d);
+            SpecialCode = new SpecialCode.SpecialCode(d);
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dbody.D8) ? d.Dbody.D8 : string.Empty;
@@ -82,9 +82,9 @@ namespace His_Pos.Class
             }
         } //d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
 
-        private SpecialCode _specialCode;
+        private SpecialCode.SpecialCode _specialCode;
 
-        public SpecialCode SpecialCode
+        public SpecialCode.SpecialCode SpecialCode
         {
             get => _specialCode;
             set
