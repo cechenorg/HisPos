@@ -1061,6 +1061,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
 
         private void AdjustCaseCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if(AdjustCaseCombo.SelectedItem == null) return;
             IsSendToServer.IsChecked = false;
             IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
@@ -1337,7 +1338,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 c.Text = string.Empty;
                 return;
             }
-            if (e.Key == Key.Enter || string.IsNullOrEmpty(search))
+            if (e.Key == Key.Enter || search.Length < 3)
                 return;
             var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
 
