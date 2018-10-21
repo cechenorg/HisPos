@@ -598,9 +598,23 @@ namespace His_Pos
                     prescriptionDec2View.AdjustCaseCombo.ItemsSource = prescriptionDec2View.AdjustCases;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
                     prescriptionDec2View.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
-                    prescriptionDec2View.HisPerson.SelectedItem =
-                        MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(m =>
-                            m.Id.Equals(MainWindow.CurrentUser.Id));
+                    var isMedicalPerson = false;
+                    foreach (var m in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
+                    {
+                        if (!m.Id.Equals(MainWindow.CurrentUser.Id)) continue;
+                        isMedicalPerson = true;
+                        break;
+                    }
+                    if (isMedicalPerson)
+                    {
+                        prescriptionDec2View.HisPerson.SelectedItem =
+                            MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
+                                p.Id.Equals(MainWindow.CurrentUser.Id));
+                    }
+                    else
+                    {
+                        prescriptionDec2View.HisPerson.SelectedIndex = 0;
+                    }
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>

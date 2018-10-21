@@ -202,8 +202,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             InitializeComponent(); 
             DataContext = this;
             Instance = this;
-            SetDefaultFieldsValue();
             GetPrescriptionData();
+            SetDefaultFieldsValue();
             if (string.IsNullOrEmpty(IndexViewDecMasId)) return;
             SetValueByDecMasId(IndexViewDecMasId);
             IndexViewDecMasId = string.Empty;
@@ -721,8 +721,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void MedicineTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
-            textBox.SelectionStart = 0;
-            textBox.SelectionLength = textBox.Text.Length;
+            textBox.SelectAll();
         }
         private void FindUsagesQuickName(object sender)
         {
@@ -1101,71 +1100,324 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (sender is null) return;
+            if (e.Key != Key.Enter || !(sender is TextBox textBox)) return;
+            DependencyObject textBoxDependency = textBox;
 
-            var textBox = sender as TextBox;
-
-            if (e.Key == Key.Enter)
+            if (textBoxDependency.GetValue(NameProperty) is string  && textBoxDependency.GetValue(NameProperty).Equals("MainDiagnosis"))
             {
-                if (textBox != null && textBox.Text.Length < 3)
+                if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id))
                 {
-                    var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING, true);
+                    SecondDiagnosis.Focus();
+                    return;
+                }
+            }
+            else if(textBoxDependency.GetValue(NameProperty) is string && textBoxDependency.GetValue(NameProperty).Equals("SecondDiagnosis"))
+            {
+                if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
+                {
+                    PaymentCategoryCombo.Focus();
+                    return;
+                }
+            }
+            if (textBox.Text.Length < 3)
+            {
+                var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING, true);
+                m.ShowDialog();
+                return;
+            }
+            if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).Count == 1)
+            {
+                var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
+                if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
+                {
+                    var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
+                    {
+                        Owner = Application.Current.MainWindow
+                    };
                     m.ShowDialog();
                     return;
                 }
-                if (textBox != null)
+                if (textBoxDependency.GetValue(NameProperty) is string && textBoxDependency.GetValue(NameProperty).Equals("MainDiagnosis"))
+                    CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = selectedDiseaseCode;
+                else
                 {
-                    if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).Count == 1)
-                    {
-                        var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
-                        if (selectedDiseaseCode.Id.Equals("查無疾病代碼"))
-                        {
-                            var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true);
-                            m.Owner = Application.Current.MainWindow;
-                            m.ShowDialog();
-                            return;
-                        }
-                        DependencyObject textBoxDependency = textBox;
-                        if (textBoxDependency.GetValue(NameProperty) is string name && name.Equals("MainDiagnosis"))
-                            CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = selectedDiseaseCode;
-                        else
-                        {
-                            CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = selectedDiseaseCode;
-                        }
-                    }
-                    else
-                    {
-                        var disease = new DiseaseCodeSelectDialog(textBox.Text);
-                        disease.Show();
-                    }
+                    CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = selectedDiseaseCode;
                 }
+            }
+            else
+            {
+                var disease = new DiseaseCodeSelectDialog(textBox.Text);
+                disease.Show();
             }
         }
 
         private void DivisionCombo_KeyUp(object sender, KeyEventArgs e)
         {
-            DivisionCombo.IsDropDownOpen = true;
+            if (!(sender is ComboBox c)) return;
+            var search = c.Text.ToUpper();
+            if (e.Key == Key.Back)
+            {
+                c.Text = string.Empty;
+                return;
+            }
+            if (e.Key == Key.Enter || (search.Length == 1))
+                return;
             var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(DivisionCombo.ItemsSource);
 
             itemsViewOriginal.Filter = ((o) =>
             {
-                if (string.IsNullOrEmpty(DivisionCombo.Text)) return true;
-                if (((Division) o).FullName.Contains(DivisionCombo.Text) || ((Division)o).Id.Contains(DivisionCombo.Text))
+                if (string.IsNullOrEmpty(search)) return true;
+                if (((Division)o).Id.Contains(search))
                 {
+                    c.Text = search;
                     return true;
                 }
+                c.Text = search;
                 return false;
             });
             itemsViewOriginal.Refresh();
         }
 
-        private void DivisionCombo_OnKeyDown(object sender, KeyEventArgs e)
+
+        private void DivisionCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            ComboBox c = sender as ComboBox;
-            if (e.Key == Key.Enter)
+            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (c.SelectedItem != null)
             {
-                if (c.SelectedIndex != -1)
-                    CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = c.Items[0] as Division;
+                DoctorId.Focus();
             }
+            else
+            {
+                c.IsDropDownOpen = true;
+                if (c.Items.Count > 0)
+                    c.SelectedIndex = 0;
+            }
+        }
+
+        private void Combo_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!(sender is ComboBox c)) return;
+            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
+            itemsViewOriginal.Filter = ((o) => true);
+            itemsViewOriginal.Refresh();
+        }
+
+        private void ReleaseHospital_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!(sender is AutoCompleteBox a)) return;
+            if (e.Key == Key.Enter && a.IsDropDownOpen && a.Text.Length <= 10)
+                a.SelectedItem = HosiHospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList()[0];
+        }
+
+        private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            if (sender is AutoCompleteBox a && a.SelectedItem != null)
+            {
+                DivisionCombo.Focus();
+            }
+        }
+
+        private void DivisionCombo_OnDropDownClosed(object sender, EventArgs e)
+        {
+            if(sender is ComboBox c && c.SelectedItem is Division)
+                DoctorId.Focus();
+        }
+
+        private void DoctorId_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                HisPerson.Focus();
+        }
+
+        private void HisPerson_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                TreatmentCaseCombo.Focus();
+        }
+
+        private void TreatmentCaseCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (c.SelectedItem != null)
+            {
+                MainDiagnosis.Focus();
+            }
+            else
+            {
+                c.IsDropDownOpen = true;
+                if (c.Items.Count > 0)
+                    c.SelectedIndex = 0;
+            }
+        }
+
+        private void TreatmentCaseCombo_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!(sender is ComboBox c)) return;
+            var search = c.Text.ToUpper();
+            if (e.Key == Key.Back)
+            {
+                c.Text = string.Empty;
+                return;
+            }
+            if (e.Key == Key.Enter || (search.Length == 1))
+                return;
+            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (string.IsNullOrEmpty(search)) return true;
+                if (((TreatmentCase)o).Id.Contains(search))
+                {
+                    c.Text = search;
+                    return true;
+                }
+                c.Text = search;
+                return false;
+            });
+            itemsViewOriginal.Refresh();
+        }
+
+        private void PaymentCategoryCombo_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!(sender is ComboBox c)) return;
+            var search = c.Text.ToUpper();
+            if (e.Key == Key.Back)
+            {
+                c.Text = string.Empty;
+                return;
+            }
+            if (e.Key == Key.Enter || string.IsNullOrEmpty(search))
+                return;
+            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (string.IsNullOrEmpty(search)) return true;
+                if (((PaymentCategory)o).Id.Contains(search))
+                {
+                    c.Text = search;
+                    return true;
+                }
+                c.Text = search;
+                return false;
+            });
+            itemsViewOriginal.Refresh();
+        }
+
+        private void PaymentCategoryCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (c.SelectedItem != null)
+            {
+                CopaymentCombo.Focus();
+            }
+            else
+            {
+                c.IsDropDownOpen = true;
+                if (c.Items.Count > 0)
+                    c.SelectedIndex = 0;
+            }
+        }
+
+        private void CopaymentCombo_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!(sender is ComboBox c)) return;
+            var search = c.Text.ToUpper();
+            if (e.Key == Key.Back)
+            {
+                c.Text = string.Empty;
+                return;
+            }
+            if (e.Key == Key.Enter || string.IsNullOrEmpty(search))
+                return;
+            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (string.IsNullOrEmpty(search)) return true;
+                if (((Copayment)o).Id.Contains(search))
+                {
+                    c.Text = search;
+                    return true;
+                }
+                c.Text = search;
+                return false;
+            });
+            itemsViewOriginal.Refresh();
+        }
+
+        private void CopaymentCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (c.SelectedItem != null)
+            {
+                AdjustCaseCombo.Focus();
+            }
+            else
+            {
+                c.IsDropDownOpen = true;
+                if (c.Items.Count > 0)
+                    c.SelectedIndex = 0;
+            }
+        }
+
+        private void AdjustCaseCombo_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!(sender is ComboBox c)) return;
+            var search = c.Text.ToUpper();
+            if (e.Key == Key.Back)
+            {
+                c.Text = string.Empty;
+                return;
+            }
+            if (e.Key == Key.Enter || string.IsNullOrEmpty(search))
+                return;
+            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (string.IsNullOrEmpty(search)) return true;
+                if (((AdjustCase)o).Id.Contains(search))
+                {
+                    c.Text = search;
+                    return true;
+                }
+                c.Text = search;
+                return false;
+            });
+            itemsViewOriginal.Refresh();
+        }
+
+        private void AdjustCaseCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (c.SelectedItem != null)
+            {
+                if (CurrentPrescription.Treatment.AdjustCase.Id.Equals("2"))
+                    ChronicSequence.Focus();
+                else
+                {
+                    SpecialCode.Focus();
+                }
+            }
+            else
+            {
+                c.IsDropDownOpen = true;
+                if (c.Items.Count > 0)
+                    c.SelectedIndex = 0;
+            }
+        }
+
+        private void ChronicSequence_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter || !(sender is TextBox)) return;
+            ChronicTotal.Focus();
+        }
+
+        private void ChronicTotal_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter || !(sender is TextBox)) return;
+            SpecialCode.Focus();
         }
     }
 }
