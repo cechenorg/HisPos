@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.ProductTypeManage"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="AddTypeWindow" MinHeight="250" Height="250" MaxHeight="250" MinWidth="400" Width="400" MaxWidth="400" WindowStartupLocation="CenterScreen">
+        Title="新增類別" MinHeight="250" Height="250" MaxHeight="250" MinWidth="400" Width="400" MaxWidth="400" WindowStartupLocation="CenterScreen">
     <Viewbox Stretch="Fill">
         <Grid Width="400" Height="250">
             <Grid.ColumnDefinitions>

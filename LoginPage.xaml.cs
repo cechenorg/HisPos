@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -22,6 +23,65 @@ namespace His_Pos
             Height = SystemParameters.PrimaryScreenHeight * 0.85;
             Width = Height * 0.77;
             UserName.Focus();
+
+            if (!IsConnectionDataValid())
+            {
+                InitConnectionWindow initConnectionWindow = new InitConnectionWindow();
+                initConnectionWindow.ShowDialog();
+            }
+        }
+
+        private static void CheckSettingFiles()
+        {
+            string folderPath = "C:\\Program Files\\HISPOS";
+
+            bool folderExist = Directory.Exists(folderPath);
+
+            if (!folderExist)
+                Directory.CreateDirectory(folderPath);
+
+            string filePath = folderPath + "\\settings.singde";
+
+            bool fileExist = File.Exists(filePath);
+
+            if (!fileExist)
+            {
+                File.Create(filePath).Dispose();
+
+                using (TextWriter fileWriter = new StreamWriter(filePath))
+                {
+                    fileWriter.WriteLine("L Data Source=,;Persist Security Info=True;User ID=;Password=");
+                    fileWriter.WriteLine("G Data Source=,;Persist Security Info=True;User ID=;Password=");
+
+                    fileWriter.WriteLine("M ");
+                    fileWriter.WriteLine("Rc ");
+                    fileWriter.WriteLine("Rp ");
+                }
+
+                Properties.Settings.Default.SQL_local =
+                    "Data Source=,;Persist Security Info=True;User ID=;Password=";
+                Properties.Settings.Default.SQL_global =
+                    "Data Source=,;Persist Security Info=True;User ID=;Password=";
+
+                Properties.Settings.Default.MedBagPrinter = "";
+                Properties.Settings.Default.ReceiptPrinter = "";
+                Properties.Settings.Default.ReportPrinter = "";
+
+                Properties.Settings.Default.Save();
+            }
+        }
+
+        private bool IsConnectionDataValid()
+        {
+            CheckSettingFiles();
+
+            DbConnection localConnection = new DbConnection(Properties.Settings.Default.SQL_local);
+            if (!localConnection.CheckConnection()) return false;
+            
+            DbConnection globalConnection = new DbConnection(Properties.Settings.Default.SQL_global);
+            if (!globalConnection.CheckConnection()) return false;
+
+            return true;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)

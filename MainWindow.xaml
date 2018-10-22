@@ -28,6 +28,7 @@
     xmlns:IndexView="clr-namespace:His_Pos.IndexView"
     xmlns:declarefile="clr-namespace:His_Pos.H6_DECLAREFILE.Export"
     xmlns:stockTaking1="clr-namespace:His_Pos.H3_STOCKTAKING.StockTaking"
+    xmlns:entrySearch="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
     Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"
@@ -100,6 +101,9 @@
         <DataTemplate DataType="{x:Type declarefile:Export}">
             <declarefile:ExportView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type entrySearch:EntrySearch}">
+            <entrySearch:EntrySearchView/>
+        </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
             <Setter Property="OverridesDefaultStyle" Value="true"/>
@@ -169,7 +173,7 @@
             <StackPanel
                 Name="MenuStack"
                 Grid.Column="0"
-                Background="#FF363535"
+                Background="{StaticResource MenuBarBackGround}"
                 Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Image
@@ -211,12 +215,13 @@
                         </Style>
                     </ScrollViewer.Resources>
                     <StackPanel Orientation="Vertical" Height="Auto">
-                        <resource:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown"/>
-                        <resource:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown"/>
+                        <resource:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>
@@ -251,7 +256,8 @@
                     <Image
                         Height="20"
                         Margin="10,5,0,10"
-                        Source="Images/Settings.png" />
+                        Source="Images/Settings.png"
+                        MouseLeftButtonDown="Settings_OnMouseLeftButtonDown"/>
                     <TextBlock
                         Name="SystemTime"
                         Margin="10,5,10,10"

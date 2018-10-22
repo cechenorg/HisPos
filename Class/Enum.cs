@@ -3,6 +3,13 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    enum SettingTabs
+    {
+        MyPharmacy = 1,
+        Printer = 2,
+        Database = 3
+    }
+
     enum PagingType
     {
         INIT,
@@ -46,7 +53,8 @@ namespace His_Pos.Class
         藥袋管理 = 17,
         顧客管理 = 18,
         首頁 = 19,
-        匯出申報檔 = 20
+        匯出申報檔 = 20,
+        庫存現值查詢 = 21
     }
 
     public enum StoreOrderProductType

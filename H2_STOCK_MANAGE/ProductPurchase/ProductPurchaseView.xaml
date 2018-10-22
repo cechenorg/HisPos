@@ -8,7 +8,7 @@
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
              xmlns:hisPos="clr-namespace:His_Pos"
              mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365">
+             d:DesignHeight="839" d:DesignWidth="1365" Unloaded="ProductPurchaseView_OnUnloaded">
     <Viewbox Stretch="Fill">
         <Grid Name="AllGrid" Width="1365" Height="839">
             <Grid.ColumnDefinitions>

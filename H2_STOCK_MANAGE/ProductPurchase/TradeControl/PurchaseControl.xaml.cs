@@ -68,6 +68,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         public DataGrid CurrentDataGrid { get; set; }
 
+        private Product CurrentProduct { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -184,27 +186,32 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
         }
 
-        private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
-        {
-            if (sender is null) return;
+        //private void StoreOrderDetail_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        //{
+        //    if (sender is null) return;
 
-            DataGrid dataGrid = sender as DataGrid;
+        //    DataGrid dataGrid = sender as DataGrid;
 
-            if (dataGrid.Items.Count == e.Row.GetIndex() + 1 && storeOrderData.type == OrderType.UNPROCESSING) return;
+        //    if (dataGrid.Items.Count == e.Row.GetIndex() + 1 && storeOrderData.type == OrderType.UNPROCESSING) return;
 
-            int rowNum = (e.Row.GetIndex() + 1);
+        //    int rowNum = (e.Row.GetIndex() + 1);
 
-            if (e.Row.Header is null)
-                e.Row.Header = rowNum.ToString();
-        }
+        //    if (e.Row.Header is null)
+        //        e.Row.Header = rowNum.ToString();
+
+        //    e.Row.Header = e.Row.GetIndex();
+        //}
+
         internal void ClearControl()
         {
             StoreOrderData = null;
             CurrentDataGrid.ItemsSource = null;
         }
-        private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
+        private void DataGridRow_MouseEnter(object sender, EventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;
+            
+            CurrentProduct = selectedItem as Product;
 
             if (selectedItem is IDeletable)
             {
@@ -220,7 +227,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             CurrentDataGrid.SelectedIndex = StoreOrderData.Products.Count;
         }
 
-        private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
+        private void DataGridRow_MouseLeave(object sender, EventArgs e)
         {
             var leaveItem = (sender as DataGridRow).Item;
 
@@ -277,14 +284,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 {
                     UIElement secondChild = (UIElement)VisualTreeHelper.GetChild(firstChild, 0);
 
-                    if (secondChild is AutoCompleteBox)
-                    {
-                        secondChild.FindChild<TextBox>("Text").Focus();
-                    }
-                    else
-                    {
-                        secondChild.Focus();
-                    }
+                    secondChild.Focus();
                 }
             }
             else if ((sender as TextBox).Tag != null && (sender as TextBox).Tag.Equals("CheckInputOnlyNum"))
@@ -302,10 +302,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 newProduct = new ProductPurchaseMedicine(product);
             else
                 newProduct = new ProductPurchaseOtc(product);
-
-            int rowIndex = GetCurrentRowIndex(textBox);
-
-            if (rowIndex == CurrentDataGrid.Items.Count - 1)
+            
+            if (CurrentProduct is null)
             {
                 StoreOrderData.Products.Add(newProduct);
 
@@ -313,9 +311,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
             else
             {
-                ((IProductPurchase)newProduct).CopyFilledData(StoreOrderData.Products[rowIndex]);
+                ((IProductPurchase)newProduct).CopyFilledData(CurrentProduct);
 
-                StoreOrderData.Products[rowIndex] = newProduct;
+                CurrentProduct = newProduct;
             }
 
             StoreOrderData.IsDataChanged = true;
@@ -343,7 +341,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!textBox.Name.Equals("FreeAmount"))
                 storeOrderData.CalculateTotalPrice();
-            
+
             StoreOrderData.IsDataChanged = true;
         }
 
@@ -359,6 +357,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 if (newItemDialog.ConfirmButtonClicked)
                 {
+                    if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
+                    {
+                        MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING);
+                        messageWindow.ShowDialog();
+                        return;
+                    }
+
                     AddProduct(textBox, newItemDialog.SelectedItem);
                 }
             }
@@ -390,38 +395,34 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             TextBox textBox = sender as TextBox;
 
-            var currentRowIndex = GetCurrentRowIndex(sender);
+            if (CurrentProduct is null) return;
 
-            if (currentRowIndex == -1 || currentRowIndex == CurrentDataGrid.Items.Count - 1) return;
-
-            if (!textBox.Text.Equals(storeOrderData.Products[currentRowIndex].Id))
-                textBox.Text = storeOrderData.Products[currentRowIndex].Id;
+            if (!textBox.Text.Equals(CurrentProduct.Id))
+                textBox.Text = CurrentProduct.Id;
         }
         #endregion
 
         #region ----- G StoreOrderDetail Functions -----
         private void SplitBatchNumber_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is null) return;
+            if (GStoreOrderDetail.SelectedItem is null) return;
 
-            var currentRowIndex = GetCurrentRowIndex(sender);
+            double left = ((ITrade)GStoreOrderDetail.SelectedItem).Amount % 2;
 
-            double left = ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount % 2;
+            ((ITrade)GStoreOrderDetail.SelectedItem).Amount = ((int)((ITrade)GStoreOrderDetail.SelectedItem).Amount / 2);
 
-            ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount = ((int)((ITrade)StoreOrderData.Products[currentRowIndex]).Amount / 2);
-
-            StoreOrderData.Products.Insert(currentRowIndex + 1, ((ICloneable)StoreOrderData.Products[currentRowIndex]).Clone() as Product);
+            StoreOrderData.Products.Insert(GStoreOrderDetail.SelectedIndex + 1, ((ICloneable)GStoreOrderDetail.SelectedItem).Clone() as Product);
 
             if (left != 0)
-                ((ITrade)StoreOrderData.Products[currentRowIndex]).Amount += left;
+                ((ITrade)GStoreOrderDetail.SelectedItem).Amount += left;
 
             StoreOrderData.IsDataChanged = true;
         }
         private void MergeBatchButton_Click(object sender, RoutedEventArgs e)
         {
-            int currentRow = GetCurrentRowIndex(sender);
+            if (GStoreOrderDetail.SelectedItem is null) return;
 
-            Product product = CurrentDataGrid.Items[currentRow - 1] as Product;
+            Product product = GStoreOrderDetail.SelectedItem as Product;
 
             if (!((IProductPurchase) product).BatchNumber.Equals(""))
             {
@@ -438,48 +439,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         #endregion
 
         #region ----- Service Functions -----
-        private int GetCurrentRowIndex(object sender)
-        {
-            if (sender is Button)
-            {
-                Button btn = sender as Button;
-
-                List<Button> temp = new List<Button>();
-                NewFunction.FindChildGroup<Button>(CurrentDataGrid, btn.Name, ref temp);
-                for (int x = 0; x < temp.Count; x++)
-                {
-                    if (temp[x].Equals(btn))
-                    {
-                        return x;
-                    }
-                }
-            }
-            else if (sender is TextBox)
-            {
-                TextBox tb = sender as TextBox;
-
-                List<TextBox> temp = new List<TextBox>();
-                NewFunction.FindChildGroup<TextBox>(CurrentDataGrid, tb.Name, ref temp);
-                for (int x = 0; x < temp.Count; x++)
-                {
-                    if (temp[x].Equals(tb))
-                    {
-                        return x;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
-        private bool IsNumbers(Key key)
-        {
-            if (key >= Key.D0 && key <= Key.D9) return true;
-            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
-
-            return false;
-        }
-
+        
         private bool IsKeyAvailable(Key key)
         {
             if (key >= Key.D0 && key <= Key.D9) return true;
@@ -498,6 +458,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (newItemDialog.ConfirmButtonClicked)
             {
+                if(StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
+                {
+                    MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING);
+                    messageWindow.ShowDialog();
+                    return;
+                }
+
                 //SetChanged();
                 if (newItemDialog.SelectedItem.Type.Equals("M"))
                     StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem));
@@ -520,7 +487,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
             declareDataDetailOverview.Show();
         }
-
+        
     }
 
     public class HasDeclareDataToVisConverter : IValueConverter

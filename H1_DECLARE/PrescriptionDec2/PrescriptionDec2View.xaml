@@ -200,6 +200,9 @@
                             </Trigger>
                         </Style.Triggers>
                     </Style>
+                    <ContextMenu x:Key="MedcineContextMenu" x:Name="MedContextMenu" StaysOpen="true" Opened="MedContextMenu_Opened">
+                        <MenuItem Header="申報不扣庫" x:Name="IsBuckle" Click="IsBuckle_Click" />
+                    </ContextMenu>
                 </DataGrid.Resources>
                 <DataGrid.RowStyle>
                     <Style TargetType="{x:Type DataGridRow}">
@@ -210,6 +213,7 @@
                         </Style.Triggers>
                         <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter" />
                         <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave" />
+                        <Setter Property="ContextMenu" Value="{DynamicResource MedcineContextMenu }"/>
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="BorderBrush" Value="Transparent" />
                         <Setter Property="FontSize" Value="16" />

@@ -251,6 +251,8 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             foreach (DeclareMedicine declareDetail in declareData.Prescription.Medicines)
             {
+                DeclareMedicine med = declareData.Prescription.Medicines.Single(medicine => medicine.Id == declareDetail.Id);
+                if (!med.IsBuckle) continue;
                 parameters.Clear();
                 parameters.Add(new SqlParameter("MAS_ID", decMasId));
                 parameters.Add(new SqlParameter("PRO_ID", declareDetail.Id));
@@ -1064,6 +1066,12 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("UPLOAD_DATE", DateTime.Now.ToShortDateString()));
             parameters.Add(new SqlParameter("FILE_CONTENT", fileContent.ToString()));
             conn.ExecuteProc("[HIS_POS_DB].[MainWindowView].[InsertDailyUploadFileData]", parameters);
+        }
+        public void CheckPredictChronicExist(string decMasId) { //判斷是否有重複預約慢箋 
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            parameters.Add(new SqlParameter("DecMasId", decMasId));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[CheckPredictChronicExist]", parameters);
         }
     }
 }

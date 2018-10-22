@@ -105,7 +105,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
                             <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <ComboBox Width="150" Text="{Binding Employee.Gender,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" 
+                            <ComboBox Width="145" Text="{Binding Employee.Gender,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" 
                                       SelectionChanged="Text_TextChanged" HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
                                 <ComboBoxItem Name="cbi1">男</ComboBoxItem>
                                 <ComboBoxItem >女</ComboBoxItem>
@@ -121,7 +121,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Margin="8">
                             <Label  Content="職位" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox Width="150" Text="{Binding Employee.Position,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                            <ComboBox Name="ComboPosition" Width="145" ItemsSource="{Binding PositionCollection,UpdateSourceTrigger=PropertyChanged}" Text="{Binding Employee.Position,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectionChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="4" Margin="8">
                             <Label  Content="到職日" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>

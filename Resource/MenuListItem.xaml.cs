@@ -25,6 +25,7 @@ namespace His_Pos.Resource
         private double _listMenuHeight;
         private double _listMaxMenuHeight = 0;
         private bool _listMenuHided = true;
+        public int _count = 0;
         public MenuListItem()
         {
             InitializeComponent();
@@ -82,6 +83,7 @@ namespace His_Pos.Resource
             ListMenu.Items.Add(newItem);
             _listMenuHeight = ListMenu.Items.Count * 32;
             SetListMenuVisibility(Visibility.Visible);
+            _count++;
         }
 
         public void SetListMenuVisibility(Visibility v)

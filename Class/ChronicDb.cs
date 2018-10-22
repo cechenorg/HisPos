@@ -64,10 +64,27 @@ namespace His_Pos.Class
             }
             return collection;
         }
+        internal static ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall> DailyChronicPhoneCall()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyChronicPhoneCall]");
+            ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall> collection = new ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                collection.Add(new IndexView.IndexView.DailtChronicPhoneCall(row));
+            }
+            return collection;
+        }
         internal static void UpdateDailyChronic() {
             var dd = new DbConnection(Settings.Default.SQL_global);
              dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateDailyChronic]");
         }
-        
+        internal static void UpdateChronicPhoneCall(string decMasId,string phoneCall) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>(); 
+            parameters.Add(new SqlParameter("DecMasId", decMasId));
+            parameters.Add(new SqlParameter("PHONECALL", phoneCall == "已聯絡" ? "0" : "1"));
+            dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateChronicPhoneCall]",parameters);
+        } 
     }
 }

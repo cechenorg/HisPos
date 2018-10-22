@@ -49,6 +49,7 @@ namespace His_Pos.Class.Product
             Status = selectedItem.Status;
             LastPrice = selectedItem.LastPrice;
             Stock = new InStock(selectedItem);
+            IsFirstBatch = true;
         }
 
         public bool IsFirstBatch { get; set; }

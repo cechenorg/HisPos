@@ -45,6 +45,20 @@ namespace His_Pos.Class.StoreOrder
             parameters.Add(new SqlParameter("STOORD_ID", Id));
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[DeleteOrder]", parameters);
         }
+
+        internal static StoreOrder AddReturnOrderByPurchace(string orderId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("OLD_ORDER_ID", orderId));
+            parameters.Add(new SqlParameter("ORDER_EMP", MainWindow.CurrentUser.Id));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[AddReturnOrderByPurchaseId]", parameters);
+
+            return new StoreOrder(table.Rows[0]);
+        }
+
         internal static void PurchaseAndReturn(StoreOrder storeOrder) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
@@ -158,7 +172,7 @@ namespace His_Pos.Class.StoreOrder
                     var newRow = details.NewRow();
 
                     newRow["PRO_ID"] = product.Id;
-                    newRow["ORDERQTY"] = 0;
+                    newRow["ORDERQTY"] = ((IProductReturn)product).BatchLimit;
                     newRow["QTY"] = ((ITrade)product).Amount;
                     newRow["PRICE"] = ((ITrade)product).Price.ToString();
                     newRow["DESCRIPTION"] = ((IProductReturn)product).Note;
@@ -399,10 +413,17 @@ namespace His_Pos.Class.StoreOrder
         {
             string orderMedicines = "";
 
+            bool isPurchace = storeOrderData.Category.CategoryName.Equals("進");
+
             foreach (var product in storeOrderData.Products)
             {
                 orderMedicines += product.Id.PadRight(12, ' ');
-                orderMedicines += ((IProductPurchase) product).OrderAmount.ToString().PadLeft(10, ' ');
+
+                if(isPurchace)
+                    orderMedicines += ((IProductPurchase) product).OrderAmount.ToString().PadLeft(10, ' ');
+                else
+                    orderMedicines += (-((ITrade)product).Amount).ToString().PadLeft(10, ' ');
+
                 orderMedicines += ((IProductPurchase) product).Note;
                 orderMedicines += "\r\n";
             }

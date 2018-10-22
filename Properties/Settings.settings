@@ -2,11 +2,20 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="His_Pos.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="SQL_local" Type="System.String" Scope="Application">
+    <Setting Name="SQL_local" Type="System.String" Scope="User">
       <Value Profile="(Default)">Data Source=192.168.0.77,59086;Persist Security Info=True;User ID=singde;Password=city1234</Value>
     </Setting>
     <Setting Name="SQL_global" Type="System.String" Scope="User">
       <Value Profile="(Default)">Data Source=59.124.201.229,59087;Persist Security Info=True;User ID=singde;Password=city1234</Value>
+    </Setting>
+    <Setting Name="MedBagPrinter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ReceiptPrinter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ReportPrinter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

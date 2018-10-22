@@ -143,6 +143,7 @@ namespace His_Pos.Class.Product
             med.price = Price;
             med.note = Note;
             med.batchNumber = BatchNumber;
+            med.BatchLimit = BatchLimit;
 
             return med;
         }

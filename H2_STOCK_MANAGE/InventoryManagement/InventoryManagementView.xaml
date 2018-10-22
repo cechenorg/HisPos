@@ -49,7 +49,7 @@
                     <RadioButton Content="OTC" Tag="0" Margin="0,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="SearchConditionChanged"/>
                     <Image Source="/Images/OrangeDot.png" Width="15"/>
                     <RadioButton Content="調劑藥品" Tag="1" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="SearchConditionChanged"/>
-                    <Image Source="/Images/HisDot.png" Width="15"/>
+                    <Image Source="/Images/BlueDot.png" Width="15"/>
                     <RadioButton Content="全部" Tag="2" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="SearchConditionChanged"/>
                     <Image Source="/Images/PosHisDot.png" Width="25" Margin="0,0,30,0"/>
                 </StackPanel>
@@ -83,8 +83,8 @@
                 <CheckBox Name="ControlMed" Content="管制藥" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <CheckBox Name="FreezeMed" Content="冷藏品" Foreground="{StaticResource ForeGround}" Margin="10,9,10,9" FontSize="18" FontFamily="Segoe UI Semibold"/>
             </StackPanel>
-            <DataGrid Name="ProductList" ItemsSource="{Binding _DataList}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="3">
+            <DataGrid Name="ProductList" ItemsSource="{Binding _DataList}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" VirtualizingPanel.IsVirtualizing="True"
+                     HeadersVisibility="All" LoadingRow="ProductList_LoadingRow" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="3">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True"/>
