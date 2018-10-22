@@ -1205,5 +1205,11 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("DecMasId", decMasId));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[SetNewGroupChronic]", parameters);
         }
+        public void CheckPredictChronicExist(string decMasId) { //判斷是否有重複預約慢箋 
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            parameters.Add(new SqlParameter("DecMasId", decMasId));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[CheckPredictChronicExist]", parameters);
+        }
     }
 }

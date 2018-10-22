@@ -37,6 +37,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     {
         private string SelectedMedId;
         public bool IsSend = false;
+        public bool IsBone = false;
         private DeclareData _currentDeclareData;
         public static string IndexViewDecMasId = string.Empty;
         public ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>  PrescriptionSendData = new ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>();
@@ -204,6 +205,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
             IsSend = false;
+            IsBone = false;
             ErrorMssageWindow err;
             MessageWindow m;
             CurrentPrescription.EList.Error = new List<Error>();
@@ -226,13 +228,35 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 _currentDeclareData = new DeclareData(CurrentPrescription);
                 var declareDb = new DeclareDb();
+
                 string medEntryName = string.Empty;
                 string medServiceName = string.Empty;
+                bool IsBoneIns = false;
                 switch (CurrentPrescription.Treatment.MedicalInfo.Hospital.Id) {
-                    case "3532016964": //瀚群骨科
+                    case "3532016964":
                         medEntryName = "骨科調劑耗用";
                         medServiceName = "骨科藥服費";
                         break;
+                    case "3532052317": 
+                        medEntryName = "骨科調劑耗用";
+                        medServiceName = "骨科藥服費";
+                        break;
+                    case "3532071956": 
+                        medEntryName = "骨科調劑耗用";
+                        medServiceName = "骨科藥服費";
+                        break;
+                    case "351064573": 
+                        medEntryName = "骨科調劑耗用";
+                        medServiceName = "骨科藥服費";
+                        break;
+                    case "3531066077": 
+                        medEntryName = "骨科調劑耗用";
+                        medServiceName = "骨科藥服費";
+                        break;
+                    case "3532082253": 
+                        medEntryName = "骨科調劑耗用";
+                        medServiceName = "骨科藥服費";
+                        break; 
                     default:
                         medEntryName = "調劑耗用";
                         medServiceName = "藥服費";
@@ -243,10 +267,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 string decMasId;
                 if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(_currentDecMasId) && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                 {  //一般處方
-                    decMasId = declareDb.InsertDeclareData(_currentDeclareData);
-
+                    decMasId = declareDb.InsertDeclareData(_currentDeclareData); 
                     ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", decMasId);
                     ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", decMasId);
+                    ProductDb.InsertEntry("押金", declareTrade.Deposit, "DecMasId", decMasId);
                     ProductDb.InsertEntry("配藥收入", _currentDeclareData.DrugsPoint.ToString(), "DecMasId", decMasId);
                     ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),"DecMasId",decMasId);
                     if (medEntryName != "骨科調劑耗用")
@@ -278,6 +302,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) {
                         ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                         ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
+                        ProductDb.InsertEntry("押金", declareTrade.Deposit, "DecMasId", _currentDecMasId);
                         ProductDb.InsertEntry("配藥收入", _currentDeclareData.DrugsPoint.ToString(), "DecMasId", _currentDecMasId);
                         ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _currentDecMasId);
                         if (medEntryName != "骨科調劑耗用") {
@@ -291,9 +316,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _currentDecMasId);//庫存扣庫
                         }
                             
-                    }
-
-
+                    } 
                     _currentDeclareData.DecMasId = _currentDecMasId;
                     declareDb.UpdateDeclareData(_currentDeclareData); //更新慢箋
                     ChronicDb.UpdateChronicData(_currentDecMasId);//重算預約慢箋 
@@ -321,6 +344,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) {
                         ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                         ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
+                        ProductDb.InsertEntry("押金", declareTrade.Deposit, "DecMasId", decMasId);
                         ProductDb.InsertEntry("配藥收入", _currentDeclareData.DrugsPoint.ToString(), "DecMasId", decMasId);
                         ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", decMasId);
                         if (medEntryName != "骨科調劑耗用") {
@@ -334,7 +358,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         }
                             
                     }
-                                        
+                    if (IsBone) //如果來自骨科 刪除預約慢箋
+                        declareDb.CheckPredictChronicExist(_currentDecMasId);
 
                     int start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
                     int end = Convert.ToInt32(CurrentPrescription.ChronicTotal);

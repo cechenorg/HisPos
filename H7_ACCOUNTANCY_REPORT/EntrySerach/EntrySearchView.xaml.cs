@@ -79,7 +79,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
         }
 
         private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
-             
+            
             SaveFileDialog saveFileDialog1 = new SaveFileDialog(); 
             saveFileDialog1.Filter = "csv|*.csv ";
             saveFileDialog1.FilterIndex = 2;
