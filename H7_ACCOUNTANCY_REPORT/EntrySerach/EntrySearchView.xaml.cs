@@ -20,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net;
+using System.Collections.Specialized;
 
 namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 {
@@ -41,6 +42,8 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
                 StockCheckValue = row["DSV_STOCKCHECK_VALUE"].ToString();
                 MedUseValue = row["DSV_MEDUSE_VALUE"].ToString();
                 MedIncomeValue = row["DSV_MEDINCOME_VALUE"].ToString();
+                CopayMentValue = row["DSV_COPAYMENT_VALUE"].ToString();
+                PaySelfValue = row["DSV_PAYSELF_VALUE"].ToString();
                 FinalStockValue = row["DSV_FINAL_VALUE"].ToString();
             }
             public string Date { get; set; }
@@ -50,6 +53,8 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
             public string StockCheckValue { get; set; }
             public string MedUseValue { get; set; }
             public string MedIncomeValue { get; set; }
+            public string CopayMentValue { get; set; }
+            public string PaySelfValue { get; set; }
             public string FinalStockValue { get; set; }
 
         }
@@ -74,7 +79,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
         }
 
         private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
-
+             
             SaveFileDialog saveFileDialog1 = new SaveFileDialog(); 
             saveFileDialog1.Filter = "csv|*.csv ";
             saveFileDialog1.FilterIndex = 2;
@@ -84,10 +89,10 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
                 using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.CreateNew))
                 {
                     StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
-                    sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "配藥收入" + "\t" + "期末現值");
+                    sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "配藥收入" + "\t" + "部分負擔" + "\t" + "自費" + "\t" + "期末現值");
                     foreach (DailyStockValue row in DailyStockValueCollection)
                     {
-                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t" + row.MedIncomeValue + "\t" + row.FinalStockValue);
+                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t" + row.MedIncomeValue + "\t" + row.CopayMentValue + "\t" + row.PaySelfValue + "\t" + row.FinalStockValue);
                     }
                     sw.Close();
                 } 
