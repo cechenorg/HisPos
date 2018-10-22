@@ -8,9 +8,28 @@
              d:DesignHeight="500" d:DesignWidth="620">
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
             <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="藥袋印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="380" FontSize="25" FontFamily="Segoe UI Semi"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label Content="收據印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="380" FontSize="25" FontFamily="Segoe UI Semi"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Label Content="報表印表機" FontSize="30" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <ComboBox ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="20,0,0,0" Width="380" FontSize="25" FontFamily="Segoe UI Semi"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" HorizontalAlignment="Right">
+            <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+            <Button Name="CancelBtn" Margin="0,0,20,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" IsEnabled="False"/>
+            <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" IsEnabled="False" Margin="0,0,10,0"/>
+        </StackPanel>
     </Grid>
 </UserControl>
