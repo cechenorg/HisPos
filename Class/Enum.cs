@@ -3,6 +3,13 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    enum SettingTabs
+    {
+        MyPharmacy = 1,
+        Printer = 2,
+        Database = 3
+    }
+
     enum PagingType
     {
         INIT,

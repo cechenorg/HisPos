@@ -553,6 +553,9 @@
     <Compile Include="IndexView\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InitConnectionWindow.xaml.cs">
+      <DependentUpon>InitConnectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interface\IDeletable.cs" />
     <Compile Include="Interface\IInventory.cs" />
     <Compile Include="Interface\IPrincipal.cs" />
@@ -652,6 +655,18 @@
     </Compile>
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
+    <Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">
+      <DependentUpon>DatabaseControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SystemSettings\SettingControl\MyPharmacyControl.xaml.cs">
+      <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SystemSettings\SettingControl\PrinterControl.xaml.cs">
+      <DependentUpon>PrinterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SystemSettings\SettingWindow.xaml.cs">
+      <DependentUpon>SettingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
@@ -873,6 +888,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="InitConnectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -956,6 +975,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resource\MenuListItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SystemSettings\SettingControl\DatabaseControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SystemSettings\SettingControl\MyPharmacyControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SystemSettings\SettingControl\PrinterControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SystemSettings\SettingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1092,6 +1127,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\cute.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Database.png" />
+    <Resource Include="Images\MyPharmacy.png" />
+    <Resource Include="Images\Printer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

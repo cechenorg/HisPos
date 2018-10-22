@@ -440,14 +440,6 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         #region ----- Service Functions -----
         
-        private bool IsNumbers(Key key)
-        {
-            if (key >= Key.D0 && key <= Key.D9) return true;
-            if (key >= Key.NumPad0 && key <= Key.NumPad9) return true;
-
-            return false;
-        }
-
         private bool IsKeyAvailable(Key key)
         {
             if (key >= Key.D0 && key <= Key.D9) return true;

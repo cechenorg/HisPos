@@ -3,9 +3,12 @@ using His_Pos.Properties;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace His_Pos.Service
 {
@@ -81,6 +84,26 @@ namespace His_Pos.Service
                 throw new InvalidOperationException(ex.Message);
             }
             return table;
+        }
+
+        public bool CheckConnection()
+        {
+            try
+            {
+                _sqlServerConnection.Open();
+            }
+            catch (SqlException e)
+            {
+                return false;
+            }
+
+            if (_sqlServerConnection.State == ConnectionState.Open)
+            {
+                _sqlServerConnection.Close();
+                return true;
+            }
+
+            return false;
         }
 
         ///<summary>

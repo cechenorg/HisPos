@@ -172,7 +172,7 @@
             <StackPanel
                 Name="MenuStack"
                 Grid.Column="0"
-                Background="#FF363535"
+                Background="{StaticResource MenuBarBackGround}"
                 Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
                     <Image
@@ -255,7 +255,8 @@
                     <Image
                         Height="20"
                         Margin="10,5,0,10"
-                        Source="Images/Settings.png" />
+                        Source="Images/Settings.png"
+                        MouseLeftButtonDown="Settings_OnMouseLeftButtonDown"/>
                     <TextBlock
                         Name="SystemTime"
                         Margin="10,5,10,10"

@@ -17,6 +17,7 @@ using His_Pos.Class.Pharmacy;
 using His_Pos.Class.Product;
 using His_Pos.Resource;
 using His_Pos.Service;
+using His_Pos.SystemSettings;
 using His_Pos.ViewModel;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
@@ -175,6 +176,12 @@ namespace His_Pos
         {
             ProductDb.UpdateDailyStockValue();
             Application.Current.Shutdown();
+        }
+
+        private void Settings_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            SettingWindow settingWindow = new SettingWindow();
+            settingWindow.ShowDialog();
         }
     }
 }

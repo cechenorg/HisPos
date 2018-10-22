@@ -12,7 +12,7 @@ namespace His_Pos.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.5.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -23,13 +23,16 @@ namespace His_Pos.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Data Source=192.168.0.77,59086;Persist Security Info=True;User ID=singde;Password" +
             "=city1234")]
         public string SQL_local {
             get {
                 return ((string)(this["SQL_local"]));
+            }
+            set {
+                this["SQL_local"] = value;
             }
         }
         
@@ -43,6 +46,42 @@ namespace His_Pos.Properties {
             }
             set {
                 this["SQL_global"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MedBagPrinter {
+            get {
+                return ((string)(this["MedBagPrinter"]));
+            }
+            set {
+                this["MedBagPrinter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ReceiptPrinter {
+            get {
+                return ((string)(this["ReceiptPrinter"]));
+            }
+            set {
+                this["ReceiptPrinter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ReportPrinter {
+            get {
+                return ((string)(this["ReportPrinter"]));
+            }
+            set {
+                this["ReportPrinter"] = value;
             }
         }
     }
