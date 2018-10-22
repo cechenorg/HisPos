@@ -160,7 +160,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Content="調劑案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <ComboBox x:Name="AdjustCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" FontFamily="Segoe UI Semibold" 
+                    <ComboBox x:Name="AdjustCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" FontFamily="Segoe UI Semibold" IsTextSearchEnabled="False" PreviewMouseLeftButtonDown="Combo_MouseDown"
                               FontSize="14" IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" KeyUp="AdjustCaseCombo_KeyUp" PreviewKeyDown="AdjustCaseCombo_PreviewKeyDown"
                               SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="AdjustCaseCombo_SelectionChanged">
                     </ComboBox>

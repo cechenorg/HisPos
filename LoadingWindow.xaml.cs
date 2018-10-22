@@ -38,12 +38,14 @@ using System.Threading;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.SpecialCode;
+using His_Pos.H3_STOCKTAKING.StockTaking;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.HisApi;
 using His_Pos.Struct.IcData;
 using Microsoft.Reporting.WinForms;
+using StockTakingView = His_Pos.H3_STOCKTAKING.StockTaking.StockTakingView;
 
 namespace His_Pos
 {
@@ -848,9 +850,9 @@ namespace His_Pos
                 prescriptionDec2View.LogInIcData();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    if (prescriptionDec2View.IsMedicalNumberGet || string.IsNullOrEmpty(prescriptionDec2View.icErrorWindow.SelectedItem.Id))
+                    if (prescriptionDec2View.IsMedicalNumberGet)
                         prescriptionDec2View.CreatIcUploadData();
-                    else
+                    else if(!prescriptionDec2View.IsMedicalNumberGet)
                     {
                         prescriptionDec2View.CreatIcErrorUploadData();
                     }

@@ -462,6 +462,9 @@
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml.cs">
       <DependentUpon>ReturnControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
+      <DependentUpon>StockTakingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
       <DependentUpon>AuthenticationManageView.xaml</DependentUpon>
@@ -663,9 +666,6 @@
     <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
       <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
-      <DependentUpon>StockTakingView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />
@@ -767,6 +767,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -976,10 +980,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="RDLC\ReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1054,6 +1054,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="packages\" />
+    <Folder Include="StockTaking\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

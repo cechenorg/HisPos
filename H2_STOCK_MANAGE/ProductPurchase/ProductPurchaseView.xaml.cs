@@ -25,6 +25,7 @@ using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
+using His_Pos.H3_STOCKTAKING.StockTaking;
 using His_Pos.Interface;
 using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchaseRecord;
@@ -379,7 +380,7 @@ namespace His_Pos.ProductPurchase
 
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
-            StockTakingView.DataChanged = true;
+            H3_STOCKTAKING.StockTaking.StockTakingView.DataChanged = true;
         }
 
         private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)

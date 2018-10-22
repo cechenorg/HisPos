@@ -27,6 +27,7 @@
     xmlns:workScheduleManage="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
     xmlns:IndexView="clr-namespace:His_Pos.IndexView"
     xmlns:declarefile="clr-namespace:His_Pos.H6_DECLAREFILE.Export"
+    xmlns:stockTaking1="clr-namespace:His_Pos.H3_STOCKTAKING.StockTaking"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
     Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"
@@ -55,7 +56,7 @@
             <productPurchaseRecord:ProductPurchaseRecordView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTaking:StockTaking}">
-            <stockTaking:StockTakingView />
+            <stockTaking1:StockTakingView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTakingRecord:StockTakingRecord}">
             <stockTakingRecord:StockTakingRecordView />

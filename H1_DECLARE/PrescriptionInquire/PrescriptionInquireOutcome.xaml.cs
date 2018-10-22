@@ -14,7 +14,6 @@ using His_Pos.Class.Declare;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;

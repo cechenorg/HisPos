@@ -1,39 +1,23 @@
-﻿using His_Pos.Class;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.AbstractClass;
-using His_Pos.Class.Product;
-using static His_Pos.ProductPurchase.ProductPurchaseView;
-using His_Pos.Interface;
-using System.ComponentModel;
-using System.Data;
-using System.Globalization;
-using System.IO;
-using System.Windows.Threading;
-using His_Pos.PrintDocuments;
-using His_Pos.Service;
-using System.Windows.Markup;
+using His_Pos.Class;
 using His_Pos.Class.Person;
-using His_Pos.RDLC;
-using MaterialDesignThemes.Wpf;
+using His_Pos.Class.Product;
+using His_Pos.Interface;
+using His_Pos.StockTaking;
 using Microsoft.Reporting.WinForms;
-using Newtonsoft.Json;
-using Visibility = System.Windows.Visibility;
 
-namespace His_Pos.StockTaking
+namespace His_Pos.H3_STOCKTAKING.StockTaking
 {
     /// <summary>
     /// StockTakingView.xaml 的互動邏輯
@@ -41,66 +25,59 @@ namespace His_Pos.StockTaking
     public partial class StockTakingView : UserControl, INotifyPropertyChanged
     {
         public ObservableCollection<Product> ProductCollection;
-        public ListCollectionView ProductTypeCollection;
-        public ObservableCollection<Product> takingCollection = new ObservableCollection<Product>();
+        private ListCollectionView _productTypeCollection;
+        private ObservableCollection<Product> _takingCollection = new ObservableCollection<Product>();
         public static StockTakingView Instance;
-        public static bool DataChanged { get; set; } = false;
+        public static bool DataChanged { get; set; }
         public ObservableCollection<Product> TakingCollection
         {
-            get
-            {
-                return takingCollection;
-            }
+            get => _takingCollection;
             set
             {
-                takingCollection = value;
-                NotifyPropertyChanged("TakingCollection");
+                _takingCollection = value;
+                NotifyPropertyChanged(nameof(TakingCollection));
             }
         }
-        private StockTakingStatus stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
+        private StockTakingStatus _stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
 
-        private int resultFilled;
+        private int _resultFilled;
         public int ResultFilled
         {
-            get { return resultFilled; }
+            get => _resultFilled;
             set
             {
-                resultFilled = value;
-                NotifyPropertyChanged("ResultFilled");
+                _resultFilled = value;
+                NotifyPropertyChanged(nameof(ResultFilled));
             }
         }
 
-        private int resultNotFilled;
+        private int _resultNotFilled;
         public int ResultNotFilled
         {
-            get { return resultNotFilled; }
+            get => _resultNotFilled;
             set
             {
-                resultNotFilled = value;
-                NotifyPropertyChanged("ResultNotFilled");
+                _resultNotFilled = value;
+                NotifyPropertyChanged(nameof(ResultNotFilled));
             }
         }
 
-        private int resultChanged;
-        private ObservableCollection<Person> UserAutoCompleteCollection;
+        private int _resultChanged;
 
         public int ResultChanged
         {
-            get { return resultChanged; }
+            get => _resultChanged;
             set
             {
-                resultChanged = value;
-                NotifyPropertyChanged("ResultChanged");
+                _resultChanged = value;
+                NotifyPropertyChanged(nameof(ResultChanged));
             }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
         public StockTakingView()
         {
@@ -110,25 +87,25 @@ namespace His_Pos.StockTaking
             Instance = this;
             DataContext = this;
             DataChanged = false;
-            UserAutoCompleteCollection = PersonDb.GetUserCollection();
-            TakingEmp.ItemsSource = UserAutoCompleteCollection;
+            var userAutoCompleteCollection = PersonDb.GetUserCollection();
+            TakingEmp.ItemsSource = userAutoCompleteCollection;
             TakingEmp.ItemFilter = UserFilter;
             InitProduct();
         }
-        public AutoCompleteFilterPredicate<object> UserFilter
+
+        private AutoCompleteFilterPredicate<object> UserFilter
         {
             get
             {
                 return (searchText, obj) =>
-                    ((obj as Person).Id is null) ? true : (obj as Person).Id.Contains(searchText)
-                    || (obj as Person).Name.Contains(searchText);
+                    (obj as Person)?.Id is null || ((Person) obj).Id.Contains(searchText) || ((Person)obj).Name.Contains(searchText);
             }
         }
 
         public void SetOtcTypeUi()
         {
-            ProductTypeCollection = ProductDb.GetProductType();
-            OtcType.ItemsSource = ProductTypeCollection;
+            _productTypeCollection = ProductDb.GetProductType();
+            OtcType.ItemsSource = _productTypeCollection;
             OtcType.SelectedValue = "無";
         }
         public void InitProduct()
@@ -141,7 +118,7 @@ namespace His_Pos.StockTaking
 
         private void UpdateUi()
         {
-            switch (stockTakingStatus)
+            switch (_stockTakingStatus)
             {
                 case StockTakingStatus.ADDPRODUCTS:
                     CheckItems.Columns[0].Visibility = Visibility.Visible;
@@ -224,25 +201,25 @@ namespace His_Pos.StockTaking
 
         private void StockTakingComplete_Click(object sender, RoutedEventArgs e)
         {
-            if (!CheckTakingResult(takingCollection))
+            if (!CheckTakingResult(_takingCollection))
             {
-                MessageWindow messageWindow = new MessageWindow("尚有品項未填寫盤點數量!", MessageType.ERROR, true);
+                var messageWindow = new MessageWindow("尚有品項未填寫盤點數量!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
 
-            if(ResultChanged == 0)
+            if (ResultChanged == 0)
             {
-                ProductDb.SaveStockTaking(takingCollection, true);
+                ProductDb.SaveStockTaking(_takingCollection, true);
 
-                takingCollection.Clear();
+                _takingCollection.Clear();
 
                 InitToBegin();
             }
             else
             {
                 CheckItems.Items.Filter = ChangedFilter;
-                
+
                 NextStatus();
             }
 
@@ -250,100 +227,97 @@ namespace His_Pos.StockTaking
 
         private void InitToBegin()
         {
-            stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
+            _stockTakingStatus = StockTakingStatus.ADDPRODUCTS;
             ClearAddCondition();
             UpdateUi();
             InitProduct();
         }
 
-        private bool ChangedFilter( object product )
+        private bool ChangedFilter(object product)
         {
-            return !(product as IStockTaking).IsEqual;
+            return !((IStockTaking)product).IsEqual;
         }
 
         private void NextStatus()
         {
-            stockTakingStatus++;
+            _stockTakingStatus++;
             UpdateUi();
         }
 
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
-            var selectedItem = (sender as DataGridRow).Item;
+            var selectedItem = (sender as DataGridRow)?.Item;
 
-            if (selectedItem is IDeletable)
+            if (selectedItem is IDeletable deletable)
             {
-                if (takingCollection.Contains(selectedItem))
+                if (_takingCollection.Contains(selectedItem))
                 {
-                    (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+                    deletable.Source = "/Images/DeleteDot.png";
                 }
 
-                CheckItems.SelectedItem = selectedItem;
+                CheckItems.SelectedItem = deletable;
                 return;
             }
 
-            CheckItems.SelectedIndex = takingCollection.Count;
+            CheckItems.SelectedIndex = _takingCollection.Count;
         }
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
-            var leaveItem = (sender as DataGridRow).Item;
+            var leaveItem = (sender as DataGridRow)?.Item;
 
-            if (leaveItem is IDeletable)
+            if (leaveItem is IDeletable deletable)
             {
-                (leaveItem as IDeletable).Source = string.Empty;
+                deletable.Source = string.Empty;
             }
         }
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            takingCollection.RemoveAt(CheckItems.SelectedIndex);
+            _takingCollection.RemoveAt(CheckItems.SelectedIndex);
         }
-        private bool CheckTakingResult(ObservableCollection<Product> takingCollection) {
-            foreach (Product p in takingCollection)
-            {
-                if (((IStockTaking)p).TakingResult == string.Empty) return false;
-            }
-            return true;
+        private bool CheckTakingResult(IEnumerable<Product> taking)
+        {
+            return taking.All(p => ((IStockTaking)p).TakingResult != string.Empty);
         }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.SaveStockTaking(takingCollection, true);
-            takingCollection.Clear();
+            ProductDb.SaveStockTaking(_takingCollection, true);
+            _takingCollection.Clear();
             CheckItems.Items.Filter = null;
             InitToBegin();
         }
-        public bool CaculateValidDate(string validdate, string month)
+
+        private bool CaculateValidDate(string validdate, string month)
         {
-            if (String.IsNullOrEmpty(month) || String.IsNullOrEmpty(validdate)) return false;
+            if (string.IsNullOrEmpty(month) || string.IsNullOrEmpty(validdate)) return false;
             validdate = validdate.Replace("/", "");
-            int compareDate = Int32.Parse(DateTime.Now.AddMonths(Int32.Parse(month)).ToString("yyyyMMdd"));
-            if (Int32.Parse(validdate) <= compareDate && Int32.Parse(validdate) > Int32.Parse(DateTime.Now.ToString("yyyyMMdd"))) return true;
-            return false;
+            var compareDate = int.Parse(DateTime.Now.AddMonths(int.Parse(month)).ToString("yyyyMMdd"));
+            return int.Parse(validdate) <= compareDate && int.Parse(validdate) > int.Parse(DateTime.Now.ToString("yyyyMMdd"));
         }
 
         private void AddItems_Click(object sender, RoutedEventArgs e)
         {
 
-            var result = ProductCollection.Where(x => 
-            (((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
-            && (((Product)x).Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
-            && (((Product)x).Name.ToLower().Contains(ProductName.Text.ToLower()) || ProductName.Text == string.Empty)
-            && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
-            && ((((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked == true) || (bool)SafeAmount.IsChecked == false)
-            && ((x is StockTakingOTC && ((StockTakingOTC)x).Category.Contains(OtcType.SelectedValue.ToString())) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString() == "無")
-            && ( (x is StockTakingMedicine && (bool)ControlMed.IsChecked && ((StockTakingMedicine)x).Control )  || !(bool)ControlMed.IsChecked)
-            && ((x is StockTakingMedicine && (bool)FreezeMed.IsChecked && ((StockTakingMedicine)x).Frozen) || !(bool)FreezeMed.IsChecked)
-            || TakingCollection.Contains(x));
+            var result = ProductCollection.Where(x =>
+            FreezeMed.IsChecked != null && (ControlMed.IsChecked != null && SafeAmount.IsChecked != null && ((((IStockTaking)x).Location.Contains(Location.Text) || Location.Text == string.Empty)
+                                                                                                             && (x.Id.Contains(ProductId.Text) || ProductId.Text == string.Empty)
+                                                                                                             && (x.Name.ToLower().Contains(ProductName.Text.ToLower()) || ProductName.Text == string.Empty)
+                                                                                                             && (CaculateValidDate(((IStockTaking)x).ValidDate, ValidDate.Text) || ValidDate.Text == string.Empty)
+                                                                                                             && (((IStockTaking)x).Inventory <= ((IStockTaking)x).SafeAmount && (bool)SafeAmount.IsChecked || SafeAmount.IsChecked == false)
+                                                                                                             && (x is StockTakingOTC otc && otc.Category.Contains(OtcType.SelectedValue.ToString()) || OtcType.SelectedValue.ToString() == string.Empty || OtcType.SelectedValue.ToString().Equals("無"))
+                                                                                                             && (x is StockTakingMedicine medicine && (bool)ControlMed.IsChecked && medicine.Control || !(bool)ControlMed.IsChecked)
+                                                                                                             && (x is StockTakingMedicine takingMedicine && (bool)FreezeMed.IsChecked && takingMedicine.Frozen || !(bool)FreezeMed.IsChecked)
+                                                                                                             || TakingCollection.Contains(x))));
 
             TakingCollection = new ObservableCollection<Product>(result.ToList());
 
             AddStockTakingEmp();
-            
+
             ClearAddCondition();
         }
 
         private void AddStockTakingEmp()
         {
-            foreach(var product in takingCollection)
+            foreach (var product in _takingCollection)
             {
                 if (((IStockTaking)product).EmpId.Equals(""))
                     ((IStockTaking)product).EmpId = (TakingEmp.Text.Equals("")) ? MainWindow.CurrentUser.Id : TakingEmp.Text;
@@ -366,7 +340,7 @@ namespace His_Pos.StockTaking
 
         private void ClearProduct_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var product in takingCollection)
+            foreach (var product in _takingCollection)
             {
                 ((IStockTaking)product).EmpId = "";
             }
@@ -378,16 +352,22 @@ namespace His_Pos.StockTaking
         {
             if (CheckItems is null) return;
 
-            RadioButton radioButton = sender as RadioButton; ;
+            var radioButton = sender as RadioButton;
 
             CheckItems.Items.SortDescriptions.Clear();
             CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[13].SortMemberPath, ListSortDirection.Ascending));
-            CheckItems.Items.SortDescriptions.Add(new SortDescription(CheckItems.Columns[Int32.Parse(radioButton.Tag.ToString())].SortMemberPath, ListSortDirection.Ascending));
+            if (radioButton != null)
+            {
+                CheckItems.Items.SortDescriptions.Add(new SortDescription(
+                    CheckItems.Columns[int.Parse(radioButton.Tag.ToString())].SortMemberPath,
+                    ListSortDirection.Ascending));
+            }
         }
 
         private void Print_OnClick(object sender, RoutedEventArgs e)
         {
-            foreach (var product in takingCollection)
+            InventoryChecking.InventoryObjectList.Clear();
+            foreach (var product in _takingCollection)
             {
                 if (product is StockTakingOTC otc)
                 {
@@ -397,7 +377,7 @@ namespace His_Pos.StockTaking
                         InventoryChecking.InventoryObjectList.Add(invObj);
                     }
                 }
-                else if(product is StockTakingMedicine med)
+                else if (product is StockTakingMedicine med)
                 {
                     foreach (var batch in med.BatchNumbersCollection)
                     {
@@ -407,148 +387,44 @@ namespace His_Pos.StockTaking
                 }
             }
             InventoryChecking.MergeData(InventoryChecking.GetInventoryObjectList());
-            ReportViewer rptViewer = new ReportViewer();
+            var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.DataSources.Add(new ReportDataSource("InventoryDataSet", InventoryChecking.t));
+            var parameters = new ReportParameter[2];
+            var recEmp = string.IsNullOrEmpty(TakingEmp.Text) ? MainWindow.CurrentUser.Name : TakingEmp.Text;
+            parameters[0] = new ReportParameter("CurrentUser", recEmp);
+            parameters[1] = new ReportParameter("ProductCount", TakingCollection.Count.ToString());
             rptViewer.LocalReport.ReportPath = @"..\..\RDLC\InventoryCheckSheet.rdlc";
+            rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.Refresh();
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var loadingWindow = new LoadingWindow();
             loadingWindow.Show();
             loadingWindow.PrintInventoryCheckSheet(rptViewer, Instance);
-            //ReportWindow r = new ReportWindow(InventoryChecking.t);
-            //r.ShowDialog();
-
-
-            //var pageSize = new Size(8.26 * 96, 11.69 * 96);
-            //var document = new FixedDocument();
-            //document.DocumentPaginator.PageSize = pageSize;
-
-            //Collection<FixedPage> stockTakingDocuments = ConvertDataToDoc(pageSize);
-
-            //foreach( var page in stockTakingDocuments)
-            //{
-            //    var pageContent = new PageContent();
-            //    pageContent.Child = page;
-            //    document.Pages.Add(pageContent);
-            //}
-
-            //if (NewFunction.DocumentPrinter(document, "盤點單" + DateTime.Now.ToShortDateString()))
-            //{
-            //    CountFilledResult();
-            //    ProductDb.SaveStockTaking(takingCollection, false);
-            //    NextStatus();
-            //}   
         }
 
-        
-        private Collection<FixedPage> ConvertDataToDoc(Size pageSize)
-        {
-            Collection<FixedPage> documents = new Collection<FixedPage>();
-
-            Collection< List < Product >> pages = new BindingList<List<Product>>();
-
-            List<RadioButton> radioButtons = SortType.Children.OfType<RadioButton>().ToList();
-            int target = Int16.Parse(radioButtons.Single(r => r.IsChecked == true).Tag.ToString());
-
-            List<Product> temp;
-
-            switch (target)
-            {
-                case 1:
-                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ThenBy(x => x.Id).ToList();
-                    break;
-                case 2:
-                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ThenBy(x => x.Name).ToList();
-                    break;
-                case 3:
-                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ThenBy(x => ((IStockTaking)x).Category).ThenBy(x => x.Id).ToList();
-                    break;
-                case 9:
-                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ThenBy(x => ((IStockTaking)x).Location).ThenBy(x => x.Id).ToList();
-                    break;
-                default:
-                    temp = takingCollection.OrderBy(x => ((IStockTaking)x).EmpId).ToList();
-                    break;
-            }
-
-            int LENGTH_LIMIT = 25;
-
-            double length = 0;
-            int lastIndex = 0;
-            for (int x = 0; x < temp.Count; x ++)
-            {
-                int itemCount = ((IStockTaking)temp[x]).BatchNumbersCollection.Count;
-                if (itemCount == 1)
-                    length += 0.9;
-                else
-                {
-                    length += (0.8 * (itemCount - 2) + 1.2);
-                }
-
-                if (x != 0 && ((IStockTaking)temp[x - 1]).EmpId != ((IStockTaking)temp[x]).EmpId)
-                {
-                    pages.Add(temp.GetRange(lastIndex, x - lastIndex));
-                    lastIndex = x;
-                    length = 0;
-                }
-                else if (length >= LENGTH_LIMIT)
-                {
-                    pages.Add(temp.GetRange(lastIndex, x - 1 - lastIndex));
-                    lastIndex = x - 1;
-                    length = 0;
-                }
-                else if (x == temp.Count - 1)
-                {
-                    pages.Add(temp.GetRange(lastIndex, x - lastIndex + 1));
-                }
-            }
-            
-            int totalPage = pages.Count;
-
-            for (int x = 0; x < pages.Count; x ++)
-            {
-                var fixedPage = new FixedPage();
-                fixedPage.Width = pageSize.Width;
-                fixedPage.Height = pageSize.Height;
-                if (CheckItems.Items.SortDescriptions.Count > 1)
-                    fixedPage.Children.Add(new StockTakingDocument(pages[x], ((IStockTaking)pages[x][0]).EmpId, takingCollection.Count, x + 1, totalPage, CheckItems.Items.SortDescriptions[1]));
-                else
-                    fixedPage.Children.Add(new StockTakingDocument(pages[x], ((IStockTaking)pages[x][0]).EmpId, takingCollection.Count, x + 1, totalPage, new SortDescription(CheckItems.Columns[1].SortMemberPath, ListSortDirection.Ascending)));
-               
-                fixedPage.Measure(pageSize);
-                fixedPage.Arrange(new Rect(new Point(), pageSize));
-                fixedPage.UpdateLayout();
-
-                documents.Add(fixedPage);
-            }
-
-            return documents;
-        }
 
         private void AddOneItem_Click(object sender, RoutedEventArgs e)
         {
-            StockTakingItemDialog stockTakingItemDialog = new StockTakingItemDialog(ProductCollection,TakingCollection);
+            StockTakingItemDialog stockTakingItemDialog = new StockTakingItemDialog(ProductCollection, TakingCollection);
             stockTakingItemDialog.ShowDialog();
 
-            if (stockTakingItemDialog.ConfirmButtonClicked)
-            {
-                TakingCollection.Add(stockTakingItemDialog.SelectedItem as Product);
+            if (!stockTakingItemDialog.ConfirmButtonClicked) return;
+            TakingCollection.Add(stockTakingItemDialog.SelectedItem);
 
-                TakingEmp.Text = stockTakingItemDialog.SelectedUser;
+            TakingEmp.Text = stockTakingItemDialog.SelectedUser;
 
-                AddStockTakingEmp();
-                ClearAddCondition();
-            }
+            AddStockTakingEmp();
+            ClearAddCondition();
         }
 
         private void CountFilledResult()
         {
-            ResultFilled = takingCollection.Count(x => ((IStockTaking)x).IsChecked);
-            ResultNotFilled = takingCollection.Count(x => !((IStockTaking)x).IsChecked);
+            ResultFilled = _takingCollection.Count(x => ((IStockTaking)x).IsChecked);
+            ResultNotFilled = _takingCollection.Count(x => !((IStockTaking)x).IsChecked);
 
-            ResultChanged = takingCollection.Count(x =>
-                !((IStockTaking) x).Inventory.ToString().Equals(((IStockTaking) x).TakingResult) && !((IStockTaking)x).TakingResult.Equals(String.Empty));
+            ResultChanged = _takingCollection.Count(x =>
+                !((IStockTaking)x).Inventory.ToString().Equals(((IStockTaking)x).TakingResult) && !((IStockTaking)x).TakingResult.Equals(String.Empty));
         }
 
         private void StockTakingResult_OnTextChanged(object sender, TextChangedEventArgs e)
@@ -558,7 +434,8 @@ namespace His_Pos.StockTaking
 
         private void AutoFill_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Product p in takingCollection) {
+            foreach (var p in _takingCollection)
+            {
                 ((IStockTaking)p).TakingResult = ((IStockTaking)p).TakingResult == string.Empty ? ((IStockTaking)p).Inventory.ToString() : ((IStockTaking)p).TakingResult;
             }
         }
@@ -570,13 +447,13 @@ namespace His_Pos.StockTaking
 
             NextStatus();
         }
-        
+
     }
     public class IsResultEqualConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(bool) value)
+            if (value != null && !(bool)value)
                 return "/Images/Changed.png";
             return "";
         }
@@ -586,5 +463,4 @@ namespace His_Pos.StockTaking
             return "";
         }
     }
-    
 }
