@@ -292,6 +292,8 @@
     <Compile Include="Class\DiseaseCode\DiseaseCodeDb.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
+    <Compile Include="Class\Entry\Entry.cs" />
+    <Compile Include="Class\Entry\EntryDb.cs" />
     <Compile Include="Class\FunctionDb.cs" />
     <Compile Include="Class\HisApiData\MedicalInformation.cs" />
     <Compile Include="Class\IcCardPay.cs" />
@@ -553,6 +555,13 @@
       <DependentUpon>ExportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H6_DECLAREFILE\Export\Export.cs" />
+    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
+		<DependentUpon>EntryDetailWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearch.cs"/>
+    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
+		<DependentUpon>EntrySearchView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HisApi\HisApiFunction.cs" />
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
@@ -560,6 +569,9 @@
     <Compile Include="IndexView\Index.cs" />
     <Compile Include="IndexView\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="InitConnectionWindow.xaml.cs">
+      <DependentUpon>InitConnectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\IDeletable.cs" />
     <Compile Include="Interface\IInventory.cs" />
@@ -676,6 +688,18 @@
     <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
+	<Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">
+		<DependentUpon>DatabaseControl.xaml</DependentUpon>
+	</Compile>
+    <Compile Include="SystemSettings\SettingControl\MyPharmacyControl.xaml.cs">
+		<DependentUpon>MyPharmacyControl.xaml</DependentUpon>
+	</Compile>
+    <Compile Include="SystemSettings\SettingControl\PrinterControl.xaml.cs">
+		<DependentUpon>PrinterControl.xaml</DependentUpon>
+	</Compile>
+    <Compile Include="SystemSettings\SettingWindow.xaml.cs" >
+		<DependentUpon>SettingWindow.xaml</DependentUpon>
+	</Compile>
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -878,6 +902,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="IconLabel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -901,6 +933,10 @@
     <Page Include="IndexView\IndexView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InitConnectionWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
@@ -987,6 +1023,22 @@
     <Page Include="Resource\MenuListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SystemSettings\SettingControl\DatabaseControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SystemSettings\SettingControl\MyPharmacyControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SystemSettings\SettingControl\PrinterControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SystemSettings\SettingWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -1148,6 +1200,9 @@
     <Resource Include="Images\reload.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Database.png" />
+    <Resource Include="Images\MyPharmacy.png" />
+    <Resource Include="Images\Printer.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

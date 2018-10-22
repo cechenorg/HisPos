@@ -359,7 +359,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 {
                     if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
                     {
-                        MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING);
+                        MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING,true);
                         messageWindow.ShowDialog();
                         return;
                     }

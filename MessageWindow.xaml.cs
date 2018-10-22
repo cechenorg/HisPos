@@ -25,7 +25,7 @@ namespace His_Pos
             InitializeComponent();
         }
 
-        public MessageWindow(string message, MessageType type,bool buttonFocus)
+        public MessageWindow(string message, MessageType type,bool buttonFocus = false)
         {
             InitializeComponent();
             switch (type) {

@@ -40,6 +40,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
         #region View相關變數
+        private string SelectedMedId;
         private readonly bool _isFirst = true;
         private bool _isChanged;
         private string _cardStatus;
@@ -1508,6 +1509,29 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (c.Items.Count > 0)
                     c.SelectedIndex = 0;
             }
+        }
+
+        private void IsBuckle_Click(object sender, RoutedEventArgs e)
+        {
+
+            for (int i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            {
+                if (CurrentPrescription.Medicines[i].Id == SelectedMedId)
+                    CurrentPrescription.Medicines[i].IsBuckle = !CurrentPrescription.Medicines[i].IsBuckle;
+            }
+
+        }
+        private void MedContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            var temp = (sender as ContextMenu);
+            MenuItem menuitem = temp.Items[0] as MenuItem;
+            SelectedMedId = ((DeclareMedicine)PrescriptionMedicines.SelectedItem).Id;
+            if (((DeclareMedicine)PrescriptionMedicines.SelectedItem).IsBuckle)
+                menuitem.Header = "申報不扣庫";
+            else
+                menuitem.Header = "申報扣庫";
+
+
         }
     }
 }
