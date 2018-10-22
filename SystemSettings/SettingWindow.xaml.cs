@@ -125,10 +125,11 @@ namespace His_Pos.SystemSettings
                     CurrentControl = myPharmacyControl;
                     break;
                 case SettingTabs.Printer:
+                    printerControl.ResetPrinter();
                     CurrentControl = printerControl;
                     break;
                 case SettingTabs.Database:
-                    databaseControl.ClearDataChangedStatus();
+                    databaseControl.ResetConnection();
                     CurrentControl = databaseControl;
                     break;
             }

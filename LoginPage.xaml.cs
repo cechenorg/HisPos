@@ -33,7 +33,7 @@ namespace His_Pos
 
         private static void CheckSettingFiles()
         {
-            string folderPath = "C:\\Program Files\\HISPOS"; // your code goes here
+            string folderPath = "C:\\Program Files\\HISPOS";
 
             bool folderExist = Directory.Exists(folderPath);
 

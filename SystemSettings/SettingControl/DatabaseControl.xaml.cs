@@ -159,7 +159,7 @@ namespace His_Pos.SystemSettings.SettingControl
             }
         }
 
-        public void ClearDataChangedStatus()
+        private void ClearDataChangedStatus()
         {
             IsDataChanged = false;
 
@@ -396,6 +396,11 @@ namespace His_Pos.SystemSettings.SettingControl
         }
 
         private void InitConnection_Click(object sender, RoutedEventArgs e)
+        {
+            ResetConnection();
+        }
+
+        public void ResetConnection()
         {
             InitConnectioData();
 
