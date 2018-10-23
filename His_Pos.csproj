@@ -15,7 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetFrameworkProfile />
-    <PublishUrl>publish\</PublishUrl>
+    <PublishUrl>ftp://httpdoc/ClickOnce/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -25,7 +25,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>http://localhost:8080/</InstallUrl>
+    <InstallUrl>http://singde.com.tw/ClickOnce/publish.htm/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
     <ApplicationRevision>1</ApplicationRevision>
@@ -556,11 +556,11 @@
     </Compile>
     <Compile Include="H6_DECLAREFILE\Export\Export.cs" />
     <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
-		<DependentUpon>EntryDetailWindow.xaml</DependentUpon>
+      <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearch.cs"/>
+    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearch.cs" />
     <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
-		<DependentUpon>EntrySearchView.xaml</DependentUpon>
+      <DependentUpon>EntrySearchView.xaml</DependentUpon>
     </Compile>
     <Compile Include="HisApi\HisApiFunction.cs" />
     <Compile Include="IconLabel.xaml.cs">
@@ -688,18 +688,18 @@
     <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
-	<Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">
-		<DependentUpon>DatabaseControl.xaml</DependentUpon>
-	</Compile>
+    <Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">
+      <DependentUpon>DatabaseControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SystemSettings\SettingControl\MyPharmacyControl.xaml.cs">
-		<DependentUpon>MyPharmacyControl.xaml</DependentUpon>
-	</Compile>
+      <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SystemSettings\SettingControl\PrinterControl.xaml.cs">
-		<DependentUpon>PrinterControl.xaml</DependentUpon>
-	</Compile>
-    <Compile Include="SystemSettings\SettingWindow.xaml.cs" >
-		<DependentUpon>SettingWindow.xaml</DependentUpon>
-	</Compile>
+      <DependentUpon>PrinterControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SystemSettings\SettingWindow.xaml.cs">
+      <DependentUpon>SettingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
