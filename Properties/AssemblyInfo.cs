@@ -17,7 +17,7 @@ using System.Windows;
 // 將 ComVisible 設為 false 可對 COM 元件隱藏
 // 組件中的類型。若必須從 COM 存取此組件中的類型，
 // 的類型，請在該類型上將 ComVisible 屬性設定為 true。
-[assembly: ComVisible(false)]
+[assembly: ComVisible(true)]
 
 //若要開始建置可當地語系化的應用程式，請在
 //.csproj 檔案中的 <UICulture>CultureYouAreCodingWith</UICulture>
