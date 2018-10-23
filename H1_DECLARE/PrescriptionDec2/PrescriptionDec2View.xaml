@@ -177,8 +177,9 @@
                 <StackPanel Grid.Row="2" Grid.Column="4" Margin="8" Orientation="Horizontal">
                     <Label Content="特定治療" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="SpecialCode" Width="170" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" KeyUp="SpecialCodeCombo_KeyUp" PreviewKeyDown="SpecialCodeCombo_PreviewKeyDown"
-                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" IsEditable="True" StaysOpenOnEdit="True" InputScope="AlphanumericHalfWidth"
-                             DisplayMemberPath="FullName" InputMethod.IsInputMethodEnabled="False" SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.SpecialCode, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" IsEditable="True" StaysOpenOnEdit="False" InputScope="AlphanumericHalfWidth"
+                             DisplayMemberPath="FullName" InputMethod.IsInputMethodEnabled="False" SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.SpecialCode, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                             PreviewMouseLeftButtonDown="Combo_MouseDown"/>
                 </StackPanel>
             </Grid>
             <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="True" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" GridLinesVisibility="Horizontal">

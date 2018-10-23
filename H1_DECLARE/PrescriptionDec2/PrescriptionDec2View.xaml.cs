@@ -40,7 +40,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     public partial class PrescriptionDec2View : UserControl, INotifyPropertyChanged
     {
         #region View相關變數
-        private string SelectedMedId;
+        private string _selectedMedId;
         private readonly bool _isFirst = true;
         private bool _isChanged;
         private string _cardStatus;
@@ -66,6 +66,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                                                                 ((DeclareMedicine)obj).EngName.ToLower().Contains(searchText.ToLower()));
             }
         }
+
         public IcErrorCodeWindow icErrorWindow;
         #endregion
 
@@ -326,7 +327,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", decMasId);
                 if (medEntryName != "骨科調劑耗用")
                 {
-                    int medTotalPrice = 0;
+                    var medTotalPrice = 0;
                     foreach (DeclareMedicine med in _currentDeclareData.Prescription.Medicines)
                     {
                         medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
@@ -359,7 +360,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (medEntryName != "骨科調劑耗用")
                     {
                         int medTotalPrice = 0;
-                        foreach (DeclareMedicine med in _currentDeclareData.Prescription.Medicines)
+                        foreach (var med in _currentDeclareData.Prescription.Medicines)
                         {
                             medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
                         }
@@ -1122,8 +1123,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             ButtonSubmmit.Content = DatePickerTreatment.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)  ? "調劑" : "預約慢箋";
             IsSendToServer.IsChecked = false;
             if (AdjustCaseCombo.SelectedItem == null) return;
-            IsSendToServer.IsEnabled = (((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) ? true : false;
-            IsSendToServer.IsChecked = (((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)) ? true : false;
+            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
         }
 
         public void SetValueByDecMasId(string decMasId) {
@@ -1476,7 +1477,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 c.Text = string.Empty;
                 return;
             }
-            if (e.Key == Key.Enter || string.IsNullOrEmpty(search))
+            if (e.Key == Key.Enter || search.Length < 2)
                 return;
             var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
 
@@ -1513,25 +1514,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void IsBuckle_Click(object sender, RoutedEventArgs e)
         {
-
-            for (int i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            foreach (var t in CurrentPrescription.Medicines)
             {
-                if (CurrentPrescription.Medicines[i].Id == SelectedMedId)
-                    CurrentPrescription.Medicines[i].IsBuckle = !CurrentPrescription.Medicines[i].IsBuckle;
+                if (t.Id == _selectedMedId)
+                    t.IsBuckle = !t.IsBuckle;
             }
-
         }
         private void MedContextMenu_Opened(object sender, RoutedEventArgs e)
         {
             var temp = (sender as ContextMenu);
-            MenuItem menuitem = temp.Items[0] as MenuItem;
-            SelectedMedId = ((DeclareMedicine)PrescriptionMedicines.SelectedItem).Id;
+            var menuitem = temp.Items[0] as MenuItem;
+            _selectedMedId = ((DeclareMedicine)PrescriptionMedicines.SelectedItem).Id;
             if (((DeclareMedicine)PrescriptionMedicines.SelectedItem).IsBuckle)
                 menuitem.Header = "申報不扣庫";
             else
                 menuitem.Header = "申報扣庫";
-
-
         }
     }
 }
