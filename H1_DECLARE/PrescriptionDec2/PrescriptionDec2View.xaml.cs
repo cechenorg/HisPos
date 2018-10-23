@@ -13,6 +13,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
@@ -241,21 +243,25 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             IsBone = false;
             ErrorMssageWindow err;
             CurrentPrescription.EList.Error = new List<Error>();
-            CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
-           
-            var medDays = 0;
-            foreach (var med in CurrentPrescription.Medicines)
+            if (NotDeclare.IsChecked != null && !(bool) NotDeclare.IsChecked)
             {
-                if (string.IsNullOrEmpty(med.Days)) {
-                    var messageWindow = new MessageWindow(med.Id + "的給藥日份不可為空",MessageType.ERROR, true);
-                    messageWindow.ShowDialog();
-                    return;
+                CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
+
+                var medDays = 0;
+                foreach (var med in CurrentPrescription.Medicines)
+                {
+                    if (string.IsNullOrEmpty(med.Days))
+                    {
+                        var messageWindow = new MessageWindow(med.Id + "的給藥日份不可為空", MessageType.ERROR, true);
+                        messageWindow.ShowDialog();
+                        return;
+                    }
+                    if (int.Parse(med.Days) > medDays)
+                        medDays = int.Parse(med.Days);
                 }
-                if (int.Parse(med.Days) > medDays)
-                    medDays = int.Parse(med.Days);
+                CurrentPrescription.Treatment.MedicineDays = medDays.ToString();
             }
 
-            CurrentPrescription.Treatment.MedicineDays = medDays.ToString();
             if (CurrentPrescription.EList.Error.Count == 0)
             {
                 InsertPrescription();
@@ -276,7 +282,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public void InsertPrescription()
+        private void InsertPrescription()
         {
             MessageWindow m;
             _currentDeclareData = new DeclareData(CurrentPrescription);
@@ -286,25 +292,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             switch (CurrentPrescription.Treatment.MedicalInfo.Hospital.Id)
             {
                 case "3532016964":
-                    medEntryName = "骨科調劑耗用";
-                    medServiceName = "骨科藥服費";
-                    break;
                 case "3532052317":
-                    medEntryName = "骨科調劑耗用";
-                    medServiceName = "骨科藥服費";
-                    break;
                 case "3532071956":
-                    medEntryName = "骨科調劑耗用";
-                    medServiceName = "骨科藥服費";
-                    break;
-                case "351064573":
-                    medEntryName = "骨科調劑耗用";
-                    medServiceName = "骨科藥服費";
-                    break;
                 case "3531066077":
-                    medEntryName = "骨科調劑耗用";
-                    medServiceName = "骨科藥服費";
-                    break;
                 case "3532082253":
                     medEntryName = "骨科調劑耗用";
                     medServiceName = "骨科藥服費";
@@ -315,7 +305,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break;
             }
 
-            var declareTrade = new DeclareTrade(CurrentPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金");
+            var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             string decMasId;
             if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(_currentDecMasId) && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
             {  //一般處方
@@ -338,7 +328,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(_currentDecMasId))
             { //第2次以後的慢性處方
-
                 if (IsSendToServer.IsChecked != null && (bool)IsSendToServer.IsChecked)//選擇傳送藥健康
                 {
                     var chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription.Medicines);
@@ -897,6 +886,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             var t1 = new Thread(CheckIcCardStatus);
             SetCardStatusContent("卡片檢查中...");
+            if (!ByPing())
+            {
+                CurrentPrescription.IsGetIcCard = false;
+                SetCardStatusContent("網路連線異常");
+                return;
+            }
             t1.Start();
             if (t1.Join(8000))
             {
@@ -914,10 +909,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 else
                 {
                     if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
-                        string.IsNullOrEmpty(PatientId.Text))
+                        string.IsNullOrEmpty(PatientId.Text) && !(bool)NotDeclare.IsChecked)
                     {
                         var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料", MessageType.WARNING, true);
                         m.ShowDialog();
+                    }
+                    else if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
+                             string.IsNullOrEmpty(PatientId.Text) && (bool) NotDeclare.IsChecked)
+                    {
+                        CurrentPrescription.Customer.Id = "0";
+                        CurrentPrescription.Customer.Name = "匿名";
                     }
                     else
                     {
@@ -1529,6 +1530,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 menuitem.Header = "申報不扣庫";
             else
                 menuitem.Header = "申報扣庫";
+        }
+        public bool ByPing()
+        {
+            IPAddress tIP = IPAddress.Parse("10.252.141.53");
+            Ping tPingControl = new Ping();
+            PingReply tReply = tPingControl.Send(tIP);
+            tPingControl.Dispose();
+            if (tReply.Status != IPStatus.Success)
+                return false;
+            else
+                return true;
         }
     }
 }

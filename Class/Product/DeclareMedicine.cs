@@ -16,20 +16,22 @@ namespace His_Pos.Class.Product
     {
         public DeclareMedicine()
         {
-            HcPrice = "";
-            Ingredient = "";
+            HcPrice = string.Empty;
+            Ingredient = string.Empty;
             MedicalCategory = new Medicate();
             Cost = 0;
             Price = 0;
             TotalPrice = 0;
             Amount = 0;
-            CountStatus = "";
-            FocusColumn = "";
+            CountStatus = string.Empty;
+            FocusColumn = string.Empty;
             Usage = new Usage();
-            days = "";
-            Position = "";
+            days = string.Empty;
+            Position = string.Empty;
             IsBuckle = true;
-            source = "";
+            source = string.Empty;
+            SideEffect = string.Empty;
+            Indication = string.Empty;
         }
 
         public DeclareMedicine(DataRow dataRow,string type) : base(dataRow)
@@ -98,12 +100,12 @@ namespace His_Pos.Class.Product
 
         public bool PaySelf
         {
-            get { return payself; }
+            get => payself;
             set
             {
                 payself = value;
                 CalculateTotalPrice();
-                NotifyPropertyChanged("PaySelf");
+                NotifyPropertyChanged(nameof(PaySelf));
             }
         }
 
@@ -116,7 +118,7 @@ namespace His_Pos.Class.Product
 
         public double Price
         {
-            get { return price; }
+            get => price;
             set
             {
                 price = value;
@@ -128,24 +130,24 @@ namespace His_Pos.Class.Product
 
         public double TotalPrice
         {
-            get { return totalPrice; }
+            get => totalPrice;
             set
             {
                 totalPrice = value;
-                NotifyPropertyChanged("TotalPrice");
+                NotifyPropertyChanged(nameof(TotalPrice));
             }
         }
 
-        public double amount;
+        private double amount;
 
         public double Amount
         {
-            get { return amount; }
+            get => amount;
             set
             {
                 amount = value;
                 CalculateTotalPrice();
-                NotifyPropertyChanged("Amount");
+                NotifyPropertyChanged(nameof(Amount));
             }
         }
 
@@ -153,36 +155,26 @@ namespace His_Pos.Class.Product
         public string FocusColumn { get; set; }
         public Usage Usage { get; set; }
 
-    public string UsageName
+        public string UsageName
         {
-            get
-            {
-                if (Usage != null)
-                    return Usage.Name;
-                return "";
-            }
+            get => Usage != null ? Usage.Name : string.Empty;
             set
             {
                 Usage.Name = value;
                 CalculateAmount();
-                NotifyPropertyChanged("UsageName");
+                NotifyPropertyChanged(nameof(UsageName));
             }
         }
 
         public string Dosage
         {
-            get
-            {
-                if (MedicalCategory != null)
-                    return MedicalCategory.Dosage;
-                return "";
-            }
+            get => MedicalCategory != null ? MedicalCategory.Dosage : string.Empty;
             set
             {
                 MedicalCategory.Dosage = value;
                 if (double.TryParse(value, out _))
                     CalculateAmount();
-                NotifyPropertyChanged("Dosage");
+                NotifyPropertyChanged(nameof(Dosage));
             }
         }
 
@@ -190,13 +182,13 @@ namespace His_Pos.Class.Product
 
         public string Days
         {
-            get { return days; }
+            get => days;
             set
             {
                 days = value;
                 if (int.TryParse(value, out _))
                     CalculateAmount();
-                NotifyPropertyChanged("Days");
+                NotifyPropertyChanged(nameof(Days));
             }
         }
 
@@ -204,11 +196,35 @@ namespace His_Pos.Class.Product
 
         public string Position
         {
-            get { return position; }
+            get => position;
             set
             {
                 position = value;
-                NotifyPropertyChanged("Position");
+                NotifyPropertyChanged(nameof(Position));
+            }
+        }
+
+        private string sideEffect;
+
+        public string SideEffect
+        {
+            get => sideEffect;
+            set
+            {
+                sideEffect = value;
+                NotifyPropertyChanged(nameof(SideEffect));
+            }
+        }
+
+        private string indication;
+
+        public string Indication
+        {
+            get => indication;
+            set
+            {
+                indication = value;
+                NotifyPropertyChanged(nameof(Indication));
             }
         }
 
@@ -221,7 +237,7 @@ namespace His_Pos.Class.Product
 
         public string Source
         {
-            get { return source; }
+            get => source;
             set
             {
                 source = value;
@@ -250,7 +266,7 @@ namespace His_Pos.Class.Product
             if(MedicalCategory.Form.Equals(""))
             foreach (var usage in UsageDb.GetUsages())
             {
-                Regex reg = new Regex(usage.Reg);
+                var reg = new Regex(usage.Reg);
                 if (reg.IsMatch(UsageName))
                 {
                     if (!string.IsNullOrEmpty(Days) && !string.IsNullOrEmpty(UsageName))
@@ -267,7 +283,7 @@ namespace His_Pos.Class.Product
 
         public object Clone()
         {
-            DeclareMedicine declareMedicine = new DeclareMedicine()
+            var declareMedicine = new DeclareMedicine()
             {
                 Id = Id,
                 Name = Name,
