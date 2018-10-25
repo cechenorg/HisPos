@@ -26,6 +26,7 @@ namespace His_Pos.Class.Declare
                 MedicalOrder = "1";
             else
                 MedicalOrder = "4";
+            PaySelf = medicine.PaySelf;
             SetMedicine(medicine);
             SetMedicate(medicine);
             Sequence = sequence;
@@ -76,6 +77,7 @@ namespace His_Pos.Class.Declare
             StartDate = declareDetail.StartDate;
             EndDate = declareDetail.EndDate;
             Form = declareDetail.Form;
+            PaySelf = PaySelf;
         }
        
         public string MedicalOrder { get; set; }//p1
@@ -94,6 +96,8 @@ namespace His_Pos.Class.Declare
         public string MedicalPersonnelIcNumber { get; set; }//p14
         public string Form { get; set; }
         public string Name { get; set; }
+        public bool PaySelf { get; set; }
+
 
         private void SetMedicate(DeclareMedicine medicine)
         {
@@ -123,11 +127,16 @@ namespace His_Pos.Class.Declare
 
         private void CountPoint()//p9
         {
-            if (MedicalOrder == "1")
-                Point = Price * Total;
+            if (PaySelf)
+                Point = 0;
             else
             {
-                Point = Price * Total * Percent;
+                if (MedicalOrder == "1")
+                    Point = Price * Total;
+                else
+                {
+                    Point = Price * Total * Percent;
+                }
             }
         }
         public object Clone()

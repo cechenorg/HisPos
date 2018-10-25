@@ -344,10 +344,10 @@
                         <RadioButton Tag="1" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="交易" FontFamily="Segoe UI Semibold" FontSize="16" Checked="RadioButton_Checked" />
                         <Image Width="18" Source="/Images/OrangeDot.png" />
                         <RadioButton Tag="0" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="調劑" FontFamily="Segoe UI Semibold" FontSize="16" Checked="RadioButton_Checked" />
-                        <Image Width="18" Source="/Images/HisDot.png" />
+                        <Image Width="18" Source="/Images/DarkerHisDot.png" />
                         <RadioButton Tag="2" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="全部顯示" FontFamily="Segoe UI Semibold" 
                                      FontSize="16" IsChecked="True" Checked="RadioButton_Checked" />
-                        <Image Width="27" Margin="0,0,15,0" Source="/Images/PosHisDot.png" />
+                        <Image Width="27" Margin="0,0,15,0" Source="/Images/OrangeLightBlueDot.png" />
                     </StackPanel>
                     <DataGrid x:Name="CusHistoryMaster" Grid.Row="1" AutoGenerateColumns="False" Background="Transparent" CellStyle="{StaticResource DataGridCellStyle}" 
                               ColumnHeaderStyle="{DynamicResource CenterGridHeaderStyle}" DataContext="{Binding CustomerHistoryMaster}" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" MouseEnter="Prescription_MouseEnter" SelectionChanged="Prescription_SelectionChanged">
@@ -446,12 +446,12 @@
                         <Label Width="90" Height="35" HorizontalContentAlignment="Center" Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     </StackPanel>
                     <StackPanel Grid.Row="3" Grid.RowSpan="2" Margin="8" Orientation="Vertical">
-                        <CheckBox Name="IsSendToServer" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"  />
-                        <CheckBox Name="NotDeclare" IsEnabled="False" Content="自費調劑"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"  IsChecked="False"/>
+                        <CheckBox Name="IsSendToServer" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Margin="8" Orientation="Horizontal">
                         <Button Width="125" Background="{StaticResource Shadow}" BorderThickness="0" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" />
-                        <Button Width="180" Name="ButtonSubmmit" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" Click="Submit_ButtonClick" Content="自行調劑" FontFamily="Segoe UI Semibold" FontSize="16" />
+                        <Button Width="180" Name="DeclareSubmit" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" Click="Submit_ButtonClick" Content="調劑" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                        <Button Width="180" Name="NotDeclareSubmit" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" Click="Submit_ButtonClick" Content="自費調劑" FontFamily="Segoe UI Semibold" FontSize="16" Visibility="Collapsed"/>
                     </StackPanel>
                 </Grid>
             </Grid>

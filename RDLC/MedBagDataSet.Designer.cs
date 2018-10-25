@@ -285,7 +285,19 @@ namespace His_Pos.RDLC {
             
             private global::System.Data.DataColumn columnIngredient;
             
-            private global::System.Data.DataColumn columnDataColumn1;
+            private global::System.Data.DataColumn columnSideEffect;
+            
+            private global::System.Data.DataColumn columnIndication;
+            
+            private global::System.Data.DataColumn columnPosition;
+            
+            private global::System.Data.DataColumn columnMedicineDays;
+            
+            private global::System.Data.DataColumn columnTotal;
+            
+            private global::System.Data.DataColumn columnDosage;
+            
+            private global::System.Data.DataColumn columnUsage;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
@@ -346,9 +358,57 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public global::System.Data.DataColumn DataColumn1Column {
+            public global::System.Data.DataColumn SideEffectColumn {
                 get {
-                    return this.columnDataColumn1;
+                    return this.columnSideEffect;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn IndicationColumn {
+                get {
+                    return this.columnIndication;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn PositionColumn {
+                get {
+                    return this.columnPosition;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn MedicineDaysColumn {
+                get {
+                    return this.columnMedicineDays;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn TotalColumn {
+                get {
+                    return this.columnTotal;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn DosageColumn {
+                get {
+                    return this.columnDosage;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public global::System.Data.DataColumn UsageColumn {
+                get {
+                    return this.columnUsage;
                 }
             }
             
@@ -389,13 +449,19 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public MedicineRow AddMedicineRow(string Id, string Name, string Ingredient, string DataColumn1) {
+            public MedicineRow AddMedicineRow(string Id, string Name, string Ingredient, string SideEffect, string Indication, string Position, string MedicineDays, string Total, string Dosage, string Usage) {
                 MedicineRow rowMedicineRow = ((MedicineRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Id,
                         Name,
                         Ingredient,
-                        DataColumn1};
+                        SideEffect,
+                        Indication,
+                        Position,
+                        MedicineDays,
+                        Total,
+                        Dosage,
+                        Usage};
                 rowMedicineRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowMedicineRow);
                 return rowMedicineRow;
@@ -421,7 +487,13 @@ namespace His_Pos.RDLC {
                 this.columnId = base.Columns["Id"];
                 this.columnName = base.Columns["Name"];
                 this.columnIngredient = base.Columns["Ingredient"];
-                this.columnDataColumn1 = base.Columns["DataColumn1"];
+                this.columnSideEffect = base.Columns["SideEffect"];
+                this.columnIndication = base.Columns["Indication"];
+                this.columnPosition = base.Columns["Position"];
+                this.columnMedicineDays = base.Columns["MedicineDays"];
+                this.columnTotal = base.Columns["Total"];
+                this.columnDosage = base.Columns["Dosage"];
+                this.columnUsage = base.Columns["Usage"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -433,8 +505,20 @@ namespace His_Pos.RDLC {
                 base.Columns.Add(this.columnName);
                 this.columnIngredient = new global::System.Data.DataColumn("Ingredient", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnIngredient);
-                this.columnDataColumn1 = new global::System.Data.DataColumn("DataColumn1", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnDataColumn1);
+                this.columnSideEffect = new global::System.Data.DataColumn("SideEffect", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSideEffect);
+                this.columnIndication = new global::System.Data.DataColumn("Indication", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnIndication);
+                this.columnPosition = new global::System.Data.DataColumn("Position", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnPosition);
+                this.columnMedicineDays = new global::System.Data.DataColumn("MedicineDays", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnMedicineDays);
+                this.columnTotal = new global::System.Data.DataColumn("Total", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnTotal);
+                this.columnDosage = new global::System.Data.DataColumn("Dosage", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnDosage);
+                this.columnUsage = new global::System.Data.DataColumn("Usage", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnUsage);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -625,17 +709,113 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public string DataColumn1 {
+            public string SideEffect {
                 get {
                     try {
-                        return ((string)(this[this.tableMedicine.DataColumn1Column]));
+                        return ((string)(this[this.tableMedicine.SideEffectColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("資料表 \'Medicine\' 中資料行 \'DataColumn1\' 的值是 DBNull。", e);
+                        throw new global::System.Data.StrongTypingException("資料表 \'Medicine\' 中資料行 \'SideEffect\' 的值是 DBNull。", e);
                     }
                 }
                 set {
-                    this[this.tableMedicine.DataColumn1Column] = value;
+                    this[this.tableMedicine.SideEffectColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Indication {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicine.IndicationColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'Medicine\' 中資料行 \'Indication\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicine.IndicationColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Position {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicine.PositionColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'Medicine\' 中資料行 \'Position\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicine.PositionColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string MedicineDays {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicine.MedicineDaysColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'Medicine\' 中資料行 \'MedicineDays\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicine.MedicineDaysColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Total {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicine.TotalColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'Medicine\' 中資料行 \'Total\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicine.TotalColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Dosage {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicine.DosageColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'Medicine\' 中資料行 \'Dosage\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicine.DosageColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public string Usage {
+                get {
+                    try {
+                        return ((string)(this[this.tableMedicine.UsageColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("資料表 \'Medicine\' 中資料行 \'Usage\' 的值是 DBNull。", e);
+                    }
+                }
+                set {
+                    this[this.tableMedicine.UsageColumn] = value;
                 }
             }
             
@@ -677,14 +857,86 @@ namespace His_Pos.RDLC {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public bool IsDataColumn1Null() {
-                return this.IsNull(this.tableMedicine.DataColumn1Column);
+            public bool IsSideEffectNull() {
+                return this.IsNull(this.tableMedicine.SideEffectColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
-            public void SetDataColumn1Null() {
-                this[this.tableMedicine.DataColumn1Column] = global::System.Convert.DBNull;
+            public void SetSideEffectNull() {
+                this[this.tableMedicine.SideEffectColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsIndicationNull() {
+                return this.IsNull(this.tableMedicine.IndicationColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetIndicationNull() {
+                this[this.tableMedicine.IndicationColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsPositionNull() {
+                return this.IsNull(this.tableMedicine.PositionColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetPositionNull() {
+                this[this.tableMedicine.PositionColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsMedicineDaysNull() {
+                return this.IsNull(this.tableMedicine.MedicineDaysColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetMedicineDaysNull() {
+                this[this.tableMedicine.MedicineDaysColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsTotalNull() {
+                return this.IsNull(this.tableMedicine.TotalColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetTotalNull() {
+                this[this.tableMedicine.TotalColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsDosageNull() {
+                return this.IsNull(this.tableMedicine.DosageColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetDosageNull() {
+                this[this.tableMedicine.DosageColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public bool IsUsageNull() {
+                return this.IsNull(this.tableMedicine.UsageColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "15.0.0.0")]
+            public void SetUsageNull() {
+                this[this.tableMedicine.UsageColumn] = global::System.Convert.DBNull;
             }
         }
         

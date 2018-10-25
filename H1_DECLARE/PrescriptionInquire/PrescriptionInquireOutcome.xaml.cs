@@ -115,7 +115,7 @@ namespace His_Pos.PrescriptionInquire
             set
             {
                 _inquiredPrescription = value;
-                PatientGender.Content = _inquiredPrescription.Prescription.Customer.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
+                PatientGender.Content = _inquiredPrescription.Customer.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
                 NotifyPropertyChanged(nameof(InquiredPrescription));
             }
         }
@@ -139,7 +139,7 @@ namespace His_Pos.PrescriptionInquire
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             _decMasId = inquired.DecMasId;
             InquiredPrescription = inquired;
-            foreach (var newDeclareDetail in InquiredPrescription.Prescription.Medicines) {
+            foreach (var newDeclareDetail in InquiredPrescription.Medicines) {
                 var declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
                 DeclareDetails.Add(declareDetailClone);
             }
@@ -182,44 +182,44 @@ namespace His_Pos.PrescriptionInquire
             HospitalCollection = PrescriptionInquireView.Instance.HospitalCollection;
             DeclareMedicinesData = PrescriptionInquireView.Instance.DeclareMedicinesData;
             SetTreatmentData();
-            InquiredPrescription.Prescription.Treatment.Copayment = CopaymentCollection.SingleOrDefault(c =>
-                c.Id.Equals(InquiredPrescription.Prescription.Treatment.Copayment.Id));
+            InquiredPrescription.Treatment.Copayment = CopaymentCollection.SingleOrDefault(c =>
+                c.Id.Equals(InquiredPrescription.Treatment.Copayment.Id));
             loadingWindow.Close();
         }
 
         private void SetTreatmentData()
         {
-            var doctor = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Doctor;
+            var doctor = InquiredPrescription.Treatment.MedicalInfo.Hospital.Doctor;
 
             var tmpHospital = HospitalCollection.SingleOrDefault(h =>
-                h.Id.Equals(InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Id));
+                h.Id.Equals(InquiredPrescription.Treatment.MedicalInfo.Hospital.Id));
 
-            var tmpDivision = DivisionCollection.SingleOrDefault(d => d.Id.Equals(InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.Id));
+            var tmpDivision = DivisionCollection.SingleOrDefault(d => d.Id.Equals(InquiredPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
             if (tmpHospital != null)
             {
                 tmpHospital.Division = tmpDivision;
                 tmpHospital.Doctor = doctor;
-                InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital = tmpHospital;
+                InquiredPrescription.Treatment.MedicalInfo.Hospital = tmpHospital;
             }
 
             var tmpCopayment = CopaymentCollection.SingleOrDefault(c =>
-                c.Id.Equals(InquiredPrescription.Prescription.Treatment.Copayment.Id));
+                c.Id.Equals(InquiredPrescription.Treatment.Copayment.Id));
 
             if (tmpCopayment != null)
             {
-                tmpCopayment.Point = InquiredPrescription.Prescription.Treatment.Copayment.Point;
-                InquiredPrescription.Prescription.Treatment.Copayment = tmpCopayment;
+                tmpCopayment.Point = InquiredPrescription.Treatment.Copayment.Point;
+                InquiredPrescription.Treatment.Copayment = tmpCopayment;
             }
 
-            InquiredPrescription.Prescription.Treatment.AdjustCase = AdjustCaseCollection.SingleOrDefault(a =>
-                a.Id.Equals(InquiredPrescription.Prescription.Treatment.AdjustCase.Id));
+            InquiredPrescription.Treatment.AdjustCase = AdjustCaseCollection.SingleOrDefault(a =>
+                a.Id.Equals(InquiredPrescription.Treatment.AdjustCase.Id));
 
-            InquiredPrescription.Prescription.Treatment.PaymentCategory = PaymentCategoryCollection.SingleOrDefault(p =>
-                p.Id.Equals(InquiredPrescription.Prescription.Treatment.PaymentCategory.Id));
+            InquiredPrescription.Treatment.PaymentCategory = PaymentCategoryCollection.SingleOrDefault(p =>
+                p.Id.Equals(InquiredPrescription.Treatment.PaymentCategory.Id));
 
-            InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase =
+            InquiredPrescription.Treatment.MedicalInfo.TreatmentCase =
                 TreatmentCaseCollection.SingleOrDefault(t =>
-                    t.Id.Equals(InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.Id));
+                    t.Id.Equals(InquiredPrescription.Treatment.MedicalInfo.TreatmentCase.Id));
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
@@ -402,7 +402,7 @@ namespace His_Pos.PrescriptionInquire
                         break;
 
                     case "Position":
-                        if (!InquiredPrescription.Prescription.Medicines[currentRowIndex].PaySelf)
+                        if (!InquiredPrescription.Medicines[currentRowIndex].PaySelf)
                         {
                             NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
                             NewFunction.FindChildGroup(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
@@ -511,14 +511,14 @@ namespace His_Pos.PrescriptionInquire
         private void ButtonImportXml_Click(object sender, RoutedEventArgs e)
         {
             MessageWindow m;
-            InquiredPrescription.Prescription.Medicines = DeclareDetails;
-            InquiredPrescription.Prescription.EList.Error = new List<Error>();
-            InquiredPrescription.Prescription.EList.Error.Clear();
-            InquiredPrescription.Prescription.EList.Error = InquiredPrescription.Prescription.CheckPrescriptionData();
+            InquiredPrescription.Medicines = DeclareDetails;
+            InquiredPrescription.EList.Error = new List<Error>();
+            InquiredPrescription.EList.Error.Clear();
+            InquiredPrescription.EList.Error = InquiredPrescription.CheckPrescriptionData();
 
-            if (InquiredPrescription.Prescription.CheckPrescriptionData().Count == 0)
+            if (InquiredPrescription.CheckPrescriptionData().Count == 0)
             {
-                _currentDeclareData = new DeclareData(InquiredPrescription.Prescription);
+                _currentDeclareData = new DeclareData(InquiredPrescription);
                 _currentDeclareData.DecMasId = InquiredPrescription.DecMasId;
                 
                 var declareDb = new DeclareDb();
@@ -529,7 +529,7 @@ namespace His_Pos.PrescriptionInquire
                 //Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
                 //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
                
-                //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Prescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
+                //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
                 declareDb.UpdateDeclareData(_currentDeclareData);
                 m = new MessageWindow("處方修改成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
@@ -540,7 +540,7 @@ namespace His_Pos.PrescriptionInquire
             else
             {
                 var errorMessage = "處方資料錯誤 : \n";
-                foreach (var error in InquiredPrescription.Prescription.EList.Error)
+                foreach (var error in InquiredPrescription.EList.Error)
                 {
                     errorMessage += error.Content + "\n";
                 }
@@ -559,16 +559,16 @@ namespace His_Pos.PrescriptionInquire
         {
             InquiredPrescription = PrescriptionDB.GetDeclareDataById(_decMasId);
 
-          ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
-          Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
-          CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
-          PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
-          AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
-          TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+          ReleasePalace.Text = InquiredPrescription.Treatment.MedicalInfo.Hospital.FullName;
+          Division.Text = InquiredPrescription.Treatment.MedicalInfo.Hospital.Division.FullName;
+          CopaymentCode.Text = InquiredPrescription.Treatment.Copayment.FullName;
+          PaymentCategory.Text = InquiredPrescription.Treatment.PaymentCategory.FullName;
+          AdjustCase.Text = InquiredPrescription.Treatment.AdjustCase.FullName;
+          TreatmentCase.Text = InquiredPrescription.Treatment.MedicalInfo.TreatmentCase.FullName;
 
 
             DeclareDetails.Clear();
-            foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines)
+            foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Medicines)
             {
                 DeclareMedicine declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
                 DeclareDetails.Add(declareDetailClone);
@@ -590,7 +590,7 @@ namespace His_Pos.PrescriptionInquire
 
         private void MakeUp_ButtonClick(object sender, RoutedEventArgs e)
         {
-            if(!InquiredPrescription.Prescription.IsGetIcCard)
+            if(!InquiredPrescription.IsGetIcCard)
                 LogInIcData();
         }
 
@@ -606,7 +606,7 @@ namespace His_Pos.PrescriptionInquire
             if (res == 0)
             {
                 icData.CopyTo(basicDataArr, 0);
-                InquiredPrescription.Prescription.IsGetIcCard = true;
+                InquiredPrescription.IsGetIcCard = true;
                 var cusBasicData = new BasicData(icData);
                 ////取得就醫紀錄
                 strLength = 498;
@@ -636,9 +636,9 @@ namespace His_Pos.PrescriptionInquire
                 if (res == 0)
                 {
                     var seq = new SeqNumber(icData);
-                    InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = seq.MedicalNumber;
+                    InquiredPrescription.Customer.IcCard.MedicalNumber = seq.MedicalNumber;
                     var icPrescripList = new List<IcPrescriptData>();
-                    foreach (var med in InquiredPrescription.Prescription.Medicines)
+                    foreach (var med in InquiredPrescription.Medicines)
                     {
                         icPrescripList.Add(new IcPrescriptData(med));
                     }
@@ -676,12 +676,12 @@ namespace His_Pos.PrescriptionInquire
         private void CreatIcUploadData(BasicData cusBasicData,SeqNumber seq, List<string> prescriptionSignatureList)
         {
             var medicalDatas = new List<MedicalData>();
-            var icData = new IcData(seq, InquiredPrescription.Prescription, cusBasicData, _currentDeclareData);
+            var icData = new IcData(seq, InquiredPrescription, cusBasicData, _currentDeclareData);
             var mainMessage = new MainMessage(icData);
             var headerMessage = new Header { DataFormat = "1" };
             var icRecord = new IcRecord(headerMessage, mainMessage);
 
-            for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
+            for (var i = 0; i < InquiredPrescription.Medicines.Count; i++)
             {
                 if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
                     continue;

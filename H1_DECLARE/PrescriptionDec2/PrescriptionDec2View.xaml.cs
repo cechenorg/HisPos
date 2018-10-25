@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -226,6 +227,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             Deposit = 0;
             Pay = 0;
             Change = 0;
+            SetCardStatusContent(MainWindow.CardReaderStatus);
         }
         private void GetPrescriptionData()
         {
@@ -243,24 +245,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             IsBone = false;
             ErrorMssageWindow err;
             CurrentPrescription.EList.Error = new List<Error>();
-            if (NotDeclare.IsChecked != null && !(bool) NotDeclare.IsChecked)
-            {
-                CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
+            CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
 
-                var medDays = 0;
-                foreach (var med in CurrentPrescription.Medicines)
+            var medDays = 0;
+            foreach (var med in CurrentPrescription.Medicines)
+            {
+                if (string.IsNullOrEmpty(med.Days))
                 {
-                    if (string.IsNullOrEmpty(med.Days))
-                    {
-                        var messageWindow = new MessageWindow(med.Id + "的給藥日份不可為空", MessageType.ERROR, true);
-                        messageWindow.ShowDialog();
-                        return;
-                    }
-                    if (int.Parse(med.Days) > medDays)
-                        medDays = int.Parse(med.Days);
+                    var messageWindow = new MessageWindow(med.Id + "的給藥日份不可為空", MessageType.ERROR, true);
+                    messageWindow.ShowDialog();
+                    return;
                 }
-                CurrentPrescription.Treatment.MedicineDays = medDays.ToString();
+                if (int.Parse(med.Days) > medDays)
+                    medDays = int.Parse(med.Days);
             }
+            CurrentPrescription.Treatment.MedicineDays = medDays.ToString();
 
             if (CurrentPrescription.EList.Error.Count == 0)
             {
@@ -308,7 +307,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             string decMasId;
             if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(_currentDecMasId) && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
-            {  //一般處方
+            {//一般處方
                 decMasId = declareDb.InsertDeclareData(_currentDeclareData);
 
                 ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", decMasId);
@@ -318,7 +317,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (medEntryName != "骨科調劑耗用")
                 {
                     var medTotalPrice = 0;
-                    foreach (DeclareMedicine med in _currentDeclareData.Prescription.Medicines)
+                    foreach (var med in _currentDeclareData.Prescription.Medicines)
                     {
                         medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
                     }
@@ -327,7 +326,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
             }
             else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(_currentDecMasId))
-            { //第2次以後的慢性處方
+            {//第2次以後的慢性處方
                 if (IsSendToServer.IsChecked != null && (bool)IsSendToServer.IsChecked)//選擇傳送藥健康
                 {
                     var chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription.Medicines);
@@ -340,7 +339,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     //送到singde
                     StoreOrderDb.SendDeclareOrderToSingde(_currentDecMasId, storId, _currentDeclareData, declareTrade, PrescriptionSendData);
                 }
-                if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                if (DeclareSubmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                 {
                     ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                     ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
@@ -348,7 +347,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _currentDecMasId);
                     if (medEntryName != "骨科調劑耗用")
                     {
-                        int medTotalPrice = 0;
+                        var medTotalPrice = 0;
                         foreach (var med in _currentDeclareData.Prescription.Medicines)
                         {
                             medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
@@ -359,14 +358,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
 
                 _currentDeclareData.DecMasId = _currentDecMasId;
-                declareDb.UpdateDeclareData(_currentDeclareData); //更新慢箋
+                declareDb.UpdateDeclareData(_currentDeclareData);//更新慢箋
                 ChronicDb.UpdateChronicData(_currentDecMasId);//重算預約慢箋 
-                if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal && ButtonSubmmit.Content.ToString() == "調劑")
-                {  //若為最後一次 則再算出下一批慢性
+                if (CurrentPrescription.ChronicSequence == CurrentPrescription.ChronicTotal && DeclareSubmit.Content.ToString() == "調劑")
+                {//若為最後一次 則再算出下一批慢性
                     declareDb.SetNewGroupChronic(_currentDecMasId);
                 }
             }
-            else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && string.IsNullOrEmpty(_currentDecMasId)) //第1次的新慢性處方
+            else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && string.IsNullOrEmpty(_currentDecMasId))//第1次的新慢性處方
             {
                 if (IsSendToServer.IsChecked != null && (bool)IsSendToServer.IsChecked)
                 {
@@ -382,7 +381,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     StoreOrderDb.SendDeclareOrderToSingde(decMasId, storId, _currentDeclareData, declareTrade, PrescriptionSendData);
                 }
 
-                if (ButtonSubmmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                if (DeclareSubmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
                 {
                     ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                     ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
@@ -392,14 +391,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     {
                         var medTotalPrice = 0;
                         foreach (var med in _currentDeclareData.Prescription.Medicines)
-                        {
                             medTotalPrice += Convert.ToInt32(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
-                        }
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", decMasId);
-                        declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", decMasId);//庫存扣庫    
+                        declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", decMasId);//庫存扣庫
                     }
                 }
-                if (IsBone) //如果來自骨科 刪除預約慢箋
+                if (IsBone)//如果來自骨科 刪除預約慢箋
                     declareDb.CheckPredictChronicExist(_currentDecMasId);
 
                 var start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
@@ -567,14 +564,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void PrintMedBag()
         {
-            var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
-            var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
+            //var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
+            //var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
             //File.WriteAllText(ReportService.ReportPath, string.Empty);
             //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
-            for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
-            {
-                ReportService.CreatePdf(defaultMedBag,i);
-            }
+            //for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            //{
+            //    ReportService.CreatePdf(defaultMedBag,i);
+            //}
         }
 
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
@@ -886,12 +883,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             var t1 = new Thread(CheckIcCardStatus);
             SetCardStatusContent("卡片檢查中...");
-            if (!ByPing())
-            {
-                CurrentPrescription.IsGetIcCard = false;
-                SetCardStatusContent("網路連線異常");
-                return;
-            }
             t1.Start();
             if (t1.Join(8000))
             {
@@ -907,15 +898,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     }
                 }
                 else
-                {
+                { 
                     if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
-                        string.IsNullOrEmpty(PatientId.Text) && !(bool)NotDeclare.IsChecked)
+                        string.IsNullOrEmpty(PatientId.Text) && CurrentPrescription.Treatment.AdjustCase.Id != "0")
                     {
-                        var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料", MessageType.WARNING, true);
+                        var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料，或選擇自費調劑", MessageType.WARNING, true);
                         m.ShowDialog();
                     }
                     else if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
-                             string.IsNullOrEmpty(PatientId.Text) && (bool) NotDeclare.IsChecked)
+                             string.IsNullOrEmpty(PatientId.Text) && CurrentPrescription.Treatment.AdjustCase.Id == "0")
                     {
                         CurrentPrescription.Customer.Id = "0";
                         CurrentPrescription.Customer.Name = "匿名";
@@ -943,7 +934,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
                        string.IsNullOrEmpty(PatientId.Text))
                 {
-                    var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料",MessageType.WARNING, true);
+                    var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料，或選擇自費調劑", MessageType.WARNING, true);
                     m.Show();
                     return;
                 }
@@ -971,30 +962,36 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void CheckIcCardStatus()
         {
             var cardStatus = HisApiBase.hisGetCardStatus(2);
-            if (cardStatus == 0 || cardStatus == 9 || cardStatus == 4000)
+            switch (cardStatus)
             {
-                CurrentPrescription.IsGetIcCard = false;
-                switch (cardStatus)
-                {
-                    case 0:
-                        SetCardStatusContent("卡片未置入");
-                        break;
-                    case 9:
-                        SetCardStatusContent("非健保卡");
-                        break;
-                    case 4000:
-                        SetCardStatusContent("讀卡機逾時");
-                        break;
-                    default:
-                        SetCardStatusContent("網路異常");
-                        break;
-                }
+                case 0:
+                    SetCardStatusContent("卡片未置入");
+                    break;
+                case 1:
+                    SetCardStatusContent("尚未與安全模組認證");
+                    break;
+                case 2:
+                    SetCardStatusContent("認證成功");
+                    break;
+                case 3:
+                    SetCardStatusContent("醫事人員卡認證成功");
+                    break;
+                case 4:
+                    SetCardStatusContent("PIN 認證成功");
+                    break;
+                case 5:
+                    SetCardStatusContent("健保局IDC認證成功 ");
+                    break;
+                case 9:
+                    SetCardStatusContent("非健保卡");
+                    break;
+                case 4000:
+                    SetCardStatusContent("讀卡機逾時");
+                    break;
             }
-            else
-            {
-                SetCardStatusContent("讀取中...");
+
+            if (cardStatus != 0 && cardStatus != 1 && cardStatus != 9 && cardStatus != 4000)
                 CurrentPrescription.IsGetIcCard = true;
-            }
         }
 
         public void SetCardStatusContent(string content)
@@ -1101,6 +1098,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void AdjustCaseCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if(AdjustCaseCombo.SelectedItem == null) return;
+            if (((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Equals("0"))
+            {
+                DeclareSubmit.Visibility = Visibility.Collapsed;
+                NotDeclareSubmit.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                DeclareSubmit.Visibility = Visibility.Visible;
+                NotDeclareSubmit.Visibility = Visibility.Collapsed;
+            }
             IsSendToServer.IsChecked = false;
             IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
@@ -1119,9 +1126,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void DatePickerTreatment_SelectionChanged(object sender, RoutedEventArgs e) { 
-
-            ButtonSubmmit.Content = DatePickerTreatment.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)  ? "調劑" : "預約慢箋";
+        private void DatePickerTreatment_SelectionChanged(object sender, RoutedEventArgs e) {
+            DeclareSubmit.Content = DatePickerTreatment.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)  ? "調劑" : "預約慢箋";
             IsSendToServer.IsChecked = false;
             if (AdjustCaseCombo.SelectedItem == null) return;
             IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
@@ -1149,12 +1155,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (sender is null) return;
-            if (e.Key != Key.Enter || !(sender is TextBox textBox)) return;
+            if (!(sender is TextBox textBox)) return;
+            if (e.Key != Key.Enter)
+            {
+                if (textBox.Text.Contains(" "))
+                    textBox.Text = string.Empty;
+                return;
+            }
             DependencyObject textBoxDependency = textBox;
 
             if (textBoxDependency.GetValue(NameProperty) is string  && textBoxDependency.GetValue(NameProperty).Equals("MainDiagnosis"))
             {
-                if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id))
+                if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id) && textBox.Text.Contains(" "))
                 {
                     SecondDiagnosis.Focus();
                     return;
@@ -1162,7 +1174,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else if(textBoxDependency.GetValue(NameProperty) is string && textBoxDependency.GetValue(NameProperty).Equals("SecondDiagnosis"))
             {
-                if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
+                if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id) && textBox.Text.Contains(" "))
                 {
                     PaymentCategoryCombo.Focus();
                     return;
@@ -1230,7 +1242,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DivisionCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (!(sender is ComboBox c)) return;
+            if (e.Key != Key.Enter)
+            {
+                if (c.Text.Contains(" "))
+                    c.Text = string.Empty;
+                return;
+            }
             if (c.SelectedItem != null)
             {
                 DoctorId.Focus();
@@ -1286,7 +1304,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void TreatmentCaseCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (!(sender is ComboBox c)) return;
+            if (e.Key != Key.Enter)
+            {
+                if (c.Text.Contains(" "))
+                    c.Text = string.Empty;
+                return;
+            }
             if (c.SelectedItem != null)
             {
                 MainDiagnosis.Focus();
@@ -1355,7 +1379,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void PaymentCategoryCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (!(sender is ComboBox c)) return;
+            if (e.Key != Key.Enter)
+            {
+                if (c.Text.Contains(" "))
+                    c.Text = string.Empty;
+                return;
+            }
             if (c.SelectedItem != null)
             {
                 CopaymentCombo.Focus();
@@ -1397,7 +1427,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void CopaymentCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (!(sender is ComboBox c)) return;
+            if (e.Key != Key.Enter)
+            {
+                if(c.Text.Contains(" "))
+                    c.Text = string.Empty;
+                return;
+            }
             if (c.SelectedItem != null)
             {
                 AdjustCaseCombo.Focus();
@@ -1439,7 +1475,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void AdjustCaseCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
+            if (!(sender is ComboBox c)) return;
+            if (e.Key != Key.Enter)
+            {
+                if(c.Text.Contains(" "))
+                    c.Text = string.Empty;
+                return;
+            }
             if (c.SelectedItem != null)
             {
                 if (CurrentPrescription.Treatment.AdjustCase.Id.Equals("2"))
@@ -1500,7 +1542,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             var nextAutoCompleteBox = new List<AutoCompleteBox>();
             if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
-            if (c.SelectedItem != null)
+            if ((c.SelectedItem != null && c.Text.Contains(" ")) || string.IsNullOrEmpty(c.Text))
             {
                 NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
                 nextAutoCompleteBox[0].Focus();
@@ -1508,7 +1550,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
             {
                 c.IsDropDownOpen = true;
-                if (c.Items.Count > 0)
+                if (c.SelectedIndex != -1)
+                    c.Text = string.Empty;
+                if (c.Items.Count > 0 && c.Text.Length > 1)
                     c.SelectedIndex = 0;
             }
         }

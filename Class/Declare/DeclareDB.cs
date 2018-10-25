@@ -249,9 +249,9 @@ namespace His_Pos.Class.Declare
         {
             var parameters = new List<SqlParameter>();
             var conn = new DbConnection(Settings.Default.SQL_global);
-            foreach (DeclareMedicine declareDetail in declareData.Prescription.Medicines)
+            foreach (var declareDetail in declareData.Prescription.Medicines)
             {
-                DeclareMedicine med = declareData.Prescription.Medicines.Single(medicine => medicine.Id == declareDetail.Id);
+                var med = declareData.Prescription.Medicines.Single(medicine => medicine.Id == declareDetail.Id);
                 if (!med.IsBuckle) continue;
                 parameters.Clear();
                 parameters.Add(new SqlParameter("MAS_ID", decMasId));
@@ -622,7 +622,6 @@ namespace His_Pos.Class.Declare
 
         private DataTable SetImportPDataTable()
         {
-
             var importPDataTable = new DataTable();
             importPDataTable.Columns.Add("DecMasId", typeof(string));
             importPDataTable.Columns.Add("P10", typeof(int));
@@ -648,6 +647,7 @@ namespace His_Pos.Class.Declare
             {
                 var row = pDataTable.NewRow();
                 var detail = declareData.DeclareDetails[i];
+                if (detail.PaySelf) continue;
                 detail.Usage = declareData.Prescription.Medicines == null
                     ? detail.Usage
                     : declareData.Prescription.Medicines[i].UsageName;
@@ -655,7 +655,7 @@ namespace His_Pos.Class.Declare
                     declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
                 //if (!String.IsNullOrEmpty(declareData.DecMasId))
                 //    row["DecMasId"] = declareData.DecMasId;
-                
+
 
                 var function = new Function();
                 row["P1"] = detail.MedicalOrder;
@@ -666,7 +666,7 @@ namespace His_Pos.Class.Declare
                 row["P6"] = function.ToInvCulture(detail.Percent);
                 row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                 row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                row["P9"] = function.SetStrFormatInt( Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
                 row["P10"] = detail.Sequence.ToString();
                 row["P11"] = detail.Days.ToString();
                 row["PAY_BY_YOURSELF"] = paySelf;
@@ -688,10 +688,16 @@ namespace His_Pos.Class.Declare
 
         private void AddDayPayCodePData(DeclareData declareData, DataTable pDataTable)
         {
+            var count = 0;
+            foreach (var d in declareData.DeclareDetails)
+            {
+                if(d.PaySelf) continue;
+                count++;
+            }
             var percent = CountAdditionPercent(declareData);
             var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             var detail = new DeclareDetail("1", declareData.DayPayCode, percent,
-                declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate,
+                declareData.MedicalServicePoint, count + 1, currentDate,
                 currentDate);
             var pData = pDataTable.NewRow();
             SetMedicalServiceCostDataRow(pData, declareData, detail);
@@ -822,6 +828,7 @@ namespace His_Pos.Class.Declare
             var dData = SetDheadXml(declareData);
             foreach (var detail in declareData.DeclareDetails)
             {
+                if(detail.PaySelf) continue;
                 dData += SetPDataXmlStr(detail, declareData);
             }
 
