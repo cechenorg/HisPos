@@ -869,7 +869,7 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("產生盤點單...");
-                CreatePdf(rptViewer);
+                CreatePdf(rptViewer,"StockChecking.pdf",21,29.7);
                 Dispatcher.Invoke((Action)(() =>
                 {
                     
@@ -885,12 +885,36 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-        private static void CreatePdf(ReportViewer viewer)
+
+        public void PrintMedbag(ReportViewer rptViewer, PrescriptionDec2View prescriptionDec2View)
+        {
+            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("藥袋列印中...");
+                CreatePdf(rptViewer,"Medbag.pdf",22,24);
+                Dispatcher.Invoke((Action)(() =>
+                {
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        private static void CreatePdf(ReportViewer viewer,string fileName,double width,double height)
         {
             var deviceInfo = "<DeviceInfo>" +
                              "  <OutputFormat>PDF</OutputFormat>" +
-                             "  <PageWidth>" + 21 + "cm</PageWidth>" +
-                             "  <PageHeight>" + 29.7 + "cm</PageHeight>" +
+                             "  <PageWidth>" + width + "cm</PageWidth>" +
+                             "  <PageHeight>" + height + "cm</PageHeight>" +
                              "  <MarginTop>0cm</MarginTop>" +
                              "  <MarginLeft>0cm</MarginLeft>" +
                              "  <MarginRight>0cm</MarginRight>" +
@@ -898,7 +922,7 @@ namespace His_Pos
                              "</DeviceInfo>";
             var bytes = viewer.LocalReport.Render("PDF", deviceInfo);
 
-            using (var fs = new FileStream("output.pdf", FileMode.Create))
+            using (var fs = new FileStream(fileName, FileMode.Create))
             {
                 fs.Write(bytes, 0, bytes.Length);
             }

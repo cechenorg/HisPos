@@ -193,8 +193,8 @@ namespace His_Pos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var t1 = new Thread(VerifySam);
-            t1.Start();
+            //var t1 = new Thread(VerifySam);
+            //t1.Start();
         }
 
         private void VerifySam()

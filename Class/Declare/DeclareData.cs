@@ -335,7 +335,7 @@ namespace His_Pos.Class.Declare
                 }
 
                 DeclareXml.Dbody.D24 = m.Hospital.Doctor.IcNumber;
-                DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode.Id;
+                DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode is null? string.Empty: t.MedicalInfo.SpecialCode.Id;
             }
 
             if (!string.IsNullOrEmpty(p.ChronicSequence))

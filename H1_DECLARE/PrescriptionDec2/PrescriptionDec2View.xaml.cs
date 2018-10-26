@@ -34,6 +34,8 @@ using His_Pos.Class.Person;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Struct.IcData;
+using Microsoft.Reporting.WinForms;
+using Newtonsoft.Json;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -234,7 +236,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DeclareMedicines = new ObservableCollection<DeclareMedicine>();
             TreatmentCases = new ObservableCollection<TreatmentCase>();
             var loadingWindow = new LoadingWindow();
-            loadingWindow.GetMedicinesData(this);
+            loadingWindow.GetMedicinesData(Instance);
             loadingWindow.Show();
         }
         #endregion
@@ -431,7 +433,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m.ShowDialog();
             }
             declareDb.UpdateDeclareFile(_currentDeclareData);
-            //PrintMedBag();
+            PrintMedBag();
         }
 
         #region 每日上傳.讀寫卡相關函數
@@ -561,7 +563,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             d.InsertDailyUpload(icRecord.SerializeObject());
         }
         #endregion
-
         private void PrintMedBag()
         {
             //var messageBoxResult = MessageBox.Show("是否列印一藥一袋?","藥袋列印模式", MessageBoxButton.YesNo);
@@ -572,6 +573,37 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             //{
             //    ReportService.CreatePdf(defaultMedBag,i);
             //}
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            var json = JsonConvert.SerializeObject(CurrentPrescription.Medicines);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            rptViewer.LocalReport.DataSources.Add(new ReportDataSource("MedicineDataSet", dataTable));
+            var parameters = new List<ReportParameter>
+            {
+                [0] = new ReportParameter("PharmacyName_Id", MainWindow.CurrentPharmacy.Name+"("+ MainWindow.CurrentPharmacy.Id+")"),
+                [1] = new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
+                [2] = new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
+                [3] = new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
+                [4] = new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
+                [5] = new ReportParameter("PatientGender_Birthday", CurrentPrescription.Customer.Gender?"男":"女" + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday,true)),
+                [6] = new ReportParameter("TreatmentDate", CurrentPrescription.Treatment.TreatDateStr),
+                [7] = new ReportParameter("Division", CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name),
+                [8] = new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
+                [9] = new ReportParameter("PaySelf", SelfCost.ToString()),
+                [10] = new ReportParameter("ServicePoint",_currentDeclareData.MedicalServicePoint.ToString()),
+                [11] = new ReportParameter("TotalPoint", _currentDeclareData.TotalPoint.ToString()),
+                [12] = new ReportParameter("CopaymentPoint", _currentDeclareData.CopaymentPoint.ToString()),
+                [13] = new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()),
+                [14] = new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString())
+            };
+
+            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.Refresh();
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.Show();
+            loadingWindow.PrintMedbag(rptViewer, Instance);
         }
 
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
@@ -1102,11 +1134,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 DeclareSubmit.Visibility = Visibility.Collapsed;
                 NotDeclareSubmit.Visibility = Visibility.Visible;
+                CurrentPrescription.Declare = false;
             }
             else
             {
                 DeclareSubmit.Visibility = Visibility.Visible;
                 NotDeclareSubmit.Visibility = Visibility.Collapsed;
+                CurrentPrescription.Declare = true;
             }
             IsSendToServer.IsChecked = false;
             IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);

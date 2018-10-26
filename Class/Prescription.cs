@@ -95,7 +95,7 @@ namespace His_Pos.Class
         public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
         public ErrorList EList = new ErrorList();
         private bool adjustCaseNull = false;
-
+        public bool Declare { get; set; }
         private List<Error> _errorMessage;
         public List<Error> CheckPrescriptionData()
         {

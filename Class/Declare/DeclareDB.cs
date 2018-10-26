@@ -49,6 +49,7 @@ namespace His_Pos.Class.Declare
                 Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
             });
             parameters.Add(new SqlParameter("HISDECMAS_GETCARD", declareData.Prescription.IsGetIcCard));
+            parameters.Add(new SqlParameter("HISDECMAS_DECLARE", declareData.Prescription.Declare));
             var conn = new DbConnection(Settings.Default.SQL_global);
             var table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId
@@ -356,7 +357,7 @@ namespace His_Pos.Class.Declare
                         {"D13", med.Hospital.Division.Id},
                         {"D22", med.TreatmentCase.Id},
                         {"D24", med.Hospital.Doctor.IcNumber},
-                        {"D26", med.SpecialCode.Id},
+                        {"D26", med.SpecialCode is null?string.Empty:med.SpecialCode.Id},
                         {"D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id}
                     };
             foreach (var tag in tagsDictionary)
