@@ -58,6 +58,7 @@ namespace His_Pos.ProductPurchase
                 {
                     MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR, true);
                     messageWindow.ShowDialog();
+                    ConfirmButtonClicked = true;
                     Close();
                 }
                 else if (SearchResult.Items.Count == 1)
@@ -67,7 +68,10 @@ namespace His_Pos.ProductPurchase
                     Close();
                 }
                 else
+                {
+                    SearchResult.SelectedIndex = 0;
                     ShowDialog();
+                }
             }
         }
         
@@ -150,6 +154,11 @@ namespace His_Pos.ProductPurchase
 
         private void ConfirmClick(object sender, RoutedEventArgs e)
         {
+            ConfirmSelectResult();
+        }
+
+        private void ConfirmSelectResult()
+        {
             if (SearchResult.SelectedItem is null)
             {
                 MessageWindow messageWindow = new MessageWindow("請選擇一個項目!", MessageType.ERROR, true);
@@ -174,6 +183,36 @@ namespace His_Pos.ProductPurchase
             if (sender is null) return;
 
             ItemGrid.RowDefinitions[1].Height = new GridLength((sender as NewItemDialog).Height - 140);
+        }
+
+        private void NewItemDialog_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            int currentIndex = -1;
+
+            if (e.Key == Key.Up)
+            {
+                currentIndex = SearchResult.SelectedIndex;
+
+                if (currentIndex == -1) return;
+                else if (currentIndex - 1 > -1)
+                    SearchResult.SelectedIndex = currentIndex - 1;
+
+                SearchResult.ScrollIntoView(SearchResult.SelectedItem);
+            }
+            else if (e.Key == Key.Down)
+            {
+                currentIndex = SearchResult.SelectedIndex;
+
+                if (currentIndex == -1) return;
+                else if (currentIndex + 1 <= SearchResult.Items.Count - 1)
+                    SearchResult.SelectedIndex = currentIndex + 1;
+
+                SearchResult.ScrollIntoView(SearchResult.SelectedItem);
+            }
+            else if (e.Key == Key.Enter)
+            {
+                ConfirmSelectResult();
+            }
         }
     }
 }

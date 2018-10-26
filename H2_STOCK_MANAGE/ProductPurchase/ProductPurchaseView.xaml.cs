@@ -553,7 +553,6 @@ namespace His_Pos.ProductPurchase
         {
             InitData();
         }
-
         
         private void ProductPurchaseView_OnUnloaded(object sender, RoutedEventArgs e)
         {

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -308,12 +309,18 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 StoreOrderData.Products.Add(newProduct);
 
                 textBox.Text = "";
+
+                Dispatcher.BeginInvoke((ThreadStart)delegate
+                {
+                    textBox.Focus();
+                });
             }
             else
             {
                 ((IProductPurchase)newProduct).CopyFilledData(CurrentProduct);
 
                 CurrentProduct = newProduct;
+                textBox.Focus();
             }
 
             StoreOrderData.IsDataChanged = true;
@@ -361,6 +368,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     {
                         MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING,true);
                         messageWindow.ShowDialog();
+                        textBox.Text = "";
                         return;
                     }
 
