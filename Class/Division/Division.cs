@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Data;
+﻿using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
 

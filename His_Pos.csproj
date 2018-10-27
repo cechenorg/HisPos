@@ -147,9 +147,6 @@
     <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="ImeLib">
-      <HintPath>.\ImeLib.dll</HintPath>
-    </Reference>
     <Reference Include="JetBrains.Annotations, Version=2018.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>packages\JetBrains.Annotations.2018.2.1\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
@@ -172,53 +169,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ReportViewer.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.Design, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.ReportViewer.WinForms, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.VisualStudio.CoreUtility.15.0.26201\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>packages\Microsoft.VisualStudio.OLE.Interop.7.10.6070\lib\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Framework, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.VisualStudio.Shell.Framework.15.0.26201\lib\net45\Microsoft.VisualStudio.Shell.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.VisualStudio.Shell.Immutable.10.0.15.0.25415\lib\net45\Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.11.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.VisualStudio.Shell.Immutable.11.0.15.0.25415\lib\net45\Microsoft.VisualStudio.Shell.Immutable.11.0.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.VisualStudio.Shell.Immutable.12.0.15.0.25415\lib\net45\Microsoft.VisualStudio.Shell.Immutable.12.0.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.14.0, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.VisualStudio.Shell.Immutable.14.0.15.0.25405\lib\net45\Microsoft.VisualStudio.Shell.Immutable.14.0.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.Utilities, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.VisualStudio.Utilities.15.0.26201\lib\net45\Microsoft.VisualStudio.Utilities.dll</HintPath>
-    </Reference>
     <Reference Include="MySql.Data, Version=8.0.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>packages\MySql.Data.8.0.12\lib\net452\MySql.Data.dll</HintPath>
     </Reference>
@@ -228,25 +192,16 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="ReachFramework" />
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.2.7.1\lib\net46\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Printing" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Controls.Input.Toolkit, Version=3.5.40128.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\WPFToolkit.3.5.50211.1\lib\System.Windows.Controls.Input.Toolkit.dll</HintPath>
       <Private>True</Private>
@@ -675,9 +630,6 @@
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="RDLC\ReportService.cs" />
-    <Compile Include="RDLC\ReportWindow.xaml.cs">
-      <DependentUpon>ReportWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="RDLC\XmlReport.cs" />
     <Compile Include="Resource\MenuListItem.xaml.cs">
       <DependentUpon>MenuListItem.xaml</DependentUpon>
@@ -1032,10 +984,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="RDLC\ReportWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

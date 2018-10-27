@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Xml;
 
 namespace His_Pos.Class.Person
 {

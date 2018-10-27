@@ -1,8 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Data;
-using System.Security.Permissions;
-using System.Windows;
-using System.Windows.Media.Imaging;
 using His_Pos.Struct.Product;
 
 namespace His_Pos.AbstractClass

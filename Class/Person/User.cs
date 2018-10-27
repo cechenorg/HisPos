@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using MahApps.Metro.Controls;
 
 namespace His_Pos.Class.Person
 {

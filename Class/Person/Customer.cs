@@ -1,5 +1,4 @@
-﻿using His_Pos.Service;
-using System;
+﻿using System;
 using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;

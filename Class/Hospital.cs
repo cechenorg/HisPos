@@ -1,7 +1,5 @@
-﻿using System.ComponentModel;
-using System.Data;
+﻿using System.Data;
 using System.Xml;
-using His_Pos.AbstractClass;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 

@@ -13,7 +13,6 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using His_Pos.Class.Declare.IcDataUpload;
-using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.RDLC;
 
 // ReSharper disable SpecifyACultureInStringConversionExplicitly

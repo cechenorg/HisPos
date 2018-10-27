@@ -1,17 +1,10 @@
-﻿using His_Pos.AbstractClass;
-using His_Pos.Class.Manufactory;
-using His_Pos.Class.Person;
+﻿using His_Pos.Class.Person;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media.Imaging;
-using His_Pos.Class.Product;
 using His_Pos.Interface;
 using His_Pos.Struct.Manufactory;
 

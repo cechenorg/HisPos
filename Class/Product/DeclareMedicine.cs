@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
 using His_Pos.Interface;
 using His_Pos.Service;
 
@@ -85,14 +79,14 @@ namespace His_Pos.Class.Product
                 }
 
             }
-            IsControlMed = Boolean.Parse(dataRow["HISMED_CONTROL"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_CONTROL"].ToString());
+            IsControlMed = int.Parse(dataRow["HISMED_CONTROL"].ToString());
             IsFrozMed = Boolean.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
             HcPrice = dataRow["HISMED_PRICE"].ToString();
             Note = dataRow["HISMED_NOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_NOTE"].ToString();
             IsBuckle = true;
         }
         
-        public bool IsControlMed { get; set; }
+        public int IsControlMed { get; set; }
         public bool IsFrozMed { get; set; }
         private bool payself;
 

@@ -2,16 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.Properties;
-using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
 using System.Collections.ObjectModel;
 using static His_Pos.H4_BASIC_MANAGE.AuthenticationManage.AuthenticationManageView;
 using System.Data;
 using His_Pos.Class.Leave;
-using His_Pos.Interface;
 
 namespace His_Pos.Class.Authority
 {

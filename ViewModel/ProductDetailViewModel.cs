@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ChromeTabs;
+﻿using ChromeTabs;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.ObjectModel;
@@ -7,11 +6,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using His_Pos.Class;
-using System.Windows;
-using System.Windows.Controls;
 using His_Pos.InventoryManagement;
 
 namespace His_Pos.ViewModel

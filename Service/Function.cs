@@ -10,9 +10,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
 using System.Xml;
 using System.Xml.Linq;
 using His_Pos.Class;
@@ -22,7 +19,6 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NChinese;
 using NChinese.Phonetic;
 
 namespace His_Pos

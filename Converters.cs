@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
-using His_Pos.Class;
-using His_Pos.Class.Division;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.Service;
 
