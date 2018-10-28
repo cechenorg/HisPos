@@ -16,16 +16,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
-using His_Pos.Class.MedBag;
 using His_Pos.HisApi;
-using His_Pos.RDLC;
 using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
 using His_Pos.Class.Declare.IcDataUpload;
@@ -1213,6 +1210,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     PaymentCategoryCombo.Focus();
                     return;
                 }
+
+                if (string.IsNullOrEmpty(textBox.Text) || textBox.Text.Equals(" "))
+                {
+                    PaymentCategoryCombo.Focus();
+                    return;
+                }
             }
             if (textBox.Text.Length < 3)
             {
@@ -1249,25 +1252,26 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void DivisionCombo_KeyUp(object sender, KeyEventArgs e)
         {
             if (!(sender is ComboBox c)) return;
-            var search = c.Text.ToUpper();
-            if (e.Key == Key.Back)
+            switch (e.Key)
             {
-                c.Text = string.Empty;
-                return;
+                case Key.Back:
+                    c.Text = string.Empty;
+                    return;
+                case Key.Enter:
+                    return;
+                default:
+                    CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = null;
+                    break;
             }
-            if (e.Key == Key.Enter || (search.Length == 1))
-                return;
             var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(DivisionCombo.ItemsSource);
 
             itemsViewOriginal.Filter = ((o) =>
             {
-                if (string.IsNullOrEmpty(search)) return true;
-                if (((Division)o).Id.Contains(search))
+                if (string.IsNullOrEmpty(c.Text.ToUpper())) return true;
+                if (((Division)o).Id.Contains(c.Text.ToUpper()))
                 {
-                    c.Text = search;
                     return true;
                 }
-                c.Text = search;
                 return false;
             });
             itemsViewOriginal.Refresh();
@@ -1279,7 +1283,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!(sender is ComboBox c)) return;
             if (e.Key != Key.Enter)
             {
-                if (c.Text.Contains(" "))
+                if (CurrentPrescription.Treatment.MedicalInfo.Hospital.Division != null)
                     c.Text = string.Empty;
                 return;
             }
@@ -1289,7 +1293,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else
             {
-                c.IsDropDownOpen = true;
                 if (c.Items.Count > 0)
                     c.SelectedIndex = 0;
             }
@@ -1554,7 +1557,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 c.Text = string.Empty;
                 return;
             }
-            if (e.Key == Key.Enter || search.Length < 2)
+            if (e.Key == Key.Enter)
                 return;
             var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
 
@@ -1575,8 +1578,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void SpecialCodeCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var nextAutoCompleteBox = new List<AutoCompleteBox>();
-            if (e.Key != Key.Enter || !(sender is ComboBox c)) return;
-            if ((c.SelectedItem != null && c.Text.Contains(" ")) || string.IsNullOrEmpty(c.Text))
+            
+            if (!(sender is ComboBox c)) return;
+            if (e.Key != Key.Enter)
+            {
+                if (c.Text.Contains(" "))
+                    c.Text = string.Empty;
+                return;
+            }
+            if (c.SelectedItem != null || (c.Text.Equals(string.Empty) && c.SelectedItem == null))
             {
                 NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
                 nextAutoCompleteBox[0].Focus();
@@ -1584,9 +1594,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
             {
                 c.IsDropDownOpen = true;
-                if (c.SelectedIndex != -1)
-                    c.Text = string.Empty;
-                if (c.Items.Count > 0 && c.Text.Length > 1)
+                if (c.Items.Count > 0)
                     c.SelectedIndex = 0;
             }
         }

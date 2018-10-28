@@ -99,8 +99,8 @@
                 <StackPanel Grid.Row="0" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫科別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="False" InputScope="AlphanumericHalfWidth"
-                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="True"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" KeyUp="DivisionCombo_KeyUp" DropDownClosed="DivisionCombo_OnDropDownClosed" PreviewKeyDown="DivisionCombo_PreviewKeyDown" PreviewMouseLeftButtonDown="Combo_MouseDown"/>
+                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False"
+                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" KeyUp="DivisionCombo_KeyUp" DropDownClosed="DivisionCombo_OnDropDownClosed" KeyDown="DivisionCombo_PreviewKeyDown" PreviewMouseLeftButtonDown="Combo_MouseDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="診治醫生" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
@@ -327,6 +327,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTextColumn  Width="50" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="管制" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="3" Margin="10,0,10,10">
