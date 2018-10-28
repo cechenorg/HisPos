@@ -109,16 +109,17 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             {
                 case OrderType.PROCESSING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[7].Height = new GridLength(50);
-                    MainGrid.RowDefinitions[8].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[4].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[7].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[8].Height = new GridLength(50);
+                    MainGrid.RowDefinitions[9].Height = new GridLength(0);
                     
                     if (StoreOrderData.Manufactory.Id.Equals("0"))
                     {
                         CurrentDataGrid = WStoreOrderDetail;
 
-                        MainGrid.RowDefinitions[4].Height = new GridLength(0);
-                        MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
+                        MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                        MainGrid.RowDefinitions[6].Height = new GridLength(1, GridUnitType.Star);
                         
                         CurrentDataGrid.Columns[4].Visibility = Visibility.Collapsed;
                         CurrentDataGrid.Columns[5].Visibility = Visibility.Visible;
@@ -127,32 +128,44 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     {
                         CurrentDataGrid = GStoreOrderDetail;
 
-                        MainGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
-                        MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                        MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
+                        MainGrid.RowDefinitions[6].Height = new GridLength(0);
                     }
                     break;
                 case OrderType.UNPROCESSING:
-                    MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
-                    MainGrid.RowDefinitions[4].Height = new GridLength(0);
+                    
                     MainGrid.RowDefinitions[5].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[6].Height = new GridLength(50);
-                    MainGrid.RowDefinitions[7].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[7].Height = new GridLength(50);
                     MainGrid.RowDefinitions[8].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[9].Height = new GridLength(0);
 
-                    CurrentDataGrid = PStoreOrderDetail;
 
                     if (StoreOrderData.Manufactory.Id.Equals("0"))
-                        PStoreOrderDetail.Columns[10].Visibility = Visibility.Collapsed;
+                    {
+                        CurrentDataGrid = PSStoreOrderDetail;
+
+                        MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
+                        MainGrid.RowDefinitions[4].Height = new GridLength(0);
+                    }
                     else
-                        PStoreOrderDetail.Columns[10].Visibility = Visibility.Visible;
+                    {
+                        CurrentDataGrid = PStoreOrderDetail;
+
+                        MainGrid.RowDefinitions[3].Height = new GridLength(0);
+                        MainGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
+
+                        CurrentDataGrid.Columns[10].Visibility = Visibility.Visible;
+                    }
                     break;
                 case OrderType.WAITING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(0);
                     MainGrid.RowDefinitions[4].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
-                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[6].Height = new GridLength(1, GridUnitType.Star);
                     MainGrid.RowDefinitions[7].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[8].Height = new GridLength(50);
+                    MainGrid.RowDefinitions[8].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[9].Height = new GridLength(50);
 
                     CurrentDataGrid = WStoreOrderDetail;
 
