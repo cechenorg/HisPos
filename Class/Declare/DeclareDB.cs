@@ -445,7 +445,7 @@ namespace His_Pos.Class.Declare
         {
             var CustomerTable = new DataTable();
             CustomerTable.Columns.Add("CUS_NAME", typeof(string));
-            CustomerTable.Columns.Add("CUS_BIRTH", typeof(string));
+            CustomerTable.Columns.Add("CUS_BIRTH", typeof(DateTime));
             CustomerTable.Columns.Add("CUS_IDNUM", typeof(string));
             CustomerTable.Columns.Add("CUS_GENDER", typeof(string));
             CustomerTable.Columns.Add("CUS_QNAME", typeof(string));
@@ -481,7 +481,7 @@ namespace His_Pos.Class.Declare
             declareMasterTable.Columns.Add("D12", typeof(string));
             declareMasterTable.Columns.Add("D13", typeof(string));
             declareMasterTable.Columns.Add("CUS_ID", typeof(string));
-            declareMasterTable.Columns.Add("D14", typeof(string));
+            declareMasterTable.Columns.Add("D14", typeof(DateTime));
             declareMasterTable.Columns.Add("D15", typeof(string));
             declareMasterTable.Columns.Add("D16", typeof(int));
             declareMasterTable.Columns.Add("D17", typeof(int));
@@ -489,7 +489,7 @@ namespace His_Pos.Class.Declare
             declareMasterTable.Columns.Add("D19", typeof(int));
             declareMasterTable.Columns.Add("D21", typeof(string));
             declareMasterTable.Columns.Add("D22", typeof(string));
-            declareMasterTable.Columns.Add("D23", typeof(string));
+            declareMasterTable.Columns.Add("D23", typeof(DateTime));
             declareMasterTable.Columns.Add("D24", typeof(string));
             declareMasterTable.Columns.Add("D25", typeof(string));
             declareMasterTable.Columns.Add("D26", typeof(string));
@@ -537,9 +537,7 @@ namespace His_Pos.Class.Declare
             row["D12"] = string.Empty;
             row["D13"] =
                 CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id);
-            row["D14"] =
-                CheckXmlDbNullValue(declareData.Prescription.Treatment.TreatmentDate == DateTime.MinValue? declareData.Prescription.Treatment.TreatDateStr:
-                    DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate));
+            row["D14"] = declareData.Prescription.Treatment.TreatmentDate;
             row["D15"] = declareData.Prescription.Treatment.Copayment.Id;
             row["D16"] = declareData.DeclarePoint.ToString();
             row["D17"] = declareData.Prescription.Treatment.Copayment.Point.ToString();
@@ -547,7 +545,7 @@ namespace His_Pos.Class.Declare
             row["D19"] = CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString());
             row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;
             row["D22"] = declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
-            row["D23"] = declareData.Prescription.Treatment.AdjustDate == DateTime.MinValue? declareData.Prescription.Treatment.AdjustDateStr: DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate);
+            row["D23"] = declareData.Prescription.Treatment.AdjustDate;  
             row["D24"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber;
             row["D25"] = declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber;
             row["D26"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id);
