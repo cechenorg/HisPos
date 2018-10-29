@@ -18,5 +18,11 @@ namespace His_Pos.Interface
         bool IsFirstBatch { get; set; }
 
         void CopyFilledData(Product product);
+
+        double PackageAmount { get; }
+        double PackagePrice { get; }
+        double SingdePrice { get; }
+
+        bool IsSingde { get; set; }
     }
 }

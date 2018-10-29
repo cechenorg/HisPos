@@ -26,6 +26,12 @@ namespace His_Pos.Class.Product
                     freeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
                     validDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01"))? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
                     batchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
+                    
+                    PackageAmount = Double.Parse(dataRow["PRO_PACKAGEQTY"].ToString());
+                    PackagePrice = Double.Parse(dataRow["PRO_SPACKAGEPRICE"].ToString());
+                    SingdePrice = Double.Parse(dataRow["PRO_SPRICE"].ToString());
+
+                    IsSingde = Boolean.Parse(dataRow["IS_SINGDE"].ToString());
                     break;
             }
 
@@ -36,7 +42,7 @@ namespace His_Pos.Class.Product
         {
         }
 
-        public ProductPurchaseMedicine(PurchaseProduct selectedItem) : base (selectedItem)
+        public ProductPurchaseMedicine(PurchaseProduct selectedItem, bool isSingde) : base (selectedItem)
         {
             Amount = 0;
             Price = 0;
@@ -50,6 +56,12 @@ namespace His_Pos.Class.Product
             LastPrice = selectedItem.LastPrice;
             Stock = new InStock(selectedItem);
             IsFirstBatch = true;
+            
+            PackageAmount = selectedItem.PackageAmount;
+            PackagePrice = selectedItem.PackagePrice;
+            SingdePrice = selectedItem.SingdePrice;
+
+            IsSingde = isSingde;
         }
 
         public bool IsFirstBatch { get; set; }
@@ -174,6 +186,14 @@ namespace His_Pos.Class.Product
                 NotifyPropertyChanged("BatchNumber");
             }
         }
+
+        public double PackageAmount { get; }
+
+        public double PackagePrice { get; }
+
+        public double SingdePrice { get; }
+
+        public bool IsSingde { get; set; }
 
         public void CalculateData(string inputSource)
         {

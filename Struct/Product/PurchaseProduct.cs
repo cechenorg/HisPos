@@ -19,7 +19,11 @@ namespace His_Pos.Struct.Product
             Type = dataRow["TYPE"].ToString();
             WarId = dataRow["PROWAR_ID"].ToString(); 
             Status = Boolean.Parse(dataRow["PRO_STATUS"].ToString());
-            OnTheWayAmount = dataRow["PRO_ONTHEWAY"].ToString(); 
+            OnTheWayAmount = dataRow["PRO_ONTHEWAY"].ToString();
+
+            PackageAmount = Double.Parse(dataRow["PRO_PACKAGEQTY"].ToString());
+            PackagePrice = Double.Parse(dataRow["PRO_SPACKAGEPRICE"].ToString());
+            SingdePrice = Double.Parse(dataRow["PRO_SPRICE"].ToString());
         }
 
         public string Mans;
@@ -35,5 +39,9 @@ namespace His_Pos.Struct.Product
         public double LastPrice;
         public string Type;
         public bool Status;
+
+        public double PackageAmount { get; }
+        public double PackagePrice { get; }
+        public double SingdePrice { get; }
     }
 }
