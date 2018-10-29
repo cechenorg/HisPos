@@ -8,7 +8,7 @@ using System.Windows;
 [assembly: AssemblyTitle("His_Pos")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("adam")]
 [assembly: AssemblyProduct("His_Pos")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
