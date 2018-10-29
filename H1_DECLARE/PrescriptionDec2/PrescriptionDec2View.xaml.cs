@@ -12,10 +12,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Net;
-using System.Net.NetworkInformation;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +29,7 @@ using His_Pos.Class.DiseaseCode;
 using His_Pos.Class.Person;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.StoreOrder;
+using His_Pos.Properties;
 using His_Pos.Struct.IcData;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
@@ -88,6 +88,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private Prescription _currentPrescription = new Prescription();
         private DeclareData _currentDeclareData;
         private string _currentDecMasId = string.Empty;
+        private int _prescriptionCount;
+
+        public int PrescriptionCount
+        {
+            get => _prescriptionCount;
+            set
+            {
+                _prescriptionCount = value;
+            }
+        }
+
         public bool IsSend;
         public bool IsBone;
         public ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> PrescriptionSendData = new ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>();
@@ -774,7 +785,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             if (temp[x].Equals(autoCompleteBox))
                                 return x;
                         }
-
                         break;
                     }
             }
@@ -1176,7 +1186,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             TreatmentCaseCombo.Text = prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
             PaymentCategoryCombo.Text = prescription.Treatment.PaymentCategory.FullName;
             CopaymentCombo.Text = prescription.Treatment.Copayment.FullName;
-            SpecialCode.Text = prescription.Treatment.MedicalInfo.SpecialCode.Id;
+            SpecialCodeCombo.Text = prescription.Treatment.MedicalInfo.SpecialCode.Id;
             ReleaseHospital.Text = prescription.Treatment.MedicalInfo.Hospital.Id;
 
             DatePickerPrecription.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.TreatmentDate);
@@ -1207,17 +1217,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else if(textBoxDependency.GetValue(NameProperty) is string && textBoxDependency.GetValue(NameProperty).Equals("SecondDiagnosis"))
             {
-                if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id) && textBox.Text.Contains(" "))
-                {
-                    PaymentCategoryCombo.Focus();
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(textBox.Text) || textBox.Text.Equals(" "))
-                {
-                    PaymentCategoryCombo.Focus();
-                    return;
-                }
+                PaymentCategoryCombo.Focus();
+                return;
             }
             if (textBox.Text.Length < 3)
             {
@@ -1251,23 +1252,69 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-
-        private void DivisionCombo_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void Combo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (!(sender is ComboBox c)) return;
-            if (e.Key == Key.Enter)
+            switch (sender)
             {
-                if (c.SelectedItem != null)
-                {
-                    DoctorId.Focus();
-                }
-                else
-                {
-                    if (c.Items.Count > 0)
-                        c.SelectedIndex = 0;
-                }
+                case ComboBox _ when e.Key != Key.Enter:
+                    return;
+                case ComboBox c:
+                    DependencyObject combo = c;
+                    var cName = combo.GetValue(NameProperty) as string;
+                    switch (cName)
+                    {
+                        case "DivisionCombo":
+                            DoctorId.Focus();
+                            break;
+                        case "HisPerson":
+                            TreatmentCaseCombo.Focus();
+                            break;
+                        case "TreatmentCaseCombo":
+                            MainDiagnosis.Focus();
+                            break;
+                        case "PaymentCategoryCombo":
+                            CopaymentCombo.Focus();
+                            break;
+                        case "CopaymentCombo":
+                            AdjustCaseCombo.Focus();
+                            break;
+                        case "AdjustCaseCombo":
+                            if (c.Text.StartsWith("2"))
+                                ChronicSequence.Focus();
+                            else
+                                SpecialCodeCombo.Focus();
+                            break;
+                        case "SpecialCodeCombo":
+                            var nextAutoCompleteBox = new List<AutoCompleteBox>();
+                            NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
+                            nextAutoCompleteBox[0].Focus();
+                            break;
+                    }
+
+                    break;
+                case TextBox _ when e.Key != Key.Enter:
+                    return;
+                case TextBox t:
+                    DependencyObject text = t;
+                    var tName = text.GetValue(NameProperty) as string;
+                    switch (tName)
+                    {
+                        case "DoctorId":
+                            HisPerson.Focus();
+                            break;
+                        case "PaymentCategoryCombo":
+                            AdjustCaseCombo.Focus();
+                            break;
+                        case "ChronicSequence":
+                            ChronicTotal.Focus();
+                            break;
+                        case "ChronicTotal":
+                            SpecialCodeCombo.Focus();
+                            break;
+                    }
+
+                    break;
             }
-            
         }
 
         private void ReleaseHospital_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1285,114 +1332,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void DoctorId_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                HisPerson.Focus();
-        }
-
-        private void HisPerson_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                TreatmentCaseCombo.Focus();
-        }
-
-        private void TreatmentCaseCombo_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            if (e.Key != Key.Enter)
-            {
-                
-            }
-            if (c.SelectedItem != null)
-            {
-                MainDiagnosis.Focus();
-            }
-            else
-            {
-                c.IsDropDownOpen = true;
-                if (c.Items.Count > 0)
-                    c.SelectedIndex = 0;
-            }
-        }
-        private void PaymentCategoryCombo_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            if (e.Key != Key.Enter)
-            {
-                if (c.Text.Contains(" "))
-                    c.Text = string.Empty;
-                return;
-            }
-            if (c.SelectedItem != null)
-            {
-                CopaymentCombo.Focus();
-            }
-            else
-            {
-                c.IsDropDownOpen = true;
-                if (c.Items.Count > 0)
-                    c.SelectedIndex = 0;
-            }
-        }
-
-        private void CopaymentCombo_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            if (e.Key != Key.Enter)
-            {
-                if(c.Text.Contains(" "))
-                    c.Text = string.Empty;
-                return;
-            }
-            if (c.SelectedItem != null)
-            {
-                AdjustCaseCombo.Focus();
-            }
-            else
-            {
-                c.IsDropDownOpen = true;
-                if (c.Items.Count > 0)
-                    c.SelectedIndex = 0;
-            }
-        }
-        
-
-        private void ChronicSequence_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Enter || !(sender is TextBox)) return;
-            ChronicTotal.Focus();
-        }
-
-        private void ChronicTotal_OnPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Enter || !(sender is TextBox)) return;
-            SpecialCode.Focus();
-        }
-        
-        private void SpecialCodeCombo_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            var nextAutoCompleteBox = new List<AutoCompleteBox>();
-            
-            if (!(sender is ComboBox c)) return;
-            if (e.Key != Key.Enter)
-            {
-                if (c.Text.Contains(" "))
-                    c.Text = string.Empty;
-                return;
-            }
-            if (c.SelectedItem != null || (c.Text.Equals(string.Empty) && c.SelectedItem == null))
-            {
-                NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
-                nextAutoCompleteBox[0].Focus();
-            }
-            else
-            {
-                c.IsDropDownOpen = true;
-                if (c.Items.Count > 0)
-                    c.SelectedIndex = 0;
-            }
-        }
 
         private void IsBuckle_Click(object sender, RoutedEventArgs e)
         {
@@ -1412,16 +1351,33 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
                 menuitem.Header = "申報扣庫";
         }
-        public bool ByPing()
+
+        private void HisPerson_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            IPAddress tIP = IPAddress.Parse("10.252.141.53");
-            Ping tPingControl = new Ping();
-            PingReply tReply = tPingControl.Send(tIP);
-            tPingControl.Dispose();
-            if (tReply.Status != IPStatus.Success)
-                return false;
-            else
-                return true;
+            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MEDICALPERSONNEL", CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber));
+            var t = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetMedicalPersonPrescriptionCount]",parameters);
+            PrescriptionCount = int.Parse(t.Rows[0][0].ToString());
+        }
+
+        private void NotDeclareSubmit_OnClickSubmit_ButtonClick(object sender, RoutedEventArgs e)
+        {
+            MessageWindow m;
+            var declareDb = new DeclareDb();
+            _currentDeclareData = new DeclareData(CurrentPrescription);
+            var decMasId = declareDb.InsertDeclareData(_currentDeclareData);
+            var totalCost = 0.0;
+            var totalPrice = 0;
+            foreach (var med in _currentDeclareData.Prescription.Medicines)
+            {
+                totalCost += double.Parse(ProductDb.GetBucklePrice(med.Id, med.Amount.ToString()));
+                totalPrice += int.Parse(Math.Ceiling(med.TotalPrice).ToString());
+            }
+            ProductDb.InsertEntry("配藥收入", totalCost.ToString() , "DecMasId", decMasId);
+            ProductDb.InsertEntry("調劑耗用", "-" + totalCost, "DecMasId", decMasId);
+            declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", decMasId);//庫存扣庫
+
         }
     }
 }
