@@ -780,11 +780,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             return -1;
         }
+
         private void MedicineTextBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(sender is TextBox textBox)) return;
             textBox.SelectAll();
         }
+
         private void FindUsagesQuickName(object sender)
         {
             var currentRow = GetCurrentRowIndex(sender);
@@ -1249,61 +1251,23 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void DivisionCombo_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            switch (e.Key)
-            {
-                case Key.Back:
-                    c.Text = string.Empty;
-                    return;
-                case Key.Enter:
-                    return;
-                default:
-                    CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = null;
-                    break;
-            }
-            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(DivisionCombo.ItemsSource);
-
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (string.IsNullOrEmpty(c.Text.ToUpper())) return true;
-                if (((Division)o).Id.Contains(c.Text.ToUpper()))
-                {
-                    return true;
-                }
-                return false;
-            });
-            itemsViewOriginal.Refresh();
-        }
-
 
         private void DivisionCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (!(sender is ComboBox c)) return;
-            if (e.Key != Key.Enter)
+            if (e.Key == Key.Enter)
             {
-                if (CurrentPrescription.Treatment.MedicalInfo.Hospital.Division != null)
-                    c.Text = string.Empty;
-                return;
+                if (c.SelectedItem != null)
+                {
+                    DoctorId.Focus();
+                }
+                else
+                {
+                    if (c.Items.Count > 0)
+                        c.SelectedIndex = 0;
+                }
             }
-            if (c.SelectedItem != null)
-            {
-                DoctorId.Focus();
-            }
-            else
-            {
-                if (c.Items.Count > 0)
-                    c.SelectedIndex = 0;
-            }
-        }
-
-        private void Combo_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
-            itemsViewOriginal.Filter = o => true;
-            itemsViewOriginal.Refresh();
+            
         }
 
         private void ReleaseHospital_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1319,12 +1283,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 DivisionCombo.Focus();
             }
-        }
-
-        private void DivisionCombo_OnDropDownClosed(object sender, EventArgs e)
-        {
-            if(sender is ComboBox c && c.SelectedItem is Division)
-                DoctorId.Focus();
         }
 
         private void DoctorId_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1344,9 +1302,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!(sender is ComboBox c)) return;
             if (e.Key != Key.Enter)
             {
-                if (c.Text.Contains(" "))
-                    c.Text = string.Empty;
-                return;
+                
             }
             if (c.SelectedItem != null)
             {
@@ -1359,61 +1315,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     c.SelectedIndex = 0;
             }
         }
-
-        private void TreatmentCaseCombo_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            var search = c.Text.ToUpper();
-            if (e.Key == Key.Back)
-            {
-                c.Text = string.Empty;
-                return;
-            }
-            if (e.Key == Key.Enter || (search.Length == 1))
-                return;
-            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
-
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (string.IsNullOrEmpty(search)) return true;
-                if (((TreatmentCase)o).Id.Contains(search))
-                {
-                    c.Text = search;
-                    return true;
-                }
-                c.Text = search;
-                return false;
-            });
-            itemsViewOriginal.Refresh();
-        }
-
-        private void PaymentCategoryCombo_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            var search = c.Text.ToUpper();
-            if (e.Key == Key.Back)
-            {
-                c.Text = string.Empty;
-                return;
-            }
-            if (e.Key == Key.Enter || string.IsNullOrEmpty(search))
-                return;
-            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
-
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (string.IsNullOrEmpty(search)) return true;
-                if (((PaymentCategory)o).Id.Equals(search))
-                {
-                    c.Text = search;
-                    return true;
-                }
-                c.Text = search;
-                return false;
-            });
-            itemsViewOriginal.Refresh();
-        }
-
         private void PaymentCategoryCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (!(sender is ComboBox c)) return;
@@ -1433,33 +1334,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (c.Items.Count > 0)
                     c.SelectedIndex = 0;
             }
-        }
-
-        private void CopaymentCombo_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            var search = c.Text.ToUpper();
-            if (e.Key == Key.Back)
-            {
-                c.Text = string.Empty;
-                return;
-            }
-            if (e.Key == Key.Enter || search.Length < 3)
-                return;
-            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
-
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (string.IsNullOrEmpty(search)) return true;
-                if (((Copayment)o).Id.Contains(search))
-                {
-                    c.Text = search;
-                    return true;
-                }
-                c.Text = search;
-                return false;
-            });
-            itemsViewOriginal.Refresh();
         }
 
         private void CopaymentCombo_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -1482,59 +1356,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     c.SelectedIndex = 0;
             }
         }
-
-        private void AdjustCaseCombo_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            var search = c.Text.ToUpper();
-            if (e.Key == Key.Back)
-            {
-                c.Text = string.Empty;
-                return;
-            }
-            if (e.Key == Key.Enter || string.IsNullOrEmpty(search))
-                return;
-            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
-
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (string.IsNullOrEmpty(search)) return true;
-                if (((AdjustCase)o).Id.Contains(search))
-                {
-                    c.Text = search;
-                    return true;
-                }
-                c.Text = search;
-                return false;
-            });
-            itemsViewOriginal.Refresh();
-        }
-
-        private void AdjustCaseCombo_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            if (e.Key != Key.Enter)
-            {
-                if(c.Text.Contains(" "))
-                    c.Text = string.Empty;
-                return;
-            }
-            if (c.SelectedItem != null)
-            {
-                if (CurrentPrescription.Treatment.AdjustCase.Id.Equals("2"))
-                    ChronicSequence.Focus();
-                else
-                {
-                    SpecialCode.Focus();
-                }
-            }
-            else
-            {
-                c.IsDropDownOpen = true;
-                if (c.Items.Count > 0)
-                    c.SelectedIndex = 0;
-            }
-        }
+        
 
         private void ChronicSequence_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -1547,34 +1369,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (e.Key != Key.Enter || !(sender is TextBox)) return;
             SpecialCode.Focus();
         }
-
-        private void SpecialCodeCombo_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            var search = c.Text.ToUpper();
-            if (e.Key == Key.Back)
-            {
-                c.Text = string.Empty;
-                return;
-            }
-            if (e.Key == Key.Enter)
-                return;
-            var itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(c.ItemsSource);
-
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (string.IsNullOrEmpty(search)) return true;
-                if (((SpecialCode)o).Id.Contains(search))
-                {
-                    c.Text = search;
-                    return true;
-                }
-                c.Text = search;
-                return false;
-            });
-            itemsViewOriginal.Refresh();
-        }
-
+        
         private void SpecialCodeCombo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var nextAutoCompleteBox = new List<AutoCompleteBox>();
