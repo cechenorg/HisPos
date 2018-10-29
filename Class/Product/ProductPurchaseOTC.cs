@@ -125,6 +125,7 @@ namespace His_Pos.Class.Product
             set
             {
                 orderAmount = value;
+                CalculatePackagePrice();
                 NotifyPropertyChanged("OrderAmount");
             }
         }
@@ -231,6 +232,8 @@ namespace His_Pos.Class.Product
 
         public void CalculateData(string inputSource)
         {
+            if (IsSingde) return;
+
             double dprice = price;
             if (totalPrice == amount * dprice || dprice == totalPrice / amount) return;
 
@@ -257,6 +260,23 @@ namespace His_Pos.Class.Product
             else if (amount != 0)
             {
                 Price = totalPrice / amount;
+            }
+        }
+
+        private void CalculatePackagePrice()
+        {
+            if (IsSingde)
+            {
+                if (OrderAmount >= PackageAmount)
+                {
+                    TotalPrice = PackagePrice * OrderAmount;
+                    Price = PackagePrice;
+                }
+                else
+                {
+                    TotalPrice = SingdePrice * OrderAmount;
+                    Price = SingdePrice;
+                }
             }
         }
 
