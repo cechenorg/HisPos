@@ -305,9 +305,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             Product newProduct;
 
             if (product.Type.Equals("M"))
-                newProduct = new ProductPurchaseMedicine(product);
+                newProduct = new ProductPurchaseMedicine(product, StoreOrderData.Manufactory.Id.Equals("0"));
             else
-                newProduct = new ProductPurchaseOtc(product);
+                newProduct = new ProductPurchaseOtc(product, StoreOrderData.Manufactory.Id.Equals("0"));
             
             if (CurrentProduct is null)
             {
@@ -480,9 +480,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 //SetChanged();
                 if (newItemDialog.SelectedItem.Type.Equals("M"))
-                    StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem));
+                    StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem, StoreOrderData.Manufactory.Id.Equals("0")));
                 else
-                    StoreOrderData.Products.Add(new ProductPurchaseOtc(newItemDialog.SelectedItem));
+                    StoreOrderData.Products.Add(new ProductPurchaseOtc(newItemDialog.SelectedItem, StoreOrderData.Manufactory.Id.Equals("0")));
             }
         }
 

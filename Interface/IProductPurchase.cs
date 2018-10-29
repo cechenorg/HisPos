@@ -22,5 +22,7 @@ namespace His_Pos.Interface
         double PackageAmount { get; }
         double PackagePrice { get; }
         double SingdePrice { get; }
+
+        bool IsSingde { get; set; }
     }
 }

@@ -43,6 +43,8 @@ namespace His_Pos.Class.Product
                     PackageAmount = Double.Parse(dataRow["PRO_PACKAGEQTY"].ToString());
                     PackagePrice = Double.Parse(dataRow["PRO_SPACKAGEPRICE"].ToString());
                     SingdePrice = Double.Parse(dataRow["PRO_SPRICE"].ToString());
+
+                    IsSingde = Boolean.Parse(dataRow["IS_SINGDE"].ToString());
                     break;
                 case DataSource.GetItemDialogProduct:
                     amount = 0;
@@ -64,7 +66,7 @@ namespace His_Pos.Class.Product
         {
         }
 
-        public ProductPurchaseOtc(PurchaseProduct selectedItem) : base(selectedItem)
+        public ProductPurchaseOtc(PurchaseProduct selectedItem, bool isSingde) : base(selectedItem)
         {
             Amount = 0;
             Price = 0;
@@ -83,6 +85,8 @@ namespace His_Pos.Class.Product
             PackageAmount = selectedItem.PackageAmount;
             PackagePrice = selectedItem.PackagePrice;
             SingdePrice = selectedItem.SingdePrice;
+
+            IsSingde = isSingde;
         }
         public bool IsFirstBatch { get; set; }
         public bool InvertIsFirstBatch { get { return !IsFirstBatch; } }
@@ -212,6 +216,8 @@ namespace His_Pos.Class.Product
         public double PackagePrice { get; }
 
         public double SingdePrice { get; }
+
+        public bool IsSingde { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
