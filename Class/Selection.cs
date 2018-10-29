@@ -22,6 +22,7 @@ namespace His_Pos.Class
             set
             {
                 id = value;
+                FullName = Id + " " +  Name;
                 NotifyPropertyChanged("Id");
             }
         }
@@ -32,6 +33,7 @@ namespace His_Pos.Class
             set
             {
                 name = value;
+                FullName = Id + " " + Name;
                 NotifyPropertyChanged("Name");
             }
         }

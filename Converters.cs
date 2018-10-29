@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
-using His_Pos.Class;
-using His_Pos.Class.Division;
+using His_Pos.H6_DECLAREFILE.Export;
+using His_Pos.Service;
 
 namespace His_Pos
 {
@@ -71,7 +70,7 @@ namespace His_Pos
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var result = string.Empty;
-            if (value == null) return result;
+            if (string.IsNullOrEmpty(value.ToString())) return result;
             result = (int.Parse(value.ToString().Split('/')[0]) - 1911) + "/" + value.ToString().Split('/')[1] + "/" +
                      value.ToString().Split('/')[2].Substring(0,2);
             return result;
@@ -80,6 +79,31 @@ namespace His_Pos
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return string.Empty;
+        }
+    }
+
+    public class BirthDayConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var result = value.ConvertTo<DateTime>().Year != 1
+                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), false)
+                : string.Empty;
+            return result;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value.ToString().Length < 7) return string.Empty;
+            else
+            {
+                var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
+                var month = int.Parse(value.ToString().Substring(3, 2));
+                var date = int.Parse(value.ToString().Substring(5, 2));
+                var result = new DateTime(year, month, date);
+                return result;
+            }
+            
         }
     }
 
@@ -175,9 +199,8 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ObservableCollection<Division> divisions = DivisionDb.GetData();
             string divisionName = "";
-            foreach (var d in divisions)
+            foreach (var d in ExportView.Instance.DivisionCollection)
             {
                 if (d.Id.Equals(value))
                     divisionName = d.Name;
@@ -195,9 +218,8 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            ObservableCollection<Hospital> divisions = HospitalDb.GetData();
             string divisionName = "";
-            foreach (var d in divisions)
+            foreach (var d in ExportView.Instance.HospitalCollection)
             {
                 if (d.Id.Equals(value))
                     divisionName = d.Name;

@@ -6,7 +6,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:His_Pos.ProductPurchase"
         mc:Ignorable="d"
-        Title="NewItemDialog" MinHeight="400" Height="400" MaxWidth="730" MinWidth="730" WindowStartupLocation="CenterScreen" SizeChanged="Window_SizeChanged">
+        Title="NewItemDialog" MinHeight="400" Height="400" MaxWidth="730" MinWidth="730" WindowStartupLocation="CenterScreen" SizeChanged="Window_SizeChanged"
+        PreviewKeyDown="NewItemDialog_OnPreviewKeyDown">
     <Window.Resources>
         <Style TargetType="{x:Type TextBlock}" x:Key="TextInMiddleCellStyle">
             <Setter Property="HorizontalAlignment"  Value="Center"/>

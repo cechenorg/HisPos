@@ -5,22 +5,14 @@ using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using His_Pos.Class;
-using System.Collections.Specialized;
-using His_Pos.Interface;
 using His_Pos.ProductPurchaseRecord;
 using System.ComponentModel;
 using His_Pos.Class.StockTakingOrder;
@@ -321,7 +313,7 @@ namespace His_Pos.InventoryManagement
             if (!check)
             {
                 var errors = _errorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
-                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR, true);
                 messageWindow.ShowDialog();
             }
             return check;
@@ -351,8 +343,8 @@ namespace His_Pos.InventoryManagement
                                           ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
                 ProductDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
             }
-            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS);
-            messageWindow.Show();
+            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS, true);
+            messageWindow.ShowDialog();
             InitVariables();
         }
      

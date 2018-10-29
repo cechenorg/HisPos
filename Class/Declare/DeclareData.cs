@@ -88,7 +88,7 @@ namespace His_Pos.Class.Declare
 
         private void CountDeclareDeatailPoint()
         {
-            var cusAge = DateTimeExtensions.CalculateAge(DateTimeExtensions.ToUsDate(Prescription.Customer.Birthday));
+            var cusAge = DateTimeExtensions.CalculateAge(Prescription.Customer.Birthday);
             var medFormCount = CountOralLiquidAgent();
             var dayPay = CountDayPayAmount(cusAge, medFormCount);
             SetMedicalServiceCode(dayPay);//判斷藥事服務費項目代碼
@@ -288,8 +288,6 @@ namespace His_Pos.Class.Declare
             var t = p.Treatment;
             var m = t.MedicalInfo;
             var ic = c.IcCard;
-            var year = c.Birthday.Split('/')[0].Length == 4 ? c.Birthday.Split('/')[0] : (int.Parse(c.Birthday.Substring(0, 3)) + 1911).ToString();
-            var cusBirth = year + "/" + c.Birthday.Split('/')[1] + "/" + c.Birthday.Split('/')[2];
             DeclareXml = new Ddata
             {
                 Dhead = new Dhead { D1 = Prescription.Treatment.AdjustCase.Id },
@@ -297,12 +295,12 @@ namespace His_Pos.Class.Declare
                 {
                     D3 = c.IcNumber,
                     D5 = t.PaymentCategory.Id,
-                    D6 = DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(cusBirth)),
+                    D6 = DateTimeExtensions.ConvertToTaiwanCalender(c.Birthday,false),
                     D7 = CheckXmlEmptyValue(ic.MedicalNumber),
                     D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id),
                     D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id),
                     D13 = CheckXmlEmptyValue(m.Hospital.Division.Id),
-                    D14 = CheckXmlEmptyValue(t.TreatmentDate == DateTime.MinValue?t.TreatDateStr:DateTimeExtensions.ToSimpleTaiwanDate(t.TreatmentDate)),
+                    D14 = CheckXmlEmptyValue(t.TreatmentDate == DateTime.MinValue?t.TreatDateStr:DateTimeExtensions.ConvertToTaiwanCalender(t.TreatmentDate,false)),
                     D15 = CheckXmlEmptyValue(t.Copayment.Id),
                     D16 = DeclarePoint.ToString(),
                     D17 = CopaymentPoint.ToString(),
@@ -311,7 +309,7 @@ namespace His_Pos.Class.Declare
                     D20 = c.Name,
                     D21 = CheckXmlEmptyValue(m.Hospital.Id),
                     D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
-                    D23 = CheckXmlEmptyValue(t.AdjustDate == DateTime.MinValue?t.AdjustDateStr:DateTimeExtensions.ToSimpleTaiwanDate(t.AdjustDate)),
+                    D23 = CheckXmlEmptyValue(t.AdjustDate == DateTime.MinValue?t.AdjustDateStr:DateTimeExtensions.ConvertToTaiwanCalender(t.AdjustDate,false)),
                     D24 = string.IsNullOrEmpty(m.Hospital.Doctor.IcNumber)? m.Hospital.Id: m.Hospital.Doctor.IcNumber,
                     D25 = p.Pharmacy.MedicalPersonnel.IcNumber,
                     D30 = t.MedicineDays,
@@ -322,7 +320,7 @@ namespace His_Pos.Class.Declare
                     D36 = CheckXmlEmptyValue(p.ChronicTotal),
                     D37 = MedicalServiceCode,
                     D38 = MedicalServicePoint.ToString(),
-                    D44 = ic.IcMarks.NewbornsData.Birthday
+                    D44 = DateTimeExtensions.ConvertToTaiwanCalender(ic.IcMarks.NewbornsData.Birthday, false)
                 }
             };
             if (!string.IsNullOrEmpty(DeclareMakeUp))

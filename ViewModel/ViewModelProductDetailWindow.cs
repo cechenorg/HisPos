@@ -1,5 +1,4 @@
-﻿using His_Pos.InventoryManagement;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 

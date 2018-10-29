@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using His_Pos.Class.Person;
 using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
+using His_Pos.Struct.IcData;
 
 namespace His_Pos.Class
 {
@@ -22,7 +22,7 @@ namespace His_Pos.Class
             switch (source)
             {
                 case DataSource.InitMedicalIcCard:
-                    IcNumber = "";
+                    IcNumber = row["CUS_IDNUM"].ToString();
                     MedicalNumber = "";
                     break;
 
@@ -39,12 +39,11 @@ namespace His_Pos.Class
             MedicalNumber = xml.SelectSingleNode("d7") == null ? null : xml.SelectSingleNode("d7").InnerText;
         }
 
-        public IcCard(string icNumber, IcMarks icMarks, string sendDate, string validityPeriod, int availableTimes, IcCardPay icCardPay, IcCardPrediction icCardPrediction, Pregnant pregnant, Vaccination vaccination)
+        public IcCard(string icNumber, IcMarks icMarks, string cardReleaseDate, int availableTimes, IcCardPay icCardPay, IcCardPrediction icCardPrediction, Pregnant pregnant, Vaccination vaccination)
         {
             IcNumber = icNumber;
             IcMarks = icMarks;
-            SendDate = sendDate;
-            ValidityPeriod = validityPeriod;
+            CardReleaseDate = cardReleaseDate;
             AvailableTimes = availableTimes;
             IcCardPay = icCardPay;
             IcCardPrediction = icCardPrediction;
@@ -52,20 +51,28 @@ namespace His_Pos.Class
             Vaccination = vaccination;
         }
 
-        private string icNumber;
+        public IcCard(BasicData basicData)
+        {
+            CardNo = basicData.CardNumber;
+            IcNumber = basicData.IcNumber;
+            IcMarks = new IcMarks {LogOutMark = basicData.CardLogoutMark};
+            CardReleaseDate = basicData.CardReleaseDate;
+        }
+
+        private string _icNumber;
 
         public string IcNumber
         {
-            get { return icNumber; }
+            get => _icNumber;
             set
             {
-                icNumber = value;
+                _icNumber = value;
                 NotifyPropertyChanged("IcNumber");
             }
-        }//卡片號碼
-
+        }//身分證字號
+        public string CardNo { get; set; }
         public IcMarks IcMarks { get; set; } = new IcMarks();//卡片註銷註記.保險對象身分註記.新生兒出生日期.新生兒胞胎註記
-        public string SendDate { get; set; }//發卡日期
+        public string CardReleaseDate { get; set; }//發卡日期
         public string ValidityPeriod { get; set; }//卡片有效期限
         public int AvailableTimes { get; set; }//就醫可用次數
         public IcCardPay IcCardPay { get; set; } //門診醫療費用 住院醫療費用
@@ -82,7 +89,7 @@ namespace His_Pos.Class
 
         public string MedicalNumber
         {
-            get { return medicalNumber; }
+            get => medicalNumber;
             set
             {
                 medicalNumber = value;

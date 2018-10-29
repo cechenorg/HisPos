@@ -1,23 +1,13 @@
-﻿using His_Pos.Class.Manufactory;
-using His_Pos.Class.Product;
+﻿using His_Pos.Class.Product;
 using His_Pos.Interface;
 using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchase;
 using His_Pos.Struct.Product;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 {
@@ -67,7 +57,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
             ProductDb.MergeProduct(Inventory.Id, targetProId);
-            MessageWindow messageWindow = new MessageWindow("併庫成功",Class.MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("併庫成功",Class.MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
             Close();
         }

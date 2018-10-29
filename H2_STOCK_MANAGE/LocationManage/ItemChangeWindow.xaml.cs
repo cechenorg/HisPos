@@ -1,20 +1,11 @@
 ﻿using His_Pos.Class;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace His_Pos.H4_BASIC_MANAGE.LocationManage
 {
@@ -152,18 +143,18 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         private void ButtonPlus_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (DataGridSource.SelectedItem is null) {
-                MessageWindow messageWindow = new MessageWindow("請選擇項目",MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇項目",MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
             if (ComboBoxSourceSmall.SelectedItem is null && ComboBoxSourceBig.SelectedItem.ToString() != "尚未有櫃位產品") {
-                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
             if (ComboBoxTargetSmall.SelectedItem is null && ComboBoxTargetBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
@@ -190,19 +181,19 @@ namespace His_Pos.H4_BASIC_MANAGE.LocationManage
         {
             if (DataGridTarget.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇項目", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇項目", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
             if (ComboBoxTargetSmall.SelectedItem is null && ComboBoxTargetBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇來源", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
             if (ComboBoxSourceSmall.SelectedItem is null && ComboBoxSourceBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇目的", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }

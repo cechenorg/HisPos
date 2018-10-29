@@ -2,17 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 
@@ -79,14 +70,14 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
 
             if (taget == 5 && SelectedManufactory is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請輸入廠商名稱", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return AddOrderType.ERROR;
             }
 
             if (WareHouseCombo.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請輸入庫存名稱", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請輸入庫存名稱", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return AddOrderType.ERROR;
             }

@@ -1,24 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Class.ProductType;
-using His_Pos.H4_BASIC_MANAGE.LocationManage;
 using His_Pos.H4_BASIC_MANAGE.ProductTypeManage;
 using His_Pos.Interface;
 using His_Pos.InventoryManagement;
@@ -331,7 +321,7 @@ namespace His_Pos.ProductTypeManage
                     ProductDb.UpdateProductType(((ProductTypeManageDetail)TypeDetail.SelectedItem).Id, SmallType.Text, SmallTypeEngName.Text);
                 }
                 
-                MessageWindow messageWindow = new MessageWindow("修改成功!", MessageType.SUCCESS);
+                MessageWindow messageWindow = new MessageWindow("修改成功!", MessageType.SUCCESS, true);
                 messageWindow.ShowDialog();
 
                 InitTypeDataChanged();
@@ -355,7 +345,7 @@ namespace His_Pos.ProductTypeManage
                 return true;
             else
             {
-                MessageWindow messageWindow = new MessageWindow(error, MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow(error, MessageType.ERROR, true);
                 messageWindow.ShowDialog();
 
                 return false;
@@ -406,7 +396,7 @@ namespace His_Pos.ProductTypeManage
                     {
                         if (detail.ItemCount != 0)
                         {
-                            MessageWindow messageWindow = new MessageWindow((deleteType as ProductTypeManageMaster).Name + "以下類別之商品數須為0!", MessageType.ERROR);
+                            MessageWindow messageWindow = new MessageWindow((deleteType as ProductTypeManageMaster).Name + "以下類別之商品數須為0!", MessageType.ERROR, true);
                             messageWindow.ShowDialog();
                             return false;
                         }
@@ -416,7 +406,7 @@ namespace His_Pos.ProductTypeManage
                 {
                     if ((deleteType as ProductTypeManageDetail).ItemCount != 0)
                     {
-                        MessageWindow messageWindow = new MessageWindow((deleteType as ProductTypeManageDetail).Name + "之商品數須為0!", MessageType.ERROR);
+                        MessageWindow messageWindow = new MessageWindow((deleteType as ProductTypeManageDetail).Name + "之商品數須為0!", MessageType.ERROR, true);
                         messageWindow.ShowDialog();
                         return false;
                     }

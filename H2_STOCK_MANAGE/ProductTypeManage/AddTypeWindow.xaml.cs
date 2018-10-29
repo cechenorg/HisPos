@@ -1,18 +1,6 @@
 ﻿using His_Pos.Class.ProductType;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
 {
@@ -93,7 +81,7 @@ namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
 
             if( error.Length != 0 )
             {
-                MessageWindow messageWindow = new MessageWindow(error, Class.MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow(error, Class.MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return false;
             }

@@ -26,14 +26,11 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://singde.com.tw/ClickOnce/</InstallUrl>
-    <PublisherName>xilian</PublisherName>
-    <SuiteName>HisPos</SuiteName>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>2</ApplicationRevision>
-    <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
-    <UseApplicationTrust>true</UseApplicationTrust>
-    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <ApplicationRevision>16</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -102,7 +99,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>5507DA932FC6B984696F31B1B038696799AC1B4E</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>7260D67ABC8AE22F8AB5FC50D824FD8D3EE84D61</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestKeyFile>His_Pos_TemporaryKey.pfx</ManifestKeyFile>
@@ -115,15 +112,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup />
-  <PropertyGroup>
-    <Win32Resource>
-    </Win32Resource>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=2.5.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
@@ -159,9 +147,6 @@
     <Reference Include="Google.Protobuf, Version=3.5.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>packages\Google.Protobuf.3.5.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
-    <Reference Include="ImeLib">
-      <HintPath>.\ImeLib.dll</HintPath>
-    </Reference>
     <Reference Include="JetBrains.Annotations, Version=2018.2.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
       <HintPath>packages\JetBrains.Annotations.2018.2.1\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
@@ -180,24 +165,22 @@
     <Reference Include="MaterialDesignThemes.MahApps, Version=0.0.11.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MaterialDesignThemes.MahApps.0.0.11\lib\net45\MaterialDesignThemes.MahApps.dll</HintPath>
     </Reference>
-    <Reference Include="MaterialDesignThemes.Wpf, Version=2.4.1.1101, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\MaterialDesignThemes.2.4.1.1101\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.1.953, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.ReportViewer.Runtime.Common.12.0.2402.15\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.ReportViewer.Runtime.Common.12.0.2402.15\lib\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.140.1000.523\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.ReportViewer.Runtime.Common.12.0.2402.15\lib\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ReportViewer.WinForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.ReportViewer.Runtime.WinForms.12.0.2402.15\lib\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>packages\Microsoft.SqlServer.Types.14.0.1016.290\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MySql.Data, Version=8.0.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
@@ -209,23 +192,13 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="ReachFramework" />
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>packages\Serilog.2.7.1\lib\net46\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Printing" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -285,14 +258,18 @@
     <Compile Include="Class\Declare\DeclareFileDdata.cs" />
     <Compile Include="Class\Declare\DeclareTDataXml.cs" />
     <Compile Include="Class\Declare\ErrorMessage.cs" />
+    <Compile Include="Class\Declare\IcDataUpload\ConvertData.cs" />
+    <Compile Include="Class\Declare\IcDataUpload\IcDataUploadService.cs" />
+    <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
+    <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
+    <Compile Include="Class\DiseaseCode\DiseaseCodeDb.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
     <Compile Include="Class\Entry\Entry.cs" />
     <Compile Include="Class\Entry\EntryDb.cs" />
     <Compile Include="Class\FunctionDb.cs" />
-    <Compile Include="Class\HisUpload\HisUploadData.cs" />
-    <Compile Include="Class\HisUpload\HisUploadDb.cs" />
+    <Compile Include="Class\HisApiData\MedicalInformation.cs" />
     <Compile Include="Class\IcCardPay.cs" />
     <Compile Include="Class\IcCardPrediction.cs" />
     <Compile Include="Class\InStock.cs" />
@@ -322,7 +299,7 @@
     <Compile Include="Class\Person\Customer.cs" />
     <Compile Include="Class\Declare\DeclareData.cs" />
     <Compile Include="Class\Declare\DeclareDetail.cs" />
-    <Compile Include="Class\DiseaseCode.cs" />
+    <Compile Include="Class\DiseaseCode\DiseaseCode.cs" />
     <Compile Include="Class\Division\Division.cs" />
     <Compile Include="Class\Division\DivisionDb.cs" />
     <Compile Include="Class\Enum.cs" />
@@ -346,6 +323,7 @@
     <Compile Include="Class\ProductType\ProductTypeManageMaster.cs" />
     <Compile Include="Class\Product\CusOrderOverview.cs" />
     <Compile Include="Class\Product\DeclareMedicine.cs" />
+    <Compile Include="Class\Product\InventoryCheckSheet.cs" />
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
@@ -365,8 +343,9 @@
     <Compile Include="Class\Product\StockTakingOTC.cs" />
     <Compile Include="Class\ProductType\ProductType.cs" />
     <Compile Include="Class\Product\ProductUnit.cs" />
+    <Compile Include="Class\SpecialCode\SpecialCodeDb.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrder.cs" />
-    <Compile Include="Class\SpecialCode.cs" />
+    <Compile Include="Class\SpecialCode\SpecialCode.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrderDb.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrderProduct.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOverview.cs" />
@@ -415,10 +394,19 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\ChronicSendToServerWindow.xaml.cs">
       <DependentUpon>ChronicSendToServerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionDec2\CustomerSelectWindow.xaml.cs">
+      <DependentUpon>CustomerSelectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionDec2\DiseaseCodeSelectDialog.xaml.cs">
+      <DependentUpon>DiseaseCodeSelectDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml.cs">
       <DependentUpon>ErrorMssageWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\GenderConverter.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml.cs">
+      <DependentUpon>IcErrorCodeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
@@ -449,6 +437,9 @@
     </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml.cs">
       <DependentUpon>ReturnControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
+      <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManage.cs" />
     <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
@@ -630,6 +621,14 @@
     <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RDLC\InventoryDataSet.cs">
+      <DependentUpon>InventoryDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="RDLC\InventoryDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InventoryDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
     <Compile Include="Resource\MenuListItem.xaml.cs">
@@ -650,11 +649,16 @@
     <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
       <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
-      <DependentUpon>StockTakingView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
+    <Compile Include="Struct\IcData\BasicData.cs" />
+    <Compile Include="Struct\IcData\IcPrescriptData.cs" />
+    <Compile Include="Struct\IcData\SeqNumber.cs" />
+    <Compile Include="Struct\IcData\TreatmentDataNoNeedHPC.cs" />
+    <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
+    <Compile Include="Struct\Product\PurchaseProduct.cs" />
+    <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
     <Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">
       <DependentUpon>DatabaseControl.xaml</DependentUpon>
     </Compile>
@@ -667,9 +671,6 @@
     <Compile Include="SystemSettings\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
-    <Compile Include="Struct\Product\PurchaseProduct.cs" />
-    <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
     <Compile Include="ViewModel\IViewModelMainWindow.cs" />
     <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -708,7 +709,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\CustomerSelectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\DiseaseCodeSelectDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -749,6 +762,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -857,12 +874,12 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="IconLabel.xaml">
       <SubType>Designer</SubType>
@@ -889,8 +906,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="InitConnectionWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
@@ -970,29 +987,25 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Resource\MenuListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SystemSettings\SettingControl\DatabaseControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SystemSettings\SettingControl\MyPharmacyControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SystemSettings\SettingControl\PrinterControl.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SystemSettings\SettingWindow.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -1014,16 +1027,43 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\InventoryCheckSheet.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="RDLC\MedBagReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\DataSources\His_Pos.AbstractClass.Product.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.Product.Batch.datasource" />
     <None Include="Properties\DataSources\His_Pos.Class.Product.DeclareMedicine.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.Product.InventoryChecking.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.Product.InventoryCheckSheet.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.Product.InventoryMedicine.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.Product.InventoryObject.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.Product.InventoryOtc.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.Product.StockTakingMedicine.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.Product.StockTakingOTC.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Interface.BatchNumbers.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Interface.IStockTaking.datasource" />
+    <None Include="Properties\DataSources\His_Pos.StockTaking.StockTakingView.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\InventoryDataSet.xsc">
+      <DependentUpon>InventoryDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="RDLC\InventoryDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>InventoryDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\InventoryDataSet.xss">
+      <DependentUpon>InventoryDataSet.xsd</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -1032,7 +1072,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
     <Folder Include="packages\" />
+    <Folder Include="StockTaking\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -1136,24 +1178,22 @@
     <Resource Include="Images\reload.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\cute.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Database.png" />
     <Resource Include="Images\MyPharmacy.png" />
     <Resource Include="Images\Printer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <PublishFile Include="Microsoft.SqlServer.Types">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>Assembly</FileType>
-    </PublishFile>
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

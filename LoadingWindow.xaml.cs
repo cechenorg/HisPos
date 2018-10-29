@@ -10,15 +10,12 @@ using His_Pos.Class.Manufactory;
 using His_Pos.Class.StoreOrder;
 using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchase;
-using His_Pos.Properties;
-using His_Pos.Service;
 using His_Pos.AbstractClass;
 using System.Linq;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Division;
 using His_Pos.Interface;
-using His_Pos.StockTaking;
 using His_Pos.StockTakingRecord;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.ProductTypeManage;
@@ -29,15 +26,19 @@ using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H1_DECLARE.MedBagManage;
-using His_Pos.RDLC;
 using His_Pos.Struct.Product;
 using His_Pos.PrescriptionInquire;
 using System.Xml;
 using His_Pos.Class.Declare;
-using System.Threading;
+using His_Pos.Class.CustomerHistory;
+using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Class.SpecialCode;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
-using His_Pos.H6_DECLAREFILE;
 using His_Pos.H6_DECLAREFILE.Export;
+using His_Pos.HisApi;
+using His_Pos.Struct.IcData;
+using Microsoft.Reporting.WinForms;
+using StockTakingView = His_Pos.H3_STOCKTAKING.StockTaking.StockTakingView;
 
 namespace His_Pos
 {
@@ -108,15 +109,15 @@ namespace His_Pos
                     declareDb.ImportDeclareData(declareDataCollection, decId);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS);
-                        mainWindow.Show();
+                        MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS, true);
+                        mainWindow.ShowDialog();
                     }));
                 }
                 else {
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MessageWindow mainWindow = new MessageWindow("申報檔已存在!", MessageType.ERROR);
-                        mainWindow.Show();
+                        MessageWindow mainWindow = new MessageWindow("申報檔已存在!", MessageType.ERROR, true);
+                        mainWindow.ShowDialog();
                     }));
                 }
                
@@ -550,9 +551,11 @@ namespace His_Pos
                 exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
                 exportView.DeclareMedicinesData = MedicineDb.GetDeclareFileMedicineData();
                 Dispatcher.Invoke((Action)(() =>
-                    {
-                        exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
-                    }));
+                {
+                    exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
+                    exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                    exportView.ReleasePalace.ItemsSource = exportView.HospitalCollection;
+                }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {
@@ -580,6 +583,7 @@ namespace His_Pos
                 prescriptionDec2View.PaymentCategories = PaymentCategroyDb.GetData();
                 prescriptionDec2View.Copayments = CopaymentDb.GetData();
                 prescriptionDec2View.AdjustCases = AdjustCaseDb.GetData();
+                prescriptionDec2View.SpecialCodes = SpecialCodeDb.GetData();
                 prescriptionDec2View.Usages = UsageDb.GetUsages();
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -589,11 +593,26 @@ namespace His_Pos
                     prescriptionDec2View.PaymentCategoryCombo.ItemsSource = prescriptionDec2View.PaymentCategories;
                     prescriptionDec2View.CopaymentCombo.ItemsSource = prescriptionDec2View.Copayments;
                     prescriptionDec2View.AdjustCaseCombo.ItemsSource = prescriptionDec2View.AdjustCases;
+                    prescriptionDec2View.SpecialCode.ItemsSource = prescriptionDec2View.SpecialCodes;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
                     prescriptionDec2View.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
-                    prescriptionDec2View.HisPerson.SelectedItem =
-                        MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(m =>
-                            m.Id.Equals(MainWindow.CurrentUser.Id));
+                    var isMedicalPerson = false;
+                    foreach (var m in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
+                    {
+                        if (!m.Id.Equals(MainWindow.CurrentUser.Id)) continue;
+                        isMedicalPerson = true;
+                        break;
+                    }
+                    if (isMedicalPerson)
+                    {
+                        prescriptionDec2View.HisPerson.SelectedItem =
+                            MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
+                                p.Id.Equals(MainWindow.CurrentUser.Id));
+                    }
+                    else
+                    {
+                        prescriptionDec2View.HisPerson.SelectedIndex = 0;
+                    }
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -694,12 +713,194 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     medBagManageView.MedBagManageViewBox.IsEnabled = true;
-                    var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS);
-                    m.Show();
+                    var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS, true);
+                    m.ShowDialog();
                     Close();
                 }));
             };
             backgroundWorker.RunWorkerAsync();
+        }
+
+        public void LoadIcData(PrescriptionDec2View prescriptionDec2View)
+        {
+            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("卡片資料讀取中...");
+                LoadPatentDataFromIcCard(prescriptionDec2View);
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    prescriptionDec2View.CustomerCollection =
+                        CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
+                    CustomerSelectWindow customerSelect = new CustomerSelectWindow(prescriptionDec2View.CustomerCollection);
+                    customerSelect.Show();
+                    //if (prescriptionDec2View.CustomerCollection.Count == 1)
+                    //    prescriptionDec2View.CurrentPrescription.Customer = prescriptionDec2View.CustomerCollection[0];
+                    //else
+                    //{
+                    //    CustomerSelectWindow customerSelect = new CustomerSelectWindow(prescriptionDec2View.CustomerCollection);
+                    //    customerSelect.Show();
+                    //}
+                    if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                        !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                        prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
+                    if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                        !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                        prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.NotifyPropertyChanged(nameof(prescriptionDec2View.CurrentPrescription));
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        private void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
+        {
+            var strLength = 72;
+            var icData = new byte[72];
+            var res = HisApiBase.hisGetBasicData(icData, ref strLength);
+            icData.CopyTo(prescriptionDec2View.BasicDataArr, 0);
+            if (res == 0)
+            {
+                prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
+                prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
+                prescriptionDec2View.CusBasicData = new BasicData(icData);
+                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData) {Id = "1"};
+                strLength = 296;
+                icData = new byte[296];
+                var cs = new ConvertData();
+                var cTreatItem = cs.StringToBytes("AF\0", 3);
+                //新生兒就醫註記,長度兩個char
+                var cBabyTreat = prescriptionDec2View.TreatRecCollection.Count > 0 ? cs.StringToBytes(prescriptionDec2View.TreatRecCollection[0].NewbornTreatmentMark + "\0", 3) : cs.StringToBytes(" ", 2);
+                //補卡註記,長度一個char
+                var cTreatAfterCheck = new byte[] { 1 };
+                res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+                //取得就醫序號
+                if (res == 0)
+                {
+                    prescriptionDec2View.IsMedicalNumberGet = true;
+                    prescriptionDec2View.Seq = new SeqNumber(icData);
+                    prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.Seq.MedicalNumber;
+                    prescriptionDec2View.NotifyPropertyChanged(nameof(prescriptionDec2View.CurrentPrescription.Customer.IcCard));
+                }
+                //未取得就醫序號
+                else
+                {
+                    prescriptionDec2View.GetMedicalNumberErrorCode = res;
+                }
+                //取得就醫紀錄
+                strLength = 498;
+                icData = new byte[498];
+                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+                if (res == 0)
+                {
+                    var startIndex = 84;
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (icData[startIndex + 3] == 32)
+                            break;
+                        prescriptionDec2View.TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
+                        startIndex += 69;
+                    }
+                }
+            }
+            else
+            {
+                /*
+                 * prescriptionDec2View.CurrentPrescription.Customer.Name = prescriptionDec2View.PatientName.Text;
+                 * if(prescriptionDec2View.PatientBirthday.Text.Length == 7)
+                 *   prescriptionDec2View.CurrentPrescription.Customer.Birthday = prescriptionDec2View.PatientBirthday.Text.Substring(0, 3) + "-" +
+                 * prescriptionDec2View.PatientBirthday.Text.Substring(3, 2) + "-" +
+                   prescriptionDec2View.PatientBirthday.Text.Substring(5, 2);
+                 * prescriptionDec2View.CurrentPrescription.Customer.IcNumber = prescriptionDec2View.PatientId.Text;
+                 */
+                prescriptionDec2View.CurrentPrescription.Customer.Id = "1";
+                prescriptionDec2View.CurrentPrescription.Customer.Name = "許文章";
+                prescriptionDec2View.CurrentPrescription.Customer.Birthday = new DateTime(1948,10,01);
+                prescriptionDec2View.CurrentPrescription.Customer.IcNumber = "S88824769A";
+                prescriptionDec2View.CheckPatientGender();
+                prescriptionDec2View.CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
+            }
+            prescriptionDec2View.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(prescriptionDec2View.CurrentPrescription.Customer.Id);
+            prescriptionDec2View.CusHistoryMaster.ItemsSource = prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
+            if(prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Count > 0)
+                prescriptionDec2View.CusHistoryMaster.SelectedIndex = 0;
+        }
+
+        public void LoginIcData(PrescriptionDec2View prescriptionDec2View)
+        {
+            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("卡片資料寫入中...");
+                prescriptionDec2View.LogInIcData();
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    if (prescriptionDec2View.IsMedicalNumberGet)
+                        prescriptionDec2View.CreatIcUploadData();
+                    else if(!prescriptionDec2View.IsMedicalNumberGet)
+                    {
+                        prescriptionDec2View.CreatIcErrorUploadData();
+                    }
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        public void PrintInventoryCheckSheet(ReportViewer rptViewer,StockTakingView stockTakingView)
+        {
+            stockTakingView.StockTakingViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("產生盤點單...");
+                CreatePdf(rptViewer);
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    stockTakingView.StockTakingViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+        private static void CreatePdf(ReportViewer viewer)
+        {
+            var deviceInfo = "<DeviceInfo>" +
+                             "  <OutputFormat>PDF</OutputFormat>" +
+                             "  <PageWidth>" + 21 + "cm</PageWidth>" +
+                             "  <PageHeight>" + 29.7 + "cm</PageHeight>" +
+                             "  <MarginTop>0cm</MarginTop>" +
+                             "  <MarginLeft>0cm</MarginLeft>" +
+                             "  <MarginRight>0cm</MarginRight>" +
+                             "  <MarginBottom>0cm</MarginBottom>" +
+                             "</DeviceInfo>";
+            var bytes = viewer.LocalReport.Render("PDF", deviceInfo);
+
+            using (var fs = new FileStream("output.pdf", FileMode.Create))
+            {
+                fs.Write(bytes, 0, bytes.Length);
+            }
         }
     }
 }

@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.Class;
-using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
-using His_Pos.Class.Person;
 
 namespace His_Pos.PrescriptionInquire
 {

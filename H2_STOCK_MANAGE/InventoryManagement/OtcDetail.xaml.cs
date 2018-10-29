@@ -1,36 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
-using His_Pos.Interface;
-using His_Pos.ProductPurchase;
 using His_Pos.ProductPurchaseRecord;
 using His_Pos.StockTaking;
-using His_Pos.Struct.Product;
-using His_Pos.ViewModel;
 using LiveCharts;
-using LiveCharts.Definitions.Series;
 using LiveCharts.Wpf;
 
 namespace His_Pos.InventoryManagement
@@ -304,7 +291,7 @@ namespace His_Pos.InventoryManagement
             }
             if (!check) {
                 var errors = _errorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
-                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow(errors, MessageType.ERROR, true);
                 messageWindow.ShowDialog();
             }
             return check;
@@ -334,8 +321,8 @@ namespace His_Pos.InventoryManagement
                                           ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text);
                 ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
-            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS);
-            messageWindow.Show();
+            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS, true);
+            messageWindow.ShowDialog();
             InitVariables();
         }
         

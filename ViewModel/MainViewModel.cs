@@ -26,6 +26,7 @@ using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.IndexView;
 using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
+using His_Pos.H3_STOCKTAKING.StockTaking;
 
 namespace His_Pos.ViewModel
 {
@@ -353,13 +354,13 @@ namespace His_Pos.ViewModel
                             break;
 
                         case nameof(FeatureItem.新增盤點):
-                            if (StockTaking.StockTakingView.Instance is null) break;
+                            if (StockTakingView.Instance is null) break;
 
-                            if (StockTaking.StockTakingView.DataChanged)
+                            if (StockTakingView.DataChanged)
                             {
-                                StockTaking.StockTakingView.Instance.InitProduct();
+                                StockTakingView.Instance.InitProduct();
 
-                                StockTaking.StockTakingView.DataChanged = false;
+                                StockTakingView.DataChanged = false;
                             }
                             break;
 

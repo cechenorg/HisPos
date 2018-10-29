@@ -9,7 +9,6 @@ using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
-using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class
@@ -35,13 +34,14 @@ namespace His_Pos.Class
 
         public Prescription(DataRow row)
         {
-            ErrorList EList = new ErrorList();
+            var errorList = new ErrorList();
             Customer = new Customer(row,"fromXml");
             Pharmacy = new Pharmacy.Pharmacy(row);
             Treatment = new Treatment(row);
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
             ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
+
         }
 
         public Prescription(XmlNode xml)
@@ -49,9 +49,9 @@ namespace His_Pos.Class
             Customer = new Customer(xml);
             Pharmacy = new Pharmacy.Pharmacy(xml);
             Treatment = new Treatment(xml);
-            ChronicSequence = xml.SelectSingleNode("d35") == null ? null : xml.SelectSingleNode("d35").InnerText;
-            ChronicTotal = xml.SelectSingleNode("d36") == null ? null : xml.SelectSingleNode("d36").InnerText;
-            OriginalMedicalNumber = xml.SelectSingleNode("d43") == null ? null : xml.SelectSingleNode("d43").InnerText;
+            ChronicSequence = xml.SelectSingleNode("d35")?.InnerText;
+            ChronicTotal = xml.SelectSingleNode("d36")?.InnerText;
+            OriginalMedicalNumber = xml.SelectSingleNode("d43")?.InnerText;
         }
 
         public Prescription(DeclareFileDdata d)
@@ -80,6 +80,16 @@ namespace His_Pos.Class
         public string MedicalRecordId = "";
         public string ChronicSequence { get; set; }//D35連續處方箋調劑序號
         public string ChronicTotal { get; set; }//D36連續處方可調劑次數
+        private bool _isGetIcCard;
+        public bool IsGetIcCard //健保卡是否讀取成功
+        {
+            get => _isGetIcCard;
+            set
+            {
+                _isGetIcCard = value;
+                OnPropertyChanged(nameof(IsGetIcCard));
+            }
+        }
         public ObservableCollection<DeclareMedicine> Medicines { get; set; }
         public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
         public ErrorList EList = new ErrorList();
@@ -264,9 +274,8 @@ namespace His_Pos.Class
                 AddError("0", "未選擇部分負擔");
 
             if (!Treatment.Copayment.Id.Equals("903")) return;
-
-            var newBornBirth = DateTimeExtensions.ToUsDate(Customer.IcCard.IcMarks.NewbornsData.Birthday);
-            var newBornAge = DateTime.Now - newBornBirth;
+            
+            var newBornAge = DateTime.Now - Customer.IcCard.IcMarks.NewbornsData.Birthday;
             CheckNewBornAge(newBornAge);
         }
 
@@ -293,27 +302,11 @@ namespace His_Pos.Class
             }
         }
 
-        public void CheckBirthDay(string customerBirthday)
+        public void CheckBirthDay(DateTime customerBirthday)
         {
-            if (string.IsNullOrEmpty(customerBirthday))
+            if (customerBirthday >= DateTime.Now)
             {
-                AddError("0", "病患生日未填寫");
-                return;
-            }
-            Regex birth = new Regex(@"[0-9]{7}");
-            Regex birth2 = new Regex(@"[0-9]{3}/[0-9]{2}/[0-9]{2}");
-            if (birth.IsMatch(customerBirthday))
-            {
-                string year = customerBirthday.Substring(0, 3);
-                string month = customerBirthday.Substring(3, 2);
-                string date = customerBirthday.Substring(5, 2);
-                Customer.Birthday = year + "/" + month + "/" + date;
-            }
-            else if (birth2.IsMatch(customerBirthday))
-                return;
-            else
-            {
-                AddError("0", "生日格式錯誤");
+                AddError("0", "生日不可超過現在時間");
             }
         }
 

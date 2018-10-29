@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace His_Pos.Class.Authority
+﻿namespace His_Pos.Class.Authority
 {
     public class Authority
     {

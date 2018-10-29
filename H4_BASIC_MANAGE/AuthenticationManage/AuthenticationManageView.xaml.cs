@@ -1,23 +1,13 @@
 ﻿using His_Pos.Class.Authority;
 using His_Pos.Class.Leave;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.Class;
 using His_Pos.H5_ATTEND.WorkScheduleManage;
 
@@ -140,7 +130,7 @@ namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
         {
             AuthorityDb.AuthLeaveConfirm(AuthLeaveRecords.Where(al => al.IsSelected).ToList());
 
-            MessageWindow messageWindow = new MessageWindow("審核成功!", MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("審核成功!", MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
 
             WorkScheduleManageView.DataChanged = true;

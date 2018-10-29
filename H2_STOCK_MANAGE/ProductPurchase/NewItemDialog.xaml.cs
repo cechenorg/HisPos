@@ -1,23 +1,10 @@
-﻿using His_Pos.AbstractClass;
-using His_Pos.Class;
-using His_Pos.Class.Product;
+﻿using His_Pos.Class;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.Interface;
 using His_Pos.Struct.Product;
-using His_Pos.Class.StoreOrder;
 
 namespace His_Pos.ProductPurchase
 {
@@ -56,8 +43,9 @@ namespace His_Pos.ProductPurchase
 
                 if (SearchResult.Items.Count == 0)
                 {
-                    MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR);
+                    MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR, true);
                     messageWindow.ShowDialog();
+                    ConfirmButtonClicked = true;
                     Close();
                 }
                 else if (SearchResult.Items.Count == 1)
@@ -67,7 +55,10 @@ namespace His_Pos.ProductPurchase
                     Close();
                 }
                 else
+                {
+                    SearchResult.SelectedIndex = 0;
                     ShowDialog();
+                }
             }
         }
         
@@ -86,7 +77,7 @@ namespace His_Pos.ProductPurchase
 
             if(SearchResult.Items.Count == 0)
             {
-                MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("查無商品!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 Close();
             }
@@ -150,9 +141,14 @@ namespace His_Pos.ProductPurchase
 
         private void ConfirmClick(object sender, RoutedEventArgs e)
         {
+            ConfirmSelectResult();
+        }
+
+        private void ConfirmSelectResult()
+        {
             if (SearchResult.SelectedItem is null)
             {
-                MessageWindow messageWindow = new MessageWindow("請選擇一個項目!", MessageType.ERROR);
+                MessageWindow messageWindow = new MessageWindow("請選擇一個項目!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
                 return;
             }
@@ -174,6 +170,36 @@ namespace His_Pos.ProductPurchase
             if (sender is null) return;
 
             ItemGrid.RowDefinitions[1].Height = new GridLength((sender as NewItemDialog).Height - 140);
+        }
+
+        private void NewItemDialog_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            int currentIndex = -1;
+
+            if (e.Key == Key.Up)
+            {
+                currentIndex = SearchResult.SelectedIndex;
+
+                if (currentIndex == -1) return;
+                else if (currentIndex - 1 > -1)
+                    SearchResult.SelectedIndex = currentIndex - 1;
+
+                SearchResult.ScrollIntoView(SearchResult.SelectedItem);
+            }
+            else if (e.Key == Key.Down)
+            {
+                currentIndex = SearchResult.SelectedIndex;
+
+                if (currentIndex == -1) return;
+                else if (currentIndex + 1 <= SearchResult.Items.Count - 1)
+                    SearchResult.SelectedIndex = currentIndex + 1;
+
+                SearchResult.ScrollIntoView(SearchResult.SelectedItem);
+            }
+            else if (e.Key == Key.Enter)
+            {
+                ConfirmSelectResult();
+            }
         }
     }
 }

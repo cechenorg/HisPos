@@ -80,12 +80,12 @@ namespace His_Pos.Class.Declare
                         break;
                 }
             }
-            var xmlStr = p.SerializeObject().Replace("<pharmacy xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">", "<pharmacy>");
-            var errorStr = file.ErrorPrescriptionList.SerializeObject().Replace("<ErrorPrescriptions xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\"", "<ErrorPrescriptions>");
+            var xmlStr = p.SerializeObject();
+            var errorStr = file.ErrorPrescriptionList.SerializeObject();
             if (string.IsNullOrEmpty(errorStr))
                 errorStr = "<ErrorPrescriptions></ErrorPrescriptions>";
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            parameters.Add(new SqlParameter("SEND_DATE", date));
+            parameters.Add(new SqlParameter("SEND_DATE", date.ToShortDateString()));
             parameters.Add(new SqlParameter("PHARMACY_ID", p.Tdata.T2));
             parameters.Add(new SqlParameter("FILE_CONTENT", SqlDbType.Xml)
             {
@@ -102,8 +102,7 @@ namespace His_Pos.Class.Declare
 
             foreach (var e in file.ErrorPrescriptionList.ErrorList)
             {
-                if (e.Error == null) continue;
-
+                if(e.Error == null) continue;
                 if (e.Error.Count > 0)
                     file.HasError = true;
             }

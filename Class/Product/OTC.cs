@@ -1,7 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Windows;
-using System.Windows.Media.Imaging;
+﻿using System.Data;
 
 namespace His_Pos.Class.Product
 {

@@ -1,23 +1,13 @@
 ﻿using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Interface;
-using His_Pos.InventoryManagement;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
 {
@@ -123,7 +113,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
             if (WareHouseInventoryCollection.Count(war => Convert.ToInt32(war.AfterDemolitionAmount) < 0) > 0) {
-                MessageWindow messageWindows = new MessageWindow("拆庫後剩餘量不可為負!", MessageType.ERROR);
+                MessageWindow messageWindows = new MessageWindow("拆庫後剩餘量不可為負!", MessageType.ERROR,true);
                 messageWindows.ShowDialog();
                 return;
             }
@@ -134,7 +124,7 @@ namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
                 if (wareHouseInventory.DemolitionAmount == "0") continue;
                 ProductDb.DemolitionProduct(newInvId,proId, wareHouseInventory.warId,wareHouseInventory.DemolitionAmount);
             }
-            MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
             Close();
         }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
@@ -49,6 +46,7 @@ namespace His_Pos.Service
                     document.Descendants()
                         .Where(e => e.IsEmpty || string.IsNullOrWhiteSpace(e.Value))
                         .Remove();
+                    document.Root?.RemoveAttributes();
                     return document.ToString();
                 }
             }

@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace His_Pos.Class
+﻿namespace His_Pos.Class.DiseaseCode
 {
     public class DiseaseCode : Selection
     {

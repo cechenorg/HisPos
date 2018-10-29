@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using His_Pos.AbstractClass;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Product;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
@@ -471,10 +467,10 @@ namespace His_Pos.Class.StoreOrder
             string empty = string.Empty;
             StringBuilder Dtl_data = new StringBuilder(); //  備註text  處方資訊
             //第一行
-            Dtl_data.Append(CurrentDecMasId.PadLeft(8,'0')); //藥局病例號
+            Dtl_data.Append(CurrentDecMasId.PadLeft(8,'0')); //藥局病歷號
             Dtl_data.Append(declareData.Prescription.Customer.Name.PadRight(20 - NewFunction.HowManyChinese(declareData.Prescription.Customer.Name), ' ')); //病患姓名 
             Dtl_data.Append(declareData.Prescription.Customer.IcCard.IcNumber.PadRight(10, ' ')); //身分證字號
-            Dtl_data.Append(declareData.Prescription.Customer.Birthday.Replace("/","").PadRight(7, ' ')); //出生年月日
+            Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Customer.Birthday, false)); //出生年月日
             string gender = declareData.Prescription.Customer.IcCard.IcNumber.Substring(1, 1) == "1" ? "1" : "2";
             Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
             Dtl_data.Append(declareData.Prescription.Customer.ContactInfo.Tel.PadRight(20, ' ')); //電話

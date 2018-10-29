@@ -1,8 +1,8 @@
-﻿using His_Pos.Service;
-using System;
+﻿using System;
 using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
+using His_Pos.Struct.IcData;
 
 namespace His_Pos.Class.Person
 {
@@ -13,10 +13,18 @@ namespace His_Pos.Class.Person
             IcCard = new IcCard();
         }
 
-        public Customer(IcCard icCard)
+        public Customer(BasicData basicData)
         {
-            IcCard = icCard;
+            var year = int.Parse(basicData.Birthday.Substring(0, 3)) + 1911;
+            var month = int.Parse(basicData.Birthday.Substring(3, 2));
+            var day = int.Parse(basicData.Birthday.Substring(5, 2));
+            Name = basicData.Name;
+            Birthday = new DateTime(year,month,day);
+            IcNumber = basicData.IcNumber;
+            Gender = basicData.Gender;
+            IcCard = new IcCard(basicData);
         }
+
         public Customer(Customer customer)
         {
             Id = customer.Id;
@@ -27,13 +35,12 @@ namespace His_Pos.Class.Person
             Gender = customer.Gender;
             GenderName = customer.GenderName;
             IcCard = customer.IcCard;
-          
         }
         public Customer(DataRow row,string type)
         {
             Id = row["CUS_ID"].ToString();
             IcNumber = row["CUS_IDNUM"].ToString();
-            Birthday = DateTimeExtensions.BirthdayFormatConverter3(row["CUS_BIRTH"].ToString());
+            Birthday = row.Field<DateTime?>("CUS_BIRTH")??new DateTime();
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
             Gender = string.IsNullOrEmpty(row["CUS_GENDER"].ToString()) || Convert.ToBoolean(row["CUS_GENDER"].ToString());
@@ -45,14 +52,31 @@ namespace His_Pos.Class.Person
                 GenderName = row["CUS_GENDER"].ToString() == "True" ? "男" : "女";
                 IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
             }
-             
+
+            if (!string.IsNullOrEmpty(row["CUS_TEL"].ToString()))
+            {
+                ContactInfo = new ContactInfo();
+                ContactInfo.Tel = row["CUS_TEL"].ToString();
+            }
+                
         }
         public Customer(XmlNode xml) {
             IcCard = new IcCard(xml);
             Name = xml.SelectSingleNode("d20") == null ? null : xml.SelectSingleNode("d20")?.InnerText;
             IcNumber = xml.SelectSingleNode("d3") == null ? null : xml.SelectSingleNode("d3")?.InnerText;
             Gender = IcNumber.Substring(1, 1) == "1" ? true : false;
-            Birthday = xml.SelectSingleNode("d6") == null ? null : DateTimeExtensions.BirthdayFormatConverter2(xml.SelectSingleNode("d6")?.InnerText);
+            var nodeStr = xml.SelectSingleNode("d6")?.InnerText;
+            if (!string.IsNullOrEmpty(nodeStr))
+            {
+                var year = int.Parse(nodeStr.Substring(0, 3))+1911;
+                var month = int.Parse(nodeStr.Substring(3, 2));
+                var day = int.Parse(nodeStr.Substring(5, 2));
+                Birthday = new DateTime(year,month,day);
+            }
+            else
+            {
+                Birthday = new DateTime();
+            }
         }
 
         public Customer(DeclareFileDdata d)
@@ -61,7 +85,18 @@ namespace His_Pos.Class.Person
             Name = !string.IsNullOrEmpty(d.Dbody.D20) ? d.Dbody.D20 : string.Empty;
             IcNumber = !string.IsNullOrEmpty(d.Dbody.D3) ? d.Dbody.D3 : string.Empty;
             Gender = IcNumber.Substring(1, 1) == "1";
-            Birthday = !string.IsNullOrEmpty(d.Dbody.D6) ? d.Dbody.D6 : string.Empty;
+            var nodeStr = d.Dbody.D6;
+            if (!string.IsNullOrEmpty(nodeStr))
+            {
+                var year = int.Parse(nodeStr.Substring(0, 3)) + 1911;
+                var month = int.Parse(nodeStr.Substring(3, 2));
+                var day = int.Parse(nodeStr.Substring(5, 2));
+                Birthday = new DateTime(year, month, day);
+            }
+            else
+            {
+                Birthday = new DateTime();
+            }
         }
 
         public string Qname { get; set; }
@@ -72,7 +107,7 @@ namespace His_Pos.Class.Person
             set
             {
                 _gender = value;
-                NotifyPropertyChanged(nameof(Gender));
+                OnPropertyChanged(nameof(Gender));
             }
         }
 
@@ -83,7 +118,7 @@ namespace His_Pos.Class.Person
             set
             {
                 _genderName = value;
-                NotifyPropertyChanged(nameof(Gender));
+                OnPropertyChanged(nameof(Gender));
             }
         }
 
@@ -95,7 +130,7 @@ namespace His_Pos.Class.Person
             set
             {
                 _icCard = value;
-                NotifyPropertyChanged("IcCard");
+                OnPropertyChanged(nameof(IcCard));
             }
         }
         public ContactInfo ContactInfo { get; set; } = new ContactInfo();

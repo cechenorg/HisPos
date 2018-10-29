@@ -32,18 +32,33 @@ namespace His_Pos.Service
 
         public static DateTime ToUsDate(string datetime)
         {
+            string year;
+            string month;
+            string date;
             if (string.IsNullOrEmpty(datetime))
                 return new DateTime();
-            if (datetime.Length >= 10)
-                return Convert.ToDateTime(datetime.Substring(0, 10));
-            if (datetime.Substring(0, 3).Contains("/"))
-                datetime = "0" + datetime;
-            if (datetime.Contains("02/29")){
-                datetime = (Convert.ToInt32(datetime.Substring(0, 3)) + 1911).ToString() + datetime.Substring(3,6);
-                return Convert.ToDateTime(datetime, CultureInfo.InvariantCulture.DateTimeFormat);
+            if (datetime.Contains("/"))
+            {
+                year = datetime.Split('/')[0];
+                month = datetime.Split('/')[1];
+                date = datetime.Split('/')[2];
             }
-          
-            return DateTime.ParseExact(datetime, "yyy/MM/dd", CultureInfo.InvariantCulture).AddYears(1911);
+            else
+            {
+                year = datetime.Split('-')[0];
+                month = datetime.Split('-')[1];
+                date = datetime.Split('-')[2];
+            }
+           
+            if (year.StartsWith("0") || year.Length == 3)
+                year = (int.Parse(datetime.Substring(0, 4)) + 1911).ToString();
+            else
+                year = int.Parse(datetime.Substring(0, 4)).ToString();
+
+            if (int.Parse(year) < 1911)
+                year += 1911;
+            datetime = year + "/" + month + "/" + date;
+            return DateTime.ParseExact(datetime, "yyyy/MM/dd", CultureInfo.InvariantCulture);
         }
  
         /*
@@ -62,40 +77,11 @@ namespace His_Pos.Service
             return age;
         }
 
-        public static string BirthdayFormatConverter(string birthday)
-        {
-            var year = birthday.Substring(0, 3).StartsWith("0") ? birthday.Substring(1, 2) : birthday.Substring(0, 3);
-            return year + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
-        }
-        public static string BirthdayFormatConverter2(string birthday)
-        {
-            return birthday.Substring(0, 3) + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(5, 2);
-        }
-        public static string BirthdayFormatConverter3(string birthday)
-        {
-            if (birthday.Split('/')[0].Length == 3)
-            {
-                return (Convert.ToInt32(birthday.Substring(0, 3))+1911).ToString() + "/" + birthday.Substring(4, 2) + "/" + birthday.Substring(7, 2);
-            }
-            if (birthday.Split('/')[0].Length == 2)
-            {
-                return (Convert.ToInt32(birthday.Substring(0, 2)) + 1911).ToString() + "/" + birthday.Substring(3, 2) + "/" + birthday.Substring(6, 2);
-            }
-            return birthday;
-        }
-       
-        public static string UsToTaiwan(string ustring)
-        {
-            string[] split = ustring.Split('/');
-            if (split[1].Length == 1) split[1] = "0" + split[1];
-            if (split[2].Length == 1) split[2] = "0" + split[2];
-            return (Convert.ToInt32(split[0]) - 1911).ToString() + split[1] + split[2];
-        }
-
         private static string CheckDateLessTen(string dateStr)
         {
             return dateStr.PadLeft(2, '0');
         }
+
         /*
         Data:yy/mm/dd => yyy/mm/dd 
         */
@@ -107,5 +93,15 @@ namespace His_Pos.Service
             else
                 return  date;
         }
+
+        public static string ConvertToTaiwanCalender(DateTime d,bool needSplit)
+        {
+            var year = (d.Year - 1911).ToString().PadLeft(3, '0');
+            var month = (d.Month).ToString().PadLeft(2, '0');
+            var day = (d.Day).ToString().PadLeft(2, '0');
+            if (needSplit)
+                return year + "/" + month + "/" + day;
+            return year + month + day;
+        } 
     }
 }

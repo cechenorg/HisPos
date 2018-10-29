@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
@@ -16,9 +15,8 @@ using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
 using His_Pos.Class.Pharmacy;
-using His_Pos.Class.Product;
+using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
-using Microsoft.ReportingServices.RdlObjectModel;
 
 namespace His_Pos.RDLC
 {
@@ -173,7 +171,7 @@ namespace His_Pos.RDLC
                     {"PatientId", p.Customer.IcNumber},
                     {"PatientTel", p.Customer.ContactInfo.Tel},
                     {"PatientGender", p.Customer.Gender ? "男" : "女"},
-                    {"PatientBirthday", p.Customer.Birthday},
+                    {"PatientBirthday", DateTimeExtensions.ConvertToTaiwanCalender(p.Customer.Birthday,true)},
                     {"MedRecNum", ""},
                     {"AdjustDate", p.Treatment.AdjustDateStr},
                     {"TreatmentDate", p.Treatment.TreatDateStr},

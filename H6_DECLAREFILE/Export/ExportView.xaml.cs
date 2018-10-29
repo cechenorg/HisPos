@@ -27,7 +27,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
     /// <summary>
     /// ExportView.xaml 的互動邏輯
     /// </summary>
-    public partial class ExportView : INotifyPropertyChanged
+    public partial class ExportView :UserControl, INotifyPropertyChanged
     {
         public static ExportView Instance;
         private ObservableCollection<DeclareFile> _declareFiles;
@@ -116,16 +116,55 @@ namespace His_Pos.H6_DECLAREFILE.Export
             }
         }
 
-        public ObservableCollection<Copayment> CopaymentCollection { get; set; }
-        public ObservableCollection<PaymentCategory> PaymentCategoryCollection { get; set; }
-        public ObservableCollection<TreatmentCase> TreatmentCaseCollection { get; set; }
-        public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
+        private ObservableCollection<Copayment> copaymentCollection;
+
+        public ObservableCollection<Copayment> CopaymentCollection
+        {
+            get => copaymentCollection;
+            set
+            {
+                copaymentCollection = value;
+                OnPropertyChanged(nameof(CopaymentCollection));
+            }
+        }
+        private ObservableCollection<PaymentCategory> paymentCategoryCollection;
+        public ObservableCollection<PaymentCategory> PaymentCategoryCollection
+        {
+            get => paymentCategoryCollection;
+            set
+            {
+                paymentCategoryCollection = value;
+                OnPropertyChanged(nameof(PaymentCategoryCollection));
+            }
+        }
+        private ObservableCollection<TreatmentCase> treatmentCaseCollection;
+
+        public ObservableCollection<TreatmentCase> TreatmentCaseCollection
+        {
+            get => treatmentCaseCollection;
+            set
+            {
+                treatmentCaseCollection = value;
+                OnPropertyChanged(nameof(TreatmentCaseCollection));
+            }
+        }
+        private ObservableCollection<DeclareMedicine> declareMedicinesData;
+
+        public ObservableCollection<DeclareMedicine> DeclareMedicinesData
+        {
+            get => declareMedicinesData;
+            set
+            {
+                declareMedicinesData = value;
+                OnPropertyChanged(nameof(DeclareMedicinesData));
+            }
+        }
 
         public ExportView()
         {
             InitializeComponent();
-            InitializeDeclareFiles();
             Instance = this;
+            InitializeDeclareFiles();
             DataContext = this;
         }
 

@@ -1,26 +1,15 @@
 ﻿using His_Pos.Class.Product;
 using His_Pos.Service;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Net;
-using System.Collections.Specialized;
 
 namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 {
@@ -79,7 +68,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
         }
 
         private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
-             
+            
             SaveFileDialog saveFileDialog1 = new SaveFileDialog(); 
             saveFileDialog1.Filter = "csv|*.csv ";
             saveFileDialog1.FilterIndex = 2;

@@ -1,14 +1,6 @@
-﻿using His_Pos.Class.AdjustCase;
-using His_Pos.Class.Copayment;
-using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.Person;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using His_Pos.Service;
 using System.Data;

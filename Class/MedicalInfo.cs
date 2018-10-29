@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using His_Pos.Class.Declare;
-using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class
@@ -16,24 +13,24 @@ namespace His_Pos.Class
         public MedicalInfo()
         {
             Hospital = new Hospital();
-            SpecialCode = new SpecialCode();
-            MainDiseaseCode = new DiseaseCode();
-            SecondDiseaseCode = new DiseaseCode();
+            SpecialCode = new SpecialCode.SpecialCode();
+            MainDiseaseCode = new DiseaseCode.DiseaseCode();
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             TreatmentCase = new TreatmentCase.TreatmentCase();
         }
 
         public MedicalInfo(DataRow row)
         {
             Hospital = new Hospital(row,DataSource.GetHospitalData);
-            SpecialCode = new SpecialCode();
-            MainDiseaseCode = new DiseaseCode();
-            SecondDiseaseCode = new DiseaseCode();
+            SpecialCode = new SpecialCode.SpecialCode();
+            MainDiseaseCode = new DiseaseCode.DiseaseCode();
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             TreatmentCase = new TreatmentCase.TreatmentCase(row);
-            MainDiseaseCode =  new DiseaseCode { Id = row["HISINT_ID1"].ToString() };
-            SecondDiseaseCode = new DiseaseCode { Id = row["HISINT_ID2"].ToString() };
+            MainDiseaseCode =  new DiseaseCode.DiseaseCode { Id = row["HISINT_ID1"].ToString() };
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode { Id = row["HISINT_ID2"].ToString() };
         }
 
-        public MedicalInfo(Hospital hospital, SpecialCode specialCode, List<DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)
+        public MedicalInfo(Hospital hospital, SpecialCode.SpecialCode specialCode, List<DiseaseCode.DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)
         {
             Hospital = hospital;
             SpecialCode = specialCode;
@@ -51,9 +48,9 @@ namespace His_Pos.Class
         }
         public MedicalInfo(XmlNode xml) {
             Hospital = new Hospital(xml);
-            SpecialCode = new SpecialCode(xml);
-            MainDiseaseCode = new DiseaseCode();
-            SecondDiseaseCode = new DiseaseCode();
+            SpecialCode = new SpecialCode.SpecialCode(xml);
+            MainDiseaseCode = new DiseaseCode.DiseaseCode();
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = xml.SelectSingleNode("d8") == null ? null : xml.SelectSingleNode("d8").InnerText;
             SecondDiseaseCode.Id = xml.SelectSingleNode("d9") == null ? null : xml.SelectSingleNode("d9").InnerText;
             TreatmentCase = new TreatmentCase.TreatmentCase(xml);
@@ -62,9 +59,9 @@ namespace His_Pos.Class
         public MedicalInfo(DeclareFileDdata d)
         {
             Hospital = new Hospital(d);
-            SpecialCode = new SpecialCode(d);
-            MainDiseaseCode = new DiseaseCode();
-            SecondDiseaseCode = new DiseaseCode();
+            SpecialCode = new SpecialCode.SpecialCode(d);
+            MainDiseaseCode = new DiseaseCode.DiseaseCode();
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dbody.D8) ? d.Dbody.D8 : string.Empty;
             SecondDiseaseCode.Id = !string.IsNullOrEmpty(d.Dbody.D9) ? d.Dbody.D9 : string.Empty;
             TreatmentCase = new TreatmentCase.TreatmentCase(d);
@@ -82,9 +79,9 @@ namespace His_Pos.Class
             }
         } //d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
 
-        private SpecialCode _specialCode;
+        private SpecialCode.SpecialCode _specialCode;
 
-        public SpecialCode SpecialCode
+        public SpecialCode.SpecialCode SpecialCode
         {
             get => _specialCode;
             set
@@ -94,9 +91,9 @@ namespace His_Pos.Class
             }
         } //d26 原處方服務機構之特定治療項目代號
 
-        private DiseaseCode _mainDiseaseCode;
+        private DiseaseCode.DiseaseCode _mainDiseaseCode;
 
-        public DiseaseCode MainDiseaseCode
+        public DiseaseCode.DiseaseCode MainDiseaseCode
         {
             get => _mainDiseaseCode;
             set
@@ -106,9 +103,9 @@ namespace His_Pos.Class
             }
         } //d8 國際疾病分類碼
 
-        private DiseaseCode _secondDiseaseCode;
+        private DiseaseCode.DiseaseCode _secondDiseaseCode;
 
-        public DiseaseCode SecondDiseaseCode
+        public DiseaseCode.DiseaseCode SecondDiseaseCode
         {
             get => _secondDiseaseCode;
             set
