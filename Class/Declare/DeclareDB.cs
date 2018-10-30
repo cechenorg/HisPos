@@ -296,7 +296,7 @@ namespace His_Pos.Class.Declare
             foreach (var tag in tagsDictionary)
             {
                 if (tag.Key == "D4" || tag.Key == "D19" || tag.Key == "D31" || tag.Key == "D32" ||
-                    tag.Key == "D33")
+                    tag.Key == "D33" || tag.Key == "D37")
                     CheckDbNullValue(parameters, tag.Value, tag.Key);
                 else
                 {
@@ -320,12 +320,9 @@ namespace His_Pos.Class.Declare
                     {
                         {"D1", declareData.Prescription.Treatment.AdjustCase.Id},
                         {"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
-                        {
-                            "D14",
-                            declareData.Prescription.Treatment.TreatmentDate == DateTime.MinValue?declareData.Prescription.Treatment.TreatDateStr:DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.TreatmentDate)
-                        },
+                        {"D14", Convert.ToDateTime(declareData.Prescription.Treatment.TreatDateStr).AddYears(1911).ToString("yyyy-MM-dd")},
                         {"D15", declareData.Prescription.Treatment.Copayment.Id},
-                        {"D23", declareData.Prescription.Treatment.AdjustDate == DateTime.MinValue?declareData.Prescription.Treatment.AdjustDateStr:DateTimeExtensions.ToSimpleTaiwanDate(declareData.Prescription.Treatment.AdjustDate)},
+                        {"D23",  Convert.ToDateTime(declareData.Prescription.Treatment.AdjustDateStr).AddYears(1911).ToString("yyyy-MM-dd")},
                         {"D25", declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber},
                         {"D30", declareData.Prescription.Treatment.MedicineDays},
                         {"CUS_ID", declareData.Prescription.Customer.Id}

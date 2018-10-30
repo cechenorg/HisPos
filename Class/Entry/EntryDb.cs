@@ -1,5 +1,6 @@
 ﻿using His_Pos.Properties;
 using His_Pos.Service;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -11,7 +12,7 @@ namespace His_Pos.Class.Entry {
             ObservableCollection<Entry> Collection = new ObservableCollection<Entry>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("DATE",DateTimeExtensions.ToUsDate(Date)));
+            parameters.Add(new SqlParameter("DATE",Convert.ToDateTime(Date).AddYears(1911) ));
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[EntrySearchView].[GetEntryDetailByDate]",parameters);
             foreach (DataRow row in table.Rows)
             {
