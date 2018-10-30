@@ -179,10 +179,10 @@ namespace His_Pos.InventoryManagement
 
             WareStcokCollection = WareHouseDb.GetWareStockById(InventoryOtc.Id);
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
-            if (ProductGroupCollection.Count == 1)
-                ButtonDemolition.IsEnabled = false;
-            else
-                ButtonDemolition.IsEnabled = true;
+          //  if (ProductGroupCollection.Count == 1)
+          //      ButtonDemolition.IsEnabled = false;
+          //  else
+          //      ButtonDemolition.IsEnabled = true;
 
 
             UpdateChart();
@@ -194,7 +194,8 @@ namespace His_Pos.InventoryManagement
         {
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
-            
+            ButtonCancel.IsEnabled = false;
+            ButtonUpdateSubmmit.IsEnabled = false;
             IsChanged = false;
         }
 
@@ -237,6 +238,8 @@ namespace His_Pos.InventoryManagement
         {
             IsChanged = true;
             IsChangedLabel.Content = "已修改";
+            ButtonCancel.IsEnabled = true;
+            ButtonUpdateSubmmit.IsEnabled = true;
             IsChangedLabel.Foreground = Brushes.Red;
         }
 

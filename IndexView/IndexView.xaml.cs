@@ -2,6 +2,7 @@
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.ProductPurchase;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -124,8 +125,10 @@ namespace His_Pos.IndexView
                 StoreOrderDb.AddDailyOrder(StoreOrderCategory.RETURN, ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList());
             ChronicDb.UpdateDailyChronic();
             MessageWindow messageWindow = new MessageWindow("已轉出進退貨單",MessageType.SUCCESS, true);
-            messageWindow.ShowDialog();
+            messageWindow.ShowDialog(); 
             MainWindow.Instance.AddNewTab("處理單管理");
+            if(ProductPurchaseView.Instance != null)
+                ProductPurchaseView.Instance.InitData();
             InitData();
         }
 
