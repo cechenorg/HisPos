@@ -296,6 +296,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             if (Keyboard.FocusedElement is Button)
                 (Keyboard.FocusedElement as Button).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
+            if(CurrentDataGrid.CurrentCell.Column is null) return;
+
             var focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
 
             if (focusedCell is null) return;
@@ -507,8 +509,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void ShowDeclareDataOverview(object sender, MouseButtonEventArgs e)
         {
-            DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
-            declareDataDetailOverview.Show();
+            DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview(StoreOrderData.Id);
+            declareDataDetailOverview.ShowDialog();
         }
         
     }

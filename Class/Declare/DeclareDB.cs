@@ -14,6 +14,7 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.RDLC;
+using His_Pos.H2_STOCK_MANAGE.ProductPurchase;
 
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 
@@ -51,6 +52,24 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             var table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId
+        }
+
+        internal static ObservableCollection<DeclareDataDetailOverview.PurchaseDeclareDataOverview> GetPurchaseDeclareDataOverviews(string storeOrderId)
+        {
+            ObservableCollection<DeclareDataDetailOverview.PurchaseDeclareDataOverview> collection = new ObservableCollection<DeclareDataDetailOverview.PurchaseDeclareDataOverview>();
+
+            var conn = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("STOORDER_ID", storeOrderId));
+            var table = conn.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetPurchaseDeclareDataOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new DeclareDataDetailOverview.PurchaseDeclareDataOverview(row));
+            }
+
+            return collection;
         }
 
         public void InsertDeclareTrade(string decMasId,DeclareTrade declareTrade) {
