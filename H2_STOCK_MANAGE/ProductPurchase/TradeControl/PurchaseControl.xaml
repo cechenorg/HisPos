@@ -84,7 +84,7 @@
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
+                            <Setter Property="Background" Value="{StaticResource Shadow}"/>
                         </Trigger>
                     </Style.Triggers>
                     <EventSetter Event="GotFocus" Handler="DataGridRow_MouseEnter"/>
@@ -111,7 +111,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -216,7 +216,7 @@
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
+                            <Setter Property="Background" Value="{StaticResource Shadow}"/>
                         </Trigger>
                     </Style.Triggers>
                     <EventSetter Event="GotFocus" Handler="DataGridRow_MouseEnter"/>
@@ -243,7 +243,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -353,8 +353,14 @@
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
+                            <Setter Property="Background" Value="{StaticResource Shadow}"/>
                         </Trigger>
+                        <DataTrigger Binding="{Binding IsEnough, UpdateSourceTrigger=PropertyChanged}" Value="True">
+                            <Setter Property="Background" Value="DarkSeaGreen"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsEnough, UpdateSourceTrigger=PropertyChanged}" Value="False">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </DataTrigger>
                     </Style.Triggers>
                     <EventSetter Event="GotFocus" Handler="DataGridRow_MouseEnter"/>
                     <EventSetter Event="LostFocus" Handler="DataGridRow_MouseLeave"/>
@@ -373,7 +379,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left"/>
@@ -489,7 +495,7 @@
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
                         <Trigger Property="DataGridRow.IsSelected" Value="True">
-                            <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}"/>
+                            <Setter Property="Background" Value="{StaticResource Shadow}"/>
                         </Trigger>
                     </Style.Triggers>
                     <EventSetter Event="GotFocus" Handler="DataGridRow_MouseEnter"/>
@@ -509,7 +515,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Name}">
+                <DataGridTextColumn Width="200" Header="商品名稱" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left"/>

@@ -139,6 +139,7 @@ namespace His_Pos.Class.Product
                 CalculateData("Amount");
                 FocusColumn = "Amount";
                 NotifyPropertyChanged("Amount");
+                NotifyPropertyChanged("IsEnough");
             }
         }
         public double price;
@@ -219,6 +220,11 @@ namespace His_Pos.Class.Product
         public double SingdePrice { get; }
 
         public bool IsSingde { get; set; }
+
+        public bool IsEnough
+        {
+            get { return Amount > OrderAmount; }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

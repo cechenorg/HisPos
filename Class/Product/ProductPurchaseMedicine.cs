@@ -114,6 +114,7 @@ namespace His_Pos.Class.Product
             {
                 totalPrice = value;
                 CalculateData("TotalPrice");
+                FocusColumn = "TotalPrice";
                 NotifyPropertyChanged("TotalPrice");
             }
         }
@@ -125,7 +126,9 @@ namespace His_Pos.Class.Product
             {
                 amount = value;
                 CalculateData("Amount");
+                FocusColumn = "Amount";
                 NotifyPropertyChanged("Amount");
+                NotifyPropertyChanged("IsEnough");
             }
         }
         private double price;
@@ -136,6 +139,7 @@ namespace His_Pos.Class.Product
             {
                 price = value;
                 CalculateData("Price");
+                FocusColumn = "Price";
                 NotifyPropertyChanged("Price");
             }
         }
@@ -195,6 +199,10 @@ namespace His_Pos.Class.Product
         public double SingdePrice { get; }
 
         public bool IsSingde { get; set; }
+        public bool IsEnough
+        {
+            get { return Amount > OrderAmount; }
+        }
 
         public void CalculateData(string inputSource)
         {
