@@ -253,44 +253,32 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 if (sender is TextBox)
                 {
-                    (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    TextBox textBox = sender as TextBox;
 
-                    if (Keyboard.FocusedElement is Button)
-                        (Keyboard.FocusedElement as Button).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                }
-                else
-                {
-                    UIElement child = (sender as AutoCompleteBox).FindChild<TextBox>("Text");
-
-                    child.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                }
-
-                var focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
-
-                while (true)
-                {
-                    if (focusedCell is ContentPresenter)
+                    if (textBox.Name.Equals("Id"))
                     {
-                        UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                        if (CurrentProduct == null || !textBox.Text.Equals(CurrentProduct.Id))
+                        {
+                            Product currentProduct = ((ICloneable) CurrentProduct)?.Clone() as Product;
 
-                        if (!(child is Image))
-                            break;
+                            NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.PURCHASE, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id, textBox.Text);
+
+                            if (newItemDialog.ConfirmButtonClicked)
+                            {
+                                if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
+                                {
+                                    MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING, true);
+                                    messageWindow.ShowDialog();
+                                    textBox.Text = "";
+                                    return;
+                                }
+
+                                AddProduct(textBox, newItemDialog.SelectedItem, currentProduct);
+                            }
+                        }
                     }
 
-                    focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-
-                    focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
-                }
-
-                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
-
-                if (firstChild is TextBox)
-                    firstChild.Focus();
-                else
-                {
-                    UIElement secondChild = (UIElement)VisualTreeHelper.GetChild(firstChild, 0);
-
-                    secondChild.Focus();
+                    MoveFocusNext(sender);
                 }
             }
             else if ((sender as TextBox).Tag != null && (sender as TextBox).Tag.Equals("CheckInputOnlyNum"))
@@ -300,7 +288,46 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
 
         }
-        private void AddProduct(TextBox textBox, PurchaseProduct product)
+
+        private void MoveFocusNext(object sender)
+        {
+            (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+            if (Keyboard.FocusedElement is Button)
+                (Keyboard.FocusedElement as Button).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+            var focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
+
+            if (focusedCell is null) return;
+
+            while (true)
+            {
+                if (focusedCell is ContentPresenter)
+                {
+                    UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                    if (!(child is Image))
+                        break;
+                }
+
+                focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
+            }
+
+            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+            if (firstChild is TextBox)
+                firstChild.Focus();
+            else
+            {
+                UIElement secondChild = (UIElement)VisualTreeHelper.GetChild(firstChild, 0);
+
+                secondChild.Focus();
+            }
+        }
+
+        private void AddProduct(TextBox textBox, PurchaseProduct product, Product currentProduct)
         {
             Product newProduct;
 
@@ -309,7 +336,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             else
                 newProduct = new ProductPurchaseOtc(product, StoreOrderData.Manufactory.Id.Equals("0"));
             
-            if (CurrentProduct is null)
+            if (currentProduct is null)
             {
                 StoreOrderData.Products.Add(newProduct);
 
@@ -322,7 +349,14 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
             else
             {
-                ((IProductPurchase)newProduct).CopyFilledData(CurrentProduct);
+                ((IProductPurchase)newProduct).CopyFilledData(currentProduct);
+
+                Product tempP = StoreOrderData.Products.Single(p => p.Id.Equals(currentProduct.Id));
+
+                int index = StoreOrderData.Products.IndexOf(tempP);
+
+                StoreOrderData.Products.RemoveAt(index);
+                StoreOrderData.Products.Insert(index, newProduct);
 
                 CurrentProduct = newProduct;
                 textBox.Focus();
@@ -356,33 +390,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             StoreOrderData.IsDataChanged = true;
         }
+        
 
-        private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (sender is null) return;
-
-            TextBox textBox = sender as TextBox;
-
-            if (e.Key == Key.Enter)
-            {
-                NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.PURCHASE, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id, textBox.Text);
-
-                if (newItemDialog.ConfirmButtonClicked)
-                {
-                    if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
-                    {
-                        MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING,true);
-                        messageWindow.ShowDialog();
-                        textBox.Text = "";
-                        return;
-                    }
-
-                    AddProduct(textBox, newItemDialog.SelectedItem);
-                }
-            }
-        }
-
-        private void Id_GotFocus(object sender, RoutedEventArgs e)
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is null) return;
 
@@ -391,7 +401,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             textBox.SelectAll();
         }
 
-        private void Id_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void TextBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (sender is null) return;
 
