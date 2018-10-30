@@ -55,6 +55,21 @@ namespace His_Pos.Class.Declare
             return table.Rows[0][0].ToString();//回傳DesMasId
         }
 
+        public string InsertPrescribeData(DeclareData declareData)
+        {
+            var parameters = new List<SqlParameter>();
+            var prescribeDataTable = SetPrescribeDataTable();
+            AddPrescribeData(declareData,prescribeDataTable);
+            
+            parameters.Add(new SqlParameter("CusId", string.IsNullOrEmpty(declareData.Prescription.Customer.Id)? declareData.Prescription.Customer.Id:"0"));
+            parameters.Add(new SqlParameter("TreatDate", declareData.Prescription.Treatment.AdjustDate));
+            parameters.Add(new SqlParameter("EmpId", declareData.Prescription.Pharmacy.MedicalPersonnel.Id));
+            parameters.Add(new SqlParameter("PrescribeDetail", prescribeDataTable));
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            var table = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertPrescribeData]", parameters);
+            return table.Rows[0][0].ToString();//回傳DesMasId
+        }
+
         public void InsertDeclareTrade(string decMasId,DeclareTrade declareTrade) {
             var dataTradeTable = SetDataTradeTable();
             AddTradeData(declareTrade, dataTradeTable);
@@ -154,14 +169,32 @@ namespace His_Pos.Class.Declare
                     //每人每日1 - 80件內 => 診療項目代碼: 05202B . 支付點數 : 48
                     if (count < 80)
                     {
-                        tmpG.Dbody.D37 = "0502B";
-                        tmpG.Dbody.D38 = "48";
+                        if (!string.IsNullOrEmpty(tmpG.Dbody.D36) && int.Parse(tmpG.Dbody.D30)>=14 && int.Parse(tmpG.Dbody.D30) <= 27)
+                        {
+                            tmpG.Dbody.D37 = "05206B";
+                            tmpG.Dbody.D38 = "59";
+                        }
+                        else if (!string.IsNullOrEmpty(tmpG.Dbody.D36) && int.Parse(tmpG.Dbody.D30) >= 28)
+                        {
+                            tmpG.Dbody.D37 = "05210B";
+                            tmpG.Dbody.D38 = "69";
+                        }
+                        else if (!string.IsNullOrEmpty(tmpG.Dbody.D36) && int.Parse(tmpG.Dbody.D30) <= 13)
+                        {
+                            tmpG.Dbody.D37 = "05223B";
+                            tmpG.Dbody.D38 = "48";
+                        }
+                        else
+                        {
+                            tmpG.Dbody.D37 = "0502B";
+                            tmpG.Dbody.D38 = "48";
+                        }
                     }
                     //每人每日81 - 100件內 => 診療項目代碼: 05234D . 支付點數 : 15
                     else if (count < 100 && count >= 80)
                     {
-                        tmpG.Dbody.D37 = "05234D";
-                        tmpG.Dbody.D38 = "15";
+                            tmpG.Dbody.D37 = "05234D";
+                            tmpG.Dbody.D38 = "15";
                     }
                     //每人每日100件以上 => 診療項目代碼: 0502B . 支付點數 : 0
                     else
@@ -181,11 +214,6 @@ namespace His_Pos.Class.Declare
             if (now)
                 return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + "01";
             return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + d.Day.ToString().PadLeft(2, '0');
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
 
         public int CountPrescriptionByCase(List<Ddata> listDdata, int caseType)
@@ -1080,6 +1108,27 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             parameters.Add(new SqlParameter("DecMasId", decMasId));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[CheckPredictChronicExist]", parameters);
+        }
+
+        private DataTable SetPrescribeDataTable()
+        {
+            var importPDataTable = new DataTable();
+            importPDataTable.Columns.Add("PRO_ID", typeof(string));
+            importPDataTable.Columns.Add("CUSPRESCRIBE_QTY", typeof(string));
+            importPDataTable.Columns.Add("CUSPRESCRIBE_PRICE", typeof(string));
+            return importPDataTable;
+        }
+
+        private void AddPrescribeData(DeclareData declareData, DataTable pDataTable)
+        {
+            foreach (var detail in declareData.DeclareDetails)
+            {
+                var row = pDataTable.NewRow();
+                row["PRO_ID"] = detail.MedicalId;
+                row["CUSPRESCRIBE_QTY"] = detail.Total;
+                row["CUSPRESCRIBE_PRICE"] = short.Parse(Math.Ceiling(detail.Total*detail.Price).ToString());
+                pDataTable.Rows.Add(row);
+            }
         }
     }
 }

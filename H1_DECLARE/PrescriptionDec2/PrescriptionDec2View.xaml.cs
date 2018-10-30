@@ -440,7 +440,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
-            declareDb.UpdateDeclareFile(_currentDeclareData);
+            //declareDb.UpdateDeclareFile(_currentDeclareData);
             PrintMedBag();
         }
 
@@ -583,28 +583,29 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             //}
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
-            var json = JsonConvert.SerializeObject(CurrentPrescription.Medicines);
+            var medBagMedicines = new ObservableCollection<MedBagMedicine>();
+            foreach (var m in CurrentPrescription.Medicines)
+            {
+                medBagMedicines.Add(new MedBagMedicine(m));
+            }
+            var json = JsonConvert.SerializeObject(medBagMedicines);
             var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
             rptViewer.LocalReport.DataSources.Add(new ReportDataSource("MedicineDataSet", dataTable));
-            var parameters = new List<ReportParameter>
-            {
-                [0] = new ReportParameter("PharmacyName_Id", MainWindow.CurrentPharmacy.Name+"("+ MainWindow.CurrentPharmacy.Id+")"),
-                [1] = new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
-                [2] = new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
-                [3] = new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
-                [4] = new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
-                [5] = new ReportParameter("PatientGender_Birthday", CurrentPrescription.Customer.Gender?"男":"女" + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday,true)),
-                [6] = new ReportParameter("TreatmentDate", CurrentPrescription.Treatment.TreatDateStr),
-                [7] = new ReportParameter("Division", CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name),
-                [8] = new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
-                [9] = new ReportParameter("PaySelf", SelfCost.ToString()),
-                [10] = new ReportParameter("ServicePoint",_currentDeclareData.MedicalServicePoint.ToString()),
-                [11] = new ReportParameter("TotalPoint", _currentDeclareData.TotalPoint.ToString()),
-                [12] = new ReportParameter("CopaymentPoint", _currentDeclareData.CopaymentPoint.ToString()),
-                [13] = new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()),
-                [14] = new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString())
-            };
-
+            var parameters = new List<ReportParameter>();
+            parameters.Add(new ReportParameter("PharmacyName_Id", MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"));
+            parameters.Add(new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address));
+            parameters.Add(new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel));
+            parameters.Add(new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name));
+            parameters.Add(new ReportParameter("PatientName", CurrentPrescription.Customer.Name));
+            parameters.Add(new ReportParameter("PatientGender_Birthday", CurrentPrescription.Customer.Gender ? "男" : "女" + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)));
+            parameters.Add(new ReportParameter("TreatmentDate", CurrentPrescription.Treatment.TreatDateStr));
+            parameters.Add(new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name));
+            parameters.Add(new ReportParameter("PaySelf", SelfCost.ToString()));
+            parameters.Add(new ReportParameter("ServicePoint", _currentDeclareData.MedicalServicePoint.ToString()));
+            parameters.Add(new ReportParameter("TotalPoint", _currentDeclareData.TotalPoint.ToString()));
+            parameters.Add(new ReportParameter("CopaymentPoint", _currentDeclareData.CopaymentPoint.ToString()));
+            parameters.Add(new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()));
+            parameters.Add(new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString()));
             rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.Refresh();
@@ -1366,7 +1367,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             MessageWindow m;
             var declareDb = new DeclareDb();
             _currentDeclareData = new DeclareData(CurrentPrescription);
-            var decMasId = declareDb.InsertDeclareData(_currentDeclareData);
+            var decMasId = declareDb.InsertPrescribeData(_currentDeclareData);
             var totalCost = 0.0;
             var totalPrice = 0;
             foreach (var med in _currentDeclareData.Prescription.Medicines)
@@ -1377,7 +1378,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             ProductDb.InsertEntry("配藥收入", totalCost.ToString() , "DecMasId", decMasId);
             ProductDb.InsertEntry("調劑耗用", "-" + totalCost, "DecMasId", decMasId);
             declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", decMasId);//庫存扣庫
-
         }
     }
 }

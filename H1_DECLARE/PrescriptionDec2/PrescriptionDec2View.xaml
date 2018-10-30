@@ -160,7 +160,7 @@
                 <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Content="調劑案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="AdjustCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False"
+                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" SelectionChanged="AdjustCaseCombo_SelectionChanged"
                               SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
@@ -209,6 +209,12 @@
                             <Trigger Property="DataGridRow.IsSelected" Value="True">
                                 <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                             </Trigger>
+                            <DataTrigger Binding="{Binding IsControl}" Value="True">
+                                <Setter Property="Background" Value="DarkSeaGreen" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsControl}" Value="False">
+                                <Setter Property="Background" Value="Transparent" />
+                            </DataTrigger>
                         </Style.Triggers>
                         <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter" />
                         <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave" />
@@ -307,15 +313,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn MinWidth="60" Header="自費價格" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="MedicinePriceDataTemplate">
-                                <TextBox x:Name="Price" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" FontSize="14" 
-                                         FontWeight="Bold" IsEnabled="{Binding PaySelf, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" 
-                                         Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn MinWidth="60" Binding="{Binding Price,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="自費價格" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTemplateColumn MinWidth="60" Header="總價" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineTotalPriceDataTemplate">
@@ -325,7 +330,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn  Width="50" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="管制" IsReadOnly="True">
+                    <DataGridTextColumn  Width="50" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="管制" IsReadOnly="True" Binding="{Binding ControlLevel,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

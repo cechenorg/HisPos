@@ -101,17 +101,18 @@ namespace His_Pos.Class.Declare
 
         private void SetMedicate(DeclareMedicine medicine)
         {
-            Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
+            Dosage = string.IsNullOrEmpty(medicine.MedicalCategory.Dosage)? 0.00
+                : double.Parse(medicine.MedicalCategory.Dosage);//p3
             Usage = medicine.Usage.Id;//p4
             Position = medicine.Position;//p5
-            Days = int.Parse(medicine.Days);//p11
+            Days = string.IsNullOrEmpty(medicine.Days)? 0: int.Parse(medicine.Days); //p11
         }
 
-        private void SetMedicine(DeclareMedicine medicine)
+        private void SetMedicine(DeclareMedicine medicine, bool paySelf = false)
         {
             MedicalId = medicine.Id;//p2
             Total = medicine.Amount;//p7
-            Price = double.Parse(medicine.HcPrice);//p8
+            Price = paySelf ? medicine.Price : double.Parse(medicine.HcPrice);
         }
 
         private void SetDate(string start, string end)

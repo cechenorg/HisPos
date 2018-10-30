@@ -87,14 +87,27 @@ namespace His_Pos.Class.Product
                 }
 
             }
-            //IsControlMed = Boolean.Parse(dataRow["HISMED_CONTROL"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_CONTROL"].ToString());
-            IsFrozMed = Boolean.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
+            ControlLevel = dataRow["HISMED_CONTROL"].ToString();
+            IsFrozMed = bool.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
             HcPrice = dataRow["HISMED_PRICE"].ToString();
+            Price = double.Parse(dataRow["PRO_LASTPRICE"].ToString());
             Note = dataRow["HISMED_NOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_NOTE"].ToString();
             IsBuckle = true;
         }
-        
-        public bool IsControlMed { get; set; }
+
+        public bool IsControl => !string.IsNullOrEmpty(ControlLevel);
+
+        private string _controlLevel;
+        public string ControlLevel
+        {
+            get => _controlLevel;
+            set
+            {
+                _controlLevel = value.Equals("0") ? string.Empty : value;
+                NotifyPropertyChanged(nameof(ControlLevel));
+            }
+        }
+
         public bool IsFrozMed { get; set; }
         private bool payself;
 
@@ -289,7 +302,6 @@ namespace His_Pos.Class.Product
                 Name = Name,
                 ChiName = ChiName,
                 EngName = EngName,
-                IsControlMed = IsControlMed,
                 IsFrozMed = IsFrozMed,
                 PaySelf = PaySelf,
                 HcPrice = HcPrice,
@@ -309,6 +321,7 @@ namespace His_Pos.Class.Product
                 Position = Position,
                 Source = Source,
                 IsBuckle = IsBuckle,
+                ControlLevel = ControlLevel
             };
             return declareMedicine;
         }
