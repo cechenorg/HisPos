@@ -502,7 +502,9 @@ namespace His_Pos.Class.Declare
             declareMasterTable.Columns.Add("D37", typeof(string));
             declareMasterTable.Columns.Add("D38", typeof(int));
             declareMasterTable.Columns.Add("D43", typeof(string));
-            declareMasterTable.Columns.Add("XML", typeof(string));
+            declareMasterTable.Columns.Add("XML", typeof(SqlXml));
+
+
             return declareMasterTable;
         }
 
@@ -564,7 +566,9 @@ namespace His_Pos.Class.Declare
             row["D37"] = declareData.MedicalServiceCode;
             row["D38"] = declareData.MedicalServicePoint.ToString();
             row["D43"] = declareData.Prescription.OriginalMedicalNumber == null ? "" : declareData.Prescription.OriginalMedicalNumber;
-            row["XML"] = CreateToXml(declareData).InnerXml;
+
+            var xmlStr = declareData.SerializeObject<Ddata>(); 
+            row["XML"] = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null));
             declareMaster.Rows.Add(row);
         }
         private DataTable SetUpdatePDataTable()
