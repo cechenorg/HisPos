@@ -39,7 +39,7 @@
     FontFamily="{DynamicResource MaterialDesignFont}"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d"
-    Closing="Window_Closing">
+    Closing="Window_Closing" Loaded="Window_Loaded">
     <Window.Resources>
         <DataTemplate DataType="{x:Type prescriptionDec2:PrescriptionDec2}">
             <prescriptionDec2:PrescriptionDec2View />

@@ -98,13 +98,13 @@
                                               MinimumPrefixLength="1" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
                             </controls:AutoCompleteBox>
                             <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
-                            <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                            <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="10,0,10,0" Height="50">
                             <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                             <controls:AutoCompleteBox Name="ReleasePalace" Background="Transparent" Width="450" FontSize="16" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center"
                                          Populating="ReleasePalace_Populating"    ValueMemberPath="FullName"    BorderThickness="0,0,0,1" VerticalContentAlignment="Stretch" FontFamily="Segoe UI Semibold" 
-                                                      MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}">
+                                                      MinimumPrefixLength="4" BorderBrush="DimGray" ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" ItemsSource="{Binding HospitalCollection,UpdateSourceTrigger=PropertyChanged}">
                                 <controls:AutoCompleteBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
@@ -247,7 +247,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <WrapPanel VerticalAlignment="Center">
-                        <CheckBox Name="ErrorDec" Margin="10" Content="錯誤不申報" FontSize="18" FontFamily="Segoe UI Semibold" IsChecked="True" Click="ErrorDec_OnClick"/>
+                        <CheckBox Name="ErrorDec" Margin="10" Content="錯誤不申報" FontSize="18" FontFamily="Segoe UI Semibold" IsChecked="True" Click="ErrorDec_OnClick" Visibility="Hidden"/>
                     </WrapPanel>
                     <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,0" Background="IndianRed" Content="轉出申報檔" Click="CreateDeclareFileClick"/>
                 </Grid>

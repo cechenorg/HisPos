@@ -120,5 +120,14 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
         {
             DataChanged();
         }
+
+        private void TextFreName_TextChanged(object sender, TextChangedEventArgs e) {
+            DataGridMedFrequency.Items.Filter = ((o) => {
+                if ( ((Usage)o).Name.Contains(TextFreName.Text) || ((Usage)o).QuickName.Contains(TextFreName.Text) || ((Usage)o).Id.Contains(TextFreName.Text) || ((Usage)o).PrintName.Contains(TextFreName.Text))
+                    return true;
+                else
+                    return false;
+            });
+        }
     }
 }

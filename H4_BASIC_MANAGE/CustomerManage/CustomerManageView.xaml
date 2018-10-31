@@ -48,8 +48,8 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="50">
-                                            <Label Content="{Binding Name}" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                            <Label Content="{Binding Birthday}" Width="200" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="17" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding Name,UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                                            <Label Content="{Binding BirthdayStr,UpdateSourceTrigger=PropertyChanged}" Width="200" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="17" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

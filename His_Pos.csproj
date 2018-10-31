@@ -333,6 +333,7 @@
     <Compile Include="Class\Product\InventoryCheckSheet.cs" />
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
+    <Compile Include="Class\Product\MedBagMedicine.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
     <Compile Include="Class\Product\MedXml.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
@@ -1190,6 +1191,7 @@
     <Resource Include="Images\MyPharmacy.png" />
     <Resource Include="Images\Printer.png" />
     <Resource Include="LOGO_HISPOS.ico" />
+    <Resource Include="Images\icons8-delete-32.png" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

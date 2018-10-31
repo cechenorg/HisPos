@@ -12,6 +12,7 @@ using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchase;
 using His_Pos.AbstractClass;
 using System.Linq;
+using System.Management.Instrumentation;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Division;
@@ -329,10 +330,13 @@ namespace His_Pos
                         stockValue += Double.Parse(medicine.StockValue);
                     }
 
-                    inventoryManagementView._DataList = products;
-                    inventoryManagementView.selectStockValue = stockValue;
-                    inventoryManagementView.TotalStockValue.Content = totalWorth;
-                    inventoryManagementView.ProductList.Items.Filter = inventoryManagementView.OrderTypeFilter;
+                    inventoryManagementView._DataList = products; 
+                    inventoryManagementView.TotalStockValue.Content = totalWorth; 
+                    inventoryManagementView.selectStockValue = 0;
+                    inventoryManagementView.searchCount = 0;
+                    inventoryManagementView.SearchData();
+                    inventoryManagementView.SearchCount.Content = inventoryManagementView.searchCount;
+                    inventoryManagementView.SelectStockValue.Content = inventoryManagementView.selectStockValue.ToString("0.#");
                 }));
             };
 
@@ -542,16 +546,51 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("申報資料處理中...");
+                //exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
+                //ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                //ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                //
+                //ObservableCollection<PaymentCategory> tmpPaymentCategory = PaymentCategroyDb.GetData();
+                //ObservableCollection<TreatmentCase> tmpTreatmentCase = TreatmentCaseDb.GetData();
+                //ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
+                //ObservableCollection<DeclareMedicine> tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
+                //exportView.Dispatcher.Invoke((Action)(() =>
+                //{
+
+                //    exportView.DivisionCollection = tmpDivisions;
+                //    exportView.AdjustCaseCollection = tmpAdjustCases;
+                //    exportView.CopaymentCollection = tmpCopayments;
+                //    exportView.PaymentCategoryCollection = tmpPaymentCategory;
+                //    exportView.TreatmentCaseCollection = tmpTreatmentCase;
+                //    exportView.DeclareMedicinesData = tmpDeclareMedicine;
+                //    exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
+                //    exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
+                //    exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                //    exportView.ReleasePalace.ItemsSource = exportView.HospitalCollection;
+                //}));
                 exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
-                exportView.DivisionCollection = DivisionDb.GetData();
-                exportView.HospitalCollection = HospitalDb.GetData();
-                exportView.AdjustCaseCollection = AdjustCaseDb.GetData();
-                exportView.CopaymentCollection = CopaymentDb.GetData();
-                exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
-                exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
-                exportView.DeclareMedicinesData = MedicineDb.GetDeclareFileMedicineData();
+                //exportView.DivisionCollection = DivisionDb.GetData();
+                //exportView.HospitalCollection = HospitalDb.GetData();
+                //exportView.AdjustCaseCollection = AdjustCaseDb.GetData();
+                //exportView.CopaymentCollection = CopaymentDb.GetData();
+                //exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
+                //exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
+                ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                ObservableCollection<AdjustCase> tmpAdjustCases = AdjustCaseDb.GetData();
+                ObservableCollection<DeclareMedicine> tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
+                ObservableCollection<PaymentCategory> tmpPaymentCategory = PaymentCategroyDb.GetData();
+                ObservableCollection<TreatmentCase> tmpTreatmentCase = TreatmentCaseDb.GetData();
+                ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
+                    exportView.DeclareMedicinesData = tmpDeclareMedicine;
+                    exportView.HospitalCollection = tmpHospitals;
+                    exportView.DivisionCollection = tmpDivisions;
+                    exportView.AdjustCaseCollection = tmpAdjustCases;
+                    exportView.PaymentCategoryCollection = tmpPaymentCategory;
+                    exportView.TreatmentCaseCollection = tmpTreatmentCase;
+                    exportView.CopaymentCollection = tmpCopayments;
                     exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
                     exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                     exportView.ReleasePalace.ItemsSource = exportView.HospitalCollection;
@@ -576,7 +615,7 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得處方資料...");
-                prescriptionDec2View.HosiHospitals = HospitalDb.GetData();
+                prescriptionDec2View.Hospitals = HospitalDb.GetData();
                 prescriptionDec2View.Divisions = DivisionDb.GetData();
                 prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
                 prescriptionDec2View.TreatmentCases = TreatmentCaseDb.GetData();
@@ -587,13 +626,13 @@ namespace His_Pos
                 prescriptionDec2View.Usages = UsageDb.GetUsages();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.HosiHospitals;
+                    prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;
                     prescriptionDec2View.DivisionCombo.ItemsSource = prescriptionDec2View.Divisions;
                     prescriptionDec2View.TreatmentCaseCombo.ItemsSource = prescriptionDec2View.TreatmentCases;
                     prescriptionDec2View.PaymentCategoryCombo.ItemsSource = prescriptionDec2View.PaymentCategories;
                     prescriptionDec2View.CopaymentCombo.ItemsSource = prescriptionDec2View.Copayments;
                     prescriptionDec2View.AdjustCaseCombo.ItemsSource = prescriptionDec2View.AdjustCases;
-                    prescriptionDec2View.SpecialCode.ItemsSource = prescriptionDec2View.SpecialCodes;
+                    prescriptionDec2View.SpecialCodeCombo.ItemsSource = prescriptionDec2View.SpecialCodes;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
                     prescriptionDec2View.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                     var isMedicalPerson = false;
@@ -732,15 +771,13 @@ namespace His_Pos
                 {
                     prescriptionDec2View.CustomerCollection =
                         CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
-                    CustomerSelectWindow customerSelect = new CustomerSelectWindow(prescriptionDec2View.CustomerCollection);
-                    customerSelect.Show();
-                    //if (prescriptionDec2View.CustomerCollection.Count == 1)
-                    //    prescriptionDec2View.CurrentPrescription.Customer = prescriptionDec2View.CustomerCollection[0];
-                    //else
-                    //{
-                    //    CustomerSelectWindow customerSelect = new CustomerSelectWindow(prescriptionDec2View.CustomerCollection);
-                    //    customerSelect.Show();
-                    //}
+                    if (prescriptionDec2View.CustomerCollection.Count == 1)
+                        prescriptionDec2View.CurrentPrescription.Customer = prescriptionDec2View.CustomerCollection[0];
+                    else
+                    {
+                        CustomerSelectWindow customerSelect = new CustomerSelectWindow(prescriptionDec2View.CustomerCollection);
+                        customerSelect.Show();
+                    }
                     if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
                         !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
                         prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
@@ -828,10 +865,6 @@ namespace His_Pos
                 prescriptionDec2View.CheckPatientGender();
                 prescriptionDec2View.CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
             }
-            prescriptionDec2View.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(prescriptionDec2View.CurrentPrescription.Customer.Id);
-            prescriptionDec2View.CusHistoryMaster.ItemsSource = prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
-            if(prescriptionDec2View.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Count > 0)
-                prescriptionDec2View.CusHistoryMaster.SelectedIndex = 0;
         }
 
         public void LoginIcData(PrescriptionDec2View prescriptionDec2View)
@@ -868,7 +901,7 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("產生盤點單...");
-                CreatePdf(rptViewer);
+                CreatePdf(rptViewer,"StockChecking.pdf",21,29.7);
                 Dispatcher.Invoke((Action)(() =>
                 {
                     
@@ -884,12 +917,36 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
-        private static void CreatePdf(ReportViewer viewer)
+
+        public void PrintMedbag(ReportViewer rptViewer, PrescriptionDec2View prescriptionDec2View)
+        {
+            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("藥袋列印中...");
+                CreatePdf(rptViewer,"Medbag.pdf",22,24);
+                Dispatcher.Invoke((Action)(() =>
+                {
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        private static void CreatePdf(ReportViewer viewer,string fileName,double width,double height)
         {
             var deviceInfo = "<DeviceInfo>" +
                              "  <OutputFormat>PDF</OutputFormat>" +
-                             "  <PageWidth>" + 21 + "cm</PageWidth>" +
-                             "  <PageHeight>" + 29.7 + "cm</PageHeight>" +
+                             "  <PageWidth>" + width + "cm</PageWidth>" +
+                             "  <PageHeight>" + height + "cm</PageHeight>" +
                              "  <MarginTop>0cm</MarginTop>" +
                              "  <MarginLeft>0cm</MarginLeft>" +
                              "  <MarginRight>0cm</MarginRight>" +
@@ -897,7 +954,7 @@ namespace His_Pos
                              "</DeviceInfo>";
             var bytes = viewer.LocalReport.Render("PDF", deviceInfo);
 
-            using (var fs = new FileStream("output.pdf", FileMode.Create))
+            using (var fs = new FileStream(fileName, FileMode.Create))
             {
                 fs.Write(bytes, 0, bytes.Length);
             }

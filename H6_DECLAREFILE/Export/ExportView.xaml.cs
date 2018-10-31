@@ -42,8 +42,30 @@ namespace His_Pos.H6_DECLAREFILE.Export
             }
         }
 
-        public ObservableCollection<Hospital> HospitalCollection { get; set; }
-        public ObservableCollection<Division> DivisionCollection { get; set; }
+        private ObservableCollection<Hospital> _hospitalCollection;
+
+        public ObservableCollection<Hospital> HospitalCollection
+        {
+            get => _hospitalCollection;
+            set
+            {
+                _hospitalCollection = value;
+                OnPropertyChanged(nameof(HospitalCollection));
+            }
+        }
+
+        private ObservableCollection<Division> _divisionCollection;
+
+        public ObservableCollection<Division> DivisionCollection
+        {
+            get => _divisionCollection;
+            set
+            {
+                _divisionCollection = value;
+                OnPropertyChanged(nameof(DivisionCollection));
+            }
+        }
+
         private ObservableCollection<AdjustCase> _adjustCaseCollection;
 
         public ObservableCollection<AdjustCase> AdjustCaseCollection
@@ -163,14 +185,14 @@ namespace His_Pos.H6_DECLAREFILE.Export
         public ExportView()
         {
             InitializeComponent();
+            SelectedFile = new DeclareFile();
+            DataContext = this;
             Instance = this;
             InitializeDeclareFiles();
-            DataContext = this;
         }
 
         private void InitializeDeclareFiles()
         {
-            SelectedFile = new DeclareFile();
             var load = new LoadingWindow();
             load.GetDeclareFileData(this);
             load.Show();
@@ -189,6 +211,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             SelectedFile = (DeclareFile)(sender as DataGrid)?.SelectedItem;
 
             if (SelectedFile == null) return;
+
             foreach (var ddata in SelectedFile.FileContent.Ddata)
             {
                 SelectedFile.PrescriptionDdatas.Add(new DeclareFileDdata(ddata));
@@ -482,5 +505,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             }
 
         }
+
+        
     }
 }

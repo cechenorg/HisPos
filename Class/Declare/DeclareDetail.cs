@@ -26,6 +26,7 @@ namespace His_Pos.Class.Declare
                 MedicalOrder = "1";
             else
                 MedicalOrder = "4";
+            PaySelf = medicine.PaySelf;
             SetMedicine(medicine);
             SetMedicate(medicine);
             Sequence = sequence;
@@ -76,6 +77,7 @@ namespace His_Pos.Class.Declare
             StartDate = declareDetail.StartDate;
             EndDate = declareDetail.EndDate;
             Form = declareDetail.Form;
+            PaySelf = PaySelf;
         }
        
         public string MedicalOrder { get; set; }//p1
@@ -94,20 +96,23 @@ namespace His_Pos.Class.Declare
         public string MedicalPersonnelIcNumber { get; set; }//p14
         public string Form { get; set; }
         public string Name { get; set; }
+        public bool PaySelf { get; set; }
+
 
         private void SetMedicate(DeclareMedicine medicine)
         {
-            Dosage = double.Parse(medicine.MedicalCategory.Dosage);//p3
+            Dosage = string.IsNullOrEmpty(medicine.MedicalCategory.Dosage)? 0.00
+                : double.Parse(medicine.MedicalCategory.Dosage);//p3
             Usage = medicine.Usage.Id;//p4
             Position = medicine.Position;//p5
-            Days = int.Parse(medicine.Days);//p11
+            Days = string.IsNullOrEmpty(medicine.Days)? 0: int.Parse(medicine.Days); //p11
         }
 
-        private void SetMedicine(DeclareMedicine medicine)
+        private void SetMedicine(DeclareMedicine medicine, bool paySelf = false)
         {
             MedicalId = medicine.Id;//p2
             Total = medicine.Amount;//p7
-            Price = double.Parse(medicine.HcPrice);//p8
+            Price = paySelf ? medicine.Price : double.Parse(medicine.HcPrice);
         }
 
         private void SetDate(string start, string end)
@@ -123,11 +128,16 @@ namespace His_Pos.Class.Declare
 
         private void CountPoint()//p9
         {
-            if (MedicalOrder == "1")
-                Point = Price * Total;
+            if (PaySelf)
+                Point = 0;
             else
             {
-                Point = Price * Total * Percent;
+                if (MedicalOrder == "1")
+                    Point = Price * Total;
+                else
+                {
+                    Point = Price * Total * Percent;
+                }
             }
         }
         public object Clone()

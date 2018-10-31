@@ -69,6 +69,7 @@ namespace His_Pos.InventoryManagement
             WareHouseCollection = WareHouseDb.GetWareHouseData();
             
             WareHouse.SelectedItem = WareHouseCollection[0];
+            
         }
         public void SetOtcTypeUi() {
             ProductTypeCollection = ProductDb.GetProductType();
@@ -223,7 +224,11 @@ namespace His_Pos.InventoryManagement
 
         private void WareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ProductList.Items.Filter = OrderTypeFilter;
+            selectStockValue = 0;
+            searchCount = 0;
+            SearchData();
+            SearchCount.Content = searchCount;
+            SelectStockValue.Content = selectStockValue.ToString("0.#");
         }
 
         private void AddNewProduct(object sender, RoutedEventArgs e)

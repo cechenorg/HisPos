@@ -33,6 +33,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
                 MedIncomeValue = row["DSV_MEDINCOME_VALUE"].ToString();
                 CopayMentValue = row["DSV_COPAYMENT_VALUE"].ToString();
                 PaySelfValue = row["DSV_PAYSELF_VALUE"].ToString();
+                DepositValue = row["DSV_DEPOSIT_VALUE"].ToString();
                 FinalStockValue = row["DSV_FINAL_VALUE"].ToString();
             }
             public string Date { get; set; }
@@ -44,6 +45,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
             public string MedIncomeValue { get; set; }
             public string CopayMentValue { get; set; }
             public string PaySelfValue { get; set; }
+            public string DepositValue { get; set; } //押金
             public string FinalStockValue { get; set; }
 
         }
@@ -78,10 +80,11 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
                 using (FileStream fs = new FileStream(saveFileDialog1.FileName, FileMode.CreateNew))
                 {
                     StreamWriter sw = new StreamWriter(fs, Encoding.Unicode);
-                    sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "配藥收入" + "\t" + "部分負擔" + "\t" + "自費" + "\t" + "期末現值");
+                    sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "期末現值" + "\t\t\t\t" + "日期" + "\t" + "部分負擔" + "\t" + "自費" + "'\t" + "押金" + "\t" + "配藥收入");
                     foreach (DailyStockValue row in DailyStockValueCollection)
                     {
-                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t" + row.MedIncomeValue + "\t" + row.CopayMentValue + "\t" + row.PaySelfValue + "\t" + row.FinalStockValue);
+                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t" + "\t" + row.FinalStockValue + "\t\t\t\t" 
+                            + row.Date + "\t" + row.CopayMentValue + "\t" + row.PaySelfValue + "\t" + row.DepositValue + "\t" + row.MedIncomeValue);
                     }
                     sw.Close();
                 } 
