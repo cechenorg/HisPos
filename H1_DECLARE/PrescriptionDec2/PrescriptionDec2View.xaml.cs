@@ -205,7 +205,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         #region ItemsSourceCollection
         private ObservableCollection<object> _medicines;
-        public ObservableCollection<Hospital> HosiHospitals { get; set; }
+        public ObservableCollection<Hospital> Hospitals { get; set; }
         public ObservableCollection<Division> Divisions { get; set; }
         public ObservableCollection<TreatmentCase> TreatmentCases { get; set; }
         public ObservableCollection<PaymentCategory> PaymentCategories { get; set; }
@@ -440,7 +440,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
-            //declareDb.UpdateDeclareFile(_currentDeclareData);
+            declareDb.UpdateDeclareFile(_currentDeclareData);
             PrintMedBag();
         }
 
@@ -924,6 +924,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
         {
             var t1 = new Thread(CheckIcCardStatus);
+            var res = HisApiBase.csVerifySAMDC();
             SetCardStatusContent("卡片檢查中...");
             t1.Start();
             if (t1.Join(8000))
@@ -1110,30 +1111,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void MedicalNumber_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-           InputNumber(e);
-        }
-
-        private void InputNumber(KeyEventArgs e)
-        {
-            var shiftKey = (Keyboard.Modifiers & ModifierKeys.Shift) != 0;
-            if (shiftKey)  
-            {
-                e.Handled = true;
-            }
-            else                        
-            {
-                if (!((e.Key >= Key.D0 && e.Key <= Key.D9) || (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || e.Key == Key.Delete || e.Key == Key.Back || e.Key == Key.Tab || e.Key == Key.Enter))
-                {
-                    e.Handled = true;
-                }
-            }
-        }
-
         private void ReleaseHospital_Populating(object sender, PopulatingEventArgs e) {
-            if (HosiHospitals is null) HosiHospitals = HospitalDb.GetData(); 
-            var tempCollection = new ObservableCollection<Hospital>(HosiHospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList());
+            if (Hospitals is null) Hospitals = HospitalDb.GetData(); 
+            var tempCollection = new ObservableCollection<Hospital>(Hospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList());
             ReleaseHospital.ItemsSource = tempCollection;
             ReleaseHospital.PopulateComplete();
         }
@@ -1218,8 +1198,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else if(textBoxDependency.GetValue(NameProperty) is string && textBoxDependency.GetValue(NameProperty).Equals("SecondDiagnosis"))
             {
-                PaymentCategoryCombo.Focus();
-                return;
+                if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                {
+                    PaymentCategoryCombo.Focus();
+                    return;
+                }
             }
             if (textBox.Text.Length < 3)
             {
@@ -1301,7 +1284,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     switch (tName)
                     {
                         case "DoctorId":
-                            HisPerson.Focus();
+                            MedicalNumber.Focus();
                             break;
                         case "PaymentCategoryCombo":
                             AdjustCaseCombo.Focus();
@@ -1312,8 +1295,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         case "ChronicTotal":
                             SpecialCodeCombo.Focus();
                             break;
+                        case "MedicalNumber":
+                            TreatmentCaseCombo.Focus();
+                            break;
                     }
-
                     break;
             }
         }
@@ -1322,7 +1307,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is AutoCompleteBox a)) return;
             if (e.Key == Key.Enter && a.IsDropDownOpen && a.Text.Length <= 10)
-                a.SelectedItem = HosiHospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList()[0];
+                a.SelectedItem = Hospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList()[0];
         }
 
         private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -1378,6 +1363,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             ProductDb.InsertEntry("配藥收入", totalCost.ToString() , "DecMasId", decMasId);
             ProductDb.InsertEntry("調劑耗用", "-" + totalCost, "DecMasId", decMasId);
             declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", decMasId);//庫存扣庫
+            m = new MessageWindow("調劑登錄成功", MessageType.SUCCESS, true);
+            m.ShowDialog();
+        }
+
+        private void MedTotalPrice_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectAll();
         }
     }
 }

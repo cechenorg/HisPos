@@ -40,7 +40,6 @@ namespace His_Pos.Class.Product
             Usage = new Usage();
             if (type.Equals("DeclareFile"))
             {
-                Ingredient = string.Empty;
                 Cost = 0;
                 Price = 0;
                 TotalPrice = 0;
@@ -62,7 +61,6 @@ namespace His_Pos.Class.Product
             {
                 MedicalCategory = new Medicate(dataRow);
                 PaySelf = false;
-                Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
                 Stock = new InStock(dataRow);
                 Cost = 1;
                 if (dataRow.Table.Columns.Contains("PRO_SELL_PRICE"))
@@ -85,13 +83,13 @@ namespace His_Pos.Class.Product
                     Position = string.IsNullOrEmpty(dataRow["HISWAY_ID"].ToString())? string.Empty : dataRow["HISWAY_ID"].ToString();
                     Amount = string.IsNullOrEmpty(dataRow["HISDECDET_QTY"].ToString())? 0 : Convert.ToDouble(dataRow["HISDECDET_QTY"].ToString());
                 }
-
+                Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
+                Price = double.Parse(dataRow["PRO_LASTPRICE"].ToString());
+                Note = dataRow["HISMED_NOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_NOTE"].ToString();
             }
             ControlLevel = dataRow["HISMED_CONTROL"].ToString();
             IsFrozMed = bool.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
             HcPrice = dataRow["HISMED_PRICE"].ToString();
-            Price = double.Parse(dataRow["PRO_LASTPRICE"].ToString());
-            Note = dataRow["HISMED_NOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_NOTE"].ToString();
             IsBuckle = true;
         }
 

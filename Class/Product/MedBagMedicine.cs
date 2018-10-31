@@ -18,7 +18,7 @@ namespace His_Pos.Class.Product
             Position = m.Position;
             MedicineDays = m.Days;
             Dosage = m.Dosage;
-            Usage = m.Usage.PrintName;
+            Usage = m.Usage.Name;
         }
         public string Id { get; set; }
         public string Name { get; set; }

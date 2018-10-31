@@ -86,7 +86,6 @@ namespace His_Pos.Class.Product
             {
                 collection.Add(new DeclareMedicine(row, "DeclareFile"));
             }
-
             return collection;
         }
 

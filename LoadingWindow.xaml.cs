@@ -14,6 +14,7 @@ using His_Pos.Properties;
 using His_Pos.Service;
 using His_Pos.AbstractClass;
 using System.Linq;
+using System.Management.Instrumentation;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Division;
@@ -549,16 +550,51 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("申報資料處理中...");
+                //exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
+                //ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                //ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                //
+                //ObservableCollection<PaymentCategory> tmpPaymentCategory = PaymentCategroyDb.GetData();
+                //ObservableCollection<TreatmentCase> tmpTreatmentCase = TreatmentCaseDb.GetData();
+                //ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
+                //ObservableCollection<DeclareMedicine> tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
+                //exportView.Dispatcher.Invoke((Action)(() =>
+                //{
+
+                //    exportView.DivisionCollection = tmpDivisions;
+                //    exportView.AdjustCaseCollection = tmpAdjustCases;
+                //    exportView.CopaymentCollection = tmpCopayments;
+                //    exportView.PaymentCategoryCollection = tmpPaymentCategory;
+                //    exportView.TreatmentCaseCollection = tmpTreatmentCase;
+                //    exportView.DeclareMedicinesData = tmpDeclareMedicine;
+                //    exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
+                //    exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
+                //    exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                //    exportView.ReleasePalace.ItemsSource = exportView.HospitalCollection;
+                //}));
                 exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
-                exportView.DivisionCollection = DivisionDb.GetData();
-                exportView.HospitalCollection = HospitalDb.GetData();
-                exportView.AdjustCaseCollection = AdjustCaseDb.GetData();
-                exportView.CopaymentCollection = CopaymentDb.GetData();
-                exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
-                exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
-                exportView.DeclareMedicinesData = MedicineDb.GetDeclareFileMedicineData();
+                //exportView.DivisionCollection = DivisionDb.GetData();
+                //exportView.HospitalCollection = HospitalDb.GetData();
+                //exportView.AdjustCaseCollection = AdjustCaseDb.GetData();
+                //exportView.CopaymentCollection = CopaymentDb.GetData();
+                //exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
+                //exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
+                ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                ObservableCollection<AdjustCase> tmpAdjustCases = AdjustCaseDb.GetData();
+                ObservableCollection<DeclareMedicine> tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
+                ObservableCollection<PaymentCategory> tmpPaymentCategory = PaymentCategroyDb.GetData();
+                ObservableCollection<TreatmentCase> tmpTreatmentCase = TreatmentCaseDb.GetData();
+                ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
+                    exportView.DeclareMedicinesData = tmpDeclareMedicine;
+                    exportView.HospitalCollection = tmpHospitals;
+                    exportView.DivisionCollection = tmpDivisions;
+                    exportView.AdjustCaseCollection = tmpAdjustCases;
+                    exportView.PaymentCategoryCollection = tmpPaymentCategory;
+                    exportView.TreatmentCaseCollection = tmpTreatmentCase;
+                    exportView.CopaymentCollection = tmpCopayments;
                     exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
                     exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                     exportView.ReleasePalace.ItemsSource = exportView.HospitalCollection;
@@ -583,7 +619,7 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得處方資料...");
-                prescriptionDec2View.HosiHospitals = HospitalDb.GetData();
+                prescriptionDec2View.Hospitals = HospitalDb.GetData();
                 prescriptionDec2View.Divisions = DivisionDb.GetData();
                 prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
                 prescriptionDec2View.TreatmentCases = TreatmentCaseDb.GetData();
@@ -594,7 +630,7 @@ namespace His_Pos
                 prescriptionDec2View.Usages = UsageDb.GetUsages();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.HosiHospitals;
+                    prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;
                     prescriptionDec2View.DivisionCombo.ItemsSource = prescriptionDec2View.Divisions;
                     prescriptionDec2View.TreatmentCaseCombo.ItemsSource = prescriptionDec2View.TreatmentCases;
                     prescriptionDec2View.PaymentCategoryCombo.ItemsSource = prescriptionDec2View.PaymentCategories;
