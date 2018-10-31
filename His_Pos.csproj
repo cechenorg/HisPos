@@ -333,6 +333,7 @@
     <Compile Include="Class\Product\InventoryCheckSheet.cs" />
     <Compile Include="Class\Product\InventoryMedicine.cs" />
     <Compile Include="Class\Product\InventoryOtc.cs" />
+    <Compile Include="Class\Product\MedBagMedicine.cs" />
     <Compile Include="Class\Product\MedicineDb.cs" />
     <Compile Include="Class\Product\MedXml.cs" />
     <Compile Include="Class\Product\OTCDb.cs" />
