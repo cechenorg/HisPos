@@ -9,7 +9,6 @@ using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
-using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class

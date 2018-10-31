@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using His_Pos.AbstractClass;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Product;
 using His_Pos.H1_DECLARE.PrescriptionDec2;

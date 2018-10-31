@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media.Imaging;
-using His_Pos.AbstractClass;
 using His_Pos.Interface;
 using His_Pos.Struct.Product;
 
@@ -46,6 +39,12 @@ namespace His_Pos.Class.Product
                     freeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
                     validDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01")) ? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
                     batchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
+
+                    PackageAmount = Double.Parse(dataRow["PRO_PACKAGEQTY"].ToString());
+                    PackagePrice = Double.Parse(dataRow["PRO_SPACKAGEPRICE"].ToString());
+                    SingdePrice = Double.Parse(dataRow["PRO_SPRICE"].ToString());
+
+                    IsSingde = Boolean.Parse(dataRow["IS_SINGDE"].ToString());
                     break;
                 case DataSource.GetItemDialogProduct:
                     amount = 0;
@@ -67,7 +66,7 @@ namespace His_Pos.Class.Product
         {
         }
 
-        public ProductPurchaseOtc(PurchaseProduct selectedItem) : base(selectedItem)
+        public ProductPurchaseOtc(PurchaseProduct selectedItem, bool isSingde) : base(selectedItem)
         {
             Amount = 0;
             Price = 0;
@@ -82,6 +81,12 @@ namespace His_Pos.Class.Product
             Stock = new InStock(selectedItem);
 
             IsFirstBatch = true;
+            
+            PackageAmount = selectedItem.PackageAmount;
+            PackagePrice = selectedItem.PackagePrice;
+            SingdePrice = selectedItem.SingdePrice;
+
+            IsSingde = isSingde;
         }
         public bool IsFirstBatch { get; set; }
         public bool InvertIsFirstBatch { get { return !IsFirstBatch; } }
@@ -120,6 +125,7 @@ namespace His_Pos.Class.Product
             set
             {
                 orderAmount = value;
+                CalculatePackagePrice();
                 NotifyPropertyChanged("OrderAmount");
             }
         }
@@ -133,6 +139,7 @@ namespace His_Pos.Class.Product
                 CalculateData("Amount");
                 FocusColumn = "Amount";
                 NotifyPropertyChanged("Amount");
+                NotifyPropertyChanged("IsEnough");
             }
         }
         public double price;
@@ -205,6 +212,20 @@ namespace His_Pos.Class.Product
             }
         }
 
+
+        public double PackageAmount { get; }
+
+        public double PackagePrice { get; }
+
+        public double SingdePrice { get; }
+
+        public bool IsSingde { get; set; }
+
+        public bool IsEnough
+        {
+            get { return Amount > OrderAmount; }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string info)
@@ -217,6 +238,8 @@ namespace His_Pos.Class.Product
 
         public void CalculateData(string inputSource)
         {
+            if (IsSingde) return;
+
             double dprice = price;
             if (totalPrice == amount * dprice || dprice == totalPrice / amount) return;
 
@@ -243,6 +266,23 @@ namespace His_Pos.Class.Product
             else if (amount != 0)
             {
                 Price = totalPrice / amount;
+            }
+        }
+
+        private void CalculatePackagePrice()
+        {
+            if (IsSingde)
+            {
+                if (OrderAmount >= PackageAmount)
+                {
+                    TotalPrice = PackagePrice * OrderAmount;
+                    Price = PackagePrice;
+                }
+                else
+                {
+                    TotalPrice = SingdePrice * OrderAmount;
+                    Price = SingdePrice;
+                }
             }
         }
 

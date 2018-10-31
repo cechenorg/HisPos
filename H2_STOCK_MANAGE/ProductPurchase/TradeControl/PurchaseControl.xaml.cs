@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
@@ -22,7 +16,6 @@ using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
-using His_Pos.Service;
 using His_Pos.Struct.Manufactory;
 using His_Pos.Struct.Product;
 using MahApps.Metro.Controls;
@@ -116,16 +109,17 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             {
                 case OrderType.PROCESSING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[7].Height = new GridLength(50);
-                    MainGrid.RowDefinitions[8].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[4].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[7].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[8].Height = new GridLength(50);
+                    MainGrid.RowDefinitions[9].Height = new GridLength(0);
                     
                     if (StoreOrderData.Manufactory.Id.Equals("0"))
                     {
                         CurrentDataGrid = WStoreOrderDetail;
 
-                        MainGrid.RowDefinitions[4].Height = new GridLength(0);
-                        MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
+                        MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                        MainGrid.RowDefinitions[6].Height = new GridLength(1, GridUnitType.Star);
                         
                         CurrentDataGrid.Columns[4].Visibility = Visibility.Collapsed;
                         CurrentDataGrid.Columns[5].Visibility = Visibility.Visible;
@@ -134,32 +128,44 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     {
                         CurrentDataGrid = GStoreOrderDetail;
 
-                        MainGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
-                        MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                        MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
+                        MainGrid.RowDefinitions[6].Height = new GridLength(0);
                     }
                     break;
                 case OrderType.UNPROCESSING:
-                    MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
-                    MainGrid.RowDefinitions[4].Height = new GridLength(0);
+                    
                     MainGrid.RowDefinitions[5].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[6].Height = new GridLength(50);
-                    MainGrid.RowDefinitions[7].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[7].Height = new GridLength(50);
                     MainGrid.RowDefinitions[8].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[9].Height = new GridLength(0);
 
-                    CurrentDataGrid = PStoreOrderDetail;
 
                     if (StoreOrderData.Manufactory.Id.Equals("0"))
-                        PStoreOrderDetail.Columns[10].Visibility = Visibility.Collapsed;
+                    {
+                        CurrentDataGrid = PSStoreOrderDetail;
+
+                        MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
+                        MainGrid.RowDefinitions[4].Height = new GridLength(0);
+                    }
                     else
-                        PStoreOrderDetail.Columns[10].Visibility = Visibility.Visible;
+                    {
+                        CurrentDataGrid = PStoreOrderDetail;
+
+                        MainGrid.RowDefinitions[3].Height = new GridLength(0);
+                        MainGrid.RowDefinitions[4].Height = new GridLength(1, GridUnitType.Star);
+
+                        CurrentDataGrid.Columns[10].Visibility = Visibility.Visible;
+                    }
                     break;
                 case OrderType.WAITING:
                     MainGrid.RowDefinitions[3].Height = new GridLength(0);
                     MainGrid.RowDefinitions[4].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
-                    MainGrid.RowDefinitions[6].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[5].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[6].Height = new GridLength(1, GridUnitType.Star);
                     MainGrid.RowDefinitions[7].Height = new GridLength(0);
-                    MainGrid.RowDefinitions[8].Height = new GridLength(50);
+                    MainGrid.RowDefinitions[8].Height = new GridLength(0);
+                    MainGrid.RowDefinitions[9].Height = new GridLength(50);
 
                     CurrentDataGrid = WStoreOrderDetail;
 
@@ -247,44 +253,32 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 if (sender is TextBox)
                 {
-                    (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                    TextBox textBox = sender as TextBox;
 
-                    if (Keyboard.FocusedElement is Button)
-                        (Keyboard.FocusedElement as Button).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                }
-                else
-                {
-                    UIElement child = (sender as AutoCompleteBox).FindChild<TextBox>("Text");
-
-                    child.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-                }
-
-                var focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
-
-                while (true)
-                {
-                    if (focusedCell is ContentPresenter)
+                    if (textBox.Name.Equals("Id"))
                     {
-                        UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                        if (CurrentProduct == null || !textBox.Text.Equals(CurrentProduct.Id))
+                        {
+                            Product currentProduct = ((ICloneable) CurrentProduct)?.Clone() as Product;
 
-                        if (!(child is Image))
-                            break;
+                            NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.PURCHASE, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id, textBox.Text);
+
+                            if (newItemDialog.ConfirmButtonClicked)
+                            {
+                                if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
+                                {
+                                    MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING, true);
+                                    messageWindow.ShowDialog();
+                                    textBox.Text = "";
+                                    return;
+                                }
+
+                                AddProduct(textBox, newItemDialog.SelectedItem, currentProduct);
+                            }
+                        }
                     }
 
-                    focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-
-                    focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
-                }
-
-                UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
-
-                if (firstChild is TextBox)
-                    firstChild.Focus();
-                else
-                {
-                    UIElement secondChild = (UIElement)VisualTreeHelper.GetChild(firstChild, 0);
-
-                    secondChild.Focus();
+                    MoveFocusNext(sender);
                 }
             }
             else if ((sender as TextBox).Tag != null && (sender as TextBox).Tag.Equals("CheckInputOnlyNum"))
@@ -294,26 +288,80 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             }
 
         }
-        private void AddProduct(TextBox textBox, PurchaseProduct product)
+
+        private void MoveFocusNext(object sender)
+        {
+            (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+            if (Keyboard.FocusedElement is Button)
+                (Keyboard.FocusedElement as Button).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+            if(CurrentDataGrid.CurrentCell.Column is null) return;
+
+            var focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
+
+            if (focusedCell is null) return;
+
+            while (true)
+            {
+                if (focusedCell is ContentPresenter)
+                {
+                    UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                    if (!(child is Image))
+                        break;
+                }
+
+                focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
+            }
+
+            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+            if (firstChild is TextBox)
+                firstChild.Focus();
+            else
+            {
+                UIElement secondChild = (UIElement)VisualTreeHelper.GetChild(firstChild, 0);
+
+                secondChild.Focus();
+            }
+        }
+
+        private void AddProduct(TextBox textBox, PurchaseProduct product, Product currentProduct)
         {
             Product newProduct;
 
             if (product.Type.Equals("M"))
-                newProduct = new ProductPurchaseMedicine(product);
+                newProduct = new ProductPurchaseMedicine(product, StoreOrderData.Manufactory.Id.Equals("0"));
             else
-                newProduct = new ProductPurchaseOtc(product);
+                newProduct = new ProductPurchaseOtc(product, StoreOrderData.Manufactory.Id.Equals("0"));
             
-            if (CurrentProduct is null)
+            if (currentProduct is null)
             {
                 StoreOrderData.Products.Add(newProduct);
 
                 textBox.Text = "";
+
+                Dispatcher.BeginInvoke((ThreadStart)delegate
+                {
+                    textBox.Focus();
+                });
             }
             else
             {
-                ((IProductPurchase)newProduct).CopyFilledData(CurrentProduct);
+                ((IProductPurchase)newProduct).CopyFilledData(currentProduct);
+
+                Product tempP = StoreOrderData.Products.Single(p => p.Id.Equals(currentProduct.Id));
+
+                int index = StoreOrderData.Products.IndexOf(tempP);
+
+                StoreOrderData.Products.RemoveAt(index);
+                StoreOrderData.Products.Insert(index, newProduct);
 
                 CurrentProduct = newProduct;
+                textBox.Focus();
             }
 
             StoreOrderData.IsDataChanged = true;
@@ -344,32 +392,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             StoreOrderData.IsDataChanged = true;
         }
+        
 
-        private void Id_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (sender is null) return;
-
-            TextBox textBox = sender as TextBox;
-
-            if (e.Key == Key.Enter)
-            {
-                NewItemDialog newItemDialog = new NewItemDialog(StoreOrderCategory.PURCHASE, ProductCollection, StoreOrderData.Manufactory.Id, StoreOrderData.Warehouse.Id, textBox.Text);
-
-                if (newItemDialog.ConfirmButtonClicked)
-                {
-                    if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
-                    {
-                        MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING,true);
-                        messageWindow.ShowDialog();
-                        return;
-                    }
-
-                    AddProduct(textBox, newItemDialog.SelectedItem);
-                }
-            }
-        }
-
-        private void Id_GotFocus(object sender, RoutedEventArgs e)
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is null) return;
 
@@ -378,7 +403,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             textBox.SelectAll();
         }
 
-        private void Id_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void TextBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (sender is null) return;
 
@@ -467,9 +492,9 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 //SetChanged();
                 if (newItemDialog.SelectedItem.Type.Equals("M"))
-                    StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem));
+                    StoreOrderData.Products.Add(new ProductPurchaseMedicine(newItemDialog.SelectedItem, StoreOrderData.Manufactory.Id.Equals("0")));
                 else
-                    StoreOrderData.Products.Add(new ProductPurchaseOtc(newItemDialog.SelectedItem));
+                    StoreOrderData.Products.Add(new ProductPurchaseOtc(newItemDialog.SelectedItem, StoreOrderData.Manufactory.Id.Equals("0")));
             }
         }
 
@@ -484,8 +509,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void ShowDeclareDataOverview(object sender, MouseButtonEventArgs e)
         {
-            DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview();
-            declareDataDetailOverview.Show();
+            DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview(StoreOrderData.Id);
+            declareDataDetailOverview.ShowDialog();
         }
         
     }

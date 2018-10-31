@@ -5,22 +5,14 @@ using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using His_Pos.Class;
-using System.Collections.Specialized;
-using His_Pos.Interface;
 using His_Pos.ProductPurchaseRecord;
 using System.ComponentModel;
 using His_Pos.Class.StockTakingOrder;
@@ -112,10 +104,10 @@ namespace His_Pos.InventoryManagement
             MedManufactory.ItemsSource = MEDManufactoryCollection;
 
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
-            if (ProductGroupCollection.Count == 1)
-                ButtonDemolition.IsEnabled = false;
-            else
-                ButtonDemolition.IsEnabled = true;
+           // if (ProductGroupCollection.Count == 1)
+           //     ButtonDemolition.IsEnabled = false;
+           // else
+           //     ButtonDemolition.IsEnabled = true;
 
             StockTakingOverviewCollection = ProductDb.GetProductStockTakingDate(InventoryMedicine.Id);
             if(StockTakingOverviewCollection.Count != 0)
@@ -130,7 +122,8 @@ namespace His_Pos.InventoryManagement
         {
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
-
+            ButtonCancel.IsEnabled = false;
+            ButtonUpdateSubmmit.IsEnabled = false;
             IsChanged = false;
         }
         private void SetUnitValue()
@@ -224,6 +217,8 @@ namespace His_Pos.InventoryManagement
         {
             IsChanged = true;
             IsChangedLabel.Content = "已修改";
+            ButtonCancel.IsEnabled = true;
+            ButtonUpdateSubmmit.IsEnabled = true;
             IsChangedLabel.Foreground = Brushes.Red;
         }
 
@@ -365,16 +360,16 @@ namespace His_Pos.InventoryManagement
 
         private void ButtonDemolition_Click(object sender, RoutedEventArgs e)
         {
-            DemolitionWindow demolitionWindow = new DemolitionWindow(ProductGroupCollection, InventoryMedicine);
-            demolitionWindow.ShowDialog();
-            UpdateUi();
+          //  DemolitionWindow demolitionWindow = new DemolitionWindow(ProductGroupCollection, InventoryMedicine);
+          //  demolitionWindow.ShowDialog();
+          //  UpdateUi();
         }
 
         private void ButtonMergeStock_Click(object sender, RoutedEventArgs e)
         {
-            MergeStockWindow mergeStockWindow = new MergeStockWindow(InventoryMedicine);
-            mergeStockWindow.ShowDialog();
-            UpdateUi();
+           // MergeStockWindow mergeStockWindow = new MergeStockWindow(InventoryMedicine);
+           // mergeStockWindow.ShowDialog();
+           // UpdateUi();
         }
     }
 }

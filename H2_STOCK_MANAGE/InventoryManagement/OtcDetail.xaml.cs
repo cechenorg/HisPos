@@ -1,36 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
-using His_Pos.Interface;
-using His_Pos.ProductPurchase;
 using His_Pos.ProductPurchaseRecord;
 using His_Pos.StockTaking;
-using His_Pos.Struct.Product;
-using His_Pos.ViewModel;
 using LiveCharts;
-using LiveCharts.Definitions.Series;
 using LiveCharts.Wpf;
 
 namespace His_Pos.InventoryManagement
@@ -192,10 +179,10 @@ namespace His_Pos.InventoryManagement
 
             WareStcokCollection = WareHouseDb.GetWareStockById(InventoryOtc.Id);
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
-            if (ProductGroupCollection.Count == 1)
-                ButtonDemolition.IsEnabled = false;
-            else
-                ButtonDemolition.IsEnabled = true;
+          //  if (ProductGroupCollection.Count == 1)
+          //      ButtonDemolition.IsEnabled = false;
+          //  else
+          //      ButtonDemolition.IsEnabled = true;
 
 
             UpdateChart();
@@ -207,7 +194,8 @@ namespace His_Pos.InventoryManagement
         {
             IsChangedLabel.Content = "未修改";
             IsChangedLabel.Foreground = (Brush)FindResource("ForeGround");
-            
+            ButtonCancel.IsEnabled = false;
+            ButtonUpdateSubmmit.IsEnabled = false;
             IsChanged = false;
         }
 
@@ -250,6 +238,8 @@ namespace His_Pos.InventoryManagement
         {
             IsChanged = true;
             IsChangedLabel.Content = "已修改";
+            ButtonCancel.IsEnabled = true;
+            ButtonUpdateSubmmit.IsEnabled = true;
             IsChangedLabel.Foreground = Brushes.Red;
         }
 

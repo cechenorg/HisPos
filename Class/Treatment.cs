@@ -1,14 +1,6 @@
-﻿using His_Pos.Class.AdjustCase;
-using His_Pos.Class.Copayment;
-using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.Person;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using His_Pos.Service;
 using System.Data;
@@ -24,9 +16,9 @@ namespace His_Pos.Class
             Copayment = new Copayment.Copayment(row);
             AdjustCase = new AdjustCase.AdjustCase(row);
             MedicineDays = "0";
-            TreatmentDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_PRESCRIPTIONDATE"].ToString().Substring(1, 9));
+            TreatmentDate =  Convert.ToDateTime(Convert.ToInt32(row["HISDECMAS_PRESCRIPTIONDATE"].ToString().Substring(0, 4)) + row["HISDECMAS_PRESCRIPTIONDATE"].ToString().Substring(4, 6));
             TreatmentDate.ToShortDateString();
-            AdjustDate = DateTimeExtensions.ToUsDate(row["HISDECMAS_TREATDATE"].ToString().Substring(1, 9));
+            AdjustDate = Convert.ToDateTime(Convert.ToInt32(row["HISDECMAS_TREATDATE"].ToString().Substring(0, 4)) + row["HISDECMAS_TREATDATE"].ToString().Substring(4, 6));
             AdjustDate.ToShortDateString();
             PaymentCategory = new PaymentCategory.PaymentCategory(row);
         }

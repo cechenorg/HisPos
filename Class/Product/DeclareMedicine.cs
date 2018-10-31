@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
 using His_Pos.Interface;
 using His_Pos.Service;
 
@@ -257,7 +251,26 @@ namespace His_Pos.Class.Product
         }
 
         public string Note { get; set; }
-        public bool IsBuckle { get; set; }
+        private bool isBuckle;
+        public bool IsBuckle
+        {
+            get { return isBuckle; }
+            set
+            {
+                isBuckle = value;
+                NotifyPropertyChanged("IsBuckle");
+                NotifyPropertyChanged("BuckleIcon");
+            }
+        }
+        public string BuckleIcon {
+
+            get {
+                if (IsBuckle)
+                    return ""; 
+                else
+                    return "../../Images/icons8-delete-32.png";
+            }
+        }
         private void CalculateTotalPrice()
         {
             if (PaySelf)

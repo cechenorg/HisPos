@@ -1,38 +1,22 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
-using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
-using His_Pos.H3_STOCKTAKING.StockTaking;
 using His_Pos.Interface;
 using His_Pos.InventoryManagement;
 using His_Pos.ProductPurchaseRecord;
-using His_Pos.Service;
-using His_Pos.StockTaking;
 using His_Pos.Struct.Product;
-using MahApps.Metro.Controls;
 
 namespace His_Pos.ProductPurchase
 {
@@ -131,7 +115,7 @@ namespace His_Pos.ProductPurchase
         }
 
         #region ----- Init View -----
-        private void InitData()
+        public void InitData()
         {
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetProductPurchaseData(this);
@@ -186,9 +170,9 @@ namespace His_Pos.ProductPurchase
                 Product product;
 
                 if (detail.Type.Equals("O"))
-                    product = new ProductPurchaseOtc(tmeProduct);
+                    product = new ProductPurchaseOtc(tmeProduct, StoreOrderData.Manufactory.Id.Equals("0"));
                 else if (detail.Type.Equals("M"))
-                    product = new ProductPurchaseMedicine(tmeProduct);
+                    product = new ProductPurchaseMedicine(tmeProduct, StoreOrderData.Manufactory.Id.Equals("0"));
                 else
                     continue;
 
@@ -553,7 +537,6 @@ namespace His_Pos.ProductPurchase
         {
             InitData();
         }
-
         
         private void ProductPurchaseView_OnUnloaded(object sender, RoutedEventArgs e)
         {

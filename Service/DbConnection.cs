@@ -3,12 +3,9 @@ using His_Pos.Properties;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Threading;
-using System.Windows.Threading;
 
 namespace His_Pos.Service
 {

@@ -1,5 +1,4 @@
-﻿using His_Pos.Service;
-using System;
+﻿using System;
 using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
@@ -41,7 +40,7 @@ namespace His_Pos.Class.Person
         {
             Id = row["CUS_ID"].ToString();
             IcNumber = row["CUS_IDNUM"].ToString();
-            Birthday = row.Field<DateTime?>("CUS_BIRTH")??new DateTime();
+            Birthday = string.IsNullOrEmpty(row["CUS_BIRTH"].ToString()) ? new DateTime() : Convert.ToDateTime(row["CUS_BIRTH"].ToString());
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
             Gender = string.IsNullOrEmpty(row["CUS_GENDER"].ToString()) || Convert.ToBoolean(row["CUS_GENDER"].ToString());

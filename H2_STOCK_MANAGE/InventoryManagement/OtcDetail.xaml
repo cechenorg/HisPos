@@ -234,9 +234,9 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" DockPanel.Dock="Bottom">
-                        <Button Width="100" Name="ButtonDemolition" Content="拆開" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonDemolition_Click"/>
+                        <!--<Button Width="100" Name="ButtonDemolition" Content="拆開" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonDemolition_Click"/>
                         <Rectangle  Width="10"/>
-                        <Button Width="100" Name="ButtonMergeStock" Content="合併" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonMergeStock_Click"/>
+                        <Button Width="100" Name="ButtonMergeStock" Content="合併" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,10" Click="ButtonMergeStock_Click"/>-->
                     </StackPanel>
                 </DockPanel>
                 <StackPanel Orientation="Vertical" Background="{StaticResource GridBackGround}" Grid.Column="4" Margin="10,0,0,0">
@@ -257,7 +257,7 @@
                 
                 <Rectangle Width="780"/>
                 <Label Name="IsChangedLabel" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="0,0,5,0"/>
-                <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="Gray" Click="ChangedCancelButton_Click" />
+                <Button Name="ButtonCancel" Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,10,10" Background="Gray" Click="ChangedCancelButton_Click" />
                 <Button Name="ButtonUpdateSubmmit" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,10,0,10" Background="IndianRed" PreviewMouseUp="ButtonUpdateSubmmit_OnMouseLeftButtonUp"/>
             </StackPanel>
             <Grid Grid.Column="0" Grid.Row="3">

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using His_Pos.Class.Declare;
-using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class

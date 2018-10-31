@@ -1,11 +1,6 @@
-﻿using His_Pos.H4_BASIC_MANAGE.LocationManage;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.Class
 {

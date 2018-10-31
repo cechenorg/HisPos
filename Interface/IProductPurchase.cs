@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using His_Pos.AbstractClass;
+﻿using His_Pos.AbstractClass;
 using His_Pos.Class;
 
 namespace His_Pos.Interface
@@ -23,5 +18,11 @@ namespace His_Pos.Interface
         bool IsFirstBatch { get; set; }
 
         void CopyFilledData(Product product);
+
+        double PackageAmount { get; }
+        double PackagePrice { get; }
+        double SingdePrice { get; }
+
+        bool IsSingde { get; set; }
     }
 }

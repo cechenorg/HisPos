@@ -338,6 +338,13 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
+                    <DataGridTemplateColumn MinWidth="20" Header="" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:Name="MedicineBuckleDataTemplate">
+                                <Image Source="{Binding BuckleIcon,UpdateSourceTrigger=PropertyChanged}" Width="16"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             <Grid Grid.Row="3" Margin="10,0,10,10">

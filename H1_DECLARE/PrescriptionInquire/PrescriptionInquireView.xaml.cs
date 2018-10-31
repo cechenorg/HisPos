@@ -94,9 +94,9 @@ namespace His_Pos.PrescriptionInquire
             prescriptionOverview.Clear();
             TaiwanCalendar taiwanCalendar = new TaiwanCalendar();
             
-            var sDate = start.Text == "" ?"" : "0" + taiwanCalendar.GetYear(Convert.ToDateTime(start.Text)) + "/" + Convert.ToDateTime(start.Text).ToString("MM/dd");
+            var sDate = start.Text;
             
-            var eDate = end.Text == "" ? "" : "0" + taiwanCalendar.GetYear(Convert.ToDateTime(end.Text)) + "/" + Convert.ToDateTime(end.Text).ToString("MM/dd");
+            var eDate = end.Text;
             string adjustId = "";
             if (AdjustCaseCombo.Text != String.Empty)
                 adjustId = AdjustCaseCombo.Text.Substring(0, 1);

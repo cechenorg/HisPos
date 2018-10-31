@@ -1,18 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using His_Pos.AbstractClass;
+﻿using System.Windows.Controls;
 using His_Pos.Class;
-using His_Pos.Class.Declare;
 using His_Pos.Class.Manufactory;
-using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
 
 namespace His_Pos.ProductPurchase
 {

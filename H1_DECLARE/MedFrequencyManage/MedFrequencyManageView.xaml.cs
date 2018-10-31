@@ -1,20 +1,11 @@
 ﻿using His_Pos.Class;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
 {
@@ -128,6 +119,15 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
         private void CheckBox_DataChanged(object sender, RoutedEventArgs e)
         {
             DataChanged();
+        }
+
+        private void TextFreName_TextChanged(object sender, TextChangedEventArgs e) {
+            DataGridMedFrequency.Items.Filter = ((o) => {
+                if ( ((Usage)o).Name.Contains(TextFreName.Text) || ((Usage)o).QuickName.Contains(TextFreName.Text) || ((Usage)o).Id.Contains(TextFreName.Text) || ((Usage)o).PrintName.Contains(TextFreName.Text))
+                    return true;
+                else
+                    return false;
+            });
         }
     }
 }

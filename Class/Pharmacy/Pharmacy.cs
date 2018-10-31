@@ -1,9 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using His_Pos.AbstractClass;
-using His_Pos.Class;
 using His_Pos.Class.Person;
 using System.Data;
-using System.IO;
 using System.Xml;
 using His_Pos.Class.Declare;
 

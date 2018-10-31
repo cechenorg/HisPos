@@ -1,11 +1,6 @@
 ﻿using His_Pos.Class.Product;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace His_Pos.Class.ProductType
 {

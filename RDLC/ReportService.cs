@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
@@ -16,10 +15,8 @@ using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
 using His_Pos.Class.Pharmacy;
-using His_Pos.Class.Product;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
-using Microsoft.ReportingServices.RdlObjectModel;
 
 namespace His_Pos.RDLC
 {

@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class.Person
@@ -70,7 +69,12 @@ namespace His_Pos.Class.Person
             {
                 _birthday = value;
                OnPropertyChanged(nameof(Birthday));
+                OnPropertyChanged("BirthdayStr");
             }
+        }
+          
+        public string BirthdayStr {
+            get => Birthday.ToString("yyyy/MM/dd"); 
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

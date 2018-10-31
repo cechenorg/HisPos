@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.Data;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using His_Pos.Class.Declare;
 
 namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
 {
@@ -19,9 +10,32 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
     /// </summary>
     public partial class DeclareDataDetailOverview : Window
     {
-        public DeclareDataDetailOverview()
+        public struct PurchaseDeclareDataOverview
+        {
+            public PurchaseDeclareDataOverview(DataRow dataRow)
+            {
+                DeclareId = dataRow["HISDECMAS_ID"].ToString();
+                CustomerName = dataRow["CUS_NAME"].ToString();
+                TreatmentDate = dataRow["HISDECMAS_TREATDATE"].ToString();
+                Division = dataRow["HISDIV_NAME"].ToString();
+                InstitutionName = dataRow["INS_NAME"].ToString();
+            }
+
+            public string DeclareId { get; }
+            public string CustomerName { get; }
+            public string TreatmentDate { get; }
+            public string Division { get; }
+            public string InstitutionName { get; }
+        }
+
+        public ObservableCollection<PurchaseDeclareDataOverview> PurchaseDeclareDataOverviews { get; set; }
+
+        public DeclareDataDetailOverview(string storeOrderId)
         {
             InitializeComponent();
+            DataContext = this;
+
+            PurchaseDeclareDataOverviews = DeclareDb.GetPurchaseDeclareDataOverviews(storeOrderId);
         }
     }
 }

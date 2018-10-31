@@ -1,12 +1,8 @@
 ﻿
 using His_Pos.Properties;
 using His_Pos.Service;
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Text;
 using static His_Pos.Function;
 
 namespace His_Pos.Class

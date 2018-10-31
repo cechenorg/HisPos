@@ -7,12 +7,8 @@ using His_Pos.Class.Product;
 using His_Pos.Class;
 using System;
 using System.Data;
-using System.Linq;
 using His_Pos.Interface;
-using His_Pos.Service;
 using System.ComponentModel;
-using System.Drawing;
-using System.Threading;
 using System.Windows.Data;
 using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.Struct.Product;
@@ -73,6 +69,7 @@ namespace His_Pos.InventoryManagement
             WareHouseCollection = WareHouseDb.GetWareHouseData();
             
             WareHouse.SelectedItem = WareHouseCollection[0];
+            
         }
         public void SetOtcTypeUi() {
             ProductTypeCollection = ProductDb.GetProductType();
@@ -227,7 +224,11 @@ namespace His_Pos.InventoryManagement
 
         private void WareHouse_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ProductList.Items.Filter = OrderTypeFilter;
+            selectStockValue = 0;
+            searchCount = 0;
+            SearchData();
+            SearchCount.Content = searchCount;
+            SelectStockValue.Content = selectStockValue.ToString("0.#");
         }
 
         private void AddNewProduct(object sender, RoutedEventArgs e)
