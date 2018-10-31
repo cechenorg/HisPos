@@ -2,7 +2,8 @@
 {
     public class DeclareTrade
     {
-        public DeclareTrade(string vCusId,string vEmpId,string vPaySelf,string vDeposit,string vReceiveMoney,string vCopayMent,string vPayMoney,string vChange, string vPayWay) {
+        public DeclareTrade(string vEmpId, string vPaySelf, string vDeposit, string vReceiveMoney, string vCopayMent,
+            string vPayMoney, string vChange, string vPayWay, string vCusId = "0") {
             CusId = vCusId;
             EmpId = vEmpId;
             PaySelf = vPaySelf;

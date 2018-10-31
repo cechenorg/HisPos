@@ -49,6 +49,7 @@ namespace His_Pos.Class.Declare
                 Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
             });
             parameters.Add(new SqlParameter("HISDECMAS_GETCARD", declareData.Prescription.IsGetIcCard));
+            parameters.Add(new SqlParameter("HISDECMAS_DECLARE", declareData.Prescription.Declare));
             var conn = new DbConnection(Settings.Default.SQL_global);
             var table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId
@@ -70,6 +71,21 @@ namespace His_Pos.Class.Declare
             }
 
             return collection;
+        }
+
+        public string InsertPrescribeData(DeclareData declareData)
+        {
+            var parameters = new List<SqlParameter>();
+            var prescribeDataTable = SetPrescribeDataTable();
+            AddPrescribeData(declareData,prescribeDataTable);
+            
+            parameters.Add(new SqlParameter("CusId", string.IsNullOrEmpty(declareData.Prescription.Customer.Id)? declareData.Prescription.Customer.Id:"0"));
+            parameters.Add(new SqlParameter("TreatDate", declareData.Prescription.Treatment.AdjustDate));
+            parameters.Add(new SqlParameter("EmpId", declareData.Prescription.Pharmacy.MedicalPersonnel.Id));
+            parameters.Add(new SqlParameter("PrescribeDetail", prescribeDataTable));
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            var table = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertPrescribeData]", parameters);
+            return table.Rows[0][0].ToString();//回傳DesMasId
         }
 
         public void InsertDeclareTrade(string decMasId,DeclareTrade declareTrade) {
@@ -171,14 +187,32 @@ namespace His_Pos.Class.Declare
                     //每人每日1 - 80件內 => 診療項目代碼: 05202B . 支付點數 : 48
                     if (count < 80)
                     {
-                        tmpG.Dbody.D37 = "0502B";
-                        tmpG.Dbody.D38 = "48";
+                        if (!string.IsNullOrEmpty(tmpG.Dbody.D36) && int.Parse(tmpG.Dbody.D30)>=14 && int.Parse(tmpG.Dbody.D30) <= 27)
+                        {
+                            tmpG.Dbody.D37 = "05206B";
+                            tmpG.Dbody.D38 = "59";
+                        }
+                        else if (!string.IsNullOrEmpty(tmpG.Dbody.D36) && int.Parse(tmpG.Dbody.D30) >= 28)
+                        {
+                            tmpG.Dbody.D37 = "05210B";
+                            tmpG.Dbody.D38 = "69";
+                        }
+                        else if (!string.IsNullOrEmpty(tmpG.Dbody.D36) && int.Parse(tmpG.Dbody.D30) <= 13)
+                        {
+                            tmpG.Dbody.D37 = "05223B";
+                            tmpG.Dbody.D38 = "48";
+                        }
+                        else
+                        {
+                            tmpG.Dbody.D37 = "0502B";
+                            tmpG.Dbody.D38 = "48";
+                        }
                     }
                     //每人每日81 - 100件內 => 診療項目代碼: 05234D . 支付點數 : 15
                     else if (count < 100 && count >= 80)
                     {
-                        tmpG.Dbody.D37 = "05234D";
-                        tmpG.Dbody.D38 = "15";
+                            tmpG.Dbody.D37 = "05234D";
+                            tmpG.Dbody.D38 = "15";
                     }
                     //每人每日100件以上 => 診療項目代碼: 0502B . 支付點數 : 0
                     else
@@ -198,11 +232,6 @@ namespace His_Pos.Class.Declare
             if (now)
                 return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + "01";
             return d.Year - 1911 + d.Month.ToString().PadLeft(2, '0') + d.Day.ToString().PadLeft(2, '0');
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
         }
 
         public int CountPrescriptionByCase(List<Ddata> listDdata, int caseType)
@@ -267,9 +296,9 @@ namespace His_Pos.Class.Declare
         {
             var parameters = new List<SqlParameter>();
             var conn = new DbConnection(Settings.Default.SQL_global);
-            foreach (DeclareMedicine declareDetail in declareData.Prescription.Medicines)
+            foreach (var declareDetail in declareData.Prescription.Medicines)
             {
-                DeclareMedicine med = declareData.Prescription.Medicines.Single(medicine => medicine.Id == declareDetail.Id);
+                var med = declareData.Prescription.Medicines.Single(medicine => medicine.Id == declareDetail.Id);
                 if (!med.IsBuckle) continue;
                 parameters.Clear();
                 parameters.Add(new SqlParameter("MAS_ID", decMasId));
@@ -371,7 +400,7 @@ namespace His_Pos.Class.Declare
                         {"D13", med.Hospital.Division.Id},
                         {"D22", med.TreatmentCase.Id},
                         {"D24", med.Hospital.Doctor.IcNumber},
-                        {"D26", med.SpecialCode.Id},
+                        {"D26", med.SpecialCode is null?string.Empty:med.SpecialCode.Id},
                         {"D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id}
                     };
             foreach (var tag in tagsDictionary)
@@ -639,7 +668,6 @@ namespace His_Pos.Class.Declare
 
         private DataTable SetImportPDataTable()
         {
-
             var importPDataTable = new DataTable();
             importPDataTable.Columns.Add("DecMasId", typeof(string));
             importPDataTable.Columns.Add("P10", typeof(int));
@@ -665,6 +693,7 @@ namespace His_Pos.Class.Declare
             {
                 var row = pDataTable.NewRow();
                 var detail = declareData.DeclareDetails[i];
+                if (detail.PaySelf) continue;
                 detail.Usage = declareData.Prescription.Medicines == null
                     ? detail.Usage
                     : declareData.Prescription.Medicines[i].UsageName;
@@ -672,7 +701,7 @@ namespace His_Pos.Class.Declare
                     declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
                 //if (!String.IsNullOrEmpty(declareData.DecMasId))
                 //    row["DecMasId"] = declareData.DecMasId;
-                
+
 
                 var function = new Function();
                 row["P1"] = detail.MedicalOrder;
@@ -683,7 +712,7 @@ namespace His_Pos.Class.Declare
                 row["P6"] = function.ToInvCulture(detail.Percent);
                 row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                 row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                row["P9"] = function.SetStrFormatInt( Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
                 row["P10"] = detail.Sequence.ToString();
                 row["P11"] = detail.Days.ToString();
                 row["PAY_BY_YOURSELF"] = paySelf;
@@ -705,10 +734,16 @@ namespace His_Pos.Class.Declare
 
         private void AddDayPayCodePData(DeclareData declareData, DataTable pDataTable)
         {
+            var count = 0;
+            foreach (var d in declareData.DeclareDetails)
+            {
+                if(d.PaySelf) continue;
+                count++;
+            }
             var percent = CountAdditionPercent(declareData);
             var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             var detail = new DeclareDetail("1", declareData.DayPayCode, percent,
-                declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate,
+                declareData.MedicalServicePoint, count + 1, currentDate,
                 currentDate);
             var pData = pDataTable.NewRow();
             SetMedicalServiceCostDataRow(pData, declareData, detail);
@@ -839,6 +874,7 @@ namespace His_Pos.Class.Declare
             var dData = SetDheadXml(declareData);
             foreach (var detail in declareData.DeclareDetails)
             {
+                if(detail.PaySelf) continue;
                 dData += SetPDataXmlStr(detail, declareData);
             }
 
@@ -1089,6 +1125,27 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             parameters.Add(new SqlParameter("DecMasId", decMasId));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[CheckPredictChronicExist]", parameters);
+        }
+
+        private DataTable SetPrescribeDataTable()
+        {
+            var importPDataTable = new DataTable();
+            importPDataTable.Columns.Add("PRO_ID", typeof(string));
+            importPDataTable.Columns.Add("CUSPRESCRIBE_QTY", typeof(string));
+            importPDataTable.Columns.Add("CUSPRESCRIBE_PRICE", typeof(string));
+            return importPDataTable;
+        }
+
+        private void AddPrescribeData(DeclareData declareData, DataTable pDataTable)
+        {
+            foreach (var detail in declareData.DeclareDetails)
+            {
+                var row = pDataTable.NewRow();
+                row["PRO_ID"] = detail.MedicalId;
+                row["CUSPRESCRIBE_QTY"] = detail.Total;
+                row["CUSPRESCRIBE_PRICE"] = short.Parse(Math.Ceiling(detail.Total*detail.Price).ToString());
+                pDataTable.Rows.Add(row);
+            }
         }
     }
 }
