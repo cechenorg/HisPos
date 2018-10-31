@@ -47,6 +47,7 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
             {
                 customerDetail = value;
                 NotifyPropertyChanged("CustomerDetail");
+                NotifyPropertyChanged("CustomerCollection");
             }
         }
         public CustomerManageView()

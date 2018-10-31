@@ -329,10 +329,13 @@ namespace His_Pos
                         stockValue += Double.Parse(medicine.StockValue);
                     }
 
-                    inventoryManagementView._DataList = products;
-                    inventoryManagementView.selectStockValue = stockValue;
-                    inventoryManagementView.TotalStockValue.Content = totalWorth;
-                    inventoryManagementView.ProductList.Items.Filter = inventoryManagementView.OrderTypeFilter;
+                    inventoryManagementView._DataList = products; 
+                    inventoryManagementView.TotalStockValue.Content = totalWorth; 
+                    inventoryManagementView.selectStockValue = 0;
+                    inventoryManagementView.searchCount = 0;
+                    inventoryManagementView.SearchData();
+                    inventoryManagementView.SearchCount.Content = inventoryManagementView.searchCount;
+                    inventoryManagementView.SelectStockValue.Content = inventoryManagementView.selectStockValue.ToString("0.#");
                 }));
             };
 

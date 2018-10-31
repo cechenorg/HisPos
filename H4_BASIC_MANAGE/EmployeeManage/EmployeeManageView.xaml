@@ -15,10 +15,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0"  Margin="10,10,10,10">
-                <Label Content="員工ID:"  Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <TextBox Name="EmpId" Margin="0,0,10,0" Width="130" FontSize="16"/>
-                <Rectangle Width="1000"/>
-                <Button Name="ButtonSearch" Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" />
+                <Label Content="請輸入員工ID或名字:"  Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
+                <TextBox Name="EmpId" Margin="0,0,10,0" Width="130" FontSize="16" TextChanged="EmpId_TextChanged"/>
+                <Rectangle Width="1000"/> 
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -233,35 +232,7 @@
                                     </DataGridTextColumn>
                                 </DataGrid.Columns>
                             </DataGrid>
-                        </Grid>
-                        <Grid Grid.Column="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition ></ColumnDefinition>
-                                <ColumnDefinition ></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TreeView Name="treeView" Grid.Column ="0" ItemsSource="{Binding OC}">
-                                <TreeView.ItemContainerStyle>
-                                    <Style TargetType="TreeViewItem">
-                                        <Setter Property="IsExpanded" Value="True"></Setter>
-                                    </Style>
-                                </TreeView.ItemContainerStyle>
-                                <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                        <CheckBox IsChecked="{Binding Checked}" Click="CheckBox_Click" Loaded="CheckBox_Loaded">
-                                            <TextBlock Text="{Binding Name}"></TextBlock>
-                                        </CheckBox>
-                                    </HierarchicalDataTemplate>
-                                </TreeView.ItemTemplate>
-                            </TreeView>
-
-                            <ListView Name="listbox" Grid.Column="1">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"></TextBlock>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                        </Grid>
+                        </Grid> 
                     </Grid>
                 </Grid>
             </Grid>

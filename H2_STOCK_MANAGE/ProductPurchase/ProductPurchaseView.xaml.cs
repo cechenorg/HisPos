@@ -115,7 +115,7 @@ namespace His_Pos.ProductPurchase
         }
 
         #region ----- Init View -----
-        private void InitData()
+        public void InitData()
         {
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetProductPurchaseData(this);

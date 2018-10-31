@@ -113,7 +113,6 @@ namespace His_Pos.Class
             CheckChronicTimes();
             Pharmacy = MainWindow.CurrentPharmacy;
             Pharmacy.MedicalPersonnel.IcNumber = MainWindow.CurrentUser.IcNumber;
-            Customer.Id = "1";
             return _errorMessage;
         }
 
