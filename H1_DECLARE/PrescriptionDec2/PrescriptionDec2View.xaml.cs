@@ -444,7 +444,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m.ShowDialog();
             }
             declareDb.UpdateDeclareFile(_currentDeclareData);
-            //PrintMedBag();
+            //PrintMedBag(); 印藥袋
         }
 
         #region 每日上傳.讀寫卡相關函數
