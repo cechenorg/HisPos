@@ -147,6 +147,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                         MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
                         MainGrid.RowDefinitions[4].Height = new GridLength(0);
+
+                        SetCurrentPrice();
                     }
                     else
                     {
@@ -178,6 +180,21 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             UpdatePricipalStackUi();
         }
+
+        private void SetCurrentPrice()
+        {
+            foreach (var product in StoreOrderData.Products)
+            {
+                if (((ITrade) product).Price == 0 && ((IProductPurchase) product).OrderAmount != 0)
+                {
+                    if(((IProductPurchase)product).OrderAmount >= ((IProductPurchase)product).PackageAmount)
+                        ((ITrade)product).Price = ((IProductPurchase)product).PackagePrice;
+                    else
+                        ((ITrade)product).Price = ((IProductPurchase)product).SingdePrice;
+                }
+            }
+        }
+
         private void UpdatePricipalStackUi()
         {
             if (StoreOrderData.Principal.Name.Equals("新增負責人"))
