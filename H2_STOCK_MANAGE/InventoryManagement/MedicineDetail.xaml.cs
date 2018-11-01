@@ -78,7 +78,7 @@ namespace His_Pos.InventoryManagement
             MedId.Content = InventoryMedicine.Id;
             MedChiName.Text = InventoryMedicine.ChiName.Trim();
             MedEngName.Text = InventoryMedicine.EngName.Trim();
-            IsControl.IsChecked = InventoryMedicine.Control;
+            //IsControl.IsChecked = InventoryMedicine.Control;
             IsFrozen.IsChecked = InventoryMedicine.Frozen;
             IsCommon.IsChecked = InventoryMedicine.Common;
             MedSafeAmount.Text = InventoryMedicine.Stock.SafeAmount;
@@ -89,33 +89,33 @@ namespace His_Pos.InventoryManagement
             MedStatus.Text = InventoryMedicine.Status == true ? "啟用" : "已停用";
             IsChangedLabel.Content = "未修改";
             
-            CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryMedicine.Id);
-            MedCusOrder.ItemsSource = CusOrderOverviewCollection;
+            //CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryMedicine.Id);
+            //MedCusOrder.ItemsSource = CusOrderOverviewCollection;
 
-            StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(InventoryMedicine.Id);
-            MedStoOrder.ItemsSource = StoreOrderOverviewCollection;
+            //StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(InventoryMedicine.Id);
+            //MedStoOrder.ItemsSource = StoreOrderOverviewCollection;
 
-            MEDStockOverviewCollection = ProductDb.GetProductStockOverviewById(InventoryMedicine.Id);
-            MedStock.ItemsSource = MEDStockOverviewCollection;
-            UpdateStockOverviewInfo();
-            MedUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
+            //MEDStockOverviewCollection = ProductDb.GetProductStockOverviewById(InventoryMedicine.Id);
+            //MedStock.ItemsSource = MEDStockOverviewCollection;
+            //UpdateStockOverviewInfo();
+            //MedUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
              
-            MEDManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryMedicine.Id);
-            MedManufactory.ItemsSource = MEDManufactoryCollection;
+            //MEDManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryMedicine.Id);
+            //MedManufactory.ItemsSource = MEDManufactoryCollection;
 
-            ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
-            if (ProductGroupCollection.Count == 1)
-                ButtonDemolition.IsEnabled = false;
-            else
-                ButtonDemolition.IsEnabled = true;
+            //ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
+            //if (ProductGroupCollection.Count == 1)
+            //    ButtonDemolition.IsEnabled = false;
+            //else
+            //    ButtonDemolition.IsEnabled = true;
 
-            StockTakingOverviewCollection = ProductDb.GetProductStockTakingDate(InventoryMedicine.Id);
-            if(StockTakingOverviewCollection.Count != 0)
-                LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
+            //StockTakingOverviewCollection = ProductDb.GetProductStockTakingDate(InventoryMedicine.Id);
+            //if(StockTakingOverviewCollection.Count != 0)
+            //    LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
 
-            UpdateChart();
-            InitVariables();
-            SetUnitValue();
+            //UpdateChart();
+            //InitVariables();
+            //SetUnitValue();
         }
       
         private void InitVariables()
@@ -127,18 +127,18 @@ namespace His_Pos.InventoryManagement
         }
         private void SetUnitValue()
         {
-            int count = 0;
-            string index = "";
-            foreach (var row in MedUnitCollection)
-            {
-                index = count.ToString();
-                ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text = row.Unit;
-                ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text = row.Amount;
-                ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text = row.Price;
-                ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text = row.VIPPrice;
-                ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text = row.EmpPrice;
-                count++;
-            }
+            //int count = 0;
+            //string index = "";
+            //foreach (var row in MedUnitCollection)
+            //{
+            //    index = count.ToString();
+            //    ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text = row.Unit;
+            //    ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text = row.Amount;
+            //    ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text = row.Price;
+            //    ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text = row.VIPPrice;
+            //    ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text = row.EmpPrice;
+            //    count++;
+            //}
         }
         private void UpdateChart()
         {
@@ -191,26 +191,26 @@ namespace His_Pos.InventoryManagement
         {
             var selectedItem = (sender as DataGridRow).Item;
 
-            if (selectedItem is CusOrderOverview)
-                MedCusOrder.SelectedItem = selectedItem;
-            else if (selectedItem is OTCStoreOrderOverview)
-                MedStoOrder.SelectedItem = selectedItem;
-            else if (selectedItem is OTCStockOverview)
-                MedStock.SelectedItem = selectedItem; 
-            else if (selectedItem is ProductDetailManufactory)
-                MedManufactory.SelectedItem = selectedItem; 
+            //if (selectedItem is CusOrderOverview)
+            //    MedCusOrder.SelectedItem = selectedItem;
+            //else if (selectedItem is OTCStoreOrderOverview)
+            //    MedStoOrder.SelectedItem = selectedItem;
+            //else if (selectedItem is OTCStockOverview)
+            //    MedStock.SelectedItem = selectedItem; 
+            //else if (selectedItem is ProductDetailManufactory)
+            //    MedManufactory.SelectedItem = selectedItem; 
         }
         private void DataGridRow_MouseLeave(object sender, MouseEventArgs e)
         {
-            var leaveItem = (sender as DataGridRow).Item;
-            if (leaveItem is CusOrderOverview)
-                MedCusOrder.SelectedItem = null;
-            else if (leaveItem is OTCStoreOrderOverview)
-                MedStoOrder.SelectedItem = null;
-            else if (leaveItem is OTCStockOverview)
-                MedStock.SelectedItem = null; 
-            else if (leaveItem is ProductDetailManufactory)
-                MedManufactory.SelectedItem = null;
+            //var leaveItem = (sender as DataGridRow).Item;
+            //if (leaveItem is CusOrderOverview)
+            //    MedCusOrder.SelectedItem = null;
+            //else if (leaveItem is OTCStoreOrderOverview)
+            //    MedStoOrder.SelectedItem = null;
+            //else if (leaveItem is OTCStockOverview)
+            //    MedStock.SelectedItem = null; 
+            //else if (leaveItem is ProductDetailManufactory)
+            //    MedManufactory.SelectedItem = null;
         }
         private void setChangedFlag()
         {
@@ -320,32 +320,32 @@ namespace His_Pos.InventoryManagement
         }
         private void ButtonUpdateSubmmit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (ChangedFlagNotChanged()) return;
-            if (!CheckValue()) return;
+            //if (ChangedFlagNotChanged()) return;
+            //if (!CheckValue()) return;
 
-            InventoryMedicine.Control = (bool)IsControl.IsChecked;
-            InventoryMedicine.Frozen = (bool)IsFrozen.IsChecked;
-            InventoryMedicine.Common = (bool)IsCommon.IsChecked;
-            InventoryMedicine.ChiName = MedChiName.Text;
-            InventoryMedicine.EngName = MedEngName.Text;
-            InventoryMedicine.Name = InventoryMedicine.EngName.Contains(" ") ? InventoryMedicine.EngName.Split(' ')[0] + " " + InventoryMedicine.EngName.Split(' ')[1] + "... " + InventoryMedicine.ChiName : InventoryMedicine.ChiName;
-            InventoryMedicine.Location = MedLocation.Text;
-            InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
-            InventoryMedicine.Stock.SafeAmount = MedSafeAmount.Text;
-            InventoryMedicine.Note = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text;
-            InventoryMedicine.Status = MedStatus.Text == "啟用" ? true : false;
-            ProductDb.UpdateOtcDataDetail(InventoryMedicine, "InventoryMedicine");
+            //InventoryMedicine.Control = (bool)IsControl.IsChecked;
+            //InventoryMedicine.Frozen = (bool)IsFrozen.IsChecked;
+            //InventoryMedicine.Common = (bool)IsCommon.IsChecked;
+            //InventoryMedicine.ChiName = MedChiName.Text;
+            //InventoryMedicine.EngName = MedEngName.Text;
+            //InventoryMedicine.Name = InventoryMedicine.EngName.Contains(" ") ? InventoryMedicine.EngName.Split(' ')[0] + " " + InventoryMedicine.EngName.Split(' ')[1] + "... " + InventoryMedicine.ChiName : InventoryMedicine.ChiName;
+            //InventoryMedicine.Location = MedLocation.Text;
+            //InventoryMedicine.Stock.BasicAmount = MedBasicAmount.Text;
+            //InventoryMedicine.Stock.SafeAmount = MedSafeAmount.Text;
+            //InventoryMedicine.Note = new TextRange(MedNotes.Document.ContentStart, MedNotes.Document.ContentEnd).Text;
+            //InventoryMedicine.Status = MedStatus.Text == "啟用" ? true : false;
+            //ProductDb.UpdateOtcDataDetail(InventoryMedicine, "InventoryMedicine");
             
-            foreach (string index in MEDUnitChangdedCollection)
-            {
-                ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
-                                         ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
-                                          ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
-                ProductDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
-            }
-            MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS, true);
-            messageWindow.ShowDialog();
-            InitVariables();
+            //foreach (string index in MEDUnitChangdedCollection)
+            //{
+            //    ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("MedUnitName" + index)).Text,
+            //                             ((TextBox)DockUnit.FindName("MedUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitPrice" + index)).Text,
+            //                              ((TextBox)DockUnit.FindName("MedUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("MedUnitEmpPrice" + index)).Text);
+            //    ProductDb.UpdateOtcUnit(prounit, InventoryMedicine.Id);
+            //}
+            //MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS, true);
+            //messageWindow.ShowDialog();
+            //InitVariables();
         }
      
         private void DataGridRow_DoubleClick(object sender, MouseButtonEventArgs e)
