@@ -3,6 +3,10 @@ using System.Data;
 
 namespace His_Pos.Class {
     public class Chronic {
+        public Chronic() {
+            hospital = new Hospital();
+            division = new Division.Division();
+        }
         public Chronic(DataRow row) {
             DecMasId = row["HISDECMAS_ID"].ToString();
             ContinueNum = row["HISDECMAS_CONTINUOUSNUM"].ToString();

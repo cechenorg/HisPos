@@ -29,14 +29,18 @@ namespace His_Pos.IndexView
                 CusId = row["CUS_ID"].ToString();
                 CusName = row["CUS_NAME"].ToString();
                 Phone = row["CUS_TEL"].ToString();
+                TreatDate = row["HISDECMAS_TREATDATE"].ToString();
+                PrescriptDate = row["HISDECMAS_PRESCRIPTIONDATE"].ToString();
                 DivInsName = row["DIVINS_NAME"].ToString();
-                Status = row["STATUS"].ToString() == "0" ? "未聯絡" : "已聯絡";
+                Status = row["STATUS"].ToString() ;
             }
             public string DecMasId { get; set; }
             public string CusId { get; set; }
             public string CusName { get; set; }
             public string Phone { get; set; }
             public string DivInsName { get; set; }
+            public string TreatDate { get; set; }
+            public string PrescriptDate { get; set; }
             public string Status { get; set; }
         }
         public class DailyTakeChronicList {
@@ -44,7 +48,7 @@ namespace His_Pos.IndexView
                 DecMasId = row["HISDECMAS_ID"].ToString();
                 TakeDays = row["DAYS"].ToString();
                 CusName = row["CUS_NAME"].ToString();
-                CusTel = row["CUS_TEL"].ToString();
+                CusTel = row["CUS_TEL"].ToString(); 
                 DivInsName = row["DIVINS_NAME"].ToString();
             }
             public string DecMasId { get; set; }

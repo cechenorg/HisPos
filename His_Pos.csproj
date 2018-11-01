@@ -1193,7 +1193,7 @@
     <Resource Include="Images\Printer.png" />
     <Resource Include="LOGO_HISPOS.ico" />
     <Resource Include="Images\icons8-delete-32.png" />
-    <Content Include="CSHIS.dll" />
+    <Content Include="csHis.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1209,7 +1209,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PublishFile Include="CSHIS.dll">
+    <PublishFile Include="csHis.dll">
       <Visible>False</Visible>
       <Group>
       </Group>

@@ -257,6 +257,7 @@ namespace His_Pos.Class
 
         private void CheckPaymentCategory()
         {
+            if (Treatment.PaymentCategory is null) return;
             if (!string.IsNullOrEmpty(Treatment.PaymentCategory.Id)) return;
 
             if (!Treatment.AdjustCase.Id.Equals("D"))
