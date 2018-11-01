@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.Class.CustomerHistory;
@@ -15,6 +16,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// </summary>
     public partial class CustomerSelectWindow : Window,INotifyPropertyChanged
     {
+        public enum RadioOptions { Option1, Option2, Option3, Option4 }
+
+        string _selectedRadioButton;
+        public string SelectedRadioButton
+        {
+            get
+            {
+                return _selectedRadioButton;
+            }
+            set
+            {
+                if (value != null) //要判斷一下是否為 null，否則選了A，又選B時，最後一個回傳的會是A的值，這樣就抓不到了。
+                    _selectedRadioButton = value;
+            }
+        }
         private ObservableCollection<Customer> _customerCollection;
         public ObservableCollection<Customer> CustomerCollection
         {
@@ -33,6 +49,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DataContext = this;
             CustomerCollection = c;
             SelectedCustomer = new Customer();
+            SelectedRadioButton = "Option1";
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

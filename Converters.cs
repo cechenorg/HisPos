@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.Service;
 
@@ -82,28 +84,24 @@ namespace His_Pos
         }
     }
 
-    public class BirthDayConverter : IValueConverter
+    public class DateConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var result = value.ConvertTo<DateTime>().Year != 1
-                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), false)
+            var result = value.ConvertTo<DateTime>().Year > 1911
+                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true)
                 : string.Empty;
             return result;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.ToString().Length < 7) return string.Empty;
-            else
-            {
-                var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
-                var month = int.Parse(value.ToString().Substring(3, 2));
-                var date = int.Parse(value.ToString().Substring(5, 2));
-                var result = new DateTime(year, month, date);
-                return result;
-            }
-            
+            if (value == null || value.ToString().Contains(" ") || value.ToString().Length != 9) return string.Empty;
+            var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
+            var month = int.Parse(value.ToString().Substring(4, 2));
+            var date = int.Parse(value.ToString().Substring(7, 2));
+            var result = new DateTime(year, month, date);
+            return result;
         }
     }
 
@@ -230,6 +228,62 @@ namespace His_Pos
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class DateValidationRule : ValidationRule
+    {
+        private const string InvalidInput = "日期格式錯誤";
+
+        // Implementing the abstract method in the Validation Rule class
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            if (string.IsNullOrEmpty((string) value)) return new ValidationResult(true, null);
+            if (!value.ToString().Contains(" ") && value.ToString().Length == 9)
+            {
+                var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
+                var month = int.Parse(value.ToString().Substring(4, 2));
+                var date = int.Parse(value.ToString().Substring(7, 2));
+                var dateStr = year + "/" + month + "/" + date;
+                // Validates weather Non numeric values are entered as the Age
+                if (!DateTime.TryParse(dateStr, out _))
+                {
+                    return new ValidationResult(false, InvalidInput);
+                }
+            }
+            else if(value.ToString().Contains(" ") || value.ToString().Length != 9)
+            {
+                return new ValidationResult(false, InvalidInput);
+            }
+            return new ValidationResult(true, null);
+        }
+    }
+    
+    public class EnumBooleanConverter : IValueConverter
+    { enum RadioOptions  { Option1 = 0, Option2 = 1, Option3 = 2, Option4 = 3}
+    public object Convert(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            if (value == null || parameter == null)
+                return false;
+
+            string checkValue = value.ToString();
+            string targetValue = parameter.ToString();
+            return checkValue.Equals(targetValue,
+                StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public object ConvertBack(object value, Type targetType,
+            object parameter, CultureInfo culture)
+        {
+            if (value == null || parameter == null)
+                return null;
+
+            bool useValue = (bool)value;
+            string targetValue = parameter.ToString();
+            if (useValue)
+                return Enum.Parse(typeof(RadioOptions), targetValue);
+            return null;
         }
     }
 }

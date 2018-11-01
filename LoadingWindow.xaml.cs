@@ -82,8 +82,10 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("檢查申報檔是否存在...");
                 DeclareDb declareDb = new DeclareDb();
-                XmlDocument doc = new XmlDocument();
-                doc.PreserveWhitespace = true;
+                XmlDocument doc = new XmlDocument
+                {
+                    PreserveWhitespace = true
+                };
                 doc.Load(filename);
                 int maxDecMasId = declareDb.GetMaxDecMasId();
                 string decId = declareDb.CheckXmlFileExist(doc);
@@ -98,8 +100,10 @@ namespace His_Pos
                     {
                         XmlDocument xDoc = new XmlDocument();
                         xDoc.LoadXml("<ddata>" + node.SelectSingleNode("dhead").InnerXml + node.SelectSingleNode("dbody").InnerXml + "</ddata>");
-                        DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0]);
-                        declareData.DecMasId = maxDecMasId.ToString();
+                        DeclareData declareData = new DeclareData(xDoc.GetElementsByTagName("ddata")[0])
+                        {
+                            DecMasId = maxDecMasId.ToString()
+                        };
                         maxDecMasId++;
                         declareData.Prescription.Pharmacy.Id = doc.SelectSingleNode("pharmacy/tdata/t2").InnerText;
                         declareDataCollection.Add(declareData);
@@ -141,7 +145,6 @@ namespace His_Pos
         public void GetNecessaryData(User userLogin)
         {
             MainWindow mainWindow = new MainWindow(userLogin);
-            
             backgroundWorker.DoWork += (s, o) =>
             {
                 //ChangeLoadingMessage("取得藥品資料...");
@@ -150,15 +153,32 @@ namespace His_Pos
 
                 //ChangeLoadingMessage("取得商品資料...");
                 //MainWindow.OtcDataTable = OTCDb.GetOtcData();
-
                 if (FunctionDb.CheckYearlyHoliday())
                 {
                     ChangeLoadingMessage("更新假日資料...");
                     Function function = new Function();
                     function.GetLastYearlyHoliday();
                 }
+                ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                ObservableCollection<AdjustCase> tmpAdjustCases = AdjustCaseDb.GetData();
+                ObservableCollection<PaymentCategory> tmpPaymentCategroies = PaymentCategroyDb.GetData();
+                ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
+                ObservableCollection<TreatmentCase> tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
+                ObservableCollection<SpecialCode> tmpSpecialCodes = SpecialCodeDb.GetData();
+                ObservableCollection<Usage> tmpUsages = UsageDb.GetData();
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    MainWindow.Hospitals = tmpHospitals;
+                    MainWindow.Divisions = tmpDivisions;
+                    MainWindow.AdjustCases = tmpAdjustCases;
+                    MainWindow.PaymentCategory = tmpPaymentCategroies;
+                    MainWindow.Copayments = tmpCopayments;
+                    MainWindow.TreatmentCase = tmpTreatmentCaseDb;
+                    MainWindow.SpecialCode = tmpSpecialCodes;
+                    MainWindow.Usages = tmpUsages;
+                }));
             };
-
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {
                 Dispatcher.BeginInvoke(new Action(() =>
@@ -494,24 +514,20 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("載入基本資料中...");
-                prescriptionInquireView.HospitalCollection = HospitalDb.GetData();
-                prescriptionInquireView.DivisionCollection = DivisionDb.GetData();
-                prescriptionInquireView.CopaymentCollection = CopaymentDb.GetData();
-                prescriptionInquireView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
-                prescriptionInquireView.AdjustCaseCollection = AdjustCaseDb.GetData();
-                prescriptionInquireView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
                 prescriptionInquireView.DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
                 Dispatcher.Invoke((Action)(() =>
                 {
-
+                    prescriptionInquireView.HospitalCollection = MainWindow.Hospitals;
+                    prescriptionInquireView.DivisionCollection = MainWindow.Divisions;
+                    prescriptionInquireView.CopaymentCollection = MainWindow.Copayments;
+                    prescriptionInquireView.PaymentCategoryCollection = MainWindow.PaymentCategory;
+                    prescriptionInquireView.AdjustCaseCollection = MainWindow.AdjustCases;
+                    prescriptionInquireView.TreatmentCaseCollection = MainWindow.TreatmentCase;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Close();
-                }));
+                Dispatcher.BeginInvoke(new Action(Close));
             };
             backgroundWorker.RunWorkerAsync();
         }
@@ -521,12 +537,12 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得藥袋資料...");
-                medBagManageView.
-                    Dispatcher.Invoke((Action)(() =>
-                    {
-                        medBagManageView.MedBagCollection = MedBagDb.ObservableGetMedBagData();
-                        medBagManageView.MedBags.ItemsSource = medBagManageView.MedBagCollection;
-                    }));
+                var tmpMedBags = MedBagDb.ObservableGetMedBagData();
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    medBagManageView.MedBagCollection = tmpMedBags;
+                    medBagManageView.MedBags.ItemsSource = medBagManageView.MedBagCollection;
+                }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {
@@ -546,54 +562,20 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("申報資料處理中...");
-                //exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
-                //ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
-                //ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
-                //
-                //ObservableCollection<PaymentCategory> tmpPaymentCategory = PaymentCategroyDb.GetData();
-                //ObservableCollection<TreatmentCase> tmpTreatmentCase = TreatmentCaseDb.GetData();
-                //ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
-                //ObservableCollection<DeclareMedicine> tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
-                //exportView.Dispatcher.Invoke((Action)(() =>
-                //{
-
-                //    exportView.DivisionCollection = tmpDivisions;
-                //    exportView.AdjustCaseCollection = tmpAdjustCases;
-                //    exportView.CopaymentCollection = tmpCopayments;
-                //    exportView.PaymentCategoryCollection = tmpPaymentCategory;
-                //    exportView.TreatmentCaseCollection = tmpTreatmentCase;
-                //    exportView.DeclareMedicinesData = tmpDeclareMedicine;
-                //    exportView.DeclareFileList.ItemsSource = exportView.DeclareFiles;
-                //    exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
-                //    exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
-                //    exportView.ReleasePalace.ItemsSource = exportView.HospitalCollection;
-                //}));
                 exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
-                //exportView.DivisionCollection = DivisionDb.GetData();
-                //exportView.HospitalCollection = HospitalDb.GetData();
-                //exportView.AdjustCaseCollection = AdjustCaseDb.GetData();
-                //exportView.CopaymentCollection = CopaymentDb.GetData();
-                //exportView.PaymentCategoryCollection = PaymentCategroyDb.GetData();
-                //exportView.TreatmentCaseCollection = TreatmentCaseDb.GetData();
-                ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
-                ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
-                ObservableCollection<AdjustCase> tmpAdjustCases = AdjustCaseDb.GetData();
-                ObservableCollection<DeclareMedicine> tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
-                ObservableCollection<PaymentCategory> tmpPaymentCategory = PaymentCategroyDb.GetData();
-                ObservableCollection<TreatmentCase> tmpTreatmentCase = TreatmentCaseDb.GetData();
-                ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
+                var tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     exportView.DeclareMedicinesData = tmpDeclareMedicine;
-                    exportView.HospitalCollection = tmpHospitals;
-                    exportView.DivisionCollection = tmpDivisions;
-                    exportView.AdjustCaseCollection = tmpAdjustCases;
-                    exportView.PaymentCategoryCollection = tmpPaymentCategory;
-                    exportView.TreatmentCaseCollection = tmpTreatmentCase;
-                    exportView.CopaymentCollection = tmpCopayments;
-                    exportView.AdjustCaseCombo.ItemsSource = exportView.AdjustCaseCollection;
+                    exportView.HospitalCollection = MainWindow.Hospitals;
+                    exportView.DivisionCollection = MainWindow.Divisions;
+                    exportView.AdjustCaseCollection = MainWindow.AdjustCases;
+                    exportView.PaymentCategoryCollection = MainWindow.PaymentCategory;
+                    exportView.TreatmentCaseCollection = MainWindow.TreatmentCase;
+                    exportView.CopaymentCollection = MainWindow.Copayments;
+                    exportView.AdjustCaseCombo.ItemsSource = MainWindow.AdjustCases;
                     exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
-                    exportView.ReleasePalace.ItemsSource = exportView.HospitalCollection;
+                    exportView.ReleasePalace.ItemsSource = MainWindow.Hospitals;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -615,24 +597,16 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得處方資料...");
-                prescriptionDec2View.Hospitals = HospitalDb.GetData();
-                prescriptionDec2View.Divisions = DivisionDb.GetData();
                 prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
-                prescriptionDec2View.TreatmentCases = TreatmentCaseDb.GetData();
-                prescriptionDec2View.PaymentCategories = PaymentCategroyDb.GetData();
-                prescriptionDec2View.Copayments = CopaymentDb.GetData();
-                prescriptionDec2View.AdjustCases = AdjustCaseDb.GetData();
-                prescriptionDec2View.SpecialCodes = SpecialCodeDb.GetData();
-                prescriptionDec2View.Usages = UsageDb.GetUsages();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;
-                    prescriptionDec2View.DivisionCombo.ItemsSource = prescriptionDec2View.Divisions;
-                    prescriptionDec2View.TreatmentCaseCombo.ItemsSource = prescriptionDec2View.TreatmentCases;
-                    prescriptionDec2View.PaymentCategoryCombo.ItemsSource = prescriptionDec2View.PaymentCategories;
-                    prescriptionDec2View.CopaymentCombo.ItemsSource = prescriptionDec2View.Copayments;
-                    prescriptionDec2View.AdjustCaseCombo.ItemsSource = prescriptionDec2View.AdjustCases;
-                    prescriptionDec2View.SpecialCodeCombo.ItemsSource = prescriptionDec2View.SpecialCodes;
+                    prescriptionDec2View.ReleaseHospital.ItemsSource = MainWindow.Hospitals;
+                    prescriptionDec2View.DivisionCombo.ItemsSource = MainWindow.Divisions;
+                    prescriptionDec2View.TreatmentCaseCombo.ItemsSource = MainWindow.TreatmentCase;
+                    prescriptionDec2View.PaymentCategoryCombo.ItemsSource = MainWindow.PaymentCategory;
+                    prescriptionDec2View.CopaymentCombo.ItemsSource = MainWindow.Copayments;
+                    prescriptionDec2View.AdjustCaseCombo.ItemsSource = MainWindow.AdjustCases;
+                    prescriptionDec2View.SpecialCodeCombo.ItemsSource = MainWindow.SpecialCode;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
                     prescriptionDec2View.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                     var isMedicalPerson = false;
@@ -652,6 +626,10 @@ namespace His_Pos
                     {
                         prescriptionDec2View.HisPerson.SelectedIndex = 0;
                     }
+                    prescriptionDec2View.CopaymentCombo.SelectedItem =
+                        MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I22"));
+                    prescriptionDec2View.PaymentCategoryCombo.SelectedItem =
+                        MainWindow.PaymentCategory.SingleOrDefault(p => p.Id.Equals("4"));
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -898,10 +876,12 @@ namespace His_Pos
         public void PrintInventoryCheckSheet(ReportViewer rptViewer,StockTakingView stockTakingView)
         {
             stockTakingView.StockTakingViewBox.IsEnabled = false;
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            path += "\\藥健康\\報表\\盤點單\\" + DateTime.Today.ToShortDateString().Replace("/","") +".pdf";
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("產生盤點單...");
-                CreatePdf(rptViewer,"StockChecking.pdf",21,29.7);
+                CreatePdf(rptViewer, path,21,29.7);
                 Dispatcher.Invoke((Action)(() =>
                 {
                     
@@ -953,7 +933,9 @@ namespace His_Pos
                              "  <MarginBottom>0cm</MarginBottom>" +
                              "</DeviceInfo>";
             var bytes = viewer.LocalReport.Render("PDF", deviceInfo);
-
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            path += "\\藥健康\\報表\\盤點單";
+            Directory.CreateDirectory(path);
             using (var fs = new FileStream(fileName, FileMode.Create))
             {
                 fs.Write(bytes, 0, bytes.Length);

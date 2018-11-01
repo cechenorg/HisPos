@@ -102,7 +102,6 @@ namespace His_Pos.Class
             CheckPatientInfo();
             CheckReleaseInstitution();
             CheckDivision();
-            CheckDoctor();
             CheckMedicalNumber();
             CheckTreatmentCase();
             CheckTreatDate();
@@ -191,18 +190,6 @@ namespace His_Pos.Class
             if (CheckHomeCareAndSmokingCessation()) return;
             AddError("0", "未選擇就醫科別");
 
-        }
-
-        /*
-         * 確認診治醫生D24
-         */
-
-        private void CheckDoctor()
-        {
-            if (!string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Doctor.IcNumber)) return;
-
-            if (!CheckHomeCareAndSmokingCessation())
-                AddError("0", "未填寫診治醫師代號");
         }
 
         /*

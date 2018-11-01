@@ -53,7 +53,7 @@ namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
         public MedFrequencyManageView()
         {
             InitializeComponent();
-            UsageCollection = UsageDb.GetUsages();
+            UsageCollection = UsageDb.GetData();
             DataContext = this;
             DataGridMedFrequency.SelectedIndex = 0;
         }

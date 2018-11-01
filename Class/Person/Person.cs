@@ -68,7 +68,7 @@ namespace His_Pos.Class.Person
             set
             {
                 _birthday = value;
-               OnPropertyChanged(nameof(Birthday));
+                OnPropertyChanged(nameof(Birthday));
                 OnPropertyChanged("BirthdayStr");
             }
         }

@@ -9,7 +9,7 @@ namespace His_Pos.Class
 {
     public class UsageDb
     {
-        internal static ObservableCollection<Usage> GetUsages()
+        internal static ObservableCollection<Usage> GetData()
         {
             var collection = new ObservableCollection<Usage>();
 

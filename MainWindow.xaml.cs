@@ -11,9 +11,15 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using ChromeTabs;
 using His_Pos.Class;
+using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Authority;
+using His_Pos.Class.Copayment;
+using His_Pos.Class.Division;
+using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
+using His_Pos.Class.SpecialCode;
+using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.HisApi;
 using His_Pos.Resource;
@@ -33,6 +39,14 @@ namespace His_Pos
         public static string CardReaderStatus;
         public static Pharmacy CurrentPharmacy;
         public static MainWindow MainWindowInstance;
+        public static ObservableCollection<Hospital> Hospitals { get; set; }
+        public static ObservableCollection<Division> Divisions { get; set; }
+        public static ObservableCollection<AdjustCase> AdjustCases { get; set; }
+        public static ObservableCollection<PaymentCategory> PaymentCategory { get; set; }
+        public static ObservableCollection<TreatmentCase> TreatmentCase { get;set; }
+        public static ObservableCollection<Copayment> Copayments { get; set; }
+        public static ObservableCollection<SpecialCode> SpecialCode { get; set; }
+        public static ObservableCollection<Usage> Usages { get; set; }
         public MainWindow(User userLogin)
         {
             FeatureFactory();

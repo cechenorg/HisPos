@@ -138,13 +138,11 @@ namespace His_Pos.Class
 
         public DateTime TreatmentDate//d14 就醫(處方)日期
         {
-            get { return treatDate; }
+            get => treatDate;
             set
             {
                 treatDate = value;
-                if(value != DateTime.MinValue)
-                    TreatDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
-                NotifyPropertyChanged("TreatmentDate");
+                NotifyPropertyChanged(nameof(TreatmentDate));
             }
         }
 
@@ -152,13 +150,11 @@ namespace His_Pos.Class
 
         public DateTime AdjustDate
         {
-            get { return _adjustDate; }
+            get => _adjustDate;
             set
             {
                 _adjustDate = value;
-                if (value != DateTime.MinValue)
-                    AdjustDateStr = DateTimeExtensions.ToSimpleTaiwanDate(value);
-                NotifyPropertyChanged("AdjustDate");
+                NotifyPropertyChanged(nameof(AdjustDate));
             }
         }//d23 調劑日期
 

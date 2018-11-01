@@ -238,6 +238,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             Pay = 0;
             Change = 0;
             SetCardStatusContent(MainWindow.CardReaderStatus);
+            
         }
         private void GetPrescriptionData()
         {
@@ -591,21 +592,23 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var json = JsonConvert.SerializeObject(medBagMedicines);
             var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
             rptViewer.LocalReport.DataSources.Add(new ReportDataSource("MedicineDataSet", dataTable));
-            var parameters = new List<ReportParameter>();
-            parameters.Add(new ReportParameter("PharmacyName_Id", MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"));
-            parameters.Add(new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address));
-            parameters.Add(new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel));
-            parameters.Add(new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name));
-            parameters.Add(new ReportParameter("PatientName", CurrentPrescription.Customer.Name));
-            parameters.Add(new ReportParameter("PatientGender_Birthday", CurrentPrescription.Customer.Gender ? "男" : "女" + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)));
-            parameters.Add(new ReportParameter("TreatmentDate", CurrentPrescription.Treatment.TreatDateStr));
-            parameters.Add(new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name));
-            parameters.Add(new ReportParameter("PaySelf", SelfCost.ToString()));
-            parameters.Add(new ReportParameter("ServicePoint", _currentDeclareData.MedicalServicePoint.ToString()));
-            parameters.Add(new ReportParameter("TotalPoint", _currentDeclareData.TotalPoint.ToString()));
-            parameters.Add(new ReportParameter("CopaymentPoint", _currentDeclareData.CopaymentPoint.ToString()));
-            parameters.Add(new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()));
-            parameters.Add(new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString()));
+            var parameters = new List<ReportParameter>
+            {
+                new ReportParameter("PharmacyName_Id", MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
+                new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
+                new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
+                new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
+                new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
+                new ReportParameter("PatientGender_Birthday", CurrentPrescription.Customer.Gender ? "男" : "女" + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
+                new ReportParameter("TreatmentDate", CurrentPrescription.Treatment.TreatDateStr),
+                new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
+                new ReportParameter("PaySelf", SelfCost.ToString()),
+                new ReportParameter("ServicePoint", _currentDeclareData.MedicalServicePoint.ToString()),
+                new ReportParameter("TotalPoint", _currentDeclareData.TotalPoint.ToString()),
+                new ReportParameter("CopaymentPoint", _currentDeclareData.CopaymentPoint.ToString()),
+                new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()),
+                new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString())
+            };
             rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.Refresh();
@@ -924,10 +927,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
         {
             var t1 = new Thread(CheckIcCardStatus);
-            var res = HisApiBase.csVerifySAMDC();
             SetCardStatusContent("卡片檢查中...");
             t1.Start();
-            if (t1.Join(8000))
+            if (t1.Join(3000))
             {
                 if (CurrentPrescription.IsGetIcCard)
                 {
@@ -942,11 +944,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
                 else
                 { 
-                    if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
-                        string.IsNullOrEmpty(PatientId.Text) && CurrentPrescription.Treatment.AdjustCase.Id != "0")
+                    if (string.IsNullOrEmpty(PatientName.Text) && PatientBirthday.Text.Contains(" ") &&
+                        string.IsNullOrEmpty(PatientId.Text))
                     {
-                        var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料，或選擇自費調劑", MessageType.WARNING, true);
-                        m.ShowDialog();
+                        var customerSelect = new CustomerSelectWindow(CustomerCollection);
+                        customerSelect.Show();
+                        //var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料，或選擇自費調劑", MessageType.WARNING, true);
+                        //m.ShowDialog();
                     }
                     else if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
                              string.IsNullOrEmpty(PatientId.Text) && CurrentPrescription.Treatment.AdjustCase.Id == "0")
@@ -1032,7 +1036,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     SetCardStatusContent("讀卡機逾時");
                     break;
             }
-
             if (cardStatus != 0 && cardStatus != 1 && cardStatus != 9 && cardStatus != 4000)
                 CurrentPrescription.IsGetIcCard = true;
         }
@@ -1133,8 +1136,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 CurrentPrescription.Declare = true;
             }
             IsSendToServer.IsChecked = false;
-            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
         }
 
         private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e) {
@@ -1151,11 +1154,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
 
         private void DatePickerTreatment_SelectionChanged(object sender, RoutedEventArgs e) {
-            DeclareSubmit.Content = DatePickerTreatment.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)  ? "調劑" : "預約慢箋";
+            DeclareSubmit.Content = AdjustDate.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)  ? "調劑" : "預約慢箋";
             IsSendToServer.IsChecked = false;
             if (AdjustCaseCombo.SelectedItem == null) return;
-            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && DatePickerTreatment.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
         }
 
         public void SetValueByDecMasId(string decMasId) {
@@ -1170,8 +1173,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             SpecialCodeCombo.Text = prescription.Treatment.MedicalInfo.SpecialCode.Id;
             ReleaseHospital.Text = prescription.Treatment.MedicalInfo.Hospital.Id;
 
-            DatePickerPrecription.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.TreatmentDate);
-            DatePickerTreatment.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.AdjustDate); 
+            TreatmentDate.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.TreatmentDate);
+            AdjustDate.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.AdjustDate); 
             CurrentPrescription.Medicines = MedicineDb.GetDeclareMedicineByMasId(decMasId);
             PrescriptionMedicines.ItemsSource = Instance.CurrentPrescription.Medicines;
         }
@@ -1248,7 +1251,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     switch (cName)
                     {
                         case "DivisionCombo":
-                            DoctorId.Focus();
+                            HisPerson.Focus();
                             break;
                         case "HisPerson":
                             TreatmentCaseCombo.Focus();
@@ -1312,10 +1315,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
-            if (sender is AutoCompleteBox a && a.SelectedItem != null)
-            {
-                DivisionCombo.Focus();
-            }
+            if (!(sender is AutoCompleteBox a) || a.SelectedItem == null) return;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber =
+                CurrentPrescription.Treatment.MedicalInfo.Hospital.Id;
+            DivisionCombo.Focus();
         }
 
 
@@ -1341,8 +1344,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void HisPerson_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("MEDICALPERSONNEL", CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber));
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("MEDICALPERSONNEL", CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber)
+            };
             var t = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetMedicalPersonPrescriptionCount]",parameters);
             PrescriptionCount = int.Parse(t.Rows[0][0].ToString());
         }
