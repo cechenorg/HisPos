@@ -478,10 +478,16 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             StoreOrderData.Products.Remove(product);
         }
+        private void Amount_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(CurrentProduct is null) return;
+
+            ((ITrade)CurrentProduct).Amount = ((IProductPurchase) CurrentProduct).OrderAmount;
+        }
         #endregion
 
         #region ----- Service Functions -----
-        
+
         private bool IsKeyAvailable(Key key)
         {
             if (key >= Key.D0 && key <= Key.D9) return true;
@@ -529,7 +535,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview(StoreOrderData.Id);
             declareDataDetailOverview.ShowDialog();
         }
-        
+
     }
 
     public class HasDeclareDataToVisConverter : IValueConverter
