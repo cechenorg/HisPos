@@ -524,6 +524,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public void CreatIcErrorUploadData()
         {
             var medicalDatas = new List<MedicalData>();
+            if(icErrorWindow.SelectedItem == null) return;
             var icData = new IcData(CurrentPrescription,icErrorWindow.SelectedItem,_currentDeclareData);
             var mainMessage = new MainMessage(icData);
             var headerMessage = new Header { DataFormat = "2" };

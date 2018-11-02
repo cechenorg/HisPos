@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class;
 using His_Pos.Class.Product;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
                 MedName = declareMedicine.Name;
                 Stock = ChronicDb.GetResidualAmountById(MedId);
                 TreatAmount = declareMedicine.Amount.ToString();
-                SendAmount = "0";
+                SendAmount = TreatAmount;
             }
 
             public string MedId { get; set; }
@@ -79,7 +80,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         private void ButtonSubmmit_Click(object sender, RoutedEventArgs e) {
             foreach (PrescriptionSendData prescriptionSendData in Prescription) {
                 if (prescriptionSendData.SendAmount == "0") {
-                    MessageWindow messageWindow = new MessageWindow("傳輸量不可為0",MessageType.ERROR, true);
+                    MessageWindow messageWindow = new MessageWindow("傳輸量不可為0", MessageType.ERROR, true);
+                    messageWindow.ShowDialog();
+                    return;
+                }
+                else if (Convert.ToInt32(prescriptionSendData.SendAmount) > Convert.ToInt32(prescriptionSendData.TreatAmount)) {
+                    MessageWindow messageWindow = new MessageWindow("傳輸量不可大於調劑量", MessageType.ERROR, true);
                     messageWindow.ShowDialog();
                     return;
                 }
