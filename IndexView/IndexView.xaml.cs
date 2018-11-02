@@ -29,8 +29,8 @@ namespace His_Pos.IndexView
                 CusId = row["CUS_ID"].ToString();
                 CusName = row["CUS_NAME"].ToString();
                 Phone = row["CUS_TEL"].ToString();
-                TreatDate = row["HISDECMAS_TREATDATE"].ToString();
-                PrescriptDate = row["HISDECMAS_PRESCRIPTIONDATE"].ToString();
+                TreatDate = Convert.ToDateTime(row["HISDECMAS_TREATDATE"]).AddYears(-1911).ToString("yyy-MM-dd");
+                PrescriptDate = Convert.ToDateTime(row["HISDECMAS_PRESCRIPTIONDATE"]).AddYears(-1911).ToString("yyy-MM-dd");  
                 DivInsName = row["DIVINS_NAME"].ToString();
                 Status = row["STATUS"].ToString() ;
             }

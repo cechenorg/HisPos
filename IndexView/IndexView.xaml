@@ -71,7 +71,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn MinWidth="50" MaxWidth="50" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CusName}">
+                            <DataGridTextColumn Width="100" Header="姓名" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding CusName}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -79,7 +79,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn  Width="80" Header="電話" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Phone}">
+                            <DataGridTextColumn  Width="100" Header="電話" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Phone}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -87,7 +87,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Width="250" Header="醫院/科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivInsName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridTextColumn Width="300" Header="醫院/科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivInsName, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment"  Value="Center" />
@@ -95,7 +95,7 @@
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTemplateColumn MinWidth="80" Header="狀態" IsReadOnly="True">
+                            <DataGridTemplateColumn MinWidth="100" Header="狀態" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate x:Name="DosageDataTemplate">
                                         <ComboBox Name="ComboPhoneStatus" Width="100" Text="{Binding Status, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="18" 
