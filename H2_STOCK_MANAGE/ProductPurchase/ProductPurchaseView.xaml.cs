@@ -307,6 +307,8 @@ namespace His_Pos.ProductPurchase
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Name;
             SaveOrder();
 
+            UpdateProductDatas();
+
             if (StoreOrderData.Category.CategoryName.Equals("進貨") && StoreOrderData.CheckIfOrderNotComplete())
             {
                 confirmWindow = new ConfirmWindow("最後收貨數量少於預訂量, 是否需要將不足部分保留成新訂單?", MessageType.WARNING);
@@ -360,6 +362,8 @@ namespace His_Pos.ProductPurchase
                     StoreOrderData.Products = new ObservableCollection<Product>(newOrderProduct.Where(p => ((IProductPurchase)p).OrderAmount > 0));
                     SetCurrentControl();
                     SaveOrder();
+
+                    UpdateOneTheWayAmount();
                 }
             }
             else
@@ -378,6 +382,21 @@ namespace His_Pos.ProductPurchase
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
             H3_STOCKTAKING.StockTaking.StockTakingView.DataChanged = true;
+        }
+
+        private void UpdateProductDatas()
+        {
+            foreach (var product in StoreOrderData.Products)
+            {
+                PurchaseProduct purchaseProduct = ProductCollection.Single(p => p.Id.Equals(product.Id));
+
+                ProductCollection.Remove(purchaseProduct);
+
+                purchaseProduct.OnTheWayAmount = (Double.Parse(purchaseProduct.OnTheWayAmount) - ((IProductPurchase) product).OrderAmount).ToString();
+                purchaseProduct.Inventory += ((ITrade)product).Amount;
+                
+                ProductCollection.Add(purchaseProduct);
+            }
         }
 
         private void ConfirmToProcess_OnClick(object sender, RoutedEventArgs e)

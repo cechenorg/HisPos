@@ -32,7 +32,7 @@ namespace His_Pos.Struct.Product
         public string ChiName;
         public string EngName;
         public string WarId;
-        public double Inventory { get; }
+        public double Inventory { get; set; }
         public string SafeAmount { get; }
         public string BasicAmount { get; }
         public string OnTheWayAmount { get; set; }
