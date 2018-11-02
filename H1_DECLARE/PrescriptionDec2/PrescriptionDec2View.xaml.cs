@@ -668,7 +668,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //var nextTextBox = new List<TextBox>();
                 //NewFunction.FindChildGroup(PrescriptionMedicines, "Dosage", ref nextTextBox);
                 //nextTextBox[0].Focus();
-                MoveFocusNext(sender);
             }
             else
             {
@@ -680,7 +679,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //var nextTextBox = new List<TextBox>();
                 //NewFunction.FindChildGroup(PrescriptionMedicines, "Dosage", ref nextTextBox);
                 //nextTextBox[0].Focus();
-                MoveFocusNext(sender);
             }
         }
 
@@ -690,7 +688,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             //按 Enter 下一欄
             if (e.Key == Key.Enter)
             {
-                e.Handled = true;
                 //var nextTextBox = new List<TextBox>();
                 //var nextAutoCompleteBox = new List<AutoCompleteBox>();
                 //var currentRowIndex = GetCurrentRowIndex(sender);
@@ -740,27 +737,28 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //}
                 //nextTextBox[currentRowIndex].Focus();
                 //nextTextBox[currentRowIndex].CaretIndex = 0;
+                e.Handled = true;
                 MoveFocusNext(sender);
             }
-            //按 Up Down
-            if (e.Key == Key.Up || e.Key == Key.Down)
-            {
-                e.Handled = true;
-                var thisTextBox = new List<TextBox>();
-                var currentRowIndex = GetCurrentRowIndex(sender);
-                if (currentRowIndex == -1) return;
+            ////按 Up Down
+            //if (e.Key == Key.Up || e.Key == Key.Down)
+            //{
+            //    e.Handled = true;
+            //    var thisTextBox = new List<TextBox>();
+            //    var currentRowIndex = GetCurrentRowIndex(sender);
+            //    if (currentRowIndex == -1) return;
 
-                NewFunction.FindChildGroup(PrescriptionMedicines, objectName, ref thisTextBox);
+            //    NewFunction.FindChildGroup(PrescriptionMedicines, objectName, ref thisTextBox);
 
-                var newIndex = (e.Key == Key.Up) ? currentRowIndex - 1 : currentRowIndex + 1;
+            //    var newIndex = (e.Key == Key.Up) ? currentRowIndex - 1 : currentRowIndex + 1;
 
-                if (newIndex < 0)
-                    newIndex = 0;
-                else if (newIndex >= thisTextBox.Count)
-                    newIndex = thisTextBox.Count - 1;
+            //    if (newIndex < 0)
+            //        newIndex = 0;
+            //    else if (newIndex >= thisTextBox.Count)
+            //        newIndex = thisTextBox.Count - 1;
 
-                thisTextBox[newIndex].Focus();
-            }
+            //    thisTextBox[newIndex].Focus();
+            //}
         }
 
         private void MoveFocusNext(object sender)

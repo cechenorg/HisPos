@@ -257,7 +257,7 @@
                                 <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" MaxHeight="50" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" 
                                                           Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" DropDownClosed="MedicineCodeAuto_DropDownClosed" Style="{StaticResource AutoCompleteBoxStyle}"
                                                           FilterMode="Contains" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsEnabled="True" IsTextCompletionEnabled="False" 
-                                                          ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" 
+                                                          ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
                                                           MinimumPrefixLength="2" Populating="MedicineCodeAuto_Populating" Text="{Binding Id, Mode=TwoWay}" ValueMemberPath="Id" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
