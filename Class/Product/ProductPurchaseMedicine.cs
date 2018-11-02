@@ -78,6 +78,7 @@ namespace His_Pos.Class.Product
             {
                 orderAmount = value;
                 CalculatePackagePrice();
+                CalculateData("OrderAmount");
                 NotifyPropertyChanged("OrderAmount");
             }
         }
@@ -208,8 +209,19 @@ namespace His_Pos.Class.Product
         {
             if(IsSingde) return;
 
+            double tempAmount = 0;
+
+            if (inputSource.Equals("OrderAmount"))
+            {
+                tempAmount = OrderAmount;
+            }
+            else
+            {
+                tempAmount = Amount;
+            }
+
             double dprice = price;
-            if (totalPrice == amount * dprice || dprice == totalPrice / amount) return;
+            if (totalPrice == tempAmount * dprice || dprice == totalPrice / tempAmount) return;
 
             bool isColumnChanged;
 
@@ -220,20 +232,20 @@ namespace His_Pos.Class.Product
 
             if (isColumnChanged) CountStatus = "";
 
-            if (inputSource.Equals("Amount") && amount == 0)
+            if (inputSource.Equals("Amount") && tempAmount == 0)
                 return;
-            else if (inputSource.Equals("Amount") && totalPrice != 0 && amount != 0 && !CountStatus.Equals("*"))
+            else if (inputSource.Equals("Amount") && totalPrice != 0 && tempAmount != 0 && !CountStatus.Equals("*"))
             {
-                Price = totalPrice / amount;
+                Price = totalPrice / tempAmount;
             }
             else if (!inputSource.Equals("TotalPrice"))
             {
                 CountStatus = "*";
-                TotalPrice = amount * dprice;
+                TotalPrice = tempAmount * dprice;
             }
-            else if (amount != 0)
+            else if (tempAmount != 0)
             {
-                Price = totalPrice / amount;
+                Price = totalPrice / tempAmount;
             }
         }
 

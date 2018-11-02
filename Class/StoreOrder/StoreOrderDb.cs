@@ -488,7 +488,7 @@ namespace His_Pos.Class.StoreOrder
             Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id.PadRight(2, ' ')); //案件
             Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id.PadRight(2, ' ')); //科別
             Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id.PadRight(10, ' ')); //主診斷
-            Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id.PadRight(40, ' ')); //次診斷
+            Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id.PadRight(10, ' ')); //次診斷
             Dtl_data.Append(declareData.Prescription.Customer.IcCard.MedicalNumber.PadRight(4, ' ')); //卡序 (0001、欠卡、自費)
             Dtl_data.Append("2".PadRight(1, ' ')); //1一般箋 2慢箋
             Dtl_data.Append(declareData.Prescription.ChronicTotal.PadRight(1, ' ')); //可調劑次數
@@ -500,7 +500,6 @@ namespace His_Pos.Class.StoreOrder
                 medCost += declareMedicine.TotalPrice;
             } 
             Dtl_data.Append(medCost.ToString().PadRight(8, ' ')); //藥品費
-
             string medicalPay = "0";
             if (Convert.ToInt32(declareData.Prescription.Treatment.MedicineDays) <= 13)
                 medicalPay = "48";
@@ -522,7 +521,11 @@ namespace His_Pos.Class.StoreOrder
                 Dtl_data.Append(declareMedicine.Days.PadRight(3, ' ')); //使用天數
                 Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
                 Dtl_data.Append(declareMedicine.Position.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-                Dtl_data.Append(declareMedicine.PaySelf == true && declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
+                if (declareMedicine.PaySelf == false)
+                    Dtl_data.Append(" ");
+                else
+                    Dtl_data.Append(declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
+
                 Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
                 string amount = string.Empty;
                 foreach (ChronicSendToServerWindow.PrescriptionSendData row in PrescriptionSendData)
@@ -532,7 +535,7 @@ namespace His_Pos.Class.StoreOrder
                         break;
                     }
                 }
-                Dtl_data.Append(amount.PadRight(8, ' ')); //訂購量
+                Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
                 if(i != declareData.Prescription.Medicines.Count)
                     Dtl_data.AppendLine();
                 i++;

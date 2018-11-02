@@ -34,6 +34,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         }
         private void InitData() {
             ChronicCollection = ChronicDb.GetChronicDeclareById(CusId);
+            Chronic chronic = new Chronic();
+            chronic.hospital.Name = "新增新處方單";
+            ChronicCollection.Add(chronic);
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {

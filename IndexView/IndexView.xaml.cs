@@ -29,14 +29,18 @@ namespace His_Pos.IndexView
                 CusId = row["CUS_ID"].ToString();
                 CusName = row["CUS_NAME"].ToString();
                 Phone = row["CUS_TEL"].ToString();
+                TreatDate = Convert.ToDateTime(row["HISDECMAS_TREATDATE"]).AddYears(-1911).ToString("yyy-MM-dd");
+                PrescriptDate = Convert.ToDateTime(row["HISDECMAS_PRESCRIPTIONDATE"]).AddYears(-1911).ToString("yyy-MM-dd");  
                 DivInsName = row["DIVINS_NAME"].ToString();
-                Status = row["STATUS"].ToString() == "0" ? "未聯絡" : "已聯絡";
+                Status = row["STATUS"].ToString() ;
             }
             public string DecMasId { get; set; }
             public string CusId { get; set; }
             public string CusName { get; set; }
             public string Phone { get; set; }
             public string DivInsName { get; set; }
+            public string TreatDate { get; set; }
+            public string PrescriptDate { get; set; }
             public string Status { get; set; }
         }
         public class DailyTakeChronicList {
@@ -44,7 +48,7 @@ namespace His_Pos.IndexView
                 DecMasId = row["HISDECMAS_ID"].ToString();
                 TakeDays = row["DAYS"].ToString();
                 CusName = row["CUS_NAME"].ToString();
-                CusTel = row["CUS_TEL"].ToString();
+                CusTel = row["CUS_TEL"].ToString(); 
                 DivInsName = row["DIVINS_NAME"].ToString();
             }
             public string DecMasId { get; set; }
@@ -131,9 +135,7 @@ namespace His_Pos.IndexView
                 ProductPurchaseView.Instance.InitData();
             InitData();
         }
-
-     
-
+         
         private void ShowPrescription_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             var selectedItem = (sender as DataGridRow).Item;
             MainWindow.Instance.AddNewTab("處方登錄");
@@ -144,6 +146,37 @@ namespace His_Pos.IndexView
             if (ChironicPhoneCall.SelectedItem is null) return;
             DailtChronicPhoneCall a =  (DailtChronicPhoneCall)ChironicPhoneCall.SelectedItem;
             ChronicDb.UpdateChronicPhoneCall(a.DecMasId,a.Status);
+        }
+
+        private void PhoneCall_Checked(object sender, RoutedEventArgs e) {
+            if (DailtChronicPhoneCallCollection is null) return;
+            ChironicPhoneCall.Items.Filter = ((o) => {
+                string status = ((DailtChronicPhoneCall)o).Status;
+                switch (status) {
+                    case "未聯絡":
+                        if ((bool)UnPhone.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "確定領藥":
+                        if ((bool)GetMed.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "確定不領":
+                        if ((bool)NoGetMed.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "電話未接":
+                        if ((bool)NoGetPhone.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    default:
+                        return true;
+                }
+            });
         }
     }
 }

@@ -220,9 +220,9 @@ namespace His_Pos.ViewModel
 
             switch (featureItem.ToString())
             {
-                //首頁
-                case nameof(FeatureItem.首頁):
-                    newTab = new Index() { TabName = "首頁", Icon = @"..\Images\Home.png", IsPinned = true };
+                //每日作業
+                case nameof(FeatureItem.每日作業):
+                    newTab = new Index() { TabName = "每日作業", Icon = @"..\Images\Home.png", IsPinned = true };
                     break;
 
                 //處方管理

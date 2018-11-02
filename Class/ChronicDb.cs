@@ -78,7 +78,7 @@ namespace His_Pos.Class
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>(); 
             parameters.Add(new SqlParameter("DecMasId", decMasId));
-            parameters.Add(new SqlParameter("PHONECALL", phoneCall == "已聯絡" ? "0" : "1"));
+            parameters.Add(new SqlParameter("PHONECALL", phoneCall));
             dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateChronicPhoneCall]",parameters);
         } 
     }

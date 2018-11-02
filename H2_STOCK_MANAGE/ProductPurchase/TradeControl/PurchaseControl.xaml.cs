@@ -147,6 +147,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                         MainGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
                         MainGrid.RowDefinitions[4].Height = new GridLength(0);
+
+                        SetCurrentPrice();
                     }
                     else
                     {
@@ -178,6 +180,21 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             UpdatePricipalStackUi();
         }
+
+        private void SetCurrentPrice()
+        {
+            foreach (var product in StoreOrderData.Products)
+            {
+                if (((ITrade) product).Price == 0 && ((IProductPurchase) product).OrderAmount != 0)
+                {
+                    if(((IProductPurchase)product).OrderAmount >= ((IProductPurchase)product).PackageAmount)
+                        ((ITrade)product).Price = ((IProductPurchase)product).PackagePrice;
+                    else
+                        ((ITrade)product).Price = ((IProductPurchase)product).SingdePrice;
+                }
+            }
+        }
+
         private void UpdatePricipalStackUi()
         {
             if (StoreOrderData.Principal.Name.Equals("新增負責人"))
@@ -265,11 +282,19 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                             if (newItemDialog.ConfirmButtonClicked)
                             {
+                                if (string.IsNullOrEmpty(newItemDialog.SelectedItem.Id))
+                                {
+                                    textBox.Text = "";
+                                    textBox.Focus();
+                                    return;
+                                }
+
                                 if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
                                 {
                                     MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING, true);
                                     messageWindow.ShowDialog();
                                     textBox.Text = "";
+                                    textBox.Focus();
                                     return;
                                 }
 
@@ -461,10 +486,16 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             StoreOrderData.Products.Remove(product);
         }
+        private void Amount_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if(CurrentProduct is null) return;
+
+            ((ITrade)CurrentProduct).Amount = ((IProductPurchase) CurrentProduct).OrderAmount;
+        }
         #endregion
 
         #region ----- Service Functions -----
-        
+
         private bool IsKeyAvailable(Key key)
         {
             if (key >= Key.D0 && key <= Key.D9) return true;
@@ -512,7 +543,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             DeclareDataDetailOverview declareDataDetailOverview = new DeclareDataDetailOverview(StoreOrderData.Id);
             declareDataDetailOverview.ShowDialog();
         }
-        
+
     }
 
     public class HasDeclareDataToVisConverter : IValueConverter
