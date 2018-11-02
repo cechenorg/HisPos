@@ -270,11 +270,11 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="60" Header="用量" IsReadOnly="True">
+                    <DataGridTemplateColumn x:Name="DosageText"  MinWidth="60" Header="用量" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="DosageDataTemplate">
-                                <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" InputScope="Number"
-                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="MedTotalPrice_GotFocus"
+                                <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" InputScope="Number" IsReadOnlyCaretVisible="True" CaretIndex="0"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="MedTotalPrice_GotFocus" CaretBrush="Red"
                                          PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

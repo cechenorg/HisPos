@@ -627,9 +627,11 @@ namespace His_Pos
                         prescriptionDec2View.HisPerson.SelectedIndex = 0;
                     }
                     prescriptionDec2View.CopaymentCombo.SelectedItem =
-                        MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I22"));
+                        MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
                     prescriptionDec2View.PaymentCategoryCombo.SelectedItem =
                         MainWindow.PaymentCategory.SingleOrDefault(p => p.Id.Equals("4"));
+                    prescriptionDec2View.AdjustCaseCombo.SelectedItem =
+                        MainWindow.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
