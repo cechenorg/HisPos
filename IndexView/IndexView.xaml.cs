@@ -135,9 +135,7 @@ namespace His_Pos.IndexView
                 ProductPurchaseView.Instance.InitData();
             InitData();
         }
-
-     
-
+         
         private void ShowPrescription_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             var selectedItem = (sender as DataGridRow).Item;
             MainWindow.Instance.AddNewTab("處方登錄");
@@ -148,6 +146,37 @@ namespace His_Pos.IndexView
             if (ChironicPhoneCall.SelectedItem is null) return;
             DailtChronicPhoneCall a =  (DailtChronicPhoneCall)ChironicPhoneCall.SelectedItem;
             ChronicDb.UpdateChronicPhoneCall(a.DecMasId,a.Status);
+        }
+
+        private void PhoneCall_Checked(object sender, RoutedEventArgs e) {
+            if (DailtChronicPhoneCallCollection is null) return;
+            ChironicPhoneCall.Items.Filter = ((o) => {
+                string status = ((DailtChronicPhoneCall)o).Status;
+                switch (status) {
+                    case "未聯絡":
+                        if ((bool)UnPhone.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "確定領藥":
+                        if ((bool)GetMed.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "確定不領":
+                        if ((bool)NoGetMed.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "電話未接":
+                        if ((bool)NoGetPhone.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    default:
+                        return true;
+                }
+            });
         }
     }
 }

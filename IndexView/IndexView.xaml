@@ -18,28 +18,15 @@
                         <RowDefinition Height="50"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label   Grid.Row="0" Content="今日需通知領藥"  Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <Label  Content="今日需通知領藥"  Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
+                        <CheckBox Name="UnPhone" Content="未聯絡" IsChecked="True" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                        <CheckBox Name="GetMed" Content="確定領藥" IsChecked="True" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                        <CheckBox Name="NoGetMed" Content="確定不領" IsChecked="True" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                        <CheckBox Name="NoGetPhone" Content="電話未接" IsChecked="True" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                    </StackPanel>
                     <DataGrid Name="ChironicPhoneCall"   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="1" ItemsSource="{Binding DailtChronicPhoneCallCollection,UpdateSourceTrigger=PropertyChanged}">
-                        <DataGrid.Resources>
-                            <Style TargetType="{x:Type ScrollBar}">
-                                <Setter Property="SnapsToDevicePixels" Value="True"/>
-                                <Setter Property="OverridesDefaultStyle" Value="true"/>
-                                <Setter Property="Width" Value="100"/>
-                                <Style.Triggers>
-                                    <Trigger Property="Orientation" Value="Horizontal">
-                                        <Setter Property="Width" Value="Auto" />
-                                        <Setter Property="Height" Value="15" />
-                                        <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                                    </Trigger>
-                                    <Trigger Property="Orientation" Value="Vertical">
-                                        <Setter Property="Width" Value="15"/>
-                                        <Setter Property="Height" Value="Auto" />
-                                        <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.Resources>
                         <DataGrid.RowStyle>
                             <Style TargetType="{x:Type DataGridRow}">
                                 <Style.Triggers>
