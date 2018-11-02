@@ -138,7 +138,7 @@ namespace His_Pos.ViewModel
                     newTab = new OtcDetailView() { TabName = newProductTab.Id, Icon = "..\\..\\Images\\OrangeDot.png" };
                     break;
                 case SearchType.MED:
-                    newTab = new MedicineDetailView() { TabName = newProductTab.Id, Icon = "..\\..\\Images\\HisDot.png" };
+                    newTab = new MedicineDetailView() { TabName = newProductTab.Id, Icon = "..\\..\\Images\\BlueDot.png" };
                     break;
                 default:
                     return;

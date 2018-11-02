@@ -17,21 +17,25 @@ namespace His_Pos.Class.Product
             Stock = new InStock(dataRow);
             Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
             Frozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
-            Control = dataRow["HISMED_CONTROL"].ToString().Equals("True");
+            Control = dataRow["HISMED_CONTROL"].ToString();
             Common = dataRow["HISMED_COMMON"].ToString().Equals("True");
             WareHouse = dataRow["PROWAR_NAME"].ToString();
             WareHouseId = dataRow["PROWAR_ID"].ToString();
-    }
+            Indication = dataRow["PROWAR_ID"].ToString();
+            SideEffect = dataRow["PROWAR_ID"].ToString();
+        }
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }
         public bool Frozen { get; set; }
-        public bool Control { get; set; }
+        public string Control { get; set; }
         public bool Common { get; set; }
         public BitmapImage TypeIcon { get; set; }
         public string StockValue { get; set; }
         public string Note { get; set; }
         public string Ingredient { get; set; }
+        public string Indication { get; set; }
+        public string SideEffect { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouse { get; set; }
     }
