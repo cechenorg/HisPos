@@ -5,8 +5,10 @@ using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class InventoryMedicine : AbstractClass.Product, IInventory
+    public class InventoryMedicine : AbstractClass.Product, IInventory, ICloneable
     {
+        private InventoryMedicine() {}
+
         public InventoryMedicine(DataRow dataRow) : base(dataRow)
         {
             Status = dataRow["PRO_STATUS"].ToString().Equals("1");
@@ -38,5 +40,29 @@ namespace His_Pos.Class.Product
         public string SideEffect { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouse { get; set; }
+        public object Clone()
+        {
+            InventoryMedicine newInventoryMedicine = new InventoryMedicine();
+
+            newInventoryMedicine.Id = Id;
+            newInventoryMedicine.Name = Id;
+            newInventoryMedicine.ChiName = Id;
+            newInventoryMedicine.EngName = Id;
+            newInventoryMedicine.Status = Status;
+            newInventoryMedicine.WareHouse = WareHouse;
+            newInventoryMedicine.WareHouseId = WareHouseId;
+            newInventoryMedicine.SideEffect = SideEffect;
+            newInventoryMedicine.Indication = Indication;
+            newInventoryMedicine.Note = Note;
+            newInventoryMedicine.StockValue = StockValue;
+            newInventoryMedicine.TypeIcon = TypeIcon;
+            newInventoryMedicine.Common = Common;
+            newInventoryMedicine.Control = Control;
+            newInventoryMedicine.Frozen = Frozen;
+            newInventoryMedicine.Location = Location;
+            newInventoryMedicine.Stock = Stock;
+
+            return newInventoryMedicine;
+        }
     }
 }

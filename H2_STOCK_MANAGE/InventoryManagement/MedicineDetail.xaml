@@ -39,7 +39,7 @@
                     <Label Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,0,20,0" Padding="0" VerticalContentAlignment="Bottom"/>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
+            <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" DataContext="{Binding InventoryMedicine}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
                     <RowDefinition Height="180"/>
@@ -356,11 +356,11 @@
                         <DataGridTemplateColumn IsReadOnly="True" Width="25">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding }" Width="20"/>
+                                    <Image Source="{Binding TypeIcon}" Width="20"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="時間" Width="150" Binding="{Binding name}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                        <DataGridTextColumn Header="時間" Width="150" Binding="{Binding Time}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -368,7 +368,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="負責人" Width="100" Binding="{Binding name}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                        <DataGridTextColumn Header="負責人" Width="100" Binding="{Binding Principal}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -376,7 +376,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="數量" Width="80" Binding="{Binding name}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                        <DataGridTextColumn Header="數量" Width="80" Binding="{Binding Amount}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -384,7 +384,7 @@
                                 </Style>
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Header="現值變化" Width="100" Binding="{Binding name}" FontFamily="Segoe UI Semi" IsReadOnly="True">
+                        <DataGridTextColumn Header="現值變化" Width="100" Binding="{Binding StockValueChange}" FontFamily="Segoe UI Semi" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment"  Value="Center"/>
