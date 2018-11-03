@@ -63,7 +63,19 @@ namespace His_Pos.Class
             ChronicTotal = !string.IsNullOrEmpty(d.Dbody.D36) ? d.Dbody.D36 : string.Empty;
             OriginalMedicalNumber = !string.IsNullOrEmpty(d.Dbody.D43) ? d.Dbody.D43 : string.Empty;
         }
-        public Customer Customer { get; set; }
+
+        private Customer _customer;
+
+        public Customer Customer
+        {
+            get => _customer;
+            set
+            {
+                _customer = value;
+                OnPropertyChanged(nameof(Customer));
+            }
+        }
+
         public Pharmacy.Pharmacy Pharmacy { get; set; } //藥局
         private Treatment _treatment;
 
@@ -90,7 +102,19 @@ namespace His_Pos.Class
                 OnPropertyChanged(nameof(IsGetIcCard));
             }
         }
-        public ObservableCollection<DeclareMedicine> Medicines { get; set; }
+
+        private ObservableCollection<DeclareMedicine> _medicines;
+
+        public ObservableCollection<DeclareMedicine> Medicines
+        {
+            get => _medicines;
+            set
+            {
+                _medicines = value;
+                OnPropertyChanged(nameof(Medicines));
+            }
+        }
+
         public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
         public ErrorList EList = new ErrorList();
         private bool adjustCaseNull = false;

@@ -69,7 +69,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                                                                 ((DeclareMedicine)obj).EngName.ToLower().Contains(searchText.ToLower()));
             }
         }
-
+        
         public IcErrorCodeWindow icErrorWindow;
         #endregion
 
@@ -644,7 +644,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 else
                     return;
             }
-
             var declareMedicine = (DeclareMedicine)((DeclareMedicine)medicineCodeAuto.SelectedItem)?.Clone();
             var currentRow = GetCurrentRowIndex(sender);
             if (CurrentPrescription.Medicines.Count > 0)
@@ -663,113 +662,48 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 {
                     CurrentPrescription.Medicines[currentRow] = declareMedicine;
                 }
-                //PrescriptionMedicines.CurrentCell = new DataGridCellInfo(
-                //    PrescriptionMedicines.Items[currentRow], DosageText);
-                //PrescriptionMedicines.BeginEdit();
-                //var nextTextBox = new List<TextBox>();
-                //NewFunction.FindChildGroup(PrescriptionMedicines, "Dosage", ref nextTextBox);
-                //nextTextBox[0].Focus();
             }
             else
             {
                 CurrentPrescription.Medicines.Add(declareMedicine);
                 medicineCodeAuto.Text = string.Empty;
-                //PrescriptionMedicines.CurrentCell = new DataGridCellInfo(
-                //    PrescriptionMedicines.Items[currentRow], DosageText);
-                //PrescriptionMedicines.BeginEdit();
-                //var nextTextBox = new List<TextBox>();
-                //NewFunction.FindChildGroup(PrescriptionMedicines, "Dosage", ref nextTextBox);
-                //nextTextBox[0].Focus();
             }
+            MedicineCodeMoveFocus(currentRow);
+        }
+
+        private void MedicineCodeMoveFocus(int currentRow)
+        {
+            PrescriptionMedicines.CurrentCell = new DataGridCellInfo(
+                PrescriptionMedicines.Items[currentRow], DosageText);
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
+            while (firstChild is ContentPresenter)
+            {
+                firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            }
+            firstChild.Focus();
         }
 
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var objectName = (sender as Control)?.Name;
             //按 Enter 下一欄
-            if (e.Key == Key.Enter)
-            {
-                //var nextTextBox = new List<TextBox>();
-                //var nextAutoCompleteBox = new List<AutoCompleteBox>();
-                //var currentRowIndex = GetCurrentRowIndex(sender);
-
-                //if (currentRowIndex == -1) return;
-
-                //switch (objectName)
-                //{
-                //    case "Dosage":
-                //        NewFunction.FindChildGroup(PrescriptionMedicines, "Usage", ref nextTextBox);
-                //        break;
-
-                //    case "Usage":
-
-                //        FindUsagesQuickName(sender);
-                //        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineDays", ref nextTextBox);
-                //        break;
-
-                //    case "MedicineDays":
-                //        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineTotal", ref nextTextBox);
-                //        break;
-
-                //    case "MedicineTotal":
-                //        NewFunction.FindChildGroup(PrescriptionMedicines, "Position", ref nextTextBox);
-                //        break;
-
-                //    case "Position":
-                //        if (!CurrentPrescription.Medicines[currentRowIndex].PaySelf)
-                //        {
-                //            NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
-                //            NewFunction.FindChildGroup(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
-                //            nextTextBox[0].Focus();
-                //            return;
-                //        }
-                //        else
-                //        {
-                //            NewFunction.FindChildGroup(PrescriptionMedicines, "Price", ref nextTextBox);
-                //            nextTextBox[currentRowIndex].Focus();
-                //        }
-                //        break;
-
-                //    case "Price":
-                //        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
-                //        NewFunction.FindChildGroup(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
-                //        nextTextBox[0].Focus();
-                //        return;
-                //}
-                //nextTextBox[currentRowIndex].Focus();
-                //nextTextBox[currentRowIndex].CaretIndex = 0;
-                e.Handled = true;
-                MoveFocusNext(sender);
-            }
-            ////按 Up Down
-            //if (e.Key == Key.Up || e.Key == Key.Down)
-            //{
-            //    e.Handled = true;
-            //    var thisTextBox = new List<TextBox>();
-            //    var currentRowIndex = GetCurrentRowIndex(sender);
-            //    if (currentRowIndex == -1) return;
-
-            //    NewFunction.FindChildGroup(PrescriptionMedicines, objectName, ref thisTextBox);
-
-            //    var newIndex = (e.Key == Key.Up) ? currentRowIndex - 1 : currentRowIndex + 1;
-
-            //    if (newIndex < 0)
-            //        newIndex = 0;
-            //    else if (newIndex >= thisTextBox.Count)
-            //        newIndex = thisTextBox.Count - 1;
-
-            //    thisTextBox[newIndex].Focus();
-            //}
+            if (e.Key != Key.Enter) return;
+            e.Handled = true;
+            MoveFocusNext(sender);
         }
 
         private void MoveFocusNext(object sender)
         {
-            (sender as AutoCompleteBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            if(sender is TextBox box)
+                box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            else if (sender is AutoCompleteBox auto)
+                auto.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            else if (sender is CheckBox check)
+                check.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
             if (PrescriptionMedicines.CurrentCell.Column is null) return;
 
             var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
-
             if (focusedCell is null) return;
 
             while (true)
@@ -777,18 +711,24 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (focusedCell is ContentPresenter)
                 {
                     UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
-                    if (!(child is Image))
+                    while (child is ContentPresenter)
+                    {
+                        child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                    }
+                    if ((child is TextBox || child is AutoCompleteBox || child is CheckBox || child is TextBlock))
                         break;
-                    
                 }
                 focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-
                 focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             }
 
             UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            while (firstChild is ContentPresenter)
+            {
+                firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            }
 
-            if (firstChild is TextBox && firstChild.IsEnabled)
+            if ((firstChild is TextBox || firstChild is AutoCompleteBox ) && firstChild.Focusable )
                 firstChild.Focus();
         }
 
@@ -911,7 +851,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void CountMedicinesCost()
+        public void CountMedicinesCost()
         {
             double medicinesHcCost = 0;//健保給付總藥價
             double medicinesSelfCost = 0;//自費藥總藥價
@@ -1181,6 +1121,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
 
         private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e) {
+            var t = sender as TextBox;
+            if (string.IsNullOrEmpty(t.Text)) return;
             if (Convert.ToInt32(ChronicSequence.Text) > 1)
             {
                 var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
@@ -1416,6 +1358,49 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is TextBox textBox)) return;
             textBox.SelectAll();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentPrescription = new Prescription();
+            DivisionCombo.SelectedIndex = -1;
+            TreatmentCaseCombo.SelectedIndex = -1;
+            var isMedicalPerson = false;
+            foreach (var m in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
+            {
+                if (!m.Id.Equals(MainWindow.CurrentUser.Id)) continue;
+                isMedicalPerson = true;
+                break;
+            }
+            if (isMedicalPerson)
+            {
+                HisPerson.SelectedItem =
+                    MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
+                        p.Id.Equals(MainWindow.CurrentUser.Id));
+            }
+            else
+            {
+                HisPerson.SelectedIndex = 0;
+            }
+            CopaymentCombo.SelectedItem =
+                MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
+            PaymentCategoryCombo.SelectedItem =
+                MainWindow.PaymentCategory.SingleOrDefault(p => p.Id.Equals("4"));
+            AdjustCaseCombo.SelectedItem =
+                MainWindow.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
+            CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = new DiseaseCode();
+            CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = new DiseaseCode();
+            CurrentPrescription.Treatment.TreatmentDate = DateTime.Now;
+            CurrentPrescription.Treatment.AdjustDate = DateTime.Now;
+            SpecialCodeCombo.SelectedIndex = -1;
+            CurrentPrescription.ChronicSequence = string.Empty;
+            CurrentPrescription.ChronicTotal = string.Empty;
+            CurrentPrescription.Medicines.Clear();
+            CopaymentText.Text = string.Empty;
+            CustomPayText.Text = string.Empty;
+            DepositText.Text = string.Empty;
+            SelfCostText.Text = string.Empty;
+            PaidText.Text = string.Empty;
         }
     }
 }

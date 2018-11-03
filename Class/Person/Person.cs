@@ -10,10 +10,10 @@ namespace His_Pos.Class.Person
     {
         public Person()
         {
-            id = "";
-            _icNumber = "";
-            _name = "";
-            _birthday = new DateTime();
+            Id = "";
+            IcNumber = "";
+            Name = "";
+            Birthday = new DateTime();
         }
 
         public Person(DataRow dataRow)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Text.RegularExpressions;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.Interface;
 using His_Pos.Service;
 
@@ -139,6 +140,7 @@ namespace His_Pos.Class.Product
             set
             {
                 totalPrice = value;
+                PrescriptionDec2View.Instance.CountMedicinesCost();
                 NotifyPropertyChanged(nameof(TotalPrice));
             }
         }

@@ -38,7 +38,7 @@
         <hisPos:DateValidationRule x:Key="BirthDayValidationRule"/>
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">
-        <Grid Width="1365" Height="839">
+        <Grid Name="PrescriptionGrid" Width="1365" Height="839">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
                 <RowDefinition Height="160" />
@@ -198,7 +198,9 @@
                              />
                 </StackPanel>
             </Grid>
-            <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="True" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" GridLinesVisibility="Horizontal">
+            <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" 
+                      CanUserAddRows="True" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
+                      GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -254,10 +256,10 @@
                     <DataGridTemplateColumn Width="130" Header="健保代碼" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineCodeDataTemplate">
-                                <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" MaxHeight="50" HorizontalAlignment="Center" VerticalContentAlignment="Stretch" 
+                                <controls:AutoCompleteBox x:Name="MedicineCodeAuto" Width="130" Height="30" MaxHeight="50" HorizontalAlignment="Center" VerticalContentAlignment="Stretch"
                                                           Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" DropDownClosed="MedicineCodeAuto_DropDownClosed" Style="{StaticResource AutoCompleteBoxStyle}"
                                                           FilterMode="Contains" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsEnabled="True" IsTextCompletionEnabled="False" 
-                                                          ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" ItemTemplate="{StaticResource MedcineCodeAutoComplete}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
+                                                          ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" ItemTemplate="{StaticResource MedcineCodeAutoComplete}"
                                                           MinimumPrefixLength="2" Populating="MedicineCodeAuto_Populating" Text="{Binding Id, Mode=TwoWay}" ValueMemberPath="Id" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -327,7 +329,7 @@
                     <DataGridTemplateColumn MinWidth="40" Header="自費" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="PaysDataTemplate">
-                                <CheckBox x:Name="PaySelf" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <CheckBox x:Name="PaySelf" HorizontalAlignment="Center" HorizontalContentAlignment="Center" IsChecked="{Binding PaySelf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -339,15 +341,14 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn MinWidth="60" Header="總價" IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="MedicineTotalPriceDataTemplate">
-                                <TextBox x:Name="MedTotalPrice" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" 
-                                         FontSize="14" FontWeight="Bold" IsReadOnly="True" Text="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                         TextChanged="MedTotalPrice_TextChanged" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" GotFocus="MedTotalPrice_GotFocus" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                    <DataGridTextColumn MinWidth="60" Header="總價" IsReadOnly="True" Binding="{Binding TotalPrice,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn  Width="50" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="管制" IsReadOnly="True" Binding="{Binding ControlLevel,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
@@ -460,23 +461,23 @@
                     </Grid.RowDefinitions> 
                     <StackPanel Grid.Row="0" Margin="8" Orientation="Horizontal">
                         <Label Width="60" Content="部分 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                        <TextBox Name="CopaymentText"  Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
                                  MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Copayment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
                         <Label Width="60" Margin="20,0,0,0" Content="應收 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                        <TextBox Name="CustomPayText" Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
                                  MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Charge, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
                     </StackPanel> 
                     <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
                         <Label Width="60" HorizontalAlignment="Right" Content="押金 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" 
+                        <TextBox Name="DepositText" Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" 
                                  Foreground="{StaticResource ForeGround}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Deposit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
                         <Label Width="60" Margin="20,0,0,0" Content="自費 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                        <TextBox Name="SelfCostText" Width="90" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
                                  MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding SelfCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
                     </StackPanel>
                     <StackPanel Grid.Row="2"  Orientation="Horizontal">
                         <Label Width="60" Margin="10,0,0,0" VerticalAlignment="Center" Content="已付 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                        <TextBox Width="90" Height="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                        <TextBox Name="PaidText" Width="90" Height="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
                                  MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Pay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
                         <Label Width="60" Margin="20,0,0,0" VerticalAlignment="Center" Content="找零 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                         <Label Width="90" Height="35" HorizontalContentAlignment="Center" Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
@@ -485,7 +486,7 @@
                         <CheckBox Name="IsSendToServer" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Margin="8" Orientation="Horizontal">
-                        <Button Width="125" Background="{StaticResource Shadow}" BorderThickness="0" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" />
+                        <Button Width="125" Background="{StaticResource Shadow}" BorderThickness="0" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Click="Button_Click" />
                         <Button Width="180" Name="DeclareSubmit" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" Click="Submit_ButtonClick" Content="調劑" FontFamily="Segoe UI Semibold" FontSize="16"/>
                         <Button Width="180" Name="NotDeclareSubmit" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" Click="NotDeclareSubmit_OnClickSubmit_ButtonClick" Content="自費調劑" FontFamily="Segoe UI Semibold" FontSize="16" Visibility="Collapsed"/>
                     </StackPanel>

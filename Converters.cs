@@ -131,13 +131,8 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Product)
-            {
-                if (String.IsNullOrEmpty((value as Product).Id))
-                    return false;
-                return true;
-            }
-            return false;
+            if (!(value is Product product)) return false;
+            return !string.IsNullOrEmpty(product.Id);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
