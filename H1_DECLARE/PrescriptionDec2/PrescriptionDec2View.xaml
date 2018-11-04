@@ -46,12 +46,12 @@
                 <RowDefinition Height="300" />
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Margin="9" Orientation="Horizontal">
-                <Image Name="IcPatientName" Width="25" Margin="20,0,15,0" Source="../../Images/User_48px.png" />
-                <TextBox Name="PatientName" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <Image Name="IcPatientId" Width="30" Source="../../Images/ID_Card.png" />
+                <Image Name="IcPatientId" Width="30" Source="../../Images/ID_Card.png" Margin="20,0,15,0"/>
                 <TextBox Name="PatientId" Width="150" Margin="5,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" 
                          Text="{Binding CurrentPrescription.Customer.IcCard.IcNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <Image Name="IcPatientName" Width="25" Source="../../Images/User_48px.png" />
+                <TextBox Name="PatientName" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" />
                 <xctk:MaskedTextBox Name="PatientBirthday" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                          Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat">

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
              xmlns:hisPos="clr-namespace:His_Pos" 
              mc:Ignorable="d" WindowStartupLocation="CenterScreen" Title="顧客查詢"
-             d:DesignHeight="450" d:DesignWidth="500" Width="650" Height="450">
+             d:DesignHeight="450" d:DesignWidth="500" Width="600" Height="450">
     <Window.Resources>
         <hisPos:DateConverter x:Key="BirthDayConverter"/>
         <hisPos:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
@@ -17,14 +17,13 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <TextBox Name="Condition" Width="170" Height="30" Margin="10,0,0,0"/>
+            <TextBox Name="Condition" Width="170" Height="30" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" TextChanged="Condition_TextChanged"/>
             <RadioButton Content="生日" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
             <RadioButton Content="姓名" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
             <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
             <RadioButton Content="電話" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
-            <Button Content="查詢顧客資料" Background="RoyalBlue" Width="130" Margin="20,0,0,0"/>
         </StackPanel>
-        <DataGrid Name="CusGrid" AutoGenerateColumns="False" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding CustomerCollection,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">
+        <DataGrid Name="CusGrid" AutoGenerateColumns="False" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" ItemsSource="{Binding ResultCollection,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -75,7 +74,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="120" Header="聯絡電話" Binding="{Binding ContactInfo.Tel,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
+                <DataGridTextColumn Width="150" Header="聯絡電話" Binding="{Binding ContactInfo.Tel,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />
@@ -83,7 +82,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="140" Header="身分證號" Binding="{Binding IcNumber,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
+                <DataGridTextColumn Width="150" Header="身分證號" Binding="{Binding IcNumber,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />

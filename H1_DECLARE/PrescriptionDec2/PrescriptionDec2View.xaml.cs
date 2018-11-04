@@ -69,7 +69,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                                                                 ((DeclareMedicine)obj).EngName.ToLower().Contains(searchText.ToLower()));
             }
         }
-        
         public IcErrorCodeWindow icErrorWindow;
         #endregion
 

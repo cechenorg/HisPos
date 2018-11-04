@@ -43,22 +43,17 @@ namespace His_Pos.Class.Person
             {
                 string.IsNullOrEmpty(c.Id)
                     ? new SqlParameter("CUS_ID", DBNull.Value)
-                    : new SqlParameter("CUS_ID", c.Id)
-            };
-            if (c.Name.All(char.IsDigit))
-            {
-                parameters.Add(new SqlParameter("CUS_NAME", DBNull.Value));
-                parameters.Add(new SqlParameter("CUS_TEL", c.Name));
-            }
-            else
-            {
-                parameters.Add(new SqlParameter("CUS_NAME", c.Name));
-                parameters.Add(new SqlParameter("CUS_TEL", DBNull.Value));
-            }
-            parameters.Add(c.Birthday.Year != 1
+                    : new SqlParameter("CUS_ID", c.Id),
+                string.IsNullOrEmpty(c.Name)
+                ? new SqlParameter("CUS_NAME", DBNull.Value)
+                : new SqlParameter("CUS_NAME", c.Name),
+                c.Birthday.Year > 1
                 ? new SqlParameter("CUS_BIRTH", c.Birthday)
-                : new SqlParameter("CUS_BIRTH", DBNull.Value));
-            parameters.Add(new SqlParameter("CUS_IDNUM", c.IcNumber));
+                : new SqlParameter("CUS_BIRTH", DBNull.Value),
+                string.IsNullOrEmpty(c.IcCard.IcNumber)
+                    ? new SqlParameter("CUS_IDNUM", DBNull.Value)
+                    : new SqlParameter("CUS_IDNUM", c.IcCard.IcNumber)
+            };
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[LoadCustomerData]", parameters);
             foreach (DataRow row in table.Rows)
             {
@@ -75,6 +70,18 @@ namespace His_Pos.Class.Person
                 data.Add(row["AUTHGROUP_NAME"].ToString());
             }
             return data;
-        } 
+        }
+
+        internal static ObservableCollection<Customer> GetData()
+        {
+            var customerLCollection = new ObservableCollection<Customer>();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetAllCustomerData]");
+            foreach (DataRow row in table.Rows)
+            {
+                customerLCollection.Add(new Customer(row, "fromDb"));
+            }
+            return customerLCollection;
+        }
     }
 }
