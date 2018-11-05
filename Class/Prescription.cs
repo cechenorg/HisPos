@@ -128,8 +128,6 @@ namespace His_Pos.Class
             CheckDivision();
             CheckMedicalNumber();
             CheckTreatmentCase();
-            CheckTreatDate();
-            CheckAdjustDate();
             CheckDiseaseCodes();
             CheckPaymentCategory();
             CheckCopayment();
@@ -226,28 +224,6 @@ namespace His_Pos.Class
 
             if (!CheckHomeCareAndSmokingCessation())
                 AddError("0", "請選擇處方案件");
-        }
-
-        /*
-         * 確認就醫日期D14
-         */
-
-        private void CheckTreatDate()
-        {
-            if (!string.IsNullOrEmpty(Treatment.TreatDateStr)) return;
-
-            if (!Treatment.AdjustCase.Id.Equals("D"))
-                AddError("0", "未選擇就醫日期");
-        }
-
-        /*
-         * 確認調劑日期D23
-         */
-
-        private void CheckAdjustDate()
-        {
-            if (string.IsNullOrEmpty(Treatment.AdjustDateStr))
-                AddError("0", "未選擇調劑日期,如為藥事居家照護請選擇訪視日期");
         }
 
         /*

@@ -102,6 +102,14 @@ namespace His_Pos.Service
             if (needSplit)
                 return year + "/" + month + "/" + day;
             return year + month + day;
-        } 
+        }
+
+        public static DateTime ConvertDeclareFileDate(string dateStr)
+        {
+            var year = int.Parse(dateStr.Substring(0,3)) + 1911;
+            var month = int.Parse(dateStr.Substring(3, 2));
+            var day = int.Parse(dateStr.Substring(5, 2));
+            return new DateTime(year,month,day);
+        }
     }
 }
