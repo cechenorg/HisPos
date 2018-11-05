@@ -86,6 +86,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <CheckBox Content="常備藥" IsChecked="{Binding Common}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" IsEnabled="False">
