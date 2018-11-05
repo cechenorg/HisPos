@@ -147,6 +147,12 @@ namespace His_Pos.InventoryManagement
                 InventoryDetailOverviewDataGrid.SelectedItem = InventoryDetailOverviews.Last();
                 InventoryDetailOverviewDataGrid.ScrollIntoView(InventoryDetailOverviews.Last());
             }
+
+            if (!InventoryMedicine.Control.Equals("0"))
+            {
+                ControlStack.Visibility = Visibility.Visible;
+
+            }
         }
 
         private void CalculateStock()
