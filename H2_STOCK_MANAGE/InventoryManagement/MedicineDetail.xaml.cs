@@ -57,14 +57,24 @@ namespace His_Pos.InventoryManagement
         #endregion
 
         #region ----- Define Variables -----
-
-        public InventoryMedicine InventoryMedicine { get; set; }
-        private InventoryMedicine inventoryMedicine { get; }
+        
+        private InventoryMedicine inventoryMedicineBackup { get; }
 
         public InventoryMedicineDetail MedicineDetails { get; set; }
 
-        private ObservableCollection<InventoryDetailOverview> inventoryDetailOverviews;
 
+        private InventoryMedicine inventoryMedicine;
+        public InventoryMedicine InventoryMedicine
+        {
+            get { return inventoryMedicine; }
+            set
+            {
+                inventoryMedicine = value;
+                NotifyPropertyChanged("InventoryMedicine");
+            }
+        }
+
+        private ObservableCollection<InventoryDetailOverview> inventoryDetailOverviews;
         public ObservableCollection<InventoryDetailOverview> InventoryDetailOverviews
         {
             get { return inventoryDetailOverviews; }
@@ -113,7 +123,7 @@ namespace His_Pos.InventoryManagement
             DataContext = this;
 
             InventoryMedicine = (InventoryMedicine)ProductDetail.NewProduct;
-            inventoryMedicine = ((ICloneable)ProductDetail.NewProduct).Clone() as InventoryMedicine;
+            inventoryMedicineBackup = ((ICloneable)ProductDetail.NewProduct).Clone() as InventoryMedicine;
             ProductDetail.NewProduct = null;
             InitMedicineDatas();
         }
@@ -172,11 +182,45 @@ namespace His_Pos.InventoryManagement
         }
         #endregion
 
+        #region ----- Data Changed -----
+        private void CancelBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            InventoryMedicine = inventoryMedicineBackup;
+
+            InitMedicineDataChanged();
+        }
+
+        private void MedicineData_Changed(object sender, EventArgs e)
+        {
+            MedicineDataChanged();
+        }
+
+        private void MedicineDataChanged()
+        {
+            CancelBtn.IsEnabled = true;
+            ConfirmBtn.IsEnabled = true;
+
+            ChangedLabel.Foreground = Brushes.Red;
+            ChangedLabel.Content = "已修改";
+        }
+
+        private void InitMedicineDataChanged()
+        {
+            CancelBtn.IsEnabled = false;
+            ConfirmBtn.IsEnabled = false;
+
+            ChangedLabel.Foreground = Brushes.DimGray;
+            ChangedLabel.Content = "未修改";
+        }
+        #endregion
+
         private void CommonMed_OnClick(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = sender as CheckBox;
 
             if(checkBox is null) return;
+
+            MedicineDataChanged();
 
             if ((bool) checkBox.IsChecked)
             {

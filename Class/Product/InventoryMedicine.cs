@@ -45,9 +45,9 @@ namespace His_Pos.Class.Product
             InventoryMedicine newInventoryMedicine = new InventoryMedicine();
 
             newInventoryMedicine.Id = Id;
-            newInventoryMedicine.Name = Id;
-            newInventoryMedicine.ChiName = Id;
-            newInventoryMedicine.EngName = Id;
+            newInventoryMedicine.Name = Name;
+            newInventoryMedicine.ChiName = ChiName;
+            newInventoryMedicine.EngName = EngName;
             newInventoryMedicine.Status = Status;
             newInventoryMedicine.WareHouse = WareHouse;
             newInventoryMedicine.WareHouseId = WareHouseId;
