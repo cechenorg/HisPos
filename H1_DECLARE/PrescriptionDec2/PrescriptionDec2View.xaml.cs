@@ -957,7 +957,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
             {
                 t1.Abort();
-                if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
+                if (string.IsNullOrEmpty(PatientName.Text) && PatientBirthday.Text.Contains(" ")&&
                        string.IsNullOrEmpty(PatientId.Text))
                 {
                     var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料，或選擇自費調劑", MessageType.WARNING, true);
@@ -998,15 +998,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break;
                 case 2:
                     SetCardStatusContent("認證成功");
+                    CurrentPrescription.IsGetIcCard = true;
                     break;
                 case 3:
                     SetCardStatusContent("醫事人員卡認證成功");
+                    CurrentPrescription.IsGetIcCard = true;
                     break;
                 case 4:
                     SetCardStatusContent("PIN 認證成功");
+                    CurrentPrescription.IsGetIcCard = true;
                     break;
                 case 5:
                     SetCardStatusContent("健保局IDC認證成功 ");
+                    CurrentPrescription.IsGetIcCard = true;
                     break;
                 case 9:
                     SetCardStatusContent("非健保卡");
@@ -1014,9 +1018,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case 4000:
                     SetCardStatusContent("讀卡機逾時");
                     break;
+                case 9205:
+                    SetCardStatusContent("開啟讀卡機連結埠失敗 ");
+                    break;
             }
-            if (cardStatus != 0 && cardStatus != 1 && cardStatus != 9 && cardStatus != 4000)
-                CurrentPrescription.IsGetIcCard = true;
         }
 
         public void SetCardStatusContent(string content)
@@ -1122,6 +1127,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e) {
             var t = sender as TextBox;
             if (string.IsNullOrEmpty(t.Text)) return;
+            if (AdjustCaseCombo.SelectedIndex != 2)
+                AdjustCaseCombo.SelectedIndex = 2;
             if (Convert.ToInt32(ChronicSequence.Text) > 1)
             {
                 var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
@@ -1400,6 +1407,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DepositText.Text = string.Empty;
             SelfCostText.Text = string.Empty;
             PaidText.Text = string.Empty;
+        }
+
+        private void ChronicSequence_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = new System.Text.RegularExpressions.Regex("[^0-9]+").IsMatch(e.Text);
         }
     }
 }

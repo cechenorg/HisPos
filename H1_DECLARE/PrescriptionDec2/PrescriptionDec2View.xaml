@@ -185,9 +185,9 @@
                     <Label Content="領藥次數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox x:Name="ChronicSequence" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14"  TextChanged="ChronicSequence_TextChanged"
                              MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.ChronicSequence, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                             PreviewKeyDown="Combo_PreviewKeyDown"/>
+                             PreviewKeyDown="Combo_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput" />
                     <Label Content=" / " FontFamily="Segoe UI Semibold" FontSize="16" />
-                    <TextBox x:Name="ChronicTotal" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" PreviewKeyDown="Combo_PreviewKeyDown"
+                    <TextBox x:Name="ChronicTotal" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" PreviewKeyDown="Combo_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput"
                              MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.ChronicTotal, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="4" Margin="8" Orientation="Horizontal">
@@ -275,7 +275,7 @@
                     <DataGridTemplateColumn x:Name="DosageText"  MinWidth="60" Header="用量" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="DosageDataTemplate">
-                                <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" InputScope="Number" IsReadOnlyCaretVisible="True" CaretIndex="0"
+                                <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" InputScope="Number" IsReadOnlyCaretVisible="True" CaretIndex="0" PreviewTextInput="ChronicSequence_PreviewTextInput"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="MedTotalPrice_GotFocus" CaretBrush="Red"
                                          PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
                             </DataTemplate>
@@ -295,7 +295,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineDaysDataTemplate">
                                 <TextBox x:Name="MedicineDays" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" GotFocus="MedTotalPrice_GotFocus"
-                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" PreviewTextInput="ChronicSequence_PreviewTextInput"
                                          PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" Text="{Binding Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" InputScope="Number"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -304,7 +304,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineAmountDataTemplate">
                                 <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" GotFocus="MedTotalPrice_GotFocus"
-                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" 
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput"
                                          Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -478,7 +478,8 @@
                     <StackPanel Grid.Row="2"  Orientation="Horizontal">
                         <Label Width="60" Margin="10,0,0,0" VerticalAlignment="Center" Content="已付 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                         <TextBox Name="PaidText" Width="90" Height="35" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                                 MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Pay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" />
+                                 MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Pay, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" 
+                                 PreviewTextInput="ChronicSequence_PreviewTextInput"/>
                         <Label Width="60" Margin="20,0,0,0" VerticalAlignment="Center" Content="找零 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                         <Label Width="90" Height="35" HorizontalContentAlignment="Center" Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     </StackPanel>
