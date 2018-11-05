@@ -13,6 +13,7 @@ using His_Pos.Struct.Product;
 using LiveCharts;
 using LiveCharts.Wpf;
 using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
+using His_Pos.InventoryManagement;
 
 namespace His_Pos.Class.Product
 {
@@ -112,6 +113,19 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_BASETYPE_STATUS", productunit.Id));
             dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateUnit]", parameters);
         }
+
+        internal static MedicineDetail.InventoryMedicineDetail GetInventoryMedicineDetail(string proid)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proid));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MedicineDetail].[GetInventoryMedicineDetail]", parameters);
+
+            return new MedicineDetail.InventoryMedicineDetail(table.Rows[0]);
+        }
+
         internal static DataTable GetStockTakingProduct()
         {
             var dd = new DbConnection(Settings.Default.SQL_global);

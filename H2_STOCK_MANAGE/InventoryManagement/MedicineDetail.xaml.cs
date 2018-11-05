@@ -32,14 +32,15 @@ namespace His_Pos.InventoryManagement
         {
             public InventoryMedicineDetail(DataRow dataRow)
             {
-                NHIPrice = dataRow[""].ToString();
-                PackageAmount = dataRow[""].ToString();
-                SingdePackagePrice = dataRow[""].ToString();
-                SindePrice = dataRow[""].ToString();
-                Form = dataRow[""].ToString();
-                ATC = dataRow[""].ToString();
-                Manufactory = dataRow[""].ToString();
-                SC = dataRow[""].ToString();
+                NHIPrice = dataRow["HISMED_PRICE"].ToString();
+                PackageAmount = dataRow["PRO_PACKAGEQTY"].ToString();
+                SingdePackagePrice = dataRow["PRO_SPACKAGEPRICE"].ToString();
+                SindePrice = dataRow["PRO_SPRICE"].ToString();
+                Form = dataRow["HISMED_FORM"].ToString();
+                ATC = dataRow["HISMED_ATC"].ToString();
+                Manufactory = dataRow["HISMED_MANUFACTORY"].ToString();
+                SC = "單方";
+                Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
             }
 
             public string NHIPrice { get; }
@@ -50,6 +51,7 @@ namespace His_Pos.InventoryManagement
             public string ATC { get; }
             public string Manufactory { get; }
             public string SC { get; }
+            public string Ingredient { get; }
         }
 
         public struct InventoryDetailOverview
@@ -79,6 +81,8 @@ namespace His_Pos.InventoryManagement
 
         public InventoryMedicine InventoryMedicine { get; set; }
         private InventoryMedicine inventoryMedicine { get; }
+
+        public InventoryMedicineDetail MedicineDetails { get; }
 
         private ObservableCollection<InventoryDetailOverview> inventoryDetailOverviews;
 
@@ -123,6 +127,11 @@ namespace His_Pos.InventoryManagement
             ProductDetail.NewProduct = null;
 
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
+            MedicineDetails = ProductDb.GetInventoryMedicineDetail(InventoryMedicine.Id);
+
+            SideEffectBox.AppendText(InventoryMedicine.SideEffect);
+            IndicationBox.AppendText(InventoryMedicine.Indication);
+            NoteBox.AppendText(InventoryMedicine.Note);
         }
         
     }
