@@ -41,6 +41,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             var selectedItem = (sender as DataGridRow).Item;
+            if (((Chronic)selectedItem).hospital.Name == "新增新處方單")
+                Close();
             string decMasId = ((Chronic)selectedItem).DecMasId;
             PrescriptionDec2View.Instance.SetValueByDecMasId(decMasId);
 
