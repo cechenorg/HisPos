@@ -664,6 +664,7 @@
     <Compile Include="Struct\IcData\SeqNumber.cs" />
     <Compile Include="Struct\IcData\TreatmentDataNoNeedHPC.cs" />
     <Compile Include="Struct\Manufactory\PurchasePrincipal.cs" />
+    <Compile Include="Class\Product\InventoryDetailOverview.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
     <Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">

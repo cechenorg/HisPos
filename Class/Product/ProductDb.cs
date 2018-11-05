@@ -114,6 +114,25 @@ namespace His_Pos.Class.Product
             dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateUnit]", parameters);
         }
 
+        internal static ObservableCollection<InventoryDetailOverview> GetInventoryDetailOverviews(string proId)
+        {
+            ObservableCollection<InventoryDetailOverview> collection = new ObservableCollection<InventoryDetailOverview>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetInventoryDetailOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new InventoryDetailOverview(row));
+            }
+
+            return collection;
+        }
+
         internal static MedicineDetail.InventoryMedicineDetail GetInventoryMedicineDetail(string proid)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);

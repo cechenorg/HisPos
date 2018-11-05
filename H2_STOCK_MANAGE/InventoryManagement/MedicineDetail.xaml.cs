@@ -19,6 +19,7 @@ using System.Data;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.Struct.Product;
 
 namespace His_Pos.InventoryManagement
 {
@@ -53,28 +54,6 @@ namespace His_Pos.InventoryManagement
             public string SC { get; }
             public string Ingredient { get; }
         }
-
-        public struct InventoryDetailOverview
-        {
-            public InventoryDetailOverview(DataRow dataRow)
-            {
-                Id = dataRow[""].ToString();
-                TypeIcon = dataRow[""].ToString();
-                Type = dataRow[""].ToString();
-                Time = dataRow[""].ToString();
-                Principal = dataRow[""].ToString();
-                Amount = dataRow[""].ToString();
-                StockValueChange = dataRow[""].ToString();
-            }
-
-            public string Id { get; }
-            public string TypeIcon { get; }
-            public string Type { get; }
-            public string Time { get; }
-            public string Principal { get; }
-            public string Amount { get; }
-            public string StockValueChange { get; }
-        }
         #endregion
 
         #region ----- Define Variables -----
@@ -86,7 +65,7 @@ namespace His_Pos.InventoryManagement
 
         private ObservableCollection<InventoryDetailOverview> inventoryDetailOverviews;
 
-        private ObservableCollection<InventoryDetailOverview> InventoryDetailOverviews
+        public ObservableCollection<InventoryDetailOverview> InventoryDetailOverviews
         {
             get { return inventoryDetailOverviews; }
             set
@@ -128,11 +107,24 @@ namespace His_Pos.InventoryManagement
 
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
             MedicineDetails = ProductDb.GetInventoryMedicineDetail(InventoryMedicine.Id);
+            InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
+
+            CalculateStock();
 
             SideEffectBox.AppendText(InventoryMedicine.SideEffect);
             IndicationBox.AppendText(InventoryMedicine.Indication);
             NoteBox.AppendText(InventoryMedicine.Note);
         }
-        
+
+        private void CalculateStock()
+        {
+            InventoryDetailOverviews[InventoryDetailOverviews.Count - 1].Stock = InventoryMedicine.Stock.Inventory;
+
+            for (int x = InventoryDetailOverviews.Count - 2; x >= 0; x--)
+            {
+                InventoryDetailOverviews[x].Stock =
+                    InventoryDetailOverviews[x + 1].Stock - InventoryDetailOverviews[x + 1].Amount;
+            }
+        }
     }
 }
