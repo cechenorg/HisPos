@@ -122,8 +122,8 @@ namespace His_Pos.InventoryManagement
             InitializeComponent();
             DataContext = this;
 
-            InventoryMedicine = (InventoryMedicine)ProductDetail.NewProduct;
-            inventoryMedicineBackup = ((ICloneable)ProductDetail.NewProduct).Clone() as InventoryMedicine;
+            InventoryMedicine = ((ICloneable)ProductDetail.NewProduct).Clone() as InventoryMedicine;
+            inventoryMedicineBackup = (InventoryMedicine)ProductDetail.NewProduct;
             ProductDetail.NewProduct = null;
             InitMedicineDatas();
         }
@@ -185,7 +185,16 @@ namespace His_Pos.InventoryManagement
         #region ----- Data Changed -----
         private void CancelBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            InventoryMedicine = inventoryMedicineBackup;
+            SideEffectBox.Document.Blocks.Clear();
+            IndicationBox.Document.Blocks.Clear();
+            NoteBox.Document.Blocks.Clear();
+
+            InventoryMedicine = ((ICloneable)inventoryMedicineBackup).Clone() as InventoryMedicine;
+            ProductUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
+
+            SideEffectBox.AppendText(InventoryMedicine.SideEffect);
+            IndicationBox.AppendText(InventoryMedicine.Indication);
+            NoteBox.AppendText(InventoryMedicine.Note);
 
             InitMedicineDataChanged();
         }
@@ -213,16 +222,21 @@ namespace His_Pos.InventoryManagement
             ChangedLabel.Content = "未修改";
         }
         #endregion
+        
+        private void InventoryFilter_OnClick(object sender, RoutedEventArgs e)
+        {
+            InventoryDetailOverviewDataGrid.Items.Filter = InventoryDetailOverviewFilter;
+        }
 
-        private void CommonMed_OnClick(object sender, RoutedEventArgs e)
+        private void CommonMed_OnChecked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = sender as CheckBox;
 
-            if(checkBox is null) return;
+            if (checkBox is null) return;
 
             MedicineDataChanged();
 
-            if ((bool) checkBox.IsChecked)
+            if ((bool)checkBox.IsChecked)
             {
                 SafeAmountStack.IsEnabled = false;
                 BasicAmountStack.IsEnabled = false;
@@ -232,11 +246,6 @@ namespace His_Pos.InventoryManagement
                 SafeAmountStack.IsEnabled = true;
                 BasicAmountStack.IsEnabled = true;
             }
-        }
-
-        private void InventoryFilter_OnClick(object sender, RoutedEventArgs e)
-        {
-            InventoryDetailOverviewDataGrid.Items.Filter = InventoryDetailOverviewFilter;
         }
     }
 }

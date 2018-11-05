@@ -60,7 +60,7 @@ namespace His_Pos.Class.Product
             newInventoryMedicine.Control = Control;
             newInventoryMedicine.Frozen = Frozen;
             newInventoryMedicine.Location = Location;
-            newInventoryMedicine.Stock = Stock;
+            newInventoryMedicine.Stock = ((ICloneable)Stock).Clone() as InStock;
 
             return newInventoryMedicine;
         }
