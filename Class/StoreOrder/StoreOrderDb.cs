@@ -454,7 +454,7 @@ namespace His_Pos.Class.StoreOrder
         
         internal static void SendDeclareOrderToSingde(string CurrentDecMasId, string storId, DeclareData declareData, DeclareTrade declareTrade, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> PrescriptionSendData) {
             string Rx_id = MainWindow.CurrentPharmacy.Id; //藥局機構代號 傳輸主KEY
-            //string Rx_order = declareData.Prescription.Treatment.AdjustDateStr.Replace("/",""); // 調劑日期(7)病歷號(9)
+            string Rx_order = declareData.Prescription.Treatment.AdjustDate.AddYears(-1911).ToString("yyyMMdd"); // 調劑日期(7)病歷號(9)
             string Pt_name = declareData.Prescription.Customer.Name; // 藥袋名稱(病患姓名)
             string Upload_data = DateTime.Now.ToString(" yyyy - MM - dd hh:mm:ss "); //更新時間( 2014 - 01 - 24 21:13:03 )
             string Upload_status = string.Empty; //	列印判斷
@@ -483,8 +483,8 @@ namespace His_Pos.Class.StoreOrder
             Dtl_data.Append(MainWindow.CurrentUser.Name.PadRight(20- NewFunction.HowManyChinese(MainWindow.CurrentUser.Name), ' ')); //藥師姓名 
             Dtl_data.AppendLine();
             //第三行
-            //Dtl_data.Append(declareData.Prescription.Treatment.TreatDateStr.Replace("/","").PadRight(7, ' ')); //處方日(就診日期)
-            //Dtl_data.Append(declareData.Prescription.Treatment.AdjustDateStr.Replace("/", "").PadRight(7, ' ')); //調劑日期
+            Dtl_data.Append(declareData.Prescription.Treatment.TreatmentDate.AddYears(-1911).ToString("yyyMMdd")); //處方日(就診日期)
+            Dtl_data.Append(declareData.Prescription.Treatment.AdjustDate.AddYears(-1911).ToString("yyyMMdd")); //調劑日期
             Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id.PadRight(2, ' ')); //案件
             Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id.PadRight(2, ' ')); //科別
             Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id.PadRight(10, ' ')); //主診斷
@@ -543,7 +543,7 @@ namespace His_Pos.Class.StoreOrder
             
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
-            //dd.MySqlNonQueryBySqlString($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{declareData.Prescription.Customer.Name}','{Dtl_data}','{declareData.Prescription.Treatment.AdjustDateStr.Replace("/","")}')");
+            dd.MySqlNonQueryBySqlString($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{declareData.Prescription.Customer.Name}','{Dtl_data}','{declareData.Prescription.Treatment.AdjustDate.AddYears(-1911).ToString("yyyMMdd")}')");
         }
         
         internal static OrderType GetDeclareOrderStatusFromSinde(string orderId)

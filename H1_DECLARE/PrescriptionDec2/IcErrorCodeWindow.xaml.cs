@@ -54,9 +54,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 Cause = cause;
             }
 
-            public IcErrorCode()
-            {
-                
+            public IcErrorCode() {
             }
 
             public event PropertyChangedEventHandler PropertyChanged;
