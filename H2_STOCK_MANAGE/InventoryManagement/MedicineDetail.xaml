@@ -99,7 +99,7 @@
                     </StackPanel>
                 </Grid>
                 <DataGrid Grid.Row="1" Grid.Column="1" Margin="0,10,10,10" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          Background="{StaticResource GridBackGround}">
+                          Background="{StaticResource GridBackGround}" ItemsSource="{Binding ProductUnitCollection, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -135,35 +135,35 @@
                         <DataGridTemplateColumn MinWidth="90" Header="單位名稱" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Id" Text="{Binding Id}" InputMethod.IsInputMethodEnabled="False" Width="80" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Id" Text="{Binding Unit}" InputMethod.IsInputMethodEnabled="False" Width="80" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="50" Header="數量" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Id" Text="{Binding Id}" InputMethod.IsInputMethodEnabled="False" Width="40" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Amount" Text="{Binding Amount}" InputMethod.IsInputMethodEnabled="False" Width="40" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="80" Header="售價" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Id" Text="{Binding Id}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Price" Text="{Binding Price}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="80" Header="會員價" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Id" Text="{Binding Id}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="VIPPrice" Text="{Binding VIPPrice}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="80" Header="員工價" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Id" Text="{Binding Id}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="EmpPrice" Text="{Binding EmpPrice}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

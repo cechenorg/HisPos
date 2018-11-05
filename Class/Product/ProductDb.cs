@@ -33,7 +33,7 @@ namespace His_Pos.Class.Product
 
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new ProductUnit(Int32.Parse(row["PRO_BASETYPE_STATUS"].ToString()), row["PROUNI_TYPE"].ToString(), row["PROUNI_QTY"].ToString(), row["PRO_SELL_PRICE"].ToString(), row["PRO_VIP_PRICE"].ToString(), row["PRO_EMP_PRICE"].ToString()));
+                collection.Add(new ProductUnit(row));
             }
 
             return collection;

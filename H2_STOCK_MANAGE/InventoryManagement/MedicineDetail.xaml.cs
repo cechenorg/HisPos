@@ -86,6 +86,17 @@ namespace His_Pos.InventoryManagement
             }
         }
 
+        private ObservableCollection<ProductUnit> productUnitCollection;
+        public ObservableCollection<ProductUnit> ProductUnitCollection
+        {
+            get { return productUnitCollection; }
+            set
+            {
+                productUnitCollection = value;
+                NotifyPropertyChanged("ProductUnitCollection");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
