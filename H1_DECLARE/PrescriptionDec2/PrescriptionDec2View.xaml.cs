@@ -443,7 +443,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
             {
                 icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
-                icErrorWindow.Show();
+                icErrorWindow.ShowDialog();
                 var loading = new LoadingWindow();
                 if(!string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
                     loading.LoginIcData(Instance);

@@ -54,6 +54,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 Cause = cause;
             }
 
+            public IcErrorCode()
+            {
+                
+            }
+
             public event PropertyChangedEventHandler PropertyChanged;
 
             [NotifyPropertyChangedInvocator]
@@ -98,6 +103,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             InitializeComponent();
             DataContext = this;
+            SelectedItem = new IcErrorCode();
             ErrorMessage = "錯誤回報 : " + errMsg;
             SetErrorCodes(isMedicalNumberGet);
         }
