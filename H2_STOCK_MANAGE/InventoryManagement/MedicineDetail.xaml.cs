@@ -148,7 +148,7 @@ namespace His_Pos.InventoryManagement
                 InventoryDetailOverviewDataGrid.ScrollIntoView(InventoryDetailOverviews.Last());
             }
 
-            if (!InventoryMedicine.Control.Equals("0"))
+            if (!(InventoryMedicine.Control.Equals("0") || InventoryMedicine.Control.Equals("")))
             {
                 ControlStack.Visibility = Visibility.Visible;
 
