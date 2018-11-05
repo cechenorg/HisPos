@@ -5,8 +5,9 @@ using His_Pos.Struct.Product;
 
 namespace His_Pos.Class
 {
-    public class InStock : INotifyPropertyChanged
+    public class InStock : INotifyPropertyChanged, ICloneable
     {
+        #region ----- Define Variables -----
         private string onTheWayAmount;
         public string OnTheWayAmount
         {
@@ -19,9 +20,6 @@ namespace His_Pos.Class
         }
 
         private double inventory;
-
-        public InStock() { }
-
         public double Inventory
         {
             get { return inventory; }
@@ -44,6 +42,28 @@ namespace His_Pos.Class
         }
 
         private string basicAmount;
+        public string BasicAmount
+        {
+            get { return basicAmount; }
+            set
+            {
+                basicAmount = value;
+                NotifyPropertyChanged("BasicAmount");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+
+        public InStock() { }
 
         public InStock(DataRow dataRow)
         {
@@ -63,24 +83,16 @@ namespace His_Pos.Class
             OnTheWayAmount = selectedItem.OnTheWayAmount;
         }
 
-        public string BasicAmount
+        public object Clone()
         {
-            get { return basicAmount; }
-            set
-            {
-                basicAmount = value;
-                NotifyPropertyChanged("BasicAmount");
-            }
-        }
+            InStock inStock = new InStock();
 
-        public event PropertyChangedEventHandler PropertyChanged;
+            inStock.inventory = Inventory;
+            inStock.safeAmount = SafeAmount;
+            inStock.basicAmount = BasicAmount;
+            inStock.onTheWayAmount = OnTheWayAmount;
 
-        private void NotifyPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+            return inStock;
         }
     }
 }

@@ -249,17 +249,17 @@ namespace His_Pos.InventoryManagement
         }
       
         private void SetUnitValue() {
-            int count = 0;
-            string index = "";
-            foreach (var row in OTCUnitCollection) {
-                index = count.ToString();
-                ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text = row.Unit;
-                ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text = row.Amount;
-                ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text = row.Price;
-                ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text = row.VIPPrice;
-                ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text = row.EmpPrice;
-                count++;
-            }
+            //int count = 0;
+            //string index = "";
+            //foreach (var row in OTCUnitCollection) {
+            //    index = count.ToString();
+            //    ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text = row.Unit;
+            //    ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text = row.Amount;
+            //    ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text = row.Price;
+            //    ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text = row.VIPPrice;
+            //    ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text = row.EmpPrice;
+            //    count++;
+            //}
         }
       
         private void SetOtcTextBoxChangedCollection(string name) {
@@ -319,9 +319,7 @@ namespace His_Pos.InventoryManagement
             }
             foreach (string index in OTCUnitChangdedCollection)
             {
-                ProductUnit prounit = new ProductUnit(Convert.ToInt32(index), ((TextBox)DockUnit.FindName("OtcUnitName" + index)).Text,
-                                         ((TextBox)DockUnit.FindName("OtcUnitAmount" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitPrice" + index)).Text,
-                                          ((TextBox)DockUnit.FindName("OtcUnitVipPrice" + index)).Text, ((TextBox)DockUnit.FindName("OtcUnitEmpPrice" + index)).Text);
+                ProductUnit prounit = new ProductUnit();
                 ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
             MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS, true);
