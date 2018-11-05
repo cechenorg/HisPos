@@ -8,7 +8,7 @@
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839"> 
             <Grid.RowDefinitions>
-                <RowDefinition/>
+                <RowDefinition Height="400"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             
@@ -20,10 +20,10 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <Label  Content="今日需通知領藥"  Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" VerticalAlignment="Center" Padding="0"/>
-                        <CheckBox Name="UnPhone" Content="未聯絡" IsChecked="True" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
-                        <CheckBox Name="GetMed" Content="確定領藥" IsChecked="True" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
-                        <CheckBox Name="NoGetMed" Content="確定不領" IsChecked="True" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
-                        <CheckBox Name="NoGetPhone" Content="電話未接" IsChecked="True" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                        <CheckBox Name="UnPhone" Content="未聯絡" IsChecked="{Binding IsUnPhone,UpdateSourceTrigger=PropertyChanged}" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                        <CheckBox Name="GetMed" Content="確定領藥" IsChecked="{Binding IsGetMed,UpdateSourceTrigger=PropertyChanged}" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                        <CheckBox Name="NoGetMed" Content="確定不領" IsChecked="{Binding IsNoGetMed,UpdateSourceTrigger=PropertyChanged}" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
+                        <CheckBox Name="NoGetPhone" Content="電話未接" IsChecked="{Binding IsNoGetPhone,UpdateSourceTrigger=PropertyChanged}" FontSize="30" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="20,0,0,0" Checked="PhoneCall_Checked" Unchecked="PhoneCall_Checked"/>
                     </StackPanel>
                     <DataGrid Name="ChironicPhoneCall"   Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                       CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10" Grid.Row="1" ItemsSource="{Binding DailtChronicPhoneCallCollection,UpdateSourceTrigger=PropertyChanged}">

@@ -9,8 +9,13 @@
     x:Class="His_Pos.PrescriptionInquire.PrescriptionInquireView"
     xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
     xmlns:abstractClass="clr-namespace:His_Pos.AbstractClass"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:hisPos="clr-namespace:His_Pos"
     dialog:DialogParticipation.Register="{Binding}"
     mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
+    <UserControl.Resources>
+        <hisPos:DateConverter x:Key="DateConverter" />
+    </UserControl.Resources>
     <Viewbox Stretch="Fill" Width="1363">
         <Grid Width="1418" Height="839">
             <Grid.RowDefinitions>
@@ -21,9 +26,29 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10,9">
                 <Label Content="調劑日期" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <DatePicker  Width="100" Height="30" Name="start" SelectedDateFormat="Short"/>
+                <xctk:MaskedTextBox Name="start" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewMouseLeftButtonUp="start_PreviewMouseLeftButtonUp">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                            <Binding.ValidationRules>
+                                <hisPos:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
                 <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                <DatePicker Width="100" Height="30" Name="end" SelectedDateFormat="Short"/>
+                <xctk:MaskedTextBox Name="end" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat"  PreviewMouseLeftButtonUp="start_PreviewMouseLeftButtonUp">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                            <Binding.ValidationRules>
+                                <hisPos:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
                 <Label Content="病患姓名" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Name="PatientName" Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>

@@ -11,7 +11,7 @@ namespace His_Pos.Class.Declare
 {
     public static class PrescriptionDB
     {
-        public static ObservableCollection<PrescriptionOverview> GetPrescriptionOverviewBySearchCondition(string sDate, string eDate, string cusName, string id,string docName,string insName)
+        public static ObservableCollection<PrescriptionOverview> GetPrescriptionOverviewBySearchCondition(DateTime sDate, DateTime eDate, string cusName, string id,string docName,string insName)
         {
             ObservableCollection<PrescriptionOverview> prescriptionOverviews = new ObservableCollection<PrescriptionOverview>();
 
