@@ -1126,9 +1126,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e) {
             var t = sender as TextBox;
-            if (string.IsNullOrEmpty(t.Text)) return;
-            if (AdjustCaseCombo.SelectedIndex != 2)
-                AdjustCaseCombo.SelectedIndex = 2;
+            if (string.IsNullOrEmpty(t.Text))
+            {
+                AdjustCaseCombo.SelectedIndex = 0;
+                return;
+            }
+            if (AdjustCaseCombo.SelectedIndex != 1)
+                AdjustCaseCombo.SelectedIndex = 1;
             if (Convert.ToInt32(ChronicSequence.Text) > 1)
             {
                 var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
