@@ -51,13 +51,10 @@ namespace His_Pos.Class.Person
             {
                 GenderName = row["CUS_GENDER"].ToString() == "True" ? "男" : "女";
                 IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
-            }
-
-            if (!string.IsNullOrEmpty(row["CUS_TEL"].ToString()))
-            {
                 ContactInfo = new ContactInfo();
                 ContactInfo.Tel = row["CUS_TEL"].ToString();
             }
+            
                 
         }
         public Customer(XmlNode xml) {

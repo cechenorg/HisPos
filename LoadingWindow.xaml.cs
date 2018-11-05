@@ -749,21 +749,17 @@ namespace His_Pos
                 LoadPatentDataFromIcCard(prescriptionDec2View);
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionDec2View.CustomerCollection =
-                        CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
-                    if (prescriptionDec2View.CustomerCollection.Count == 1)
-                        prescriptionDec2View.CurrentPrescription.Customer = prescriptionDec2View.CustomerCollection[0];
-                    else
+                    if (prescriptionDec2View.CurrentPrescription.IsGetIcCard)
                     {
-                        CustomerSelectWindow customerSelect = new CustomerSelectWindow(prescriptionDec2View.CustomerCollection);
-                        customerSelect.Show();
+                        var c = new CustomerSelectWindow(prescriptionDec2View.CurrentPrescription.Customer.IcCard.IcNumber,3);
+                        c.ShowDialog();
+                        if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                            !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                            prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
+                        if (!string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                            string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                            prescriptionDec2View.MedicalNumber.Text = prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber;
                     }
-                    if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                        !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
-                        prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
-                    if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                        !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
-                        prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
@@ -789,7 +785,7 @@ namespace His_Pos
                 prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
                 prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
                 prescriptionDec2View.CusBasicData = new BasicData(icData);
-                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData) {Id = "1"};
+                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
                 strLength = 296;
                 icData = new byte[296];
                 var cs = new ConvertData();
@@ -830,20 +826,25 @@ namespace His_Pos
             }
             else
             {
-                /*
-                 * prescriptionDec2View.CurrentPrescription.Customer.Name = prescriptionDec2View.PatientName.Text;
-                 * if(prescriptionDec2View.PatientBirthday.Text.Length == 7)
-                 *   prescriptionDec2View.CurrentPrescription.Customer.Birthday = prescriptionDec2View.PatientBirthday.Text.Substring(0, 3) + "-" +
-                 * prescriptionDec2View.PatientBirthday.Text.Substring(3, 2) + "-" +
-                   prescriptionDec2View.PatientBirthday.Text.Substring(5, 2);
-                 * prescriptionDec2View.CurrentPrescription.Customer.IcNumber = prescriptionDec2View.PatientId.Text;
-                 */
-                prescriptionDec2View.CurrentPrescription.Customer.Id = "1";
-                prescriptionDec2View.CurrentPrescription.Customer.Name = "許文章";
-                prescriptionDec2View.CurrentPrescription.Customer.Birthday = new DateTime(1948,10,01);
-                prescriptionDec2View.CurrentPrescription.Customer.IcNumber = "S88824769A";
-                prescriptionDec2View.CheckPatientGender();
-                prescriptionDec2View.CurrentPrescription.Customer.IcCard = new IcCard("S18824769A", new IcMarks("1", new NewbornsData()), "91/07/25", 5, new IcCardPay(), new IcCardPrediction(), new Pregnant(), new Vaccination());
+                prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
+                switch (res)
+                {
+                    case 4000:
+                        prescriptionDec2View.SetCardStatusContent("讀卡機逾時");
+                        break;
+                    case 4013:
+                        prescriptionDec2View.SetCardStatusContent("未置入健保IC卡");
+                        break;
+                    case 4029:
+                        prescriptionDec2View.SetCardStatusContent("IC卡權限不足");
+                        break;
+                    case 4033:
+                        prescriptionDec2View.SetCardStatusContent("所置入非健保IC卡");
+                        break;
+                    case 4050:
+                        prescriptionDec2View.SetCardStatusContent("安全模組尚未與IDC認證");
+                        break;
+                }
             }
         }
 
