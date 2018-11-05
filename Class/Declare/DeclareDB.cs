@@ -368,9 +368,9 @@ namespace His_Pos.Class.Declare
                     {
                         {"D1", declareData.Prescription.Treatment.AdjustCase.Id},
                         {"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
-                        {"D14", DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Treatment.TreatmentDate,false)},
+                        {"D14", declareData.Prescription.Treatment.TreatmentDate.ToString("yyyy-MM-dd") },
                         {"D15", declareData.Prescription.Treatment.Copayment.Id},
-                        {"D23", DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Treatment.AdjustDate,false)},
+                        {"D23", declareData.Prescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") },
                         {"D25", declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber},
                         {"D30", declareData.Prescription.Treatment.MedicineDays},
                         {"CUS_ID", declareData.Prescription.Customer.Id}

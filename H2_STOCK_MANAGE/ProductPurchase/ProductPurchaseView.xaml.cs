@@ -170,9 +170,9 @@ namespace His_Pos.ProductPurchase
                 Product product;
 
                 if (detail.Type.Equals("O"))
-                    product = new ProductPurchaseOtc(tmeProduct, StoreOrderData.Manufactory.Id.Equals("0"));
+                    product = new ProductPurchaseOtc(tmeProduct, storeOrder.Manufactory.Id.Equals("0"));
                 else if (detail.Type.Equals("M"))
-                    product = new ProductPurchaseMedicine(tmeProduct, StoreOrderData.Manufactory.Id.Equals("0"));
+                    product = new ProductPurchaseMedicine(tmeProduct, storeOrder.Manufactory.Id.Equals("0"));
                 else
                     continue;
 

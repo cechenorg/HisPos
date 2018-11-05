@@ -105,7 +105,45 @@ namespace His_Pos.IndexView
             }
         }
 
-        
+        private bool isUnPhone = true;
+        public bool IsUnPhone {
+            get => isUnPhone;
+            set
+            {
+                isUnPhone = value;
+                NotifyPropertyChanged("IsUnPhone");
+            } 
+        }
+        private bool isGetMed = true;
+        public bool IsGetMed
+        {
+            get => isGetMed;
+            set
+            {
+                isGetMed = value;
+                NotifyPropertyChanged("IsGetMed");
+            }
+        }
+        private bool isNoGetMed = true;
+        public bool IsNoGetMed
+        {
+            get => isNoGetMed;
+            set
+            {
+                isNoGetMed = value;
+                NotifyPropertyChanged("IsNoGetMed");
+            }
+        }
+        private bool isNoGetPhone = true;
+        public bool IsNoGetPhone
+        {
+            get => isNoGetPhone;
+            set
+            {
+                isNoGetPhone = value;
+                NotifyPropertyChanged("IsNoGetPhone");
+            }
+        }
         public IndexView()
         {
             InitializeComponent();
@@ -152,24 +190,25 @@ namespace His_Pos.IndexView
             if (DailtChronicPhoneCallCollection is null) return;
             ChironicPhoneCall.Items.Filter = ((o) => {
                 string status = ((DailtChronicPhoneCall)o).Status;
-                switch (status) {
+                switch (status)
+                {
                     case "未聯絡":
-                        if ((bool)UnPhone.IsChecked)
+                        if (IsUnPhone)
                             return true;
                         else
                             return false;
                     case "確定領藥":
-                        if ((bool)GetMed.IsChecked)
+                        if (IsGetMed)
                             return true;
                         else
                             return false;
                     case "確定不領":
-                        if ((bool)NoGetMed.IsChecked)
+                        if (IsNoGetMed)
                             return true;
                         else
                             return false;
                     case "電話未接":
-                        if ((bool)NoGetPhone.IsChecked)
+                        if (IsNoGetPhone)
                             return true;
                         else
                             return false;
@@ -178,5 +217,6 @@ namespace His_Pos.IndexView
                 }
             });
         }
+
     }
 }

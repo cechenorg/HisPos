@@ -83,5 +83,45 @@ namespace His_Pos.Class.Person
             }
             return customerLCollection;
         }
+        internal static void UpdateCustomerById(Customer customer) {
+            var customerLCollection = new ObservableCollection<Customer>();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+          
+                parameters.Add(new SqlParameter("CUS_ID", customer.Id));
+                parameters.Add(new SqlParameter("CUS_NAME", customer.Name));
+                parameters.Add(new SqlParameter("CUS_GENDER", customer.Gender));
+            if (string.IsNullOrEmpty(customer.Qname))
+                parameters.Add(new SqlParameter("CUS_QNAME", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_QNAME", customer.Qname));
+            if (string.IsNullOrEmpty(customer.Birthday.ToString()))
+                parameters.Add(new SqlParameter("CUS_BIRTH", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_BIRTH", customer.Birthday));
+            if (string.IsNullOrEmpty(customer.ContactInfo.Address))
+                parameters.Add(new SqlParameter("CUS_ADDR", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_ADDR", customer.ContactInfo.Address));
+            if (string.IsNullOrEmpty(customer.ContactInfo.Tel))
+                parameters.Add(new SqlParameter("CUS_TEL", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_TEL", customer.ContactInfo.Tel));
+            if (string.IsNullOrEmpty(customer.IcNumber))
+                parameters.Add(new SqlParameter("CUS_IDNUM", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_IDNUM", customer.IcNumber));
+            if (string.IsNullOrEmpty(customer.ContactInfo.Email))
+                parameters.Add(new SqlParameter("CUS_EMAIL", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_EMAIL", customer.ContactInfo.Email)); 
+            if (string.IsNullOrEmpty(customer.EmergentTel))
+                parameters.Add(new SqlParameter("CUS_EMERGENTTEL", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_EMERGENTTEL", customer.EmergentTel)); 
+
+            dd.ExecuteProc("[HIS_POS_DB].[CustomerManageView].[UpdateCustomerById]",parameters);
+        }
+          
     }
 }
