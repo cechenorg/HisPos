@@ -432,7 +432,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
                 icErrorWindow.Show();
                 var loading = new LoadingWindow();
-                if(!string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
+                if (!string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
                     loading.LoginIcData(Instance);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
@@ -1144,15 +1144,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
             }
         }
-
-        private void DatePickerTreatment_SelectionChanged(object sender, RoutedEventArgs e) {
-            DeclareSubmit.Content = AdjustDate.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)  ? "調劑" : "預約慢箋";
-            IsSendToServer.IsChecked = false;
-            if (AdjustCaseCombo.SelectedItem == null) return;
-            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-        }
-
+         
         public void SetValueByDecMasId(string decMasId) {
             _currentDecMasId = decMasId;
             var prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
@@ -1416,6 +1408,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void ChronicSequence_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = new System.Text.RegularExpressions.Regex("[^0-9]+").IsMatch(e.Text);
+        }
+
+        private void AdjustDate_TextChanged(object sender, TextChangedEventArgs e) {
+            if (DeclareSubmit == null) return;
+            DeclareSubmit.Content = AdjustDate.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now) ? "調劑" : "預約慢箋";
+            IsSendToServer.IsChecked = false;
+            if (AdjustCaseCombo.SelectedItem == null) return;
+            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
         }
     }
 }
