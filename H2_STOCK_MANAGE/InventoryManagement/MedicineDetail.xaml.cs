@@ -119,6 +119,7 @@ namespace His_Pos.InventoryManagement
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
             MedicineDetails = ProductDb.GetInventoryMedicineDetail(InventoryMedicine.Id);
             InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
+            ProductUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
 
             CalculateStock();
 
