@@ -10,6 +10,7 @@
         mc:Ignorable="d" Height="900" Width="1600" Background="Transparent">
     <UserControl.Resources>
         <stockTakingRecord:ValueDifferentColorConverter x:Key="ValueDifferentColorConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1600" Height="900" Margin="10" DataContext="{Binding InventoryMedicine}">
@@ -34,10 +35,17 @@
                 <Label Content="{Binding Id}" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Foreground="DimGray" FontSize="50" FontFamily="Segoe UI Semibold" Margin="20,10,0,10" VerticalAlignment="Center" Padding="0"/>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <TextBox Text="{Binding ChiName, Mode=TwoWay}" Width="1130" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="20,10,20,0" Padding="0" BorderBrush="Transparent" />
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="管" Foreground="IndianRed" FontSize="40" FontFamily="Segoe UI Semibold"/>
-                        <Label Content="4" Foreground="IndianRed" FontSize="40" FontFamily="Segoe UI Semibold"/>
-                    </StackPanel>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Orientation="Horizontal" Grid.Row="0">
+                            <TextBlock Text="管制藥" Foreground="IndianRed" FontSize="30" FontFamily="Segoe UI Semibold"/>
+                            <TextBlock Text="{Binding Control}" Foreground="IndianRed" FontSize="30" FontFamily="Segoe UI Semibold"/>
+                        </StackPanel>
+                        <TextBlock Text="冷藏藥" Grid.Row="1" Foreground="RoyalBlue" FontSize="30" FontFamily="Segoe UI Semibold" Visibility="{Binding Frozen, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </Grid>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <TextBox Text="{Binding EngName, Mode=TwoWay}" Width="950" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semi" Margin="20,0,20,0" Padding="0" BorderBrush="Transparent"/>
@@ -47,8 +55,8 @@
             </Grid>
             <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="180"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="200"/>
                     <RowDefinition/>
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
@@ -57,31 +65,20 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="0,0,10,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
-                        <Label Content="狀態" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <ComboBox x:Name="MedStatus" Width="130" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14"  HorizontalContentAlignment="Center" 
-                                  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" Margin="10,0,0,0">
-                            <ComboBoxItem Content="啟用"/>
-                            <ComboBoxItem Content="已停用"/>
-                        </ComboBox>
-                    </StackPanel>
+                    <CheckBox Content="啟用" IsChecked="{Binding Status}" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="25" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
                         <Label Content="櫃位" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Text="{Binding Location, Mode=TwoWay}" Width="133" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox Text="{Binding Location, Mode=TwoWay}" Width="100" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
-                    <CheckBox x:Name="IsFrozen" Content="冷藏藥" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10" />
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
                         <Label Content="條碼" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Width="330" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                        <TextBox Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,10,10" Background="{StaticResource GridBackGround}">
@@ -90,7 +87,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <CheckBox Content="常備藥" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
+                    <CheckBox Content="常備藥" IsChecked="{Binding Common}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
                     <StackPanel Orientation="Horizontal" Grid.Row="1" IsEnabled="False">
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Text="{Binding Stock.SafeAmount, Mode=TwoWay}" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0"/>
@@ -204,8 +201,8 @@
                     </StackPanel>
                 </Grid>
                 <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,10,0" Background="{StaticResource GridBackGround}">
-                    <Rectangle Width="190"/>
-                    <Label x:Name="IsChangedLabel" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                    <Rectangle Width="220"/>
+                    <Label Name="IsChangedLabel" Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
                     <Button Width="120" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="Gray" IsEnabled="False"/>
                     <Button Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" x:Name="ButtonUpdateSubmmit" IsEnabled="False"/>
                 </StackPanel>
@@ -279,7 +276,8 @@
                     </StackPanel>
                 </Grid>
                 <DataGrid ItemsSource="{Binding ProductGroupCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}"
-                              AutoGenerateColumns="False" Grid.Row="1" Grid.Column="0" Margin="0,0,10,0">
+                          AutoGenerateColumns="False" Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                          Background="{StaticResource GridBackGround}">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -299,15 +297,6 @@
                             </Style.Triggers>
                         </Style>
                     </DataGrid.Resources>
-                    <DataGrid.Background>
-                        <StaticResource ResourceKey="GridBackGround"/>
-                    </DataGrid.Background>
-                    <DataGrid.ColumnHeaderStyle>
-                        <StaticResource ResourceKey="DataGridColumnHeaderStyle"/>
-                    </DataGrid.ColumnHeaderStyle>
-                    <DataGrid.CellStyle>
-                        <StaticResource ResourceKey="DataGridCellStyle"/>
-                    </DataGrid.CellStyle>
                     <DataGrid.RowStyle>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Setter Property="Background" Value="Transparent"/>
@@ -356,11 +345,11 @@
                     <Button Content="盤點" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="40" Background="{StaticResource Shadow}" Margin="20,0,0,0"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Margin="0,10,0,0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                    <CheckBox Content="訂退貨" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="50,0,0,0"/>
+                    <CheckBox Content="訂退貨" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="50,0,0,0" IsChecked="True"/>
                     <Image Source="../../Images/BlueDot.png" Width="20" Margin="5,0,0,0"/>
-                    <CheckBox Content="調劑" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0"/>
+                    <CheckBox Content="調劑" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True"/>
                     <Image Source="../../Images/OrangeDot.png" Width="20" Margin="5,0,0,0"/>
-                    <CheckBox Content="盤點" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0"/>
+                    <CheckBox Content="盤點" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True"/>
                     <Image Source="../../Images/GreenDot.png" Width="20" Margin="5,0,0,0"/>
                 </StackPanel>
                 <DataGrid Grid.Row="4" AutoGenerateColumns="False" ItemsSource="{Binding InventoryDetailOverviews, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}"

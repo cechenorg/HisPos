@@ -118,6 +118,8 @@ namespace His_Pos.InventoryManagement
 
         private void CalculateStock()
         {
+            if(InventoryDetailOverviews.Count == 0) return;
+
             InventoryDetailOverviews[InventoryDetailOverviews.Count - 1].Stock = InventoryMedicine.Stock.Inventory;
 
             for (int x = InventoryDetailOverviews.Count - 2; x >= 0; x--)
