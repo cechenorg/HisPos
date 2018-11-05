@@ -249,6 +249,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
+            if (TreatmentDate.Text.Contains(" "))
+            {
+                var m = new MessageWindow("就醫日期錯誤", MessageType.ERROR, true);
+                m.Show();
+                return;
+            }
+
+            if (AdjustDate.Text.Contains(" "))
+            {
+                var m = new MessageWindow("調劑日期錯誤", MessageType.ERROR, true);
+                m.Show();
+                return;
+            }
             IsSend = false;
             IsBone = false;
             ErrorMssageWindow err;
@@ -313,7 +326,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             string decMasId;
-            if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(_currentDecMasId) && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+            if (CurrentPrescription.Treatment.AdjustCase.Id != "2" && string.IsNullOrEmpty(_currentDecMasId) && DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate,true) == DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Now, true))
             {//一般處方
                 decMasId = declareDb.InsertDeclareData(_currentDeclareData);
 
@@ -346,7 +359,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     //送到singde
                     StoreOrderDb.SendDeclareOrderToSingde(_currentDecMasId, storId, _currentDeclareData, declareTrade, PrescriptionSendData);
                 }
-                if (DeclareSubmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                if (DeclareSubmit.Content.ToString() == "調劑" && DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.AdjustDate, true) == DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Now,true))
                 {
                     ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                     ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
@@ -388,7 +401,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     StoreOrderDb.SendDeclareOrderToSingde(decMasId, storId, _currentDeclareData, declareTrade, PrescriptionSendData);
                 }
 
-                if (DeclareSubmit.Content.ToString() == "調劑" && CurrentPrescription.Treatment.AdjustDateStr == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now))
+                if (DeclareSubmit.Content.ToString() == "調劑" && DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.AdjustDate, true) == DateTimeExtensions.ConvertToTaiwanCalender(DateTime.Now,true))
                 {
                     ProductDb.InsertEntry("部分負擔", declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                     ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
@@ -597,7 +610,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
                 new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
                 new ReportParameter("PatientGender_Birthday", CurrentPrescription.Customer.Gender ? "男" : "女" + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
-                new ReportParameter("TreatmentDate", CurrentPrescription.Treatment.TreatDateStr),
+                new ReportParameter("TreatmentDate",DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate, true)),
                 new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
                 new ReportParameter("PaySelf", SelfCost.ToString()),
                 new ReportParameter("ServicePoint", _currentDeclareData.MedicalServicePoint.ToString()),
@@ -958,11 +971,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 t1.Abort();
                 if (string.IsNullOrEmpty(PatientName.Text) && PatientBirthday.Text.Contains(" ")&&
-                       string.IsNullOrEmpty(PatientId.Text))
+                       string.IsNullOrEmpty(PatientId.Text) && !CurrentPrescription.IsGetIcCard)
                 {
-                    var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料，或選擇自費調劑", MessageType.WARNING, true);
-                    m.Show();
+                    CurrentPrescription.Customer.Id = "0";
+                    CurrentPrescription.Customer.Name = "匿名";
+
                     return;
+                }
+                else if (!CurrentPrescription.IsGetIcCard)
+                {
+
                 }
                 CurrentPrescription.Customer.Id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
                 CustomerCollection =
@@ -992,9 +1010,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 case 0:
                     SetCardStatusContent("卡片未置入");
+                    CurrentPrescription.IsGetIcCard = false;
                     break;
                 case 1:
                     SetCardStatusContent("尚未與安全模組認證");
+                    CurrentPrescription.IsGetIcCard = false;
                     break;
                 case 2:
                     SetCardStatusContent("認證成功");
@@ -1014,12 +1034,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break;
                 case 9:
                     SetCardStatusContent("非健保卡");
+                    CurrentPrescription.IsGetIcCard = false;
                     break;
                 case 4000:
                     SetCardStatusContent("讀卡機逾時");
+                    CurrentPrescription.IsGetIcCard = false;
                     break;
                 case 9205:
                     SetCardStatusContent("開啟讀卡機連結埠失敗 ");
+                    CurrentPrescription.IsGetIcCard = false;
                     break;
             }
         }
@@ -1126,9 +1149,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e) {
             var t = sender as TextBox;
-            if (string.IsNullOrEmpty(t.Text)) return;
-            if (AdjustCaseCombo.SelectedIndex != 2)
-                AdjustCaseCombo.SelectedIndex = 2;
+            if (string.IsNullOrEmpty(t.Text))
+            {
+                AdjustCaseCombo.SelectedIndex = 0;
+                return;
+            }
+            if (AdjustCaseCombo.SelectedIndex != 1)
+                AdjustCaseCombo.SelectedIndex = 1;
             if (Convert.ToInt32(ChronicSequence.Text) > 1)
             {
                 var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");

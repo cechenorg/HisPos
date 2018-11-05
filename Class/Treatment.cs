@@ -110,30 +110,6 @@ namespace His_Pos.Class
             }
         } //d1 案件分類
 
-        private string _adjustDateStr;
-
-        public string AdjustDateStr
-        {
-            get { return _adjustDateStr; }
-            set
-            {
-                _adjustDateStr = value;
-                NotifyPropertyChanged("AdjustDateStr");
-            }
-        }
-
-        private string _treatDateStr;
-
-        public string TreatDateStr
-        {
-            get { return _treatDateStr; }
-            set
-            {
-                _treatDateStr = value;
-                NotifyPropertyChanged("TreatDateStr");
-            }
-        }
-
         private DateTime treatDate;
 
         public DateTime TreatmentDate//d14 就醫(處方)日期

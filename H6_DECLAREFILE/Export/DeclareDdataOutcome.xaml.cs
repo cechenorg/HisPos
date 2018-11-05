@@ -102,8 +102,8 @@ namespace His_Pos.H6_DECLAREFILE.Export
             CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName = ExportView.Instance.DivisionCollection.SingleOrDefault(d =>
                     d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id))?.FullName;
             CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber = declareFileDdata.Dbody.D24;
-            CurrentPrescription.Treatment.TreatDateStr = declareFileDdata.Dbody.D14;
-            CurrentPrescription.Treatment.AdjustDateStr = declareFileDdata.Dbody.D23;
+            CurrentPrescription.Treatment.TreatmentDate = DateTimeExtensions.ConvertDeclareFileDate(declareFileDdata.Dbody.D14);
+            CurrentPrescription.Treatment.AdjustDate = DateTimeExtensions.ConvertDeclareFileDate(declareFileDdata.Dbody.D23);
             CopaymentCode.ItemsSource = ExportView.Instance.CopaymentCollection;
             CopaymentCode.SelectedItem =
                 ExportView.Instance.CopaymentCollection.SingleOrDefault(c =>
