@@ -50,7 +50,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                     <TextBox Text="{Binding EngName, Mode=TwoWay}" Width="950" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semi" Margin="20,0,20,0" Padding="0" BorderBrush="Transparent"/>
                     <Label Content="最後盤點時間: " Foreground="{StaticResource ForeGround}" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,10,10,10" Padding="0" VerticalContentAlignment="Bottom"/>
-                    <Label x:Name="LastCheckTime" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,0,20,0" Padding="0" VerticalContentAlignment="Bottom"/>
+                    <Label Foreground="DimGray" FontSize="20" FontFamily="Segoe UI Semi" Margin="0,0,20,0" Padding="0" VerticalContentAlignment="Bottom"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,0,0">
@@ -88,12 +88,12 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <CheckBox Content="常備藥" IsChecked="{Binding Common}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10"/>
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" IsEnabled="False">
+                    <CheckBox Content="常備藥" IsChecked="{Binding Common}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10" Click="CommonMed_OnClick"/>
+                    <StackPanel Name="SafeAmountStack" Orientation="Horizontal" Grid.Row="1" IsEnabled="False">
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Text="{Binding Stock.SafeAmount, Mode=TwoWay}" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Grid.Row="2" IsEnabled="False">
+                    <StackPanel Name="BasicAmountStack" Orientation="Horizontal" Grid.Row="2" IsEnabled="False">
                         <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Text="{Binding Stock.BasicAmount, Mode=TwoWay}" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0"/>
                     </StackPanel>
@@ -333,14 +333,14 @@
                     <Button Content="盤點" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="40" Background="ForestGreen" Margin="20,0,0,0"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Margin="0,10,0,0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                    <CheckBox Content="訂退貨" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="50,0,0,0" IsChecked="True"/>
+                    <CheckBox Content="訂退貨" Name="PurchaseCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="50,0,0,0" IsChecked="True" Click="InventoryFilter_OnClick"/>
                     <Image Source="../../Images/BlueDot.png" Width="20" Margin="5,0,0,0"/>
-                    <CheckBox Content="調劑" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True"/>
+                    <CheckBox Content="調劑" Name="TreatmentCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True" Click="InventoryFilter_OnClick"/>
                     <Image Source="../../Images/OrangeDot.png" Width="20" Margin="5,0,0,0"/>
-                    <CheckBox Content="盤點" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True"/>
+                    <CheckBox Content="盤點" Name="StockTakingCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True" Click="InventoryFilter_OnClick"/>
                     <Image Source="../../Images/GreenDot.png" Width="20" Margin="5,0,0,0"/>
                 </StackPanel>
-                <DataGrid Grid.Row="4" AutoGenerateColumns="False" ItemsSource="{Binding InventoryDetailOverviews, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}"
+                <DataGrid Name="InventoryDetailOverviewDataGrid" Grid.Row="4" AutoGenerateColumns="False" ItemsSource="{Binding InventoryDetailOverviews, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}"
                           CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CellStyle="{StaticResource DataGridCellStyle}" Background="{StaticResource GridDarkerBackGround}"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
                     <DataGrid.Resources>

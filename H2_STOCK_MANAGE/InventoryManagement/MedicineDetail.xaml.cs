@@ -61,7 +61,7 @@ namespace His_Pos.InventoryManagement
         public InventoryMedicine InventoryMedicine { get; set; }
         private InventoryMedicine inventoryMedicine { get; }
 
-        public InventoryMedicineDetail MedicineDetails { get; }
+        public InventoryMedicineDetail MedicineDetails { get; set; }
 
         private ObservableCollection<InventoryDetailOverview> inventoryDetailOverviews;
 
@@ -115,7 +115,12 @@ namespace His_Pos.InventoryManagement
             InventoryMedicine = (InventoryMedicine)ProductDetail.NewProduct;
             inventoryMedicine = ((ICloneable)ProductDetail.NewProduct).Clone() as InventoryMedicine;
             ProductDetail.NewProduct = null;
+            InitMedicineDatas();
+        }
 
+        #region ----- Init Data -----
+        private void InitMedicineDatas()
+        {
             ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
             MedicineDetails = ProductDb.GetInventoryMedicineDetail(InventoryMedicine.Id);
             InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
@@ -126,6 +131,12 @@ namespace His_Pos.InventoryManagement
             SideEffectBox.AppendText(InventoryMedicine.SideEffect);
             IndicationBox.AppendText(InventoryMedicine.Indication);
             NoteBox.AppendText(InventoryMedicine.Note);
+
+            if (InventoryDetailOverviews.Count > 0)
+            {
+                InventoryDetailOverviewDataGrid.SelectedItem = InventoryDetailOverviews.Last();
+                InventoryDetailOverviewDataGrid.ScrollIntoView(InventoryDetailOverviews.Last());
+            }
         }
 
         private void CalculateStock()
@@ -139,6 +150,49 @@ namespace His_Pos.InventoryManagement
                 InventoryDetailOverviews[x].Stock =
                     InventoryDetailOverviews[x + 1].Stock - InventoryDetailOverviews[x + 1].Amount;
             }
+        }
+        #endregion
+
+        #region ----- Filter -----
+        private bool InventoryDetailOverviewFilter(object obj)
+        {
+            InventoryDetailOverview inventoryDetailOverview = obj as InventoryDetailOverview;
+
+            switch (inventoryDetailOverview.Type)
+            {
+                case InventoryDetailOverviewType.PurchaseReturn:
+                    return (bool)PurchaseCheckBox.IsChecked;
+                case InventoryDetailOverviewType.StockTaking:
+                    return (bool)StockTakingCheckBox.IsChecked;
+                case InventoryDetailOverviewType.Treatment:
+                    return (bool)TreatmentCheckBox.IsChecked;
+            }
+
+            return false;
+        }
+        #endregion
+
+        private void CommonMed_OnClick(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+
+            if(checkBox is null) return;
+
+            if ((bool) checkBox.IsChecked)
+            {
+                SafeAmountStack.IsEnabled = false;
+                BasicAmountStack.IsEnabled = false;
+            }
+            else
+            {
+                SafeAmountStack.IsEnabled = true;
+                BasicAmountStack.IsEnabled = true;
+            }
+        }
+
+        private void InventoryFilter_OnClick(object sender, RoutedEventArgs e)
+        {
+            InventoryDetailOverviewDataGrid.Items.Filter = InventoryDetailOverviewFilter;
         }
     }
 }
