@@ -1440,12 +1440,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void ShowCustomerSelectionWindow(CustomerSelectWindow selectionWindow)
         {
             if (!CustomerSelected)
-            {
                 selectionWindow.ShowDialog();
-                if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
-                var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
-                chronicSelectWindow.ShowDialog();
-            }
+                
+            if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
+            var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
+            chronicSelectWindow.ShowDialog();
         }
     }
 }

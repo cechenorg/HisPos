@@ -253,5 +253,9 @@ namespace His_Pos.InventoryManagement
                 BasicAmountStack.IsEnabled = true;
             }
         }
+
+        private void ButtonStockCheck_Click(object sender, RoutedEventArgs e) {
+
+        }
     }
 }
