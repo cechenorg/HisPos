@@ -54,6 +54,26 @@ namespace His_Pos.PrescriptionInquire
         public static PrescriptionInquireView Instance;
         private Function f = new Function();
 
+        private DateTime startDate = DateTime.Now.AddMonths(-3);
+        public DateTime StartDate
+        {
+            get => startDate;
+            set
+            {
+                startDate = value;
+                NotifyPropertyChanged("StartDate");
+            }
+        }
+        private DateTime endDate = DateTime.Now;
+        public DateTime EndDate
+        {
+            get => endDate;
+            set
+            {
+                endDate = value;
+                NotifyPropertyChanged("EndDate");
+            }
+        }
         public PrescriptionInquireView()
         {
             InitializeComponent();
@@ -61,9 +81,7 @@ namespace His_Pos.PrescriptionInquire
             Instance = this;
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(this);
-            loadingWindow.Show();
-            start.SelectedDate = DateTime.Now.AddMonths(-3);
-            end.SelectedDate = DateTime.Now;
+            loadingWindow.Show(); 
             LoadAdjustCases();
             Hospitals = HospitalCollection;
         }
@@ -93,17 +111,14 @@ namespace His_Pos.PrescriptionInquire
         {
             prescriptionOverview.Clear();
             TaiwanCalendar taiwanCalendar = new TaiwanCalendar();
-            
-            var sDate = start.Text;
-            
-            var eDate = end.Text;
+             
             string adjustId = "";
             if (AdjustCaseCombo.Text != String.Empty)
                 adjustId = AdjustCaseCombo.Text.Substring(0, 1);
             string insName = "";
             if (ReleasePalace.Text != String.Empty)
                 insName = ReleasePalace.Text.Split(' ')[1];
-            PrescriptionOverview = PrescriptionDB.GetPrescriptionOverviewBySearchCondition(sDate, eDate, PatientName.Text, adjustId, HisPerson.Text, insName);
+            PrescriptionOverview = PrescriptionDB.GetPrescriptionOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
 
         }
 
@@ -141,6 +156,12 @@ namespace His_Pos.PrescriptionInquire
                     loadingWindow.Show();
             }
 
+        } 
+        private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (sender is System.Windows.Controls.TextBox t) {
+                t.SelectionStart = 0;
+                t.SelectionLength = t.Text.Length;
+            }  
         }
     }
 }

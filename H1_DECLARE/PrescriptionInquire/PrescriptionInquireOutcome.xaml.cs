@@ -116,7 +116,7 @@ namespace His_Pos.PrescriptionInquire
             {
                 _inquiredPrescription = value;
                 PatientGender.Content = _inquiredPrescription.Prescription.Customer.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
-                NotifyPropertyChanged(nameof(InquiredPrescription));
+                NotifyPropertyChanged("InquiredPrescription");
             }
         }
         private ObservableCollection<DeclareMedicine> _declareDetails = new ObservableCollection<DeclareMedicine>();
@@ -134,6 +134,7 @@ namespace His_Pos.PrescriptionInquire
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
             InitializeComponent();
+           
             _isFirst = true;
             DataContext = this;
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
@@ -723,5 +724,13 @@ namespace His_Pos.PrescriptionInquire
             d.InsertDailyUpload(icRecord.SerializeObject());
         }
         #endregion
+
+        private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            if (sender is System.Windows.Controls.TextBox t)
+            {
+                t.SelectionStart = 0;
+                t.SelectionLength = t.Text.Length;
+            }
+        }
     }
 }

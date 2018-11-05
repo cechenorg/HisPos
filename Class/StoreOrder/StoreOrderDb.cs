@@ -316,9 +316,8 @@ namespace His_Pos.Class.StoreOrder
 
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
-            string id = (orderId.Length > 10) ? orderId.Substring(2, 10) : orderId;
-
-            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{id}')");
+             
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId}')");
             
             foreach (DataRow row in dataTable.Rows)
             {

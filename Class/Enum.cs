@@ -3,20 +3,20 @@ using System.ComponentModel;
 
 namespace His_Pos.Class
 {
+    public enum InventoryDetailOverviewType
+    {
+        Error = 0,
+        Treatment = 1,
+        PurchaseReturn = 2,
+        StockTaking = 3
+    }
     enum SettingTabs
     {
         MyPharmacy = 1,
         Printer = 2,
         Database = 3
     }
-
-    enum PagingType
-    {
-        INIT,
-        DEL,
-        ADD,
-        SPLIT
-    }
+    
     public enum StoreOrderCategory
     {
         PURCHASE = 0,

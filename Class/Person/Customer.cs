@@ -35,6 +35,7 @@ namespace His_Pos.Class.Person
             Gender = customer.Gender;
             GenderName = customer.GenderName;
             IcCard = customer.IcCard;
+            ContactInfo = customer.ContactInfo;
         }
         public Customer(DataRow row,string type)
         {
@@ -135,5 +136,15 @@ namespace His_Pos.Class.Person
         {
             return new Customer(this);
         }
+        private string emergentTel;
+        public string EmergentTel {
+            get => emergentTel;
+            set
+            {
+                emergentTel = value;
+                OnPropertyChanged("EmergentTel");
+            }
+
+        } 
     }
 }

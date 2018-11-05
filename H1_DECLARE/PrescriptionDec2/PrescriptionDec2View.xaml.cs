@@ -1111,6 +1111,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
          
         public void SetValueByDecMasId(string decMasId) {
+            if (decMasId is null) return;
             _currentDecMasId = decMasId;
             var prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
             CurrentPrescription = prescription;

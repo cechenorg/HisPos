@@ -88,6 +88,8 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (string.IsNullOrEmpty(value.ToString()))
+                return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
                 ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true)
                 : string.Empty;
@@ -151,21 +153,6 @@ namespace His_Pos
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return string.IsNullOrEmpty(String.Format(culture, "{0}", value)) ? null : value;
-        }
-    }
-
-
-    public class BoolToVisConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if ((bool)value) return Visibility.Visible;
-            return Visibility.Collapsed;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return 0;
         }
     }
 
