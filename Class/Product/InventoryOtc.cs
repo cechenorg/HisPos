@@ -18,6 +18,7 @@ namespace His_Pos.Class.Product
             ProductType = new ProductType.ProductType(dataRow);
             WareHouseId = dataRow["PROWAR_ID"].ToString();
             WareHouse = dataRow["PROWAR_NAME"].ToString();
+            BarCode = dataRow["PRO_BARCODE"].ToString();
         }
         public ProductType.ProductType ProductType { get; set; }
         public InStock Stock { get; set; }
@@ -28,5 +29,6 @@ namespace His_Pos.Class.Product
         public string Note { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouse { get; set; }
+        public string BarCode { get; set; }
     }
 }

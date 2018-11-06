@@ -66,8 +66,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         public ChronicSendToServerWindow(ObservableCollection<DeclareMedicine> medicines) {
             InitializeComponent();
             foreach (DeclareMedicine row in medicines) {
-                if(row.IsBuckle)
-                Prescription.Add(new PrescriptionSendData(row));
+                PrescriptionSendData prescription = new PrescriptionSendData(row);
+                if (row.IsBuckle) 
+                    prescription.SendAmount = "0";
+                
+                Prescription.Add(prescription);
             } 
             DataContext = this;
             Instance = this;
@@ -78,17 +81,22 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         }
 
         private void ButtonSubmmit_Click(object sender, RoutedEventArgs e) {
+            bool checkAllZero = true;
             foreach (PrescriptionSendData prescriptionSendData in Prescription) {
-                if (prescriptionSendData.SendAmount == "0") {
-                    MessageWindow messageWindow = new MessageWindow("傳輸量不可為0", MessageType.ERROR, true);
-                    messageWindow.ShowDialog();
-                    return;
-                }
-                else if (Convert.ToInt32(prescriptionSendData.SendAmount) > Convert.ToInt32(prescriptionSendData.TreatAmount)) {
+                if (prescriptionSendData.SendAmount != "0") 
+                    checkAllZero = false;
+                
+                if (Convert.ToInt32(prescriptionSendData.SendAmount) > Convert.ToInt32(prescriptionSendData.TreatAmount)) {
                     MessageWindow messageWindow = new MessageWindow("傳輸量不可大於調劑量", MessageType.ERROR, true);
                     messageWindow.ShowDialog();
                     return;
-                }
+                } 
+            }
+            if (checkAllZero)
+            {
+                MessageWindow messageWindow = new MessageWindow("傳輸量不可為0", MessageType.ERROR, true);
+                messageWindow.ShowDialog();
+                return;
             }
             PrescriptionDec2View.Instance.IsSend = true;
             PrescriptionDec2View.Instance.PrescriptionSendData = Prescription;

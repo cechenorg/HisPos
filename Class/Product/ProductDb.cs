@@ -13,6 +13,7 @@ using His_Pos.Struct.Product;
 using LiveCharts;
 using LiveCharts.Wpf;
 using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
+using His_Pos.InventoryManagement;
 
 namespace His_Pos.Class.Product
 {
@@ -32,7 +33,7 @@ namespace His_Pos.Class.Product
 
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new ProductUnit(Int32.Parse(row["PRO_BASETYPE_STATUS"].ToString()), row["PROUNI_TYPE"].ToString(), row["PROUNI_QTY"].ToString(), row["PRO_SELL_PRICE"].ToString(), row["PRO_VIP_PRICE"].ToString(), row["PRO_EMP_PRICE"].ToString()));
+                collection.Add(new ProductUnit(row));
             }
 
             return collection;
@@ -101,17 +102,49 @@ namespace His_Pos.Class.Product
 
         public static void UpdateOtcUnit(ProductUnit productunit, string proid)
         {
+            //var dd = new DbConnection(Settings.Default.SQL_global);
+            //var parameters = new List<SqlParameter>();
+            //parameters.Add(new SqlParameter("PRO_ID", proid));
+            //parameters.Add(new SqlParameter("PROUNI_TYPE", productunit.Unit));
+            //parameters.Add(new SqlParameter("PROUNI_QTY", productunit.Amount));
+            //parameters.Add(new SqlParameter("PRO_SELL_PRICE", productunit.Price));
+            //parameters.Add(new SqlParameter("PRO_VIP_PRICE", productunit.VIPPrice));
+            //parameters.Add(new SqlParameter("PRO_EMP_PRICE", productunit.EmpPrice));
+            //parameters.Add(new SqlParameter("PRO_BASETYPE_STATUS", productunit.Id));
+            //dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateUnit]", parameters);
+        }
+
+        internal static ObservableCollection<InventoryDetailOverview> GetInventoryDetailOverviews(string proId)
+        {
+            ObservableCollection<InventoryDetailOverview> collection = new ObservableCollection<InventoryDetailOverview>();
+
             var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetInventoryDetailOverview]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new InventoryDetailOverview(row));
+            }
+
+            return collection;
+        }
+
+        internal static MedicineDetail.InventoryMedicineDetail GetInventoryMedicineDetail(string proid)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proid));
-            parameters.Add(new SqlParameter("PROUNI_TYPE", productunit.Unit));
-            parameters.Add(new SqlParameter("PROUNI_QTY", productunit.Amount));
-            parameters.Add(new SqlParameter("PRO_SELL_PRICE", productunit.Price));
-            parameters.Add(new SqlParameter("PRO_VIP_PRICE", productunit.VIPPrice));
-            parameters.Add(new SqlParameter("PRO_EMP_PRICE", productunit.EmpPrice));
-            parameters.Add(new SqlParameter("PRO_BASETYPE_STATUS", productunit.Id));
-            dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateUnit]", parameters);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MedicineDetail].[GetInventoryMedicineDetail]", parameters);
+
+            return new MedicineDetail.InventoryMedicineDetail(table.Rows[0]);
         }
+
         internal static DataTable GetStockTakingProduct()
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
@@ -350,7 +383,6 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryMedicine)product).Location));
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryMedicine)product).Note));
                 parameters.Add(new SqlParameter("STATUS", ((InventoryMedicine)product).Status));
-                parameters.Add(new SqlParameter("CONTROL", ((InventoryMedicine)product).Control));
                 parameters.Add(new SqlParameter("FROZEN", ((InventoryMedicine)product).Frozen));
                 parameters.Add(new SqlParameter("COMMON", ((InventoryMedicine)product).Common));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);
@@ -364,7 +396,6 @@ namespace His_Pos.Class.Product
                 parameters.Add(new SqlParameter("LOCATION", ((InventoryOtc)product).Location));
                 parameters.Add(new SqlParameter("PRO_DESCRIPTION", ((InventoryOtc)product).Note));
                 parameters.Add(new SqlParameter("STATUS", ((InventoryOtc)product).Status));
-                parameters.Add(new SqlParameter("CONTROL", DBNull.Value));
                 parameters.Add(new SqlParameter("FROZEN",DBNull.Value));
                 parameters.Add(new SqlParameter("COMMON", DBNull.Value));
                 dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[UpdateProductDataDetail]", parameters);

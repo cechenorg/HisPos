@@ -368,9 +368,9 @@ namespace His_Pos.Class.Declare
                     {
                         {"D1", declareData.Prescription.Treatment.AdjustCase.Id},
                         {"D5", declareData.Prescription.Treatment.PaymentCategory.Id},
-                        {"D14", DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Treatment.TreatmentDate,false)},
+                        {"D14", declareData.Prescription.Treatment.TreatmentDate.ToString("yyyy-MM-dd") },
                         {"D15", declareData.Prescription.Treatment.Copayment.Id},
-                        {"D23", DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Treatment.AdjustDate,false)},
+                        {"D23", declareData.Prescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") },
                         {"D25", declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber},
                         {"D30", declareData.Prescription.Treatment.MedicineDays},
                         {"CUS_ID", declareData.Prescription.Customer.Id}
@@ -864,147 +864,6 @@ namespace His_Pos.Class.Declare
                 parameters.Add(new SqlParameter(tag, DBNull.Value));
             }
         }
-
-        /*
-         * 判斷InsertDb type為Update
-         */
-        private XmlDocument CreateToXml(DeclareData declareData)
-        {
-            var xml = new XmlDocument();
-            var dData = SetDheadXml(declareData);
-            foreach (var detail in declareData.DeclareDetails)
-            {
-                if(detail.PaySelf) continue;
-                dData += SetPDataXmlStr(detail, declareData);
-            }
-
-            dData += "</ddata>";
-            xml.LoadXml(dData);
-            return xml;
-        }
-
-        private string SetDheadXml(DeclareData declareData)
-        {
-            var dData = "<ddata><dhead>";
-            var treatment = declareData.Prescription.Treatment;
-            var medicalInfo = treatment.MedicalInfo;
-            var dDataDictionary = SetDheadDictionary(declareData, treatment, medicalInfo);
-            foreach (var tag in dDataDictionary)
-            {
-                if (tag.Value != string.Empty)
-                    dData += function.XmlTagCreator(tag.Key, tag.Value);
-            }
-
-            if (treatment.AdjustCase.Id.Equals(Resources.ChronicAdjustCaseId))
-            {
-                if (Convert.ToDecimal(declareData.Prescription.ChronicSequence) >= 2)
-                    dData += function.XmlTagCreator("d43", declareData.Prescription.OriginalMedicalNumber);
-            }
-
-            if (treatment.Copayment.Id == "903")
-                dData += function.XmlTagCreator("d44",
-                    CheckXmlDbNullValue(DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Customer.IcCard.IcMarks.NewbornsData
-                        .Birthday, false))); //新生兒註記就醫
-            dData += "</dhead>";
-            return dData;
-        }
-
-        /*
-         * 設定DData dhead資料並以Dictionary結構回傳
-         */
-
-        private Dictionary<string, string> SetDheadDictionary(DeclareData declareData, Treatment treatment,
-            MedicalInfo medicalInfo)
-        {
-            string d8 = string.Empty,
-                d9 = string.Empty,
-                d35 = declareData.Prescription.ChronicSequence,
-                d36 = declareData.Prescription.ChronicTotal;
-            if (medicalInfo.MainDiseaseCode != null)
-            {
-                d8 = medicalInfo.MainDiseaseCode.Id;
-                if (medicalInfo.SecondDiseaseCode != null)
-                    d9 = medicalInfo.SecondDiseaseCode.Id;
-            }
-
-            return new Dictionary<string, string>
-                    {
-                        {"d1", treatment.AdjustCase.Id},
-                        {"d2", string.Empty},
-                        {"d3", declareData.Prescription.Customer.IcNumber},
-                        {"d4", CheckXmlDbNullValue(declareData.DeclareMakeUp)},
-                        {"d5", CheckXmlDbNullValue(treatment.PaymentCategory.Id)},
-                        {"d6", DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Customer.Birthday,false)},
-                        {"d7", declareData.Prescription.Customer.IcCard.MedicalNumber},
-                        {"d8", d8},
-                        {"d9", d9},
-                        {"d13", CheckXmlDbNullValue(medicalInfo.Hospital.Division.Id)},
-                        {"d14", DateTimeExtensions.ConvertToTaiwanCalender(treatment.TreatmentDate,false)},
-                        {"d15", treatment.Copayment.Id},
-                        {"d16", declareData.DeclarePoint.ToString()},
-                        {"d17", treatment.Copayment.Point.ToString()},
-                        {"d18", declareData.TotalPoint.ToString()},
-                        {"d19", CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString())},
-                        {"d20", declareData.Prescription.Customer.Name},
-                        {"d21", medicalInfo.Hospital.Id},
-                        {"d22", medicalInfo.TreatmentCase.Id},
-                        {"d23", DateTimeExtensions.ConvertToTaiwanCalender(treatment.AdjustDate,false)},
-                        {"d24", medicalInfo.Hospital.Doctor.IcNumber},
-                        {"d25", declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber},
-                        {"d26", CheckXmlDbNullValue(medicalInfo.SpecialCode.Id)},
-                        {"d30", CheckXmlDbNullValue(treatment.MedicineDays)},
-                        {"d31", CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString())},
-                        {"d32", CheckXmlDbNullValue(declareData.DiagnosisPoint.ToString())},
-                        {"d33", CheckXmlDbNullValue(declareData.DrugsPoint.ToString())},
-                        {"d35", d35},
-                        {"d36", d36},
-                        {"d37", declareData.MedicalServiceCode},
-                        {"d38", declareData.MedicalServicePoint.ToString()},
-                    };
-        }
-
-        private string SetPDataXmlStr(DeclareDetail detail, DeclareData declareData)
-        {
-            var pData = "<pdata>";
-            var pDataDictionary = SetPDataDictionary(detail);
-            foreach (var tag in pDataDictionary)
-            {
-                if (tag.Value != string.Empty)
-                    pData += function.XmlTagCreator(tag.Key, tag.Value);
-            }
-
-            if (detail.Days.ToString() != string.Empty)
-            {
-                if (Convert.ToInt32((string)declareData.Prescription.Treatment.MedicineDays) < detail.Days)
-                    declareData.Prescription.Treatment.MedicineDays = detail.Days.ToString();
-            }
-
-            pData += "</pdata>";
-            return pData;
-        }
-
-        /*
-         * 設定PData資料並以Dictionary結構回傳
-         */
-
-        private Dictionary<string, string> SetPDataDictionary(DeclareDetail detail)
-        {
-            return new Dictionary<string, string>
-                    {
-                        {"p1", detail.MedicalOrder},
-                        {"p2", detail.MedicalId},
-                        {"p3", CheckXmlDbNullValue(function.ToInvCulture(detail.Dosage))},
-                        {"p4", CheckXmlDbNullValue(detail.Usage)},
-                        {"p5", CheckXmlDbNullValue(detail.Position)},
-                        {"p6", CheckXmlDbNullValue(function.ToInvCulture(detail.Percent))},
-                        {"p7", detail.Total.ToString()},
-                        {"p8", detail.Price.ToString()},
-                        {"p9", detail.Point.ToString()},
-                        {"p10", detail.Sequence.ToString()},
-                        {"p11", CheckXmlDbNullValue(detail.Days.ToString())}
-                    };
-        }
-
         /*
          * 檢查SQLparameter是否為DBNull
          */
@@ -1031,29 +890,6 @@ namespace His_Pos.Class.Declare
             return string.Empty;
         }
 
-        /*
-         *檢查DataRow是否為空值
-         */
-        private void CheckEmptyDataRow(DataTable dataTable, string value, ref DataRow row, string rowName)
-        {
-            if (value != string.Empty )
-            {
-                switch (dataTable.Columns[rowName].DataType.Name)
-                {
-                    case "String":
-                        row[rowName] = value;
-                        break;
-
-                    case "Int32":
-                        row[rowName] = Convert.ToInt32(value);
-                        break;
-
-                    case "Double":
-                        row[rowName] = Convert.ToDouble(value);
-                        break;
-                }
-            }
-        }
         public void SetSameGroupChronic(string decMasId,string continueNum) { //同GROUP慢箋預約
 
             var parameters = new List<SqlParameter>();

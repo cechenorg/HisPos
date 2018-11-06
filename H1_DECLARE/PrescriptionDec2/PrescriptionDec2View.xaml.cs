@@ -46,6 +46,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private string _selectedMedId;
         private readonly bool _isFirst = true;
         private bool _isChanged;
+        public bool CustomerSelected;
         private string _cardStatus;
         public string CardStatus
         {
@@ -445,13 +446,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
                 icErrorWindow.ShowDialog();
                 var loading = new LoadingWindow();
-                if(!string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
+                if (!string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
                     loading.LoginIcData(Instance);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
             declareDb.UpdateDeclareFile(_currentDeclareData);
             //PrintMedBag(); 印藥袋
+            CustomerSelected = false;
         }
 
         #region 每日上傳.讀寫卡相關函數
@@ -944,86 +946,23 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var t1 = new Thread(CheckIcCardStatus);
             SetCardStatusContent("卡片檢查中...");
             t1.Start();
-            if (t1.Join(3000))
+            if (t1.Join(4000))
             {
                 if (CurrentPrescription.IsGetIcCard)
                 {
                     var loading = new LoadingWindow();
                     loading.Show();
                     loading.LoadIcData(Instance);
-                    if (ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id))
-                    {
-                        var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
-                        chronicSelectWindow.ShowDialog();
-                    }
                 }
                 else
-                { 
-                    if (string.IsNullOrEmpty(PatientName.Text) && PatientBirthday.Text.Contains(" ") &&
-                        string.IsNullOrEmpty(PatientId.Text))
-                    {
-                        var customerSelect = new CustomerSelectWindow(CustomerCollection);
-                        customerSelect.Show();
-                        //var m = new MessageWindow("無法取得健保卡資料，請輸入病患姓名.生日或身分證字號以查詢病患資料，或選擇自費調劑", MessageType.WARNING, true);
-                        //m.ShowDialog();
-                    }
-                    else if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
-                             string.IsNullOrEmpty(PatientId.Text) && CurrentPrescription.Treatment.AdjustCase.Id == "0")
-                    {
-                        CurrentPrescription.Customer.Id = "0";
-                        CurrentPrescription.Customer.Name = "匿名";
-                    }
-                    else
-                    {
-                        CustomerCollection =
-                            CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
-                        if (CustomerCollection.Count == 1)
-                            CurrentPrescription.Customer = CustomerCollection[0];
-                        else
-                        {
-                            var customerSelect = new CustomerSelectWindow(CustomerCollection);
-                            customerSelect.Show();
-                        }
-                        if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
-                        var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
-                        chronicSelectWindow.ShowDialog();
-                    }
-                }
+                    SearchCustomer();
             }
             else
             {
                 t1.Abort();
-                if (string.IsNullOrEmpty(PatientName.Text) && PatientBirthday.Text.Contains(" ")&&
-                       string.IsNullOrEmpty(PatientId.Text) && !CurrentPrescription.IsGetIcCard)
-                {
-                    CurrentPrescription.Customer.Id = "0";
-                    CurrentPrescription.Customer.Name = "匿名";
-
-                    return;
-                }
-                else if (!CurrentPrescription.IsGetIcCard)
-                {
-
-                }
-                CurrentPrescription.Customer.Id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
-                CustomerCollection =
-                    CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
-                if (CustomerCollection.Count == 1)
-                    CurrentPrescription.Customer = CustomerCollection[0];
-                else
-                {
-                    var customerSelect = new CustomerSelectWindow(CustomerCollection);
-                    customerSelect.Show();
-                }
-                if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
-                var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
-                chronicSelectWindow.ShowDialog();
+                SetCardStatusContent("超過最大限制時間");
+                SearchCustomer();
             }
-            CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(CurrentPrescription.Customer.Id);
-            CusHistoryMaster.ItemsSource = CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
-            if (CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Count > 0)
-                CusHistoryMaster.SelectedIndex = 0;
-            NotifyPropertyChanged(nameof(CurrentPrescription));
         }
 
         private void CheckIcCardStatus()
@@ -1165,6 +1104,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 NotDeclareSubmit.Visibility = Visibility.Collapsed;
                 CurrentPrescription.Declare = true;
             }
+
+            if (((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Equals("2"))
+                CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I22"));
             IsSendToServer.IsChecked = false;
             IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
@@ -1190,16 +1132,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
             }
         }
-
-        private void DatePickerTreatment_SelectionChanged(object sender, RoutedEventArgs e) {
-            DeclareSubmit.Content = AdjustDate.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now)  ? "調劑" : "預約慢箋";
-            IsSendToServer.IsChecked = false;
-            if (AdjustCaseCombo.SelectedItem == null) return;
-            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-        }
-
+         
         public void SetValueByDecMasId(string decMasId) {
+            if (decMasId is null) return;
             _currentDecMasId = decMasId;
             var prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
             CurrentPrescription = prescription;
@@ -1227,8 +1162,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     textBox.Text = string.Empty;
                 return;
             }
-            DependencyObject textBoxDependency = textBox;
 
+            DependencyObject textBoxDependency = textBox;
             if (textBoxDependency.GetValue(NameProperty) is string  && textBoxDependency.GetValue(NameProperty).Equals("MainDiagnosis"))
             {
                 if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id) && textBox.Text.Contains(" "))
@@ -1298,16 +1233,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             MainDiagnosis.Focus();
                             break;
                         case "PaymentCategoryCombo":
-                            CopaymentCombo.Focus();
-                            break;
-                        case "CopaymentCombo":
                             AdjustCaseCombo.Focus();
                             break;
-                        case "AdjustCaseCombo":
+                        case "CopaymentCombo":
                             if (c.Text.StartsWith("2"))
                                 ChronicSequence.Focus();
                             else
                                 SpecialCodeCombo.Focus();
+                            break;
+                        case "AdjustCaseCombo":
+                            CopaymentCombo.Focus();
                             break;
                         case "SpecialCodeCombo":
                             var nextAutoCompleteBox = new List<AutoCompleteBox>();
@@ -1457,11 +1392,82 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DepositText.Text = string.Empty;
             SelfCostText.Text = string.Empty;
             PaidText.Text = string.Empty;
+            CustomerSelected = false;
         }
 
         private void ChronicSequence_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = new System.Text.RegularExpressions.Regex("[^0-9]+").IsMatch(e.Text);
+        }
+
+        private void AdjustDate_TextChanged(object sender, TextChangedEventArgs e) {
+            if (DeclareSubmit == null) return;
+            DeclareSubmit.Content = AdjustDate.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now) ? "調劑" : "預約慢箋";
+            IsSendToServer.IsChecked = false;
+            if (AdjustCaseCombo.SelectedItem == null) return;
+            IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+        }
+
+        private void SelectionStart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TextBox t)
+            {
+                t.SelectionStart = 0;
+                t.SelectionLength = t.Text.Length;
+            }
+        }
+
+        private void SearchCustomer()
+        {
+            if (!string.IsNullOrEmpty(PatientId.Text))
+            {
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(PatientId.Text, 3));
+                return;
+            }
+            if (!string.IsNullOrEmpty(PatientName.Text))
+            {
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(PatientName.Text, 2));
+                return;
+            }
+            if (!string.IsNullOrEmpty(PatientTel.Text))
+            {
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(PatientTel.Text, 4));
+                return;
+            }
+            if (!PatientBirthday.Text.Equals("   /  /  "))
+            {
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(PatientBirthday.Text.Replace("/", ""), 1));
+                return;
+            }
+            if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
+                string.IsNullOrEmpty(PatientId.Text) && CurrentPrescription.Treatment.AdjustCase.Id == "0")
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(string.Empty, 0));
+            else
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(string.Empty, -1));
+        }
+
+        private void PatientId_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back && CustomerSelected)
+            {
+                CustomerSelected = false;
+                CurrentPrescription.Customer = new Customer();
+            }
+            else if (e.Key == Key.Enter)
+            {
+                SearchCustomer();
+            }
+        }
+
+        private void ShowCustomerSelectionWindow(CustomerSelectWindow selectionWindow)
+        {
+            if (!CustomerSelected)
+                selectionWindow.ShowDialog();
+                
+            if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
+            var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
+            chronicSelectWindow.ShowDialog();
         }
     }
 }

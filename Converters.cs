@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
+using His_Pos.Class.Product;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.Service;
@@ -88,6 +89,8 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (string.IsNullOrEmpty(value.ToString()))
+                return string.Empty;
             var result = value.ConvertTo<DateTime>().Year > 1911
                 ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true)
                 : string.Empty;
@@ -131,8 +134,8 @@ namespace His_Pos
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is Product product)) return false;
-            return !string.IsNullOrEmpty(product.Id);
+            if (value is Product || value is ProductUnit) return true;
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -151,21 +154,6 @@ namespace His_Pos
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return string.IsNullOrEmpty(String.Format(culture, "{0}", value)) ? null : value;
-        }
-    }
-
-
-    public class BoolToVisConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if ((bool)value) return Visibility.Visible;
-            return Visibility.Collapsed;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return 0;
         }
     }
 

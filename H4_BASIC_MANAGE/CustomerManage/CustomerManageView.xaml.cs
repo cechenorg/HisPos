@@ -105,5 +105,12 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
             CustomerDetail = (Customer)newcustomer.Clone();
             InitDataChanged();
         }
+
+        private void ButtonSubmit_Click(object sender, RoutedEventArgs e) {
+            CustomerDb.UpdateCustomerById(CustomerDetail);
+            MessageWindow messageWindow = new MessageWindow("修改完成!",Class.MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+            InitDataChanged();
+        }
     }
 }

@@ -13,7 +13,7 @@
         <hisPos:TextBoxDateConverter x:Key="TextBoxDateConverter"/>
         <hisPos:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
         <local:HasDeclareDataToVisConverter x:Key="HasDeclareDataToVisConverter"/>
-        <hisPos:BoolToVisConverter x:Key="BoolToVisConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
     <Grid Name="MainGrid" DataContext="{Binding StoreOrderData, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>

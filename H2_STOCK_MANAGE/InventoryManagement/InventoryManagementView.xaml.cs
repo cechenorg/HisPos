@@ -133,7 +133,7 @@ namespace His_Pos.InventoryManagement
                         && (((InventoryMedicine)item).Ingredient.Contains(Ingredient.Text) || Ingredient.Text == string.Empty)
                        && ((((InventoryMedicine)item).Stock.Inventory == 0 && (bool)NoneInventory.IsChecked) || (((InventoryMedicine)item).Stock.Inventory != 0 && (bool)!NoneInventory.IsChecked))
                          && ((((InventoryMedicine)item).Frozen && (bool)FreezeMed.IsChecked) ||  !(bool)FreezeMed.IsChecked)
-                          && ((((InventoryMedicine)item).Control && (bool)ControlMed.IsChecked) || !(bool)ControlMed.IsChecked)
+                          && ((!((InventoryMedicine)item).Control.Equals("") && (bool)ControlMed.IsChecked) || !(bool)ControlMed.IsChecked)
                           && (((InventoryMedicine)item).WareHouse == WareHouse.Text || WareHouse.Text == "全部")
                         ) reply = true;
                     if (reply)

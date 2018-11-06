@@ -170,9 +170,9 @@ namespace His_Pos.ProductPurchase
                 Product product;
 
                 if (detail.Type.Equals("O"))
-                    product = new ProductPurchaseOtc(tmeProduct, StoreOrderData.Manufactory.Id.Equals("0"));
+                    product = new ProductPurchaseOtc(tmeProduct, storeOrder.Manufactory.Id.Equals("0"));
                 else if (detail.Type.Equals("M"))
-                    product = new ProductPurchaseMedicine(tmeProduct, StoreOrderData.Manufactory.Id.Equals("0"));
+                    product = new ProductPurchaseMedicine(tmeProduct, storeOrder.Manufactory.Id.Equals("0"));
                 else
                     continue;
 
@@ -181,10 +181,15 @@ namespace His_Pos.ProductPurchase
                 ((IProductPurchase)product).ValidDate = detail.ValidDate;
                 ((ITrade)product).TotalPrice = Double.Parse(detail.Price.ToString());
                 ((ITrade)product).Amount = -(detail.Amount);
-                //((ITrade)product).Price = detail.Price / -detail.Amount;
+                ((ITrade)product).Price = detail.Price / -detail.Amount;
 
-                Product noteProduct = storeOrder.Products.SingleOrDefault(p => p.Id.Equals(product.Id));
-                ((IProductPurchase)product).Note = (noteProduct is null) ? "" : ((IProductPurchase)noteProduct).Note;
+                List<Product> listProducts = storeOrder.Products.Where(p => p.Id.Equals(product.Id)).ToList();
+
+                if (listProducts.Count != 0)
+                {
+                    Product noteProduct = listProducts[0];
+                    ((IProductPurchase)product).Note = ((IProductPurchase)noteProduct).Note;
+                }
 
                 tempProducts.Add(product);
             }

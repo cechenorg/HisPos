@@ -49,12 +49,13 @@
                 <Image Name="IcPatientId" Width="30" Source="../../Images/ID_Card.png" Margin="20,0,15,0"/>
                 <TextBox Name="PatientId" Width="150" Margin="5,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                         Text="{Binding CurrentPrescription.Customer.IcCard.IcNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                         Text="{Binding CurrentPrescription.Customer.IcCard.IcNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown"/>
                 <Image Name="IcPatientName" Width="25" Source="../../Images/User_48px.png" />
-                <TextBox Name="PatientName" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" Text="{Binding CurrentPrescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Name="PatientName" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                         Text="{Binding CurrentPrescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown"/>
                 <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" />
                 <xctk:MaskedTextBox Name="PatientBirthday" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat">
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="CurrentPrescription.Customer.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -64,11 +65,14 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
+                <Image Width="25" Source="../../Images/Phone.png" />
+                <TextBox Name="PatientTel" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="聯絡電話" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                         Text="{Binding CurrentPrescription.Customer.ContactInfo.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown"/>
                 <Label VerticalAlignment="Center" Content="張數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                 <Label VerticalAlignment="Center" Content="{Binding PrescriptionCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="100"  FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                 <Label Width="auto" Content="讀卡機狀態" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                 <Label x:Name="IcCardStatus" Width="183" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" FontSize="14" VerticalContentAlignment="Bottom" Content="{Binding CardStatus,UpdateSourceTrigger=PropertyChanged}"/>
-                <Button MinWidth="128" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="205,0,0,0"/>
+                <Button MinWidth="128" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,0,0"/>
             </StackPanel>
             <Grid Name="TrementGrid" Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
@@ -126,7 +130,7 @@
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <xctk:MaskedTextBox Name="TreatmentDate" Width="170" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat">
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="CurrentPrescription.Treatment.TreatmentDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -140,7 +144,7 @@
                 <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="調劑日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <xctk:MaskedTextBox Name="AdjustDate" Width="170" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat">
+                                        Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" TextChanged="AdjustDate_TextChanged" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                      ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -170,16 +174,16 @@
                               SelectedItem="{Binding CurrentPrescription.Treatment.PaymentCategory, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="1" Margin="8" Orientation="Horizontal">
-                    <Label Content="部分負擔" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <ComboBox x:Name="CopaymentCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" ItemsSource="{Binding Copayments}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
-                </StackPanel>
-                <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Content="調劑案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="AdjustCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" ItemsSource="{Binding AdjustCases}"
                               IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" SelectionChanged="AdjustCaseCombo_SelectionChanged"
                               SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
+                    <Label Content="部分負擔" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                    <ComboBox x:Name="CopaymentCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
+                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" ItemsSource="{Binding Copayments}"
+                              SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Content="領藥次數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />

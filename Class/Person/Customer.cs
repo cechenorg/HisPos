@@ -35,6 +35,7 @@ namespace His_Pos.Class.Person
             Gender = customer.Gender;
             GenderName = customer.GenderName;
             IcCard = customer.IcCard;
+            ContactInfo = customer.ContactInfo;
         }
         public Customer(DataRow row,string type)
         {
@@ -51,13 +52,10 @@ namespace His_Pos.Class.Person
             {
                 GenderName = row["CUS_GENDER"].ToString() == "True" ? "男" : "女";
                 IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
-            }
-
-            if (!string.IsNullOrEmpty(row["CUS_TEL"].ToString()))
-            {
                 ContactInfo = new ContactInfo();
                 ContactInfo.Tel = row["CUS_TEL"].ToString();
             }
+            
                 
         }
         public Customer(XmlNode xml) {
@@ -138,5 +136,15 @@ namespace His_Pos.Class.Person
         {
             return new Customer(this);
         }
+        private string emergentTel;
+        public string EmergentTel {
+            get => emergentTel;
+            set
+            {
+                emergentTel = value;
+                OnPropertyChanged("EmergentTel");
+            }
+
+        } 
     }
 }
