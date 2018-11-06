@@ -210,7 +210,7 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
 
             if (ResultChanged == 0)
             {
-                ProductDb.SaveStockTaking(_takingCollection, true);
+                ProductDb.SaveStockTaking(_takingCollection);
 
                 _takingCollection.Clear();
 
@@ -280,7 +280,7 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
         }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.SaveStockTaking(_takingCollection, true);
+            ProductDb.SaveStockTaking(_takingCollection);
             _takingCollection.Clear();
             CheckItems.Items.Filter = null;
             InitToBegin();
@@ -401,6 +401,7 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
             var loadingWindow = new LoadingWindow();
             loadingWindow.Show();
             loadingWindow.PrintInventoryCheckSheet(rptViewer, Instance);
+            NextStatus();
         }
 
 

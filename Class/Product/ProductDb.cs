@@ -326,7 +326,7 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("ORDER_ID", orderId));
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
         }
-        public static void SaveStockTaking(ObservableCollection<AbstractClass.Product> takingCollection, bool isComplete) {
+        public static void SaveStockTaking(ObservableCollection<AbstractClass.Product> takingCollection) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             DataTable details = new DataTable();
@@ -348,7 +348,6 @@ namespace His_Pos.Class.Product
                 details.Rows.Add(newRow);
             }
             parameters.Add(new SqlParameter("DETAILS", details));
-            parameters.Add(new SqlParameter("ISCOMPLETE", isComplete));
             dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[SaveStockTakingProducts]", parameters);
     }
 
