@@ -265,10 +265,12 @@ namespace His_Pos
 
                             if (stoOrd.Type == OrderType.PROCESSING)
                                 productPurchaseView.CheckSindeOrderDetail(stoOrd);
+                            else if (stoOrd.Type == OrderType.SCRAP)
+                                StoreOrderDb.DeleteOrder(stoOrd.Id);
                         }
                     }
 
-                    productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
+                    productPurchaseView.StoreOrderCollection = new ObservableCollection<StoreOrder>(tempStoreOrderCollection.Where(so => so.Type != OrderType.SCRAP).ToList());
                 }));
             };
 
