@@ -16,9 +16,11 @@ using His_Pos.Class;
 using His_Pos.ProductPurchaseRecord;
 using System.ComponentModel;
 using System.Data;
+using System.Threading;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.Interface;
 using His_Pos.Struct.Product;
 
 namespace His_Pos.InventoryManagement
@@ -148,7 +150,7 @@ namespace His_Pos.InventoryManagement
                 InventoryDetailOverviewDataGrid.ScrollIntoView(InventoryDetailOverviews.Last());
             }
 
-            if (!InventoryMedicine.Control.Equals("0"))
+            if (!(InventoryMedicine.Control.Equals("0") || InventoryMedicine.Control.Equals("")))
             {
                 ControlStack.Visibility = Visibility.Visible;
 
@@ -228,7 +230,69 @@ namespace His_Pos.InventoryManagement
             ChangedLabel.Content = "未修改";
         }
         #endregion
-        
+
+        #region ----- Unit DataGrid -----
+        private void Unit_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+
+            if (e.Key == Key.Enter)
+            {
+                MoveFocusNext(sender);
+
+                TextBox textBox = sender as TextBox;
+
+                if (textBox.Name.Equals("Unit") && !textBox.Text.Equals(""))
+                {
+                    if (!(UnitDataGrid.SelectedItem is ProductUnit))
+                    {
+                        ProductUnit productUnit = new ProductUnit(textBox.Text);
+                        productUnitCollection.Add(productUnit);
+                        textBox.Text = "";
+                    }
+                }
+
+                e.Handled = true;
+            }
+        }
+
+        private void MoveFocusNext(object sender)
+        {
+            (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+            if (UnitDataGrid.CurrentCell.Column is null) return;
+
+            var focusedCell = UnitDataGrid.CurrentCell.Column.GetCellContent(UnitDataGrid.CurrentCell.Item);
+
+            if (focusedCell is null) return;
+
+            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+            if (firstChild is TextBox)
+                firstChild.Focus();
+        }
+
+        private void Unit_OnFocus(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is IDeletable)
+            {
+                if ((selectedItem as ProductUnit).BaseType) return;
+
+                (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+            }
+        }
+
+        private void Unit_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is IDeletable)
+                (selectedItem as IDeletable).Source = "";
+        }
+        #endregion
+
         private void InventoryFilter_OnClick(object sender, RoutedEventArgs e)
         {
             InventoryDetailOverviewDataGrid.Items.Filter = InventoryDetailOverviewFilter;

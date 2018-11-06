@@ -319,7 +319,7 @@ namespace His_Pos.InventoryManagement
             }
             foreach (string index in OTCUnitChangdedCollection)
             {
-                ProductUnit prounit = new ProductUnit();
+                ProductUnit prounit = new ProductUnit("s");
                 ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
             MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS, true);
