@@ -211,6 +211,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public ObservableCollection<PaymentCategory> PaymentCategories { get; set; }
         public ObservableCollection<Copayment> Copayments { get; set; }
         public ObservableCollection<AdjustCase> AdjustCases { get; set; }
+        public ObservableCollection<MedicalPersonnel> MedicalPersonnels { get; set; }
         public ObservableCollection<Usage> Usages { get; set; }
         public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
         public ObservableCollection<SpecialCode> SpecialCodes { get; set; }
@@ -218,7 +219,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public PrescriptionDec2View()
         {
             InitializeComponent(); 
-            DataContext = this;
             Instance = this;
             GetPrescriptionData();
             SetDefaultFieldsValue();
@@ -700,19 +700,42 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             //按 Enter 下一欄
             if (e.Key != Key.Enter) return;
+            TextBox t = sender as TextBox;
+            DependencyObject dpobj = sender as DependencyObject;
+            string name = dpobj.GetValue(FrameworkElement.NameProperty) as string;
+            if (name.Equals("Usage"))
+            {
+                foreach (var u in MainWindow.Usages)
+                {
+                    if (t.Text.Equals(u.QuickName))
+                        t.Text = u.Name;
+                }
+            }
             e.Handled = true;
             MoveFocusNext(sender);
+        }
+
+        private void Position_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            //按 Enter 下一欄
+            if (e.Key != Key.Enter) return;
+            e.Handled = true;
+            var currentRow = GetCurrentRowIndex(sender);
+            PrescriptionMedicines.CurrentCell = new DataGridCellInfo(
+                PrescriptionMedicines.Items[currentRow+1], MedicineId);
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
+            while (firstChild is ContentPresenter)
+            {
+                firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            }
+            firstChild.Focus();
         }
 
         private void MoveFocusNext(object sender)
         {
             if(sender is TextBox box)
                 box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-            else if (sender is AutoCompleteBox auto)
-                auto.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-            else if (sender is CheckBox check)
-                check.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-
             if (PrescriptionMedicines.CurrentCell.Column is null) return;
 
             var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);

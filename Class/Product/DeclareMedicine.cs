@@ -168,7 +168,8 @@ namespace His_Pos.Class.Product
             set
             {
                 Usage.Name = value;
-                CalculateAmount();
+                if(double.TryParse(Dosage, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
+                    CalculateAmount();
                 NotifyPropertyChanged(nameof(UsageName));
             }
         }
@@ -179,7 +180,7 @@ namespace His_Pos.Class.Product
             set
             {
                 MedicalCategory.Dosage = value;
-                if (double.TryParse(value, out _))
+                if (double.TryParse(value, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
                     CalculateAmount();
                 NotifyPropertyChanged(nameof(Dosage));
             }
@@ -193,7 +194,7 @@ namespace His_Pos.Class.Product
             set
             {
                 days = value;
-                if (int.TryParse(value, out _))
+                if (int.TryParse(value, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && double.TryParse(Dosage, out _))
                     CalculateAmount();
                 NotifyPropertyChanged(nameof(Days));
             }
@@ -289,22 +290,15 @@ namespace His_Pos.Class.Product
 
         private void CalculateAmount()
         {
-            if(MedicalCategory.Form.Equals(""))
-            foreach (var usage in UsageDb.GetData())
+            var tmpUsage = new Usage();
+            var find = false;
+            foreach (var u in MainWindow.Usages)
             {
-                var reg = new Regex(usage.Reg);
-                if (reg.IsMatch(UsageName))
-                {
-                    if (!string.IsNullOrEmpty(Days) && !string.IsNullOrEmpty(UsageName))
-                    {
-                        int total = UsagesFunction.CheckUsage(usage, int.Parse(Days));
-                        if (total > 0 && Dosage != string.Empty)
-                            Amount = Math.Ceiling(double.Parse(Dosage) * total);
-                        else
-                            Amount = 0;
-                    }
-                }
+                if (!UsageName.Equals(u.Name)) continue;
+                tmpUsage = u;
+                find = true;
             }
+            Amount = find ? UsagesFunction.CheckUsage(int.Parse(days), tmpUsage) : UsagesFunction.CheckUsage(int.Parse(days));
         }
 
         public object Clone()
