@@ -265,10 +265,12 @@ namespace His_Pos
 
                             if (stoOrd.Type == OrderType.PROCESSING)
                                 productPurchaseView.CheckSindeOrderDetail(stoOrd);
+                            else if (stoOrd.Type == OrderType.SCRAP)
+                                StoreOrderDb.DeleteOrder(stoOrd.Id);
                         }
                     }
 
-                    productPurchaseView.StoreOrderCollection = tempStoreOrderCollection;
+                    productPurchaseView.StoreOrderCollection = new ObservableCollection<StoreOrder>(tempStoreOrderCollection.Where(so => so.Type != OrderType.SCRAP).ToList());
                 }));
             };
 
@@ -598,19 +600,29 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("取得處方資料...");
                 prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
+                prescriptionDec2View.Hospitals = MainWindow.Hospitals;
+                prescriptionDec2View.Divisions = MainWindow.Divisions;
+                prescriptionDec2View.TreatmentCases = MainWindow.TreatmentCase;
+                prescriptionDec2View.PaymentCategories = MainWindow.PaymentCategory;
+                prescriptionDec2View.Copayments = MainWindow.Copayments;
+                prescriptionDec2View.AdjustCases = MainWindow.AdjustCases;
+                prescriptionDec2View.SpecialCodes = MainWindow.SpecialCode;
+                prescriptionDec2View.Usages = MainWindow.Usages;
+                prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionDec2View.ReleaseHospital.ItemsSource = MainWindow.Hospitals;
-                    prescriptionDec2View.DivisionCombo.ItemsSource = MainWindow.Divisions;
-                    prescriptionDec2View.TreatmentCaseCombo.ItemsSource = MainWindow.TreatmentCase;
-                    prescriptionDec2View.PaymentCategoryCombo.ItemsSource = MainWindow.PaymentCategory;
-                    prescriptionDec2View.CopaymentCombo.ItemsSource = MainWindow.Copayments;
-                    prescriptionDec2View.AdjustCaseCombo.ItemsSource = MainWindow.AdjustCases;
-                    prescriptionDec2View.SpecialCodeCombo.ItemsSource = MainWindow.SpecialCode;
+                    prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
-                    prescriptionDec2View.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    prescriptionDec2View.DataContext = prescriptionDec2View;
                     var isMedicalPerson = false;
-                    foreach (var m in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
+                    foreach (var m in prescriptionDec2View.MedicalPersonnels)
                     {
                         if (!m.Id.Equals(MainWindow.CurrentUser.Id)) continue;
                         isMedicalPerson = true;
@@ -619,7 +631,7 @@ namespace His_Pos
                     if (isMedicalPerson)
                     {
                         prescriptionDec2View.HisPerson.SelectedItem =
-                            MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
+                            prescriptionDec2View.MedicalPersonnels.SingleOrDefault(p =>
                                 p.Id.Equals(MainWindow.CurrentUser.Id));
                     }
                     else
@@ -627,18 +639,11 @@ namespace His_Pos
                         prescriptionDec2View.HisPerson.SelectedIndex = 0;
                     }
                     prescriptionDec2View.CopaymentCombo.SelectedItem =
-                        MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
+                        prescriptionDec2View.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
                     prescriptionDec2View.PaymentCategoryCombo.SelectedItem =
-                        MainWindow.PaymentCategory.SingleOrDefault(p => p.Id.Equals("4"));
+                        prescriptionDec2View.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
                     prescriptionDec2View.AdjustCaseCombo.SelectedItem =
-                        MainWindow.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                        prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
                     Close();
                 }));
             };

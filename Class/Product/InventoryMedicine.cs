@@ -1,11 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Media.Imaging;
 using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class InventoryMedicine : AbstractClass.Product, IInventory, ICloneable
+    public class InventoryMedicine : AbstractClass.Product, IInventory, ICloneable, INotifyPropertyChanged
     {
         private InventoryMedicine() {}
 
@@ -25,6 +26,7 @@ namespace His_Pos.Class.Product
             WareHouseId = dataRow["PROWAR_ID"].ToString();
             Indication = dataRow["PROWAR_ID"].ToString();
             SideEffect = dataRow["PROWAR_ID"].ToString();
+            BarCode = dataRow["PRO_BARCODE"].ToString();
         }
         public InStock Stock { get; set; }
         public string Location { get; set; }
@@ -33,13 +35,35 @@ namespace His_Pos.Class.Product
         public string Control { get; set; }
         public bool Common { get; set; }
         public BitmapImage TypeIcon { get; set; }
-        public string StockValue { get; set; }
         public string Note { get; set; }
         public string Ingredient { get; set; }
         public string Indication { get; set; }
         public string SideEffect { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouse { get; set; }
+        public string BarCode { get; set; }
+
+        private string stockValue;
+        public string StockValue
+        {
+            get
+            {
+                return stockValue;
+            }
+            set
+            {
+                stockValue = value;
+                NotifyPropertyChanged("StockValue");
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         public object Clone()
         {
             InventoryMedicine newInventoryMedicine = new InventoryMedicine();

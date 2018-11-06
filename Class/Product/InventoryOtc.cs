@@ -1,11 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Media.Imaging;
 using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
 {
-    public class InventoryOtc : AbstractClass.Product, IInventory
+    public class InventoryOtc : AbstractClass.Product, IInventory, INotifyPropertyChanged
     {
         public InventoryOtc(DataRow dataRow) : base(dataRow)
         {
@@ -18,15 +19,37 @@ namespace His_Pos.Class.Product
             ProductType = new ProductType.ProductType(dataRow);
             WareHouseId = dataRow["PROWAR_ID"].ToString();
             WareHouse = dataRow["PROWAR_NAME"].ToString();
+            BarCode = dataRow["PRO_BARCODE"].ToString();
         }
         public ProductType.ProductType ProductType { get; set; }
         public InStock Stock { get; set; }
         public string Location { get; set; }
         public bool Status { get; set; }
         public BitmapImage TypeIcon { get; set; }
-        public string StockValue { get; set; }
         public string Note { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouse { get; set; }
+        public string BarCode { get; set; }
+        private string stockValue;
+        public string StockValue
+        {
+            get
+            {
+                return stockValue;
+            }
+            set
+            {
+                stockValue = value;
+                NotifyPropertyChanged("StockValue");
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
     }
 }

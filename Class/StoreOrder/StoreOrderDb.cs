@@ -238,7 +238,7 @@ namespace His_Pos.Class.StoreOrder
             var sindgdeConnection = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
             var localConnection = new DbConnection(Settings.Default.SQL_global);
 
-            DataTable dataTable = sindgdeConnection.MySqlQueryBySqlString("call GetNewStoreOrderBySingde('9999999999')");
+            DataTable dataTable = sindgdeConnection.MySqlQueryBySqlString($"call GetNewStoreOrderBySingde('{MainWindow.CurrentPharmacy.Id}')");
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -285,7 +285,7 @@ namespace His_Pos.Class.StoreOrder
 
                 if (table.Rows[0]["RESULT"].ToString().Equals("SUCCESS"))
                 {
-                    sindgdeConnection.MySqlQueryBySqlString($"call UpdateStoreOrderSyncFlag('{row["sht_no"].ToString()}')");
+                    sindgdeConnection.MySqlQueryBySqlString($"call UpdateStoreOrderSyncFlag('{row["sht_no"].ToString()}', '{MainWindow.CurrentPharmacy.Id}')");
                 }
             }
         }
@@ -315,9 +315,8 @@ namespace His_Pos.Class.StoreOrder
             ObservableCollection<ProductPurchaseView.SindeOrderDetail> collection = new ObservableCollection<ProductPurchaseView.SindeOrderDetail>();
 
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
-
-             
-            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId}')");
+            
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
             
             foreach (DataRow row in dataTable.Rows)
             {
@@ -408,7 +407,7 @@ namespace His_Pos.Class.StoreOrder
         {
             string orderMedicines = "";
 
-            bool isPurchace = storeOrderData.Category.CategoryName.Equals("進");
+            bool isPurchace = storeOrderData.Category.CategoryName.Equals("進貨");
 
             foreach (var product in storeOrderData.Products)
             {
@@ -425,17 +424,15 @@ namespace His_Pos.Class.StoreOrder
             
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
             
-            dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{storeOrderData.Id.Substring(2, 10)}', '{storeOrderData.Note}', '{orderMedicines}')");
+            dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{MainWindow.CurrentPharmacy.Id}','{storeOrderData.Id}', '{storeOrderData.Note}', '{orderMedicines}')");
 
         }
 
         internal static OrderType GetOrderStatusFromSinde(string orderId)
         {
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
-
-            string id = (orderId.Length > 10) ? orderId.Substring(2, 10) : orderId;
-
-            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{id}')");
+            
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
 
 
             switch (dataTable.Rows[0]["FLAG"].ToString())
@@ -549,7 +546,7 @@ namespace His_Pos.Class.StoreOrder
         {
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
 
-            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetDeclareOrderStatus('{orderId}')");
+            DataTable dataTable = dd.MySqlQueryBySqlString($"call GetDeclareOrderStatus('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
 
             if (dataTable.Rows.Count == 0)
                 return OrderType.ERROR;

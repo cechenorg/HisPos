@@ -12,8 +12,8 @@ namespace His_Pos.Class
             QuickName = "";
             PrintName = "";
             Reg = "";
-            Days = "";
-            Times = "";
+            Days = 0;
+            Times = 0;
             PreDefault = true;
         }
         private Usage(Usage usage)
@@ -35,30 +35,71 @@ namespace His_Pos.Class
             QuickName = dataRow["USAGE_QNAME"].ToString();
             PrintName = dataRow["USAGE_PRINTNAME"].ToString();
             Reg = dataRow["USAGE_REG"].ToString();
-            Days = (dataRow["USAGE_DAY"].ToString());
-            Times = (dataRow["USAGE_TIMES"].ToString());
+            Days = short.Parse(dataRow["USAGE_DAY"].ToString());
+            Times = short.Parse(dataRow["USAGE_TIMES"].ToString());
             PreDefault = bool.Parse(dataRow["USAGE_DEFAULT"].ToString());
             
-            PrintIcons[0] = Boolean.Parse( dataRow["HISFREPRI_MORNING"].ToString());
-            PrintIcons[1] = Boolean.Parse( dataRow["HISFREPRI_NOON"].ToString());
-            PrintIcons[2] = Boolean.Parse( dataRow["HISFREPRI_NIGHT"].ToString());
-            PrintIcons[3] = Boolean.Parse( dataRow["HISFREPRI_SLEEP"].ToString());
-            PrintIcons[4] = Boolean.Parse( dataRow["HISFREPRI_BEFOREMEAL"].ToString());
-            PrintIcons[5] = Boolean.Parse( dataRow["HISFREPRI_AFTERMEAL"].ToString());
+            PrintIcons[0] = bool.Parse( dataRow["HISFREPRI_MORNING"].ToString());
+            PrintIcons[1] = bool.Parse( dataRow["HISFREPRI_NOON"].ToString());
+            PrintIcons[2] = bool.Parse( dataRow["HISFREPRI_NIGHT"].ToString());
+            PrintIcons[3] = bool.Parse( dataRow["HISFREPRI_SLEEP"].ToString());
+            PrintIcons[4] = bool.Parse( dataRow["HISFREPRI_BEFOREMEAL"].ToString());
+            PrintIcons[5] = bool.Parse( dataRow["HISFREPRI_AFTERMEAL"].ToString());
         }
-        public string PrintName { get; set; }
-        public string QuickName { get; set; }//快速輸入用代號
 
-        public string Reg { get; set; }//Regular Expression規則
+        private string _printName;
 
-        //ex : x Days y Times = > x天吃y次
-        public string Days { get; set; }
+        public string PrintName
+        {
+            get => _printName;
+            private set
+            {
+                _printName = value;
+                NotifyPropertyChanged(nameof(PrintName));
+            }
+        }
 
-        public string Times { get; set; }
+        private string _quickName;
 
-        public bool PreDefault { get; set; }
+        public string QuickName
+        {
+            get => _quickName;
+            private set
+            {
+                _quickName = value;
+                NotifyPropertyChanged(nameof(QuickName));
+            }
+        } //快速輸入用代號
         
-        public bool[] PrintIcons { get; set; } = new bool[6];
+        public string Reg { get; }//Regular Expression規則
+
+        private int _days;
+
+        public int Days
+        {
+            get => _days;
+            private set
+            {
+                _days = value;
+                NotifyPropertyChanged(nameof(Days));
+            }
+        }
+
+        private int _times;
+
+        public int Times
+        {
+            get => _times;
+            private set
+            {
+                _times = value;
+                NotifyPropertyChanged(nameof(Times));
+            }
+        }
+
+        public bool PreDefault { get; }
+        
+        public bool[] PrintIcons { get; private set; } = new bool[6];
 
         public object Clone()
         {

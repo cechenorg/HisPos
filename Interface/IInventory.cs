@@ -15,5 +15,6 @@ namespace His_Pos.Interface
         string Note { get; set; }
         string WareHouseId { get; set; }
         string WareHouse { get; set; }
+        string BarCode { get; set; }
     }
 }

@@ -16,9 +16,11 @@ using His_Pos.Class;
 using His_Pos.ProductPurchaseRecord;
 using System.ComponentModel;
 using System.Data;
+using System.Threading;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.Interface;
 using His_Pos.Struct.Product;
 
 namespace His_Pos.InventoryManagement
@@ -40,7 +42,7 @@ namespace His_Pos.InventoryManagement
                 Form = dataRow["HISMED_FORM"].ToString();
                 ATC = dataRow["HISMED_ATC"].ToString();
                 Manufactory = dataRow["HISMED_MANUFACTORY"].ToString();
-                SC = "單方";
+                SC = dataRow["HISMED_SC"].ToString();
                 Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
             }
 
@@ -57,7 +59,9 @@ namespace His_Pos.InventoryManagement
         #endregion
 
         #region ----- Define Variables -----
-        
+
+        private bool IsFirst { get; set; } = true;
+
         private InventoryMedicine inventoryMedicineBackup { get; }
 
         public InventoryMedicineDetail MedicineDetails { get; set; }
@@ -148,7 +152,7 @@ namespace His_Pos.InventoryManagement
                 InventoryDetailOverviewDataGrid.ScrollIntoView(InventoryDetailOverviews.Last());
             }
 
-            if (!InventoryMedicine.Control.Equals("0"))
+            if (!(InventoryMedicine.Control.Equals("0") || InventoryMedicine.Control.Equals("")))
             {
                 ControlStack.Visibility = Visibility.Visible;
 
@@ -191,6 +195,8 @@ namespace His_Pos.InventoryManagement
         #region ----- Data Changed -----
         private void CancelBtn_OnClick(object sender, RoutedEventArgs e)
         {
+            IsFirst = true;
+
             SideEffectBox.Document.Blocks.Clear();
             IndicationBox.Document.Blocks.Clear();
             NoteBox.Document.Blocks.Clear();
@@ -212,6 +218,8 @@ namespace His_Pos.InventoryManagement
 
         private void MedicineDataChanged()
         {
+            if(IsFirst) return;
+
             CancelBtn.IsEnabled = true;
             ConfirmBtn.IsEnabled = true;
 
@@ -228,7 +236,146 @@ namespace His_Pos.InventoryManagement
             ChangedLabel.Content = "未修改";
         }
         #endregion
-        
+
+        #region ----- Unit DataGrid -----
+        private void Unit_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+
+            if (e.Key == Key.Enter)
+            {
+                MoveFocusNext(sender);
+
+                TextBox textBox = sender as TextBox;
+
+                if (textBox.Name.Equals("Unit") && !textBox.Text.Equals(""))
+                {
+                    if (!(UnitDataGrid.SelectedItem is ProductUnit))
+                    {
+                        ProductUnit productUnit = new ProductUnit(textBox.Text);
+                        productUnitCollection.Add(productUnit);
+                        textBox.Text = "";
+
+                        UnitDataGrid.CurrentCell = new DataGridCellInfo(UnitDataGrid.Items[productUnitCollection.Count - 1], Amount);
+
+                        var focusedCell = UnitDataGrid.CurrentCell.Column.GetCellContent(UnitDataGrid.CurrentCell.Item);
+                        var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
+                        while (firstChild is ContentPresenter)
+                        {
+                            firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                        }
+                        firstChild.Focus();
+                    }
+                }
+
+                e.Handled = true;
+            }
+        }
+
+        private void MoveFocusNext(object sender)
+        {
+            (sender as TextBox).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+            if (UnitDataGrid.CurrentCell.Column is null) return;
+
+            var focusedCell = UnitDataGrid.CurrentCell.Column.GetCellContent(UnitDataGrid.CurrentCell.Item);
+
+            if (focusedCell is null) return;
+
+            while (true)
+            {
+                if (focusedCell is ContentPresenter)
+                {
+                    UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                    if (!(child is Image))
+                        break;
+                }
+
+                focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                focusedCell = UnitDataGrid.CurrentCell.Column.GetCellContent(UnitDataGrid.CurrentCell.Item);
+            }
+
+            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+            if (firstChild is TextBox)
+                firstChild.Focus();
+        }
+
+        private void Unit_OnFocus(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is IDeletable)
+            {
+                if ((selectedItem as ProductUnit).BaseType) return;
+
+                (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
+            }
+        }
+
+        private void Unit_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+
+            if (selectedItem is IDeletable)
+                (selectedItem as IDeletable).Source = "";
+        }
+
+        private void UnitDeleteDot_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (UnitDataGrid.SelectedItem is null) return;
+
+            ProductUnitCollection.Remove(UnitDataGrid.SelectedItem as ProductUnit);
+
+            MedicineDataChanged();
+        }
+        #endregion
+
+        #region ----- StockTaking -----
+        private void ButtonStockCheck_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsStockTakingValid()) return;
+
+            if (!ConfirmStockTaking()) return;
+
+            string stockValue = StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
+            MessageWindow messageWindow = new MessageWindow("單品盤點成功!", MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+            
+            InventoryMedicine.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
+            inventoryMedicineBackup.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
+
+            InventoryMedicine.StockValue = stockValue;
+            inventoryMedicineBackup.StockValue = stockValue;
+
+            InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
+            CalculateStock();
+        }
+
+        private bool ConfirmStockTaking()
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認盤點?", MessageType.ONLYMESSAGE);
+            confirmWindow.ShowDialog();
+
+            return confirmWindow.Confirm;
+        }
+
+        private bool IsStockTakingValid()
+        {
+            if (TextBoxTakingValue.Text.Equals(""))
+            {
+                MessageWindow messageWindow = new MessageWindow("請輸入數量!", MessageType.WARNING, true);
+                messageWindow.ShowDialog();
+
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+
         private void InventoryFilter_OnClick(object sender, RoutedEventArgs e)
         {
             InventoryDetailOverviewDataGrid.Items.Filter = InventoryDetailOverviewFilter;
@@ -254,11 +401,35 @@ namespace His_Pos.InventoryManagement
             }
         }
 
-        private void ButtonStockCheck_Click(object sender, RoutedEventArgs e) {
-            StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
-            MessageWindow messageWindow = new MessageWindow("單品盤點成功!",MessageType.SUCCESS);
-            messageWindow.ShowDialog();
-            InitMedicineDatas();
+        private void MedicineDetail_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            IsFirst = false;
+        }
+
+        private void ConfirmBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            InventoryMedicine.SideEffect = new TextRange(SideEffectBox.Document.ContentStart, SideEffectBox.Document.ContentEnd).Text;
+            InventoryMedicine.Indication = new TextRange(IndicationBox.Document.ContentStart, IndicationBox.Document.ContentEnd).Text;
+            InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text;
+
+            MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
+
+            UpdateNewDataToCurrentMed();
+        }
+
+        private void UpdateNewDataToCurrentMed()
+        {
+            inventoryMedicineBackup.EngName = InventoryMedicine.EngName;
+            inventoryMedicineBackup.ChiName = InventoryMedicine.ChiName;
+            inventoryMedicineBackup.Status = InventoryMedicine.Status;
+            inventoryMedicineBackup.Location = InventoryMedicine.Location;
+            inventoryMedicineBackup.BarCode = InventoryMedicine.BarCode;
+            inventoryMedicineBackup.Common = InventoryMedicine.Common;
+            inventoryMedicineBackup.Stock.SafeAmount = InventoryMedicine.Stock.SafeAmount;
+            inventoryMedicineBackup.Stock.BasicAmount = InventoryMedicine.Stock.BasicAmount;
+            inventoryMedicineBackup.SideEffect = InventoryMedicine.SideEffect;
+            inventoryMedicineBackup.Indication = InventoryMedicine.Indication;
+            inventoryMedicineBackup.Note = InventoryMedicine.Note;
         }
     }
 }

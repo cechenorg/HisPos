@@ -7,8 +7,10 @@
         xmlns:local="His_Pos.InventoryManagement"
         xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         xmlns:stockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
-        mc:Ignorable="d" Height="900" Width="1600" Background="Transparent">
+        xmlns:hisPos="clr-namespace:His_Pos"
+        mc:Ignorable="d" Height="900" Width="1600" Background="Transparent" GotFocus="MedicineDetail_OnGotFocus">
     <UserControl.Resources>
+        <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <stockTakingRecord:ValueDifferentColorConverter x:Key="ValueDifferentColorConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
@@ -61,7 +63,7 @@
                     <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="170"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}" Margin="0,0,10,0">
@@ -78,7 +80,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
                         <Label Content="條碼" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
+                        <TextBox Text="{Binding BarCode, Mode=TwoWay}" Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,10,10" Background="{StaticResource GridBackGround}">
@@ -91,15 +93,16 @@
                     <CheckBox Content="常備藥" IsChecked="{Binding Common}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10" Checked="CommonMed_OnChecked" Unchecked="CommonMed_OnChecked"/>
                     <StackPanel Name="SafeAmountStack" Orientation="Horizontal" Grid.Row="1">
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Text="{Binding Stock.SafeAmount, Mode=TwoWay}" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
+                        <TextBox Text="{Binding Stock.SafeAmount, Mode=TwoWay}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
                     </StackPanel>
                     <StackPanel Name="BasicAmountStack" Orientation="Horizontal" Grid.Row="2">
                         <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Text="{Binding Stock.BasicAmount, Mode=TwoWay}" Width="110" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
+                        <TextBox Text="{Binding Stock.BasicAmount, Mode=TwoWay}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
                     </StackPanel>
                 </Grid>
-                <DataGrid Grid.Row="1" Grid.Column="1" Margin="0,10,10,10" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          Background="{StaticResource GridBackGround}" ItemsSource="{Binding ProductUnitCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}" CanUserAddRows="True">
+                <DataGrid Name="UnitDataGrid" Grid.Row="1" Grid.Column="1" Margin="0,10,10,10" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                          Background="{StaticResource GridBackGround}" ItemsSource="{Binding ProductUnitCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}"
+                          CanUserAddRows="True" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
                             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -124,6 +127,8 @@
                             <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="FontSize" Value="14"/>
                             <Setter Property="Height" Value="40"/>
+                            <EventSetter Event="GotFocus" Handler="Unit_OnFocus"/>
+                            <EventSetter Event="LostFocus" Handler="Unit_LostFocus"/>
                             <Style.Triggers>
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="Background" Value="{StaticResource GridSelected}"/>
@@ -132,38 +137,45 @@
                         </Style>
                     </DataGrid.RowStyle>
                     <DataGrid.Columns>
-                        <DataGridTemplateColumn MinWidth="90" Header="單位名稱" IsReadOnly="True">
+                        <DataGridTemplateColumn Width="30" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Id" Text="{Binding Unit}" InputMethod.IsInputMethodEnabled="False" Width="80" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <Image Name="DeleteDot" Width="18" Source="{Binding Source, NotifyOnSourceUpdated=True}" MouseLeftButtonDown="UnitDeleteDot_OnMouseLeftButtonDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="50" Header="數量" IsReadOnly="True">
+                        <DataGridTemplateColumn MinWidth="90" Header="單位名稱" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Amount" Text="{Binding Amount}" InputMethod.IsInputMethodEnabled="False" Width="40" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Unit" Text="{Binding Unit}" InputMethod.IsInputMethodEnabled="False" Width="80" FontSize="18" FontFamily="Segoe UI Semibold" Margin="0,0,0,2" PreviewKeyDown="Unit_OnPreviewKeyDown" TextChanged="MedicineData_Changed"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn x:Name="Amount" MinWidth="50" Header="數量" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Amount}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="40" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" PreviewKeyDown="Unit_OnPreviewKeyDown" TextChanged="MedicineData_Changed"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="80" Header="售價" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Price" Text="{Binding Price}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="Price" Text="{Binding Price}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" PreviewKeyDown="Unit_OnPreviewKeyDown" TextChanged="MedicineData_Changed"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="80" Header="會員價" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="VIPPrice" Text="{Binding VIPPrice}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="VIPPrice" Text="{Binding VIPPrice}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" PreviewKeyDown="Unit_OnPreviewKeyDown" TextChanged="MedicineData_Changed"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn MinWidth="80" Header="員工價" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="EmpPrice" Text="{Binding EmpPrice}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2"/>
+                                    <TextBox x:Name="EmpPrice" Text="{Binding EmpPrice}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="70" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" PreviewKeyDown="Unit_OnPreviewKeyDown" TextChanged="MedicineData_Changed"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -192,7 +204,7 @@
                     <Rectangle Width="220"/>
                     <Label Name="ChangedLabel" Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
                     <Button Width="120" Content="取消" Name="CancelBtn" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="Gray" IsEnabled="False" Click="CancelBtn_OnClick"/>
-                    <Button Width="150" Content="確認" Name="ConfirmBtn" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" IsEnabled="False"/>
+                    <Button Width="150" Content="確認" Name="ConfirmBtn" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="IndianRed" IsEnabled="False" Click="ConfirmBtn_OnClick"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1" Grid.Column="1" Margin="0,10,0,0">
@@ -329,8 +341,8 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Background="{StaticResource GridDarkerBackGround}" Grid.Row="2">
                     <Label Content="快速盤點" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" Margin="150,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    <TextBox Name="TextBoxTakingValue" Width="100" Margin="10,0,0,0" Height="40" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                    <Button Name="ButtonStockCheck" Content="盤點" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="40" Background="ForestGreen" Margin="20,0,0,0" Click="ButtonStockCheck_Click"/>
+                    <TextBox Name="TextBoxTakingValue" Width="100" Margin="10,0,0,0" Height="40" HorizontalContentAlignment="Center" InputMethod.IsInputMethodEnabled="False" FontFamily="Segoe UI Semibold" FontSize="20"/>
+                    <Button Content="盤點" BorderThickness="0" FontSize="20" FontFamily="Segoe UI Semi" Height="40" Background="ForestGreen" Margin="20,0,0,0" Click="ButtonStockCheck_Click"/>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Margin="0,10,0,0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
                     <CheckBox Content="訂退貨" Name="PurchaseCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="50,0,0,0" IsChecked="True" Click="InventoryFilter_OnClick"/>
