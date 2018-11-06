@@ -230,35 +230,11 @@ namespace His_Pos.InventoryManagement
             ChangedLabel.Content = "未修改";
         }
         #endregion
-        
-        private void InventoryFilter_OnClick(object sender, RoutedEventArgs e)
-        {
-            InventoryDetailOverviewDataGrid.Items.Filter = InventoryDetailOverviewFilter;
-        }
 
-        private void CommonMed_OnChecked(object sender, RoutedEventArgs e)
-        {
-            CheckBox checkBox = sender as CheckBox;
-
-            if (checkBox is null) return;
-
-            MedicineDataChanged();
-
-            if ((bool)checkBox.IsChecked)
-            {
-                SafeAmountStack.IsEnabled = false;
-                BasicAmountStack.IsEnabled = false;
-            }
-            else
-            {
-                SafeAmountStack.IsEnabled = true;
-                BasicAmountStack.IsEnabled = true;
-            }
-        }
-
+        #region ----- Unit DataGrid -----
         private void Unit_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(sender is null) return;
+            if (sender is null) return;
 
             if (e.Key == Key.Enter)
             {
@@ -302,8 +278,8 @@ namespace His_Pos.InventoryManagement
 
             if (selectedItem is IDeletable)
             {
-                if((selectedItem as ProductUnit).BaseType) return;
-                
+                if ((selectedItem as ProductUnit).BaseType) return;
+
                 (selectedItem as IDeletable).Source = "/Images/DeleteDot.png";
             }
         }
@@ -314,6 +290,32 @@ namespace His_Pos.InventoryManagement
 
             if (selectedItem is IDeletable)
                 (selectedItem as IDeletable).Source = "";
+        }
+        #endregion
+
+        private void InventoryFilter_OnClick(object sender, RoutedEventArgs e)
+        {
+            InventoryDetailOverviewDataGrid.Items.Filter = InventoryDetailOverviewFilter;
+        }
+
+        private void CommonMed_OnChecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = sender as CheckBox;
+
+            if (checkBox is null) return;
+
+            MedicineDataChanged();
+
+            if ((bool)checkBox.IsChecked)
+            {
+                SafeAmountStack.IsEnabled = false;
+                BasicAmountStack.IsEnabled = false;
+            }
+            else
+            {
+                SafeAmountStack.IsEnabled = true;
+                BasicAmountStack.IsEnabled = true;
+            }
         }
     }
 }
