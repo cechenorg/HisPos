@@ -255,7 +255,10 @@ namespace His_Pos.InventoryManagement
         }
 
         private void ButtonStockCheck_Click(object sender, RoutedEventArgs e) {
-
+            StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
+            MessageWindow messageWindow = new MessageWindow("單品盤點成功!",MessageType.SUCCESS);
+            messageWindow.ShowDialog();
+            InitMedicineDatas();
         }
     }
 }
