@@ -303,14 +303,15 @@ namespace His_Pos.InventoryManagement
             string stockValue = StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
             MessageWindow messageWindow = new MessageWindow("單品盤點成功!", MessageType.SUCCESS, true);
             messageWindow.ShowDialog();
-
-            InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
-
+            
             InventoryMedicine.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
             inventoryMedicineBackup.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
 
             InventoryMedicine.StockValue = stockValue;
             inventoryMedicineBackup.StockValue = stockValue;
+
+            InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
+            CalculateStock();
         }
 
         private bool ConfirmStockTaking()
