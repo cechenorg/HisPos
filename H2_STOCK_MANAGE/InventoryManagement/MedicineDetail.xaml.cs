@@ -293,6 +293,48 @@ namespace His_Pos.InventoryManagement
         }
         #endregion
 
+        #region ----- StockTaking -----
+        private void ButtonStockCheck_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsStockTakingValid()) return;
+
+            if (!ConfirmStockTaking()) return;
+
+            string stockValue = StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
+            MessageWindow messageWindow = new MessageWindow("單品盤點成功!", MessageType.SUCCESS, true);
+            messageWindow.ShowDialog();
+
+            InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
+
+            InventoryMedicine.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
+            inventoryMedicineBackup.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
+
+            InventoryMedicine.StockValue = stockValue;
+            inventoryMedicineBackup.StockValue = stockValue;
+        }
+
+        private bool ConfirmStockTaking()
+        {
+            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認盤點?", MessageType.ONLYMESSAGE);
+            confirmWindow.ShowDialog();
+
+            return confirmWindow.Confirm;
+        }
+
+        private bool IsStockTakingValid()
+        {
+            if (TextBoxTakingValue.Text.Equals(""))
+            {
+                MessageWindow messageWindow = new MessageWindow("請輸入數量!", MessageType.WARNING, true);
+                messageWindow.ShowDialog();
+
+                return false;
+            }
+
+            return true;
+        }
+        #endregion
+
         private void InventoryFilter_OnClick(object sender, RoutedEventArgs e)
         {
             InventoryDetailOverviewDataGrid.Items.Filter = InventoryDetailOverviewFilter;
@@ -316,13 +358,6 @@ namespace His_Pos.InventoryManagement
                 SafeAmountStack.IsEnabled = true;
                 BasicAmountStack.IsEnabled = true;
             }
-        }
-
-        private void ButtonStockCheck_Click(object sender, RoutedEventArgs e) {
-            StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
-            MessageWindow messageWindow = new MessageWindow("單品盤點成功!",MessageType.SUCCESS);
-            messageWindow.ShowDialog();
-            InitMedicineDatas();
         }
     }
 }
