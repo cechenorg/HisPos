@@ -24,6 +24,7 @@ using His_Pos.Class.Declare;
 using His_Pos.HisApi;
 using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
+using System.Windows.Forms;
 using System.Windows.Media;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.DiseaseCode;
@@ -34,6 +35,18 @@ using His_Pos.Properties;
 using His_Pos.Struct.IcData;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
+using Application = System.Windows.Application;
+using Binding = System.Windows.Data.Binding;
+using CheckBox = System.Windows.Controls.CheckBox;
+using ComboBox = System.Windows.Controls.ComboBox;
+using ContextMenu = System.Windows.Controls.ContextMenu;
+using DataGrid = System.Windows.Controls.DataGrid;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using MenuItem = System.Windows.Controls.MenuItem;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using RadioButton = System.Windows.Controls.RadioButton;
+using TextBox = System.Windows.Controls.TextBox;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -436,18 +449,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             if (CurrentPrescription.IsGetIcCard)
             {
-                var loading = new LoadingWindow();
-                loading.LoginIcData(Instance);
+                //var loading = new LoadingWindow();
+                //loading.LoginIcData(Instance);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
             else
             {
-                icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
-                icErrorWindow.ShowDialog();
-                var loading = new LoadingWindow();
-                if (!string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
-                    loading.LoginIcData(Instance);
+                //icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
+                //icErrorWindow.ShowDialog();
+                //var loading = new LoadingWindow();
+                //if (!string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
+                //    loading.LoginIcData(Instance);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
@@ -460,7 +473,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public void LogInIcData()
         {
             var cs = new ConvertData();
-            var icPrescripList = new List<IcPrescriptData>();
+            List<IcPrescriptData> icPrescripList = new List<IcPrescriptData>();
             foreach (var med in CurrentPrescription.Medicines)
             {
                 icPrescripList.Add(new IcPrescriptData(med));
@@ -479,6 +492,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput, icData, ref strLength);
                 if (res == 0)
                     _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                else
+                    break;
             }
         }
 
@@ -727,11 +742,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 PrescriptionMedicines.Items[currentRow+1], MedicineId);
             var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
-            while (firstChild is ContentPresenter)
+            while (!(firstChild is AutoCompleteBox))
             {
                 firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
             }
             firstChild.Focus();
+            e.Handled = false;
+            SendKeys.SendWait("~");
+            
         }
 
         private void MoveFocusNext(object sender)
@@ -1107,6 +1125,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             if (((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Equals("2"))
                 CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I22"));
+            else if(((AdjustCase)AdjustCaseCombo.SelectedItem).Id.Equals("1"))
+                CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
             IsSendToServer.IsChecked = false;
             IsSendToServer.IsEnabled = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             IsSendToServer.IsChecked = ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "02" || ((AdjustCase)AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text != DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
@@ -1114,6 +1134,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e) {
             var t = sender as TextBox;
+            var tmpMedicalNumber = MedicalNumber.Text;
             if (string.IsNullOrEmpty(t.Text))
             {
                 AdjustCaseCombo.SelectedIndex = 0;
@@ -1125,11 +1146,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+                MedicalNumber.Text = tmpMedicalNumber;
+                CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + t.Text;
+                CurrentPrescription.OriginalMedicalNumber = tmpMedicalNumber;
             }
             else
             {
                 var myBinding = new Binding("CurrentPrescription.Customer.IcCard.MedicalNumber");
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+                MedicalNumber.Text = tmpMedicalNumber;
             }
         }
          
@@ -1176,7 +1201,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 if (string.IsNullOrEmpty(textBox.Text.Trim()))
                 {
-                    PaymentCategoryCombo.Focus();
+                    ChronicSequence.Focus();
                     return;
                 }
             }
@@ -1224,25 +1249,28 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     switch (cName)
                     {
                         case "DivisionCombo":
-                            HisPerson.Focus();
+                            if(!MainWindow.CurrentUser.Id.Equals((HisPerson.SelectedItem as MedicalPersonnel).Id))
+                                HisPerson.Focus();
+                            else
+                                TreatmentCaseCombo.Focus();
                             break;
                         case "HisPerson":
-                            TreatmentCaseCombo.Focus();
+                            if (string.IsNullOrEmpty(MedicalNumber.Text.Trim()))
+                                MedicalNumber.Focus();
+                            else
+                                MainDiagnosis.Focus();
                             break;
                         case "TreatmentCaseCombo":
-                            MainDiagnosis.Focus();
+                            CopaymentCombo.Focus();
                             break;
                         case "PaymentCategoryCombo":
                             AdjustCaseCombo.Focus();
                             break;
                         case "CopaymentCombo":
-                            if (c.Text.StartsWith("2"))
-                                ChronicSequence.Focus();
-                            else
-                                SpecialCodeCombo.Focus();
+                            SpecialCodeCombo.Focus();
                             break;
                         case "AdjustCaseCombo":
-                            CopaymentCombo.Focus();
+                            TreatmentCaseCombo.Focus();
                             break;
                         case "SpecialCodeCombo":
                             var nextAutoCompleteBox = new List<AutoCompleteBox>();
@@ -1266,13 +1294,23 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             AdjustCaseCombo.Focus();
                             break;
                         case "ChronicSequence":
-                            ChronicTotal.Focus();
+                            if (string.IsNullOrEmpty(ChronicSequence.Text))
+                                SpecialCodeCombo.Focus();
+                            else
+                                ChronicTotal.Focus();
                             break;
                         case "ChronicTotal":
-                            SpecialCodeCombo.Focus();
+                            if (string.IsNullOrEmpty(ChronicTotal.Text) && !string.IsNullOrEmpty(ChronicSequence.Text))
+                            {
+                                var m = new MessageWindow("領藥次數有值，需填寫總領藥次數",MessageType.WARNING,true);
+                                m.ShowDialog();
+                                ChronicTotal.Focus();
+                            }
+                            else
+                                SpecialCodeCombo.Focus();
                             break;
                         case "MedicalNumber":
-                            TreatmentCaseCombo.Focus();
+                            MainDiagnosis.Focus();
                             break;
                     }
                     break;

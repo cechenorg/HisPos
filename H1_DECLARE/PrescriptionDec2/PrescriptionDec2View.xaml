@@ -122,12 +122,6 @@
                              InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="Combo_PreviewKeyDown" InputScope="Number"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal">
-                    <Label Content="處方案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <ComboBox x:Name="TreatmentCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              FontFamily="Segoe UI Semibold" FontSize="14" IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding TreatmentCases}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Combo_PreviewKeyDown"/>
-                </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <xctk:MaskedTextBox Name="TreatmentDate" Width="170" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp">
@@ -141,7 +135,7 @@
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="調劑日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <xctk:MaskedTextBox Name="AdjustDate" Width="170" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" TextChanged="AdjustDate_TextChanged" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp">
@@ -155,29 +149,38 @@
                         </xctk:MaskedTextBox.Text>
                     </xctk:MaskedTextBox>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="3" Margin="8" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Content="主要診斷" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox x:Name="MainDiagnosis" Width="170" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
                              MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" 
                              Text="{Binding CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.FullName,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="DiseaseCode_PreviewKeyDown"/>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Grid.Column="4" Margin="8" Orientation="Horizontal">
+                <StackPanel Grid.Row="1" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="次要診斷" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <TextBox x:Name="SecondDiagnosis" Width="170" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" 
                              MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" 
                              Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.FullName,UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="DiseaseCode_PreviewKeyDown"/>
                 </StackPanel>
-                <StackPanel Grid.Row="2" Grid.Column="0" Margin="8" Orientation="Horizontal">
-                    <Label Content="給付類別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <ComboBox x:Name="PaymentCategoryCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" ItemsSource="{Binding PaymentCategories}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.PaymentCategory, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
+                <StackPanel Grid.Row="1" Grid.Column="4" Margin="8" Orientation="Horizontal">
+                    <Label Content="領藥次數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                    <TextBox x:Name="ChronicSequence" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14"  TextChanged="ChronicSequence_TextChanged"
+                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.ChronicSequence, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                             PreviewKeyDown="Combo_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput" />
+                    <Label Content=" / " FontFamily="Segoe UI Semibold" FontSize="16" />
+                    <TextBox x:Name="ChronicTotal" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" PreviewKeyDown="Combo_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput"
+                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.ChronicTotal, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
-                <StackPanel Grid.Row="2" Grid.Column="1" Margin="8" Orientation="Horizontal">
+                <StackPanel Grid.Row="2" Grid.Column="0" Margin="8" Orientation="Horizontal">
                     <Label Content="調劑案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="AdjustCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" ItemsSource="{Binding AdjustCases}"
                               IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" SelectionChanged="AdjustCaseCombo_SelectionChanged"
                               SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
+                </StackPanel>
+                <StackPanel Grid.Row="2" Grid.Column="1" Margin="8" Orientation="Horizontal">
+                    <Label Content="處方案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                    <ComboBox x:Name="TreatmentCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
+                              FontFamily="Segoe UI Semibold" FontSize="14" IsEditable="True" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding TreatmentCases}"
+                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Content="部分負擔" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
@@ -186,13 +189,10 @@
                               SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
-                    <Label Content="領藥次數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <TextBox x:Name="ChronicSequence" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14"  TextChanged="ChronicSequence_TextChanged"
-                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.ChronicSequence, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                             PreviewKeyDown="Combo_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput" />
-                    <Label Content=" / " FontFamily="Segoe UI Semibold" FontSize="16" />
-                    <TextBox x:Name="ChronicTotal" Width="72" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" PreviewKeyDown="Combo_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput"
-                             MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.ChronicTotal, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                    <Label Content="給付類別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                    <ComboBox x:Name="PaymentCategoryCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
+                              IsEditable="True" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" ItemsSource="{Binding PaymentCategories}"
+                              SelectedItem="{Binding CurrentPrescription.Treatment.PaymentCategory, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="4" Margin="8" Orientation="Horizontal">
                     <Label Content="特定治療" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
@@ -264,7 +264,7 @@
                                                           Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" DropDownClosed="MedicineCodeAuto_DropDownClosed" Style="{StaticResource AutoCompleteBoxStyle}"
                                                           FilterMode="Contains" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsEnabled="True" IsTextCompletionEnabled="False" 
                                                           ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" ItemTemplate="{StaticResource MedcineCodeAutoComplete}"
-                                                          MinimumPrefixLength="2" Populating="MedicineCodeAuto_Populating" Text="{Binding Id, Mode=TwoWay}" ValueMemberPath="Id" />
+                                                          MinimumPrefixLength="2" Populating="MedicineCodeAuto_Populating" Text="{Binding Id, Mode=TwoWay}" ValueMemberPath="Id"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -345,7 +345,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn MinWidth="60" Header="總價" IsReadOnly="True" Binding="{Binding TotalPrice,UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn MinWidth="60" Header="總價" FontFamily="Segoe UI Semibold" IsReadOnly="True" Binding="{Binding TotalPrice,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

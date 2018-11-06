@@ -611,6 +611,14 @@ namespace His_Pos
                 {
                     prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;
                     prescriptionDec2View.PrescriptionMedicines.ItemsSource = prescriptionDec2View.CurrentPrescription.Medicines;
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    prescriptionDec2View.DataContext = prescriptionDec2View;
                     var isMedicalPerson = false;
                     foreach (var m in prescriptionDec2View.MedicalPersonnels)
                     {
@@ -634,14 +642,6 @@ namespace His_Pos
                         prescriptionDec2View.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
                     prescriptionDec2View.AdjustCaseCombo.SelectedItem =
                         prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
-                    prescriptionDec2View.DataContext = prescriptionDec2View;
                     Close();
                 }));
             };

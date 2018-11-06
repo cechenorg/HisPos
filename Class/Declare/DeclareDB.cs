@@ -613,7 +613,7 @@ namespace His_Pos.Class.Declare
                 row["D36"] = d36;
             row["D37"] = declareData.MedicalServiceCode;
             row["D38"] = declareData.MedicalServicePoint.ToString();
-            row["D43"] = declareData.Prescription.OriginalMedicalNumber == null ? "" : declareData.Prescription.OriginalMedicalNumber;
+            row["D43"] = string.IsNullOrEmpty(declareData.Prescription.OriginalMedicalNumber)? "" : declareData.Prescription.OriginalMedicalNumber;
 
             var xmlStr = declareData.SerializeObject<Ddata>(); 
             row["XML"] = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null));

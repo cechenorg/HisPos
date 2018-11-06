@@ -299,7 +299,7 @@ namespace His_Pos.Class.Product
                 tmpUsage = u;
                 find = true;
             }
-            Amount = find ? UsagesFunction.CheckUsage(int.Parse(days), tmpUsage) : UsagesFunction.CheckUsage(int.Parse(days));
+            Amount = find ? double.Parse(Dosage)*UsagesFunction.CheckUsage(int.Parse(days), tmpUsage) : double.Parse(Dosage)*UsagesFunction.CheckUsage(int.Parse(days));
         }
 
         public object Clone()
