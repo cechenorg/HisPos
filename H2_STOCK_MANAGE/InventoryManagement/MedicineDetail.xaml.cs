@@ -249,6 +249,16 @@ namespace His_Pos.InventoryManagement
                         ProductUnit productUnit = new ProductUnit(textBox.Text);
                         productUnitCollection.Add(productUnit);
                         textBox.Text = "";
+
+                        UnitDataGrid.CurrentCell = new DataGridCellInfo(UnitDataGrid.Items[productUnitCollection.Count - 1], Amount);
+
+                        var focusedCell = UnitDataGrid.CurrentCell.Column.GetCellContent(UnitDataGrid.CurrentCell.Item);
+                        var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
+                        while (firstChild is ContentPresenter)
+                        {
+                            firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                        }
+                        firstChild.Focus();
                     }
                 }
 
@@ -265,6 +275,21 @@ namespace His_Pos.InventoryManagement
             var focusedCell = UnitDataGrid.CurrentCell.Column.GetCellContent(UnitDataGrid.CurrentCell.Item);
 
             if (focusedCell is null) return;
+
+            while (true)
+            {
+                if (focusedCell is ContentPresenter)
+                {
+                    UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+
+                    if (!(child is Image))
+                        break;
+                }
+
+                focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+                focusedCell = UnitDataGrid.CurrentCell.Column.GetCellContent(UnitDataGrid.CurrentCell.Item);
+            }
 
             UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
 

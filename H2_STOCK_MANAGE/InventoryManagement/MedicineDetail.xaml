@@ -151,10 +151,10 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn MinWidth="50" Header="數量" IsReadOnly="True">
+                        <DataGridTemplateColumn x:Name="Amount" MinWidth="50" Header="數量" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox x:Name="Amount" Text="{Binding Amount}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="40" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" PreviewKeyDown="Unit_OnPreviewKeyDown"/>
+                                    <TextBox Text="{Binding Amount}" HorizontalContentAlignment="Center" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="40" FontSize="18" FontFamily="Segoe UI Semi" Margin="0,0,0,2" PreviewKeyDown="Unit_OnPreviewKeyDown"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
