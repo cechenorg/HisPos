@@ -59,7 +59,9 @@ namespace His_Pos.InventoryManagement
         #endregion
 
         #region ----- Define Variables -----
-        
+
+        private bool IsFirst { get; set; } = true;
+
         private InventoryMedicine inventoryMedicineBackup { get; }
 
         public InventoryMedicineDetail MedicineDetails { get; set; }
@@ -193,6 +195,8 @@ namespace His_Pos.InventoryManagement
         #region ----- Data Changed -----
         private void CancelBtn_OnClick(object sender, RoutedEventArgs e)
         {
+            IsFirst = true;
+
             SideEffectBox.Document.Blocks.Clear();
             IndicationBox.Document.Blocks.Clear();
             NoteBox.Document.Blocks.Clear();
@@ -214,6 +218,8 @@ namespace His_Pos.InventoryManagement
 
         private void MedicineDataChanged()
         {
+            if(IsFirst) return;
+
             CancelBtn.IsEnabled = true;
             ConfirmBtn.IsEnabled = true;
 
@@ -395,5 +401,9 @@ namespace His_Pos.InventoryManagement
             }
         }
 
+        private void MedicineDetail_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            IsFirst = false;
+        }
     }
 }

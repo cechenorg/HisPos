@@ -8,7 +8,7 @@
         xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         xmlns:stockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
         xmlns:hisPos="clr-namespace:His_Pos"
-        mc:Ignorable="d" Height="900" Width="1600" Background="Transparent">
+        mc:Ignorable="d" Height="900" Width="1600" Background="Transparent" GotFocus="MedicineDetail_OnGotFocus">
     <UserControl.Resources>
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <stockTakingRecord:ValueDifferentColorConverter x:Key="ValueDifferentColorConverter"/>
