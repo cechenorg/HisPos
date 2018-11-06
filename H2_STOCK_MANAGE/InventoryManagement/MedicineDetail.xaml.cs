@@ -42,7 +42,7 @@ namespace His_Pos.InventoryManagement
                 Form = dataRow["HISMED_FORM"].ToString();
                 ATC = dataRow["HISMED_ATC"].ToString();
                 Manufactory = dataRow["HISMED_MANUFACTORY"].ToString();
-                SC = "單方";
+                SC = dataRow["HISMED_SC"].ToString();
                 Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
             }
 

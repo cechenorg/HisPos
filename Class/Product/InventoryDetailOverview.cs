@@ -26,6 +26,7 @@ namespace His_Pos.Class.Product
                     Type = InventoryDetailOverviewType.PurchaseReturn;
                     break;
                 case "盤點":
+                case "單品盤點":
                     TypeIcon = "/Images/GreenDot.png";
                     Type = InventoryDetailOverviewType.StockTaking;
                     break;
