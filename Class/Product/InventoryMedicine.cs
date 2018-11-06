@@ -25,6 +25,7 @@ namespace His_Pos.Class.Product
             WareHouseId = dataRow["PROWAR_ID"].ToString();
             Indication = dataRow["PROWAR_ID"].ToString();
             SideEffect = dataRow["PROWAR_ID"].ToString();
+            BarCode = dataRow["PRO_BARCODE"].ToString();
         }
         public InStock Stock { get; set; }
         public string Location { get; set; }
@@ -40,6 +41,7 @@ namespace His_Pos.Class.Product
         public string SideEffect { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouse { get; set; }
+        public string BarCode { get; set; }
         public object Clone()
         {
             InventoryMedicine newInventoryMedicine = new InventoryMedicine();

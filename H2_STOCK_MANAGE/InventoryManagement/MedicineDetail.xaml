@@ -80,7 +80,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
                         <Label Content="條碼" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
+                        <TextBox Text="{Binding BarCode, Mode=TwoWay}" Width="260" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
                     </StackPanel>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="0" Margin="0,10,10,10" Background="{StaticResource GridBackGround}">
