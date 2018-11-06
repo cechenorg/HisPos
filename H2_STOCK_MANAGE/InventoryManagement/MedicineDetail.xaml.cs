@@ -341,7 +341,7 @@ namespace His_Pos.InventoryManagement
             if (!ConfirmStockTaking()) return;
 
             string stockValue = StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
-            MessageWindow messageWindow = new MessageWindow("單品盤點成功!", MessageType.SUCCESS, true);
+            MessageWindow messageWindow = new MessageWindow("單品盤點成功!", MessageType.SUCCESS);
             messageWindow.ShowDialog();
             
             InventoryMedicine.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
@@ -404,6 +404,32 @@ namespace His_Pos.InventoryManagement
         private void MedicineDetail_OnGotFocus(object sender, RoutedEventArgs e)
         {
             IsFirst = false;
+        }
+
+        private void ConfirmBtn_OnClick(object sender, RoutedEventArgs e)
+        {
+            InventoryMedicine.SideEffect = new TextRange(SideEffectBox.Document.ContentStart, SideEffectBox.Document.ContentEnd).Text;
+            InventoryMedicine.Indication = new TextRange(IndicationBox.Document.ContentStart, IndicationBox.Document.ContentEnd).Text;
+            InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text;
+
+            MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
+
+            UpdateNewDataToCurrentMed();
+        }
+
+        private void UpdateNewDataToCurrentMed()
+        {
+            inventoryMedicineBackup.EngName = InventoryMedicine.EngName;
+            inventoryMedicineBackup.ChiName = InventoryMedicine.ChiName;
+            inventoryMedicineBackup.Status = InventoryMedicine.Status;
+            inventoryMedicineBackup.Location = InventoryMedicine.Location;
+            inventoryMedicineBackup.BarCode = InventoryMedicine.BarCode;
+            inventoryMedicineBackup.Common = InventoryMedicine.Common;
+            inventoryMedicineBackup.Stock.SafeAmount = InventoryMedicine.Stock.SafeAmount;
+            inventoryMedicineBackup.Stock.BasicAmount = InventoryMedicine.Stock.BasicAmount;
+            inventoryMedicineBackup.SideEffect = InventoryMedicine.SideEffect;
+            inventoryMedicineBackup.Indication = InventoryMedicine.Indication;
+            inventoryMedicineBackup.Note = InventoryMedicine.Note;
         }
     }
 }

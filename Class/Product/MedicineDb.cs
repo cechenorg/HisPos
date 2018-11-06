@@ -172,5 +172,26 @@ namespace His_Pos.Class.Product
                 return "無";
             return Strings.StrConv(str, VbStrConv.Narrow, 0);
         }
+
+        internal static void UpdateInventoryMedicineData(InventoryMedicine inventoryMedicine)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", inventoryMedicine.Id));
+            parameters.Add(new SqlParameter("CHI_NAME", inventoryMedicine.ChiName));
+            parameters.Add(new SqlParameter("ENG_NAME", inventoryMedicine.EngName));
+            parameters.Add(new SqlParameter("STATUS", (inventoryMedicine.Status)? "1":"0"));
+            parameters.Add(new SqlParameter("LOCATION", inventoryMedicine.Location));
+            parameters.Add(new SqlParameter("BAR_CODE", inventoryMedicine.BarCode));
+            parameters.Add(new SqlParameter("SAFEAMOUNT", Int32.Parse(inventoryMedicine.Stock.SafeAmount)));
+            parameters.Add(new SqlParameter("BASICAMOUNT", Int32.Parse(inventoryMedicine.Stock.BasicAmount)));
+            parameters.Add(new SqlParameter("COMMON", inventoryMedicine.Common));
+            parameters.Add(new SqlParameter("SIDEEFFECT", inventoryMedicine.SideEffect));
+            parameters.Add(new SqlParameter("INDICATION", inventoryMedicine.Indication));
+            parameters.Add(new SqlParameter("NOTE", inventoryMedicine.Note));
+
+            dd.ExecuteProc("[HIS_POS_DB].[MedicineDetail].[UpdateInventoryMedicineDetail]", parameters);
+        }
     }
 }
