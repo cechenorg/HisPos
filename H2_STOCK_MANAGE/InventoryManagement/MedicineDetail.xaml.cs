@@ -316,6 +316,15 @@ namespace His_Pos.InventoryManagement
             if (selectedItem is IDeletable)
                 (selectedItem as IDeletable).Source = "";
         }
+
+        private void UnitDeleteDot_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (UnitDataGrid.SelectedItem is null) return;
+
+            ProductUnitCollection.Remove(UnitDataGrid.SelectedItem as ProductUnit);
+
+            MedicineDataChanged();
+        }
         #endregion
 
         #region ----- StockTaking -----
@@ -385,5 +394,6 @@ namespace His_Pos.InventoryManagement
                 BasicAmountStack.IsEnabled = true;
             }
         }
+
     }
 }
