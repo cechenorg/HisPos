@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.Class.CustomerHistory;
@@ -21,6 +22,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     {
         public enum RadioOptions { Option1, Option2, Option3, Option4 }
 
+        private bool conditionNotNull;
         string _selectedRadioButton;
         public string SelectedRadioButton
         {
@@ -30,8 +32,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             set
             {
-                if (value != null) //要判斷一下是否為 null，否則選了A，又選B時，最後一個回傳的會是A的值，這樣就抓不到了。
+                if (value != null)
+                {
                     _selectedRadioButton = value;
+                    Condition.Focus();
+                    FilterCustomer(Condition.Text);
+                }
             }
         }
         private ObservableCollection<Customer> _customerCollection;
@@ -60,38 +66,42 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public CustomerSelectWindow(string condition,int option)
         {
             InitializeComponent();
-            Condition.Text = condition;
             CustomerCollection = CustomerDb.GetData();
-            ResultCollection = new ObservableCollection<Customer>();
             DataContext = this;
+            Condition.Text = condition;
+            ResultCollection = new ObservableCollection<Customer>();
             SelectedCustomer = new Customer();
-            switch (option)
+            Condition.Focus();
+            if (string.IsNullOrEmpty(condition))
             {
-                case 0:
-                    SelectedCustomer = CustomerCollection.SingleOrDefault(c => c.Id.Equals("0"));
-                    SetSelectedCustomer();
-                    break;
-                case 1:
-                    SelectedRadioButton = "Option1";
-                    FilterCustomer(condition);
-                    break;
-                case 2:
-                    SelectedRadioButton = "Option2";
-                    FilterCustomer(condition);
-                    break;
-                case 3:
-                    SelectedRadioButton = "Option3";
-                    FilterCustomer(condition);
-                    break;
-                case 4:
-                    SelectedRadioButton = "Option4";
-                    FilterCustomer(condition);
-                    break;
-                default:
-                    SelectedRadioButton = "Option1";
-                    ResultCollection = CustomerCollection;
-                    CusGrid.SelectedIndex = 0;
-                    break;
+                SelectedRadioButton = "Option1";
+                conditionNotNull = false;
+            }
+            else
+            {
+                conditionNotNull = true;
+                switch (option)
+                {
+                    case 0:
+                        SelectedCustomer = CustomerCollection.SingleOrDefault(c => c.Id.Equals("0"));
+                        SetSelectedCustomer();
+                        break;
+                    case 1:
+                        SelectedRadioButton = "Option1";
+                        break;
+                    case 2:
+                        SelectedRadioButton = "Option2";
+                        break;
+                    case 3:
+                        SelectedRadioButton = "Option3";
+                        break;
+                    case 4:
+                        SelectedRadioButton = "Option4";
+                        break;
+                    default:
+                        SelectedRadioButton = "Option1";
+                        break;
+                }
             }
         }
 
@@ -114,7 +124,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void MatchCustomer(Customer match)
         {
-            ResultCollection.Clear();
             ResultCollection.Add(match);
             CusGrid.SelectedIndex = 0;
         }
@@ -129,7 +138,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is TextBox txt)) return;
             if (string.IsNullOrEmpty(txt.Text))
+            {
+                ResultCollection = CustomerCollection;
                 return;
+            }
+            FilterCustomer(txt.Text);
         }
 
         private string ToBirthStr(DateTime d)
@@ -142,75 +155,58 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void FilterCustomer(string condition)
         {
-            ResultCollection.Clear();
+            var itemSourceList = new CollectionViewSource() { Source = CustomerCollection };
+            var itemlist = itemSourceList.View;
             switch (SelectedRadioButton)
             {
                 case "Option1":
-                    foreach (var c in CustomerCollection)
-                    {
-                        var birthStr = ToBirthStr(c.Birthday);
-                        var search = condition.StartsWith("0")
-                            ? condition.Substring(1, condition.Length - 1) : condition;
-                        if (birthStr.Contains(search))
-                            ResultCollection.Add(c);
-                    }
-
-                    foreach (var t in ResultCollection)
-                    {
-                        var birthStr = ToBirthStr(t.Birthday);
-                        if (!birthStr.Equals(condition.Replace("/", "").Replace("-", ""))) continue;
-                        MatchCustomer(t);
-                        break;
-                    }
+                    itemSourceList.Filter += FilterByBirthDay;
+                    CusGrid.ItemsSource = itemlist;
                     break;
                 case "Option2":
-                    foreach (var c in CustomerCollection)
-                    {
-                        if (c.Name.Contains(condition))
-                            ResultCollection.Add(c);
-                    }
-                    foreach (var t in ResultCollection)
-                    {
-                        if (!t.Name.Equals(condition)) continue;
-                        MatchCustomer(t);
-                        break;
-                    }
+                    itemSourceList.Filter += FilterByName;
+                    CusGrid.ItemsSource = itemlist;
                     break;
                 case "Option3":
-                    foreach (var c in CustomerCollection)
-                    {
-                        if (c.IcNumber.Contains(condition))
-                            ResultCollection.Add(c);
-                    }
-                    foreach (var t in ResultCollection)
-                    {
-                        if (!t.IcNumber.Equals(condition)) continue;
-                        MatchCustomer(t);
-                        break;
-                    }
+                    itemSourceList.Filter += FilterByIcNumber;
+                    CusGrid.ItemsSource = itemlist;
                     break;
                 case "Option4":
-                    foreach (var c in CustomerCollection)
-                    {
-                        if (c.ContactInfo.Tel.Contains(condition))
-                            ResultCollection.Add(c);
-                    }
-                    foreach (var t in ResultCollection)
-                    {
-                        if (!t.ContactInfo.Tel.Equals(condition)) continue;
-                        MatchCustomer(t);
-                        break;
-                    }
+                    itemSourceList.Filter += FilterByTel;
+                    CusGrid.ItemsSource = itemlist;
                     break;
             }
-
-            if (ResultCollection.Count == 1)
+            if (itemlist.Cast<Customer>().ToList().Count == 1)
             {
-                SelectedCustomer = ResultCollection[0];
-                SetSelectedCustomer();
+                SelectedCustomer = itemlist.Cast<Customer>().ToList()[0];
+                if(conditionNotNull)
+                    SetSelectedCustomer();
             }
-            if (CusGrid.SelectedIndex == -1 && ResultCollection.Count > 0)
+            if (CusGrid.SelectedIndex == -1 && itemlist.Cast<Customer>().ToList().Count > 0)
                 CusGrid.SelectedIndex = 0;
+        }
+
+        private void FilterByName(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is Customer obj)) return;
+            e.Accepted = string.IsNullOrEmpty(Condition.Text) || obj.Name.Contains(Condition.Text);
+        }
+        private void FilterByBirthDay(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is Customer obj)) return;
+            e.Accepted = string.IsNullOrEmpty(Condition.Text) || ToBirthStr(obj.Birthday).Contains(Condition.Text);
+        }
+
+        private void FilterByIcNumber(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is Customer obj)) return;
+            e.Accepted = string.IsNullOrEmpty(Condition.Text) || obj.IcNumber.Contains(Condition.Text);
+        }
+
+        private void FilterByTel(object sender, FilterEventArgs e)
+        {
+            if (!(e.Item is Customer obj)) return;
+            e.Accepted = string.IsNullOrEmpty(Condition.Text) || obj.ContactInfo.Tel.Contains(Condition.Text);
         }
 
         private void SetSelectedCustomer()
