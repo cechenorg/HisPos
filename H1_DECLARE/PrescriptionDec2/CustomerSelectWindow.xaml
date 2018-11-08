@@ -7,7 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:hisPos="clr-namespace:His_Pos" 
              mc:Ignorable="d" WindowStartupLocation="CenterScreen" Title="顧客查詢"
-             d:DesignHeight="450" d:DesignWidth="500" Width="600" Height="450">
+             d:DesignHeight="450" d:DesignWidth="500" Width="715" Height="450">
     <Window.Resources>
         <hisPos:DateConverter x:Key="BirthDayConverter"/>
         <hisPos:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
@@ -84,6 +84,14 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Width="150" Header="身分證號" Binding="{Binding IcNumber,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="165" Header="編輯時間" Binding="{Binding LastEdit,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:MM/dd h:mm}'}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment" Value="Center" />

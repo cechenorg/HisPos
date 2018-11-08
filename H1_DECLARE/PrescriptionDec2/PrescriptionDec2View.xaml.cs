@@ -1472,5 +1472,26 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if ((c.SelectedItem as Division).Name.Equals("牙科"))
                 TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id.Equals("19"));
         }
+
+        private void ReloadCardReader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var res = HisApiBase.csVerifySAMDC();
+            string cardReaderStatus;
+            if (res == 0)
+            {
+                SetCardStatusContent("安全模組認證成功");
+                res = HisApiBase.hisGetCardStatus(2);
+                cardReaderStatus = MainWindow.GetEnumDescription((CardStatusReturnCode) res);
+                SetCardStatusContent(cardReaderStatus);
+                if (cardReaderStatus.Contains("成功"))
+                    CurrentPrescription.IsGetIcCard = true;
+            }
+            else
+            {
+                res = HisApiBase.hisGetCardStatus(2);
+                cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)res);
+                SetCardStatusContent(cardReaderStatus);
+            }
+        }
     }
 }

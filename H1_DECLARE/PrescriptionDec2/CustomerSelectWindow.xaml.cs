@@ -128,21 +128,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 case "Option1":
                     itemSourceList.Filter += FilterByBirthDay;
-                    CusGrid.ItemsSource = customerList;
                     break;
                 case "Option2":
                     itemSourceList.Filter += FilterByName;
-                    CusGrid.ItemsSource = customerList;
                     break;
                 case "Option3":
                     itemSourceList.Filter += FilterByIcNumber;
-                    CusGrid.ItemsSource = customerList;
                     break;
                 case "Option4":
                     itemSourceList.Filter += FilterByTel;
-                    CusGrid.ItemsSource = customerList;
                     break;
             }
+            customerList.SortDescriptions.Add(new SortDescription("LastEdit", ListSortDirection.Descending));
+            CusGrid.ItemsSource = customerList;
             if (customerList.Cast<Customer>().ToList().Count == 1)
             {
                 SelectedCustomer = customerList.Cast<Customer>().ToList()[0];
@@ -179,6 +177,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void SetSelectedCustomer()
         {
             PrescriptionDec2View.Instance.CurrentPrescription.Customer = SelectedCustomer;
+            CustomerDb.UpdateCustomerLastEdit(SelectedCustomer);
             PrescriptionDec2View.Instance.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(PrescriptionDec2View.Instance.CurrentPrescription.Customer.Id);
             PrescriptionDec2View.Instance.CusHistoryMaster.ItemsSource = PrescriptionDec2View.Instance.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
             PrescriptionDec2View.Instance.CusHistoryMaster.SelectedIndex = 0;

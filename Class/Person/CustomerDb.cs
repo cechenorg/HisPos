@@ -122,6 +122,18 @@ namespace His_Pos.Class.Person
 
             dd.ExecuteProc("[HIS_POS_DB].[CustomerManageView].[UpdateCustomerById]",parameters);
         }
-          
+
+        internal static void UpdateCustomerLastEdit(Customer customer)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var lastEdit = DateTime.Now;
+            var sqlFormattedDate = lastEdit.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("Cus_Id", int.Parse(customer.Id)),
+                new SqlParameter("LastEdit", sqlFormattedDate)
+            };
+            dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateCustomerLastEdit]", parameters);
+        }
     }
 }

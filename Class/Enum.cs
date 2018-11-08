@@ -550,6 +550,24 @@ namespace His_Pos.Class
         ErrorCode9140 = 9140
 
     }
+
+    public enum CardStatusReturnCode
+    {
+        [Description("卡片未置入")]
+        NoCard = 0,
+        [Description("健保卡尚未與安全模組認證")]
+        SamNonVerify = 1,
+        [Description("健保卡與安全模組認證成功 ")]
+        SamVerifySuccess = 2,
+        [Description("健保卡與醫事人員卡認證成功")]
+        HpcVerifySuccess = 3,
+        [Description("健保卡PIN認證成功 ")]
+        IcPinVerifySuccess = 4,
+        [Description("與健保局資料中心認證成功 ")]
+        IdcVerifySuccess = 5,
+        [Description("所置入非健保卡 ")]
+        NotIcCard = 9
+    }
     public enum SqlConnectionType {
         SqlServer = 0,
         NySql = 1
