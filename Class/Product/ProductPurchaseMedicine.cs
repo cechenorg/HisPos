@@ -32,6 +32,7 @@ namespace His_Pos.Class.Product
                     SingdePrice = Double.Parse(dataRow["PROSIN_PRICE"].ToString());
 
                     IsSingde = Boolean.Parse(dataRow["IS_SINGDE"].ToString());
+                    IsCommon = Boolean.Parse(dataRow["HISMED_COMMON"].ToString());
                     break;
             }
 
@@ -56,6 +57,8 @@ namespace His_Pos.Class.Product
             LastPrice = selectedItem.LastPrice;
             Stock = new InStock(selectedItem);
             IsFirstBatch = true;
+
+            IsCommon = selectedItem.IsCommon;
             
             PackageAmount = selectedItem.PackageAmount;
             PackagePrice = selectedItem.PackagePrice;
@@ -200,6 +203,7 @@ namespace His_Pos.Class.Product
         public double SingdePrice { get; }
 
         public bool IsSingde { get; set; }
+        public bool IsCommon { get; set; }
         public bool IsEnough
         {
             get { return Amount > OrderAmount; }

@@ -24,6 +24,8 @@ namespace His_Pos.Struct.Product
             PackageAmount = Double.Parse(dataRow["PROSIN_PACKAGEQTY"].ToString());
             PackagePrice = Double.Parse(dataRow["PROSIN_PACKAGEPRICE"].ToString());
             SingdePrice = Double.Parse(dataRow["PROSIN_PRICE"].ToString());
+
+            IsCommon = Boolean.Parse(dataRow["HISMED_COMMON"].ToString());
         }
 
         public string Mans;
@@ -43,5 +45,7 @@ namespace His_Pos.Struct.Product
         public double PackageAmount { get; }
         public double PackagePrice { get; }
         public double SingdePrice { get; }
+
+        public bool IsCommon { get; }
     }
 }
