@@ -21,9 +21,9 @@ namespace His_Pos.Struct.Product
             Status = Boolean.Parse(dataRow["PRO_STATUS"].ToString());
             OnTheWayAmount = dataRow["PRO_ONTHEWAY"].ToString();
 
-            PackageAmount = Double.Parse(dataRow["PRO_PACKAGEQTY"].ToString());
-            PackagePrice = Double.Parse(dataRow["PRO_SPACKAGEPRICE"].ToString());
-            SingdePrice = Double.Parse(dataRow["PRO_SPRICE"].ToString());
+            PackageAmount = Double.Parse(dataRow["PROSIN_PACKAGEQTY"].ToString());
+            PackagePrice = Double.Parse(dataRow["PROSIN_PACKAGEPRICE"].ToString());
+            SingdePrice = Double.Parse(dataRow["PROSIN_PRICE"].ToString());
         }
 
         public string Mans;

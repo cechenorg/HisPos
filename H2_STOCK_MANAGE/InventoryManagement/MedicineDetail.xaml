@@ -101,7 +101,7 @@
                     </StackPanel>
                     <StackPanel Name="MinOrderStack" Orientation="Horizontal" Grid.Row="3">
                         <Label Content="最小訂貨" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
-                        <TextBox Text="{Binding Stock.BasicAmount, Mode=TwoWay}" Width="61" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
+                        <TextBox Text="{Binding Stock.MinOrderAmount, Mode=TwoWay}" Width="61" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="UnitDataGrid" Grid.Row="1" Grid.Column="1" Margin="0,10,10,10" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
@@ -239,6 +239,8 @@
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource Shadow}">
                         <Label Content="杏德藥價" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <Label Content="最小訂購量" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="200,0,0,0"/>
+                        <Label Content="{Binding SingdeMinOrderAmount}" Foreground="{StaticResource ForeGround}" Width="90" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource Shadow}">
                         <Label Content="散裝價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>

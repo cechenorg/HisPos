@@ -52,6 +52,17 @@ namespace His_Pos.Class
             }
         }
 
+        private string minOrderAmount;
+        public string MinOrderAmount
+        {
+            get { return minOrderAmount; }
+            set
+            {
+                minOrderAmount = value;
+                NotifyPropertyChanged("MinOrderAmount");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void NotifyPropertyChanged(string info)
@@ -70,6 +81,7 @@ namespace His_Pos.Class
             BasicAmount = dataRow["PRO_BASICQTY"].ToString();
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             OnTheWayAmount = dataRow["PRO_ONTHEWAY"].ToString();
+            MinOrderAmount = dataRow["PRO_MINORDER"].ToString();
             Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "")
                 ? "0"
                 : dataRow["PRO_INVENTORY"].ToString());

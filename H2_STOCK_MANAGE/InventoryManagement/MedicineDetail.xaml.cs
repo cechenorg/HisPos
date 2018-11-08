@@ -36,9 +36,10 @@ namespace His_Pos.InventoryManagement
             public InventoryMedicineDetail(DataRow dataRow)
             {
                 NHIPrice = dataRow["HISMED_PRICE"].ToString();
-                PackageAmount = dataRow["PRO_PACKAGEQTY"].ToString();
-                SingdePackagePrice = dataRow["PRO_SPACKAGEPRICE"].ToString();
-                SindePrice = dataRow["PRO_SPRICE"].ToString();
+                SingdeMinOrderAmount = dataRow["PROSIN_MINORDER"].ToString();
+                PackageAmount = dataRow["PROSIN_PACKAGEQTY"].ToString();
+                SingdePackagePrice = dataRow["PROSIN_PACKAGEPRICE"].ToString();
+                SindePrice = dataRow["PROSIN_PRICE"].ToString();
                 Form = dataRow["HISMED_FORM"].ToString();
                 ATC = dataRow["HISMED_ATC"].ToString();
                 Manufactory = dataRow["HISMED_MANUFACTORY"].ToString();
@@ -49,6 +50,7 @@ namespace His_Pos.InventoryManagement
             public string NHIPrice { get; }
             public string PackageAmount { get; }
             public string SingdePackagePrice { get; }
+            public string SingdeMinOrderAmount { get; }
             public string SindePrice { get; }
             public string Form { get; }
             public string ATC { get; }
