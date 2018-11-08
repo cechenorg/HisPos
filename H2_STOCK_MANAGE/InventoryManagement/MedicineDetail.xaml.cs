@@ -437,6 +437,7 @@ namespace His_Pos.InventoryManagement
             inventoryMedicineBackup.Stock.BasicAmount = InventoryMedicine.Stock.BasicAmount;
             inventoryMedicineBackup.SideEffect = InventoryMedicine.SideEffect;
             inventoryMedicineBackup.Indication = InventoryMedicine.Indication;
+            inventoryMedicineBackup.Warnings = InventoryMedicine.Warnings;
             inventoryMedicineBackup.Note = InventoryMedicine.Note;
         }
     }

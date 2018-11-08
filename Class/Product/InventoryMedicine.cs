@@ -77,6 +77,7 @@ namespace His_Pos.Class.Product
             newInventoryMedicine.Status = Status;
             newInventoryMedicine.WareHouse = WareHouse;
             newInventoryMedicine.WareHouseId = WareHouseId;
+            newInventoryMedicine.BarCode = BarCode;
             newInventoryMedicine.SideEffect = SideEffect;
             newInventoryMedicine.Indication = Indication;
             newInventoryMedicine.Warnings = Warnings;
