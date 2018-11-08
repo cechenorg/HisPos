@@ -101,6 +101,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             UpdateOrderDetailUi();
 
+            StoreOrderData.CalculateTotalPrice();
+
             StoreOrderData.IsDataChanged = false;
         }
 
