@@ -396,13 +396,15 @@ namespace His_Pos.InventoryManagement
 
             if ((bool)checkBox.IsChecked)
             {
-                SafeAmountStack.IsEnabled = false;
-                BasicAmountStack.IsEnabled = false;
+                SafeAmountStack.IsEnabled = true;
+                BasicAmountStack.IsEnabled = true;
+                MinOrderStack.IsEnabled = true;
             }
             else
             {
-                SafeAmountStack.IsEnabled = true;
-                BasicAmountStack.IsEnabled = true;
+                SafeAmountStack.IsEnabled = false;
+                BasicAmountStack.IsEnabled = false;
+                MinOrderStack.IsEnabled = false;
             }
         }
 

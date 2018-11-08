@@ -91,15 +91,15 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <CheckBox Content="常備藥" IsChecked="{Binding Common}" Grid.Row="0" HorizontalAlignment="Center" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="10" Checked="CommonMed_OnChecked" Unchecked="CommonMed_OnChecked"/>
-                    <StackPanel Name="SafeAmountStack" Orientation="Horizontal" Grid.Row="1">
+                    <StackPanel Name="SafeAmountStack" Orientation="Horizontal" Grid.Row="1" IsEnabled="False">
                         <Label Content="安全量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Text="{Binding Stock.SafeAmount, Mode=TwoWay}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center" Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
                     </StackPanel>
-                    <StackPanel Name="BasicAmountStack" Orientation="Horizontal" Grid.Row="2">
+                    <StackPanel Name="BasicAmountStack" Orientation="Horizontal" Grid.Row="2" IsEnabled="False">
                         <Label Content="基準量" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Text="{Binding Stock.BasicAmount, Mode=TwoWay}" Width="80" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
                     </StackPanel>
-                    <StackPanel Name="MinOrderStack" Orientation="Horizontal" Grid.Row="3">
+                    <StackPanel Name="MinOrderStack" Orientation="Horizontal" Grid.Row="3" IsEnabled="False">
                         <Label Content="最小訂貨" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="2"/>
                         <TextBox Text="{Binding Stock.MinOrderAmount, Mode=TwoWay}" Width="61" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Center"  Margin="5,0,0,0" TextChanged="MedicineData_Changed"/>
                     </StackPanel>

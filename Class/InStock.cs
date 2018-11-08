@@ -102,6 +102,7 @@ namespace His_Pos.Class
             inStock.inventory = Inventory;
             inStock.safeAmount = SafeAmount;
             inStock.basicAmount = BasicAmount;
+            inStock.minOrderAmount = MinOrderAmount;
             inStock.onTheWayAmount = OnTheWayAmount;
 
             return inStock;
