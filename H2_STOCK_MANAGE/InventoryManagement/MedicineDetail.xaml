@@ -8,6 +8,7 @@
         xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
         xmlns:stockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
         xmlns:hisPos="clr-namespace:His_Pos"
+        xmlns:resource="clr-namespace:His_Pos.Resource"
         mc:Ignorable="d" Height="900" Width="1600" Background="Transparent" GotFocus="MedicineDetail_OnGotFocus">
     <UserControl.Resources>
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
@@ -234,6 +235,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
                         <Label Content="健保價" Foreground="Black" FontSize="35" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <resource:DecimalControl Decimal="{Binding NHIPrice}" VerticalAlignment="Center" Width="120" FontSize="35" Foreground="Black" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <Label Content="{Binding NHIPrice}" Width="120" Foreground="Black" FontSize="35" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
                         <Button Content="歷史健保價" BorderThickness="0"  FontSize="20" FontFamily="Segoe UI Semi" Height="40" Background="DimGray" Margin="140,0,0,0"/>
                     </StackPanel>

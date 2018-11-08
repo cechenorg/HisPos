@@ -423,6 +423,11 @@ namespace His_Pos.InventoryManagement
             MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
 
             UpdateNewDataToCurrentMed();
+
+            InitMedicineDataChanged();
+
+            MessageWindow messageWindow = new MessageWindow("更新成功!", MessageType.SUCCESS);
+            messageWindow.ShowDialog();
         }
 
         private void UpdateNewDataToCurrentMed()

@@ -661,6 +661,9 @@
     </Compile>
     <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
+    <Compile Include="Resource\DecimalControl.xaml.cs">
+      <DependentUpon>DecimalControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Resource\MenuListItem.xaml.cs">
       <DependentUpon>MenuListItem.xaml</DependentUpon>
     </Compile>
@@ -1019,6 +1022,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resource\DecimalControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
