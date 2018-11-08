@@ -63,15 +63,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             }
         }
         public static ChronicSendToServerWindow Instance;
-        public ChronicSendToServerWindow(ObservableCollection<DeclareMedicine> medicines) {
+        private string DecMasId = string.Empty;
+        public ChronicSendToServerWindow(ObservableCollection<DeclareMedicine> medicines,string decMasId) {
             InitializeComponent();
             foreach (DeclareMedicine row in medicines) {
                 PrescriptionSendData prescription = new PrescriptionSendData(row);
-                if (row.IsBuckle) 
+                if (!row.IsBuckle) 
                     prescription.SendAmount = "0";
+
                 
                 Prescription.Add(prescription);
-            } 
+            }
+            DecMasId = decMasId;
             DataContext = this;
             Instance = this;
         }
@@ -100,6 +103,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             }
             PrescriptionDec2View.Instance.IsSend = true;
             PrescriptionDec2View.Instance.PrescriptionSendData = Prescription;
+            ChronicDb.InsertChronicDetail(Prescription,DecMasId);
             Close();
         }
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {

@@ -125,6 +125,7 @@
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
                 </StackPanel>
+                <Button Name="AddStockItems" Grid.Column="6" Grid.Row="1" Width="150" Content="盤點所有庫存" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="AddStockItems_Click"/>
                 <Button Name="AddItems" Grid.Column="6" Grid.Row="2" Width="150" Content="新增商品" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="AddItems_Click"/>
             </Grid>
             <StackPanel Name="SortType" Orientation="Horizontal" Grid.Row="4" Background="{StaticResource GridDarkestBackGround}">
@@ -290,7 +291,12 @@
                     <DataGridTemplateColumn MinWidth="200" MaxWidth="200" Header="盤差原因">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Width="190" FontSize="18" FontFamily="Segoe UI Semi" Text="{Binding TakingReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" VerticalAlignment="Center" />
+                                <ComboBox  Name="ComboBox1" Text="{Binding TakingReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" VerticalAlignment="Center">
+                                    <ComboBoxItem Content="汙損"></ComboBoxItem>
+                                    <ComboBoxItem Content="被竊"></ComboBoxItem>
+                                    <ComboBoxItem Content="不明原因"></ComboBoxItem> 
+                                </ComboBox>
+                                <!--<TextBox Width="190" FontSize="18" FontFamily="Segoe UI Semi" Text="{Binding TakingReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" VerticalAlignment="Center" />-->
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -312,6 +318,7 @@
                 <Rectangle Name="Row1Rectangle" Width="610"/>
                 <Button Name="ClearProduct" Margin="0,0,20,0" Width="150" Content="清空盤點單" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Click="ClearProduct_Click"/>
                 <Button Name="FinishedAddProduct" Width="150" Content="新增完成" FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Click="FinishedAddProduct_Click"/>
+                <CheckBox Width="100" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Name="CheckBoxSkipPrint" Content="跳過列印"/>
                 <Button Name="Print" Width="150" Content="列印盤點單" FontSize="16" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Background="RoyalBlue" BorderThickness="0" Click="Print_OnClick"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="7" Background="{StaticResource GridDarkerBackGround}">

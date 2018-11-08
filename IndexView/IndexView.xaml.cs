@@ -144,6 +144,7 @@ namespace His_Pos.IndexView
                 NotifyPropertyChanged("IsNoGetPhone");
             }
         }
+        public static IndexView Instance;
         public IndexView()
         {
             InitializeComponent();
@@ -151,9 +152,12 @@ namespace His_Pos.IndexView
             ChronicDb.CaculateChironic();
             InitData();
             DataContext = this;
+            Instance = this;
         }
 
-        public void InitData() { 
+        public void InitData() {
+            IsGetMed = false;
+            IsNoGetMed = false;
             ProductListCollection = ProductDb.DailyPurchaseReturn();
             DailyTakeChronicListCollection = ChronicDb.DailyTakeChronic();
             DailtChronicPhoneCallCollection = ChronicDb.DailyChronicPhoneCall();

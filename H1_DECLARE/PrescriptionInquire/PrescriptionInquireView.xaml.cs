@@ -119,7 +119,8 @@ namespace His_Pos.PrescriptionInquire
             if (ReleasePalace.Text != String.Empty)
                 insName = ReleasePalace.Text.Split(' ')[1];
             PrescriptionOverview = PrescriptionDB.GetPrescriptionOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
-
+            if(DataPrescription.Items.Count > 0)
+                 DataPrescription.ScrollIntoView(DataPrescription.Items[DataPrescription.Items.Count - 1]);
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)

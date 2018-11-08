@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -58,6 +59,7 @@ namespace His_Pos.SystemSettings
             CurrentStack = MyPharmacyStack;
 
             UpdateContentControl();
+            LabelVersion.Content = "系統版本 " + Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         private void InitControls()

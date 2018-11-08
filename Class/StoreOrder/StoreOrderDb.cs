@@ -469,7 +469,7 @@ namespace His_Pos.Class.StoreOrder
             Dtl_data.Append(DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Customer.Birthday, false)); //出生年月日
             string gender = declareData.Prescription.Customer.IcCard.IcNumber.Substring(1, 1) == "1" ? "1" : "2";
             Dtl_data.Append(gender.PadRight(1, ' ')); //性別判斷 1男 2女
-            Dtl_data.Append(declareData.Prescription.Customer.ContactInfo.Tel.PadRight(20, ' ')); //電話
+            Dtl_data.Append(declareData.Prescription.Customer.ContactInfo.Tel == null ? empty.PadRight(20,' ') : declareData.Prescription.Customer.ContactInfo.Tel.PadRight(20, ' ')); //電話
             Dtl_data.AppendLine();
             //第二行   
             Dtl_data.Append(declareData.Prescription.Treatment.MedicalInfo.Hospital.Id.PadRight(10, ' ')); //院所代號

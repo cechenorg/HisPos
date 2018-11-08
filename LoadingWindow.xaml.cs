@@ -497,15 +497,19 @@ namespace His_Pos
                         StockTakingOrderProduct stockTakingOrderProduct = new StockTakingOrderProduct(p);
                         products.Add(stockTakingOrderProduct);
                         count++;
-                        lastProcheId = p["PROCHE_ID"].ToString();
+                        lastProcheId = p["PROCHE_ID"].ToString(); 
                     }
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {
                 Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    if (stockTakingRecord.StocktakingCollection.Count > 0) stockTakingRecord.StockTakingRecord.SelectedIndex = 0;
+                { 
+                    if (stockTakingRecord.StockTakingRecord.Items.Count > 0) {
+                        stockTakingRecord.StockTakingRecord.ScrollIntoView(stockTakingRecord.StockTakingRecord.Items[stockTakingRecord.StockTakingRecord.Items.Count - 1]);
+                        stockTakingRecord.StockTakingRecord.SelectedIndex = stockTakingRecord.StockTakingRecord.Items.Count - 1;
+                    }
+                       
                     Close();
                 }));
             };
@@ -653,6 +657,7 @@ namespace His_Pos
         public void MergeProductStockTaking(StockTakingView stockTakingView)
         {
             stockTakingView.AddItems.IsEnabled = false;
+            stockTakingView.AddStockItems.IsEnabled = false;
             stockTakingView.AddOneItem.IsEnabled = false;
             stockTakingView.ClearProduct.IsEnabled = false;
             stockTakingView.FinishedAddProduct.IsEnabled = false;
@@ -705,6 +710,7 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     stockTakingView.AddItems.IsEnabled = true;
+                    stockTakingView.AddStockItems.IsEnabled = true;
                     stockTakingView.AddOneItem.IsEnabled = true;
                     stockTakingView.FinishedAddProduct.IsEnabled = true;
                     stockTakingView.ClearProduct.IsEnabled = true;

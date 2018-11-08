@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
+using static His_Pos.H1_DECLARE.PrescriptionDec2.ChronicSendToServerWindow;
 
 namespace His_Pos.Class
 {
@@ -80,6 +81,27 @@ namespace His_Pos.Class
             parameters.Add(new SqlParameter("DecMasId", decMasId));
             parameters.Add(new SqlParameter("PHONECALL", phoneCall));
             dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateChronicPhoneCall]",parameters);
+        }
+        internal static void InsertChronicDetail(ObservableCollection<PrescriptionSendData> prescriptionSendDataCollection,string DecMasId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var chronicDetailTable = new DataTable();
+
+            chronicDetailTable.Columns.Add("HISDECMAS_ID", typeof(string));
+            chronicDetailTable.Columns.Add("PRO_ID", typeof(string)); 
+            chronicDetailTable.Columns.Add("SEND_AMOUNT", typeof(string));
+            DataRow row = null;
+            foreach (PrescriptionSendData prescriptionSendData in prescriptionSendDataCollection) {
+                row = chronicDetailTable.NewRow();
+                row["HISDECMAS_ID"] = DecMasId;
+                row["PRO_ID"] = prescriptionSendData.MedId;
+                row["SEND_AMOUNT"] = prescriptionSendData.SendAmount;
+                chronicDetailTable.Rows.Add(row); 
+            }
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ChronicDetail", chronicDetailTable)); 
+            dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertChronicDetail]", parameters);
         } 
     }
 }

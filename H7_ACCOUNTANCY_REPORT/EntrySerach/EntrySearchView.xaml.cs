@@ -59,16 +59,18 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
                 NotifyPropertyChanged("DailyStockValueCollection");
             }
         }
-
+        public static EntrySearchView Instance;
         public EntrySearchView()
         {
             InitializeComponent();
+            InitData();
+            DataContext = this;
+            Instance = this;
+        }
+        public void InitData() {
             ProductDb.UpdateDailyStockValue();
             DailyStockValueCollection = ProductDb.GetDailyStockValue();
-            DataContext = this;
-
         }
-
         private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
             
             SaveFileDialog saveFileDialog1 = new SaveFileDialog(); 

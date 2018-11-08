@@ -14,7 +14,7 @@ namespace His_Pos.PrescriptionInquire
             HospitalName = row["INS_NAME"].ToString();
             MedicalPersonnelName = row["EMP_NAME"].ToString();
             ChronicStatus = row["CHRONIC_STATUS"].ToString();
-            AdjustDate = Convert.ToDateTime(row["HISDECMAS_TREATDATE"]).ToString("yyy/MM/dd");
+            AdjustDate = Convert.ToDateTime(row["HISDECMAS_TREATDATE"]).AddYears(-1911).ToString("yyy/MM/dd");
             Point = row["HISDECMAS_TOTALPOINT"].ToString();
         }
         public PrescriptionOverview(DeclareData declareData) {

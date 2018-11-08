@@ -13,6 +13,7 @@ using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
+using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.Interface;
 using His_Pos.StockTaking;
 using Microsoft.Reporting.WinForms;
@@ -151,6 +152,7 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
                     ClearProduct.Visibility = Visibility.Visible;
                     FinishedAddProduct.Visibility = Visibility.Visible;
                     Print.Visibility = Visibility.Collapsed;
+                    CheckBoxSkipPrint.Visibility = Visibility.Collapsed;
                     Row1Rectangle.Width = 610;
                     break;
                 case StockTakingStatus.PRINT:
@@ -165,7 +167,8 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
                     ClearProduct.Visibility = Visibility.Collapsed;
                     FinishedAddProduct.Visibility = Visibility.Collapsed;
                     Print.Visibility = Visibility.Visible;
-                    Row1Rectangle.Width = 780;
+                    CheckBoxSkipPrint.Visibility = Visibility.Visible;
+                    Row1Rectangle.Width = 680;
                     break;
                 case StockTakingStatus.INPUTRESULT:
                     CheckItems.Columns[0].Visibility = Visibility.Collapsed;
@@ -283,7 +286,9 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
             ProductDb.SaveStockTaking(_takingCollection);
             _takingCollection.Clear();
             CheckItems.Items.Filter = null;
-            InitToBegin();
+            if (EntrySearchView.Instance != null)
+                EntrySearchView.Instance.InitData();
+            InitToBegin(); 
         }
 
         private bool CaculateValidDate(string validdate, string month)
@@ -365,7 +370,7 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
         }
 
         private void Print_OnClick(object sender, RoutedEventArgs e)
-        {
+        { 
             InventoryChecking.InventoryObjectList.Clear();
             foreach (var product in _takingCollection)
             {
@@ -387,6 +392,11 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
                 }
             }
             InventoryChecking.MergeData(InventoryChecking.GetInventoryObjectList());
+            if ((bool)CheckBoxSkipPrint.IsChecked) {
+                NextStatus();
+                return;
+            }
+               
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.DataSources.Add(new ReportDataSource("InventoryDataSet", InventoryChecking.t));
@@ -449,6 +459,16 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
             NextStatus();
         }
 
+        private void AddStockItems_Click(object sender, RoutedEventArgs e)
+        {
+            var result = ProductCollection.Where(x =>  ((((IStockTaking)x).Inventory > 0   || TakingCollection.Contains(x))));
+
+            TakingCollection = new ObservableCollection<Product>(result.ToList());
+
+            AddStockTakingEmp();
+
+            ClearAddCondition();
+        }
     }
     public class IsResultEqualConverter : IValueConverter
     {
