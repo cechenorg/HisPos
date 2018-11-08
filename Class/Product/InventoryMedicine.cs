@@ -24,8 +24,8 @@ namespace His_Pos.Class.Product
             Common = dataRow["HISMED_COMMON"].ToString().Equals("True");
             WareHouse = dataRow["PROWAR_NAME"].ToString();
             WareHouseId = dataRow["PROWAR_ID"].ToString();
-            Indication = dataRow["PROWAR_ID"].ToString();
-            SideEffect = dataRow["PROWAR_ID"].ToString();
+            Indication = dataRow["HISMED_INDICATION"].ToString();
+            SideEffect = dataRow["HISMED_SIDEFFECT"].ToString();
             BarCode = dataRow["PRO_BARCODE"].ToString();
             Warnings = dataRow["HISMED_NOTE"].ToString();
         }
@@ -79,6 +79,7 @@ namespace His_Pos.Class.Product
             newInventoryMedicine.WareHouseId = WareHouseId;
             newInventoryMedicine.SideEffect = SideEffect;
             newInventoryMedicine.Indication = Indication;
+            newInventoryMedicine.Warnings = Warnings;
             newInventoryMedicine.Note = Note;
             newInventoryMedicine.StockValue = StockValue;
             newInventoryMedicine.TypeIcon = TypeIcon;
