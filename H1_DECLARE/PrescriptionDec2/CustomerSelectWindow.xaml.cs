@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -22,21 +21,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     {
         public enum RadioOptions { Option1, Option2, Option3, Option4 }
 
-        private bool conditionNotNull;
-        string _selectedRadioButton;
+        private readonly bool conditionNotNull;
+        private string _selectedRadioButton;
         public string SelectedRadioButton
         {
-            get
-            {
-                return _selectedRadioButton;
-            }
+            get => _selectedRadioButton;
             set
             {
                 if (value != null)
                 {
                     _selectedRadioButton = value;
                     Condition.Focus();
-                    FilterCustomer(Condition.Text);
+                    FilterCustomer();
                 }
             }
         }
@@ -51,17 +47,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private ObservableCollection<Customer> _resultCollection;
-        public ObservableCollection<Customer> ResultCollection
-        {
-            get => _resultCollection;
-            set
-            {
-                _resultCollection = value;
-                OnPropertyChanged(nameof(ResultCollection));
-            }
-        }
-
         private Customer SelectedCustomer { get; set; }
         public CustomerSelectWindow(string condition,int option)
         {
@@ -69,7 +54,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CustomerCollection = CustomerDb.GetData();
             DataContext = this;
             Condition.Text = condition;
-            ResultCollection = new ObservableCollection<Customer>();
             SelectedCustomer = new Customer();
             Condition.Focus();
             if (string.IsNullOrEmpty(condition))
@@ -122,27 +106,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             SetSelectedCustomer();
         }
 
-        private void MatchCustomer(Customer match)
-        {
-            ResultCollection.Add(match);
-            CusGrid.SelectedIndex = 0;
-        }
-
-        public ObservableCollection<Customer> ToObservableCollection<T>
-            (IEnumerable<Customer> source)
-        {
-            return source == null ? new ObservableCollection<Customer>() : new ObservableCollection<Customer>(source);
-        }
-
         private void Condition_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!(sender is TextBox txt)) return;
-            if (string.IsNullOrEmpty(txt.Text))
-            {
-                ResultCollection = CustomerCollection;
-                return;
-            }
-            FilterCustomer(txt.Text);
+            if (!(sender is TextBox)) return;
+            FilterCustomer();
         }
 
         private string ToBirthStr(DateTime d)
@@ -153,36 +120,36 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             return year + month + day;
         }
 
-        private void FilterCustomer(string condition)
+        private void FilterCustomer()
         {
-            var itemSourceList = new CollectionViewSource() { Source = CustomerCollection };
-            var itemlist = itemSourceList.View;
+            var itemSourceList = new CollectionViewSource { Source = CustomerCollection };
+            var customerList = itemSourceList.View;
             switch (SelectedRadioButton)
             {
                 case "Option1":
                     itemSourceList.Filter += FilterByBirthDay;
-                    CusGrid.ItemsSource = itemlist;
+                    CusGrid.ItemsSource = customerList;
                     break;
                 case "Option2":
                     itemSourceList.Filter += FilterByName;
-                    CusGrid.ItemsSource = itemlist;
+                    CusGrid.ItemsSource = customerList;
                     break;
                 case "Option3":
                     itemSourceList.Filter += FilterByIcNumber;
-                    CusGrid.ItemsSource = itemlist;
+                    CusGrid.ItemsSource = customerList;
                     break;
                 case "Option4":
                     itemSourceList.Filter += FilterByTel;
-                    CusGrid.ItemsSource = itemlist;
+                    CusGrid.ItemsSource = customerList;
                     break;
             }
-            if (itemlist.Cast<Customer>().ToList().Count == 1)
+            if (customerList.Cast<Customer>().ToList().Count == 1)
             {
-                SelectedCustomer = itemlist.Cast<Customer>().ToList()[0];
+                SelectedCustomer = customerList.Cast<Customer>().ToList()[0];
                 if(conditionNotNull)
                     SetSelectedCustomer();
             }
-            if (CusGrid.SelectedIndex == -1 && itemlist.Cast<Customer>().ToList().Count > 0)
+            if (CusGrid.SelectedIndex == -1 && customerList.Cast<Customer>().ToList().Count > 0)
                 CusGrid.SelectedIndex = 0;
         }
 

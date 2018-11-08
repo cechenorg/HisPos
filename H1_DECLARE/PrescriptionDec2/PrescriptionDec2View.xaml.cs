@@ -961,70 +961,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
         {
-            var t1 = new Thread(CheckIcCardStatus);
-            SetCardStatusContent("卡片檢查中...");
-            t1.Start();
-            if (t1.Join(4000))
-            {
-                if (CurrentPrescription.IsGetIcCard)
-                {
-                    var loading = new LoadingWindow();
-                    loading.Show();
-                    loading.LoadIcData(Instance);
-                }
-                else
-                    SearchCustomer();
-            }
-            else
-            {
-                t1.Abort();
-                SetCardStatusContent("超過最大限制時間");
-                SearchCustomer();
-            }
-        }
-
-        private void CheckIcCardStatus()
-        {
-            var cardStatus = HisApiBase.hisGetCardStatus(2);
-            switch (cardStatus)
-            {
-                case 0:
-                    SetCardStatusContent("卡片未置入");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-                case 1:
-                    SetCardStatusContent("尚未與安全模組認證");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-                case 2:
-                    SetCardStatusContent("認證成功");
-                    CurrentPrescription.IsGetIcCard = true;
-                    break;
-                case 3:
-                    SetCardStatusContent("醫事人員卡認證成功");
-                    CurrentPrescription.IsGetIcCard = true;
-                    break;
-                case 4:
-                    SetCardStatusContent("PIN 認證成功");
-                    CurrentPrescription.IsGetIcCard = true;
-                    break;
-                case 5:
-                    SetCardStatusContent("健保局IDC認證成功 ");
-                    CurrentPrescription.IsGetIcCard = true;
-                    break;
-                case 9:
-                    SetCardStatusContent("非健保卡");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-                case 4000:
-                    SetCardStatusContent("讀卡機逾時");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-                case 9205:
-                    SetCardStatusContent("開啟讀卡機連結埠失敗 ");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-            }
+            var loading = new LoadingWindow();
+            loading.Show();
+            loading.LoadIcData(Instance);
         }
 
         public void SetCardStatusContent(string content)
@@ -1294,22 +1233,41 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             AdjustCaseCombo.Focus();
                             break;
                         case "ChronicSequence":
-                            if (string.IsNullOrEmpty(ChronicSequence.Text))
-                                SpecialCodeCombo.Focus();
-                            else
-                                ChronicTotal.Focus();
-                            break;
-                        case "ChronicTotal":
                             if (string.IsNullOrEmpty(ChronicTotal.Text) && !string.IsNullOrEmpty(ChronicSequence.Text))
                             {
-                                var m = new MessageWindow("領藥次數有值，需填寫總領藥次數",MessageType.WARNING,true);
+                                var m = new MessageWindow("總領藥次數有值，需填寫領藥次數", MessageType.WARNING, true);
                                 m.ShowDialog();
                                 ChronicTotal.Focus();
                             }
                             else
+                            {
+                                if (!string.IsNullOrEmpty(ChronicTotal.Text) && !string.IsNullOrEmpty(ChronicSequence.Text))
+                                {
+                                    AdjustCaseCombo.SelectedIndex = 1;
+                                    SpecialCodeCombo.Focus();
+                                }
+                            }
+                            break;
+                        case "ChronicTotal":
+                            if (string.IsNullOrEmpty(ChronicSequence.Text))
                                 SpecialCodeCombo.Focus();
+                            else
+                                ChronicSequence.Focus();
                             break;
                         case "MedicalNumber":
+                            TreatmentDate.Focus();
+                            break;
+                    }
+                    break;
+                case MaskedTextBox _ when e.Key != Key.Enter:
+                    return;
+                case MaskedTextBox masked:
+                    switch (masked.Name)
+                    {
+                        case "TreatmentDate":
+                            AdjustDate.Focus();
+                            break;
+                        case "AdjustDate":
                             MainDiagnosis.Focus();
                             break;
                     }
@@ -1506,6 +1464,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
             var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
             chronicSelectWindow.ShowDialog();
+        }
+
+        private void DivisionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox c = sender as ComboBox;
+            if ((c.SelectedItem as Division).Name.Equals("牙科"))
+                TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id.Equals("19"));
         }
     }
 }

@@ -240,23 +240,23 @@ namespace His_Pos.Class
     }
 
     public enum ErrorCode {
-        [Description("讀卡機comport連線失敗")]
+        [Description("讀卡機連接埠連線失敗")]
         ErrorCode1 = -1,
         [Description("成功")]
         ErrorCode0 = 0,
-        [Description("讀卡機timeout")]
+        [Description("讀卡機逾時")]
         ErrorCode4000 = 4000,
         [Description("未置入安全模組卡")]
         ErrorCode4012 = 4012,
-        [Description("未置入健保IC卡")]
+        [Description("未置入健保卡")]
         ErrorCode4013 = 4013,
         [Description("未置入醫事人員卡")]
         ErrorCode4014 = 4014,
-        [Description("IC卡權限不足")]
+        [Description("健保卡權限不足")]
         ErrorCode4029 = 4029,
         [Description("所插入非安全模組卡")]
         ErrorCode4032 = 4032,
-        [Description("所置入非健保IC卡")]
+        [Description("所置入非健保卡")]
         ErrorCode4033 = 4033,
         [Description("所置入非醫事人員卡")]
         ErrorCode4034 = 4034,
@@ -420,31 +420,31 @@ namespace His_Pos.Class
         ErrorCode6018 = 6018,
         [Description("送至IDCMeageHeader檢核不符")]
         ErrorCode9001 = 9001,
-        [Description("送至IDC語法不符")]
+        [Description("送至健保卡資料中心語法不符")]
         ErrorCode9002 = 9002,
-        [Description("與IDC作業逾時")]
+        [Description("與健保卡資料中心作業逾時")]
         ErrorCode9003 = 9003,
-        [Description("IDC異常無法Service")]
+        [Description("健保卡資料中心異常無法提供服務")]
         ErrorCode9004 = 9004,
-        [Description("IDC無法驗證該卡片")]
+        [Description("健保卡資料中心無法驗證該卡片")]
         ErrorCode9010 = 9010,
-        [Description("IDC驗證健保IC卡失敗")]
+        [Description("健保卡資料中心驗證健保卡失敗")]
         ErrorCode9011 = 9011,
-        [Description("IDC無該卡片資料")]
+        [Description("健保卡資料中心無該卡片資料")]
         ErrorCode9012 = 9012,
         [Description("無效的安全模組卡")]
         ErrorCode9013 = 9013,
-        [Description("IDC對安全模組卡認證失敗")]
+        [Description("健保卡資料中心對安全模組卡認證失敗")]
         ErrorCode9014 = 9014,
-        [Description("安全模組卡對IDC認證失敗")]
+        [Description("安全模組卡對健保卡資料中心認證失敗")]
         ErrorCode9015 = 9015,
-        [Description("IDC驗章錯誤")]
+        [Description("健保卡資料中心驗章錯誤")]
         ErrorCode9020 = 9020,
         [Description("無法執行卡片管理系統的認證")]
         ErrorCode9030 = 9030,
         [Description("無法執行健保IC卡AppletPero認證")]
         ErrorCode9040 = 9040,
-        [Description("健保IC卡AppletPero認證失敗")]
+        [Description("健保卡AppletPero認證失敗")]
         ErrorCode9041 = 9041,
         [Description("無法執行安全模組卡世代碼更新認證")]
         ErrorCode9050 = 9050,
@@ -458,7 +458,7 @@ namespace His_Pos.Class
         ErrorCode9062 = 9062,
         [Description("上傳資料大小不符無法接收檔案")]
         ErrorCode9070 = 9070,
-        [Description("上傳日期與DataCenter不一致")]
+        [Description("上傳日期與資料中心不一致")]
         ErrorCode9071 = 9071,
         [Description("卡片可用次數大於3次,未達可更新標準")]
         ErrorCode9081 = 9081,

@@ -756,6 +756,7 @@ namespace His_Pos
                 {
                     if (prescriptionDec2View.CurrentPrescription.IsGetIcCard)
                     {
+                        CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
                         var c = new CustomerSelectWindow(prescriptionDec2View.CurrentPrescription.Customer.IcCard.IcNumber,3);
                         c.ShowDialog();
                         if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
@@ -764,6 +765,11 @@ namespace His_Pos
                         if (!string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
                             string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
                             prescriptionDec2View.MedicalNumber.Text = prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber;
+                    }
+                    else
+                    {
+                        var c = new CustomerSelectWindow(string.Empty, 3);
+                        c.ShowDialog();
                     }
                 }));
             };
@@ -832,24 +838,7 @@ namespace His_Pos
             else
             {
                 prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
-                switch (res)
-                {
-                    case 4000:
-                        prescriptionDec2View.SetCardStatusContent("讀卡機逾時");
-                        break;
-                    case 4013:
-                        prescriptionDec2View.SetCardStatusContent("未置入健保IC卡");
-                        break;
-                    case 4029:
-                        prescriptionDec2View.SetCardStatusContent("IC卡權限不足");
-                        break;
-                    case 4033:
-                        prescriptionDec2View.SetCardStatusContent("所置入非健保IC卡");
-                        break;
-                    case 4050:
-                        prescriptionDec2View.SetCardStatusContent("安全模組尚未與IDC認證");
-                        break;
-                }
+                prescriptionDec2View.SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)res));
             }
         }
 
