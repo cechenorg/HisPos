@@ -27,6 +27,7 @@ namespace His_Pos.Class.Product
             Indication = dataRow["PROWAR_ID"].ToString();
             SideEffect = dataRow["PROWAR_ID"].ToString();
             BarCode = dataRow["PRO_BARCODE"].ToString();
+            Warnings = dataRow["HISMED_NOTE"].ToString();
         }
         public InStock Stock { get; set; }
         public string Location { get; set; }
@@ -38,6 +39,7 @@ namespace His_Pos.Class.Product
         public string Note { get; set; }
         public string Ingredient { get; set; }
         public string Indication { get; set; }
+        public string Warnings { get; set; }
         public string SideEffect { get; set; }
         public string WareHouseId { get; set; }
         public string WareHouse { get; set; }

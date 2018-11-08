@@ -144,6 +144,7 @@ namespace His_Pos.InventoryManagement
 
             SideEffectBox.AppendText(InventoryMedicine.SideEffect);
             IndicationBox.AppendText(InventoryMedicine.Indication);
+            WarningBox.AppendText(InventoryMedicine.Warnings);
             NoteBox.AppendText(InventoryMedicine.Note);
 
             if (InventoryDetailOverviews.Count > 0)
@@ -199,6 +200,7 @@ namespace His_Pos.InventoryManagement
 
             SideEffectBox.Document.Blocks.Clear();
             IndicationBox.Document.Blocks.Clear();
+            WarningBox.Document.Blocks.Clear();
             NoteBox.Document.Blocks.Clear();
 
             InventoryMedicine = ((ICloneable)inventoryMedicineBackup).Clone() as InventoryMedicine;
@@ -206,6 +208,7 @@ namespace His_Pos.InventoryManagement
 
             SideEffectBox.AppendText(InventoryMedicine.SideEffect);
             IndicationBox.AppendText(InventoryMedicine.Indication);
+            WarningBox.AppendText(InventoryMedicine.Warnings);
             NoteBox.AppendText(InventoryMedicine.Note);
 
             InitMedicineDataChanged();
@@ -410,6 +413,7 @@ namespace His_Pos.InventoryManagement
         {
             InventoryMedicine.SideEffect = new TextRange(SideEffectBox.Document.ContentStart, SideEffectBox.Document.ContentEnd).Text;
             InventoryMedicine.Indication = new TextRange(IndicationBox.Document.ContentStart, IndicationBox.Document.ContentEnd).Text;
+            InventoryMedicine.Warnings = new TextRange(WarningBox.Document.ContentStart, WarningBox.Document.ContentEnd).Text;
             InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text;
 
             MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
