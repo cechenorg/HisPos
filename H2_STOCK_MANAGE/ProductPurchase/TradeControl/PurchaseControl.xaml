@@ -465,8 +465,8 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Width="170">
                                 <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown"/>
-                                <Button x:Name="Split" Content="拆批" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Click="SplitBatchNumber_Click" Visibility="{Binding IsFirstBatch, Converter={StaticResource BoolToVisConverter}}"/>
-                                <Button Content="合批" Background="MediumPurple" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Click="MergeBatchButton_Click" Visibility="{Binding InvertIsFirstBatch, Converter={StaticResource BoolToVisConverter}}"/>
+                                <Button x:Name="Split" Content="拆批" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Click="SplitBatchNumber_Click" Visibility="{Binding IsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                <Button Content="合批" Background="MediumPurple" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Click="MergeBatchButton_Click" Visibility="{Binding InvertIsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -493,11 +493,6 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-            <DataGrid.RowHeaderTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding}"/>
-                </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
         </DataGrid>
         <DataGrid Name="WStoreOrderDetail" Grid.Row="6" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
                           AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False">

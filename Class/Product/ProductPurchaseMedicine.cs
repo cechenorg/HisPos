@@ -6,7 +6,7 @@ using His_Pos.Struct.Product;
 
 namespace His_Pos.Class.Product
 {
-    class ProductPurchaseMedicine : AbstractClass.Product, IProductPurchase, IDeletable, ITrade, INotifyPropertyChanged, ICloneable
+    class ProductPurchaseMedicine : AbstractClass.Product, IProductPurchase, IDeletable, ITrade, ICloneable
     {
         public ProductPurchaseMedicine(DataRow dataRow, DataSource dataSource) : base(dataRow)
         {
@@ -270,15 +270,6 @@ namespace His_Pos.Class.Product
                     TotalPrice = SingdePrice * OrderAmount;
                     Price = SingdePrice;
                 }
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        private void NotifyPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
 
