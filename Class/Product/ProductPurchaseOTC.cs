@@ -224,7 +224,7 @@ namespace His_Pos.Class.Product
 
         public bool IsEnough
         {
-            get { return Amount > OrderAmount; }
+            get { return Amount >= OrderAmount; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
