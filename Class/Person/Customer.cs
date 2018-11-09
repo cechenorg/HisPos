@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Globalization;
+using System.Threading;
 using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Struct.IcData;
@@ -39,6 +41,7 @@ namespace His_Pos.Class.Person
         }
         public Customer(DataRow row,string type)
         {
+            CultureInfo ci = Thread.CurrentThread.CurrentCulture;
             Id = row["CUS_ID"].ToString();
             IcNumber = row["CUS_IDNUM"].ToString();
             Birthday = string.IsNullOrEmpty(row["CUS_BIRTH"].ToString()) ? new DateTime() : Convert.ToDateTime(row["CUS_BIRTH"].ToString());
@@ -54,6 +57,7 @@ namespace His_Pos.Class.Person
                 IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
                 ContactInfo = new ContactInfo();
                 ContactInfo.Tel = row["CUS_TEL"].ToString();
+                LastEdit = string.IsNullOrEmpty(row["CUS_LASTEDIT"].ToString()) ? new DateTime().ToLocalTime() : Convert.ToDateTime(row["CUS_LASTEDIT"].ToString()).ToLocalTime();
             }
             
                 
@@ -142,9 +146,20 @@ namespace His_Pos.Class.Person
             set
             {
                 emergentTel = value;
-                OnPropertyChanged("EmergentTel");
+                OnPropertyChanged(nameof(EmergentTel));
             }
 
-        } 
+        }
+
+        private DateTime _lastEdit;
+        public DateTime LastEdit
+        {
+            get => _lastEdit;
+            set
+            {
+                _lastEdit = value;
+                OnPropertyChanged(nameof(LastEdit));
+            }
+        }
     }
 }
