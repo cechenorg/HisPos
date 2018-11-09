@@ -118,7 +118,8 @@ namespace His_Pos.Class.Person
             if (string.IsNullOrEmpty(customer.EmergentTel))
                 parameters.Add(new SqlParameter("CUS_EMERGENTTEL", DBNull.Value));
             else
-                parameters.Add(new SqlParameter("CUS_EMERGENTTEL", customer.EmergentTel)); 
+                parameters.Add(new SqlParameter("CUS_EMERGENTTEL", customer.EmergentTel));
+            parameters.Add(new SqlParameter("CUS_LASTEDIT", DateTime.Now));
 
             dd.ExecuteProc("[HIS_POS_DB].[CustomerManageView].[UpdateCustomerById]",parameters);
         }

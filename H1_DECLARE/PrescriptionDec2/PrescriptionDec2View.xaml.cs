@@ -16,6 +16,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -1081,7 +1082,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             if (AdjustCaseCombo.SelectedIndex != 1)
                 AdjustCaseCombo.SelectedIndex = 1;
-            if (Convert.ToInt32(ChronicSequence.Text) > 1)
+            if (!int.TryParse(t.Text, out var seqence)) return;
+            if (seqence > 1)
             {
                 var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
@@ -1279,7 +1281,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is AutoCompleteBox a)) return;
             if (e.Key == Key.Enter && a.IsDropDownOpen && a.Text.Length <= 10)
-                a.SelectedItem = Hospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList()[0];
+                a.SelectedItem = Hospitals.Where(x => x.Id.Contains(ReleaseHospital.Text.TrimStart(' '))).Take(50).ToList()[0];
         }
 
         private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -1301,6 +1303,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
         private void MedContextMenu_Opened(object sender, RoutedEventArgs e)
         {
+            if (PrescriptionMedicines.SelectedItem == null || CurrentPrescription.Medicines.Count == 0) return;
             var temp = (sender as ContextMenu);
             var menuitem = temp.Items[0] as MenuItem;
             _selectedMedId = ((DeclareMedicine)PrescriptionMedicines.SelectedItem).Id;
@@ -1407,11 +1410,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void SelectionStart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (sender is TextBox t)
-            {
-                t.SelectionStart = 0;
-                t.SelectionLength = t.Text.Length;
-            }
+            if (!(sender is TextBox t)) return;
+            t.SelectionStart = 0;
+            t.SelectionLength = t.Text.Length;
         }
 
         private void SearchCustomer()
@@ -1468,8 +1469,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DivisionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox c = sender as ComboBox;
-            if ((c.SelectedItem as Division).Name.Equals("牙科"))
+            if (sender is ComboBox c && ((Division) c.SelectedItem).Name.Equals("牙科"))
                 TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id.Equals("19"));
         }
 

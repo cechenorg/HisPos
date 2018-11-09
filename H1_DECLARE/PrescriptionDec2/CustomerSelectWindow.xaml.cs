@@ -3,13 +3,17 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.Class.CustomerHistory;
+using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.Person;
+using His_Pos.HisApi;
+using His_Pos.Struct.IcData;
 using JetBrains.Annotations;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
@@ -183,7 +187,59 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PrescriptionDec2View.Instance.CusHistoryMaster.SelectedIndex = 0;
             PrescriptionDec2View.Instance.CustomerSelected = true;
             PrescriptionDec2View.Instance.NotifyPropertyChanged(nameof(PrescriptionDec2View.Instance.CurrentPrescription));
+            if (PrescriptionDec2View.Instance.CurrentPrescription.IsGetIcCard)
+            {
+                ReadTreatRecord();
+            }
             Close();
+        }
+        public void ReadTreatRecord()
+        {
+            Thread thread = new Thread(() =>
+            {
+                var strLength = 296;
+                var icData = new byte[296];
+                var cs = new ConvertData();
+                var cTreatItem = cs.StringToBytes("AF\0", 3);
+                //新生兒就醫註記,長度兩個char
+                var cBabyTreat = PrescriptionDec2View.Instance.TreatRecCollection.Count > 0 ? cs.StringToBytes(PrescriptionDec2View.Instance.TreatRecCollection[0].NewbornTreatmentMark + "\0", 3) : cs.StringToBytes(" ", 2);
+                //補卡註記,長度一個char
+                var cTreatAfterCheck = new byte[] { 1 };
+                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+                //取得就醫序號
+                if (res == 0)
+                {
+                    PrescriptionDec2View.Instance.IsMedicalNumberGet = true;
+                    PrescriptionDec2View.Instance.Seq = new SeqNumber(icData);
+                    PrescriptionDec2View.Instance.CurrentPrescription.Customer.IcCard.MedicalNumber = PrescriptionDec2View.Instance.Seq.MedicalNumber;
+                    PrescriptionDec2View.Instance.NotifyPropertyChanged(nameof(PrescriptionDec2View.Instance.CurrentPrescription.Customer.IcCard));
+                }
+                //未取得就醫序號
+                else
+                {
+                    PrescriptionDec2View.Instance.GetMedicalNumberErrorCode = res;
+                }
+                //取得就醫紀錄
+                strLength = 498;
+                icData = new byte[498];
+                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+                if (res == 0)
+                {
+                    var startIndex = 84;
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (icData[startIndex + 3] == 32)
+                            break;
+                        PrescriptionDec2View.Instance.TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
+                        startIndex += 69;
+                    }
+                }
+
+                System.Windows.Threading.Dispatcher.Run();
+            });
+
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
         }
     }
 }
