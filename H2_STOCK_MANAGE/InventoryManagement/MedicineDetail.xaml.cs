@@ -357,6 +357,7 @@ namespace His_Pos.InventoryManagement
 
             InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
             CalculateStock();
+            TextBoxTakingValue.Text = string.Empty;
         }
 
         private bool ConfirmStockTaking()
