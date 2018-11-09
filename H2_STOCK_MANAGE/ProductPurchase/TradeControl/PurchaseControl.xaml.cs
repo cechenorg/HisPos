@@ -88,6 +88,8 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             InitPrincipal();
 
             UpdateOrderDetailUi();
+
+            StoreOrderData.CalculateTotalPrice();
             
             StoreOrderData.IsDataChanged = false;
         }

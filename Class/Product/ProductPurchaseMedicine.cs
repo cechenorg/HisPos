@@ -26,12 +26,13 @@ namespace His_Pos.Class.Product
                     freeAmount = Int32.Parse(dataRow["STOORDDET_FREEQTY"].ToString());
                     validDate = (dataRow["STOORDDET_VALIDDATE"].ToString().Equals("1900/01/01"))? "" : dataRow["STOORDDET_VALIDDATE"].ToString();
                     batchNumber = dataRow["STOORDDET_BATCHNUMBER"].ToString();
-                    
-                    PackageAmount = Double.Parse(dataRow["PRO_PACKAGEQTY"].ToString());
-                    PackagePrice = Double.Parse(dataRow["PRO_SPACKAGEPRICE"].ToString());
-                    SingdePrice = Double.Parse(dataRow["PRO_SPRICE"].ToString());
+
+                    PackageAmount = Double.Parse(dataRow["PROSIN_PACKAGEQTY"].ToString());
+                    PackagePrice = Double.Parse(dataRow["PROSIN_PACKAGEPRICE"].ToString());
+                    SingdePrice = Double.Parse(dataRow["PROSIN_PRICE"].ToString());
 
                     IsSingde = Boolean.Parse(dataRow["IS_SINGDE"].ToString());
+                    IsCommon = Boolean.Parse(dataRow["HISMED_COMMON"].ToString());
                     break;
             }
 
@@ -56,6 +57,8 @@ namespace His_Pos.Class.Product
             LastPrice = selectedItem.LastPrice;
             Stock = new InStock(selectedItem);
             IsFirstBatch = true;
+
+            IsCommon = selectedItem.IsCommon;
             
             PackageAmount = selectedItem.PackageAmount;
             PackagePrice = selectedItem.PackagePrice;
@@ -200,6 +203,7 @@ namespace His_Pos.Class.Product
         public double SingdePrice { get; }
 
         public bool IsSingde { get; set; }
+        public bool IsCommon { get; set; }
         public bool IsEnough
         {
             get { return Amount > OrderAmount; }

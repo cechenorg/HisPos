@@ -189,7 +189,9 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("COMMON", inventoryMedicine.Common));
             parameters.Add(new SqlParameter("SIDEEFFECT", inventoryMedicine.SideEffect));
             parameters.Add(new SqlParameter("INDICATION", inventoryMedicine.Indication));
-            parameters.Add(new SqlParameter("NOTE", inventoryMedicine.Note));
+            parameters.Add(new SqlParameter("WARNING", inventoryMedicine.Warnings));
+            parameters.Add(new SqlParameter("MINORDER", inventoryMedicine.Stock.MinOrderAmount));
+            parameters.Add(new SqlParameter("DESCRIPTION", inventoryMedicine.Note));
 
             dd.ExecuteProc("[HIS_POS_DB].[MedicineDetail].[UpdateInventoryMedicineDetail]", parameters);
         }

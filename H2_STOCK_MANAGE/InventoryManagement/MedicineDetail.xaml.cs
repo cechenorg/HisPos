@@ -36,9 +36,10 @@ namespace His_Pos.InventoryManagement
             public InventoryMedicineDetail(DataRow dataRow)
             {
                 NHIPrice = dataRow["HISMED_PRICE"].ToString();
-                PackageAmount = dataRow["PRO_PACKAGEQTY"].ToString();
-                SingdePackagePrice = dataRow["PRO_SPACKAGEPRICE"].ToString();
-                SindePrice = dataRow["PRO_SPRICE"].ToString();
+                SingdeMinOrderAmount = dataRow["PROSIN_MINORDER"].ToString();
+                PackageAmount = dataRow["PROSIN_PACKAGEQTY"].ToString();
+                SingdePackagePrice = dataRow["PROSIN_PACKAGEPRICE"].ToString();
+                SindePrice = dataRow["PROSIN_PRICE"].ToString();
                 Form = dataRow["HISMED_FORM"].ToString();
                 ATC = dataRow["HISMED_ATC"].ToString();
                 Manufactory = dataRow["HISMED_MANUFACTORY"].ToString();
@@ -49,6 +50,7 @@ namespace His_Pos.InventoryManagement
             public string NHIPrice { get; }
             public string PackageAmount { get; }
             public string SingdePackagePrice { get; }
+            public string SingdeMinOrderAmount { get; }
             public string SindePrice { get; }
             public string Form { get; }
             public string ATC { get; }
@@ -144,6 +146,7 @@ namespace His_Pos.InventoryManagement
 
             SideEffectBox.AppendText(InventoryMedicine.SideEffect);
             IndicationBox.AppendText(InventoryMedicine.Indication);
+            WarningBox.AppendText(InventoryMedicine.Warnings);
             NoteBox.AppendText(InventoryMedicine.Note);
 
             if (InventoryDetailOverviews.Count > 0)
@@ -199,6 +202,7 @@ namespace His_Pos.InventoryManagement
 
             SideEffectBox.Document.Blocks.Clear();
             IndicationBox.Document.Blocks.Clear();
+            WarningBox.Document.Blocks.Clear();
             NoteBox.Document.Blocks.Clear();
 
             InventoryMedicine = ((ICloneable)inventoryMedicineBackup).Clone() as InventoryMedicine;
@@ -206,6 +210,7 @@ namespace His_Pos.InventoryManagement
 
             SideEffectBox.AppendText(InventoryMedicine.SideEffect);
             IndicationBox.AppendText(InventoryMedicine.Indication);
+            WarningBox.AppendText(InventoryMedicine.Warnings);
             NoteBox.AppendText(InventoryMedicine.Note);
 
             InitMedicineDataChanged();
@@ -391,13 +396,15 @@ namespace His_Pos.InventoryManagement
 
             if ((bool)checkBox.IsChecked)
             {
-                SafeAmountStack.IsEnabled = false;
-                BasicAmountStack.IsEnabled = false;
+                SafeAmountStack.IsEnabled = true;
+                BasicAmountStack.IsEnabled = true;
+                MinOrderStack.IsEnabled = true;
             }
             else
             {
-                SafeAmountStack.IsEnabled = true;
-                BasicAmountStack.IsEnabled = true;
+                SafeAmountStack.IsEnabled = false;
+                BasicAmountStack.IsEnabled = false;
+                MinOrderStack.IsEnabled = false;
             }
         }
 
@@ -410,11 +417,17 @@ namespace His_Pos.InventoryManagement
         {
             InventoryMedicine.SideEffect = new TextRange(SideEffectBox.Document.ContentStart, SideEffectBox.Document.ContentEnd).Text;
             InventoryMedicine.Indication = new TextRange(IndicationBox.Document.ContentStart, IndicationBox.Document.ContentEnd).Text;
+            InventoryMedicine.Warnings = new TextRange(WarningBox.Document.ContentStart, WarningBox.Document.ContentEnd).Text;
             InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text;
 
             MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
 
             UpdateNewDataToCurrentMed();
+
+            InitMedicineDataChanged();
+
+            MessageWindow messageWindow = new MessageWindow("更新成功!", MessageType.SUCCESS);
+            messageWindow.ShowDialog();
         }
 
         private void UpdateNewDataToCurrentMed()
@@ -429,6 +442,7 @@ namespace His_Pos.InventoryManagement
             inventoryMedicineBackup.Stock.BasicAmount = InventoryMedicine.Stock.BasicAmount;
             inventoryMedicineBackup.SideEffect = InventoryMedicine.SideEffect;
             inventoryMedicineBackup.Indication = InventoryMedicine.Indication;
+            inventoryMedicineBackup.Warnings = InventoryMedicine.Warnings;
             inventoryMedicineBackup.Note = InventoryMedicine.Note;
         }
     }
