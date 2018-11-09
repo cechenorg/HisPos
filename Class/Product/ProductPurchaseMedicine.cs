@@ -33,6 +33,7 @@ namespace His_Pos.Class.Product
 
                     IsSingde = Boolean.Parse(dataRow["IS_SINGDE"].ToString());
                     IsCommon = Boolean.Parse(dataRow["HISMED_COMMON"].ToString());
+                    IsControl = Boolean.Parse(dataRow["HISMED_CONTROL"].ToString());
                     break;
             }
 
@@ -59,7 +60,8 @@ namespace His_Pos.Class.Product
             IsFirstBatch = true;
 
             IsCommon = selectedItem.IsCommon;
-            
+            IsControl = selectedItem.IsControl;
+
             PackageAmount = selectedItem.PackageAmount;
             PackagePrice = selectedItem.PackagePrice;
             SingdePrice = selectedItem.SingdePrice;
@@ -204,6 +206,7 @@ namespace His_Pos.Class.Product
 
         public bool IsSingde { get; set; }
         public bool IsCommon { get; set; }
+        public bool IsControl { get; set; }
         public bool IsEnough
         {
             get { return Amount > OrderAmount; }

@@ -26,6 +26,7 @@ namespace His_Pos.Struct.Product
             SingdePrice = Double.Parse(dataRow["PROSIN_PRICE"].ToString());
 
             IsCommon = Boolean.Parse(dataRow["HISMED_COMMON"].ToString());
+            IsControl = Boolean.Parse(dataRow["HISMED_CONTROL"].ToString());
         }
 
         public string Mans;
@@ -47,5 +48,7 @@ namespace His_Pos.Struct.Product
         public double SingdePrice { get; }
 
         public bool IsCommon { get; }
+
+        public bool IsControl { get; }
     }
 }
