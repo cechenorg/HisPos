@@ -23,6 +23,9 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         public class DailyStockValue {
+            public DailyStockValue() {
+
+            }
             public DailyStockValue(DataRow row) {
                 Date =  DateTimeExtensions.ToSimpleTaiwanDate(Convert.ToDateTime(row["DSV_DATE"]));
                 InitStockValue = row["DSV_INITIAL_VALUE"].ToString();

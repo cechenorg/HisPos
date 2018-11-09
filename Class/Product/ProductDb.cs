@@ -474,10 +474,46 @@ namespace His_Pos.Class.Product
             var dd = new DbConnection(Settings.Default.SQL_global);
             var table = dd.ExecuteProc("[HIS_POS_DB].[Index].[GetDailyStockValue]");
             ObservableCollection<EntrySearchView.DailyStockValue> collection = new ObservableCollection<EntrySearchView.DailyStockValue>();
+
+            var InitStockValue = table.Rows[0]["DSV_INITIAL_VALUE"].ToString(); 
+            var FinalStockValue = table.Rows[table.Rows.Count-1]["DSV_FINAL_VALUE"].ToString();
+
+            var PurchaseValue = 0;
+            var ReturnValue = 0;
+            var StockCheckValue = 0;
+            var MedUseValue = 0;
+            var MedIncomeValue = 0;
+            var CopayMentValue = 0;
+            var PaySelfValue = 0;
+            var DepositValue = 0;
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new EntrySearchView.DailyStockValue(row));
+                EntrySearchView.DailyStockValue daily = new EntrySearchView.DailyStockValue(row);
+                collection.Add(daily);
+                PurchaseValue += Convert.ToInt32(daily.PurchaseValue);
+                ReturnValue += Convert.ToInt32(daily.ReturnValue);
+                StockCheckValue += Convert.ToInt32(daily.StockCheckValue);
+                MedUseValue += Convert.ToInt32(daily.MedUseValue);
+                MedIncomeValue += Convert.ToInt32(daily.MedIncomeValue);
+                CopayMentValue += Convert.ToInt32(daily.CopayMentValue);
+                PaySelfValue += Convert.ToInt32(daily.PaySelfValue);
+                DepositValue += Convert.ToInt32(daily.DepositValue);
             }
+            EntrySearchView.DailyStockValue dailyStockValue = new EntrySearchView.DailyStockValue();
+
+                dailyStockValue.Date = "總和";
+                dailyStockValue.InitStockValue = InitStockValue;
+                dailyStockValue.PurchaseValue = PurchaseValue.ToString();
+                dailyStockValue.ReturnValue = ReturnValue.ToString();
+                dailyStockValue.StockCheckValue = StockCheckValue.ToString();
+                dailyStockValue.MedUseValue = MedUseValue.ToString();
+                dailyStockValue.MedIncomeValue = MedIncomeValue.ToString();
+                dailyStockValue.CopayMentValue = CopayMentValue.ToString();
+                dailyStockValue.PaySelfValue = PaySelfValue.ToString();
+                dailyStockValue.DepositValue = DepositValue.ToString();
+                dailyStockValue.FinalStockValue = FinalStockValue;
+            
+            collection.Add(dailyStockValue);
             return collection;
         }
         
