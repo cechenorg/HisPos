@@ -28,6 +28,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach {
         public EntryDetailWindow(string date) {
             InitializeComponent();
  
+
                 DataContext = this;
                 EntryDetailCollection = EntryDb.GetEntryDetailByDate(date);
             
