@@ -99,8 +99,11 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         private void showEntryDetail(object sender, MouseButtonEventArgs e) {
             var selectedItem = (sender as DataGridRow).Item;
-            EntryDetailWindow entryDetailWindow = new EntryDetailWindow( ((DailyStockValue)selectedItem).Date);
-            entryDetailWindow.ShowDialog();
+            if (((DailyStockValue)selectedItem).Date != "總和") {
+                EntryDetailWindow entryDetailWindow = new EntryDetailWindow(((DailyStockValue)selectedItem).Date);
+                entryDetailWindow.ShowDialog(); 
+            }
+        
         }
     }
 }

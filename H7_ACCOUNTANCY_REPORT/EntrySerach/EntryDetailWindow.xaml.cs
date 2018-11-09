@@ -27,9 +27,51 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach {
 
         public EntryDetailWindow(string date) {
             InitializeComponent();
-            DataContext = this;
-            EntryDetailCollection = EntryDb.GetEntryDetailByDate(date);
+ 
+                DataContext = this;
+                EntryDetailCollection = EntryDb.GetEntryDetailByDate(date);
+            
         }
+
+        private void CheckBoxPurchase_Checked(object sender, RoutedEventArgs e) {
+            if (EntryDetailCollection is null) return;
+            EntryDetail.Items.Filter = ((o) => {
+                string name = ((Entry)o).EntryName;
+                switch (name)
+                {
+                    case "進貨":
+                        if ((bool)CheckBoxPurchase.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "退貨":
+                        if ((bool)CheckBoxReturn.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "盤點單盤點":
+                        if ((bool)CheckBoxCheck.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "單品盤點":
+                        if ((bool)CheckBoxCheck.IsChecked)
+                            return true;
+                        else
+                            return false;
+                    case "調劑耗用":
+                        if ((bool)CheckBoxMedUse.IsChecked)
+                            return true;
+                        else
+                            return false;
+
+                    default:
+                        return false;
+                }
+            });
+
+        }
+
          
     }
 }

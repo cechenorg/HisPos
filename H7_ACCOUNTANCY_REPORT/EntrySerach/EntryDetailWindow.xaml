@@ -5,9 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach"
         mc:Ignorable="d"
-        Title="科目詳細" Height="450" Width="450">
+        Title="科目詳細" Height="600" Width="450">
     <Grid>
-        <DataGrid   ItemsSource="{Binding EntryDetailCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  Grid.Row="1" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox IsChecked="True" Name="CheckBoxPurchase" Content="進貨" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="30,0,0,0" Checked="CheckBoxPurchase_Checked" Unchecked="CheckBoxPurchase_Checked"/>
+                <CheckBox IsChecked="True" Name="CheckBoxReturn" Content="退貨" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="30,0,0,0" Checked="CheckBoxPurchase_Checked" Unchecked="CheckBoxPurchase_Checked"/>
+                <CheckBox IsChecked="True" Name="CheckBoxCheck" Content="盤點" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="30,0,0,0" Checked="CheckBoxPurchase_Checked" Unchecked="CheckBoxPurchase_Checked"/>
+                <CheckBox IsChecked="True" Name="CheckBoxMedUse" Content="調劑" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Padding="0" Margin="30,0,0,0" Checked="CheckBoxPurchase_Checked" Unchecked="CheckBoxPurchase_Checked"/>
+            </StackPanel>
+        </Grid>
+        <DataGrid Name="EntryDetail"  Grid.Row="1" ItemsSource="{Binding EntryDetailCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"  CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False"  >
             <DataGrid.RowStyle>
                 <Style TargetType="{x:Type DataGridRow}">
                     <Style.Triggers>
