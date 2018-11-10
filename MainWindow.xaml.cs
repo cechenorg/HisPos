@@ -223,18 +223,10 @@ namespace His_Pos
 
         public static string GetEnumDescription(Enum value)
         {
-            FieldInfo fi = value.GetType().GetField(value.ToString());
-
-            DescriptionAttribute[] attributes =
-                (DescriptionAttribute[])fi.GetCustomAttributes(
-                    typeof(DescriptionAttribute),
-                    false);
-
-            if (attributes != null &&
-                attributes.Length > 0)
-                return attributes[0].Description;
-            else
-                return value.ToString();
+            var fi = value.GetType().GetField(value.ToString());
+            if (fi == null) return string.Empty;
+            var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute),false);
+            return attributes.Length > 0 ? attributes[0].Description : value.ToString();
         }
     }
 }
