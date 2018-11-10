@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -203,46 +205,36 @@ namespace His_Pos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //var t1 = new Thread(VerifySam);
-            //t1.Start();
+            var t1 = new Thread(VerifySam);
+            t1.Start();
         }
 
         private void VerifySam()
         {
-            var res = HisApiBase.csVerifySAMDC();
-            switch (res)
+            var res = HisApiBase.csOpenCom(0);
+            if (res == 0)
             {
-                case 0:
-                    CardReaderStatus = "無任何錯誤";
-                    break;
-                case 4000:
-                    CardReaderStatus = "讀卡機逾時";
-                    break;
-                case 4012:
-                    CardReaderStatus = "未置入安全模組檔";
-                    break;
-                case 4032:
-                    CardReaderStatus = "所插入非安全模組檔";
-                    break;
-                case 4051:
-                    CardReaderStatus = "安全模組與 IDC 認證失敗";
-                    break;
-                case 4061:
-                    CardReaderStatus = "網路連線失敗";
-                    break;
-                case 6005:
-                    CardReaderStatus = "安全模組檔的外部認證失敗";
-                    break;
-                case 6006:
-                    CardReaderStatus = "IDC 的外部認證失敗";
-                    break;
-                case 6007:
-                    CardReaderStatus = "安全模組檔的內部認證失敗";
-                    break;
-                case 6008:
-                    CardReaderStatus = "寫入讀卡機日期時間失敗";
-                    break;
+                res = HisApiBase.csVerifySAMDC();
+                CardReaderStatus = GetEnumDescription((ErrorCode)res);
             }
+            else
+                CardReaderStatus = GetEnumDescription((ErrorCode)res);
+        }
+
+        public static string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                    typeof(DescriptionAttribute),
+                    false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
         }
     }
 }

@@ -16,6 +16,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -965,70 +966,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
         {
-            var t1 = new Thread(CheckIcCardStatus);
-            SetCardStatusContent("卡片檢查中...");
-            t1.Start();
-            if (t1.Join(4000))
-            {
-                if (CurrentPrescription.IsGetIcCard)
-                {
-                    var loading = new LoadingWindow();
-                    loading.Show();
-                    loading.LoadIcData(Instance);
-                }
-                else
-                    SearchCustomer();
-            }
-            else
-            {
-                t1.Abort();
-                SetCardStatusContent("超過最大限制時間");
-                SearchCustomer();
-            }
-        }
-
-        private void CheckIcCardStatus()
-        {
-            var cardStatus = HisApiBase.hisGetCardStatus(2);
-            switch (cardStatus)
-            {
-                case 0:
-                    SetCardStatusContent("卡片未置入");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-                case 1:
-                    SetCardStatusContent("尚未與安全模組認證");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-                case 2:
-                    SetCardStatusContent("認證成功");
-                    CurrentPrescription.IsGetIcCard = true;
-                    break;
-                case 3:
-                    SetCardStatusContent("醫事人員卡認證成功");
-                    CurrentPrescription.IsGetIcCard = true;
-                    break;
-                case 4:
-                    SetCardStatusContent("PIN 認證成功");
-                    CurrentPrescription.IsGetIcCard = true;
-                    break;
-                case 5:
-                    SetCardStatusContent("健保局IDC認證成功 ");
-                    CurrentPrescription.IsGetIcCard = true;
-                    break;
-                case 9:
-                    SetCardStatusContent("非健保卡");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-                case 4000:
-                    SetCardStatusContent("讀卡機逾時");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-                case 9205:
-                    SetCardStatusContent("開啟讀卡機連結埠失敗 ");
-                    CurrentPrescription.IsGetIcCard = false;
-                    break;
-            }
+            var loading = new LoadingWindow();
+            loading.Show();
+            loading.LoadIcData(Instance);
         }
 
         public void SetCardStatusContent(string content)
@@ -1146,7 +1086,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             if (AdjustCaseCombo.SelectedIndex != 1)
                 AdjustCaseCombo.SelectedIndex = 1;
-            if (Convert.ToInt32(ChronicSequence.Text) > 1)
+            if (!int.TryParse(t.Text, out var seqence)) return;
+            if (seqence > 1)
             {
                 var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
@@ -1298,22 +1239,41 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             AdjustCaseCombo.Focus();
                             break;
                         case "ChronicSequence":
-                            if (string.IsNullOrEmpty(ChronicSequence.Text))
-                                SpecialCodeCombo.Focus();
-                            else
-                                ChronicTotal.Focus();
-                            break;
-                        case "ChronicTotal":
                             if (string.IsNullOrEmpty(ChronicTotal.Text) && !string.IsNullOrEmpty(ChronicSequence.Text))
                             {
-                                var m = new MessageWindow("領藥次數有值，需填寫總領藥次數",MessageType.WARNING,true);
+                                var m = new MessageWindow("總領藥次數有值，需填寫領藥次數", MessageType.WARNING, true);
                                 m.ShowDialog();
                                 ChronicTotal.Focus();
                             }
                             else
+                            {
+                                if (!string.IsNullOrEmpty(ChronicTotal.Text) && !string.IsNullOrEmpty(ChronicSequence.Text))
+                                {
+                                    AdjustCaseCombo.SelectedIndex = 1;
+                                    SpecialCodeCombo.Focus();
+                                }
+                            }
+                            break;
+                        case "ChronicTotal":
+                            if (string.IsNullOrEmpty(ChronicSequence.Text))
                                 SpecialCodeCombo.Focus();
+                            else
+                                ChronicSequence.Focus();
                             break;
                         case "MedicalNumber":
+                            TreatmentDate.Focus();
+                            break;
+                    }
+                    break;
+                case MaskedTextBox _ when e.Key != Key.Enter:
+                    return;
+                case MaskedTextBox masked:
+                    switch (masked.Name)
+                    {
+                        case "TreatmentDate":
+                            AdjustDate.Focus();
+                            break;
+                        case "AdjustDate":
                             MainDiagnosis.Focus();
                             break;
                     }
@@ -1325,7 +1285,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is AutoCompleteBox a)) return;
             if (e.Key == Key.Enter && a.IsDropDownOpen && a.Text.Length <= 10)
-                a.SelectedItem = Hospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList()[0];
+                a.SelectedItem = Hospitals.Where(x => x.Id.Contains(ReleaseHospital.Text.TrimStart(' '))).Take(50).ToList()[0];
         }
 
         private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -1347,6 +1307,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
         private void MedContextMenu_Opened(object sender, RoutedEventArgs e)
         {
+            if (PrescriptionMedicines.SelectedItem == null || CurrentPrescription.Medicines.Count == 0) return;
             var temp = (sender as ContextMenu);
             var menuitem = temp.Items[0] as MenuItem;
             _selectedMedId = ((DeclareMedicine)PrescriptionMedicines.SelectedItem).Id;
@@ -1453,11 +1414,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void SelectionStart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (sender is TextBox t)
-            {
-                t.SelectionStart = 0;
-                t.SelectionLength = t.Text.Length;
-            }
+            if (!(sender is TextBox t)) return;
+            t.SelectionStart = 0;
+            t.SelectionLength = t.Text.Length;
         }
 
         private void SearchCustomer()
@@ -1510,6 +1469,33 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
             var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
             chronicSelectWindow.ShowDialog();
+        }
+
+        private void DivisionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox c && ((Division) c.SelectedItem).Name.Equals("牙科"))
+                TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id.Equals("19"));
+        }
+
+        private void ReloadCardReader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var res = HisApiBase.csVerifySAMDC();
+            string cardReaderStatus;
+            if (res == 0)
+            {
+                SetCardStatusContent("安全模組認證成功");
+                res = HisApiBase.hisGetCardStatus(2);
+                cardReaderStatus = MainWindow.GetEnumDescription((CardStatusReturnCode) res);
+                SetCardStatusContent(cardReaderStatus);
+                if (cardReaderStatus.Contains("成功"))
+                    CurrentPrescription.IsGetIcCard = true;
+            }
+            else
+            {
+                res = HisApiBase.hisGetCardStatus(2);
+                cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)res);
+                SetCardStatusContent(cardReaderStatus);
+            }
         }
     }
 }
