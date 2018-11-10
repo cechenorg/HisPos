@@ -547,8 +547,37 @@ namespace His_Pos.Class
         [Description("醫事卡失效")]
         ErrorCode9130 = 9130,
         [Description("醫事卡逾效期")]
-        ErrorCode9140 = 9140
-
+        ErrorCode9140 = 9140,
+        [Description("安全模組檔目錄錯誤或不存在或數量超過一個以上")]
+        ErrorCode9200,
+        [Description("初始安全模組檔讀取異常，請在 C:\\NHI\\SAM\\COMX1 目錄下放置健保署正確安全模組檔。")]
+        ErrorCode9201,
+        [Description("安全模組檔讀取異常，已在其它電腦使用過，請在 C:\\NHI\\SAM\\COMX1 目錄下放置健保署正確安全模組檔。")]
+        ErrorCode9202,
+        [Description("卡片配對錯誤，正式卡與測試卡不能混用 ")]
+        ErrorCode9203,
+        [Description("找不到讀卡機，或 PCSC 環境異常")]
+        ErrorCode9204,
+        [Description("開啟讀卡機連結埠失敗")]
+        ErrorCode9205,
+        [Description("健保 IC 卡內部認證失敗 ")]
+        ErrorCode9210,
+        [Description("雲端安全模組(IDC)對健保 IC 卡認證失敗")]
+        ErrorCode9211,
+        [Description("健保 IC 卡對雲端安全模組認證失敗 ")]
+        ErrorCode9212,
+        [Description("雲端安全模組卡片更新逾時")]
+        ErrorCode9213,
+        [Description("醫事人員卡內部認證失敗")]
+        ErrorCode9220,
+        [Description("雲端安全模組(IDC)驗證醫事人員卡失敗")]
+        ErrorCode9221,
+        [Description("安全模組檔「醫療院所名稱」讀取失敗")]
+        ErrorCode9230,
+        [Description("安全模組檔「醫療院所簡稱」讀取失敗")]
+        ErrorCode9231,
+        [Description("雲端安全模組主控台沒啓動")]
+        ErrorCode9240
     }
 
     public enum CardStatusReturnCode
