@@ -23,7 +23,6 @@ namespace His_Pos.PrescriptionInquire
 {
     public partial class PrescriptionInquireView : UserControl, INotifyPropertyChanged
     {
-        public ObservableCollection<Hospital> Hospitals { get; set; }
         private ObservableCollection<PrescriptionOverview> prescriptionOverview = new ObservableCollection<PrescriptionOverview>();
         public ObservableCollection<PrescriptionOverview> PrescriptionOverview {
             get
@@ -82,8 +81,7 @@ namespace His_Pos.PrescriptionInquire
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(this);
             loadingWindow.Show(); 
-            LoadAdjustCases();
-            Hospitals = HospitalCollection;
+            LoadAdjustCases(); 
         }
 
         private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
@@ -125,7 +123,7 @@ namespace His_Pos.PrescriptionInquire
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
         {
-            ObservableCollection<Hospital> tempCollection = new ObservableCollection<Hospital>(Hospitals.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
+            ObservableCollection<Hospital> tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
             ReleasePalace.ItemsSource = tempCollection;
             ReleasePalace.PopulateComplete();
         }
@@ -163,6 +161,22 @@ namespace His_Pos.PrescriptionInquire
                 t.SelectionStart = 0;
                 t.SelectionLength = t.Text.Length;
             }  
+        }
+
+        private void ButtonChronicSearch_Click(object sender, RoutedEventArgs e)
+        {
+            prescriptionOverview.Clear();
+            TaiwanCalendar taiwanCalendar = new TaiwanCalendar();
+
+            string adjustId = "";
+            if (AdjustCaseCombo.Text != String.Empty)
+                adjustId = AdjustCaseCombo.Text.Substring(0, 1);
+            string insName = "";
+            if (ReleasePalace.Text != String.Empty)
+                insName = ReleasePalace.Text.Split(' ')[1];
+            PrescriptionOverview = PrescriptionDB.GetChronicOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
+            if (DataPrescription.Items.Count > 0)
+                DataPrescription.ScrollIntoView(DataPrescription.Items[DataPrescription.Items.Count - 1]);
         }
     }
 }
