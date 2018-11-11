@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Printing;
 using System.IO;
 using His_Pos.Class;
 using His_Pos.Class.Person;
@@ -13,6 +17,7 @@ using His_Pos.ProductPurchase;
 using His_Pos.AbstractClass;
 using System.Linq;
 using System.Management.Instrumentation;
+using System.Text;
 using System.Threading;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
@@ -773,8 +778,7 @@ namespace His_Pos
                     }
                     else
                     {
-                        var c = new CustomerSelectWindow(string.Empty, 3);
-                        c.ShowDialog();
+                        prescriptionDec2View.SearchCustomer();
                     }
                 }));
             };
@@ -870,7 +874,8 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("藥袋列印中...");
-                CreatePdf(rptViewer,"Medbag.pdf",22,24);
+                Export(rptViewer.LocalReport,22,24);
+                ReportPrint();
                 Dispatcher.Invoke((Action)(() =>
                 {
 
@@ -906,6 +911,76 @@ namespace His_Pos
             {
                 fs.Write(bytes, 0, bytes.Length);
             }
+        }
+        private int m_currentPageIndex;
+        private IList<Stream> m_streams;
+        private Stream CreateStream(string name, string fileNameExtension, Encoding encoding,
+            string mimeType, bool willSeek)
+        {
+            Stream stream = new MemoryStream();
+            m_streams.Add(stream);
+            return stream;
+        }
+
+        private void Export(LocalReport report, double width, double height)
+        {
+            string deviceInfo =
+                @"<DeviceInfo>
+                <OutputFormat>EMF</OutputFormat>"+
+                 "  <PageWidth>" + width + "cm</PageWidth>" +
+                 "  <PageHeight>" + height + "cm</PageHeight>" +
+                 "  <MarginTop>0cm</MarginTop>" +
+                 "  <MarginLeft>0cm</MarginLeft>" +
+                 "  <MarginRight>0cm</MarginRight>" +
+                 "  <MarginBottom>0cm</MarginBottom>" +
+            "</DeviceInfo>";
+            Warning[] warnings;
+            m_streams = new List<Stream>();
+            report.Render("Image", deviceInfo, CreateStream, out warnings);
+            foreach (Stream stream in m_streams)
+                stream.Position = 0;
+        }
+
+        private void ReportPrint()
+        {
+            if (m_streams == null || m_streams.Count == 0)
+                throw new Exception("Error: no stream to print.");
+            PrintDocument printDoc = new PrintDocument();
+            printDoc.PrinterSettings.PrinterName = Properties.Settings.Default.MedBagPrinter;
+            if (!printDoc.PrinterSettings.IsValid)
+            {
+                throw new Exception("Error: cannot find printer.");
+            }
+            else
+            {
+                printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
+                m_currentPageIndex = 0;
+                printDoc.Print();
+            }
+
+        }
+
+        private void printDoc_PrintPage(object sender, PrintPageEventArgs ev)
+        {
+            Metafile pageImage = new
+            Metafile(m_streams[m_currentPageIndex]);
+
+            // Adjust rectangular area with printer margins.
+            Rectangle adjustedRect = new Rectangle(
+                ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
+                ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
+                ev.PageBounds.Width,
+                ev.PageBounds.Height);
+
+            // Draw a white background for the report
+            ev.Graphics.FillRectangle(Brushes.White, adjustedRect);
+
+            // Draw the report content
+            ev.Graphics.DrawImage(pageImage, adjustedRect);
+
+            // Prepare for the next page. Make sure we haven't hit the end.
+            m_currentPageIndex++;
+            ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
         }
     }
 }

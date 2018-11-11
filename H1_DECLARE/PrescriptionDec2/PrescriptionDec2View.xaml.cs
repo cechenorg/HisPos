@@ -1432,7 +1432,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void SearchCustomer()
+        public void SearchCustomer()
         {
             if (!string.IsNullOrEmpty(PatientId.Text))
             {
@@ -1451,7 +1451,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             if (!PatientBirthday.Text.Equals("   /  /  "))
             {
-                ShowCustomerSelectionWindow(new CustomerSelectWindow(PatientBirthday.Text.Replace("/", ""), 1));
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(PatientBirthday.Text.TrimStart('0').Trim().Replace("/",string.Empty), 1));
                 return;
             }
             if (string.IsNullOrEmpty(PatientName.Text) && string.IsNullOrEmpty(PatientBirthday.Text) &&
