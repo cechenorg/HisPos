@@ -165,13 +165,21 @@ namespace His_Pos
                     Function function = new Function();
                     function.GetLastYearlyHoliday();
                 }
+                ChangeLoadingMessage("取得醫療院所...");
                 ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                ChangeLoadingMessage("取得科別資料...");
                 ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                ChangeLoadingMessage("取得調劑案件資料...");
                 ObservableCollection<AdjustCase> tmpAdjustCases = AdjustCaseDb.GetData();
+                ChangeLoadingMessage("取得給付類別資料...");
                 ObservableCollection<PaymentCategory> tmpPaymentCategroies = PaymentCategroyDb.GetData();
+                ChangeLoadingMessage("取得部分負擔資料...");
                 ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
+                ChangeLoadingMessage("取得處方案件資料...");
                 ObservableCollection<TreatmentCase> tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
+                ChangeLoadingMessage("取得特定治療代碼資料...");
                 ObservableCollection<SpecialCode> tmpSpecialCodes = SpecialCodeDb.GetData();
+                ChangeLoadingMessage("取得藥品用法資料...");
                 ObservableCollection<Usage> tmpUsages = UsageDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {

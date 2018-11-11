@@ -210,8 +210,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
         {
             SelectedFile = (DeclareFile)(sender as DataGrid)?.SelectedItem;
 
-            if (SelectedFile == null) return;
-
+            if (SelectedFile?.FileContent == null) return;
             foreach (var ddata in SelectedFile.FileContent.Ddata)
             {
                 SelectedFile.PrescriptionDdatas.Add(new DeclareFileDdata(ddata));

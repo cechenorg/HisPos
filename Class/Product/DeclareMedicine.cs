@@ -7,11 +7,11 @@ using His_Pos.Service;
 
 namespace His_Pos.Class.Product
 {
-    public class DeclareMedicine : AbstractClass.Product, ITrade, IDeletable, ICloneable
+    public class DeclareMedicine : AbstractClass.Product, ITrade, IDeletable, ICloneable,IProductDeclare
     {
         public DeclareMedicine()
         {
-            HcPrice = string.Empty;
+            HcPrice = 0.0000;
             Ingredient = string.Empty;
             MedicalCategory = new Medicate();
             Cost = 0;
@@ -21,7 +21,7 @@ namespace His_Pos.Class.Product
             CountStatus = string.Empty;
             FocusColumn = string.Empty;
             Usage = new Usage();
-            days = string.Empty;
+            _days = string.Empty;
             Position = string.Empty;
             IsBuckle = true;
             source = string.Empty;
@@ -42,7 +42,7 @@ namespace His_Pos.Class.Product
                 CountStatus = string.Empty;
                 FocusColumn = string.Empty;
                 Usage = new Usage();
-                days = string.Empty;
+                _days = string.Empty;
                 Position = string.Empty;
                 source = string.Empty;
                 MedicalCategory = new Medicate
@@ -68,7 +68,7 @@ namespace His_Pos.Class.Product
                 if (type.Equals("Init"))
                 {
                     Amount = 0;
-                    days = string.Empty;
+                    _days = string.Empty;
                 }
                 else
                 {
@@ -84,7 +84,7 @@ namespace His_Pos.Class.Product
             }
             ControlLevel = dataRow["HISMED_CONTROL"].ToString();
             IsFrozMed = bool.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
-            HcPrice = dataRow["HISMED_PRICE"].ToString();
+            HcPrice = double.TryParse(dataRow["HISMED_PRICE"].ToString(), out var hcPrice) ? hcPrice : 0.0000;
             IsBuckle = true;
         }
 
@@ -115,7 +115,7 @@ namespace His_Pos.Class.Product
             }
         }
 
-        public string HcPrice { get; set; }
+        public double HcPrice { get; set; }
         public string Ingredient { get; set; }
         public Medicate MedicalCategory { get; set; }
         public InStock Stock { get; set; }
@@ -187,28 +187,28 @@ namespace His_Pos.Class.Product
             }
         }
 
-        private string days;
+        private string _days;
 
         public string Days
         {
-            get => days;
+            get => _days;
             set
             {
-                days = value;
+                _days = value;
                 if (int.TryParse(value, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && double.TryParse(Dosage, out _))
                     CalculateAmount();
                 NotifyPropertyChanged(nameof(Days));
             }
         }
 
-        private string position;
+        private string _position;
 
         public string Position
         {
-            get => position;
+            get => _position;
             set
             {
-                position = value;
+                _position = value;
                 NotifyPropertyChanged(nameof(Position));
             }
         }
@@ -275,18 +275,37 @@ namespace His_Pos.Class.Product
                     return "../../Images/icons8-delete-32.png";
             }
         }
+
+        private double _inventory;
+        public double Inventory
+        {
+            get => _inventory;
+            set
+            {
+                _inventory = value;
+                NotifyPropertyChanged(nameof(Inventory));
+            }
+        }
+
+        string IProductDeclare.ProductId { get => Id; set => Id = value; }
+        string IProductDeclare.ProductName { get => Name; set => Name=value; }
+        string IProductDeclare.Dosage { get => Dosage; set => Dosage = value; }
+        string IProductDeclare.Usage { get => Usage.Name; set => Usage.Name = value; }
+        string IProductDeclare.Position { get => Position; set => Position = value; }
+        string IProductDeclare.Days { get => Days; set => Days = value; }
+        double IProductDeclare.Amount { get => Amount; set => Amount = value; }
+        double IProductDeclare.Inventory { get => Inventory; set => Inventory = value; }
+        double IProductDeclare.HcPrice { get => HcPrice; set => HcPrice = value; }
+        bool IProductDeclare.PaySelf { get => PaySelf; set => PaySelf = value; }
+        double IProductDeclare.TotalPrice { get => TotalPrice; set => TotalPrice = value; }
+        string IProductDeclare.ControlLevel { get => ControlLevel; set => ControlLevel = value; }
+
         private void CalculateTotalPrice()
         {
             if (PaySelf)
-            {
                 TotalPrice = Amount * Price;
-            }
             else
-            {
-                if (string.IsNullOrEmpty(HcPrice))
-                    return;
-                TotalPrice = Amount * double.Parse(HcPrice);
-            }
+                TotalPrice = Amount * HcPrice;
         }
 
         private void CalculateAmount()
@@ -299,7 +318,7 @@ namespace His_Pos.Class.Product
                 tmpUsage = u;
                 find = true;
             }
-            Amount = find ? double.Parse(Dosage)*UsagesFunction.CheckUsage(int.Parse(days), tmpUsage) : double.Parse(Dosage)*UsagesFunction.CheckUsage(int.Parse(days));
+            Amount = find ? double.Parse(Dosage)*UsagesFunction.CheckUsage(int.Parse(_days), tmpUsage) : double.Parse(Dosage)*UsagesFunction.CheckUsage(int.Parse(_days));
         }
 
         public object Clone()

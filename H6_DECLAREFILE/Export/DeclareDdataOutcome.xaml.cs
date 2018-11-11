@@ -135,7 +135,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 d.Amount = double.Parse(p.P7);
 
                 if(p.P8.TrimStart('0').StartsWith("."))
-                    d.HcPrice = "0.00";
+                    d.HcPrice = 0.00;
 
                 d.TotalPrice = double.Parse(p.P8.TrimStart('0'))* double.Parse(p.P7);
                 d.Days = p.P11;
