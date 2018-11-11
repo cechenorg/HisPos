@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
@@ -107,7 +108,7 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged(nameof(DeclareTrade));
             }
         }
-        public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
+        public ObservableCollection<Product> DeclareMedicinesData { get; set; }
         private static DeclareData _inquiredPrescription;
         public DeclareData InquiredPrescription
         {

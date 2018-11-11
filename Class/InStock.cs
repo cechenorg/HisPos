@@ -82,7 +82,7 @@ namespace His_Pos.Class
             SafeAmount = dataRow["PRO_SAFEQTY"].ToString();
             OnTheWayAmount = dataRow["PRO_ONTHEWAY"].ToString();
             MinOrderAmount = dataRow["PRO_MINORDER"].ToString();
-            Inventory = Double.Parse((dataRow["PRO_INVENTORY"].ToString() == "")
+            Inventory = double.Parse((dataRow["PRO_INVENTORY"].ToString() == "")
                 ? "0"
                 : dataRow["PRO_INVENTORY"].ToString());
         }

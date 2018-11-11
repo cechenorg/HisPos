@@ -27,6 +27,7 @@ using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Media;
+using His_Pos.AbstractClass;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.DiseaseCode;
 using His_Pos.Class.Person;
@@ -229,7 +230,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public ObservableCollection<AdjustCase> AdjustCases { get; set; }
         public ObservableCollection<MedicalPersonnel> MedicalPersonnels { get; set; }
         public ObservableCollection<Usage> Usages { get; set; }
-        public ObservableCollection<DeclareMedicine> DeclareMedicines { get; set; }
+        public ObservableCollection<Product> DeclareMedicines { get; set; }
         public ObservableCollection<SpecialCode> SpecialCodes { get; set; }
         #endregion
         public PrescriptionDec2View()
@@ -255,7 +256,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
         private void GetPrescriptionData()
         {
-            DeclareMedicines = new ObservableCollection<DeclareMedicine>();
+            DeclareMedicines = new ObservableCollection<Product>();
             TreatmentCases = new ObservableCollection<TreatmentCase>();
             var loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(Instance);
