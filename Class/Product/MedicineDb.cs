@@ -37,9 +37,9 @@ namespace His_Pos.Class.Product
             return dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[GetInventoryMedicine]");
         }
 
-        internal static ObservableCollection<DeclareMedicine> GetDeclareMedicine()
+        internal static ObservableCollection<AbstractClass.Product> GetDeclareMedicine()
         {
-            ObservableCollection<DeclareMedicine> collection = new ObservableCollection<DeclareMedicine>();
+            ObservableCollection<AbstractClass.Product> collection = new ObservableCollection<AbstractClass.Product>();
 
            var dd = new DbConnection(Settings.Default.SQL_global);
             
