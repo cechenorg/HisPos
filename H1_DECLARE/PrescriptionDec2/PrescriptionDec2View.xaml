@@ -93,7 +93,7 @@
                     <controls:AutoCompleteBox x:Name="ReleaseHospital" Width="450" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Style="{StaticResource AutoCompleteBoxStyle}"
                                               Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" FontSize="16" FontStretch="ExtraExpanded" 
                                               ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" MinimumPrefixLength="4" InputScope="AlphanumericHalfWidth"
-                                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay}" ValueMemberPath="FullName"
+                                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay}" ValueMemberPath="FullName" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp"
                                               Populating="ReleaseHospital_Populating" PreviewKeyDown="ReleaseHospital_PreviewKeyDown" DropDownClosed="ReleaseHospital_DropDownClosed">
                         <controls:AutoCompleteBox.ItemTemplate>
                             <DataTemplate>
