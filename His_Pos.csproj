@@ -442,6 +442,9 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml.cs">
+      <DependentUpon>StockAdjustmentWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml.cs">
       <DependentUpon>AddNewProductWindow.xaml</DependentUpon>
     </Compile>
@@ -766,6 +769,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

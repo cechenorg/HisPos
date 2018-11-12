@@ -54,8 +54,8 @@
                 <Label Content="調劑藥師" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox Name="HisPerson"  Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Label Content="調劑案件" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="250" FontSize="16"/>
-                <Button Name="ButtonSearch"  Content="查詢處方" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="88,0,10,0" Click="SearchButtonClick"/>
+                <ComboBox Name="AdjustCaseCombo" DisplayMemberPath="FullName"  Margin="0,0,10,0" Width="230" FontSize="16"/>
+                <Button Name="ButtonSearch"  Content="查詢處方" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="120" BorderThickness="0" Margin="88,0,10,0" Click="SearchButtonClick"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,9,9,9">
                 <Label Content="釋出院所" Width="85" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold" />

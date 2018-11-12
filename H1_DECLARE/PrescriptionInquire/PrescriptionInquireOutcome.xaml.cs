@@ -18,6 +18,7 @@ using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.H1_DECLARE.PrescriptionInquire;
 using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.Service;
@@ -30,6 +31,7 @@ namespace His_Pos.PrescriptionInquire
     /// </summary>
     public partial class PrescriptionInquireOutcome : Window, INotifyPropertyChanged
     {
+        public static bool IsAdjust = false;
         private bool _isFirst = true;
         private DeclareData _currentDeclareData;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -130,12 +132,22 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged(nameof(DeclareDetails));
             }
         }
+        private ObservableCollection<Product> originDeclareDetails = new ObservableCollection<Product>();
+        public ObservableCollection<Product> OriginDeclareDetails
+        {
+            get => originDeclareDetails;
+            set
+            {
+                originDeclareDetails = value;
+                NotifyPropertyChanged(nameof(OriginDeclareDetails));
+            }
+        }
         private ObservableCollection<object> _medicines;
         private readonly string _decMasId;
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
             InitializeComponent();
-           
+            IsAdjust = false;
             _isFirst = true;
             DataContext = this;
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
@@ -146,11 +158,15 @@ namespace His_Pos.PrescriptionInquire
                 {
                     var declareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
                     DeclareDetails.Add(declareDetailClone);
+                    var tempdeclareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
+                    OriginDeclareDetails.Add(tempdeclareDetailClone);
                 }
                 else if (newDeclareDetail is PrescriptionOTC)
                 {
                     var otc = (PrescriptionOTC)((PrescriptionOTC)newDeclareDetail).Clone();
                     DeclareDetails.Add(otc);
+                    var tempotc = (PrescriptionOTC)((PrescriptionOTC)newDeclareDetail).Clone();
+                    OriginDeclareDetails.Add(tempotc);
                 }
             }
             InitData();
@@ -533,22 +549,25 @@ namespace His_Pos.PrescriptionInquire
             {
                 _currentDeclareData = new DeclareData(InquiredPrescription.Prescription);
                 _currentDeclareData.DecMasId = InquiredPrescription.DecMasId;
-                
-                var declareDb = new DeclareDb();
-                //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
-                //Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();
-                //Charge.Content = Charge.Content.ToString() == null ? "0" : Charge.Content.ToString();
-                //Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
-                //Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
-                //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
-               
-                //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
-                declareDb.UpdateDeclareData(_currentDeclareData);
-                m = new MessageWindow("處方修改成功", MessageType.SUCCESS, true);
-                m.ShowDialog();
-                InitDataChanged();
-                PrescriptionOverview prescriptionOverview = new PrescriptionOverview(InquiredPrescription);
-                PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview);
+                StockAdjustmentWindow stockAdjustmentWindow = new StockAdjustmentWindow(OriginDeclareDetails, DeclareDetails);
+                stockAdjustmentWindow.ShowDialog();
+                if (IsAdjust) { 
+                    var declareDb = new DeclareDb();
+                    //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
+                    //Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();
+                    //Charge.Content = Charge.Content.ToString() == null ? "0" : Charge.Content.ToString();
+                    //Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
+                    //Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
+                    //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
+
+                    //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
+                    declareDb.UpdateDeclareData(_currentDeclareData);
+                    m = new MessageWindow("處方修改成功", MessageType.SUCCESS, true);
+                    m.ShowDialog();
+                    InitDataChanged();
+                    PrescriptionOverview prescriptionOverview = new PrescriptionOverview(InquiredPrescription);
+                    PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview); 
+                } 
             }
             else
             {
@@ -560,7 +579,7 @@ namespace His_Pos.PrescriptionInquire
                 m = new MessageWindow(errorMessage, MessageType.ERROR, true);
                 m.ShowDialog();
             }
-          
+            IsAdjust = false;
         }
 
         private void TextBox_GotFocus(object sender, EventArgs e)
