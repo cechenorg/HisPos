@@ -299,16 +299,18 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             foreach (var declareDetail in declareData.Prescription.Medicines)
             {
-                if (declareDetail is DeclareMedicine med)
-                {
-                    if (!med.IsBuckle) continue;
-                    parameters.Add(new SqlParameter("BUCKLE_VALUE", ((IProductDeclare)(DeclareMedicine)declareDetail).Amount));
-                }
-                else
-                {
-                    parameters.Add(new SqlParameter("BUCKLE_VALUE", ((IProductDeclare)(PrescriptionOTC)declareDetail).Amount));
-                }
                 parameters.Clear();
+                switch (declareDetail)
+                {
+                    case DeclareMedicine med when !med.IsBuckle:
+                        continue;
+                    case DeclareMedicine med:
+                        parameters.Add(new SqlParameter("BUCKLE_VALUE", ((IProductDeclare)med).Amount));
+                        break;
+                    case PrescriptionOTC otc:
+                        parameters.Add(new SqlParameter("BUCKLE_VALUE", ((IProductDeclare)otc).Amount));
+                        break;
+                }
                 parameters.Add(new SqlParameter("MAS_ID", decMasId));
                 parameters.Add(new SqlParameter("PRO_ID", declareDetail.Id));
                 
