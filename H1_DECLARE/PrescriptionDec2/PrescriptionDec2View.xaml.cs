@@ -116,8 +116,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public bool IsSend;
-        public bool IsBone;
+        public bool IsSend; 
         public ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> PrescriptionSendData = new ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>();
         public Prescription CurrentPrescription
         {
@@ -279,8 +278,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m.Show();
                 return;
             }
-            IsSend = false;
-            IsBone = false;
+            IsSend = false; 
             ErrorMssageWindow err;
             CurrentPrescription.EList.Error = new List<Error>();
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
@@ -437,8 +435,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     }
                     declareDb.UpdateDeclareFile(_currentDeclareData);
                 }
-                if (IsBone)//如果來自骨科 刪除預約慢箋
-                    declareDb.CheckPredictChronicExist(_currentDecMasId);
+               
+                    declareDb.CheckPredictChronicExist(_currentDecMasId); //刪除預約慢箋
 
                 var start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
                 var end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
