@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
@@ -49,7 +50,7 @@ namespace His_Pos.PrescriptionInquire
         public ObservableCollection<Copayment> CopaymentCollection { get; set; }
         public ObservableCollection<Division> DivisionCollection { get; set; }
         public ObservableCollection<Hospital> HospitalCollection { get; set; }
-        public ObservableCollection<DeclareMedicine> DeclareMedicinesData { get; set; }
+        public ObservableCollection<Product> DeclareMedicinesData { get; set; }
         public static PrescriptionInquireView Instance;
         private Function f = new Function();
 
