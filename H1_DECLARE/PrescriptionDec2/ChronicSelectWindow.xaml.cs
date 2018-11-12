@@ -45,7 +45,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
                 Close();
             string decMasId = ((Chronic)selectedItem).DecMasId;
             PrescriptionDec2View.Instance.SetValueByDecMasId(decMasId);
-
             Close();
         }
     }

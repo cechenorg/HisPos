@@ -30,7 +30,7 @@ namespace His_Pos.Class.Product
             ControlLevel = "0";
         }
 
-        public PrescriptionOTC(DataRow dataRow, string type) : base(dataRow)
+        public PrescriptionOTC(DataRow dataRow) : base(dataRow)
         {
             PaySelf = true;
             HcPrice = 0.0000;
@@ -63,7 +63,7 @@ namespace His_Pos.Class.Product
         private double HcPrice { get => _hcPrice;
             set
             {
-                HcPrice = 0.0000;
+                _hcPrice = 0.0000;
                 NotifyPropertyChanged(nameof(HcPrice));
             }
         }
@@ -162,6 +162,8 @@ namespace His_Pos.Class.Product
         }
 
         private double _inventory;
+        private IProductDeclare _productDeclareImplementation;
+
         public double Inventory
         {
             get => _inventory;
@@ -191,6 +193,7 @@ namespace His_Pos.Class.Product
         double IProductDeclare.HcPrice { get => 0.0000;set => HcPrice = 0.0000;}
         bool IProductDeclare.PaySelf { get => PaySelf; set => PaySelf = true; }
         string IProductDeclare.ControlLevel { get => ControlLevel; set => ControlLevel = "0"; }
+        string IProductDeclare.Forms { get => string.Empty; set => throw new NotImplementedException(); }
 
         public object Clone()
         {

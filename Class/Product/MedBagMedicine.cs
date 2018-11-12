@@ -20,6 +20,18 @@ namespace His_Pos.Class.Product
             Dosage = m.Dosage;
             Usage = m.Usage.Name;
         }
+        public MedBagMedicine(PrescriptionOTC o)
+        {
+            Id = o.Id;
+            Name = o.Name;
+            Ingredient = string.Empty;
+            SideEffect = string.Empty;
+            Indication = string.Empty;
+            Position = o.Position;
+            MedicineDays = o.Days;
+            Dosage = o.Dosage;
+            Usage = o.Usage;
+        }
         public string Id { get; set; }
         public string Name { get; set; }
         public string Ingredient { get; set; }

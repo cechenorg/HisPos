@@ -778,11 +778,12 @@ namespace His_Pos
                     {
                         var c = new CustomerSelectWindow(prescriptionDec2View.CurrentPrescription.Customer.IcCard.IcNumber,3);
                         if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                            !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                            !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text.Trim()))
                             prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
                         if (!string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                            string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                            string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text.Trim()))
                             prescriptionDec2View.MedicalNumber.Text = prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber;
+                        prescriptionDec2View.CheckChronicExist();
                     }
                     else
                     {

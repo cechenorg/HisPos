@@ -299,6 +299,7 @@ namespace His_Pos.Class.Product
         bool IProductDeclare.PaySelf { get => PaySelf; set => PaySelf = value; }
         double IProductDeclare.TotalPrice { get => TotalPrice; set => TotalPrice = value; }
         string IProductDeclare.ControlLevel { get => ControlLevel; set => ControlLevel = value; }
+        string IProductDeclare.Forms { get => MedicalCategory.Form; set => MedicalCategory.Form = value; }
 
         private void CalculateTotalPrice()
         {

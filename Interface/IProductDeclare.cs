@@ -20,5 +20,6 @@ namespace His_Pos.Interface
         bool PaySelf { get; set; }
         double TotalPrice { get; set; }
         string ControlLevel { get; set; }
+        string Forms { get; set; }
     }
 }

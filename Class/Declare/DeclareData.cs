@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using His_Pos.Class.Product;
 using His_Pos.RDLC;
 using His_Pos.Service;
 
@@ -113,9 +114,12 @@ namespace His_Pos.Class.Declare
             const string oralLiquidAgent = "口服液劑(原瓶包裝)";
             foreach (var med in Prescription.Medicines)
             {
-                if (med.Note == null) continue;
-                if (med.Note.Equals(oralLiquidAgent) && !med.PaySelf)
-                    medFormCount++;
+                if (med is DeclareMedicine declare)
+                {
+                    if (declare.Note == null) continue;
+                    if (declare.Note.Equals(oralLiquidAgent) && !declare.PaySelf)
+                        medFormCount++;
+                }
             }
             return medFormCount;
         }
@@ -239,11 +243,14 @@ namespace His_Pos.Class.Declare
             var count = 1;
             foreach (var medicine in Prescription.Medicines)
             {
-                var detail = new DeclareDetail(medicine, Prescription.Treatment.AdjustCase, count);
-                if(!medicine.PaySelf)
-                    CountDeclarePoint(detail);
-                DeclareDetails.Add(detail);
-                count++;
+                if (medicine is DeclareMedicine declare)
+                {
+                    var detail = new DeclareDetail(declare, Prescription.Treatment.AdjustCase, count);
+                    if (!declare.PaySelf)
+                        CountDeclarePoint(detail);
+                    DeclareDetails.Add(detail);
+                    count++;
+                }
             }
         }
 

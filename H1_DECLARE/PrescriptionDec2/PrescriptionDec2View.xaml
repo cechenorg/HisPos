@@ -124,7 +124,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <xctk:MaskedTextBox Name="TreatmentDate" Width="170" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                    <xctk:MaskedTextBox Name="TreatmentDate" Width="170" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" PreviewKeyUp="Combo_PreviewKeyDown"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="CurrentPrescription.Treatment.TreatmentDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
@@ -138,7 +138,7 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="調劑日期" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <xctk:MaskedTextBox Name="AdjustDate" Width="170" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                    <xctk:MaskedTextBox Name="AdjustDate" Width="170" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" PreviewKeyDown="Combo_PreviewKeyDown"
                                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" TextChanged="AdjustDate_TextChanged" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp">
                         <xctk:MaskedTextBox.Text>
                             <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
@@ -301,7 +301,7 @@
                             <DataTemplate x:Name="PositionDataTemplate">
                                 <TextBox x:Name="Position" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" InputMethod.IsInputMethodEnabled="False" GotFocus="MedTotalPrice_GotFocus"
                                          CharacterCasing="Upper" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" 
-                                         PreviewKeyDown="Position_PreviewKeyDown" Text="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
+                                         PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" Text="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -318,7 +318,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:Name="MedicineAmountDataTemplate">
                                 <TextBox x:Name="MedicineTotal" MinWidth="40" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" GotFocus="MedTotalPrice_GotFocus"
-                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput"
+                                         FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="Position_PreviewKeyDown" PreviewTextInput="ChronicSequence_PreviewTextInput"
                                          Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="NullTextBox_TextChanged" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

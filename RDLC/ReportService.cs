@@ -15,6 +15,7 @@ using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
 using His_Pos.Class.Pharmacy;
+using His_Pos.Class.Product;
 using His_Pos.Service;
 using Microsoft.Reporting.WinForms;
 
@@ -182,14 +183,14 @@ namespace His_Pos.RDLC
                     {"VisitBackDate", ""},
                     {"ChronicSequence", "第 " + p.ChronicSequence + " 次，共 " + p.ChronicTotal + " 次"},
                     {"MedicineId",m.Id},
-                    { "EngName",m.EngName},
-                    { "ChnName",m.ChiName},
-                    { "Ingredient",m.Ingredient},
+                    {"EngName",m.EngName},
+                    {"ChnName",m.ChiName},
+                    {"Ingredient",((DeclareMedicine)m).Ingredient},
                     //{ "Form",m.},
-                    { "Usage",m.Usage.PrintName},
-                    { "Dosage",m.Dosage},
-                    { "Total",m.Amount.ToString()},
-                    { "Days",m.Days},
+                    { "Usage",((DeclareMedicine)m).Usage.PrintName},
+                    { "Dosage",((DeclareMedicine)m).Dosage},
+                    { "Total",((DeclareMedicine)m).Amount.ToString()},
+                    { "Days",((DeclareMedicine)m).Days},
                     //{ "Indication",},
                     //{ "SideEffect",},
                     {"Notes","＊請依照醫師指示使用，勿自行停藥!"}
