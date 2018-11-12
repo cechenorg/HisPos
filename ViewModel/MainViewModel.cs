@@ -149,7 +149,6 @@ namespace His_Pos.ViewModel
 
                 case nameof(FeatureItem.處方查詢):
                     break;
-
                 case nameof(FeatureItem.商品查詢):
                     break;
 

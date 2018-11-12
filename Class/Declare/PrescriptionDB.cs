@@ -11,6 +11,26 @@ namespace His_Pos.Class.Declare
 {
     public static class PrescriptionDB
     {
+        public static ObservableCollection<PrescriptionOverview> GetChronicOverviewBySearchCondition(DateTime sDate, DateTime eDate, string cusName, string id, string docName, string insName)
+        {
+            ObservableCollection<PrescriptionOverview> prescriptionOverviews = new ObservableCollection<PrescriptionOverview>();
+
+            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SDATE", sDate));
+            parameters.Add(new SqlParameter("EDATE", eDate));
+            parameters.Add(new SqlParameter("CUSNAME", cusName));
+            parameters.Add(new SqlParameter("HISCASCAT_ID", id));
+            parameters.Add(new SqlParameter("EMP_NAME", docName));
+            parameters.Add(new SqlParameter("INS_NAME", insName));
+            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[GetChronicOverviewBySearchCondition]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                prescriptionOverviews.Add(new PrescriptionOverview(row));
+            }
+            return prescriptionOverviews;
+        }
         public static ObservableCollection<PrescriptionOverview> GetPrescriptionOverviewBySearchCondition(DateTime sDate, DateTime eDate, string cusName, string id,string docName,string insName)
         {
             ObservableCollection<PrescriptionOverview> prescriptionOverviews = new ObservableCollection<PrescriptionOverview>();

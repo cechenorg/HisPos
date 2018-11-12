@@ -13,11 +13,12 @@
                 Margin="10,0,10,10"
                 AutoGenerateColumns="False"
                 Background="{StaticResource GridBackGround}"
-                CanUserAddRows="True"
+                CanUserAddRows="False"
                 CellStyle="{StaticResource DataGridCellStyle}"
                 ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                 GridLinesVisibility="Horizontal"
-                ItemsSource="{Binding ChronicCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                ItemsSource="{Binding ChronicCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                 >
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True" />

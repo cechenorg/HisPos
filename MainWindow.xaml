@@ -28,7 +28,7 @@
     xmlns:IndexView="clr-namespace:His_Pos.IndexView"
     xmlns:declarefile="clr-namespace:His_Pos.H6_DECLAREFILE.Export"
     xmlns:stockTaking1="clr-namespace:His_Pos.H3_STOCKTAKING.StockTaking"
-    xmlns:entrySearch="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach"
+    xmlns:entrySearch="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach" 
     Title="藥健康 HIS POS 系統"
     Width="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
     Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"

@@ -4,30 +4,47 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach"
+             xmlns:hisPos="clr-namespace:His_Pos"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"  
              d:DesignHeight="839" d:DesignWidth="1365">
+    <UserControl.Resources>
+        <hisPos:DateConverter x:Key="DateConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="180"/>
             <RowDefinition />
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Margin="10"  Orientation="Horizontal">
-            <Label Content="開始日期"  FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}"/>
-            <TextBox Name="TextBoxStart"  Width="130" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14"  />
-            <DatePicker Name="DatePickerStart" Width="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Focusable="False" 
-                                FontFamily="Segoe UI Semi" Foreground="Transparent" IsHitTestVisible="True" IsTodayHighlighted="False" 
-                                SelectedDate="{Binding CurrentPrescription.Treatment.TreatmentDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
-            <Label Content="結束日期"  FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}"/>
-            <TextBox Name="TextBoxEnd"  Width="130" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="14" />
-            <DatePicker Name="DatePickerEnd" Width="40" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Focusable="False" 
-                                FontFamily="Segoe UI Semi" Foreground="Transparent" IsHitTestVisible="True" IsTodayHighlighted="False" 
-                                SelectedDate="{Binding CurrentPrescription.Treatment.TreatmentDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:yyyy-mm-dd}}" />
-            <Label Content="會計科目" Width="100" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}"/>
-            <ComboBox Width="120"/>
-            <Rectangle Width="520"/>
-            <Button Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16"/>
+        <StackPanel Grid.Row="0"  Orientation="Horizontal" Margin="10">
+            <Label Content="開始日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}" />
+            <xctk:MaskedTextBox Name="start" Width="100"  HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewMouseLeftButtonUp="start_PreviewMouseLeftButtonUp">
+                <xctk:MaskedTextBox.Text>
+                    <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                        <Binding.ValidationRules>
+                            <hisPos:DateValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </xctk:MaskedTextBox.Text>
+            </xctk:MaskedTextBox>
+            <Label Content="結束日期"  FontFamily="Segoe UI Semibold" FontSize="18"  HorizontalContentAlignment="Center" Foreground="{StaticResource ForeGround}"/>
+            <xctk:MaskedTextBox Name="end" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewMouseLeftButtonUp="start_PreviewMouseLeftButtonUp">
+                <xctk:MaskedTextBox.Text>
+                    <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                        <Binding.ValidationRules>
+                            <hisPos:DateValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </xctk:MaskedTextBox.Text>
+            </xctk:MaskedTextBox>
+            <Rectangle Width="840"/>
+            <Button Name="ButtonSearch" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" Click="ButtonSearch_Click"/>
         </StackPanel>
         <Grid Grid.Row="1" Margin="10">
             <Grid.RowDefinitions>
@@ -49,9 +66,9 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="10">
-                <Label Content="2018/01/01" FontFamily="Segoe UI Semibold" FontSize="30"/>
+                <Label Name="LabelstartDate"  FontFamily="Segoe UI Semibold" FontSize="30"/>
                 <Label Content="~" FontFamily="Segoe UI Semibold" FontSize="30"/>
-                <Label Content="2018/01/01" FontFamily="Segoe UI Semibold" FontSize="30"/>
+                <Label Name="LabelendDate"  FontFamily="Segoe UI Semibold" FontSize="30"/>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="6" Background="DarkSeaGreen"/>
             <StackPanel Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="4" Background="DarkSeaGreen"/>
@@ -69,16 +86,16 @@
             <Label Content="自費" Grid.Row="1" Grid.Column="8" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="配藥收入" Grid.Row="1" Grid.Column="9" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <Label Content="押金" Grid.Row="1" Grid.Column="10" FontFamily="Segoe UI Semibold" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="1" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="2" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="3" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="4" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="5" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="7" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="8" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="9" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label Content="100" Grid.Row="2" Grid.Column="10" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.InitStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.PurchaseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="1" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.ReturnValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="2" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.MedUseValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="3" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.StockCheckValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="4" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.FinalStockValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="5" FontFamily="Segoe UI Semibold" FontSize="25" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.CopayMentValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="7" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.PaySelfValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="8" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.MedIncomeValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="9" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label Content="{Binding TotalDailyStock.DepositValue, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}" Grid.Row="2" Grid.Column="10" FontFamily="Segoe UI Semi" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
         <DataGrid  Grid.Row="2" ItemsSource="{Binding DailyStockValueCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="{StaticResource GridBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                   CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False" AutoGenerateColumns="False" Margin="10,0,10,10">

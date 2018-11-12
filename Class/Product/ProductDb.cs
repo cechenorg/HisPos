@@ -470,9 +470,17 @@ namespace His_Pos.Class.Product
             var dd = new DbConnection(Settings.Default.SQL_global); 
               dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateDailyStockValue]"); 
         }
-        internal static ObservableCollection<EntrySearchView.DailyStockValue> GetDailyStockValue() {
+        internal static ObservableCollection<EntrySearchView.DailyStockValue> GetDailyStockValue(EntrySearchView.DailyStockValue totalStock,string startdate = null, string enddate = null) {
             var dd = new DbConnection(Settings.Default.SQL_global);
-            var table = dd.ExecuteProc("[HIS_POS_DB].[Index].[GetDailyStockValue]");
+            var table = new DataTable();
+            if (startdate == null)
+                table = dd.ExecuteProc("[HIS_POS_DB].[Index].[GetDailyStockValue]");
+            else {
+                var parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("STARTDATE", startdate));
+                parameters.Add(new SqlParameter("ENDDATE", enddate));
+                table = dd.ExecuteProc("[HIS_POS_DB].[Index].[GetDailyStockValue]",parameters);
+            }
             ObservableCollection<EntrySearchView.DailyStockValue> collection = new ObservableCollection<EntrySearchView.DailyStockValue>();
 
             var InitStockValue = table.Rows[0]["DSV_INITIAL_VALUE"].ToString(); 
@@ -498,22 +506,19 @@ namespace His_Pos.Class.Product
                 CopayMentValue += Convert.ToInt32(daily.CopayMentValue);
                 PaySelfValue += Convert.ToInt32(daily.PaySelfValue);
                 DepositValue += Convert.ToInt32(daily.DepositValue);
-            }
-            EntrySearchView.DailyStockValue dailyStockValue = new EntrySearchView.DailyStockValue();
+            } 
 
-                dailyStockValue.Date = "總和";
-                dailyStockValue.InitStockValue = InitStockValue;
-                dailyStockValue.PurchaseValue = PurchaseValue.ToString();
-                dailyStockValue.ReturnValue = ReturnValue.ToString();
-                dailyStockValue.StockCheckValue = StockCheckValue.ToString();
-                dailyStockValue.MedUseValue = MedUseValue.ToString();
-                dailyStockValue.MedIncomeValue = MedIncomeValue.ToString();
-                dailyStockValue.CopayMentValue = CopayMentValue.ToString();
-                dailyStockValue.PaySelfValue = PaySelfValue.ToString();
-                dailyStockValue.DepositValue = DepositValue.ToString();
-                dailyStockValue.FinalStockValue = FinalStockValue;
-            
-            collection.Add(dailyStockValue);
+                totalStock.Date = "總和";
+                totalStock.InitStockValue = InitStockValue;
+                totalStock.PurchaseValue = PurchaseValue.ToString();
+                totalStock.ReturnValue = ReturnValue.ToString();
+                totalStock.StockCheckValue = StockCheckValue.ToString();
+                totalStock.MedUseValue = MedUseValue.ToString();
+                totalStock.MedIncomeValue = MedIncomeValue.ToString();
+                totalStock.CopayMentValue = CopayMentValue.ToString();
+                totalStock.PaySelfValue = PaySelfValue.ToString();
+                totalStock.DepositValue = DepositValue.ToString();
+                totalStock.FinalStockValue = FinalStockValue; 
             return collection;
         }
         

@@ -62,6 +62,37 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
                 NotifyPropertyChanged("DailyStockValueCollection");
             }
         }
+        private DailyStockValue totalDailyStock = new DailyStockValue();
+        public DailyStockValue TotalDailyStock
+        {
+            get => totalDailyStock;
+            set
+            {
+                totalDailyStock = value;
+                NotifyPropertyChanged("TotalDailyStock");
+            }
+        }
+        private DateTime startDate = DateTime.Now.AddMonths(-1);
+        public DateTime StartDate
+        {
+            get => startDate;
+            set
+            {
+                startDate = value;
+                NotifyPropertyChanged("StartDate");
+            }
+        }
+        private DateTime endDate = DateTime.Now;
+        public DateTime EndDate
+        {
+            get => endDate;
+            set
+            {
+                endDate = value;
+                NotifyPropertyChanged("EndDate");
+            }
+        }
+
         public static EntrySearchView Instance;
         public EntrySearchView()
         {
@@ -70,9 +101,14 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
             DataContext = this;
             Instance = this;
         }
-        public void InitData() {
+        public void InitData(string startDate = null,string endDate = null) {
             ProductDb.UpdateDailyStockValue();
-            DailyStockValueCollection = ProductDb.GetDailyStockValue();
+            if(startDate == null)
+                DailyStockValueCollection = ProductDb.GetDailyStockValue(TotalDailyStock);
+            else
+                DailyStockValueCollection = ProductDb.GetDailyStockValue(TotalDailyStock, startDate, endDate);
+            LabelstartDate.Content = StartDate.AddYears(-1911).ToString("yyy/MM/dd");
+            LabelendDate.Content = EndDate.AddYears(-1911).ToString("yyy/MM/dd");
         }
         private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
             
@@ -88,7 +124,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
                     sw.WriteLine("日期" + "\t" + "期初現值" + "\t" + "進貨" + "\t" + "退貨" + "\t" + "盤點" + "\t" + "調劑耗用" + "\t" + "期末現值" + "\t\t\t\t" + "日期" + "\t" + "部分負擔" + "\t" + "自費" + "'\t" + "押金" + "\t" + "配藥收入");
                     foreach (DailyStockValue row in DailyStockValueCollection)
                     {
-                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t" + "\t" + row.FinalStockValue + "\t\t\t\t" 
+                        sw.WriteLine(row.Date + "\t" + row.InitStockValue + "\t" + row.PurchaseValue + "\t" + row.ReturnValue + "\t" + row.StockCheckValue + "\t" + row.MedUseValue + "\t"  + row.FinalStockValue + "\t\t\t\t" 
                             + row.Date + "\t" + row.CopayMentValue + "\t" + row.PaySelfValue + "\t" + row.DepositValue + "\t" + row.MedIncomeValue);
                     }
                     sw.Close();
@@ -99,8 +135,27 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
 
         private void showEntryDetail(object sender, MouseButtonEventArgs e) {
             var selectedItem = (sender as DataGridRow).Item;
-            EntryDetailWindow entryDetailWindow = new EntryDetailWindow( ((DailyStockValue)selectedItem).Date);
-            entryDetailWindow.ShowDialog();
+            if (((DailyStockValue)selectedItem).Date != "總和") {
+                EntryDetailWindow entryDetailWindow = new EntryDetailWindow(((DailyStockValue)selectedItem).Date);
+                entryDetailWindow.ShowDialog(); 
+            }
+        
+        }
+
+        private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is System.Windows.Controls.TextBox t)
+            {
+                t.SelectionStart = 0;
+                t.SelectionLength = t.Text.Length;
+            }
+        }
+
+      
+        private void ButtonSearch_Click(object sender, RoutedEventArgs e)
+        {
+            InitData(StartDate.ToString("yyyy-MM-dd"),EndDate.ToString("yyyy-MM-dd"));
+            NotifyPropertyChanged("TotalDailyStock");
         }
     }
 }

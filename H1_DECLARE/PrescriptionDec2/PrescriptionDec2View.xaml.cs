@@ -116,8 +116,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public bool IsSend;
-        public bool IsBone;
+        public bool IsSend; 
         public ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> PrescriptionSendData = new ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData>();
         public Prescription CurrentPrescription
         {
@@ -279,8 +278,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m.Show();
                 return;
             }
-            IsSend = false;
-            IsBone = false;
+            IsSend = false; 
             ErrorMssageWindow err;
             CurrentPrescription.EList.Error = new List<Error>();
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
@@ -370,6 +368,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _firstTimeDecMasId);
                     declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId);//庫存扣庫
                 }
+                declareDb.UpdateDeclareFile(_currentDeclareData);
             }
             else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(_currentDecMasId))
             {//第2次以後的慢性處方
@@ -407,6 +406,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _currentDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _currentDecMasId);//庫存扣庫
                     }
+                    declareDb.UpdateDeclareFile(_currentDeclareData);
                 }
 
                 _currentDeclareData.DecMasId = _currentDecMasId;
@@ -454,9 +454,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId);//庫存扣庫
                     }
+                    declareDb.UpdateDeclareFile(_currentDeclareData);
                 }
-                if (IsBone)//如果來自骨科 刪除預約慢箋
-                    declareDb.CheckPredictChronicExist(_currentDecMasId);
+               
+                    declareDb.CheckPredictChronicExist(_currentDecMasId); //刪除預約慢箋
 
                 var start = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
                 var end = Convert.ToInt32(CurrentPrescription.ChronicTotal);
@@ -488,8 +489,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //    loading.LoginIcData(Instance);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
-            }
-            declareDb.UpdateDeclareFile(_currentDeclareData);
+            } 
             //PrintMedBag(); 印藥袋
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
