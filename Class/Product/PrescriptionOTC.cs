@@ -41,7 +41,7 @@ namespace His_Pos.Class.Product
             Position = string.Empty;
             Days = string.Empty;
             ControlLevel = "0";
-            Stock = new InStock();
+            Stock = new InStock(dataRow);
         }
 
         private bool _paySelf;
@@ -213,6 +213,7 @@ namespace His_Pos.Class.Product
                 Days = Days,
                 Position = Position,
                 Source = Source,
+                Stock = Stock,
                 ControlLevel = ControlLevel
             };
             return prescriptionOtc;

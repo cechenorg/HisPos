@@ -21,6 +21,7 @@ namespace His_Pos.Class
             Pharmacy = new Pharmacy.Pharmacy();
             Treatment = new Treatment();
             Medicines = new ObservableCollection<AbstractClass.Product>();
+            IsGetIcCard = false;
             EList = new ErrorList();
         }
      

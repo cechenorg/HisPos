@@ -60,7 +60,7 @@ namespace His_Pos.Class.Declare
         {
             var ddatas = new List<Ddata>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter> {new SqlParameter("DEC_TIME", dateTime)};
+            var parameters = new List<SqlParameter> {new SqlParameter("ADJUST_DATE", dateTime)};
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
             foreach (DataRow row in table.Rows)
             {
@@ -76,7 +76,7 @@ namespace His_Pos.Class.Declare
         {
             var errorList = new List<ErrorList>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var parameters = new List<SqlParameter> { new SqlParameter("DEC_TIME", dateTime) };
+            var parameters = new List<SqlParameter> { new SqlParameter("ADJUST_DATE", dateTime) };
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
             foreach (DataRow row in table.Rows)
             {
