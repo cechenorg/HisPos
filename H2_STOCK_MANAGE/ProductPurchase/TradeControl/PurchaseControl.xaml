@@ -464,7 +464,7 @@
                 <DataGridTemplateColumn MinWidth="170" Header="批號" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Width="170">
+                            <StackPanel Orientation="Horizontal" Width="170" Tag="NotSkip">
                                 <TextBox x:Name="BatchNumber" Width="120" FontSize="18" Text="{Binding BatchNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown"/>
                                 <Button x:Name="Split" Content="拆批" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Click="SplitBatchNumber_Click" Visibility="{Binding IsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                 <Button Content="合批" Background="MediumPurple" Width="40" Margin="5,0,0,0" Padding="0" BorderThickness="0" FontFamily="Segoe UI Semi" Click="MergeBatchButton_Click" Visibility="{Binding InvertIsFirstBatch, Converter={StaticResource BooleanToVisibilityConverter}}"/>

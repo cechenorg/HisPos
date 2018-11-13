@@ -335,7 +335,13 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                 {
                     UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
 
-                    if (!(child is Image))
+                    if (child is StackPanel)
+                    {
+                        StackPanel stackPanel = child as StackPanel;
+                        if (stackPanel.Tag.ToString().Equals("NotSkip"))
+                            break;
+                    }
+                    else if (!(child is Image))
                         break;
                 }
 
