@@ -52,10 +52,10 @@
                                         <RowDefinition Height="35" />
                                     </Grid.RowDefinitions>
                                     <Label Grid.Row="0" Margin="10,0,0,0"
-                                           Content="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                           Content="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                            FontFamily="Segoe UI Semibold" FontSize="25" />
                                     <Label Grid.Row="1" Margin="20,0,0,0"
-                                           Content="{Binding PrintName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                           Content="{Binding PrintName, UpdateSourceTrigger=PropertyChanged}"
                                            FontFamily="Segoe UI Semi" FontSize="16"
                                            Foreground="{StaticResource ForeGround}" />
                                 </Grid>
@@ -84,12 +84,12 @@
                              materialDesign:HintAssist.Hint="代號" BorderThickness="0" FontFamily="Segoe UI Semibold"
                              FontSize="40" FontWeight="Bold" Foreground="Black"
                              Text="{Binding UsageDetail.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextChanged="TextBox_DataChanged" />
+                             TextChanged="TextBox_DataChanged" IsReadOnly="True"/>
                     <TextBox Width="750" Margin="30,0,0,0" VerticalAlignment="Center"
                              materialDesign:HintAssist.Hint="名稱" BorderThickness="0" FontFamily="Segoe UI Semibold"
                              FontSize="40" FontWeight="Bold" Foreground="Black"
                              Text="{Binding UsageDetail.PrintName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextChanged="TextBox_DataChanged" />
+                             TextChanged="TextBox_DataChanged" IsReadOnly="True"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="8" Orientation="Horizontal">
                     <Label VerticalAlignment="Center" Content="頻率簡碼" FontFamily="Segoe UI Semibold" FontSize="20" />
@@ -103,37 +103,37 @@
                     <TextBox Width="140" Margin="10,0,0,0" HorizontalContentAlignment="Center"
                              FontFamily="Segoe UI Semi" FontSize="18"
                              Text="{Binding UsageDetail.Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextChanged="TextBox_DataChanged" />
+                             TextChanged="TextBox_DataChanged" IsReadOnly="True"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label VerticalAlignment="Center" Content="使用次數" FontFamily="Segoe UI Semibold" FontSize="20" />
                     <TextBox Width="140" Margin="10,0,0,0" HorizontalContentAlignment="Center"
                              FontFamily="Segoe UI Semi" FontSize="18"
                              Text="{Binding UsageDetail.Times, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextChanged="TextBox_DataChanged" />
+                             TextChanged="TextBox_DataChanged" IsReadOnly="True"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Background="{StaticResource Shadow}"
                             Orientation="Horizontal">
                     <Label Margin="10,0,0,0" VerticalAlignment="Center" Content="藥袋勾選" FontFamily="Segoe UI Semibold"
                            FontSize="20" />
-                    <CheckBox Margin="15,0,0,0" VerticalAlignment="Center" Background="DimGray"
+                    <CheckBox Margin="15,0,0,0" VerticalAlignment="Center" Background="DimGray" IsEnabled="False"
                               Click="CheckBox_DataChanged" Content="早上" FontFamily="Segoe UI Semibold" FontSize="20"
                               IsChecked="{Binding UsageDetail.PrintIcons[0], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray"
+                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray" IsEnabled="False"
                               Click="CheckBox_DataChanged" Content="中午" FontFamily="Segoe UI Semibold" FontSize="20"
                               IsChecked="{Binding UsageDetail.PrintIcons[1], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray"
+                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray" IsEnabled="False"
                               Click="CheckBox_DataChanged" Content="晚上" FontFamily="Segoe UI Semibold" FontSize="20"
                               IsChecked="{Binding UsageDetail.PrintIcons[2], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray"
+                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray" IsEnabled="False"
                               Click="CheckBox_DataChanged" Content="睡前" FontFamily="Segoe UI Semibold" FontSize="20"
                               IsChecked="{Binding UsageDetail.PrintIcons[3], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray"
+                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray" IsEnabled="False"
                               Click="CheckBox_DataChanged" Content="飯前" FontFamily="Segoe UI Semibold" FontSize="20"
                               IsChecked="{Binding UsageDetail.PrintIcons[4], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray"
+                    <CheckBox Margin="30,0,0,0" VerticalAlignment="Center" Background="DimGray" IsEnabled="False"
                               Click="CheckBox_DataChanged" Content="飯後" FontFamily="Segoe UI Semibold" FontSize="20"
-                              IsChecked="{Binding UsageDetail.PrintIcons[5], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                              IsChecked="{Binding UsageDetail.PrintIcons[5], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"
                             Background="{StaticResource GridDarkerBackGround}" Orientation="Horizontal">
