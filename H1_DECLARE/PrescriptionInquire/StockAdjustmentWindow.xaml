@@ -57,33 +57,32 @@
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTemplateColumn Width="130" Header="調整原因">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ComboBox  Name="ComboBoxAdjustReason" Text="{Binding AdjustReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" VerticalAlignment="Center">
-                                <ComboBoxItem Content="處方對 但給錯藥"></ComboBoxItem>
-                                <ComboBoxItem Content="處方錯 給錯藥"></ComboBoxItem>
-                                <ComboBoxItem Content="處方錯 給對藥"></ComboBoxItem>
-                            </ComboBox>
-                           </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                </DataGridTextColumn> 
                 <DataGridTemplateColumn Width="130" Header="調整方法">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <ComboBox  Name="ComboBoxAdjustMethod" Text="{Binding Adjustmethod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" VerticalAlignment="Center">
                                 <ComboBoxItem Content="不調整"></ComboBoxItem>
-                                <ComboBoxItem Visibility="{Binding BuckleStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Content="扣庫"></ComboBoxItem>
-                                <ComboBoxItem Visibility="{Binding BuckleStatus, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"  Content="補回庫存"></ComboBoxItem>
+                                <ComboBoxItem Visibility="{Binding IsBuckle,UpdateSourceTrigger=PropertyChanged}" Content="扣庫"></ComboBoxItem>
+                                <ComboBoxItem Visibility="{Binding IsAddStock,UpdateSourceTrigger=PropertyChanged}" Content="補回庫存"></ComboBoxItem>
                             </ComboBox>
                            </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="130" Header="調整原因">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox  Name="ComboBoxAdjustReason" Text="{Binding AdjustReason, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Center" VerticalAlignment="Center">
+                                <ComboBoxItem Content="處方錯 給錯藥"></ComboBoxItem>
+                                <ComboBoxItem Content="處方錯 給對藥"></ComboBoxItem>
+                            </ComboBox>
+                        </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Rectangle Width="730"/>
+            <Rectangle Width="720"/>
             <Button Name="ButtonCancel" Width="120" Content="取消"  FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Margin="10,0,10,0" Click="ButtonCancel_Click"/>
             <Button Name="ButtonSubmmit" Width="120" Content="修改確定"  FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0"  Click="ButtonSubmmit_Click"/>
    </StackPanel>

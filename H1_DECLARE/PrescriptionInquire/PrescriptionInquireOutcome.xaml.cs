@@ -157,8 +157,10 @@ namespace His_Pos.PrescriptionInquire
                 if (newDeclareDetail is DeclareMedicine)
                 {
                     var declareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
+                    declareDetailClone.Amount = ((DeclareMedicine)newDeclareDetail).Amount;
                     DeclareDetails.Add(declareDetailClone);
                     var tempdeclareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
+                    tempdeclareDetailClone.Amount = ((DeclareMedicine)newDeclareDetail).Amount;
                     OriginDeclareDetails.Add(tempdeclareDetailClone);
                 }
                 else if (newDeclareDetail is PrescriptionOTC)
@@ -549,7 +551,7 @@ namespace His_Pos.PrescriptionInquire
             {
                 _currentDeclareData = new DeclareData(InquiredPrescription.Prescription);
                 _currentDeclareData.DecMasId = InquiredPrescription.DecMasId;
-                StockAdjustmentWindow stockAdjustmentWindow = new StockAdjustmentWindow(OriginDeclareDetails, DeclareDetails);
+                StockAdjustmentWindow stockAdjustmentWindow = new StockAdjustmentWindow(InquiredPrescription.DecMasId, OriginDeclareDetails, DeclareDetails);
                 stockAdjustmentWindow.ShowDialog();
                 if (IsAdjust) { 
                     var declareDb = new DeclareDb();
@@ -566,7 +568,8 @@ namespace His_Pos.PrescriptionInquire
                     m.ShowDialog();
                     InitDataChanged();
                     PrescriptionOverview prescriptionOverview = new PrescriptionOverview(InquiredPrescription);
-                    PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview); 
+                    PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview);
+                    Close();
                 } 
             }
             else

@@ -521,6 +521,33 @@ namespace His_Pos.Class.Product
                 totalStock.FinalStockValue = FinalStockValue; 
             return collection;
         }
-        
+        internal static string GetAddStockValue (string DecmasId,string proId, string AddStockAmount) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DECMAS_ID", DecmasId));
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("AddStockAmount", AddStockAmount));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetAddStockValue]", parameters);
+            return table.Rows[0][0].ToString();
+        }
+        internal static void BuckleInventory( string proId, string BuckleAmount,string statusName,string foreign) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("PROWAR_ID", '1'));
+            parameters.Add(new SqlParameter("BuckleAmount", BuckleAmount));
+            parameters.Add(new SqlParameter("STATUS_NAME", statusName));
+            parameters.Add(new SqlParameter("PROINVREC_FOREIN", foreign));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[BuckleInventory]", parameters);
+        }
+        internal static void RecoveryInventory(string decMasId,string proId, string RecoveryAmount) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DECMAS_ID", decMasId));
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("PROWAR_ID", '1'));
+            parameters.Add(new SqlParameter("RecoveryAmount", RecoveryAmount)); 
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[RecoveryInventory]", parameters);
+        } 
     }
 } 
