@@ -209,7 +209,7 @@ namespace His_Pos.Class.Product
         public bool IsControl { get; set; }
         public bool IsEnough
         {
-            get { return Amount > OrderAmount; }
+            get { return Amount >= OrderAmount; }
         }
 
         public void CalculateData(string inputSource)

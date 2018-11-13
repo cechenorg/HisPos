@@ -30,7 +30,7 @@ using His_Pos.ViewModel;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
-
+ 
 namespace His_Pos
 {
     /// <summary>
