@@ -549,7 +549,7 @@ namespace His_Pos.PrescriptionInquire
             {
                 _currentDeclareData = new DeclareData(InquiredPrescription.Prescription);
                 _currentDeclareData.DecMasId = InquiredPrescription.DecMasId;
-                StockAdjustmentWindow stockAdjustmentWindow = new StockAdjustmentWindow(OriginDeclareDetails, DeclareDetails);
+                StockAdjustmentWindow stockAdjustmentWindow = new StockAdjustmentWindow(InquiredPrescription.DecMasId, OriginDeclareDetails, DeclareDetails);
                 stockAdjustmentWindow.ShowDialog();
                 if (IsAdjust) { 
                     var declareDb = new DeclareDb();
@@ -566,7 +566,8 @@ namespace His_Pos.PrescriptionInquire
                     m.ShowDialog();
                     InitDataChanged();
                     PrescriptionOverview prescriptionOverview = new PrescriptionOverview(InquiredPrescription);
-                    PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview); 
+                    PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview);
+                    Close();
                 } 
             }
             else

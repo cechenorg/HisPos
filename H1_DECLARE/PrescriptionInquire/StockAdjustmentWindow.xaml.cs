@@ -41,9 +41,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
             public string AdjustAmount { get; set; }
             public string AdjustReason { get; set; } = string.Empty;
             public string Adjustmethod { get; set; } = string.Empty;
-            public string BuckleStatus { get; set; }
+            public Visibility IsBuckle { get; set; } = Visibility.Collapsed;
+            public Visibility IsAddStock { get; set; } = Visibility.Collapsed;
         }
-
+        public string DecMasId;
         private ObservableCollection<StockAdjust> stockAdjustCollection = new ObservableCollection<StockAdjust>();
         public ObservableCollection<StockAdjust> StockAdjustCollection
         {
@@ -54,9 +55,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
                 NotifyPropertyChanged("StockAdjustCollection");
             }
         }
-        public StockAdjustmentWindow(ObservableCollection<Product> originMedCollection, ObservableCollection<Product> adjustMedCollection )
+        public StockAdjustmentWindow(string decMasId,ObservableCollection<Product> originMedCollection, ObservableCollection<Product> adjustMedCollection )
         {
             InitializeComponent();
+            DecMasId = decMasId;
             DataContext = this;
             foreach (Product pro in originMedCollection) {
                 if (pro is DeclareMedicine) {
@@ -66,9 +68,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
                     if (tempadjust != null)
                         temp.AdjustAmount = ((DeclareMedicine)tempadjust).Amount.ToString();
 
-                    temp.BuckleStatus = Convert.ToInt32(temp.AdjustAmount) >= Convert.ToInt32(temp.OriginAmount) ? "Visible" : "Hidden";
+                    temp.Adjustmethod = Convert.ToInt32(temp.AdjustAmount) >= Convert.ToInt32(temp.OriginAmount) ? "扣庫" : "補回庫存";
                     if (Convert.ToInt32(temp.AdjustAmount) == Convert.ToInt32(temp.OriginAmount))
                         temp.Adjustmethod = "不調整";
+
+                    switch (temp.Adjustmethod) {
+                        case "扣庫":
+                            temp.IsBuckle = Visibility.Visible;
+                            break;
+                        case "補回庫存":
+                            temp.IsAddStock = Visibility.Visible;
+                            break;  
+                    }
                     StockAdjustCollection.Add(temp);
                 } 
             }
@@ -78,9 +89,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
                     StockAdjust temp = new StockAdjust(pro);
                     temp.OriginAmount = "0";
                     temp.AdjustAmount = ((DeclareMedicine)pro).Amount.ToString();
-                    temp.BuckleStatus = Convert.ToInt32(temp.AdjustAmount) >= Convert.ToInt32(temp.OriginAmount) ? "Visible" : "Hidden";
+                    temp.Adjustmethod = Convert.ToInt32(temp.AdjustAmount) >= Convert.ToInt32(temp.OriginAmount) ? "扣庫" : "補回庫存";
                     if (Convert.ToInt32(temp.AdjustAmount) == Convert.ToInt32(temp.OriginAmount))
                         temp.Adjustmethod = "不調整";
+
+                    switch (temp.Adjustmethod)
+                    {
+                        case "扣庫":
+                            temp.IsBuckle = Visibility.Visible;
+                            break;
+                        case "補回庫存":
+                            temp.IsAddStock = Visibility.Visible;
+                            break;
+                    }
                     StockAdjustCollection.Add(temp);
                 }
             }
@@ -94,7 +115,22 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
                     messageWindow.ShowDialog();
                     return;
                 }
-            } 
+            }
+            double totalPrice = 0;
+            foreach (StockAdjust stockAdjust in StockAdjustCollection)
+            {
+                if (stockAdjust.AdjustReason == "扣庫") {
+
+                    totalPrice -=  double.Parse(ProductDb.GetBucklePrice(stockAdjust.ProId, (Convert.ToInt32(stockAdjust.AdjustAmount) - Convert.ToInt32(stockAdjust.OriginAmount)).ToString()));
+                    ProductDb.BuckleInventory(stockAdjust.ProId, (Convert.ToInt32(stockAdjust.AdjustAmount) - Convert.ToInt32(stockAdjust.OriginAmount)).ToString(),"處方修改調整",DecMasId);
+                }
+                if (stockAdjust.AdjustReason == "補回庫存") {
+                    totalPrice += double.Parse(ProductDb.GetAddStockValue(DecMasId, stockAdjust.ProId, (Convert.ToInt32(stockAdjust.OriginAmount) - Convert.ToInt32(stockAdjust.AdjustAmount)).ToString()));
+                    ProductDb.RecoveryInventory( DecMasId, stockAdjust.ProId, (Convert.ToInt32(stockAdjust.OriginAmount) - Convert.ToInt32(stockAdjust.AdjustAmount)).ToString());
+                }
+            }
+            ProductDb.InsertEntry("處方修改調整", totalPrice.ToString(), "DecMasId", DecMasId);
+
             PrescriptionInquireOutcome.IsAdjust = true;
             this.Close();
         }
