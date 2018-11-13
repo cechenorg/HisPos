@@ -69,7 +69,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             InitializeComponent();
             foreach (Product row in medicines) {
                 PrescriptionSendData prescription = new PrescriptionSendData(row);
-                if (!row.IsBuckle) 
+                if(row is DeclareMedicine)
+                if (!((DeclareMedicine)row).IsBuckle) 
                     prescription.SendAmount = "0";
 
                 
