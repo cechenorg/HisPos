@@ -21,7 +21,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
                 MedName = declareMedicine.Name;
                 Stock = ChronicDb.GetResidualAmountById(MedId); 
                 TreatAmount =  declareMedicine is DeclareMedicine ? ((DeclareMedicine)declareMedicine).Amount.ToString() : ((PrescriptionOTC)declareMedicine).Amount.ToString();
-                SendAmount = TreatAmount;
+                SendAmount = declareMedicine is DeclareMedicine ? TreatAmount : "0";
             }
 
             public string MedId { get; set; }
@@ -70,10 +70,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             foreach (Product row in medicines) {
                 PrescriptionSendData prescription = new PrescriptionSendData(row);
                 if(row is DeclareMedicine)
-                if (!((DeclareMedicine)row).IsBuckle) 
-                    prescription.SendAmount = "0";
-
-                
+                    if (!((DeclareMedicine)row).IsBuckle) 
+                        prescription.SendAmount = "0";
+                  
                 Prescription.Add(prescription);
             }
             DecMasId = decMasId;

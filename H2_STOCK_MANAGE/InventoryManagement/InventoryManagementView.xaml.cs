@@ -94,7 +94,7 @@ namespace His_Pos.InventoryManagement
             searchCount = 0;
             SearchData();
             SearchCount.Content = searchCount;
-            SelectStockValue.Content = selectStockValue.ToString("0.#");
+            SelectStockValue.Content = selectStockValue.ToString();
         }
 
         public void SearchData()

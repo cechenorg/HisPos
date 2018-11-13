@@ -491,9 +491,10 @@ namespace His_Pos.Class.StoreOrder
             Dtl_data.Append(declareData.Prescription.ChronicSequence.PadRight(1, ' ')); //本次調劑次數
             Dtl_data.Append(declareTrade.PaySelf.PadRight(8, ' ')); //自費金額
 
-            double medCost = 0;
-            foreach (DeclareMedicine declareMedicine in declareData.Prescription.Medicines) {
-                medCost += declareMedicine.TotalPrice;
+            double medCost = 0; 
+            foreach (AbstractClass.Product declareMedicine in declareData.Prescription.Medicines) {
+                if(declareMedicine is DeclareMedicine)
+                   medCost += ((DeclareMedicine)declareMedicine).TotalPrice;
             } 
             Dtl_data.Append(medCost.ToString().PadRight(8, ' ')); //藥品費
             string medicalPay = "0";
@@ -509,29 +510,48 @@ namespace His_Pos.Class.StoreOrder
             Dtl_data.AppendLine();
             //第四行
             int i = 1;
-            foreach (DeclareMedicine declareMedicine in declareData.Prescription.Medicines)
+            foreach (AbstractClass.Product declareMedicine in declareData.Prescription.Medicines)
             {
-                Dtl_data.Append(declareMedicine.Id.PadRight(12, ' ')); //健保碼
-                Dtl_data.Append(declareMedicine.MedicalCategory.Dosage.PadLeft(8, ' ')); //每次使用數量
-                Dtl_data.Append(declareMedicine.Usage.Name.PadRight(16, ' ')); //使用頻率
-                Dtl_data.Append(declareMedicine.Days.PadRight(3, ' ')); //使用天數
-                Dtl_data.Append(declareMedicine.Amount.ToString().PadRight(8, ' ')); //使用總量
-                Dtl_data.Append(declareMedicine.Position.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
-                if (declareMedicine.PaySelf == false)
-                    Dtl_data.Append(" ");
-                else
-                    Dtl_data.Append(declareMedicine.TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
+                if (declareMedicine is DeclareMedicine)
+                {
+                    Dtl_data.Append(((DeclareMedicine)declareMedicine).Id.PadRight(12, ' ')); //健保碼
+                    Dtl_data.Append(((DeclareMedicine)declareMedicine).MedicalCategory.Dosage.PadLeft(8, ' ')); //每次使用數量
+                    Dtl_data.Append(((DeclareMedicine)declareMedicine).Usage.Name.PadRight(16, ' ')); //使用頻率
+                    Dtl_data.Append(((DeclareMedicine)declareMedicine).Days.PadRight(3, ' ')); //使用天數
+                    Dtl_data.Append(((DeclareMedicine)declareMedicine).Amount.ToString().PadRight(8, ' ')); //使用總量
+                    Dtl_data.Append(((DeclareMedicine)declareMedicine).Position.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+                    if (((DeclareMedicine)declareMedicine).PaySelf == false)
+                        Dtl_data.Append(" ");
+                    else
+                        Dtl_data.Append(((DeclareMedicine)declareMedicine).TotalPrice > 0 ? "Y" : "N".PadRight(1, ' ')); //自費判斷 Y自費收費 N自費不收費
 
-                Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
-                string amount = string.Empty;
-                foreach (ChronicSendToServerWindow.PrescriptionSendData row in PrescriptionSendData)
-                { 
-                    if (row.MedId == declareMedicine.Id) {
-                        amount = row.SendAmount;
-                        break;
+                    Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
+                    string amount = string.Empty;
+                    foreach (ChronicSendToServerWindow.PrescriptionSendData row in PrescriptionSendData)
+                    {
+                        if (row.MedId == declareMedicine.Id)
+                        {
+                            amount = row.SendAmount;
+                            break;
+                        }
                     }
+                    Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
                 }
-                Dtl_data.Append(amount.PadRight(10, ' ')); //訂購量
+                else {
+                    Dtl_data.Append(declareMedicine.Id.PadRight(12, ' ')); //健保碼
+                    Dtl_data.Append(empty.PadLeft(8, ' ')); //每次使用數量
+                    Dtl_data.Append(empty.PadRight(16, ' ')); //使用頻率
+                    Dtl_data.Append(empty.PadRight(3, ' ')); //使用天數
+                    Dtl_data.Append(((PrescriptionOTC)declareMedicine).Amount.ToString().PadRight(8, ' ')); //使用總量
+                    Dtl_data.Append(empty.PadRight(6, ' ')); //途徑 (詳見:途徑欄位說明)
+                     
+                    Dtl_data.Append(" ");  //自費判斷 Y自費收費 N自費不收費
+
+                    Dtl_data.Append(empty.PadRight(1, ' ')); //管藥判斷庫存是否充足 Y是 N 否
+                    Dtl_data.Append(empty.PadRight(10, ' ')); //訂購量
+                }
+                
+
                 if(i != declareData.Prescription.Medicines.Count)
                     Dtl_data.AppendLine();
                 i++;

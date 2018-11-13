@@ -372,7 +372,7 @@ namespace His_Pos
                     inventoryManagementView.searchCount = 0;
                     inventoryManagementView.SearchData();
                     inventoryManagementView.SearchCount.Content = inventoryManagementView.searchCount;
-                    inventoryManagementView.SelectStockValue.Content = inventoryManagementView.selectStockValue.ToString("0.#");
+                    inventoryManagementView.SelectStockValue.Content = inventoryManagementView.selectStockValue.ToString();
                 }));
             };
 
