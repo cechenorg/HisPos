@@ -360,11 +360,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     var medTotalPrice = 0.00;
                     foreach (var med in _currentDeclareData.Prescription.Medicines)
                     {
-                        if(med is DeclareMedicine)
-                            medTotalPrice += double.Parse(ProductDb.GetBucklePrice(med.Id, ((IProductDeclare)(DeclareMedicine)med).Amount.ToString()));
-                        else
+                        switch (med)
                         {
-                            medTotalPrice += double.Parse(ProductDb.GetBucklePrice(med.Id, ((IProductDeclare)(PrescriptionOTC)med).Amount.ToString()));
+                            case DeclareMedicine declare:
+                                medTotalPrice += double.Parse(ProductDb.GetBucklePrice(declare.Id, ((IProductDeclare)declare).Amount.ToString()));
+                                break;
+                            case PrescriptionOTC otc:
+                                medTotalPrice += double.Parse(ProductDb.GetBucklePrice(med.Id, ((IProductDeclare)otc).Amount.ToString()));
+                                break;
                         }
                     }
                     ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _firstTimeDecMasId);
@@ -451,10 +454,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         var medTotalPrice = 0.0;
                         foreach (var med in _currentDeclareData.Prescription.Medicines)
                         {
-                            if(med is DeclareMedicine declare)
-                                medTotalPrice += double.Parse(ProductDb.GetBucklePrice(declare.Id, ((IProductDeclare)declare).Amount.ToString()));
-                            else if(med is PrescriptionOTC otc)
-                                medTotalPrice += double.Parse(ProductDb.GetBucklePrice(otc.Id, ((IProductDeclare)otc).Amount.ToString()));
+                            switch (med)
+                            {
+                                case DeclareMedicine declare:
+                                    medTotalPrice += double.Parse(ProductDb.GetBucklePrice(declare.Id, ((IProductDeclare)declare).Amount.ToString()));
+                                    break;
+                                case PrescriptionOTC otc:
+                                    medTotalPrice += double.Parse(ProductDb.GetBucklePrice(otc.Id, ((IProductDeclare)otc).Amount.ToString()));
+                                    break;
+                            }
                         }
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId);//庫存扣庫

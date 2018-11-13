@@ -53,7 +53,7 @@ namespace His_Pos.RDLC
                 ConsumeContainerWhitespace = "true",
                 ReportID = "cdd7925b-803a-4208-8788-8e2ae4bd14b8"
             };
-            SetReportItem(medBagReport, selectedMedBag.MedLocations,p,medicineIndex);
+            //SetReportItem(medBagReport, selectedMedBag.MedLocations,p,medicineIndex);
             return medBagReport;
         }
 

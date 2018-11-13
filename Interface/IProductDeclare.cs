@@ -21,5 +21,8 @@ namespace His_Pos.Interface
         double TotalPrice { get; set; }
         string ControlLevel { get; set; }
         string Forms { get; set; }
+        string Ingredient { get; set; }
+        string SideEffect { get; set; }
+        string Indication { get; set; }
     }
 }

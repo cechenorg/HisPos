@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.Interface;
 
 namespace His_Pos.Class.Product
@@ -26,8 +21,8 @@ namespace His_Pos.Class.Product
             Usage = string.Empty;
             Position = string.Empty;
             Days = string.Empty;
-            Inventory = 0.00;
-            ControlLevel = "0";
+            Stock = new InStock();
+            ControlLevel = string.Empty;
         }
 
         public PrescriptionOTC(DataRow dataRow) : base(dataRow)
@@ -45,8 +40,8 @@ namespace His_Pos.Class.Product
             Usage = string.Empty;
             Position = string.Empty;
             Days = string.Empty;
-            Inventory = 0.00;
             ControlLevel = "0";
+            Stock = new InStock();
         }
 
         private bool _paySelf;
@@ -93,7 +88,6 @@ namespace His_Pos.Class.Product
         }
 
         private double _price;
-
         public double Price
         {
             get => _price;
@@ -161,18 +155,18 @@ namespace His_Pos.Class.Product
             }
         }
 
-        private double _inventory;
-        private IProductDeclare _productDeclareImplementation;
+        private InStock _stock;
 
-        public double Inventory
+        public InStock Stock
         {
-            get => _inventory;
+            get => _stock;
             set
             {
-                _inventory = value;
-                NotifyPropertyChanged(nameof(Inventory));
+                _stock = value;
+                NotifyPropertyChanged(nameof(Stock));
             }
         }
+
         public string ControlLevel { get; set; }
         string IDeletable.Source { get => Source; set => Source =value; }
         double ITrade.Cost { get => Cost; set => Cost = value; }
@@ -189,11 +183,14 @@ namespace His_Pos.Class.Product
         string IProductDeclare.Usage { get => Usage; set => Usage = value; }
         string IProductDeclare.Position { get => Position; set => Position = value; }
         string IProductDeclare.Days { get => Days; set => Days = value; }
-        double IProductDeclare.Inventory { get => Inventory; set => Inventory = value; }
-        double IProductDeclare.HcPrice { get => 0.0000;set => HcPrice = 0.0000;}
+        double IProductDeclare.Inventory { get => Stock.Inventory; set => Stock.Inventory = value; }
+        double IProductDeclare.HcPrice { get => 0.0000;set => throw new NotImplementedException(); }
         bool IProductDeclare.PaySelf { get => PaySelf; set => PaySelf = true; }
-        string IProductDeclare.ControlLevel { get => ControlLevel; set => ControlLevel = "0"; }
+        string IProductDeclare.ControlLevel { get => ControlLevel; set => ControlLevel = string.Empty; }
         string IProductDeclare.Forms { get => string.Empty; set => throw new NotImplementedException(); }
+        string IProductDeclare.Ingredient { get => string.Empty; set => throw new NotImplementedException(); }
+        string IProductDeclare.SideEffect { get => string.Empty; set => throw new NotImplementedException(); }
+        string IProductDeclare.Indication { get => string.Empty; set => throw new NotImplementedException(); }
 
         public object Clone()
         {
