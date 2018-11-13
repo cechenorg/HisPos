@@ -15,6 +15,7 @@ using System.Xml.Serialization;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.RDLC;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase;
+using His_Pos.Interface;
 
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 
@@ -298,12 +299,21 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             foreach (var declareDetail in declareData.Prescription.Medicines)
             {
-                var med = declareData.Prescription.Medicines.Single(medicine => medicine.Id == declareDetail.Id);
-                if (!med.IsBuckle) continue;
                 parameters.Clear();
+                switch (declareDetail)
+                {
+                    case DeclareMedicine med when !med.IsBuckle:
+                        continue;
+                    case DeclareMedicine med:
+                        parameters.Add(new SqlParameter("BUCKLE_VALUE", ((IProductDeclare)med).Amount));
+                        break;
+                    case PrescriptionOTC otc:
+                        parameters.Add(new SqlParameter("BUCKLE_VALUE", ((IProductDeclare)otc).Amount));
+                        break;
+                }
                 parameters.Add(new SqlParameter("MAS_ID", decMasId));
                 parameters.Add(new SqlParameter("PRO_ID", declareDetail.Id));
-                parameters.Add(new SqlParameter("BUCKLE_VALUE", declareDetail.Amount));
+                
                 parameters.Add(new SqlParameter("BUCKLE_STATUS", "1"));
                 parameters.Add(new SqlParameter("WAY", way));
                 parameters.Add(new SqlParameter("PROWAR_ID", "1"));
@@ -400,7 +410,7 @@ namespace His_Pos.Class.Declare
                         {"D13", med.Hospital.Division.Id},
                         {"D22", med.TreatmentCase.Id},
                         {"D24", med.Hospital.Doctor.IcNumber},
-                        {"D26", med.SpecialCode is null?string.Empty:med.SpecialCode.Id},
+                        {"D26", string.IsNullOrEmpty(med.SpecialCode.Id)?string.Empty:med.SpecialCode.Id},
                         {"D21", declareData.Prescription.Treatment.MedicalInfo.Hospital.Id}
                     };
             foreach (var tag in tagsDictionary)
@@ -595,7 +605,7 @@ namespace His_Pos.Class.Declare
             row["D23"] = declareData.Prescription.Treatment.AdjustDate;  
             row["D24"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber;
             row["D25"] = declareData.Prescription.Pharmacy.MedicalPersonnel.IcNumber;
-            row["D26"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id);
+            row["D26"] = string.IsNullOrEmpty(declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id)?string.Empty: declareData.Prescription.Treatment.MedicalInfo.SpecialCode.Id;
             row["D27"] = string.Empty;
             row["D28"] = string.Empty;
             row["D29"] = string.Empty;
@@ -691,33 +701,36 @@ namespace His_Pos.Class.Declare
         {
             for (var i = 0; i < declareData.DeclareDetails.Count; i++)
             {
-                var row = pDataTable.NewRow();
-                var detail = declareData.DeclareDetails[i];
-                if (detail.PaySelf) continue;
-                detail.Usage = declareData.Prescription.Medicines == null
-                    ? detail.Usage
-                    : declareData.Prescription.Medicines[i].UsageName;
-                var paySelf = /*declareData.Prescription.Medicines == null ? "0" :*/
-                    declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
-                //if (!String.IsNullOrEmpty(declareData.DecMasId))
-                //    row["DecMasId"] = declareData.DecMasId;
+                if (declareData.Prescription.Medicines[i] is DeclareMedicine med)
+                {
+                    var row = pDataTable.NewRow();
+                    var detail = declareData.DeclareDetails[i];
+                    if (detail.PaySelf) continue;
+                    detail.Usage = declareData.Prescription.Medicines == null
+                        ? detail.Usage
+                        : med.UsageName;
+                    var paySelf = /*declareData.Prescription.Medicines == null ? "0" :*/
+                        med.PaySelf ? "1" : "0";
+                    //if (!String.IsNullOrEmpty(declareData.DecMasId))
+                    //    row["DecMasId"] = declareData.DecMasId;
 
 
-                var function = new Function();
-                row["P1"] = detail.MedicalOrder;
-                row["P2"] = detail.MedicalId;
-                row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
-                row["P4"] = detail.Usage;
-                row["P5"] = detail.Position;
-                row["P6"] = function.ToInvCulture(detail.Percent);
-                row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
-                row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
-                row["P10"] = detail.Sequence.ToString();
-                row["P11"] = detail.Days.ToString();
-                row["PAY_BY_YOURSELF"] = paySelf;
+                    var function = new Function();
+                    row["P1"] = detail.MedicalOrder;
+                    row["P2"] = detail.MedicalId;
+                    row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
+                    row["P4"] = detail.Usage;
+                    row["P5"] = detail.Position;
+                    row["P6"] = function.ToInvCulture(detail.Percent);
+                    row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
+                    row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
+                    row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                    row["P10"] = detail.Sequence.ToString();
+                    row["P11"] = detail.Days.ToString();
+                    row["PAY_BY_YOURSELF"] = paySelf;
 
-                pDataTable.Rows.Add(row);
+                    pDataTable.Rows.Add(row);
+                }
             }
 
             if (declareData.Prescription.Treatment.AdjustCase.Id == "3")
@@ -755,28 +768,31 @@ namespace His_Pos.Class.Declare
         {
             for (var i = 0; i < declareData.DeclareDetails.Count; i++)
             {
-                var row = pDataTable.NewRow();
-                var detail = declareData.DeclareDetails[i];
-                detail.Usage = declareData.Prescription.Medicines == null
-                    ? detail.Usage
-                    : declareData.Prescription.Medicines[i].UsageName;
-                var paySelf = declareData.Prescription.Medicines == null ? "0" :
-                    declareData.Prescription.Medicines[i].PaySelf ? "1" : "0";
+                if (declareData.Prescription.Medicines[i] is DeclareMedicine med)
+                {
+                    var row = pDataTable.NewRow();
+                    var detail = declareData.DeclareDetails[i];
+                    detail.Usage = declareData.Prescription.Medicines == null
+                        ? detail.Usage
+                        : med.UsageName;
+                    var paySelf = declareData.Prescription.Medicines == null ? "0" :
+                        med.PaySelf ? "1" : "0";
 
-                row["DecMasId"] = declareData.DecMasId;
-                row["P1"] = detail.MedicalOrder;
-                row["P2"] = detail.MedicalId;
-                row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
-                row["P4"] = detail.Usage;
-                row["P5"] = detail.Position;
-                row["P6"] = function.ToInvCulture(detail.Percent);
-                row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
-                row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                row["P9"] = function.SetStrFormatInt( Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
-                row["P10"] = detail.Sequence.ToString();
-                row["P11"] = detail.Days.ToString();
-                row["PAY_BY_YOURSELF"] = paySelf;
-                pDataTable.Rows.Add(row);
+                    row["DecMasId"] = declareData.DecMasId;
+                    row["P1"] = detail.MedicalOrder;
+                    row["P2"] = detail.MedicalId;
+                    row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
+                    row["P4"] = detail.Usage;
+                    row["P5"] = detail.Position;
+                    row["P6"] = function.ToInvCulture(detail.Percent);
+                    row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
+                    row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
+                    row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                    row["P10"] = detail.Sequence.ToString();
+                    row["P11"] = detail.Days.ToString();
+                    row["PAY_BY_YOURSELF"] = paySelf;
+                    pDataTable.Rows.Add(row);
+                }
             }
         }
 

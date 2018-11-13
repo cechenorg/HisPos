@@ -47,15 +47,18 @@ namespace His_Pos.Class.Product
 
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new DeclareMedicine(row,"Init"));
+                if(string.IsNullOrEmpty(row["HISMED_FORM"].ToString()))
+                    collection.Add(new PrescriptionOTC(row));
+                else
+                    collection.Add(new DeclareMedicine(row,"Init"));
             }
 
             return collection;
         }
 
-        internal static ObservableCollection<DeclareMedicine> GetDeclareMedicineByMasId(string decmasId)
+        internal static ObservableCollection<AbstractClass.Product> GetDeclareMedicineByMasId(string decmasId)
         {
-            ObservableCollection<DeclareMedicine> collection = new ObservableCollection<DeclareMedicine>();
+            ObservableCollection<AbstractClass.Product> collection = new ObservableCollection<AbstractClass.Product>();
 
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
@@ -64,7 +67,10 @@ namespace His_Pos.Class.Product
 
             foreach (DataRow row in table.Rows)
             {
-                collection.Add(new DeclareMedicine(row,"Get"));
+                if (string.IsNullOrEmpty(row["HISMED_FORM"].ToString()))
+                    collection.Add(new PrescriptionOTC(row));
+                else
+                    collection.Add(new DeclareMedicine(row, "Get"));
             }
 
             return collection;

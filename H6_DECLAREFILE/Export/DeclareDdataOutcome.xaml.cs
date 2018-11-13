@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Product;
@@ -25,9 +26,9 @@ namespace His_Pos.H6_DECLAREFILE.Export
     {
         private bool _isFirst = true;
 
-        private ObservableCollection<DeclareMedicine> _prescriptionMedicines;
+        private ObservableCollection<Product> _prescriptionMedicines;
 
-        public ObservableCollection<DeclareMedicine> PrescriptionMedicines
+        public ObservableCollection<Product> PrescriptionMedicines
         {
             get => _prescriptionMedicines;
             set
@@ -116,7 +117,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             TreatmentCase.ItemsSource = ExportView.Instance.TreatmentCaseCollection;
             TreatmentCase.Text = ExportView.Instance.TreatmentCaseCollection.SingleOrDefault(t => t.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id))
                 ?.FullName;
-            PrescriptionMedicines = new ObservableCollection<DeclareMedicine>();
+            PrescriptionMedicines = new ObservableCollection<Product>();
             foreach (var p in declareFileDdata.Dbody.Pdata)
             {
                 if (!p.P1.Equals("1")) continue;
@@ -135,7 +136,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 d.Amount = double.Parse(p.P7);
 
                 if(p.P8.TrimStart('0').StartsWith("."))
-                    d.HcPrice = "0.00";
+                    d.HcPrice = 0.00;
 
                 d.TotalPrice = double.Parse(p.P8.TrimStart('0'))* double.Parse(p.P7);
                 d.Days = p.P11;
@@ -209,7 +210,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ClearMedicine(PrescriptionMedicines[PrescriptionSet.SelectedIndex]);
+            ClearMedicine((DeclareMedicine)PrescriptionMedicines[PrescriptionSet.SelectedIndex]);
             DataChanged();
             PrescriptionMedicines.RemoveAt(PrescriptionSet.SelectedIndex);
         }
@@ -340,76 +341,54 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var objectName = (sender as Control)?.Name;
-            //按 Enter 下一欄
-            if (e.Key == Key.Enter)
+            if (e.Key != Key.Enter) return;
+            TextBox t = sender as TextBox;
+            DependencyObject dpobj = sender as DependencyObject;
+            string name = dpobj.GetValue(FrameworkElement.NameProperty) as string;
+            if (name.Equals("Usage"))
             {
-                e.Handled = true;
-                var nextTextBox = new List<TextBox>();
-                var nextAutoCompleteBox = new List<AutoCompleteBox>();
-                var currentRowIndex = GetCurrentRowIndex(sender);
-
-                if (currentRowIndex == -1) return;
-
-                switch (objectName)
+                foreach (var u in MainWindow.Usages)
                 {
-                    case "Dosage":
-                        NewFunction.FindChildGroup(PrescriptionSet, "Usage", ref nextTextBox);
-                        break;
-                    case "Usage":
-                        FindUsagesQuickName(sender);
-                        NewFunction.FindChildGroup(PrescriptionSet, "MedicineDays", ref nextTextBox);
-                        break;
-
-                    case "MedicineDays":
-                        NewFunction.FindChildGroup(PrescriptionSet, "MedicineTotal", ref nextTextBox);
-                        break;
-
-                    case "MedicineTotal":
-                        NewFunction.FindChildGroup(PrescriptionSet, "Position", ref nextTextBox);
-                        break;
-
-                    case "Position":
-                        if (!PrescriptionMedicines[currentRowIndex].PaySelf)
-                        {
-                            NewFunction.FindChildGroup(PrescriptionSet, "MedicineCodeAuto",
-                                ref nextAutoCompleteBox);
-                            NewFunction.FindChildGroup(nextAutoCompleteBox[currentRowIndex + 1], "Text",
-                                ref nextTextBox);
-                            nextTextBox[0].Focus();
-                            return;
-                        }
-                        else
-                        {
-                            NewFunction.FindChildGroup(PrescriptionSet, "Price", ref nextTextBox);
-                            nextTextBox[currentRowIndex].Focus();
-                        }
-
-                        break;
-
-                    case "Price":
-                        NewFunction.FindChildGroup(PrescriptionSet, "MedicineCodeAuto", ref nextAutoCompleteBox);
-                        NewFunction.FindChildGroup(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
-                        nextTextBox[0].Focus();
-                        return;
+                    if (t.Text.Equals(u.QuickName))
+                        t.Text = u.Name;
                 }
-
-                nextTextBox[currentRowIndex].Focus();
-                nextTextBox[currentRowIndex].CaretIndex = 0;
             }
+            e.Handled = true;
+            MoveFocusNext(sender);
         }
-
-        private void FindUsagesQuickName(object sender)
+        private void MoveFocusNext(object sender)
         {
-            var currentRow = GetCurrentRowIndex(sender);
-            if (!(sender is TextBox t) || string.IsNullOrEmpty(t.Text)) return;
+            if (sender is TextBox box)
+                box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            if (PrescriptionSet.CurrentCell.Column is null) return;
 
-            if (Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text)) == null) return;
+            var focusedCell = PrescriptionSet.CurrentCell.Column.GetCellContent(PrescriptionSet.CurrentCell.Item);
+            if (focusedCell is null) return;
+
+            while (true)
             {
-                PrescriptionMedicines[currentRow].Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
-                if (PrescriptionMedicines[currentRow].Usage != null)
-                    t.Text = PrescriptionMedicines[currentRow].Usage.Name;
+                if (focusedCell is ContentPresenter)
+                {
+                    UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                    while (child is ContentPresenter)
+                    {
+                        child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                    }
+                    if ((child is TextBox || child is AutoCompleteBox || child is CheckBox || child is TextBlock))
+                        break;
+                }
+                focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                focusedCell = PrescriptionSet.CurrentCell.Column.GetCellContent(PrescriptionSet.CurrentCell.Item);
             }
+
+            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            while (firstChild is ContentPresenter)
+            {
+                firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            }
+
+            if ((firstChild is TextBox || firstChild is AutoCompleteBox) && firstChild.Focusable)
+                firstChild.Focus();
         }
 
         private void Dosage_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)

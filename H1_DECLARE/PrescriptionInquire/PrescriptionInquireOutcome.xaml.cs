@@ -120,8 +120,8 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("InquiredPrescription");
             }
         }
-        private ObservableCollection<DeclareMedicine> _declareDetails = new ObservableCollection<DeclareMedicine>();
-        public ObservableCollection<DeclareMedicine> DeclareDetails
+        private ObservableCollection<Product> _declareDetails = new ObservableCollection<Product>();
+        public ObservableCollection<Product> DeclareDetails
         {
             get => _declareDetails;
             set
@@ -142,8 +142,16 @@ namespace His_Pos.PrescriptionInquire
             _decMasId = inquired.DecMasId;
             InquiredPrescription = inquired;
             foreach (var newDeclareDetail in InquiredPrescription.Prescription.Medicines) {
-                var declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
-                DeclareDetails.Add(declareDetailClone);
+                if (newDeclareDetail is DeclareMedicine)
+                {
+                    var declareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
+                    DeclareDetails.Add(declareDetailClone);
+                }
+                else if (newDeclareDetail is PrescriptionOTC)
+                {
+                    var otc = (PrescriptionOTC)((PrescriptionOTC)newDeclareDetail).Clone();
+                    DeclareDetails.Add(otc);
+                }
             }
             InitData();
             InitDataChanged();
@@ -306,11 +314,18 @@ namespace His_Pos.PrescriptionInquire
         }
         private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ClearMedicine(DeclareDetails[PrescriptionMedicines.SelectedIndex]);
+            if (DeclareDetails[PrescriptionMedicines.SelectedIndex] is DeclareMedicine)
+            {
+                ClearMedicine((DeclareMedicine)DeclareDetails[PrescriptionMedicines.SelectedIndex]);
+            }
+            else
+            {
+                ClearPrescriptionOtc((PrescriptionOTC)DeclareDetails[PrescriptionMedicines.SelectedIndex]);
+            }
             DataChanged();
             DeclareDetails.RemoveAt(PrescriptionMedicines.SelectedIndex);
         }
-        public void ClearMedicine(DeclareMedicine med)
+        private void ClearMedicine(DeclareMedicine med)
         {
             med.PaySelf = false;
             med.Cost = 0;
@@ -319,6 +334,21 @@ namespace His_Pos.PrescriptionInquire
             med.CountStatus = string.Empty;
             med.FocusColumn = string.Empty;
             med.Usage = new Usage();
+            med.Days = string.Empty;
+            med.Position = string.Empty;
+            med.Source = string.Empty;
+            med.Dosage = string.Empty;
+        }
+
+        private void ClearPrescriptionOtc(PrescriptionOTC med)
+        {
+            med.PaySelf = false;
+            med.Cost = 0;
+            med.TotalPrice = 0;
+            med.Amount = 0;
+            med.CountStatus = string.Empty;
+            med.FocusColumn = string.Empty;
+            med.Usage = string.Empty;
             med.Days = string.Empty;
             med.Position = string.Empty;
             med.Source = string.Empty;
@@ -348,13 +378,20 @@ namespace His_Pos.PrescriptionInquire
             double purchaseCosts = 0;//藥品總進貨成本
             foreach (var medicine in DeclareDetails)
             {
-                if (!medicine.PaySelf)
-                    medicinesHcCost += medicine.TotalPrice;
-                else
+                if (medicine is DeclareMedicine declareMedicine)
                 {
-                    medicinesSelfCost += medicine.TotalPrice;
+                    if (!declareMedicine.PaySelf)
+                        medicinesHcCost += declareMedicine.TotalPrice;
+                    else
+                        medicinesSelfCost += declareMedicine.TotalPrice;
+                    purchaseCosts += declareMedicine.Cost * declareMedicine.Amount;
                 }
-                purchaseCosts += medicine.Cost * medicine.Amount;
+                else if (medicine is PrescriptionOTC otc)
+                {
+                    medicinesSelfCost += otc.TotalPrice;
+                    purchaseCosts += otc.Cost * otc.Amount;
+                }
+
             }
             DeclareTrade.PaySelf = Math.Ceiling(medicinesSelfCost).ToString();//自費金額
             DeclareTrade.CopayMent = CountCopaymentCost(medicinesHcCost).ToString();//部分負擔
@@ -374,81 +411,55 @@ namespace His_Pos.PrescriptionInquire
         }
         private void PrescriptionMedicines_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            var objectName = (sender as Control)?.Name;
-
-            if (e.Key == Key.Enter)
+            if (e.Key != Key.Enter) return;
+            TextBox t = sender as TextBox;
+            DependencyObject dpobj = sender as DependencyObject;
+            string name = dpobj.GetValue(FrameworkElement.NameProperty) as string;
+            if (name.Equals("Usage"))
             {
-                e.Handled = true;
-                var nextTextBox = new List<TextBox>();
-                var nextAutoCompleteBox = new List<AutoCompleteBox>();
-                var currentRowIndex = GetCurrentRowIndex(sender);
-
-                if (currentRowIndex == -1) return;
-
-                switch (objectName)
+                foreach (var u in MainWindow.Usages)
                 {
-                    case "Dosage":
-                        NewFunction.FindChildGroup(PrescriptionMedicines, "Usage", ref nextTextBox);
-                        break;
-
-                    case "Usage":
-                        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineDays", ref nextTextBox);
-                        break;
-
-                    case "MedicineDays":
-                        NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineTotal", ref nextTextBox);
-                        break;
-
-                    case "MedicineTotal":
-                        NewFunction.FindChildGroup(PrescriptionMedicines, "Position", ref nextTextBox);
-                        break;
-
-                    case "Position":
-                        if (!InquiredPrescription.Prescription.Medicines[currentRowIndex].PaySelf)
-                        {
-                            NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
-                            NewFunction.FindChildGroup(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
-                            nextTextBox[0].Focus();
-                            return;
-                        }
-                        else
-                        {
-                            NewFunction.FindChildGroup(PrescriptionMedicines, "Price", ref nextTextBox);
-                            nextTextBox[currentRowIndex].Focus();
-                        }
-                        break;
-
-                    case "Price":
-                        NewFunction.FindChildGroup<AutoCompleteBox>(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
-                        NewFunction.FindChildGroup<TextBox>(nextAutoCompleteBox[currentRowIndex + 1], "Text", ref nextTextBox);
-                        nextTextBox[0].Focus();
-                        return;
+                    if (t.Text.Equals(u.QuickName))
+                        t.Text = u.Name;
                 }
-                nextTextBox[currentRowIndex].Focus();
-                nextTextBox[currentRowIndex].CaretIndex = 0;
             }
-            ////按 Up Down
-            //if (e.Key == Key.Up || e.Key == Key.Down)
-            //{
-            //    e.Handled = true;
-            //    var thisTextBox = new List<TextBox>();
-            //    var currentRowIndex = GetCurrentRowIndex(sender);
-
-            //    if (currentRowIndex == -1) return;
-
-            //    NewFunction.FindChildGroup<TextBox>(PrescriptionMedicines, objectName, ref thisTextBox);
-
-            //    int newIndex = (e.Key == Key.Up) ? currentRowIndex - 1 : currentRowIndex + 1;
-
-            //    if (newIndex < 0)
-            //        newIndex = 0;
-            //    else if (newIndex >= thisTextBox.Count)
-            //        newIndex = thisTextBox.Count - 1;
-
-            //    thisTextBox[newIndex].Focus();
-            //}
+            e.Handled = true;
+            MoveFocusNext(sender);
         }
+        private void MoveFocusNext(object sender)
+        {
+            if (sender is TextBox box)
+                box.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            if (PrescriptionMedicines.CurrentCell.Column is null) return;
 
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            if (focusedCell is null) return;
+
+            while (true)
+            {
+                if (focusedCell is ContentPresenter)
+                {
+                    UIElement child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                    while (child is ContentPresenter)
+                    {
+                        child = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                    }
+                    if ((child is TextBox || child is AutoCompleteBox || child is CheckBox || child is TextBlock))
+                        break;
+                }
+                focusedCell.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+                focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            }
+
+            UIElement firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            while (firstChild is ContentPresenter)
+            {
+                firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+            }
+
+            if ((firstChild is TextBox || firstChild is AutoCompleteBox) && firstChild.Focusable)
+                firstChild.Focus();
+        }
         private int GetCurrentRowIndex(object sender)
         {
             if (sender is TextBox)
@@ -642,7 +653,11 @@ namespace His_Pos.PrescriptionInquire
                     var icPrescripList = new List<IcPrescriptData>();
                     foreach (var med in InquiredPrescription.Prescription.Medicines)
                     {
-                        icPrescripList.Add(new IcPrescriptData(med));
+                        if (!(med is DeclareMedicine)) continue;
+                        if (!((DeclareMedicine)med).PaySelf)
+                        {
+                            icPrescripList.Add(new IcPrescriptData((DeclareMedicine)med));
+                        }
                     }
                     var pPatientId = new byte[10];
                     var pPatientBitrhDay = new byte[10];

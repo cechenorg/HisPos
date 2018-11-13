@@ -165,13 +165,21 @@ namespace His_Pos
                     Function function = new Function();
                     function.GetLastYearlyHoliday();
                 }
+                ChangeLoadingMessage("取得醫療院所...");
                 ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                ChangeLoadingMessage("取得科別資料...");
                 ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                ChangeLoadingMessage("取得調劑案件資料...");
                 ObservableCollection<AdjustCase> tmpAdjustCases = AdjustCaseDb.GetData();
+                ChangeLoadingMessage("取得給付類別資料...");
                 ObservableCollection<PaymentCategory> tmpPaymentCategroies = PaymentCategroyDb.GetData();
+                ChangeLoadingMessage("取得部分負擔資料...");
                 ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
+                ChangeLoadingMessage("取得處方案件資料...");
                 ObservableCollection<TreatmentCase> tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
+                ChangeLoadingMessage("取得特定治療代碼資料...");
                 ObservableCollection<SpecialCode> tmpSpecialCodes = SpecialCodeDb.GetData();
+                ChangeLoadingMessage("取得藥品用法資料...");
                 ObservableCollection<Usage> tmpUsages = UsageDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -654,6 +662,8 @@ namespace His_Pos
                         prescriptionDec2View.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
                     prescriptionDec2View.AdjustCaseCombo.SelectedItem =
                         prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
+                    prescriptionDec2View.TreatmentCaseCombo.SelectedItem =
+                        prescriptionDec2View.TreatmentCases.SingleOrDefault(t => t.Id.Equals("01"));
                     Close();
                 }));
             };
@@ -770,11 +780,12 @@ namespace His_Pos
                     {
                         var c = new CustomerSelectWindow(prescriptionDec2View.CurrentPrescription.Customer.IcCard.IcNumber,3);
                         if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                            !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                            !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text.Trim()))
                             prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
                         if (!string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                            string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text))
+                            string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text.Trim()))
                             prescriptionDec2View.MedicalNumber.Text = prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber;
+                        prescriptionDec2View.CheckChronicExist();
                     }
                     else
                     {
@@ -796,17 +807,26 @@ namespace His_Pos
 
         private void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
         {
-            var strLength = 72;
-            var icData = new byte[72];
-            var res = HisApiBase.hisGetBasicData(icData, ref strLength);
-            icData.CopyTo(prescriptionDec2View.BasicDataArr, 0);
+            var res = HisApiBase.csOpenCom(0);
             if (res == 0)
             {
-                prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
-                prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
-                prescriptionDec2View.CusBasicData = new BasicData(icData);
-                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
-                CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
+                var strLength = 72;
+                var icData = new byte[72];
+                res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                icData.CopyTo(prescriptionDec2View.BasicDataArr, 0);
+                if (res == 0)
+                {
+                    prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
+                    prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
+                    prescriptionDec2View.CusBasicData = new BasicData(icData);
+                    prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
+                    CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
+                }
+                else
+                {
+                    prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
+                    prescriptionDec2View.SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)res));
+                }
             }
             else
             {

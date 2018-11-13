@@ -28,6 +28,7 @@ namespace His_Pos.Class
             TreatmentCase = new TreatmentCase.TreatmentCase(row);
             MainDiseaseCode =  new DiseaseCode.DiseaseCode { Id = row["HISINT_ID1"].ToString() };
             SecondDiseaseCode = new DiseaseCode.DiseaseCode { Id = row["HISINT_ID2"].ToString() };
+            SpecialCode = new SpecialCode.SpecialCode { Id = row["HISSPE_ID1"].ToString() };
         }
 
         public MedicalInfo(Hospital hospital, SpecialCode.SpecialCode specialCode, List<DiseaseCode.DiseaseCode> diseaseCodes, TreatmentCase.TreatmentCase treatmentCase)

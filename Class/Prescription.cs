@@ -20,11 +20,11 @@ namespace His_Pos.Class
             Customer = new Customer();
             Pharmacy = new Pharmacy.Pharmacy();
             Treatment = new Treatment();
-            Medicines = new ObservableCollection<DeclareMedicine>();
+            Medicines = new ObservableCollection<AbstractClass.Product>();
             EList = new ErrorList();
         }
      
-        public Prescription(Customer customer, Pharmacy.Pharmacy pharmacy, Treatment treatment, ObservableCollection<DeclareMedicine> medicines)
+        public Prescription(Customer customer, Pharmacy.Pharmacy pharmacy, Treatment treatment, ObservableCollection<AbstractClass.Product> medicines)
         {
             Customer = customer;
             Pharmacy = pharmacy;
@@ -41,7 +41,6 @@ namespace His_Pos.Class
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
             ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
-
         }
 
         public Prescription(XmlNode xml)
@@ -103,9 +102,9 @@ namespace His_Pos.Class
             }
         }
 
-        private ObservableCollection<DeclareMedicine> _medicines;
+        private ObservableCollection<AbstractClass.Product> _medicines;
 
-        public ObservableCollection<DeclareMedicine> Medicines
+        public ObservableCollection<AbstractClass.Product> Medicines
         {
             get => _medicines;
             set

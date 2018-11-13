@@ -15,10 +15,7 @@ namespace His_Pos.Class
 
         public string Id
         {
-            get
-            {
-                return id;
-            }
+            get => id;
             set
             {
                 id = value;

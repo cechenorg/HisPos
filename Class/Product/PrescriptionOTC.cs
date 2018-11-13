@@ -1,0 +1,229 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using His_Pos.Interface;
+
+namespace His_Pos.Class.Product
+{
+    public class PrescriptionOTC : AbstractClass.Product, ITrade, IDeletable, ICloneable, IProductDeclare
+    {
+        public PrescriptionOTC()
+        {
+            PaySelf = true;
+            HcPrice = 0.0000;
+            Cost = 0.00;
+            TotalPrice = 0.00;
+            Amount = 0.00;
+            Price = 0.00;
+            Source = string.Empty;
+            CountStatus = string.Empty;
+            FocusColumn = string.Empty;
+            Dosage = "0";
+            Usage = string.Empty;
+            Position = string.Empty;
+            Days = string.Empty;
+            Inventory = 0.00;
+            ControlLevel = "0";
+        }
+
+        public PrescriptionOTC(DataRow dataRow) : base(dataRow)
+        {
+            PaySelf = true;
+            HcPrice = 0.0000;
+            Cost = 0.00;
+            TotalPrice = 0.00;
+            Amount = 0.00;
+            Price = 0.00;
+            Source = string.Empty;
+            CountStatus = string.Empty;
+            FocusColumn = string.Empty;
+            Dosage = "0";
+            Usage = string.Empty;
+            Position = string.Empty;
+            Days = string.Empty;
+            Inventory = 0.00;
+            ControlLevel = "0";
+        }
+
+        private bool _paySelf;
+        public bool PaySelf
+        {
+            get => _paySelf;
+            set
+            {
+                _paySelf = true;
+                NotifyPropertyChanged(nameof(PaySelf));
+            }
+        }
+        private double _hcPrice;
+        private double HcPrice { get => _hcPrice;
+            set
+            {
+                _hcPrice = 0.0000;
+                NotifyPropertyChanged(nameof(HcPrice));
+            }
+        }
+        public double Cost { get; set; }
+        private double _totalPrice;
+
+        public double TotalPrice
+        {
+            get => _totalPrice;
+            set
+            {
+                _totalPrice = value;
+                NotifyPropertyChanged(nameof(TotalPrice));
+            }
+        }
+
+        private double _amount;
+
+        public double Amount
+        {
+            get => _amount;
+            set
+            {
+                _amount = value;
+                NotifyPropertyChanged(nameof(Amount));
+            }
+        }
+
+        private double _price;
+
+        public double Price
+        {
+            get => _price;
+            set
+            {
+                _price = value;
+                NotifyPropertyChanged(nameof(Price));
+            }
+        }
+
+        private string _source;
+        public string Source
+        {
+            get => _source;
+            set
+            {
+                _source = value;
+                NotifyPropertyChanged(nameof(Source));
+            }
+        }
+        public string CountStatus { get; set; }
+        public string FocusColumn { get; set; }
+        private string _dosage;
+        public string Dosage
+        {
+            get => _dosage;
+            set
+            {
+                _dosage = value;
+                NotifyPropertyChanged(nameof(Dosage));
+            }
+        }
+
+        private string _usage;
+
+        public string Usage
+        {
+            get => _usage;
+            set
+            {
+                _usage = value;
+                NotifyPropertyChanged(nameof(Usage));
+            }
+        }
+
+        private string _position;
+        public string Position
+        {
+            get => _position;
+            set
+            {
+                _position = value;
+                NotifyPropertyChanged(nameof(Position));
+            }
+        }
+
+        private string _days;
+        public string Days
+        {
+            get => _days;
+            set
+            {
+                _days = value;
+                NotifyPropertyChanged(nameof(Days));
+            }
+        }
+
+        private double _inventory;
+        private IProductDeclare _productDeclareImplementation;
+
+        public double Inventory
+        {
+            get => _inventory;
+            set
+            {
+                _inventory = value;
+                NotifyPropertyChanged(nameof(Inventory));
+            }
+        }
+        public string ControlLevel { get; set; }
+        string IDeletable.Source { get => Source; set => Source =value; }
+        double ITrade.Cost { get => Cost; set => Cost = value; }
+        double ITrade.TotalPrice { get => TotalPrice; set => TotalPrice = value; }
+        double IProductDeclare.TotalPrice { get => TotalPrice; set => TotalPrice = value; }
+        double ITrade.Amount { get => Amount; set => Amount = value; }
+        double IProductDeclare.Amount { get => Amount; set => Amount = value; }
+        double ITrade.Price { get => Price; set => Price = value; }
+        string ITrade.CountStatus { get => CountStatus; set => CountStatus = value; }
+        string ITrade.FocusColumn { get => FocusColumn; set => FocusColumn = value; }
+        string IProductDeclare.ProductId { get => Id; set => Id = value; }
+        string IProductDeclare.ProductName { get => Name; set => Name = value; }
+        string IProductDeclare.Dosage { get => Dosage; set => Dosage = value; }
+        string IProductDeclare.Usage { get => Usage; set => Usage = value; }
+        string IProductDeclare.Position { get => Position; set => Position = value; }
+        string IProductDeclare.Days { get => Days; set => Days = value; }
+        double IProductDeclare.Inventory { get => Inventory; set => Inventory = value; }
+        double IProductDeclare.HcPrice { get => 0.0000;set => HcPrice = 0.0000;}
+        bool IProductDeclare.PaySelf { get => PaySelf; set => PaySelf = true; }
+        string IProductDeclare.ControlLevel { get => ControlLevel; set => ControlLevel = "0"; }
+        string IProductDeclare.Forms { get => string.Empty; set => throw new NotImplementedException(); }
+
+        public object Clone()
+        {
+            var prescriptionOtc = new PrescriptionOTC()
+            {
+                Id = Id,
+                Name = Name,
+                ChiName = ChiName,
+                EngName = EngName,
+                PaySelf = PaySelf,
+                HcPrice = HcPrice,
+                Cost = Cost,
+                Price = Price,
+                TotalPrice = TotalPrice,
+                Amount = Amount,
+                CountStatus = CountStatus,
+                FocusColumn = FocusColumn,
+                Usage = Usage,
+                Dosage = Dosage,
+                Days = Days,
+                Position = Position,
+                Source = Source,
+                ControlLevel = ControlLevel
+            };
+            return prescriptionOtc;
+        }
+
+        void ITrade.CalculateData(string inputSource)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

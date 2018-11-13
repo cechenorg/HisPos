@@ -358,6 +358,7 @@
     <Compile Include="Class\Product\OTCDb.cs" />
     <Compile Include="Class\Product\OTCStockOverview.cs" />
     <Compile Include="Class\Product\OTCStoreOrderOverview.cs" />
+    <Compile Include="Class\Product\PrescriptionOTC.cs" />
     <Compile Include="Class\Product\ProductDb.cs" />
     <Compile Include="Class\Product\ProductGroup.cs" />
     <Compile Include="Class\Product\ProductPurchaseMedicine.cs" />
