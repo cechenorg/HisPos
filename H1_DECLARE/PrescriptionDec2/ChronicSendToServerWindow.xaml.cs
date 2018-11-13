@@ -1,4 +1,5 @@
-﻿using His_Pos.Class;
+﻿using His_Pos.AbstractClass;
+using His_Pos.Class;
 using His_Pos.Class.Product;
 using System;
 using System.Collections.ObjectModel;
@@ -15,11 +16,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
     public partial class ChronicSendToServerWindow : Window , INotifyPropertyChanged {
 
         public class PrescriptionSendData:INotifyPropertyChanged {
-            public PrescriptionSendData(DeclareMedicine declareMedicine) {
+            public PrescriptionSendData(Product declareMedicine) {
                 MedId = declareMedicine.Id;
                 MedName = declareMedicine.Name;
-                Stock = ChronicDb.GetResidualAmountById(MedId);
-                TreatAmount = declareMedicine.Amount.ToString();
+                Stock = ChronicDb.GetResidualAmountById(MedId); 
+                TreatAmount =  declareMedicine is DeclareMedicine ? ((DeclareMedicine)declareMedicine).Amount.ToString() : ((PrescriptionOTC)declareMedicine).Amount.ToString();
                 SendAmount = TreatAmount;
             }
 
@@ -64,9 +65,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         }
         public static ChronicSendToServerWindow Instance;
         private string DecMasId = string.Empty;
-        public ChronicSendToServerWindow(ObservableCollection<DeclareMedicine> medicines,string decMasId) {
+        public ChronicSendToServerWindow(ObservableCollection<Product> medicines,string decMasId) {
             InitializeComponent();
-            foreach (DeclareMedicine row in medicines) {
+            foreach (Product row in medicines) {
                 PrescriptionSendData prescription = new PrescriptionSendData(row);
                 if (!row.IsBuckle) 
                     prescription.SendAmount = "0";

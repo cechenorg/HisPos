@@ -375,7 +375,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (IsSendToServer.IsChecked != null && (bool)IsSendToServer.IsChecked)//選擇傳送藥健康
                 {
                     ObservableCollection<DeclareMedicine> tmpMedicines = new ObservableCollection<DeclareMedicine>();
-                    foreach (var d in DeclareMedicines)
+                    foreach (var d in CurrentPrescription.Medicines)
                     {
                         if(d is DeclareMedicine)
                             tmpMedicines.Add((DeclareMedicine)d);
@@ -424,7 +424,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (IsSendToServer.IsChecked != null && (bool)IsSendToServer.IsChecked)
                 {
                     ObservableCollection<DeclareMedicine> tmpMedicines = new ObservableCollection<DeclareMedicine>();
-                    foreach (var d in DeclareMedicines)
+                    foreach (var d in CurrentPrescription.Medicines)
                     {
                         if (d is DeclareMedicine)
                             tmpMedicines.Add((DeclareMedicine)d);
