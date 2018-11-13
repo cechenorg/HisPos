@@ -36,6 +36,7 @@ using His_Pos.Class.StoreOrder;
 using His_Pos.Properties;
 using His_Pos.Struct.IcData;
 using Microsoft.Reporting.WinForms;
+using MoreLinq;
 using Newtonsoft.Json;
 using Application = System.Windows.Application;
 using Binding = System.Windows.Data.Binding;
@@ -125,6 +126,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 _currentPrescription = value;
                 NotifyPropertyChanged("CurrentPrescription");
+            }
+        }
+
+        private double _medicinePoint;
+
+        public double MedicinePoint
+        {
+            get => _medicinePoint;
+            set
+            {
+                _medicinePoint = value;
             }
         }
         #endregion
@@ -1260,7 +1272,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
 
             DependencyObject textBoxDependency = textBox;
-            if (textBoxDependency.GetValue(NameProperty) is string  && textBoxDependency.GetValue(NameProperty).Equals("MainDiagnosis"))
+            var name = textBoxDependency.GetValue(NameProperty);
+            if (name.Equals("MainDiagnosis"))
             {
                 if ((!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id) && textBox.Text.Contains(" "))|| string.IsNullOrEmpty(textBox.Text.Trim()))
                 {
@@ -1268,7 +1281,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     return;
                 }
             }
-            else if(textBoxDependency.GetValue(NameProperty) is string && textBoxDependency.GetValue(NameProperty).Equals("SecondDiagnosis"))
+            else if(name.Equals("SecondDiagnosis"))
             {
                 if (string.IsNullOrEmpty(textBox.Text.Trim()))
                 {
@@ -1282,7 +1295,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m.ShowDialog();
                 return;
             }
-            if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).Count == 1)
+            if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).DistinctBy(d => d.ICD10.Id).DistinctBy(d => d.ICD9.Id).ToList().Count == 1)
             {
                 var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
                 if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
@@ -1319,8 +1332,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else
             {
-                var disease = new DiseaseCodeSelectDialog(textBox.Text);
-                disease.Show();
+                var disease = new DiseaseCodeSelectDialog(textBox.Text,(string)name);
+                if(disease.DiseaseCollection.Count > 1)
+                    disease.Show();
             }
         }
 

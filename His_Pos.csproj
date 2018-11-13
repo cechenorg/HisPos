@@ -634,6 +634,7 @@
     </Compile>
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
+    <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
     <Compile Include="PrintDocuments\StockTakingDocument.xaml.cs">
       <DependentUpon>StockTakingDocument.xaml</DependentUpon>
     </Compile>
