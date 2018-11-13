@@ -373,14 +373,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else if (CurrentPrescription.Treatment.AdjustCase.Id == "2" && !string.IsNullOrEmpty(_currentDecMasId))
             {//第2次以後的慢性處方
                 if (IsSendToServer.IsChecked != null && (bool)IsSendToServer.IsChecked)//選擇傳送藥健康
-                {
-                    ObservableCollection<DeclareMedicine> tmpMedicines = new ObservableCollection<DeclareMedicine>();
-                    foreach (var d in CurrentPrescription.Medicines)
-                    {
-                        if(d is DeclareMedicine)
-                            tmpMedicines.Add((DeclareMedicine)d);
-                    }
-                    var chronicSendToServerWindow = new ChronicSendToServerWindow(tmpMedicines, _currentDecMasId);
+                { 
+                    var chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription.Medicines, _currentDecMasId);
                     chronicSendToServerWindow.ShowDialog();
                     if (!IsSend) return;
                 }
@@ -422,14 +416,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if(string.IsNullOrEmpty(_firstTimeDecMasId))
                     _firstTimeDecMasId = declareDb.InsertDeclareData(_currentDeclareData);
                 if (IsSendToServer.IsChecked != null && (bool)IsSendToServer.IsChecked)
-                {
-                    ObservableCollection<DeclareMedicine> tmpMedicines = new ObservableCollection<DeclareMedicine>();
-                    foreach (var d in CurrentPrescription.Medicines)
-                    {
-                        if (d is DeclareMedicine)
-                            tmpMedicines.Add((DeclareMedicine)d);
-                    }
-                    var chronicSendToServerWindow = new ChronicSendToServerWindow(tmpMedicines, _firstTimeDecMasId);
+                { 
+                    var chronicSendToServerWindow = new ChronicSendToServerWindow(CurrentPrescription.Medicines, _firstTimeDecMasId);
                     chronicSendToServerWindow.ShowDialog();
                     if (!IsSend) return;
                 }
