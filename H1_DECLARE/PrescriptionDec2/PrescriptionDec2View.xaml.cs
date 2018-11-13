@@ -450,7 +450,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     {
                         var medTotalPrice = 0.0;
                         foreach (var med in _currentDeclareData.Prescription.Medicines)
-                            medTotalPrice += double.Parse(ProductDb.GetBucklePrice(med.Id, ((IProductDeclare)(DeclareMedicine)med).Amount.ToString()));
+                        {
+                            if(med is DeclareMedicine declare)
+                                medTotalPrice += double.Parse(ProductDb.GetBucklePrice(declare.Id, ((IProductDeclare)declare).Amount.ToString()));
+                            else if(med is PrescriptionOTC otc)
+                                medTotalPrice += double.Parse(ProductDb.GetBucklePrice(otc.Id, ((IProductDeclare)otc).Amount.ToString()));
+                        }
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId);//庫存扣庫
                     }
@@ -740,6 +745,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
             {
                 declareMedicine = (DeclareMedicine)((DeclareMedicine)medicineCodeAuto.SelectedItem)?.Clone();
+                if (declareMedicine != null && declareMedicine.Id.EndsWith("00"))
+                    declareMedicine.Position = "PO";
                 if (CurrentPrescription.Medicines.Count > 0)
                 {
                     if (CurrentPrescription.Medicines.Count == currentRow)
@@ -1177,10 +1184,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (string.IsNullOrEmpty(t.Text))
             {
                 AdjustCaseCombo.SelectedIndex = 0;
+                TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
                 return;
             }
-            if (AdjustCaseCombo.SelectedIndex != 1)
-                AdjustCaseCombo.SelectedIndex = 1;
+
+            AdjustCaseCombo.SelectedItem = AdjustCases.SingleOrDefault(a => a.Name.Contains("慢性病連續處方調劑"));
+            TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(c => c.Name.Equals("慢性病"));
             if (!int.TryParse(t.Text, out var seqence)) return;
             if (seqence > 1)
             {
@@ -1217,7 +1226,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 foreach (var s in SpecialCodes)
                 {
-                    if (s.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id))
+                    if (s.Id.Contains(CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id))
                         SpecialCodeCombo.SelectedItem = s;
                 }
             }

@@ -662,6 +662,8 @@ namespace His_Pos
                         prescriptionDec2View.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
                     prescriptionDec2View.AdjustCaseCombo.SelectedItem =
                         prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
+                    prescriptionDec2View.TreatmentCaseCombo.SelectedItem =
+                        prescriptionDec2View.TreatmentCases.SingleOrDefault(t => t.Id.Equals("01"));
                     Close();
                 }));
             };
@@ -805,17 +807,26 @@ namespace His_Pos
 
         private void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
         {
-            var strLength = 72;
-            var icData = new byte[72];
-            var res = HisApiBase.hisGetBasicData(icData, ref strLength);
-            icData.CopyTo(prescriptionDec2View.BasicDataArr, 0);
+            var res = HisApiBase.csOpenCom(0);
             if (res == 0)
             {
-                prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
-                prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
-                prescriptionDec2View.CusBasicData = new BasicData(icData);
-                prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
-                CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
+                var strLength = 72;
+                var icData = new byte[72];
+                res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                icData.CopyTo(prescriptionDec2View.BasicDataArr, 0);
+                if (res == 0)
+                {
+                    prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
+                    prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
+                    prescriptionDec2View.CusBasicData = new BasicData(icData);
+                    prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
+                    CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
+                }
+                else
+                {
+                    prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
+                    prescriptionDec2View.SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)res));
+                }
             }
             else
             {
