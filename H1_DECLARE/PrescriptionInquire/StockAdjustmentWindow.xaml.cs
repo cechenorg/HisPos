@@ -37,8 +37,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
             }
             public string ProId { get; set; }
             public string ProName { get; set; }
-            public string OriginAmount { get; set; }
-            public string AdjustAmount { get; set; }
+            public string OriginAmount { get; set; } = "0";
+            public string AdjustAmount { get; set; } = "0";
             public string AdjustReason { get; set; } = string.Empty;
             public string Adjustmethod { get; set; } = string.Empty;
             public Visibility IsBuckle { get; set; } = Visibility.Collapsed;
@@ -119,12 +119,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
             double totalPrice = 0;
             foreach (StockAdjust stockAdjust in StockAdjustCollection)
             {
-                if (stockAdjust.AdjustReason == "扣庫") {
+                if (stockAdjust.Adjustmethod == "扣庫") {
 
                     totalPrice -=  double.Parse(ProductDb.GetBucklePrice(stockAdjust.ProId, (Convert.ToInt32(stockAdjust.AdjustAmount) - Convert.ToInt32(stockAdjust.OriginAmount)).ToString()));
                     ProductDb.BuckleInventory(stockAdjust.ProId, (Convert.ToInt32(stockAdjust.AdjustAmount) - Convert.ToInt32(stockAdjust.OriginAmount)).ToString(),"處方修改調整",DecMasId);
                 }
-                if (stockAdjust.AdjustReason == "補回庫存") {
+                if (stockAdjust.Adjustmethod == "補回庫存") {
                     totalPrice += double.Parse(ProductDb.GetAddStockValue(DecMasId, stockAdjust.ProId, (Convert.ToInt32(stockAdjust.OriginAmount) - Convert.ToInt32(stockAdjust.AdjustAmount)).ToString()));
                     ProductDb.RecoveryInventory( DecMasId, stockAdjust.ProId, (Convert.ToInt32(stockAdjust.OriginAmount) - Convert.ToInt32(stockAdjust.AdjustAmount)).ToString());
                 }

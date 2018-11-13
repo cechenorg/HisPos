@@ -192,7 +192,7 @@
                 <Label Content="調劑案件" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
                 <ComboBox x:Name="AdjustCase" SelectedItem="{Binding InquiredPrescription.Prescription.Treatment.AdjustCase,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath="FullName" ItemsSource="{Binding AdjustCaseCollection,UpdateSourceTrigger=PropertyChanged}"
                           SelectionChanged="Text_TextChanged" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded"  
-                          HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
+                          HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" IsEditable="False"
                           ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
             </StackPanel>
             <StackPanel  Grid.Row="3"  Grid.Column="4"  Margin="8"  Orientation="Horizontal">

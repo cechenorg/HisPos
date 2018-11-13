@@ -157,8 +157,10 @@ namespace His_Pos.PrescriptionInquire
                 if (newDeclareDetail is DeclareMedicine)
                 {
                     var declareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
+                    declareDetailClone.Amount = ((DeclareMedicine)newDeclareDetail).Amount;
                     DeclareDetails.Add(declareDetailClone);
                     var tempdeclareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
+                    tempdeclareDetailClone.Amount = ((DeclareMedicine)newDeclareDetail).Amount;
                     OriginDeclareDetails.Add(tempdeclareDetailClone);
                 }
                 else if (newDeclareDetail is PrescriptionOTC)
