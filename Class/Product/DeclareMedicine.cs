@@ -41,7 +41,6 @@ namespace His_Pos.Class.Product
                 Amount = 0;
                 CountStatus = string.Empty;
                 FocusColumn = string.Empty;
-                Usage = new Usage();
                 days = string.Empty;
                 Position = string.Empty;
                 source = string.Empty;

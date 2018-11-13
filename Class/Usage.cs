@@ -48,11 +48,10 @@ namespace His_Pos.Class
         }
 
         private string _printName;
-
         public string PrintName
         {
             get => _printName;
-            private set
+            set
             {
                 _printName = value;
                 NotifyPropertyChanged(nameof(PrintName));
@@ -60,11 +59,10 @@ namespace His_Pos.Class
         }
 
         private string _quickName;
-
         public string QuickName
         {
             get => _quickName;
-            private set
+            set
             {
                 _quickName = value;
                 NotifyPropertyChanged(nameof(QuickName));
@@ -74,11 +72,10 @@ namespace His_Pos.Class
         public string Reg { get; }//Regular Expression規則
 
         private int _days;
-
         public int Days
         {
             get => _days;
-            private set
+            set
             {
                 _days = value;
                 NotifyPropertyChanged(nameof(Days));
@@ -90,7 +87,7 @@ namespace His_Pos.Class
         public int Times
         {
             get => _times;
-            private set
+            set
             {
                 _times = value;
                 NotifyPropertyChanged(nameof(Times));
@@ -99,7 +96,7 @@ namespace His_Pos.Class
 
         public bool PreDefault { get; }
         
-        public bool[] PrintIcons { get; private set; } = new bool[6];
+        public bool[] PrintIcons { get; set; } = new bool[6];
 
         public object Clone()
         {
