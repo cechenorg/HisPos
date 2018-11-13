@@ -338,7 +338,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                     if (child is StackPanel)
                     {
                         StackPanel stackPanel = child as StackPanel;
-                        if (stackPanel.Tag.ToString().Equals("NotSkip"))
+                        if (stackPanel.Tag != null && stackPanel.Tag.ToString().Equals("NotSkip"))
                             break;
                     }
                     else if (!(child is Image))
