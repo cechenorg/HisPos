@@ -28,6 +28,7 @@ namespace His_Pos.Class
             PreDefault = usage.PreDefault;
             PrintIcons = (bool[])usage.PrintIcons.Clone();
         }
+
         public Usage(DataRow dataRow)
         {
             Id = dataRow["USAGE_ID"].ToString();

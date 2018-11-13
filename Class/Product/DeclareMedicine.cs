@@ -276,17 +276,6 @@ namespace His_Pos.Class.Product
             }
         }
 
-        private double _inventory;
-        public double Inventory
-        {
-            get => _inventory;
-            set
-            {
-                _inventory = value;
-                NotifyPropertyChanged(nameof(Inventory));
-            }
-        }
-
         string IProductDeclare.ProductId { get => Id; set => Id = value; }
         string IProductDeclare.ProductName { get => Name; set => Name=value; }
         string IProductDeclare.Dosage { get => Dosage; set => Dosage = value; }
@@ -294,7 +283,7 @@ namespace His_Pos.Class.Product
         string IProductDeclare.Position { get => Position; set => Position = value; }
         string IProductDeclare.Days { get => Days; set => Days = value; }
         double IProductDeclare.Amount { get => Amount; set => Amount = value; }
-        double IProductDeclare.Inventory { get => Inventory; set => Inventory = value; }
+        double IProductDeclare.Inventory { get => Stock.Inventory; set => Stock.Inventory = value; }
         double IProductDeclare.HcPrice { get => HcPrice; set => HcPrice = value; }
         bool IProductDeclare.PaySelf { get => PaySelf; set => PaySelf = value; }
         double IProductDeclare.TotalPrice { get => TotalPrice; set => TotalPrice = value; }

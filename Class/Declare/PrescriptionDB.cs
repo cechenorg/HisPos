@@ -80,7 +80,8 @@ namespace His_Pos.Class.Declare
         {
             var ddatas = new List<Ddata>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]");
+            var parameters = new List<SqlParameter> {new SqlParameter("ADJUST_DATE", dateTime)};
+            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
             foreach (DataRow row in table.Rows)
             {
                 var d = new Ddata();
@@ -95,7 +96,8 @@ namespace His_Pos.Class.Declare
         {
             var errorList = new List<ErrorList>();
             var dbConnection = new DbConnection(Settings.Default.SQL_global);
-            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]");
+            var parameters = new List<SqlParameter> { new SqlParameter("ADJUST_DATE", dateTime) };
+            var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
             foreach (DataRow row in table.Rows)
             {
                 var e = new ErrorList
