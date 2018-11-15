@@ -49,8 +49,8 @@ namespace His_Pos.Class.Declare
             {
                 Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
             });
-            parameters.Add(new SqlParameter("HISDECMAS_GETCARD", declareData.Prescription.IsGetIcCard));
-            parameters.Add(new SqlParameter("HISDECMAS_DECLARE", declareData.Prescription.Declare));
+            //parameters.Add(new SqlParameter("HISDECMAS_GETCARD", declareData.Prescription.IsGetIcCard));
+            //parameters.Add(new SqlParameter("HISDECMAS_DECLARE", declareData.Prescription.Declare));
             var conn = new DbConnection(Settings.Default.SQL_global);
             var table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId
@@ -153,10 +153,10 @@ namespace His_Pos.Class.Declare
                 Value = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null))
             });
 
-            parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
-            {
-                Value = new SqlXml(new XmlTextReader((string)errorStr, XmlNodeType.Document, null))
-            });
+           parameters.Add(new SqlParameter("HISDECMAS_ERRORMSG", SqlDbType.Xml)
+           {
+               Value = new SqlXml(new XmlTextReader((string)errorStr, XmlNodeType.Document, null))
+           });
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateDeclareData]", parameters);
         }
 
@@ -768,15 +768,12 @@ namespace His_Pos.Class.Declare
         {
             for (var i = 0; i < declareData.DeclareDetails.Count; i++)
             {
-                if (declareData.Prescription.Medicines[i] is DeclareMedicine med)
-                {
                     var row = pDataTable.NewRow();
                     var detail = declareData.DeclareDetails[i];
                     detail.Usage = declareData.Prescription.Medicines == null
-                        ? detail.Usage
-                        : med.UsageName;
+                        ? detail.Usage : ((DeclareMedicine)declareData.Prescription.Medicines[i]).UsageName;
                     var paySelf = declareData.Prescription.Medicines == null ? "0" :
-                        med.PaySelf ? "1" : "0";
+                        ((DeclareMedicine)declareData.Prescription.Medicines[i]).PaySelf ? "1" : "0";
 
                     row["DecMasId"] = declareData.DecMasId;
                     row["P1"] = detail.MedicalOrder;
@@ -792,7 +789,6 @@ namespace His_Pos.Class.Declare
                     row["P11"] = detail.Days.ToString();
                     row["PAY_BY_YOURSELF"] = paySelf;
                     pDataTable.Rows.Add(row);
-                }
             }
         }
 
@@ -998,6 +994,18 @@ namespace His_Pos.Class.Declare
                 row["CUSPRESCRIBE_PRICE"] = short.Parse(Math.Ceiling(detail.Total*detail.Price).ToString());
                 pDataTable.Rows.Add(row);
             }
+        }
+        public void InsertDeclareRegister(string decMasId, bool isSentToServer, bool isReg, bool isGetCard, bool isDeclare, bool errorDeclare)
+        {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            parameters.Add(new SqlParameter("DECMAS_ID", decMasId));
+            parameters.Add(new SqlParameter("IS_SENDTOSERVER", isSentToServer));
+            parameters.Add(new SqlParameter("IS_REG", isReg));
+            parameters.Add(new SqlParameter("ISGETCARD", isGetCard));
+            parameters.Add(new SqlParameter("IS_DECLARE", isDeclare));
+            parameters.Add(new SqlParameter("ERROR_DECLARE", errorDeclare));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareRegister]", parameters);
         }
     }
 }
