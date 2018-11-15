@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Text.RegularExpressions;
 
 namespace His_Pos.Class
 {
@@ -11,7 +12,7 @@ namespace His_Pos.Class
             Name = "";
             QuickName = "";
             PrintName = "";
-            Reg = "";
+            Reg = new Regex("");
             Days = 0;
             Times = 0;
             PreDefault = true;
@@ -35,7 +36,7 @@ namespace His_Pos.Class
             Name = dataRow["USAGE_NAME"].ToString();
             QuickName = dataRow["USAGE_QNAME"].ToString();
             PrintName = dataRow["USAGE_PRINTNAME"].ToString();
-            Reg = dataRow["USAGE_REG"].ToString();
+            Reg = new Regex(dataRow["USAGE_REG"].ToString());
             Days = short.Parse(dataRow["USAGE_DAY"].ToString());
             Times = short.Parse(dataRow["USAGE_TIMES"].ToString());
             PreDefault = bool.Parse(dataRow["USAGE_DEFAULT"].ToString());
@@ -70,7 +71,7 @@ namespace His_Pos.Class
             }
         } //快速輸入用代號
         
-        public string Reg { get; }//Regular Expression規則
+        public Regex Reg { get; }//Regular Expression規則
 
         private int _days;
         public int Days

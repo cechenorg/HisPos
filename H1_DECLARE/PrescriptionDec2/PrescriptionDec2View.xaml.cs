@@ -16,7 +16,6 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -30,7 +29,10 @@ using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.DiseaseCode;
+using His_Pos.Class.MedBag;
 using His_Pos.Class.Person;
+using His_Pos.Class.Position;
+using His_Pos.Class.ReportClass;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.StoreOrder;
 using His_Pos.Properties;
@@ -231,6 +233,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
         #endregion
 
+        private MedBagReport medBag = new MedBagReport();
         #region ItemsSourceCollection
         private ObservableCollection<object> _medicines;
         public ObservableCollection<Hospital> Hospitals { get; set; }
@@ -243,6 +246,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public ObservableCollection<Usage> Usages { get; set; }
         public ObservableCollection<Product> DeclareMedicines { get; set; }
         public ObservableCollection<SpecialCode> SpecialCodes { get; set; }
+        public ObservableCollection<Position> Positions { get; set; }
         #endregion
         public PrescriptionDec2View()
         {
@@ -502,8 +506,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //    loading.LoginIcData(Instance);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
-            } 
-            //PrintMedBag(); 印藥袋
+            }
+            PrintMedBag();
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
             ClearPrescription();
@@ -659,14 +663,45 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var medBagMedicines = new ObservableCollection<MedBagMedicine>();
             foreach (var m in CurrentPrescription.Medicines)
             {
-                if(m is DeclareMedicine)
-                    medBagMedicines.Add(new MedBagMedicine((DeclareMedicine)m));
-                else
-                    medBagMedicines.Add(new MedBagMedicine((PrescriptionOTC)m));
+                switch (m)
+                {
+                    case DeclareMedicine medicine:
+                        medBagMedicines.Add(new MedBagMedicine(medicine));
+                        break;
+                    case PrescriptionOTC otc:
+                        medBagMedicines.Add(new MedBagMedicine(otc));
+                        break;
+                }
             }
-            var json = JsonConvert.SerializeObject(medBagMedicines);
-            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-            rptViewer.LocalReport.DataSources.Add(new ReportDataSource("MedicineDataSet", dataTable));
+            foreach (var med in medBagMedicines.GroupBy(m => m.Usage)
+                .Select(group => new {u = group.Key,Count = group.Count()}).OrderBy(x => x.u))
+            {
+                medBag.ReportItems.Add(new MedBagItem(med.u));
+            }
+
+            foreach (var rItem in medBag.ReportItems)
+            {
+                var i = 1;
+                foreach (var m in medBagMedicines)
+                {
+                    if (!m.Usage.Equals(rItem.Usage)) continue;
+                    m.MedNo = i.ToString();
+                    rItem.Medicines.Add(m);
+                    i++;
+                }
+            }
+            var dataTable = new DataTable();
+            dataTable.Columns.Add(new DataColumn("Usage", typeof(string)));
+            foreach (var r in medBag.ReportItems)
+            {
+                var row = dataTable.NewRow();
+                row["Usage"] = r.Usage;
+                dataTable.Rows.Add(row);
+            }
+            rptViewer.LocalReport.SubreportProcessing += subReportProcessing;
+            rptViewer.LocalReport.Refresh();
+            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id", MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
@@ -674,7 +709,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
                 new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
                 new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
-                new ReportParameter("PatientGender_Birthday", CurrentPrescription.Customer.Gender ? "男" : "女" + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
+                new ReportParameter("PatientGender_Birthday", (CurrentPrescription.Customer.Gender ? "男" : "女") + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
                 new ReportParameter("TreatmentDate",DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate, true)),
                 new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
                 new ReportParameter("PaySelf", SelfCost.ToString()),
@@ -684,14 +719,30 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()),
                 new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString())
             };
-            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
             rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            var rd = new ReportDataSource("MedBagReport", dataTable);
+            rptViewer.LocalReport.DataSources.Add(rd);
             rptViewer.LocalReport.Refresh();
-            rptViewer.ProcessingMode = ProcessingMode.Local;
+            rptViewer.LocalReport.SubreportProcessing += subReportProcessing;
+            rptViewer.LocalReport.Refresh();
             var loadingWindow = new LoadingWindow();
             loadingWindow.Show();
             loadingWindow.PrintMedbag(rptViewer, Instance);
         }
+
+        void subReportProcessing(object sender, SubreportProcessingEventArgs e)
+        {
+            string Usage = e.Parameters[0].Values[0];
+            e.DataSources.Clear();
+            var medicines = medBag.ReportItems.Single(m => m.Usage == Usage).Medicines;
+            e.DataSources.Add(new ReportDataSource
+            {
+                Name = "MedBagMedicineDS",
+                Value = medicines
+            });
+        }
+
 
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
@@ -734,7 +785,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     {
                         var m = CurrentPrescription.Medicines[currentRow - 1];
                         Debug.Assert(prescriptionOtc != null, nameof(prescriptionOtc) + " != null");
-                        prescriptionOtc.Usage = string.Empty;
+                        prescriptionOtc.Usage = new Usage();
                         prescriptionOtc.Dosage = string.Empty;
                         prescriptionOtc.Days = string.Empty;
                         CurrentPrescription.Medicines.Add(prescriptionOtc);
@@ -754,8 +805,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
             {
                 declareMedicine = (DeclareMedicine)((DeclareMedicine)medicineCodeAuto.SelectedItem)?.Clone();
-                if (declareMedicine != null && declareMedicine.Id.EndsWith("00"))
-                    declareMedicine.Position = "PO";
+                if (declareMedicine != null && (declareMedicine.Id.EndsWith("00")|| declareMedicine.Id.EndsWith("G0")))
+                    declareMedicine.Position = Positions.SingleOrDefault(p=>p.Id.Contains("PO"))?.Id;
                 if (CurrentPrescription.Medicines.Count > 0)
                 {
                     if (CurrentPrescription.Medicines.Count == currentRow)
@@ -790,6 +841,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PrescriptionMedicines.CurrentCell = new DataGridCellInfo(
                 PrescriptionMedicines.Items[currentRow], DosageText);
             var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            if(focusedCell is null) return;
             var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
             while (firstChild is ContentPresenter)
             {
@@ -936,7 +988,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
                 else
                 {
-                    ((PrescriptionOTC)CurrentPrescription.Medicines[currentRow]).Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text)).Name;
+                    ((PrescriptionOTC)CurrentPrescription.Medicines[currentRow]).Usage = Usages.SingleOrDefault(u => u.QuickName.Equals(t.Text));
                     if (((IProductDeclare)(PrescriptionOTC)CurrentPrescription.Medicines[currentRow]).Usage != null)
                         t.Text = ((IProductDeclare)(PrescriptionOTC)CurrentPrescription.Medicines[currentRow]).Usage;
                 }
@@ -998,7 +1050,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             med.Amount = 0;
             med.CountStatus = string.Empty;
             med.FocusColumn = string.Empty;
-            med.Usage = string.Empty;
+            med.Usage = new Usage();
             med.Days = string.Empty;
             med.Position = string.Empty;
             med.Source = string.Empty;

@@ -39,6 +39,7 @@ using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Class.Position;
 using His_Pos.Class.SpecialCode;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE.Export;
@@ -166,21 +167,23 @@ namespace His_Pos
                     function.GetLastYearlyHoliday();
                 }
                 ChangeLoadingMessage("取得醫療院所...");
-                ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                var tmpHospitals = HospitalDb.GetData();
                 ChangeLoadingMessage("取得科別資料...");
-                ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                var tmpDivisions = DivisionDb.GetData();
                 ChangeLoadingMessage("取得調劑案件資料...");
-                ObservableCollection<AdjustCase> tmpAdjustCases = AdjustCaseDb.GetData();
+                var tmpAdjustCases = AdjustCaseDb.GetData();
                 ChangeLoadingMessage("取得給付類別資料...");
-                ObservableCollection<PaymentCategory> tmpPaymentCategroies = PaymentCategroyDb.GetData();
+                var tmpPaymentCategroies = PaymentCategroyDb.GetData();
                 ChangeLoadingMessage("取得部分負擔資料...");
-                ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
+                var tmpCopayments = CopaymentDb.GetData();
                 ChangeLoadingMessage("取得處方案件資料...");
-                ObservableCollection<TreatmentCase> tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
+                var tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
                 ChangeLoadingMessage("取得特定治療代碼資料...");
-                ObservableCollection<SpecialCode> tmpSpecialCodes = SpecialCodeDb.GetData();
+                var tmpSpecialCodes = SpecialCodeDb.GetData();
                 ChangeLoadingMessage("取得藥品用法資料...");
-                ObservableCollection<Usage> tmpUsages = UsageDb.GetData();
+                var tmpUsages = UsageDb.GetData();
+                ChangeLoadingMessage("取得途徑/作用部位資料...");
+                var tmpPositions = PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     MainWindow.Hospitals = tmpHospitals;
@@ -191,6 +194,7 @@ namespace His_Pos
                     MainWindow.TreatmentCase = tmpTreatmentCaseDb;
                     MainWindow.SpecialCode = tmpSpecialCodes;
                     MainWindow.Usages = tmpUsages;
+                    MainWindow.Positions = tmpPositions;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -627,6 +631,7 @@ namespace His_Pos
                 prescriptionDec2View.SpecialCodes = MainWindow.SpecialCode;
                 prescriptionDec2View.Usages = MainWindow.Usages;
                 prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                prescriptionDec2View.Positions = PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;

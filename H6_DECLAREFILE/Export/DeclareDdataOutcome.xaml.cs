@@ -11,6 +11,7 @@ using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Interface;
 using His_Pos.Service;

@@ -19,6 +19,7 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
+using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.TreatmentCase;
@@ -49,6 +50,7 @@ namespace His_Pos
         public static ObservableCollection<Copayment> Copayments { get; set; }
         public static ObservableCollection<SpecialCode> SpecialCode { get; set; }
         public static ObservableCollection<Usage> Usages { get; set; }
+        public static ObservableCollection<Position> Positions { get; set; }
         public MainWindow(User userLogin)
         {
             FeatureFactory();

@@ -343,6 +343,8 @@
     <Compile Include="Class\Person\PersonDb.cs" />
     <Compile Include="Class\Pharmacy\Pharmacy.cs" />
     <Compile Include="Class\Pharmacy\PharmacyPrincipal.cs" />
+    <Compile Include="Class\Position\Position.cs" />
+    <Compile Include="Class\Position\PositionDb.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
     <Compile Include="Class\ProductType\ProductTypeManageDetail.cs" />
@@ -371,6 +373,8 @@
     <Compile Include="Class\Product\StockTakingOTC.cs" />
     <Compile Include="Class\ProductType\ProductType.cs" />
     <Compile Include="Class\Product\ProductUnit.cs" />
+    <Compile Include="Class\ReportClass\MedBagReport.cs" />
+    <Compile Include="Class\ReportClass\MedBagItem.cs" />
     <Compile Include="Class\SpecialCode\SpecialCodeDb.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrder.cs" />
     <Compile Include="Class\SpecialCode\SpecialCode.cs" />
@@ -664,6 +668,14 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="RDLC\MedBagReportDataSet.cs">
+      <DependentUpon>MedBagReportDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="RDLC\MedBagReportDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MedBagReportDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
@@ -1082,9 +1094,8 @@
     <EmbeddedResource Include="RDLC\InventoryCheckSheet.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\MedBagReport.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\MedBagMedicine.rdlc" />
+    <EmbeddedResource Include="RDLC\MedBagReport.rdlc" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -1100,6 +1111,7 @@
     <None Include="Properties\DataSources\His_Pos.Class.Product.InventoryOtc.datasource" />
     <None Include="Properties\DataSources\His_Pos.Class.Product.StockTakingMedicine.datasource" />
     <None Include="Properties\DataSources\His_Pos.Class.Product.StockTakingOTC.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.ReportClass.MedBagReport.datasource" />
     <None Include="Properties\DataSources\His_Pos.Interface.BatchNumbers.datasource" />
     <None Include="Properties\DataSources\His_Pos.Interface.IStockTaking.datasource" />
     <None Include="Properties\DataSources\His_Pos.StockTaking.StockTakingView.datasource" />
@@ -1117,6 +1129,17 @@
     </None>
     <None Include="RDLC\InventoryDataSet.xss">
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="RDLC\MedBagReportDataSet.xsc">
+      <DependentUpon>MedBagReportDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="RDLC\MedBagReportDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MedBagReportDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\MedBagReportDataSet.xss">
+      <DependentUpon>MedBagReportDataSet.xsd</DependentUpon>
     </None>
     <None Include="ReaderCFG.ini" />
   </ItemGroup>
