@@ -14,7 +14,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <settingControl:DatabaseControl x:Name="DatabaseControl" Grid.Row="0"/>
-        <Button Grid.Row="1" Width="200" Click="Confirm_OnClick"/>
+        <Button Content="確認" FontSize="18" FontFamily="Segoe UI Semi" Background="RoyalBlue" BorderThickness="0" Grid.Row="1" Width="200" Click="Confirm_OnClick"/>
     </Grid>
 
 </Window>
