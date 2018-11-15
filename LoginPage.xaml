@@ -28,12 +28,10 @@
                         <Label Content="帳 號 或 密 碼 錯 誤" Foreground="Red" FontWeight="Bold" FontSize="20"/>
                     </StackPanel>
                     <StackPanel Orientation="Vertical">
-                        <Button Name="Login" Width="220" Height="40"
-                        BorderBrush="DarkGray" BorderThickness="1" Background="DarkGray" Margin="0,30,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Click="Login_Click" Opacity="0.6">
+                        <Button Name="Login" Width="220" Height="45" BorderThickness="0" Background="RoyalBlue" Margin="0,30,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Click="Login_Click" Opacity="0.8">
                             登入
                         </Button>
-                        <Button Name="Exit" Width="220" Height="40"
-                        BorderBrush="DarkGray" BorderThickness="1" Background="Transparent" Margin="0,10,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Foreground="DarkGray" Click="Exit_Click">
+                        <Button Name="Exit" Width="220" Height="40" BorderBrush="DarkGray" BorderThickness="2" Background="Transparent" Margin="0,10,0,0" HorizontalContentAlignment="Center" HorizontalAlignment="Center" FontSize="20" FontFamily="Microsoft YaHei UI" Foreground="DimGray" Click="Exit_Click">
                             離開
                         </Button>
                     </StackPanel>
