@@ -454,7 +454,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         }
                         ProductDb.InsertEntry(medEntryName,  (medTotalPrice * -1).ToString(), "DecMasId", _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId);//庫存扣庫
-                        declareDb.InsertDeclareRegister(_currentDecMasId,false, true, CurrentPrescription.IsGetIcCard, false, false); //處方登錄
+                        declareDb.InsertDeclareRegister(_currentDecMasId,false, true, CurrentPrescription.IsGetIcCard, true, false); //處方登錄
                     }
                     declareDb.UpdateDeclareFile(_currentDeclareData);
                     break;
