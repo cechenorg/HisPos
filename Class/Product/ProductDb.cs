@@ -351,6 +351,40 @@ namespace His_Pos.Class.Product
             dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[SaveStockTakingProducts]", parameters);
     }
 
+        internal static void UpdateInventoryProductUnit(string proId, ObservableCollection<ProductUnit> units)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+
+            DataTable unitTable = new DataTable();
+            unitTable.Columns.Add("UNI_ID", typeof(int));
+            unitTable.Columns.Add("UNI_TYPE", typeof(string));
+            unitTable.Columns.Add("UNI_QTY", typeof(int));
+            unitTable.Columns.Add("UNI_SELL", typeof(double));
+            unitTable.Columns.Add("UNI_VIP", typeof(double));
+            unitTable.Columns.Add("UNI_EMP", typeof(double));
+
+            int index = 1;
+
+            foreach (var unit in units)
+            {
+                var newRow = unitTable.NewRow();
+                newRow["UNI_ID"] = index;
+                newRow["UNI_TYPE"] = unit.Unit;
+                newRow["UNI_QTY"] = unit.Amount;
+                newRow["UNI_SELL"] = unit.Price;
+                newRow["UNI_VIP"] = unit.VIPPrice;
+                newRow["UNI_EMP"] = unit.EmpPrice;
+                unitTable.Rows.Add(newRow);
+
+                index++;
+            }
+            parameters.Add(new SqlParameter("UNITS", unitTable));
+            dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[UpdateProductUnit]", parameters);
+        }
+
         internal static void DeleteProductType(string id)
         {
             var dd = new DbConnection(Settings.Default.SQL_global);
