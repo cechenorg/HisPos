@@ -176,6 +176,8 @@ namespace His_Pos.Class
          */
         private bool CheckHomeCareAndSmokingCessation()
         {
+            if (Treatment.AdjustCase is null)
+                return false;
             if (!string.IsNullOrEmpty(Treatment.AdjustCase.Id))
                 return Treatment.AdjustCase.Id.StartsWith("D") || Treatment.AdjustCase.Id.StartsWith("5");
            
