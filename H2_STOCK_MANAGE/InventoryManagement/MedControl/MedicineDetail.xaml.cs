@@ -20,6 +20,7 @@ using System.Threading;
 using System.Windows.Media.Imaging;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.H2_STOCK_MANAGE.InventoryManagement.MedControl;
 using His_Pos.Interface;
 using His_Pos.Struct.Product;
 
@@ -450,6 +451,12 @@ namespace His_Pos.InventoryManagement
         private void MedicineDetail_OnGotFocus(object sender, RoutedEventArgs e)
         {
             IsFirst = false;
+        }
+
+        private void OpenMedHisPrice_OnClick(object sender, RoutedEventArgs e)
+        {
+            MedicineHistoryPriceWindow medicineHistoryPriceWindow = new MedicineHistoryPriceWindow(InventoryMedicine.Id);
+            medicineHistoryPriceWindow.Show();
         }
     }
 }
