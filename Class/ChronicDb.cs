@@ -1,4 +1,5 @@
-﻿using His_Pos.Properties;
+﻿using His_Pos.H1_DECLARE.PrescriptionInquire;
+using His_Pos.Properties;
 using His_Pos.Service;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,9 +10,11 @@ using static His_Pos.H1_DECLARE.PrescriptionDec2.ChronicSendToServerWindow;
 namespace His_Pos.Class
 {
     public static class ChronicDb {
-        internal static void CaculateChironic() { //假設病人1-3沒領  要幫他算出2-1~2-3
+       
+        internal static void DailyPredictChronic()
+        { //檢查過領藥日的3-3 若整輪都沒領 則不預約 若有一次 則預約
             var dd = new DbConnection(Settings.Default.SQL_global);
-            dd.ExecuteProc("[HIS_POS_DB].[Index].[CaculateChironic]");
+            dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyPredictChronic]");
         }
         internal static ObservableCollection<Chronic> GetChronicDeclareById(string cusId) {
             var dd = new DbConnection(Settings.Default.SQL_global);
@@ -102,6 +105,28 @@ namespace His_Pos.Class
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ChronicDetail", chronicDetailTable)); 
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertChronicDetail]", parameters);
-        } 
+        }
+
+        internal static ObservableCollection<ChronicRegisterWindow.ChronicRegister> GetChronicGroupById(string DecMasId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global); 
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DECMAS_ID", DecMasId));
+            DataTable table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetChronicGroupById]", parameters);
+            ObservableCollection<ChronicRegisterWindow.ChronicRegister> chronicRegisters = new ObservableCollection<ChronicRegisterWindow.ChronicRegister>();
+            foreach (DataRow row in table.Rows) {
+                chronicRegisters.Add(new ChronicRegisterWindow.ChronicRegister(row));
+            }
+            return chronicRegisters;
+        }
+        internal static void UpdateRegisterStatus(string DecMasId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DECMAS_ID", DecMasId));
+            dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateRegisterStatus]", parameters);
+        }
+         
     }
 }
+ 

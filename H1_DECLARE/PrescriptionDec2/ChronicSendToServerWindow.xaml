@@ -47,13 +47,6 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="30">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Name="DeleteDot" Width="18"   MouseLeftButtonDown="DeleteDot_MouseLeftButtonDown" Source="{Binding Source,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
                 <DataGridTextColumn MinWidth="150" Binding="{Binding MedId}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" Header="藥品代碼" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
