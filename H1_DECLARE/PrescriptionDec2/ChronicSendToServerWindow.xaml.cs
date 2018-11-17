@@ -107,10 +107,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             ChronicDb.InsertChronicDetail(Prescription,DecMasId);
             Close();
         }
-        private void DeleteDot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            Prescription.RemoveAt(MedicinesList.SelectedIndex);
-        }
-
+      
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             var selectedItem = (sender as DataGridRow).Item;

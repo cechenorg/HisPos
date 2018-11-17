@@ -995,7 +995,7 @@ namespace His_Pos.Class.Declare
                 pDataTable.Rows.Add(row);
             }
         }
-        public void InsertDeclareRegister(string decMasId, bool isSentToServer, bool isReg, bool isGetCard, bool isDeclare, bool errorDeclare)
+        public void InsertDeclareRegister(string decMasId, bool isSentToServer, bool isReg, bool isGetCard, bool isDeclare, bool errorDeclare,bool isAdjust)
         {
             var parameters = new List<SqlParameter>();
             var conn = new DbConnection(Settings.Default.SQL_global);
@@ -1004,7 +1004,8 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("IS_REG", isReg));
             parameters.Add(new SqlParameter("ISGETCARD", isGetCard));
             parameters.Add(new SqlParameter("IS_DECLARE", isDeclare));
-            parameters.Add(new SqlParameter("ERROR_DECLARE", errorDeclare));
+            parameters.Add(new SqlParameter("IS_ADJUST", isAdjust));
+            parameters.Add(new SqlParameter("ERROR_DECLARE", errorDeclare)); 
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareRegister]", parameters);
         }
     }

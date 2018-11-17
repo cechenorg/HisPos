@@ -52,6 +52,7 @@ using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using RadioButton = System.Windows.Controls.RadioButton;
 using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
+using His_Pos.H1_DECLARE.PrescriptionInquire;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -459,7 +460,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         }
                         ProductDb.InsertEntry(medEntryName,  (medTotalPrice * -1).ToString(), "DecMasId", _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId);//庫存扣庫
-                        declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, true, false); //處方登錄
+                        declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, true, false,true); //處方登錄
                     }
                     declareDb.UpdateDeclareFile(_currentDeclareData);
                     break;
@@ -491,7 +492,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         
                         declareDb.UpdateDeclareFile(_currentDeclareData);
                     }
-                    declareDb.InsertDeclareRegister(_currentDecMasId, IsSend,true, false, false, false); //處方登錄
+                    declareDb.InsertDeclareRegister(_currentDecMasId, IsSend,true, false, false, false,false); //處方登錄
                     _currentDeclareData.DecMasId = _currentDecMasId;
                     declareDb.UpdateDeclareData(_currentDeclareData);//更新慢箋
                     ChronicDb.UpdateChronicData(_currentDecMasId);//重算預約慢箋  
@@ -510,16 +511,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         var storId = StoreOrderDb.SaveOrderDeclareData(_firstTimeDecMasId, PrescriptionSendData);  //出進貨單
                         StoreOrderDb.SendDeclareOrderToSingde(_firstTimeDecMasId, storId, _currentDeclareData, declareTrade, PrescriptionSendData);  //送到singde
                     }
-                    declareDb.InsertDeclareRegister(_currentDecMasId, IsSend, true, CurrentPrescription.IsGetIcCard,false,false); //處方登錄
-                    declareDb.CheckPredictChronicExist(_currentDecMasId); //刪除同人同科別預約慢箋
+                    declareDb.InsertDeclareRegister(_firstTimeDecMasId, IsSend, true, CurrentPrescription.IsGetIcCard,false,false,false); //處方登錄
+                    declareDb.CheckPredictChronicExist(_firstTimeDecMasId); //刪除同人同科別預約慢箋
                      
                     var intDecMasId = Convert.ToInt32(_firstTimeDecMasId);
                     for (var i = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1; i <= Convert.ToInt32(CurrentPrescription.ChronicTotal); i++)
                     {
-                        declareDb.SetSameGroupChronic(intDecMasId.ToString(), i.ToString()); //預約慢箋
-                        declareDb.InsertDeclareRegister(intDecMasId.ToString(), false, false, false, false, false); //處方登錄
+                        declareDb.SetSameGroupChronic(intDecMasId.ToString(), i.ToString()); //預約慢箋 
                         intDecMasId++;
-                    } 
+                        declareDb.InsertDeclareRegister(intDecMasId.ToString(), false, false, false, false, false,false); //處方登錄
+                    }
+                    ChronicRegisterWindow chronicRegisterWindow = new ChronicRegisterWindow(_firstTimeDecMasId);
+                    chronicRegisterWindow.ShowDialog();
                     break;
                 case -1:
                     m = new MessageWindow("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR, true);
