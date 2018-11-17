@@ -1,4 +1,5 @@
-﻿using System;
+﻿using His_Pos.Class;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -33,18 +34,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
         public class ChronicRegister {
 
             public ChronicRegister(DataRow row) {
-                DecMasid = row[""].ToString();
-                CusName = row[""].ToString();
-                HospitalName = row[""].ToString();
-                Division = row[""].ToString();
-                Status = row[""].ToString();
-                TreatmentDate = row[""].ToString();
+                DecMasid = row["HISDECMAS_ID"].ToString();
+                CusName = row["CUS_NAME"].ToString();
+                HospitalName = row["INS_NAME"].ToString();
+                DivisionName = row["HISDIV_NAME"].ToString();
+                Status = row["CHRONIC_STATUS"].ToString();
+                TreatmentDate = Convert.ToDateTime(row["HISDECMAS_TREATDATE"].ToString()).AddYears(-1911).ToString("yyy/MM/dd");
 
             }
+            public bool IsRegister { get; set; } = true;
             public string DecMasid { get; set; }
             public string CusName { get; set; }
             public string HospitalName { get; set; }
-            public string Division { get; set; }
+            public string DivisionName { get; set; }
             public string Status { get; set; }
             public string TreatmentDate { get; set; }
         }
@@ -65,11 +67,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
         {
             InitializeComponent();
             DataContext = this;
+            InitData(DecMasId);
         }
-        private void InitData() {
-
-
-
+        private void InitData(string DecMasId) {
+            ChronicRegisterCollection = ChronicDb.GetChronicGroupById(DecMasId);
         }
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -78,7 +79,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
 
         private void ButtonSubmmit_Click(object sender, RoutedEventArgs e)
         {
-
+            foreach (ChronicRegister chronicRegister in ChronicRegisterCollection) {
+                if (chronicRegister.IsRegister)
+                    ChronicDb.UpdateRegisterStatus(chronicRegister.DecMasid);
+            }
+            Close();
         }
     }
 }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H1_DECLARE.PrescriptionInquire"
         mc:Ignorable="d"
-        Title="ChronicRegisterWindow" Height="450" Width="800">
+        Title="預約慢箋登錄" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -31,7 +31,14 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="120" Header="病患名稱" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding PatientName,UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTemplateColumn Width="50" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsRegister,UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Width="120" Header="病患名稱" FontFamily="Segoe UI Semi" IsReadOnly="True"  Binding="{Binding CusName,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -39,7 +46,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="220" Header="醫療院所" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding HospitalName,UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Width="260" Header="醫療院所" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding HospitalName,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -47,23 +54,23 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="90" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Division.Name,UpdateSourceTrigger=PropertyChanged}">
+                <DataGridTextColumn Width="90" Header="科別" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding DivisionName,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn> 
-                <DataGridTextColumn Width="90" Header="慢箋狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ChronicStatus,UpdateSourceTrigger=PropertyChanged}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="90" Header="慢箋狀態" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Status,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn> 
-                <DataGridTextColumn Width="150" Header="調劑日期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding AdjustDate,UpdateSourceTrigger=PropertyChanged}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="150" Header="調劑日期" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding TreatmentDate,UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

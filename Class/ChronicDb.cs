@@ -1,4 +1,5 @@
-﻿using His_Pos.Properties;
+﻿using His_Pos.H1_DECLARE.PrescriptionInquire;
+using His_Pos.Properties;
 using His_Pos.Service;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -102,6 +103,28 @@ namespace His_Pos.Class
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ChronicDetail", chronicDetailTable)); 
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertChronicDetail]", parameters);
-        } 
+        }
+
+        internal static ObservableCollection<ChronicRegisterWindow.ChronicRegister> GetChronicGroupById(string DecMasId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global); 
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DECMAS_ID", DecMasId));
+            DataTable table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetChronicGroupById]", parameters);
+            ObservableCollection<ChronicRegisterWindow.ChronicRegister> chronicRegisters = new ObservableCollection<ChronicRegisterWindow.ChronicRegister>();
+            foreach (DataRow row in table.Rows) {
+                chronicRegisters.Add(new ChronicRegisterWindow.ChronicRegister(row));
+            }
+            return chronicRegisters;
+        }
+        internal static void UpdateRegisterStatus(string DecMasId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("DECMAS_ID", DecMasId));
+            dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateRegisterStatus]", parameters);
+        }
+         
     }
 }
+ 

@@ -442,7 +442,7 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionInquire\ChronicRegisterWindow.xaml.cs">
+    <Compile Include="H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml.cs">
       <DependentUpon>ChronicRegisterWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml.cs">
@@ -776,7 +776,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionInquire\ChronicRegisterWindow.xaml">
+    <Page Include="H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
