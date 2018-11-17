@@ -23,7 +23,7 @@ namespace His_Pos.Class.Pharmacy
             Address = address;
             Tel = tel;
             MedicalPersonnel = new MedicalPersonnel();
-            MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
+            MedicalPersonnelCollection = new ObservableCollection<MedicalPersonnel>();
         }
         public Pharmacy(XmlNode xml) {
             MedicalPersonnel = new MedicalPersonnel();

@@ -1261,6 +1261,7 @@
     <Resource Include="LOGO_HISPOS.ico" />
     <Resource Include="Images\icons8-delete-32.png" />
     <Content Include="csHis.dll" />
+    <Resource Include="Images\Ph.png" />
     <Content Include="Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">

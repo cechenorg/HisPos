@@ -109,10 +109,22 @@ namespace His_Pos.Class.Pharmacy
             var table = dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetPharmacyMedicalPersonData]");
             foreach (DataRow row in table.Rows)
             {
-                medicalPersonnels.Add(new MedicalPersonnel(row));
+                var m = new MedicalPersonnel(row);
+                m.PrescriptionCount = GetPrescriptionCount(dd, m.IcNumber);
+                medicalPersonnels.Add(m);
             }
-
+            
             return medicalPersonnels;
+        }
+
+        internal static int GetPrescriptionCount(DbConnection dd,string icNumber)
+        {
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("MEDICALPERSONNEL", icNumber)
+            };
+            var t = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetMedicalPersonPrescriptionCount]", parameters);
+            return int.Parse(t.Rows[0][0].ToString());
         }
     }
 }

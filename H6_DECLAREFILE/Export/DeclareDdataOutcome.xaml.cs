@@ -10,9 +10,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
+using His_Pos.Class.AdjustCase;
+using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Division;
+using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Person;
 using His_Pos.Class.Position;
 using His_Pos.Class.Product;
+using His_Pos.Class.TreatmentCase;
 using His_Pos.Interface;
 using His_Pos.Service;
 using JetBrains.Annotations;
@@ -26,6 +32,14 @@ namespace His_Pos.H6_DECLAREFILE.Export
     public partial class DeclareDdataOutcome : Window, INotifyPropertyChanged
     {
         private bool _isFirst = true;
+        public static DeclareDdataOutcome Instance;
+        public ObservableCollection<Hospital> Hospitals { get; set; }
+        public ObservableCollection<Division> Divisions { get; set; }
+        public ObservableCollection<TreatmentCase> TreatmentCases { get; set; }
+        public ObservableCollection<PaymentCategory> PaymentCategories { get; set; }
+        public ObservableCollection<Copayment> Copayments { get; set; }
+        public ObservableCollection<AdjustCase> AdjustCases { get; set; }
+        public ObservableCollection<MedicalPersonnel> MedicalPersonnels { get; set; }
 
         private ObservableCollection<Product> _prescriptionMedicines;
 
@@ -90,6 +104,10 @@ namespace His_Pos.H6_DECLAREFILE.Export
             DataContext = this;
             CurrentFile = d;
             CurrentPrescription = new Prescription(CurrentFile);
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.ChangeLoadingMessage("處方申報資料載入中...");
+            loadingWindow.SetDeclareFileData(Instance,d);
+            loadingWindow.Show();
             InitData(d);
             InitDataChanged();
         }
@@ -97,27 +115,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
         private void InitData(DeclareFileDdata declareFileDdata)
         {
             if (ExportView.Instance is null) return;
-            var loadingWindow = new LoadingWindow();
-            loadingWindow.ChangeLoadingMessage("處方申報資料載入中...");
-            loadingWindow.Show();
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName = ExportView.Instance.HospitalCollection.SingleOrDefault(h => h.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id))?.FullName;
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName = ExportView.Instance.DivisionCollection.SingleOrDefault(d =>
-                    d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id))?.FullName;
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber = declareFileDdata.Dbody.D24;
-            CurrentPrescription.Treatment.TreatmentDate = DateTimeExtensions.ConvertDeclareFileDate(declareFileDdata.Dbody.D14);
-            CurrentPrescription.Treatment.AdjustDate = DateTimeExtensions.ConvertDeclareFileDate(declareFileDdata.Dbody.D23);
-            CopaymentCode.ItemsSource = ExportView.Instance.CopaymentCollection;
-            CopaymentCode.SelectedItem =
-                ExportView.Instance.CopaymentCollection.SingleOrDefault(c =>
-                    c.Id.Equals(CurrentPrescription.Treatment.Copayment.Id));
-            PaymentCategory.ItemsSource = ExportView.Instance.PaymentCategoryCollection;
-            PaymentCategory.Text = ExportView.Instance.PaymentCategoryCollection.SingleOrDefault(p => p.Id.Equals(CurrentPrescription.Treatment.PaymentCategory.Id))
-                ?.FullName;
-            AdjustCase.ItemsSource = ExportView.Instance.AdjustCaseCollection;
-            AdjustCase.Text = ExportView.Instance.AdjustCaseCollection.SingleOrDefault(a => a.Id.Equals(CurrentPrescription.Treatment.AdjustCase.Id))?.FullName;
-            TreatmentCase.ItemsSource = ExportView.Instance.TreatmentCaseCollection;
-            TreatmentCase.Text = ExportView.Instance.TreatmentCaseCollection.SingleOrDefault(t => t.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id))
-                ?.FullName;
             PrescriptionMedicines = new ObservableCollection<Product>();
             foreach (var p in declareFileDdata.Dbody.Pdata)
             {
@@ -143,7 +140,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 d.Days = p.P11;
                 PrescriptionMedicines.Add(d);
             }
-            loadingWindow.Close();
         }
 
         private void Text_TextChanged(object sender, EventArgs e)
@@ -357,6 +353,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             e.Handled = true;
             MoveFocusNext(sender);
         }
+
         private void MoveFocusNext(object sender)
         {
             if (sender is TextBox box)

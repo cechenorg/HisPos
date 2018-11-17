@@ -19,6 +19,7 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
+using His_Pos.Class.Pharmacy;
 using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
@@ -64,6 +65,7 @@ namespace His_Pos
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
             CurrentPharmacy = new Pharmacy("5932012975", "杏昌藥局", "330桃園市桃園區中正路1100號", "03-3573268");
+            CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
         }
         

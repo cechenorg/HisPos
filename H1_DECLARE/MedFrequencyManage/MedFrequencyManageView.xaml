@@ -100,17 +100,15 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="8" Orientation="Horizontal">
                     <Label VerticalAlignment="Center" Content="使用天數" FontFamily="Segoe UI Semibold" FontSize="20" />
-                    <TextBox Width="140" Margin="10,0,0,0" HorizontalContentAlignment="Center"
+                    <Label Width="140" Margin="10,0,0,0" HorizontalContentAlignment="Center"
                              FontFamily="Segoe UI Semi" FontSize="18"
-                             Text="{Binding UsageDetail.Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextChanged="TextBox_DataChanged" IsReadOnly="True"/>
+                             Content="{Binding UsageDetail.Days, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label VerticalAlignment="Center" Content="使用次數" FontFamily="Segoe UI Semibold" FontSize="20" />
-                    <TextBox Width="140" Margin="10,0,0,0" HorizontalContentAlignment="Center"
+                    <Label Width="140" Margin="10,0,0,0" HorizontalContentAlignment="Center"
                              FontFamily="Segoe UI Semi" FontSize="18"
-                             Text="{Binding UsageDetail.Times, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             TextChanged="TextBox_DataChanged" IsReadOnly="True"/>
+                             Content="{Binding UsageDetail.Times, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Background="{StaticResource Shadow}"
                             Orientation="Horizontal">
@@ -149,10 +147,10 @@
             <StackPanel Grid.Row="2" Grid.Column="0" Margin="10,0,0,10" Background="{StaticResource GridBackGround}"
                         Orientation="Horizontal">
                 <Image Width="35" Margin="10,0,0,0" MouseLeftButtonDown="Image_MouseLeftButtonDown"
-                       Source="/Images/Plus.png" />
+                       Source="/Images/Plus.png" Visibility="Collapsed"/>
                 <Rectangle Width="210" />
                 <Image Name="ButtonDelete" Width="30" MouseLeftButtonDown="ButtonDelete_MouseLeftButtonDown"
-                       Source="/Images/Delete.png" />
+                       Source="/Images/Delete.png" Visibility="Collapsed"/>
             </StackPanel>
         </Grid>
     </Viewbox>

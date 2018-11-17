@@ -44,6 +44,7 @@ using His_Pos.Class.SpecialCode;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.HisApi;
+using His_Pos.Service;
 using His_Pos.Struct.IcData;
 using Microsoft.Reporting.WinForms;
 using StockTakingView = His_Pos.H3_STOCKTAKING.StockTaking.StockTakingView;
@@ -1006,6 +1007,56 @@ namespace His_Pos
             // Prepare for the next page. Make sure we haven't hit the end.
             m_currentPageIndex++;
             ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
+        }
+
+        public void SetDeclareFileData(DeclareDdataOutcome outcome,DeclareFileDdata dData)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得申報檔處方資料...");
+                var tmpHospitals = MainWindow.Hospitals;
+                var tmpDivisions = MainWindow.Divisions;
+                var tmpAdjustCases = MainWindow.AdjustCases;
+                var tmpPaymentCategroies = MainWindow.PaymentCategory;
+                var tmpCopayments = MainWindow.Copayments;
+                var tmpTreatmentCases = MainWindow.TreatmentCase;
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    outcome.Hospitals = tmpHospitals;
+                    outcome.Divisions = tmpDivisions;
+                    outcome.AdjustCases = tmpAdjustCases;
+                    outcome.PaymentCategories = tmpPaymentCategroies;
+                    outcome.Copayments = tmpCopayments;
+                    outcome.TreatmentCases = tmpTreatmentCases;
+                    outcome.CurrentPrescription.Treatment.Copayment = outcome.Copayments.SingleOrDefault(c =>
+                        c.Id.Equals(outcome.CurrentPrescription.Treatment.Copayment.Id));
+                    outcome.CurrentPrescription.Treatment.TreatmentDate = DateTimeExtensions.ConvertDeclareFileDate(dData.Dbody.D14);
+                    outcome.CurrentPrescription.Treatment.AdjustDate = DateTimeExtensions.ConvertDeclareFileDate(dData.Dbody.D23);
+                    outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital = outcome.Hospitals.SingleOrDefault(h => h.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
+                    if (outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital != null)
+                    {
+                        outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = outcome.Divisions.SingleOrDefault(d =>
+                            d.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
+                        outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber = dData.Dbody.D24;
+                    }
+                    outcome.CurrentPrescription.Treatment.PaymentCategory =
+                        outcome.PaymentCategories.SingleOrDefault(p =>
+                            p.Id.Equals(outcome.CurrentPrescription.Treatment.PaymentCategory.Id));
+                    outcome.CurrentPrescription.Treatment.AdjustCase = outcome.AdjustCases.SingleOrDefault(a =>
+                        a.Id.Equals(outcome.CurrentPrescription.Treatment.AdjustCase.Id));
+                    outcome.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = outcome.TreatmentCases.SingleOrDefault(t =>
+                        t.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id));
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
         }
     }
 }
