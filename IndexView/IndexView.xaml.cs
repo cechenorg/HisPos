@@ -149,7 +149,7 @@ namespace His_Pos.IndexView
         {
             InitializeComponent();
            // Date.Content = DateTime.Today.ToString("yyyy/MM/dd");
-            ChronicDb.CaculateChironic();
+            ChronicDb.DailyPredictChronic();
             InitData();
             DataContext = this;
             Instance = this;
