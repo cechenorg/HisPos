@@ -218,7 +218,7 @@ namespace His_Pos.Class.Product
 
             double tempAmount = 0;
 
-            if (inputSource.Equals("OrderAmount"))
+            if (Amount == 0.0)
             {
                 tempAmount = OrderAmount;
             }
@@ -239,9 +239,9 @@ namespace His_Pos.Class.Product
 
             if (isColumnChanged) CountStatus = "";
 
-            if (inputSource.Equals("Amount") && tempAmount == 0)
+            if ((inputSource.Equals("Amount") || inputSource.Equals("OrderAmount")) && tempAmount == 0)
                 return;
-            else if (inputSource.Equals("Amount") && totalPrice != 0 && tempAmount != 0 && !CountStatus.Equals("*"))
+            else if ((inputSource.Equals("Amount") || inputSource.Equals("OrderAmount")) && totalPrice != 0 && tempAmount != 0 && !CountStatus.Equals("*"))
             {
                 Price = totalPrice / tempAmount;
             }
