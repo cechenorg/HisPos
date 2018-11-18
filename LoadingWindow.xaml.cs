@@ -203,6 +203,7 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     mainWindow.Show();
+                    MainWindow.ItemSourcesSet = true;
                     Close();
                 }));
             };
@@ -912,6 +913,7 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    prescriptionDec2View.ClearPrescription();
                     Close();
                 }));
             };

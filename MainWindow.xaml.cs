@@ -43,9 +43,21 @@ namespace His_Pos
         public static string CardReaderStatus;
         public static Pharmacy CurrentPharmacy;
         public static MainWindow MainWindowInstance;
+        public static bool ItemSourcesSet { get; set; }
         public static ObservableCollection<Hospital> Hospitals { get; set; }
         public static ObservableCollection<Division> Divisions { get; set; }
-        public static ObservableCollection<AdjustCase> AdjustCases { get; set; }
+        private static ObservableCollection<AdjustCase> _adjustCases;
+        public static ObservableCollection<AdjustCase> AdjustCases
+        {
+            get => _adjustCases;
+            set
+            {
+                if (ItemSourcesSet)
+                    return;
+                _adjustCases = value;
+            }
+        }
+
         public static ObservableCollection<PaymentCategory> PaymentCategory { get; set; }
         public static ObservableCollection<TreatmentCase> TreatmentCase { get;set; }
         public static ObservableCollection<Copayment> Copayments { get; set; }
@@ -92,8 +104,6 @@ namespace His_Pos
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", Properties.Resources.Attend,
                             new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
 
-            HisFeatures.Add(new Feature(@"..\Images\DeclareFile.png", Properties.Resources.DeclareFile,
-                new string[] { Properties.Resources.DeclareFileExport }));
             HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.ReportSystem,
               new string[] { Properties.Resources.EntrySearch }));
         }

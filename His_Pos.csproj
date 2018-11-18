@@ -664,6 +664,11 @@
     <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RDLC\MedBagMedicineDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MedBagMedicineDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="RDLC\InventoryDataSet.cs">
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
     </Compile>
@@ -671,14 +676,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="RDLC\MedBagReportDataSet.cs">
-      <DependentUpon>MedBagReportDataSet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="RDLC\MedBagReportDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MedBagReportDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
@@ -1101,7 +1098,6 @@
     <EmbeddedResource Include="RDLC\InventoryCheckSheet.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\MedBagMedicine.rdlc" />
     <EmbeddedResource Include="RDLC\MedBagReport.rdlc" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
@@ -1126,6 +1122,17 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="RDLC\MedBagMedicineDataSet.xsc">
+      <DependentUpon>MedBagMedicineDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="RDLC\MedBagMedicineDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MedBagMedicineDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\MedBagMedicineDataSet.xss">
+      <DependentUpon>MedBagMedicineDataSet.xsd</DependentUpon>
+    </None>
     <None Include="RDLC\InventoryDataSet.xsc">
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
     </None>
@@ -1136,17 +1143,6 @@
     </None>
     <None Include="RDLC\InventoryDataSet.xss">
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="RDLC\MedBagReportDataSet.xsc">
-      <DependentUpon>MedBagReportDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="RDLC\MedBagReportDataSet.xsd">
-      <SubType>Designer</SubType>
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>MedBagReportDataSet.Designer.cs</LastGenOutput>
-    </None>
-    <None Include="RDLC\MedBagReportDataSet.xss">
-      <DependentUpon>MedBagReportDataSet.xsd</DependentUpon>
     </None>
     <None Include="ReaderCFG.ini" />
   </ItemGroup>

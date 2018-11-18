@@ -528,7 +528,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     m = new MessageWindow("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR, true);
                     m.ShowDialog();
                     break;
-                     
             }
             
             if (CurrentPrescription.IsGetIcCard)
@@ -559,8 +558,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PrintMedBag();
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
-            ClearPrescription();
             IndexView.IndexView.Instance.InitData();
+
         }
 
         #region 每日上傳.讀寫卡相關函數
@@ -722,33 +721,24 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         break;
                 }
             }
-            foreach (var med in medBagMedicines.GroupBy(m => m.Usage)
-                .Select(group => new {u = group.Key,Count = group.Count()}).OrderBy(x => x.u))
-            {
-                medBag.ReportItems.Add(new MedBagItem(med.u));
-            }
 
-            foreach (var rItem in medBag.ReportItems)
+            foreach (var m in medBagMedicines.GroupBy(info => info.Usage)
+                .Select(group => new {UsageName = group.Key,count = group.Count()})
+                .OrderBy(x => x.UsageName))
             {
-                var i = 1;
-                foreach (var m in medBagMedicines)
+                int i = 1;
+                foreach (var med in medBagMedicines)
                 {
-                    if (!m.Usage.Equals(rItem.Usage)) continue;
-                    m.MedNo = i.ToString();
-                    rItem.Medicines.Add(m);
-                    i++;
+                    if (med.Usage.Equals(m.UsageName))
+                    {
+                        med.MedNo = i.ToString();
+                        i++;
+                    }
                 }
             }
-            var dataTable = new DataTable();
-            dataTable.Columns.Add(new DataColumn("Usage", typeof(string)));
-            foreach (var r in medBag.ReportItems)
-            {
-                var row = dataTable.NewRow();
-                row["Usage"] = r.Usage;
-                dataTable.Rows.Add(row);
-            }
-            rptViewer.LocalReport.SubreportProcessing += subReportProcessing;
-            rptViewer.LocalReport.Refresh();
+            var json = JsonConvert.SerializeObject(medBagMedicines);
+            var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+            
             rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var parameters = new List<ReportParameter>
@@ -766,33 +756,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 new ReportParameter("TotalPoint", _currentDeclareData.TotalPoint.ToString()),
                 new ReportParameter("CopaymentPoint", _currentDeclareData.CopaymentPoint.ToString()),
                 new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()),
-                new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString())
+                new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString()),
+                new ReportParameter("Division", CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name)
             };
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.DataSources.Clear();
-            var rd = new ReportDataSource("MedBagReport", dataTable);
+            var rd = new ReportDataSource("DataSet1", dataTable);
             rptViewer.LocalReport.DataSources.Add(rd);
-            rptViewer.LocalReport.Refresh();
-            rptViewer.LocalReport.SubreportProcessing += subReportProcessing;
             rptViewer.LocalReport.Refresh();
             var loadingWindow = new LoadingWindow();
             loadingWindow.Show();
             loadingWindow.PrintMedbag(rptViewer, Instance);
         }
-
-        void subReportProcessing(object sender, SubreportProcessingEventArgs e)
-        {
-            string Usage = e.Parameters[0].Values[0];
-            e.DataSources.Clear();
-            var medicines = medBag.ReportItems.Single(m => m.Usage == Usage).Medicines;
-            e.DataSources.Add(new ReportDataSource
-            {
-                Name = "MedBagMedicineDS",
-                Value = medicines
-            });
-        }
-
-
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
             if (!(sender is AutoCompleteBox medicineCodeAuto)) return;
@@ -889,7 +864,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             PrescriptionMedicines.CurrentCell = new DataGridCellInfo(
                 PrescriptionMedicines.Items[currentRow], DosageText);
-            var focusedCell = PrescriptionMedicines.CurrentCell.Column.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            if (PrescriptionMedicines.CurrentCell.Item is null) return;
+            var focusedCell = PrescriptionMedicines.CurrentCell.Column?.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
             if(focusedCell is null) return;
             var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
             while (firstChild is ContentPresenter)
@@ -1148,6 +1124,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             MedProfit = (medicinesHcCost + medicinesSelfCost - purchaseCosts);//藥品毛利
             MedicinePoint = medicinesHcCost;
             if (CurrentPrescription.Medicines.Count <= 0) return;
+            if(CurrentPrescription.Treatment.AdjustCase.Id != "2") return;
             var adjustBtnEnable = CurrentPrescription.Treatment.AdjustDate.Date.Equals(DateTime.Now.Date);
             foreach (var m in CurrentPrescription.Medicines)
             {
@@ -1813,9 +1790,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             chronicSelectWindow.ShowDialog();
         }
 
-        private void ClearPrescription()
+        public void ClearPrescription()
         {
             CurrentPrescription = new Prescription();
+            CurrentPrescription.Treatment.MedicalInfo.Hospital = new Hospital();
             DivisionCombo.SelectedIndex = -1;
             TreatmentCaseCombo.SelectedIndex = -1;
             var isMedicalPerson = false;
@@ -1840,7 +1818,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PaymentCategoryCombo.SelectedItem =
                 MainWindow.PaymentCategory.SingleOrDefault(p => p.Id.Equals("4"));
             AdjustCaseCombo.SelectedItem =
-                MainWindow.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
+                AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
             CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = new DiseaseCode();
             CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = new DiseaseCode();
             CurrentPrescription.Treatment.TreatmentDate = DateTime.Now;
@@ -1855,6 +1833,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             SelfCostText.Text = string.Empty;
             PaidText.Text = string.Empty;
             CustomerSelected = false;
+            medBag = new MedBagReport();
+            AdjustCases = MainWindow.AdjustCases;
         }
     }
 }
