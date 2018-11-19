@@ -15,12 +15,12 @@ namespace His_Pos.PrescriptionInquire
             MedicalPersonnelName = row["EMP_NAME"].ToString();
             ChronicStatus = row["CHRONIC_STATUS"].ToString();
             AdjustDate = Convert.ToDateTime(row["HISDECMAS_TREATDATE"]).AddYears(-1911).ToString("yyy/MM/dd");
-            Point = row["HISDECMAS_TOTALPOINT"].ToString();
-            MedDeclarePoint = row["HISDECMAS_DRUGPOINT"].ToString();
-            MedServicePrice = row["HISDECMAS_SERVICEPOINT"].ToString();
-            MedUseePrice = row["MEDUSE_VALUE"].ToString();
-            CopaymentPrice = row["HISDECMAS_COPAYMENTPOINT"].ToString();
-            Profit = (Convert.ToInt32(Point) - Convert.ToInt32(MedUseePrice)).ToString();
+            Point = row["HISDECMAS_POINT"].ToString();
+            MedDeclarePoint = Double.Parse(row["HISDECMAS_DRUGPOINT"].ToString());
+            MedServicePrice = Double.Parse(row["HISDECMAS_SERVICEPOINT"].ToString());
+            MedUseePrice = Double.Parse(string.IsNullOrEmpty(row["MEDUSE_VALUE"].ToString()) ? "0" : row["MEDUSE_VALUE"].ToString());
+            CopaymentPrice = Double.Parse(row["HISDECMAS_COPAYMENTPOINT"].ToString());
+            Profit = Double.Parse(Point) + MedUseePrice;
         }
         public PrescriptionOverview(DeclareData declareData) {
             Decmas_Id = declareData.DecMasId;
@@ -43,11 +43,11 @@ namespace His_Pos.PrescriptionInquire
         public string AdjustDate { get; set; }
         public string ChronicStatus { get; set; }
         public string Point { get; set; }
-        public string MedDeclarePoint { get; set; }
-        public string MedServicePrice { get; set; }
-        public string MedUseePrice { get; set; }
-        public string CopaymentPrice { get; set; }
-        public string Profit { get; set; }
+        public double MedDeclarePoint { get; set; }
+        public double MedServicePrice { get; set; }
+        public double MedUseePrice { get; set; }
+        public double CopaymentPrice { get; set; }
+        public double Profit { get; set; }
         
     }
 }

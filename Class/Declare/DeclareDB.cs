@@ -597,7 +597,7 @@ namespace His_Pos.Class.Declare
             row["D14"] = declareData.Prescription.Treatment.TreatmentDate;
             row["D15"] = declareData.Prescription.Treatment.Copayment.Id;
             row["D16"] = declareData.DeclarePoint.ToString();
-            row["D17"] = declareData.Prescription.Treatment.Copayment.Point.ToString();
+            row["D17"] = declareData.CopaymentPoint.ToString();
             row["D18"] = declareData.TotalPoint.ToString();
             row["D19"] = CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString());
             row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;

@@ -74,7 +74,7 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("EndDate");
             }
         }
-        private string totalAmount = string.Empty;
+        private string totalAmount = "0";
         public string TotalAmount
         {
             get => totalAmount;
@@ -85,7 +85,7 @@ namespace His_Pos.PrescriptionInquire
             }
         }
 
-        private string chronicAmount = string.Empty;
+        private string chronicAmount = "0";
         public string ChronicAmount
         {
             get => chronicAmount;
@@ -95,8 +95,18 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("ChronicAmount");
             }
         }
-        private string medDeclarePrice = string.Empty;
-        public string MedDeclarePrice
+        private double totalPoint = 0;
+        public double TotalPoint
+        {
+            get => totalPoint;
+            set
+            {
+                totalPoint = value;
+                NotifyPropertyChanged("TotalPoint");
+            }
+        }
+        private double medDeclarePrice = 0;
+        public double MedDeclarePrice
         {
             get => medDeclarePrice;
             set
@@ -105,8 +115,18 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("MedDeclarePrice");
             }
         }
-        private string medServicePrice = string.Empty;
-        public string MedServicePrice
+        private double copaymenTPrice = 0;
+        public double CopaymenTPrice
+        {
+            get => copaymenTPrice;
+            set
+            {
+                copaymenTPrice = value;
+                NotifyPropertyChanged("CopaymenTPrice");
+            }
+        }
+        private double medServicePrice = 0;
+        public double MedServicePrice
         {
             get => medServicePrice;
             set
@@ -115,8 +135,8 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("MedServicePrice");
             }
         }
-        private string medUseePrice = string.Empty;
-        public string MedUseePrice
+        private double medUseePrice = 0;
+        public double MedUseePrice
         {
             get => medUseePrice;
             set
@@ -125,8 +145,8 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("MedUseePrice");
             }
         }
-        private string profit = string.Empty;
-        public string Profit
+        private double profit = 0;
+        public double Profit
         {
             get => profit;
             set
@@ -182,10 +202,28 @@ namespace His_Pos.PrescriptionInquire
             if(DataPrescription.Items.Count > 0)
                  DataPrescription.ScrollIntoView(DataPrescription.Items[DataPrescription.Items.Count - 1]);
 
-            TotalAmount = PrescriptionOverview.Count.ToString();
-            ChronicAmount = PrescriptionOverview.Count(pre  => !string.IsNullOrEmpty(pre.ChronicStatus) ).ToString();
+            SumPrescriptValue();
         }
-
+        private void SumPrescriptValue() {
+         
+            TotalAmount = PrescriptionOverview.Count.ToString();
+            ChronicAmount = PrescriptionOverview.Count(pre => !string.IsNullOrEmpty(pre.ChronicStatus)).ToString();
+            MedDeclarePrice = 0;
+            MedServicePrice = 0;
+            MedUseePrice = 0;
+            Profit = 0;
+            TotalPoint = 0;
+            CopaymenTPrice = 0;
+            foreach (PrescriptionOverview row in PrescriptionOverview) {
+                MedDeclarePrice += row.MedDeclarePoint;
+                MedServicePrice += row.MedServicePrice;
+                MedUseePrice += row.MedUseePrice;
+                CopaymenTPrice += row.CopaymentPrice;
+                Profit += row.Profit;
+                TotalPoint += Convert.ToInt32(row.Point); 
+            }
+            MedServicePrice *= 0.9;
+        }
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
         {
             ObservableCollection<Hospital> tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
@@ -242,6 +280,8 @@ namespace His_Pos.PrescriptionInquire
             PrescriptionOverview = PrescriptionDB.GetChronicOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
             if (DataPrescription.Items.Count > 0)
                 DataPrescription.ScrollIntoView(DataPrescription.Items[DataPrescription.Items.Count - 1]);
+
+            SumPrescriptValue();
         }
     }
 }
