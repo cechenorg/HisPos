@@ -7,6 +7,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
             
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" Margin="10">
+            <Grid Height="Auto">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Margin="0,0,5,0"/>
+                <StackPanel Grid.Column="1" Margin="5,0,0,0"/>
+            </Grid>
+        </ScrollViewer>
+        
     </Grid>
 </UserControl>

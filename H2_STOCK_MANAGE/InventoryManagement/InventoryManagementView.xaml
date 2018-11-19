@@ -205,7 +205,7 @@
                 <Label Name="SearchCount" Content="0" Width="90" Foreground="{StaticResource ForeGround}" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="筆" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Rectangle Width="540"/>
-                <Label Content="選取範圍庫存淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                <Label Content="查詢範圍庫存淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Name="SelectStockValue" Content="0" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
                 <Label Content="庫存淨值  $" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                 <Label Name="TotalStockValue" Width="100" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="20" FontFamily="Segoe UI Semi"/>
