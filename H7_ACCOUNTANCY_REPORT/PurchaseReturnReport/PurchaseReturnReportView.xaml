@@ -14,7 +14,7 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             
         </StackPanel>
-        <ScrollViewer Grid.Row="1" Margin="10">
+        <ScrollViewer Grid.Row="1" Margin="10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
             <Grid Height="Auto">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
