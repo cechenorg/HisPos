@@ -16,6 +16,11 @@ namespace His_Pos.PrescriptionInquire
             ChronicStatus = row["CHRONIC_STATUS"].ToString();
             AdjustDate = Convert.ToDateTime(row["HISDECMAS_TREATDATE"]).AddYears(-1911).ToString("yyy/MM/dd");
             Point = row["HISDECMAS_TOTALPOINT"].ToString();
+            MedDeclarePoint = row["HISDECMAS_DRUGPOINT"].ToString();
+            MedServicePrice = row["HISDECMAS_SERVICEPOINT"].ToString();
+            MedUseePrice = row["MEDUSE_VALUE"].ToString();
+            CopaymentPrice = row["HISDECMAS_COPAYMENTPOINT"].ToString();
+            Profit = (Convert.ToInt32(Point) - Convert.ToInt32(MedUseePrice)).ToString();
         }
         public PrescriptionOverview(DeclareData declareData) {
             Decmas_Id = declareData.DecMasId;
@@ -26,7 +31,7 @@ namespace His_Pos.PrescriptionInquire
             MedicalPersonnelName = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Name;
             AdjustDate = declareData.Prescription.Treatment.AdjustDate.ToShortTimeString();
             Point = declareData.TotalPoint.ToString();
-            ChronicStatus = declareData.Prescription.ChronicSequence + "/" + declareData.Prescription.ChronicTotal;
+            ChronicStatus =  declareData.Prescription.ChronicTotal + "/" + declareData.Prescription.ChronicSequence ;
         }
         public string Decmas_Id { get; set; }
         public string AdjustCaseName { get; set; }
@@ -41,6 +46,7 @@ namespace His_Pos.PrescriptionInquire
         public string MedDeclarePoint { get; set; }
         public string MedServicePrice { get; set; }
         public string MedUseePrice { get; set; }
+        public string CopaymentPrice { get; set; }
         public string Profit { get; set; }
         
     }
