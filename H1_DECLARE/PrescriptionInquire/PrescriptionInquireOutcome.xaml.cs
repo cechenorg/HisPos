@@ -15,6 +15,7 @@ using His_Pos.Class.Declare;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
+using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
@@ -366,7 +367,7 @@ namespace His_Pos.PrescriptionInquire
             med.Amount = 0;
             med.CountStatus = string.Empty;
             med.FocusColumn = string.Empty;
-            med.Usage = string.Empty;
+            med.Usage = new Usage();
             med.Days = string.Empty;
             med.Position = string.Empty;
             med.Source = string.Empty;

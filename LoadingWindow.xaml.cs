@@ -39,10 +39,12 @@ using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Class.Position;
 using His_Pos.Class.SpecialCode;
 using His_Pos.H4_BASIC_MANAGE.CustomerManage;
 using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.HisApi;
+using His_Pos.Service;
 using His_Pos.Struct.IcData;
 using Microsoft.Reporting.WinForms;
 using StockTakingView = His_Pos.H3_STOCKTAKING.StockTaking.StockTakingView;
@@ -166,21 +168,23 @@ namespace His_Pos
                     function.GetLastYearlyHoliday();
                 }
                 ChangeLoadingMessage("取得醫療院所...");
-                ObservableCollection<Hospital> tmpHospitals = HospitalDb.GetData();
+                var tmpHospitals = HospitalDb.GetData();
                 ChangeLoadingMessage("取得科別資料...");
-                ObservableCollection<Division> tmpDivisions = DivisionDb.GetData();
+                var tmpDivisions = DivisionDb.GetData();
                 ChangeLoadingMessage("取得調劑案件資料...");
-                ObservableCollection<AdjustCase> tmpAdjustCases = AdjustCaseDb.GetData();
+                var tmpAdjustCases = AdjustCaseDb.GetData();
                 ChangeLoadingMessage("取得給付類別資料...");
-                ObservableCollection<PaymentCategory> tmpPaymentCategroies = PaymentCategroyDb.GetData();
+                var tmpPaymentCategroies = PaymentCategroyDb.GetData();
                 ChangeLoadingMessage("取得部分負擔資料...");
-                ObservableCollection<Copayment> tmpCopayments = CopaymentDb.GetData();
+                var tmpCopayments = CopaymentDb.GetData();
                 ChangeLoadingMessage("取得處方案件資料...");
-                ObservableCollection<TreatmentCase> tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
+                var tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
                 ChangeLoadingMessage("取得特定治療代碼資料...");
-                ObservableCollection<SpecialCode> tmpSpecialCodes = SpecialCodeDb.GetData();
+                var tmpSpecialCodes = SpecialCodeDb.GetData();
                 ChangeLoadingMessage("取得藥品用法資料...");
-                ObservableCollection<Usage> tmpUsages = UsageDb.GetData();
+                var tmpUsages = UsageDb.GetData();
+                ChangeLoadingMessage("取得途徑/作用部位資料...");
+                var tmpPositions = PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     MainWindow.Hospitals = tmpHospitals;
@@ -191,6 +195,7 @@ namespace His_Pos
                     MainWindow.TreatmentCase = tmpTreatmentCaseDb;
                     MainWindow.SpecialCode = tmpSpecialCodes;
                     MainWindow.Usages = tmpUsages;
+                    MainWindow.Positions = tmpPositions;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -198,6 +203,7 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     mainWindow.Show();
+                    MainWindow.ItemSourcesSet = true;
                     Close();
                 }));
             };
@@ -627,6 +633,7 @@ namespace His_Pos
                 prescriptionDec2View.SpecialCodes = MainWindow.SpecialCode;
                 prescriptionDec2View.Usages = MainWindow.Usages;
                 prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+                prescriptionDec2View.Positions = PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;
@@ -906,6 +913,7 @@ namespace His_Pos
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    prescriptionDec2View.ClearPrescription();
                     Close();
                 }));
             };
@@ -1001,6 +1009,56 @@ namespace His_Pos
             // Prepare for the next page. Make sure we haven't hit the end.
             m_currentPageIndex++;
             ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
+        }
+
+        public void SetDeclareFileData(DeclareDdataOutcome outcome,DeclareFileDdata dData)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("取得申報檔處方資料...");
+                var tmpHospitals = MainWindow.Hospitals;
+                var tmpDivisions = MainWindow.Divisions;
+                var tmpAdjustCases = MainWindow.AdjustCases;
+                var tmpPaymentCategroies = MainWindow.PaymentCategory;
+                var tmpCopayments = MainWindow.Copayments;
+                var tmpTreatmentCases = MainWindow.TreatmentCase;
+                Dispatcher.Invoke((Action)(() =>
+                {
+                    outcome.Hospitals = tmpHospitals;
+                    outcome.Divisions = tmpDivisions;
+                    outcome.AdjustCases = tmpAdjustCases;
+                    outcome.PaymentCategories = tmpPaymentCategroies;
+                    outcome.Copayments = tmpCopayments;
+                    outcome.TreatmentCases = tmpTreatmentCases;
+                    outcome.CurrentPrescription.Treatment.Copayment = outcome.Copayments.SingleOrDefault(c =>
+                        c.Id.Equals(outcome.CurrentPrescription.Treatment.Copayment.Id));
+                    outcome.CurrentPrescription.Treatment.TreatmentDate = DateTimeExtensions.ConvertDeclareFileDate(dData.Dbody.D14);
+                    outcome.CurrentPrescription.Treatment.AdjustDate = DateTimeExtensions.ConvertDeclareFileDate(dData.Dbody.D23);
+                    outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital = outcome.Hospitals.SingleOrDefault(h => h.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
+                    if (outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital != null)
+                    {
+                        outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = outcome.Divisions.SingleOrDefault(d =>
+                            d.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
+                        outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber = dData.Dbody.D24;
+                    }
+                    outcome.CurrentPrescription.Treatment.PaymentCategory =
+                        outcome.PaymentCategories.SingleOrDefault(p =>
+                            p.Id.Equals(outcome.CurrentPrescription.Treatment.PaymentCategory.Id));
+                    outcome.CurrentPrescription.Treatment.AdjustCase = outcome.AdjustCases.SingleOrDefault(a =>
+                        a.Id.Equals(outcome.CurrentPrescription.Treatment.AdjustCase.Id));
+                    outcome.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = outcome.TreatmentCases.SingleOrDefault(t =>
+                        t.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id));
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
         }
     }
 }
