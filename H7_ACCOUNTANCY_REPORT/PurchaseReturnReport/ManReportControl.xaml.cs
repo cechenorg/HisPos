@@ -26,9 +26,11 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         public List<PurchaseReturnReportView.PurchaseReturnRecord> PurchaseReturnRecordList { get; }
 
-        public string ManufactoryName { get; }
+        public string ManufactoryName { get; private set; }
 
         public ScrollViewer OutsideScrollViewer { get; }
+
+        public string Total { get; private set; }
 
         #endregion
 
@@ -39,7 +41,27 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
             PurchaseReturnRecordList = list;
             OutsideScrollViewer = scrollViewer;
-            ManufactoryName = list[0].Manufactory;
+
+            InitData();
+        }
+
+        private void InitData()
+        {
+            ManufactoryName = PurchaseReturnRecordList[0].Manufactory;
+
+            CalculateTotal();
+        }
+
+        private void CalculateTotal()
+        {
+            double sum = 0;
+
+            foreach (var record in PurchaseReturnRecordList)
+            {
+                sum += Double.Parse(record.SubTotal);
+            }
+
+            Total = sum.ToString("##,###");
         }
 
         private void DataGrid_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)

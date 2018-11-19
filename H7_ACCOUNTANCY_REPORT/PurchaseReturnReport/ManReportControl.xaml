@@ -19,7 +19,13 @@
             </CollectionViewSource>
             <local:CalculateTotalConverter x:Key="CalculateTotalConverter"/>
         </Grid.Resources>
-        <Label Content="{Binding ManufactoryName}" Grid.Row="0" FontSize="32" FontFamily="Segoe UI Semibold" Foreground="Black" Margin="10,0,0,0"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="{Binding ManufactoryName}" FontSize="32" Width="200" FontFamily="Segoe UI Semibold" Foreground="Black" Margin="10,5,0,0"/>
+            <Rectangle Width="320"/>
+            <Image Source="../../Images/CloseRecord.png" Width="25" Margin="8,8,8,15" VerticalAlignment="Bottom"/>
+            <Image Source="../../Images/OpenRecord.png" Width="25" Margin="8,8,8,15" VerticalAlignment="Bottom"/>
+            <Image Source="../../Images/OpenRecord2Detail.png" Width="24" Margin="8,8,8,15" VerticalAlignment="Bottom"/>
+        </StackPanel>
         <DataGrid Grid.Row="1" Background="DarkSeaGreen" ItemsSource="{Binding Source={StaticResource PurchaseReturnRecordList}}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                   CellStyle="{StaticResource DataGridCellStyle}" Height="Auto" AutoGenerateColumns="False" BorderThickness="2" BorderBrush="DarkSeaGreen"
                   CanUserSortColumns="False" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled" PreviewMouseWheel="DataGrid_OnPreviewMouseWheel">
@@ -33,10 +39,10 @@
                                         <Expander IsExpanded="True" Background="White" Foreground="Black">
                                             <Expander.Header>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Name}" Margin="5,0,0,0" FontSize="22" FontFamily="Segoe UI Semibold"/>
-                                                    <TextBlock Text="收貨日: " Margin="20,2,0,0" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                                    <TextBlock Text="{Binding Items[0].RecDate}" Margin="0,2,0,0" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
-                                                    <TextBlock Text="$" Margin="190,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                                                    <TextBlock Text="{Binding Name}" Margin="5,0,0,0" Width="150" FontSize="22" FontFamily="Segoe UI Semibold"/>
+                                                    <TextBlock Text="收貨日: " Margin="10,2,0,0" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Items[0].RecDate}" Margin="0,2,0,0" Width="90" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="$" Margin="160,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
                                                     <TextBlock Text="{Binding Converter={StaticResource CalculateTotalConverter}}" FontSize="20" FontFamily="Segoe UI Semibold"/>
                                                 </StackPanel>
                                             </Expander.Header>
@@ -134,8 +140,11 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2" Background="{StaticResource GridBackGround}">
-
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridBackGround}">
+            <Rectangle Width="400"/>
+            <Label Content="總金額: $" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="Black" Margin="10,0,0,0" VerticalAlignment="Center"/>
+            <Label Content="{Binding Total}" FontSize="20" Width="110" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center"/>
+            <Image Source="../../Images/CloseRecord.png" Width="25" Margin="8"/>
         </StackPanel>
     </Grid>
 </UserControl>
