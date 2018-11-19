@@ -33,5 +33,17 @@ namespace His_Pos.Class.Person
             Name = name;
             IcNumber = icNumber;
         }
+
+        private int _prescriptionCount;
+
+        public int PrescriptionCount
+        {
+            get => _prescriptionCount;
+            set
+            {
+                _prescriptionCount = value;
+                OnPropertyChanged(nameof(PrescriptionCount));
+            }
+        }
     }
 }

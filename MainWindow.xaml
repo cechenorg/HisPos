@@ -225,7 +225,6 @@
                         <resource:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <resource:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <resource:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <resource:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>

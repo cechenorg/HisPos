@@ -147,8 +147,9 @@ namespace His_Pos.ViewModel
             {
                 case nameof(FeatureItem.處方登錄):
                     break;
-
                 case nameof(FeatureItem.處方查詢):
+                    break;
+                case nameof(FeatureItem.匯出申報檔):
                     break;
                 case nameof(FeatureItem.商品查詢):
                     break;
@@ -200,9 +201,9 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.藥局管理):
                     break;
-                case nameof(FeatureItem.匯出申報檔):
-                    break;
                 case nameof(FeatureItem.庫存現值查詢):
+                    break;
+                case nameof(FeatureItem.進退貨報表查詢):
                     break;
                 default:
                     return;
@@ -237,11 +238,14 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.藥品頻率管理):
                     newTab = new MedFrequencyManage() { TabName = MainWindow.HisFeatures[0].Functions[2], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
-
+                
                 case nameof(FeatureItem.藥袋管理):
                     newTab = new MedBagManage() { TabName = MainWindow.HisFeatures[0].Functions[3], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
+                case nameof(FeatureItem.匯出申報檔):
+                    newTab = new Export() { TabName = MainWindow.HisFeatures[0].Functions[4], Icon = MainWindow.HisFeatures[0].Icon };
+                    break;
                 //商品管理
                 case nameof(FeatureItem.商品查詢):
                     newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
@@ -300,14 +304,11 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
-                case nameof(FeatureItem.匯出申報檔):
-                    newTab = new Export() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
-                    break;
                 case nameof(FeatureItem.庫存現值查詢):
-                    newTab = new EntrySearch() { TabName = MainWindow.HisFeatures[6].Functions[0], Icon = MainWindow.HisFeatures[6].Icon };
+                    newTab = new EntrySearch() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
-                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[6].Functions[1], Icon = MainWindow.HisFeatures[6].Icon };
+                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
                 default:
                     return;
