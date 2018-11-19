@@ -88,9 +88,13 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         private void UpdateUi()
         {
-            ManReportControl newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals("杏德")).ToList());
+            ManReportControl newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals("杏德")).ToList(), OutsideScrollViewer);
 
             FirstStack.Children.Add(newManReportControl);
+
+            newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals("NEW")).ToList(), OutsideScrollViewer);
+
+            SecondStack.Children.Add(newManReportControl);
         }
     }
 }

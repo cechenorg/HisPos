@@ -26,14 +26,27 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         public List<PurchaseReturnReportView.PurchaseReturnRecord> PurchaseReturnRecordList { get; }
 
+        public string ManufactoryName { get; }
+
+        public ScrollViewer OutsideScrollViewer { get; }
+
         #endregion
 
-        public ManReportControl(List<PurchaseReturnReportView.PurchaseReturnRecord> list)
+        public ManReportControl(List<PurchaseReturnReportView.PurchaseReturnRecord> list, ScrollViewer scrollViewer)
         {
             InitializeComponent();
             DataContext = this;
 
             PurchaseReturnRecordList = list;
+            OutsideScrollViewer = scrollViewer;
+            ManufactoryName = list[0].Manufactory;
+        }
+
+        private void DataGrid_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            e.Handled = true;
+
+            OutsideScrollViewer.ScrollToVerticalOffset(OutsideScrollViewer.VerticalOffset - e.Delta / 3);
         }
     }
 
