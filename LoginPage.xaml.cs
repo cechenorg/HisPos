@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using His_Pos.Class;
@@ -66,6 +67,34 @@ namespace His_Pos
                 Properties.Settings.Default.ReportPrinter = "";
 
                 Properties.Settings.Default.Save();
+            }
+            else
+            {
+                using (StreamReader fileReader = new StreamReader(filePath))
+                {
+                    Regex connReg = new Regex(@"[LG] Data Source=([0-9.]*),([0-9]*);Persist Security Info=True;User ID=([a-zA-Z0-9]*);Password=([a-zA-Z0-9]*)");
+                    Regex printReg = new Regex(@"[MR][cp]* (.*)");
+                    Match match;
+                    
+                    match = connReg.Match(fileReader.ReadLine());
+                    Properties.Settings.Default.SQL_local =
+                        $"Data Source={match.Groups[1].Value},{match.Groups[2].Value};Persist Security Info=True;User ID={match.Groups[3].Value};Password={match.Groups[4].Value}";
+
+                    match = connReg.Match(fileReader.ReadLine());
+                    Properties.Settings.Default.SQL_global =
+                        $"Data Source={match.Groups[1].Value},{match.Groups[2].Value};Persist Security Info=True;User ID={match.Groups[3].Value};Password={match.Groups[4].Value}";
+
+                    match = printReg.Match(fileReader.ReadLine());
+                    Properties.Settings.Default.MedBagPrinter = match.Groups[1].Value;
+
+                    match = printReg.Match(fileReader.ReadLine());
+                    Properties.Settings.Default.ReceiptPrinter = match.Groups[1].Value;
+
+                    match = printReg.Match(fileReader.ReadLine());
+                    Properties.Settings.Default.ReportPrinter = match.Groups[1].Value;
+
+                    Properties.Settings.Default.Save();
+                }
             }
         }
 

@@ -580,6 +580,9 @@
     <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
       <DependentUpon>EntrySearchView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl.xaml.cs">
+      <DependentUpon>ManReportControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReport.cs" />
     <Compile Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml.cs">
       <DependentUpon>PurchaseReturnReportView.xaml</DependentUpon>
@@ -956,6 +959,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1169,7 +1176,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
-    <Folder Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl\" />
     <Folder Include="packages\" />
     <Folder Include="StockTaking\" />
   </ItemGroup>

@@ -105,7 +105,7 @@ namespace His_Pos
                             new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
 
             HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.ReportSystem,
-              new string[] { Properties.Resources.EntrySearch }));
+              new string[] { Properties.Resources.EntrySearch, Properties.Resources.PurchaseReturnReport }));
         }
         
         private void InitializeMenu()
