@@ -30,8 +30,8 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
             <Label Name="ID" Content="{Binding Id}" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-            <Label Content="庫別 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-            <Label Content="{Binding Path=Warehouse.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="130" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+            <Label Content="庫別 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Visibility="Collapsed"/>
+            <Label Content="{Binding Path=Warehouse.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="130" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi" Visibility="Collapsed"/>
             <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
             <Label Content="{Binding Path=Manufactory.Name}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
             <Label Content="{Binding Path=Manufactory.Telphone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
@@ -167,10 +167,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="70" Header="預定量" IsReadOnly="True">
+                <DataGridTemplateColumn x:Name="OrderAmount" MinWidth="70" Header="預定量" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Amount" Tag="CheckInputOnlyNum" Text="{Binding OrderAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown" TextChanged="TextBox_TextChanged"/>
+                            <TextBox Tag="CheckInputOnlyNum" Text="{Binding OrderAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown" TextChanged="TextBox_TextChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -274,10 +274,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTemplateColumn MinWidth="70" Header="單價" IsReadOnly="True">
+                <DataGridTemplateColumn x:Name="Price" MinWidth="70" Header="單價" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="Price" Tag="CheckInputOnlyNum" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown" TextChanged="TextBox_TextChanged"/>
+                            <TextBox Tag="CheckInputOnlyNum" Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}" GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" InputMethod.IsInputMethodEnabled="False" Width="60" FontSize="18" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown" TextChanged="TextBox_TextChanged"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

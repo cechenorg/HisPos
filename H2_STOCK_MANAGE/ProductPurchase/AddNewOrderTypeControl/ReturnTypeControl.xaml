@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-             mc:Ignorable="d"  Height="350" Width="500">
+             mc:Ignorable="d"  Height="300" Width="500">
     <Grid Background="{StaticResource GridDarkerBackGround}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="0"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition/>

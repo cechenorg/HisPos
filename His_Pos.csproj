@@ -343,6 +343,8 @@
     <Compile Include="Class\Person\PersonDb.cs" />
     <Compile Include="Class\Pharmacy\Pharmacy.cs" />
     <Compile Include="Class\Pharmacy\PharmacyPrincipal.cs" />
+    <Compile Include="Class\Position\Position.cs" />
+    <Compile Include="Class\Position\PositionDb.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
     <Compile Include="Class\ProductType\ProductTypeManageDetail.cs" />
@@ -371,6 +373,8 @@
     <Compile Include="Class\Product\StockTakingOTC.cs" />
     <Compile Include="Class\ProductType\ProductType.cs" />
     <Compile Include="Class\Product\ProductUnit.cs" />
+    <Compile Include="Class\ReportClass\MedBagReport.cs" />
+    <Compile Include="Class\ReportClass\MedBagItem.cs" />
     <Compile Include="Class\SpecialCode\SpecialCodeDb.cs" />
     <Compile Include="Class\StockTakingOrder\StockTakingOrder.cs" />
     <Compile Include="Class\SpecialCode\SpecialCode.cs" />
@@ -453,6 +457,9 @@
     </Compile>
     <Compile Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml.cs">
       <DependentUpon>DemolitionWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineHistoryPriceWindow.xaml.cs">
+      <DependentUpon>MedicineHistoryPriceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
       <DependentUpon>MergeStockWindow.xaml</DependentUpon>
@@ -573,6 +580,10 @@
     <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
       <DependentUpon>EntrySearchView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReport.cs" />
+    <Compile Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml.cs">
+      <DependentUpon>PurchaseReturnReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HisApi\HisApiFunction.cs" />
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
@@ -599,14 +610,14 @@
     <Compile Include="H2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml.cs">
       <DependentUpon>InventoryManagementView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MedicineDetail.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetail.xaml.cs">
       <DependentUpon>MedicineDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MedicineDetailView.cs" />
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\OtcDetail.xaml.cs">
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetailView.cs" />
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetail.xaml.cs">
       <DependentUpon>OtcDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\OtcDetailView.cs" />
+    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetailView.cs" />
     <Compile Include="H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml.cs">
       <DependentUpon>ProductDetail.xaml</DependentUpon>
     </Compile>
@@ -659,6 +670,11 @@
     <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManage.cs" />
     <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RDLC\MedBagMedicineDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MedBagMedicineDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="RDLC\InventoryDataSet.cs">
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
@@ -789,6 +805,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineHistoryPriceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -936,6 +956,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="IconLabel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -944,11 +968,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\MedicineDetail.xaml">
+    <Page Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\OtcDetail.xaml">
+    <Page Include="H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1089,9 +1113,8 @@
     <EmbeddedResource Include="RDLC\InventoryCheckSheet.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="RDLC\MedBagReport.rdlc">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\MedBagReport.rdlc" />
+    <EmbeddedResource Include="RDLC\MedBagReport1.rdlc" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -1107,12 +1130,24 @@
     <None Include="Properties\DataSources\His_Pos.Class.Product.InventoryOtc.datasource" />
     <None Include="Properties\DataSources\His_Pos.Class.Product.StockTakingMedicine.datasource" />
     <None Include="Properties\DataSources\His_Pos.Class.Product.StockTakingOTC.datasource" />
+    <None Include="Properties\DataSources\His_Pos.Class.ReportClass.MedBagReport.datasource" />
     <None Include="Properties\DataSources\His_Pos.Interface.BatchNumbers.datasource" />
     <None Include="Properties\DataSources\His_Pos.Interface.IStockTaking.datasource" />
     <None Include="Properties\DataSources\His_Pos.StockTaking.StockTakingView.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\MedBagMedicineDataSet.xsc">
+      <DependentUpon>MedBagMedicineDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="RDLC\MedBagMedicineDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>MedBagMedicineDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="RDLC\MedBagMedicineDataSet.xss">
+      <DependentUpon>MedBagMedicineDataSet.xsd</DependentUpon>
     </None>
     <None Include="RDLC\InventoryDataSet.xsc">
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
@@ -1134,6 +1169,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
+    <Folder Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl\" />
     <Folder Include="packages\" />
     <Folder Include="StockTaking\" />
   </ItemGroup>
@@ -1245,6 +1281,7 @@
     <Resource Include="LOGO_HISPOS.ico" />
     <Resource Include="Images\icons8-delete-32.png" />
     <Content Include="csHis.dll" />
+    <Resource Include="Images\Ph.png" />
     <Content Include="Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
@@ -1263,292 +1300,292 @@
   <ItemGroup>
     <PublishFile Include="csHis.dll">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.CoreUtility">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Data.Framework">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.DataDesign.Common">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.DataDesign.DataSetDesigner">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.DataDesign.Interfaces">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Debugger.Interop.Internal">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>False</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>False</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Diagnostics.Assert">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Diagnostics.PerformanceProvider">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Editor">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.ExtensibilityHosting">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.ImageCatalog">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Imaging">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Language.Intellisense">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Package.LanguageService.14.0">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Shell.14.0">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Shell.Design">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Text.Data">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Text.Logic">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Text.UI">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Text.UI.Wpf">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Threading">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Utilities">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Validation">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.WizardFramework">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VSDesigner">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VSDesigner.ExceptionAssistant.SmartTag">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Reader.dll">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="System.Collections.Immutable">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>

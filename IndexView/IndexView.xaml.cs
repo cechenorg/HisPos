@@ -222,5 +222,9 @@ namespace His_Pos.IndexView
             });
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

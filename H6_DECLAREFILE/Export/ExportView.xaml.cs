@@ -114,27 +114,27 @@ namespace His_Pos.H6_DECLAREFILE.Export
             }
         }
 
-        private string _startDateStr;
+        private DateTime _startDate;
 
-        public string StartDateStr
+        public DateTime StartDate
         {
-            get => _startDateStr;
+            get => _startDate;
             set
             {
-                _startDateStr = value;
-                OnPropertyChanged(nameof(StartDateStr));
+                _startDate = value;
+                OnPropertyChanged(nameof(StartDate));
             }
         }
 
-        private string _endDateStr;
+        private DateTime _endDate;
 
-        public string EndDateStr
+        public DateTime EndDate
         {
-            get => _endDateStr;
+            get => _endDate;
             set
             {
-                _endDateStr = value;
-                OnPropertyChanged(nameof(EndDateStr));
+                _endDate = value;
+                OnPropertyChanged(nameof(EndDate));
             }
         }
 
@@ -261,51 +261,23 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
         private bool CollectionViewSource_Filter(object item)
         {
-            if (string.IsNullOrEmpty(StartDateStr) && string.IsNullOrEmpty(EndDateStr) && AdjustCaseCombo.SelectedItem == null && ReleasePalace.SelectedItem == null && 
-                HisPerson.SelectedItem == null)
-                return true;
-            bool accepted = true;
-            var sDate = string.Empty;
-            var eDate = string.Empty;
-            if (!string.IsNullOrEmpty(StartDateStr))
-                sDate = StartDateStr.Equals(string.Empty) ? string.Empty : "0" + SelectedFile.DeclareYear + "/" + StartDateStr;
-            if (!string.IsNullOrEmpty(EndDateStr))
-                eDate = EndDateStr.Equals(string.Empty) ? string.Empty : "0" + SelectedFile.DeclareYear + "/" + EndDateStr;
-
-            var adjustId = string.Empty;
-            if (AdjustCaseCombo.Text != string.Empty)
-                adjustId = AdjustCaseCombo.Text.Substring(0, 1);
-            var hospitalId = string.Empty;
-            if (ReleasePalace.Text != string.Empty)
-                hospitalId = ReleasePalace.Text.Split(' ')[1];
-            DeclareFileDdata d = (DeclareFileDdata) item;
-            if (d != null)
-            {
-                if (!string.IsNullOrEmpty(sDate))
-                {
-                    if (!StartDateStr.Split('/')[0].Equals(d.Dbody.D23.Split('/')[1]))
-                        accepted = false;
-                    else if (int.Parse(StartDateStr.Split('/')[1]) > int.Parse(d.Dbody.D23.Split('/')[2]))
-                        accepted = false;
-                }
-                if (!string.IsNullOrEmpty(eDate))
-                {
-                    if (!EndDateStr.Split('/')[0].Equals(d.Dbody.D23.Split('/')[1]))
-                        accepted = false;
-                    else if (int.Parse(EndDateStr.Split('/')[1]) < int.Parse(d.Dbody.D23.Split('/')[2]))
-                        accepted = false;
-                }
-
-                if (!string.IsNullOrEmpty(adjustId))
-                    accepted = d.Dhead.D1.Equals(adjustId);
-
-                if (!string.IsNullOrEmpty(hospitalId))
-                    accepted = d.Dbody.D21.Equals(hospitalId);
-
-                if (HisPerson.SelectedItem != null)
-                    accepted = d.Dbody.D25.Equals(((MedicalPersonnel)HisPerson.SelectedItem).IcNumber);
-            }
-            return accepted;
+            var d = (DeclareFileDdata)item;
+            var startDateAccept = true;
+            var date = new DateTime(int.Parse(d.Dbody.D23.Substring(0,3)) +1911, int.Parse(d.Dbody.D23.Substring(3, 2)), int.Parse(d.Dbody.D23.Substring(5, 2)));
+            var startDateValid = DateTime.TryParse($"{Start.Text.Split('/')[0]}/{Start.Text.Split('/')[1]}/{Start.Text.Split('/')[2]}", out _);
+            if (!Start.Text.Contains(" ") && startDateValid)
+                startDateAccept = date.Date >= StartDate.Date;
+            var endDateAccept = true;
+            var endDateValid = DateTime.TryParse($"{End.Text.Split('/')[0]}/{End.Text.Split('/')[1]}/{End.Text.Split('/')[2]}", out _);
+            if (!End.Text.Contains(" ") && endDateValid)
+                endDateAccept = date.Date <= EndDate.Date;
+            var adjustCaseAccept = true;
+            if (AdjustCaseCombo.SelectedIndex != -1)
+                adjustCaseAccept = d.Dhead.D1.Equals(((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Trim());
+            var hospitalAccept = true;
+            if (!string.IsNullOrEmpty(ReleasePalace.Text) && ReleasePalace.SelectedItem != null)
+                hospitalAccept = d.Dbody.D21.Equals(((Hospital) ReleasePalace.SelectedItem).Id.Trim());
+            return startDateAccept && endDateAccept && adjustCaseAccept && hospitalAccept;
         }
 
         private void CreateDeclareFileClick(object sender, RoutedEventArgs e)
@@ -447,30 +419,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
             return sorteDdatas;
         }
 
-        private void PatientNamePopulating(object sender, PopulatingEventArgs e)
-        {
-            ObservableCollection<string> tempCollection = new ObservableCollection<string>();
-            foreach (var cusName in PrescriptionCollection)
-            {
-                tempCollection.Add(cusName.Dbody.D20);
-            }
-            CustomerName.Clear();
-            CustomerName = new ObservableCollection<string>(tempCollection.Where(x => x.Contains(PatientName.Text)).Take(50).ToList());
-            PatientName.ItemsSource = CustomerName;
-            PatientName.PopulateComplete();
-        }
-
-        private void DatePickerSelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var d = sender as DatePicker;
-            var date = Convert.ToDateTime(d.SelectedDate);
-            var result = date.Month.ToString().PadLeft(2,'0') + "/" + date.Day.ToString().PadLeft(2,'0');
-            if (d.Name.Equals("Start"))
-                StartDateStr = result;
-            else
-                EndDateStr = result;
-        }
-
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
             PrescriptionList.SelectedItem = (sender as DataGridRow)?.Item;
@@ -504,7 +452,22 @@ namespace His_Pos.H6_DECLAREFILE.Export
             }
 
         }
-
-        
+        private void SelectionStart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            switch (sender)
+            {
+                case AutoCompleteBox a:
+                    if (a.Template.FindName("Text", a) is TextBox txt)
+                    {
+                        txt.SelectionStart = 0;
+                        txt.SelectionLength = txt.Text.Length;
+                    }
+                    break;
+                case TextBox t:
+                    t.SelectionStart = 0;
+                    t.SelectionLength = t.Text.Length;
+                    break;
+            }
+        }
     }
 }

@@ -19,6 +19,8 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
+using His_Pos.Class.Pharmacy;
+using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.TreatmentCase;
@@ -41,14 +43,27 @@ namespace His_Pos
         public static string CardReaderStatus;
         public static Pharmacy CurrentPharmacy;
         public static MainWindow MainWindowInstance;
+        public static bool ItemSourcesSet { get; set; }
         public static ObservableCollection<Hospital> Hospitals { get; set; }
         public static ObservableCollection<Division> Divisions { get; set; }
-        public static ObservableCollection<AdjustCase> AdjustCases { get; set; }
+        private static ObservableCollection<AdjustCase> _adjustCases;
+        public static ObservableCollection<AdjustCase> AdjustCases
+        {
+            get => _adjustCases;
+            set
+            {
+                if (ItemSourcesSet)
+                    return;
+                _adjustCases = value;
+            }
+        }
+
         public static ObservableCollection<PaymentCategory> PaymentCategory { get; set; }
         public static ObservableCollection<TreatmentCase> TreatmentCase { get;set; }
         public static ObservableCollection<Copayment> Copayments { get; set; }
         public static ObservableCollection<SpecialCode> SpecialCode { get; set; }
         public static ObservableCollection<Usage> Usages { get; set; }
+        public static ObservableCollection<Position> Positions { get; set; }
         public MainWindow(User userLogin)
         {
             FeatureFactory();
@@ -62,6 +77,7 @@ namespace His_Pos
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
             CurrentPharmacy = new Pharmacy("5932012975", "杏昌藥局", "330桃園市桃園區中正路1100號", "03-3573268");
+            CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
         }
         
@@ -88,8 +104,6 @@ namespace His_Pos
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", Properties.Resources.Attend,
                             new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
 
-            HisFeatures.Add(new Feature(@"..\Images\DeclareFile.png", Properties.Resources.DeclareFile,
-                new string[] { Properties.Resources.DeclareFileExport }));
             HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.ReportSystem,
               new string[] { Properties.Resources.EntrySearch }));
         }

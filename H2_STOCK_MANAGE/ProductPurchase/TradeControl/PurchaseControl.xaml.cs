@@ -301,6 +301,7 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
                                 }
 
                                 AddProduct(textBox, newItemDialog.SelectedItem, currentProduct);
+                                return;
                             }
                         }
                     }
@@ -377,10 +378,16 @@ namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                 textBox.Text = "";
 
-                Dispatcher.BeginInvoke((ThreadStart)delegate
+                CurrentDataGrid.CurrentCell = (CurrentDataGrid.Name.Equals("PSStoreOrderDetail"))? new DataGridCellInfo(CurrentDataGrid.Items[StoreOrderData.Products.Count - 1], OrderAmount)
+                                                                                                 : new DataGridCellInfo(CurrentDataGrid.Items[StoreOrderData.Products.Count - 1], Price);
+
+                var focusedCell = CurrentDataGrid.CurrentCell.Column.GetCellContent(CurrentDataGrid.CurrentCell.Item);
+                var firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
+                while (firstChild is ContentPresenter)
                 {
-                    textBox.Focus();
-                });
+                    firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
+                }
+                firstChild.Focus();
             }
             else
             {

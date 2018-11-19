@@ -199,8 +199,14 @@ namespace His_Pos.ProductPurchaseRecord
             sdate = datestart.SelectedDate.ToString() != "" ?Convert.ToInt32(((DateTime)datestart.SelectedDate).ToString("yyyyMMdd")) : 0;
             edate = dateend.SelectedDate.ToString() != "" ?Convert.ToInt32(((DateTime)dateend.SelectedDate).ToString("yyyyMMdd")) : 99999999;
             StoOrderOverview.Items.Filter = StoOrderOverviewFilter;
-            StoreOrderData = null;
+
             StoOrderOverview.SelectedIndex = 0;
+            StoreOrderData = StoOrderOverview.SelectedItem as StoreOrder;
+
+            if (StoreOrderData != null)
+                CurrentDataGrid.ItemsSource = StoreOrderData.Products;
+            else
+                CurrentDataGrid.ItemsSource = null;
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)

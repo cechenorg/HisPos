@@ -45,6 +45,11 @@ namespace His_Pos.Class.Product
         public string WareHouse { get; set; }
         public string BarCode { get; set; }
 
+        public bool IsControl
+        {
+            get { return !(Control.Equals("0") || Control.Equals("")); }
+        }
+
         private string stockValue;
         public string StockValue
         {

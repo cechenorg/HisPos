@@ -59,7 +59,7 @@ namespace His_Pos.SystemSettings
             CurrentStack = MyPharmacyStack;
 
             UpdateContentControl();
-            LabelVersion.Content = "系統版本 " + Assembly.GetExecutingAssembly().GetName().Version;
+            LabelVersion.Content = "系統版本  " + Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         private void InitControls()

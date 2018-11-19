@@ -8,6 +8,7 @@
         xmlns:hisPos="clr-namespace:His_Pos"
         xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d" Title="處方詳細資料" Height="650" Width="1200" WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
     <Window.Background>
@@ -33,10 +34,8 @@
                     Content="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
-        <prescriptionDec2:GenderConverter x:Key="GenderConverter" />
-        <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter" />
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
-        <hisPos:NullTextBoxConverter x:Key="NullTextBoxConverter" />
+        <hisPos:DateConverter x:Key="DateConverter" />
     </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1200" Height="595">
@@ -57,105 +56,111 @@
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal"  Grid.Row="0"  Grid.ColumnSpan="5">
                 <StackPanel Grid.Row="0" Margin="9" Orientation="Horizontal">
-                    <Image Name="IcPatientGender" Width="25" Margin="20,0,15,0" Source="../../Images/Genders.png" />
-                    <Label Name="PatientGender" Width="50" Margin="0,0,15,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="Segoe UI Semi" FontSize="18" Content="{Binding Gender}"/>
-                    <Image Name="IcPatientName" Width="25" Margin="20,0,15,0" Source="../../Images/User_48px.png" />
-                    <Label Name="PatientName" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" Content="{Binding CurrentPrescription.Customer.Name, UpdateSourceTrigger=PropertyChanged}" />
                     <Image Name="IcPatientId" Width="30" Source="../../Images/ID_Card.png" />
                     <Label Name="PatientId" Width="150" Margin="5,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
-                         InputMethod.IsInputMethodEnabled="False" FontSize="18" Foreground="{StaticResource ForeGround}" 
-                         Content="{Binding CurrentPrescription.Customer.IcCard.IcNumber, UpdateSourceTrigger=PropertyChanged}" />
+                           InputMethod.IsInputMethodEnabled="False" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                           Content="{Binding CurrentPrescription.Customer.IcCard.IcNumber, UpdateSourceTrigger=PropertyChanged}" />
+                    <Image Name="IcPatientName" Width="25" Margin="20,0,15,0" Source="../../Images/User_48px.png" />
+                    <Label Name="PatientName" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" Content="{Binding CurrentPrescription.Customer.Name, UpdateSourceTrigger=PropertyChanged}" />
                     <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" />
                     <Label Name="PatientBirthday" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" 
                          Foreground="{StaticResource ForeGround}" Content="{Binding CurrentPrescription.Customer.Birthday, UpdateSourceTrigger=PropertyChanged}" />
-                    <StackPanel Orientation="Horizontal" Height="30" Margin="255,0,0,0">
-                        <Label Content="調劑藥師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch" HorizontalAlignment="Right"/>
-                        <TextBox Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalAlignment="Right"
-                                 HorizontalContentAlignment="Center"  Text="{Binding CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged"/>
-                    </StackPanel>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
                 <Label Content="釋出院所"  Foreground="#FF424040" FontSize="16" FontFamily="Segoe UI Semibold" 
                                    BorderThickness="0,0,0,1"/>
-                <TextBox Name="ReleasePalace" Width="380" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" FontSize="16" FontFamily="Segoe UI Semibold" IsReadOnly="True"
-                         FontStretch="ExtraExpanded" Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName,UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Name="ReleasePalace" Width="380" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" FontSize="16" FontFamily="Segoe UI Semibold" BorderThickness="0,0,0,1" BorderBrush="DimGray"
+                         FontStretch="ExtraExpanded" Content="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.FullName,UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="10">
                 <Label Content="就醫科別" Width="auto" Foreground="#FF424040" FontSize="16" FontFamily="Segoe UI Semibold" 
                                    HorizontalContentAlignment="Stretch"/>
-                <TextBox Width="140" HorizontalContentAlignment="Center" FontSize="16" FontFamily="Segoe UI Semibold" Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True"/>
+                <Label Width="140" HorizontalContentAlignment="Center" FontSize="16" FontFamily="Segoe UI Semibold" Content="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.FullName,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,0,0,1" BorderBrush="DimGray"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="3" Margin="10">
-                <Label Content="診治醫師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <TextBox Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Center"  Text="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Height="30" Margin="10">
+                <Label Content="調劑藥師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch" HorizontalAlignment="Right"/>
+                <Label Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalAlignment="Right"
+                         HorizontalContentAlignment="Center" Content="{Binding CurrentPrescription.Pharmacy.MedicalPersonnel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="4" Margin="10">
                 <Label Content="就醫日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox Width="147" Height="30" Text="{Binding CurrentPrescription.Treatment.TreatDateStr,UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontFamily="Segoe UI Semibold" IsReadOnly="True" HorizontalContentAlignment="Center"/>
+                <xctk:MaskedTextBox Name="TreatmentDate" Width="147" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="CurrentPrescription.Treatment.TreatmentDate" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                            <Binding.ValidationRules>
+                                <hisPos:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="0" Margin="10">
                 <Label Content="調劑日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox Width="auto" Height="30" MinWidth="143" FontSize="16" FontFamily="Segoe UI Semibold" FontWeight="Bold" Padding="0" FontStretch="ExtraExpanded" IsReadOnly="True"
-                           Text="{Binding CurrentPrescription.Treatment.AdjustDateStr,UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
+                <xctk:MaskedTextBox Name="AdjustDate" Width="147" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                            <Binding.ValidationRules>
+                                <hisPos:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="1" Margin="10">
                 <Label Content="主要診斷" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox x:Name="MainDiagnosis" Text="{Binding CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id}" Width="auto" MinWidth="147" Height="30" FontSize="16" 
+                <Label x:Name="MainDiagnosis" Content="{Binding CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.FullName}" Width="auto" MinWidth="147" Height="30" FontSize="16" 
                          FontFamily="Segoe UI Semibold" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" 
-                         HorizontalContentAlignment="Center" TextChanged="Text_TextChanged"/>
+                         HorizontalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="2" Margin="10">
                 <Label Width="auto" Content="次要診斷" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox x:Name="SeconDiagnosis" Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id}" Width="auto" MinWidth="147" Height="30" FontSize="16" 
+                <Label x:Name="SeconDiagnosis" Content="{Binding CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.FullName}" Width="auto" MinWidth="147" Height="30" FontSize="16" 
                          FontFamily="Segoe UI Semibold" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Center" TextChanged="Text_TextChanged"/>
+                         HorizontalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="3" Margin="10">
                 <Label Content="就醫序號" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <TextBox MinWidth="147" Width="auto" Height="30" FontSize="16" FontFamily="Segoe UI Semibold" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
-                           Text="{Binding CurrentPrescription.Customer.IcCard.MedicalNumber}" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" BorderBrush="DimGray" VerticalContentAlignment="Center" TextChanged="Text_TextChanged"/>
+                <Label MinWidth="147" Width="auto" Height="30" FontSize="16" FontFamily="Segoe UI Semibold" FontWeight="Bold" FontStretch="ExtraExpanded" Padding="0" 
+                           Content="{Binding CurrentPrescription.Customer.IcCard.MedicalNumber}" BorderThickness="0,0,0,1" HorizontalContentAlignment="Center" BorderBrush="DimGray" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="4" Margin="10">
                 <Label Content="特定治療" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <TextBox Text="{Binding CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id}" MinWidth="147" Height="30" FontSize="16" FontFamily="Segoe UI Semibold" FontWeight="Bold" 
-                         FontStretch="ExtraExpanded" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" TextChanged="Text_TextChanged"/>
+                <Label Content="{Binding CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id}" MinWidth="147" Height="30" FontSize="16" FontFamily="Segoe UI Semibold" FontWeight="Bold" 
+                         FontStretch="ExtraExpanded" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="0" Margin="10" >
                 <Label Content="給付類別" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <ComboBox Name="PaymentCategory" SelectedItem="{Binding  CurrentPrescription.Treatment.PaymentCategory}"  SelectionChanged="Text_TextChanged" 
-                          DisplayMemberPath="FullName" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" VerticalAlignment="Top" 
-                          BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                <Label Name="PaymentCategory" Content="{Binding  CurrentPrescription.Treatment.PaymentCategory.FullName}"
+                          Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" VerticalAlignment="Top" 
+                          BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="1" Margin="10">
                 <Label Content="部分負擔" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <ComboBox Name="CopaymentCode" SelectedItem="{Binding CurrentPrescription.Treatment.Copayment}" DisplayMemberPath="FullName" HorizontalContentAlignment="Center"
-                          SelectionChanged="Text_TextChanged" Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" 
-                          VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                <Label Name="Copayment" Content="{Binding CurrentPrescription.Treatment.Copayment.FullName}" HorizontalContentAlignment="Center"
+                       Width="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" VerticalAlignment="Top" BorderBrush="DimGray" BorderThickness="0,0,0,1"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="2" Margin="10">
                 <Label Content="處方案件" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <ComboBox x:Name="TreatmentCase" Width="147" SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase}" DisplayMemberPath="FullName" 
-                          SelectionChanged="Text_TextChanged" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" 
-                          HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
-                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                <Label x:Name="TreatmentCase" Width="147" Content="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.FullName}" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" 
+                          HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="3" Margin="10">
                 <Label Content="調劑案件" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <ComboBox x:Name="AdjustCase" SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase}"  DisplayMemberPath="FullName" 
-                          SelectionChanged="Text_TextChanged" Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded"  
-                          HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
-                          ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+                <Label x:Name="AdjustCase" Content="{Binding CurrentPrescription.Treatment.AdjustCase.FullName}"
+                          Width="147" Height="30" FontWeight="Bold" FontSize="14" FontStretch="ExtraExpanded" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel  Grid.Row="3"  Grid.Column="4"  Margin="8"  Orientation="Horizontal">
                 <Label  Content="領藥次數" FontFamily="Segoe UI Semibold"  FontSize="18" Foreground="{StaticResource ForeGround}" />
-                <TextBox  x:Name="ChronicSequence" Width="50" HorizontalContentAlignment="Center"  FontSize="16" FontFamily="Segoe UI Semibold"
-                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding CurrentPrescription.ChronicSequence, Mode=TwoWay}" />
-                <Label  Content=" / "  FontFamily="Segoe UI Semibold"  FontSize="16" />
-                <TextBox x:Name="ChronicTotal"   Width="50" HorizontalContentAlignment="Center" FontSize="16" FontFamily="Segoe UI Semibold"
-                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"  Text="{Binding CurrentPrescription.ChronicTotal, Mode=TwoWay}" />
+                <Label x:Name="ChronicTotal"   Width="50" HorizontalContentAlignment="Center" FontSize="16" FontFamily="Segoe UI Semibold"
+                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"  Content="{Binding CurrentPrescription.ChronicTotal}" />
+                <Label  Content=" - "  FontFamily="Segoe UI Semibold"  FontSize="16" />
+                <Label  x:Name="ChronicSequence" Width="50" HorizontalContentAlignment="Center"  FontSize="16" FontFamily="Segoe UI Semibold"
+                          MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Content="{Binding CurrentPrescription.ChronicSequence}" />
             </StackPanel>
             <DataGrid
                 Name="PrescriptionSet"
@@ -441,7 +446,7 @@
             </DataGrid>
             <StackPanel Orientation="Horizontal"  Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3">
                 <Label Content="部分負擔" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-                <Label Name="Copayment" Content="{Binding CurrentPrescription.Treatment.Copayment.Point,UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+                <Label Name="CopaymentPoint" Content="{Binding CurrentPrescription.Treatment.Copayment.Point,UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Content="藥品點數" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Name="MedicinePoint" Content="{Binding CurrentFile.Dbody.D33,UpdateSourceTrigger=PropertyChanged}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <Label Content="藥事服務點數" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>

@@ -68,11 +68,11 @@
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
                     <Label Content="處理單日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                    <DatePicker Width="100" Height="30" Name="datestart" SelectedDateFormat="Short"  />
+                    <DatePicker Width="100" Height="30" Name="datestart" SelectedDateFormat="Short"/>
                     <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                    <DatePicker Width="100" Height="30" Name="dateend" SelectedDateFormat="Short" />
+                    <DatePicker Width="100" Height="30" Name="dateend" SelectedDateFormat="Short"/>
                 </StackPanel>
-                <Button Grid.Column="1" Grid.Row="0" Content="查詢" Name="Search" Click="Search_Click" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
+                <Button Grid.Column="1" Grid.Row="0" Content="查詢" BorderThickness="0" Click="Search_Click" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -85,9 +85,9 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal" Background="{StaticResource GridBackGround}">
-                        <RadioButton Name="RadioButtonPurchase" Content="進貨" Tag="0" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
-                        <RadioButton Name="RadioButtonReturns" Content="退貨" Tag="1" Margin="5,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
-                        <RadioButton Name="RadioButtonAll" Content="全部" Tag="2" Margin="5,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked" />
+                        <RadioButton Name="RadioButtonPurchase" Content="進貨" Tag="0" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
+                        <RadioButton Name="RadioButtonReturns" Content="退貨" Tag="1" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" Checked="RadioButton_Checked" />
+                        <RadioButton Name="RadioButtonAll" Content="全部" Tag="2" Margin="20,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center" IsChecked="True" Checked="RadioButton_Checked" />
                     </StackPanel>
                     <DataGrid Name="StoOrderOverview" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" Background="Transparent" SelectionChanged="StoOrderOverview_OnSelectionChanged"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
@@ -141,8 +141,8 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
                         <Label Name="ID" Content="{Binding Id}" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-                        <Label Content="庫別 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-                        <Label Content="{Binding Path=Warehouse.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="130" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+                        <Label Content="庫別 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Visibility="Collapsed"/>
+                        <Label Content="{Binding Path=Warehouse.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="130" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi" Visibility="Collapsed"/>
                         <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <Label Content="{Binding Path=Manufactory.Name}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
                         <Label Content="{Binding Path=Manufactory.Telphone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>

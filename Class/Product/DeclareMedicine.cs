@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using System.Text.RegularExpressions;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.Interface;
@@ -162,16 +163,20 @@ namespace His_Pos.Class.Product
         public string CountStatus { get; set; }
         public string FocusColumn { get; set; }
         public Usage Usage { get; set; }
-
+        private string _usageName;
         public string UsageName
         {
-            get => Usage != null ? Usage.Name : string.Empty;
+            get => _usageName;
             set
             {
-                Usage.Name = value;
-                if(double.TryParse(Dosage, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
-                    CalculateAmount();
-                NotifyPropertyChanged(nameof(UsageName));
+                if (value != null)
+                {
+                    _usageName = value;
+                    Usage = MainWindow.Usages.SingleOrDefault(u => u.Name.Replace(" ", "").Equals(_usageName.ToString().Replace(" ", "")));
+                    if (double.TryParse(Dosage, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
+                        CalculateAmount();
+                    NotifyPropertyChanged(nameof(UsageName));
+                }
             }
         }
 

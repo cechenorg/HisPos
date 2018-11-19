@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Data;
+using System.Linq;
 using His_Pos.Interface;
+using His_Pos.Service;
 
 namespace His_Pos.Class.Product
 {
@@ -18,7 +20,7 @@ namespace His_Pos.Class.Product
             CountStatus = string.Empty;
             FocusColumn = string.Empty;
             Dosage = "0";
-            Usage = string.Empty;
+            Usage = new Usage();
             Position = string.Empty;
             Days = string.Empty;
             Stock = new InStock();
@@ -37,7 +39,7 @@ namespace His_Pos.Class.Product
             CountStatus = string.Empty;
             FocusColumn = string.Empty;
             Dosage = "0";
-            Usage = string.Empty;
+            Usage = new Usage();
             Position = string.Empty;
             Days = string.Empty;
             ControlLevel = "0";
@@ -121,15 +123,25 @@ namespace His_Pos.Class.Product
             }
         }
 
-        private string _usage;
+        private Usage _usage;
 
-        public string Usage
+        public Usage Usage
         {
             get => _usage;
             set
             {
                 _usage = value;
                 NotifyPropertyChanged(nameof(Usage));
+            }
+        }
+
+        public string UsageName
+        {
+            get => Usage != null ? Usage.Name : string.Empty;
+            set
+            {
+                Usage.PrintName = value.Any(char.IsDigit) ? NewFunction.FindUsageName(value) : NewFunction.GetUsagePrintName(value);
+                NotifyPropertyChanged(nameof(UsageName));
             }
         }
 
@@ -144,6 +156,16 @@ namespace His_Pos.Class.Product
             }
         }
 
+        private string _positionId;
+        public string PositionId
+        {
+            get => _positionId;
+            set
+            {
+                _positionId = value;
+                NotifyPropertyChanged(nameof(PositionId));
+            }
+        }
         private string _days;
         public string Days
         {
@@ -180,8 +202,8 @@ namespace His_Pos.Class.Product
         string IProductDeclare.ProductId { get => Id; set => Id = value; }
         string IProductDeclare.ProductName { get => Name; set => Name = value; }
         string IProductDeclare.Dosage { get => Dosage; set => Dosage = value; }
-        string IProductDeclare.Usage { get => Usage; set => Usage = value; }
-        string IProductDeclare.Position { get => Position; set => Position = value; }
+        string IProductDeclare.Usage { get => UsageName; set => UsageName = value; }
+        string IProductDeclare.Position { get => PositionId; set => PositionId = value; }
         string IProductDeclare.Days { get => Days; set => Days = value; }
         double IProductDeclare.Inventory { get => Stock.Inventory; set => Stock.Inventory = value; }
         double IProductDeclare.HcPrice { get => 0.0000;set => throw new NotImplementedException(); }
