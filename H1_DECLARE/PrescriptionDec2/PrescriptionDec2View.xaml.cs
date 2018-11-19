@@ -559,7 +559,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
             IndexView.IndexView.Instance.InitData();
-
         }
 
         #region 每日上傳.讀寫卡相關函數
