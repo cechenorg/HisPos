@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
@@ -8,6 +9,7 @@ using His_Pos.Class.Declare;
 using His_Pos.Class.Product;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
+using His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
 using His_Pos.Interface;
 using His_Pos.ProductPurchase;
 using His_Pos.Properties;
@@ -78,6 +80,26 @@ namespace His_Pos.Class.StoreOrder
             foreach (DataRow row in table.Rows)
             {
                 collection.Add(new StoreOrderOverview(row));
+            }
+
+            return collection;
+        }
+
+        internal static Collection<PurchaseReturnReportView.PurchaseReturnRecord> GetPurchaseReturnRecord(DateTime sDate, DateTime eDate)
+        {
+            Collection<PurchaseReturnReportView.PurchaseReturnRecord> collection = new Collection<PurchaseReturnReportView.PurchaseReturnRecord>();
+
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("SDATE", sDate));
+            parameters.Add(new SqlParameter("EDATE", eDate));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PurchaseReturnReportView].[GetPurchaseReturnReportView]", parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                collection.Add(new PurchaseReturnReportView.PurchaseReturnRecord(row));
             }
 
             return collection;

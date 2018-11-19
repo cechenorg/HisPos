@@ -20,9 +20,19 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
     /// </summary>
     public partial class ManReportControl : UserControl
     {
-        public ManReportControl()
+
+        #region ----- Define Variables -----
+
+        public List<PurchaseReturnReportView.PurchaseReturnRecord> PurchaseReturnRecordList { get; }
+
+        #endregion
+
+        public ManReportControl(List<PurchaseReturnReportView.PurchaseReturnRecord> list)
         {
             InitializeComponent();
+            DataContext = this;
+
+            PurchaseReturnRecordList = list;
         }
     }
 }
