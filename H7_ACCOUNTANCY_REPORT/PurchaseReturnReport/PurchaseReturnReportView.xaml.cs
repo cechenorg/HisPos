@@ -94,7 +94,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
             newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals("NEW")).ToList(), OutsideScrollViewer);
 
-            SecondStack.Children.Add(newManReportControl);
+            FirstStack.Children.Add(newManReportControl);
         }
     }
 }
