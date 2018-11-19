@@ -74,6 +74,67 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged("EndDate");
             }
         }
+        private string totalAmount = string.Empty;
+        public string TotalAmount
+        {
+            get => totalAmount;
+            set
+            {
+                totalAmount = value;
+                NotifyPropertyChanged("TotalAmount");
+            }
+        }
+
+        private string chronicAmount = string.Empty;
+        public string ChronicAmount
+        {
+            get => chronicAmount;
+            set
+            {
+                chronicAmount = value;
+                NotifyPropertyChanged("ChronicAmount");
+            }
+        }
+        private string medDeclarePrice = string.Empty;
+        public string MedDeclarePrice
+        {
+            get => medDeclarePrice;
+            set
+            {
+                medDeclarePrice = value;
+                NotifyPropertyChanged("MedDeclarePrice");
+            }
+        }
+        private string medServicePrice = string.Empty;
+        public string MedServicePrice
+        {
+            get => medServicePrice;
+            set
+            {
+                medServicePrice = value;
+                NotifyPropertyChanged("MedServicePrice");
+            }
+        }
+        private string medUseePrice = string.Empty;
+        public string MedUseePrice
+        {
+            get => medUseePrice;
+            set
+            {
+                medUseePrice = value;
+                NotifyPropertyChanged("MedUseePrice");
+            }
+        }
+        private string profit = string.Empty;
+        public string Profit
+        {
+            get => profit;
+            set
+            {
+                profit = value;
+                NotifyPropertyChanged("Profit");
+            }
+        }
         public PrescriptionInquireView()
         {
             InitializeComponent();
@@ -120,6 +181,9 @@ namespace His_Pos.PrescriptionInquire
             PrescriptionOverview = PrescriptionDB.GetPrescriptionOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
             if(DataPrescription.Items.Count > 0)
                  DataPrescription.ScrollIntoView(DataPrescription.Items[DataPrescription.Items.Count - 1]);
+
+            TotalAmount = PrescriptionOverview.Count.ToString();
+            ChronicAmount = PrescriptionOverview.Count(pre  => !string.IsNullOrEmpty(pre.ChronicStatus) ).ToString();
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)

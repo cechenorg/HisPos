@@ -38,6 +38,10 @@ namespace His_Pos.PrescriptionInquire
         public string AdjustDate { get; set; }
         public string ChronicStatus { get; set; }
         public string Point { get; set; }
-
+        public string MedDeclarePoint { get; set; }
+        public string MedServicePrice { get; set; }
+        public string MedUseePrice { get; set; }
+        public string Profit { get; set; }
+        
     }
 }
