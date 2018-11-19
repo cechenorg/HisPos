@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,28 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             DataContext = this;
 
             PurchaseReturnRecordList = list;
+        }
+    }
+
+    public class CalculateTotalConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            CollectionViewGroup group = value as CollectionViewGroup;
+
+            double sum = 0;
+
+            foreach (PurchaseReturnReportView.PurchaseReturnRecord record in group.Items)
+            {
+                sum += Double.Parse(record.SubTotal);
+            }
+
+            return sum;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return "";
         }
     }
 }

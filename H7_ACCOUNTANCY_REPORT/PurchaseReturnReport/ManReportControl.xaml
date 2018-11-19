@@ -17,10 +17,11 @@
                     <PropertyGroupDescription PropertyName="StoOrderId"/>
                 </CollectionViewSource.GroupDescriptions>
             </CollectionViewSource>
+            <local:CalculateTotalConverter x:Key="CalculateTotalConverter"/>
         </Grid.Resources>
         <Label Grid.Row="0"/>
-        <DataGrid Grid.Row="1" Background="{StaticResource GridDarkerBackGround}" ItemsSource="{Binding Source={StaticResource PurchaseReturnRecordList}}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}" Height="Auto" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="1" Background="DarkSeaGreen" ItemsSource="{Binding Source={StaticResource PurchaseReturnRecordList}}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                  CellStyle="{StaticResource DataGridCellStyle}" Height="Auto" AutoGenerateColumns="False" BorderThickness="2" BorderBrush="DarkSeaGreen">
             <DataGrid.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.ContainerStyle>
@@ -28,12 +29,14 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander IsExpanded="True" Background="{StaticResource Shadow}" Foreground="Black">
+                                        <Expander IsExpanded="True" Background="White" Foreground="Black">
                                             <Expander.Header>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Name}" Margin="5,0,0,0" FontSize="22" FontFamily="Segoe UI Semibold"/>
-                                                    <TextBlock Text="收貨日: " Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Bottom"/>
-                                                    <TextBlock Text="{Binding Items[0].RecDate}" FontSize="18" FontFamily="Segoe UI Semi" VerticalAlignment="Bottom"/>
+                                                    <TextBlock Text="收貨日: " Margin="20,2,0,0" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Items[0].RecDate}" Margin="0,2,0,0" FontSize="16" FontFamily="Segoe UI Semi" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="$" Margin="190,0,0,0" FontSize="20" FontFamily="Segoe UI Semibold"/>
+                                                    <TextBlock Text="{Binding Converter={StaticResource CalculateTotalConverter}}" FontSize="20" FontFamily="Segoe UI Semibold"/>
                                                 </StackPanel>
                                             </Expander.Header>
                                             <Expander.Content>
