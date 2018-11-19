@@ -741,6 +741,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             
             rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
+
+            string treatmentDate =
+                DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate, true);
+            string treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
+                                      treatmentDate.Split('/')[2] + "日";
             var parameters = new List<ReportParameter>
             {
                 new ReportParameter("PharmacyName_Id", MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
@@ -749,7 +754,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
                 new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
                 new ReportParameter("PatientGender_Birthday", (CurrentPrescription.Customer.Gender ? "男" : "女") + "/" + DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
-                new ReportParameter("TreatmentDate",DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate, true)),
+                new ReportParameter("TreatmentDate",treatmentDateChi),
                 new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
                 new ReportParameter("PaySelf", SelfCost.ToString()),
                 new ReportParameter("ServicePoint", _currentDeclareData.MedicalServicePoint.ToString()),
