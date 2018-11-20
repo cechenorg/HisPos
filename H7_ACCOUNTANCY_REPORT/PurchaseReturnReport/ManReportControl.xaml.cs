@@ -23,7 +23,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
     public partial class ManReportControl : UserControl, INotifyPropertyChanged
     {
         #region ----- Define Enum -----
-        private enum ControlStatus
+        public enum ControlStatus
         {
             CloseAll = 1,
             OpenOrder = 2,
@@ -83,7 +83,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             ManufactoryName = PurchaseReturnRecordList[0].Manufactory;
 
             CalculateTotal();
-            SetControlStatus();
+            UpdateControlStatusUi();
         }
 
         private void CalculateTotal()
@@ -115,7 +115,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
             if (border is null) return;
 
-            SetControlStatus();
+            UpdateControlStatusUi();
         }
 
         private void Icon_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -126,10 +126,10 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
             ReportControlStatus = (ControlStatus)Int16.Parse(border.Tag.ToString());
 
-            SetControlStatus();
+            UpdateControlStatusUi();
         }
 
-        private void SetControlStatus()
+        private void UpdateControlStatusUi()
         {
             switch (ReportControlStatus)
             {
@@ -158,6 +158,13 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
                     OrderGrid.RowDefinitions[1].Height = GridLength.Auto;
                     break;
             }
+        }
+
+        public void SetControlStatus(ControlStatus status)
+        {
+            ReportControlStatus = status;
+
+            UpdateControlStatusUi();
         }
         #endregion
 

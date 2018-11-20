@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
              xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
-             mc:Ignorable="d" Width="660">
+             mc:Ignorable="d" Width="645">
     <UserControl.Resources>
         <Style x:Key="IconSelectedStyle" TargetType="Border">
             <Setter Property="Background" Value="LightBlue"/>
@@ -44,7 +44,7 @@
         </Grid.Resources>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="{Binding ManufactoryName}" FontSize="32" Width="200" FontFamily="Segoe UI Semibold" Foreground="Black" Margin="10,5,0,0"/>
-            <Rectangle Width="300"/>
+            <Rectangle Width="285"/>
             <Border Name="CloseAllIcon1" Tag="1" Height="40" Margin="5" MouseLeftButtonDown="Icon_OnMouseLeftButtonDown" MouseLeave="Icon_OnMouseLeave" MouseLeftButtonUp="Icon_OnMouseLeftButtonUp">
                 <Image Source="../../Images/CloseRecord.png" Width="25" Margin="8,0,4,0" VerticalAlignment="Center"/>
             </Border>
@@ -135,7 +135,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="數量" Width="80" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
+                <DataGridTextColumn Header="數量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -143,7 +143,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="贈量" Width="80" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FreeAmount}">
+                <DataGridTextColumn Header="贈量" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding FreeAmount}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -151,7 +151,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="價格" Width="80" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Price}">
+                <DataGridTextColumn Header="價格" Width="70" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Price}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -159,7 +159,7 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="小計" Width="90" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SubTotal}">
+                <DataGridTextColumn Header="小計" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding SubTotal}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -170,7 +170,7 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
-            <Rectangle Width="400"/>
+            <Rectangle Width="385"/>
             <Label Content="總金額: $" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="Black" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <Label Content="{Binding Total}" FontSize="20" Width="110" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center"/>
             <Border Name="CloseAllIcon2" Tag="1" Height="40" MouseLeftButtonDown="Icon_OnMouseLeftButtonDown" MouseLeave="Icon_OnMouseLeave" MouseLeftButtonUp="Icon_OnMouseLeftButtonUp">

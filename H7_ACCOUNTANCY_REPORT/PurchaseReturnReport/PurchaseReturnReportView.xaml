@@ -18,8 +18,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Width="150" Content="當月查詢" Margin="10,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="LightBlue" BorderThickness="0" Click="Search_OnClick"/>
-            <xctk:MaskedTextBox Name="StartDate" Width="150" Margin="705,0,10,5" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
+            
+            <xctk:MaskedTextBox Name="StartDate" Width="150" Margin="20,0,10,5" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
                                 Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
                                 PreviewMouseLeftButtonUp="Date_OnPreviewMouseLeftButtonUp" PreviewKeyDown="Date_OnPreviewKeyDown">
                 <xctk:MaskedTextBox.Text>
@@ -44,23 +44,24 @@
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Button Name="SearchButton" Width="120" Margin="20,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Click="Search_OnClick"/>
+            <Button Name="SearchButton" Tag="ByUser" Width="120" Margin="20,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="LightBlue" BorderThickness="0" Click="Search_OnClick"/>
+            <Button Width="150" Tag="ThisMonth" Content="當月查詢" Margin="685,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Click="Search_OnClick"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="10,0,10,0" Background="{StaticResource GridBackGround}">
             <Rectangle Width="835"/>
-            <Button Width="150" Margin="10,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="DarkGray" BorderThickness="0">
+            <Button Tag="1" Width="150" Margin="10,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="DarkGray" BorderThickness="0" Click="SetControlStatus_OnClick">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="../../Images/CloseRecord.png" Width="25"/>
                     <TextBlock Text="全部收起" Margin="8,0,0,0"/>
                 </StackPanel>
             </Button>
-            <Button Width="170" Margin="10,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="DarkGray" BorderThickness="0">
+            <Button Tag="2" Width="170" Margin="10,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="DarkGray" BorderThickness="0" Click="SetControlStatus_OnClick">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="../../Images/CloseRecord.png" Width="25"/>
                     <TextBlock Text="展開至訂單" Margin="8,0,0,0"/>
                 </StackPanel>
             </Button>
-            <Button Width="150" Margin="10,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="DarkGray" BorderThickness="0">
+            <Button Tag="3" Width="150" Margin="10,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="DarkGray" BorderThickness="0" Click="SetControlStatus_OnClick">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="../../Images/CloseRecord.png" Width="25"/>
                     <TextBlock Text="全部展開" Margin="8,0,0,0"/>
@@ -93,8 +94,8 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Name="FirstStack" Grid.Column="0" Margin="0,0,5,0"/>
-                <StackPanel Name="SecondStack" Grid.Column="1" Margin="5,0,0,0"/>
+                <StackPanel Name="FirstStack" Grid.Column="0" Margin="10,0,5,10"/>
+                <StackPanel Name="SecondStack" Grid.Column="1" Margin="5,0,10,10"/>
             </Grid>
         </ScrollViewer>
     </Grid>

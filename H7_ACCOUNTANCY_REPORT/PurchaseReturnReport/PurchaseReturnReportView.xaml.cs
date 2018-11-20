@@ -60,8 +60,27 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         private bool IsFirstStack { get; set; } = true;
 
-        public DateTime SDateTime { get; set; } = new DateTime();
-        public DateTime EDateTime { get; set; } = new DateTime();
+        public DateTime sDateTime = new DateTime();
+
+        public DateTime SDateTime
+        {
+            get { return sDateTime; }
+            set
+            {
+                sDateTime = value;
+                NotifyPropertyChanged("SDateTime");
+            }
+        }
+        public DateTime eDateTime = new DateTime();
+        public DateTime EDateTime
+        {
+            get { return eDateTime; }
+            set
+            {
+                eDateTime = value;
+                NotifyPropertyChanged("EDateTime");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
@@ -82,7 +101,17 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         #region ----- Search Report -----
         private void Search_OnClick(object sender, RoutedEventArgs e)
         {
-            if(!CheckDateTimeValid()) return;
+            Button button = sender as Button;
+
+            if (button is null) return;
+
+            if (button.Tag.ToString().Equals("ThisMonth"))
+            {
+                SDateTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                EDateTime = DateTime.Now;
+            }
+
+            if (!CheckDateTimeValid()) return;
 
             PurchaseReturnRecordCollection = StoreOrderDb.GetPurchaseReturnRecord(SDateTime, EDateTime);
 
@@ -148,5 +177,26 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             }
         }
         #endregion
+
+        private void SetControlStatus_OnClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            if(button is null) return;
+
+            ManReportControl.ControlStatus status = (ManReportControl.ControlStatus)Int16.Parse(button.Tag.ToString());
+
+            foreach (var child in FirstStack.Children)
+            {
+                if (child is ManReportControl)
+                    (child as ManReportControl).SetControlStatus(status);
+            }
+
+            foreach (var child in SecondStack.Children)
+            {
+                if (child is ManReportControl)
+                    (child as ManReportControl).SetControlStatus(status);
+            }
+        }
     }
 }
