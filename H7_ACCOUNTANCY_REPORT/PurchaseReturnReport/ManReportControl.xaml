@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
+             xmlns:componentmodel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              mc:Ignorable="d" Width="660">
     <UserControl.Resources>
         <Style x:Key="IconSelectedStyle" TargetType="Border">
@@ -33,6 +34,11 @@
                 <CollectionViewSource.GroupDescriptions>
                     <PropertyGroupDescription PropertyName="StoOrderId"/>
                 </CollectionViewSource.GroupDescriptions>
+                <CollectionViewSource.SortDescriptions>
+                    <componentmodel:SortDescription PropertyName="RecDate" Direction="Ascending"/>
+                    <componentmodel:SortDescription PropertyName="StoOrderId" Direction="Ascending"/>
+                    <componentmodel:SortDescription PropertyName="ProductId" Direction="Ascending"/>
+                </CollectionViewSource.SortDescriptions>
             </CollectionViewSource>
             <local:CalculateTotalConverter x:Key="CalculateTotalConverter"/>
         </Grid.Resources>
