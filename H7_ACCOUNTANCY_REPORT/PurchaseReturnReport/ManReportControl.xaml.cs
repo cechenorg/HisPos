@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -19,8 +20,16 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
     /// <summary>
     /// ManReportControl.xaml 的互動邏輯
     /// </summary>
-    public partial class ManReportControl : UserControl
+    public partial class ManReportControl : UserControl, INotifyPropertyChanged
     {
+        #region ----- Define Enum -----
+        private enum ControlStatus
+        {
+            CloseAll = 1,
+            OpenOrder = 2,
+            OpenAll = 3
+        }
+        #endregion
 
         #region ----- Define Variables -----
 
@@ -32,6 +41,29 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         public string Total { get; private set; }
 
+        private ControlStatus controlStatus = ControlStatus.CloseAll;
+        private ControlStatus ReportControlStatus {
+            get { return controlStatus; }
+            set
+            {
+                controlStatus = value;
+                NotifyPropertyChanged("IsOpenAll");
+            }
+        }
+
+        public bool IsOpenAll
+        {
+            get { return controlStatus == ControlStatus.OpenAll; }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
         #endregion
 
         public ManReportControl(List<PurchaseReturnReportView.PurchaseReturnRecord> list, ScrollViewer scrollViewer)
@@ -45,11 +77,13 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             InitData();
         }
 
+        #region ----- Init Data -----
         private void InitData()
         {
             ManufactoryName = PurchaseReturnRecordList[0].Manufactory;
 
             CalculateTotal();
+            SetControlStatus();
         }
 
         private void CalculateTotal()
@@ -63,11 +97,74 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
             Total = sum.ToString("##,###");
         }
+        #endregion
+
+        #region ----- Control Status -----
+        private void Icon_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Border border = sender as Border;
+
+            if (border is null) return;
+
+            border.Style = Resources["IconSelectingStyle"] as Style;
+        }
+
+        private void Icon_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            Border border = sender as Border;
+
+            if (border is null) return;
+
+            SetControlStatus();
+        }
+
+        private void Icon_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Border border = sender as Border;
+
+            if (border is null) return;
+
+            ReportControlStatus = (ControlStatus)Int16.Parse(border.Tag.ToString());
+
+            SetControlStatus();
+        }
+
+        private void SetControlStatus()
+        {
+            switch (ReportControlStatus)
+            {
+                case ControlStatus.CloseAll:
+                    CloseAllIcon1.Style = Resources["IconSelectedStyle"] as Style;
+                    CloseAllIcon2.Style = Resources["IconSelectedStyle"] as Style;
+                    OpenOrderIcon.Style = Resources["IconUnSelectedStyle"] as Style;
+                    OpenAllIcon.Style = Resources["IconUnSelectedStyle"] as Style;
+
+                    OrderGrid.RowDefinitions[1].Height = new GridLength(0);
+                    break;
+                case ControlStatus.OpenOrder:
+                    CloseAllIcon1.Style = Resources["IconUnSelectedStyle"] as Style;
+                    CloseAllIcon2.Style = Resources["IconUnSelectedStyle"] as Style;
+                    OpenOrderIcon.Style = Resources["IconSelectedStyle"] as Style;
+                    OpenAllIcon.Style = Resources["IconUnSelectedStyle"] as Style;
+
+                    OrderGrid.RowDefinitions[1].Height = GridLength.Auto;
+                    break;
+                case ControlStatus.OpenAll:
+                    CloseAllIcon1.Style = Resources["IconUnSelectedStyle"] as Style;
+                    CloseAllIcon2.Style = Resources["IconUnSelectedStyle"] as Style;
+                    OpenOrderIcon.Style = Resources["IconUnSelectedStyle"] as Style;
+                    OpenAllIcon.Style = Resources["IconSelectedStyle"] as Style;
+
+                    OrderGrid.RowDefinitions[1].Height = GridLength.Auto;
+                    break;
+            }
+        }
+        #endregion
 
         private void DataGrid_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-
+            
             OutsideScrollViewer.ScrollToVerticalOffset(OutsideScrollViewer.VerticalOffset - e.Delta / 3);
         }
     }

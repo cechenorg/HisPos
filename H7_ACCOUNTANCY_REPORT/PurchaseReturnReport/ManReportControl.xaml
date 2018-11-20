@@ -5,7 +5,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
              mc:Ignorable="d" Width="660">
-    <Grid Margin="0,10,0,0">
+    <UserControl.Resources>
+        <Style x:Key="IconSelectedStyle" TargetType="Border">
+            <Setter Property="Background" Value="LightBlue"/>
+            <Setter Property="BorderBrush" Value="RoyalBlue"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        <Style x:Key="IconSelectingStyle" TargetType="Border">
+            <Setter Property="Background" Value="LightBlue"/>
+            <Setter Property="BorderBrush" Value="RoyalBlue"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style x:Key="IconUnSelectedStyle" TargetType="Border">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="RoyalBlue"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid Name="OrderGrid" Margin="0,10,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="0"/>
@@ -22,13 +39,13 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Label Content="{Binding ManufactoryName}" FontSize="32" Width="200" FontFamily="Segoe UI Semibold" Foreground="Black" Margin="10,5,0,0"/>
             <Rectangle Width="300"/>
-            <Border Height="40" Background="LightBlue" BorderBrush="RoyalBlue" BorderThickness="2" Margin="5">
+            <Border Name="CloseAllIcon1" Tag="1" Height="40" Margin="5" MouseLeftButtonDown="Icon_OnMouseLeftButtonDown" MouseLeave="Icon_OnMouseLeave" MouseLeftButtonUp="Icon_OnMouseLeftButtonUp">
                 <Image Source="../../Images/CloseRecord.png" Width="25" Margin="8,0,4,0" VerticalAlignment="Center"/>
             </Border>
-            <Border Height="40" Background="Transparent" BorderBrush="RoyalBlue" Margin="5">
+            <Border Name="OpenOrderIcon" Tag="2" Height="40" Margin="5" MouseLeftButtonDown="Icon_OnMouseLeftButtonDown" MouseLeave="Icon_OnMouseLeave" MouseLeftButtonUp="Icon_OnMouseLeftButtonUp">
                 <Image Source="../../Images/OpenRecord.png" Width="25" Margin="8,0,4,0" VerticalAlignment="Center"/>
             </Border>
-            <Border Height="40" Background="Transparent" BorderBrush="RoyalBlue" Margin="5">
+            <Border Name="OpenAllIcon" Tag="3" Height="40" Margin="5" MouseLeftButtonDown="Icon_OnMouseLeftButtonDown" MouseLeave="Icon_OnMouseLeave" MouseLeftButtonUp="Icon_OnMouseLeftButtonUp">
                 <Image Source="../../Images/OpenRecord2Detail.png" Width="24" Margin="8,0,4,0" VerticalAlignment="Center"/>
             </Border>
         </StackPanel>
@@ -42,7 +59,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander IsExpanded="False" Background="White" Foreground="Black">
+                                        <Expander IsExpanded="{Binding IsOpenAll, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=local:ManReportControl}}" Background="White" Foreground="Black">
                                             <Expander.Header>
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Name}" Margin="5,0,0,0" Width="150" FontSize="22" FontFamily="Segoe UI Semibold"/>
@@ -150,7 +167,7 @@
             <Rectangle Width="400"/>
             <Label Content="總金額: $" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="Black" Margin="10,0,0,0" VerticalAlignment="Center"/>
             <Label Content="{Binding Total}" FontSize="20" Width="110" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center"/>
-            <Border Height="40" Background="LightBlue" BorderBrush="RoyalBlue" BorderThickness="2">
+            <Border Name="CloseAllIcon2" Tag="1" Height="40" MouseLeftButtonDown="Icon_OnMouseLeftButtonDown" MouseLeave="Icon_OnMouseLeave" MouseLeftButtonUp="Icon_OnMouseLeftButtonUp">
                 <Image Source="../../Images/CloseRecord.png" Width="25" Margin="8,0,4,0" VerticalAlignment="Center"/>
             </Border>
         </StackPanel>
