@@ -32,7 +32,7 @@ namespace His_Pos.Class
             var parameters = new List<SqlParameter>();
             ObservableCollection<Chronic> chronics = new ObservableCollection<Chronic>();
             parameters.Add(new SqlParameter("CUS_ID", cusId));
-            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[CheckChronicExistById]", parameters);
+            DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[CheckChronicExistById]", parameters); 
             if (dataTable.Rows[0][0].ToString() == "0")
                 return false;
             else
