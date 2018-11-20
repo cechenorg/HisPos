@@ -79,7 +79,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
             DataContext = this;
         }
 
-
+        #region ----- Search Report -----
         private void Search_OnClick(object sender, RoutedEventArgs e)
         {
             if(!CheckDateTimeValid()) return;
@@ -98,6 +98,9 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         private void UpdateUi()
         {
+            FirstStack.Children.Clear();
+            SecondStack.Children.Clear();
+
             var ManList = PurchaseReturnRecordCollection.Select(r => r.Manufactory).Distinct().ToList();
 
             foreach (var man in ManList)
@@ -112,7 +115,9 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
                 IsFirstStack = !IsFirstStack;
             }
         }
+        #endregion
 
+        #region ----- Date Control -----
         private void Date_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -142,5 +147,6 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
                 }
             }
         }
+        #endregion
     }
 }
