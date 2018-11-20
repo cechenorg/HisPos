@@ -4,15 +4,46 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
+             xmlns:hisPos="clr-namespace:His_Pos"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
+    <UserControl.Resources>
+        <hisPos:DateConverter x:Key="DateConverter"/>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Width="100" Content="查詢" Click="Search_OnClick"/>
+            <xctk:MaskedTextBox Name="StartDate" Width="150" Margin="20,0,10,0" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
+                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
+                                PreviewMouseLeftButtonUp="Date_OnPreviewMouseLeftButtonUp" PreviewKeyDown="Date_OnPreviewKeyDown">
+                <xctk:MaskedTextBox.Text>
+                    <Binding Path="SDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                        <Binding.ValidationRules>
+                            <hisPos:DateValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </xctk:MaskedTextBox.Text>
+            </xctk:MaskedTextBox>
+            <Label Content="~" FontSize="25" VerticalAlignment="Center"/>
+            <xctk:MaskedTextBox Name="EndDate" Width="150" Margin="10,0,0,0" HorizontalContentAlignment="Center" FontSize="27" Style="{StaticResource MaterialDesignTextBox}"
+                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" FontFamily="Segoe UI Semibold"
+                                PreviewMouseLeftButtonUp="Date_OnPreviewMouseLeftButtonUp" PreviewKeyDown="Date_OnPreviewKeyDown">
+                <xctk:MaskedTextBox.Text>
+                    <Binding Path="EDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                        <Binding.ValidationRules>
+                            <hisPos:DateValidationRule/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </xctk:MaskedTextBox.Text>
+            </xctk:MaskedTextBox>
+            <Rectangle Width="870"/>
+            <Button Name="SearchButton" Width="120" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Click="Search_OnClick"/>
         </StackPanel>
         <ScrollViewer Name="OutsideScrollViewer" Grid.Row="1" Margin="10,10,5,10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" CanContentScroll="False">
             <ScrollViewer.Resources>
@@ -43,6 +74,5 @@
                 <StackPanel Name="SecondStack" Grid.Column="1" Margin="5,0,0,0"/>
             </Grid>
         </ScrollViewer>
-        
     </Grid>
 </UserControl>

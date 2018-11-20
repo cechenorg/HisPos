@@ -60,6 +60,9 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
         private bool IsFirstStack { get; set; } = true;
 
+        public DateTime SDateTime { get; set; } = new DateTime();
+        public DateTime EDateTime { get; set; } = new DateTime();
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -73,36 +76,71 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
         public PurchaseReturnReportView()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
 
         private void Search_OnClick(object sender, RoutedEventArgs e)
         {
-            DateTime now = DateTime.Now;
-            DateTime before = now.AddYears(-1);
+            if(!CheckDateTimeValid()) return;
 
-            PurchaseReturnRecordCollection = StoreOrderDb.GetPurchaseReturnRecord(before, now);
+            PurchaseReturnRecordCollection = StoreOrderDb.GetPurchaseReturnRecord(SDateTime, EDateTime);
 
             UpdateUi();
         }
 
+        private bool CheckDateTimeValid()
+        {
+            if (StartDate.Text.Contains(" ") || EndDate.Text.Contains(" ")) return false;
+
+            return true;
+        }
+
         private void UpdateUi()
         {
-            ManReportControl newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals("杏德")).ToList(), OutsideScrollViewer);
+            var ManList = PurchaseReturnRecordCollection.Select(r => r.Manufactory).Distinct().ToList();
 
-            FirstStack.Children.Add(newManReportControl);
+            foreach (var man in ManList)
+            {
+                ManReportControl newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals(man)).ToList(), OutsideScrollViewer);
 
-            newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals("NEW")).ToList(), OutsideScrollViewer);
+                if (IsFirstStack)
+                    FirstStack.Children.Add(newManReportControl);
+                else
+                    SecondStack.Children.Add(newManReportControl);
 
-            SecondStack.Children.Add(newManReportControl);
+                IsFirstStack = !IsFirstStack;
+            }
+        }
 
-            newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals("杏德")).ToList(), OutsideScrollViewer);
+        private void Date_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            TextBox textBox = sender as TextBox;
 
-            FirstStack.Children.Add(newManReportControl);
+            if(textBox is null) return;
 
-            newManReportControl = new ManReportControl(PurchaseReturnRecordCollection.Where(r => r.Manufactory.Equals("杏德")).ToList(), OutsideScrollViewer);
+            textBox.SelectAll();
+        }
 
-            FirstStack.Children.Add(newManReportControl);
+        private void Date_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                TextBox textBox = sender as TextBox;
+
+                if (textBox is null) return;
+
+                switch (textBox.Name)
+                {
+                    case "StartDate":
+                        EndDate.Focus();
+                        EndDate.SelectAll();
+                        break;
+                    case "EndDate":
+                        SearchButton.Focus();
+                        break;
+                }
+            }
         }
     }
 }
