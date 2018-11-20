@@ -814,12 +814,16 @@ namespace His_Pos
 
         private void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
         {
-            var res = HisApiBase.csOpenCom(0);
-            if (res == 0)
+            if (MainWindow.Res != 0)
+            {
+                prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
+                prescriptionDec2View.SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
+            }
+            else
             {
                 var strLength = 72;
                 var icData = new byte[72];
-                res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                var res = HisApiBase.hisGetBasicData(icData, ref strLength);
                 icData.CopyTo(prescriptionDec2View.BasicDataArr, 0);
                 if (res == 0)
                 {
@@ -834,11 +838,6 @@ namespace His_Pos
                     prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
                     prescriptionDec2View.SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)res));
                 }
-            }
-            else
-            {
-                prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
-                prescriptionDec2View.SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)res));
             }
         }
 

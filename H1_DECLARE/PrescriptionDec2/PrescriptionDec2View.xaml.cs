@@ -1720,23 +1720,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ReloadCardReader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var res = HisApiBase.csVerifySAMDC();
-            string cardReaderStatus;
-            if (res == 0)
-            {
-                SetCardStatusContent("安全模組認證成功");
-                res = HisApiBase.hisGetCardStatus(2);
-                cardReaderStatus = MainWindow.GetEnumDescription((CardStatusReturnCode) res);
-                SetCardStatusContent(cardReaderStatus);
-                if (cardReaderStatus.Contains("成功"))
-                    CurrentPrescription.IsGetIcCard = true;
-            }
-            else
-            {
-                res = HisApiBase.hisGetCardStatus(2);
-                cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)res);
-                SetCardStatusContent(cardReaderStatus);
-            }
+            var t1 = new Thread(ReloadCardReader);
+            t1.Start();
         }
 
         public void ReadTreatRecord()
@@ -1839,6 +1824,37 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CustomerSelected = false;
             medBag = new MedBagReport();
             AdjustCases = MainWindow.AdjustCases;
+        }
+
+        private void ReloadCardReader()
+        {
+            SetCardStatusContent("重新讀取中...");
+            string cardReaderStatus;
+            var res = HisApiBase.csOpenCom(0);
+            if (res == 0)
+            {
+                res = HisApiBase.csVerifySAMDC();
+                
+                if (res == 0)
+                {
+                    SetCardStatusContent("安全模組認證成功");
+                    res = HisApiBase.hisGetCardStatus(2);
+                    cardReaderStatus = MainWindow.GetEnumDescription((CardStatusReturnCode)res);
+                    SetCardStatusContent(cardReaderStatus);
+                    if (cardReaderStatus.Contains("成功"))
+                        CurrentPrescription.IsGetIcCard = true;
+                }
+                else
+                {
+                    cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)res);
+                    SetCardStatusContent(cardReaderStatus);
+                }
+            }
+            else
+            {
+                cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)res);
+                SetCardStatusContent(cardReaderStatus);
+            }
         }
     }
 }
