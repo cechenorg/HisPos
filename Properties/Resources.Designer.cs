@@ -439,6 +439,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 進退貨報表查詢 的當地語系化字串。
+        /// </summary>
+        internal static string PurchaseReturnReport {
+            get {
+                return ResourceManager.GetString("PurchaseReturnReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 報表系統 的當地語系化字串。
         /// </summary>
         internal static string ReportSystem {

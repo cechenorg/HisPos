@@ -270,4 +270,7 @@
   <data name="EntrySearch" xml:space="preserve">
     <value>庫存現值查詢</value>
   </data>
+  <data name="PurchaseReturnReport" xml:space="preserve">
+    <value>進退貨報表查詢</value>
+  </data>
 </root>

@@ -27,6 +27,7 @@ using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.IndexView;
 using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.H3_STOCKTAKING.StockTaking;
+using His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
 
 namespace His_Pos.ViewModel
 {
@@ -202,6 +203,8 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.庫存現值查詢):
                     break;
+                case nameof(FeatureItem.進退貨報表查詢):
+                    break;
                 default:
                     return;
             }
@@ -303,6 +306,9 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.庫存現值查詢):
                     newTab = new EntrySearch() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                case nameof(FeatureItem.進退貨報表查詢):
+                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[6].Icon };
                     break;
                 default:
                     return;
