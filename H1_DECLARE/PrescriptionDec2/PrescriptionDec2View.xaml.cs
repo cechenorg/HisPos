@@ -1325,8 +1325,29 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 MedicalNumber.Text = tmpMedicalNumber;
             }
         }
-         
-        public void SetValueByDecMasId(string decMasId) {
+        public void SetValueByPrescription(Prescription prescription)
+        { 
+            CurrentPrescription = prescription;
+            DivisionCombo.SelectedItem =
+                Divisions.SingleOrDefault(d => d.Id.Equals(prescription.Treatment.MedicalInfo.Hospital.Division.Id));
+           // TreatmentCaseCombo.SelectedItem =
+            //    TreatmentCases.SingleOrDefault(t => t.Id.Equals(prescription.Treatment.MedicalInfo.TreatmentCase.Id));
+            var diseaseCode = CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
+            if (!string.IsNullOrEmpty(diseaseCode))
+                CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
+            diseaseCode = CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
+            if (!string.IsNullOrEmpty(diseaseCode))
+                CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
+            if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id))
+            {
+                foreach (var s in SpecialCodes)
+                {
+                    if (s.Id.Contains(CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id))
+                        SpecialCodeCombo.SelectedItem = s;
+                }
+            }
+        }
+            public void SetValueByDecMasId(string decMasId) {
             if (decMasId is null) return;
             _currentDecMasId = decMasId;
             var prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.Interface;
 using His_Pos.Service;
@@ -29,7 +30,26 @@ namespace His_Pos.Class.Product
             SideEffect = string.Empty;
             Indication = string.Empty;
         }
-
+        public DeclareMedicine(XmlNode xml)
+        {
+            Id = xml.Attributes["id"].Value;
+            HcPrice = 0.0000;
+            Ingredient = string.Empty;
+            MedicalCategory = new Medicate();
+            Cost = 0;
+            Price = 0;
+            TotalPrice = 0;
+            Amount = 0;
+            CountStatus = string.Empty;
+            FocusColumn = string.Empty;
+            Usage = new Usage();
+            _days = string.Empty;
+            Position = string.Empty;
+            IsBuckle = true;
+            source = string.Empty;
+            SideEffect = string.Empty;
+            Indication = string.Empty;
+        }
         public DeclareMedicine(DataRow dataRow,string type) : base(dataRow)
         {
             MedicalCategory = new Medicate();

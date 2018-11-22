@@ -29,7 +29,11 @@ namespace His_Pos.Class.Pharmacy
             MedicalPersonnel = new MedicalPersonnel();
             MedicalPersonnel.IcNumber = xml.SelectSingleNode("d25") == null ? null : xml.SelectSingleNode("d25").InnerText;
         }
-
+        public Pharmacy(XmlDocument xml)
+        {
+            MedicalPersonnel = new MedicalPersonnel();
+            MedicalPersonnel.IcNumber = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["doctor_id"].Value;
+        }
         public Pharmacy(DeclareFileDdata d)
         {
             MedicalPersonnel = new MedicalPersonnel();
