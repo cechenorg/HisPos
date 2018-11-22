@@ -655,7 +655,7 @@ namespace His_Pos
                     }
                     if (isMedicalPerson)
                     {
-                        prescriptionDec2View.HisPerson.SelectedItem =
+                        prescriptionDec2View.CurrentPrescription.Pharmacy.MedicalPersonnel =
                             prescriptionDec2View.MedicalPersonnels.SingleOrDefault(p =>
                                 p.Id.Equals(MainWindow.CurrentUser.Id));
                     }
@@ -663,14 +663,11 @@ namespace His_Pos
                     {
                         prescriptionDec2View.HisPerson.SelectedIndex = 0;
                     }
-                    prescriptionDec2View.CopaymentCombo.SelectedItem =
-                        prescriptionDec2View.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
-                    prescriptionDec2View.PaymentCategoryCombo.SelectedItem =
-                        prescriptionDec2View.PaymentCategories.SingleOrDefault(p => p.Id.Equals("4"));
-                    prescriptionDec2View.AdjustCaseCombo.SelectedItem =
-                        prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
-                    prescriptionDec2View.TreatmentCaseCombo.SelectedItem =
-                        prescriptionDec2View.TreatmentCases.SingleOrDefault(t => t.Id.Equals("01"));
+                    prescriptionDec2View.CurrentPrescription.Treatment.Copayment = prescriptionDec2View.Copayments.SingleOrDefault(c => c.Name.Equals("加收部分負擔"));
+                    prescriptionDec2View.CurrentPrescription.Treatment.PaymentCategory = prescriptionDec2View.PaymentCategories.SingleOrDefault(p => p.Name.Equals("普通疾病"));
+                    prescriptionDec2View.CurrentPrescription.Treatment.AdjustCase = prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Name.Equals("一般處方調劑"));
+                    prescriptionDec2View.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = prescriptionDec2View.TreatmentCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
+                    prescriptionDec2View.DataContext = prescriptionDec2View;
                     Close();
                 }));
             };

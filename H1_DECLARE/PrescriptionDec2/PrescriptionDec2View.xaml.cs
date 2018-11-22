@@ -532,8 +532,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             
             if (CurrentPrescription.IsGetIcCard)
             {
-                //var loading = new LoadingWindow();
-                //loading.LoginIcData(Instance);
+                var loading = new LoadingWindow();
+                loading.LoginIcData(Instance);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
@@ -1593,8 +1593,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is AutoCompleteBox a)) return;
             a.Text = a.Text.TrimStart(' ');
-            if (e.Key == Key.Enter && a.IsDropDownOpen && a.Text.Length <= 10)
-                a.SelectedItem = Hospitals.Where(x => x.Id.Contains(a.Text)).Take(50).ToList()[0];
+            if (a.IsDropDownOpen && a.Text.Length <= 10)
+                a.ItemsSource = Hospitals.Where(x => x.Id.Contains(a.Text)).Take(50).ToList();
         }
 
         private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -1643,17 +1643,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var totalPrice = 0;
             foreach (var med in _currentDeclareData.Prescription.Medicines)
             {
-                if (med is DeclareMedicine declare)
+                switch (med)
                 {
-                    totalCost += double.Parse(ProductDb.GetBucklePrice(((IProductDeclare)declare).ProductId, ((IProductDeclare)declare).Amount.ToString()));
-                    totalPrice += int.Parse(Math.Ceiling(((IProductDeclare)declare).TotalPrice).ToString());
+                    case DeclareMedicine declare:
+                        totalCost += double.Parse(ProductDb.GetBucklePrice(((IProductDeclare)declare).ProductId, ((IProductDeclare)declare).Amount.ToString()));
+                        totalPrice += int.Parse(Math.Ceiling(((IProductDeclare)declare).TotalPrice).ToString());
+                        break;
+                    case PrescriptionOTC otc:
+                        totalCost += double.Parse(ProductDb.GetBucklePrice(((IProductDeclare)otc).ProductId, ((IProductDeclare)otc).Amount.ToString()));
+                        totalPrice += int.Parse(Math.Ceiling(((IProductDeclare)otc).TotalPrice).ToString());
+                        break;
                 }
-                else if (med is PrescriptionOTC otc)
-                {
-                    totalCost += double.Parse(ProductDb.GetBucklePrice(((IProductDeclare)otc).ProductId, ((IProductDeclare)otc).Amount.ToString()));
-                    totalPrice += int.Parse(Math.Ceiling(((IProductDeclare)otc).TotalPrice).ToString());
-                }
-                
             }
             ProductDb.InsertEntry("配藥收入", totalCost.ToString() , "DecMasId", decMasId);
             ProductDb.InsertEntry("調劑耗用", "-" + totalCost, "DecMasId", decMasId);
@@ -1835,7 +1835,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public void ClearPrescription()
         {
             CurrentPrescription = new Prescription();
-            CurrentPrescription.Treatment.MedicalInfo.Hospital = new Hospital();
             DivisionCombo.SelectedIndex = -1;
             TreatmentCaseCombo.SelectedIndex = -1;
             var isMedicalPerson = false;
@@ -1855,16 +1854,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 HisPerson.SelectedIndex = 0;
             }
-            CopaymentCombo.SelectedItem =
-                MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
-            PaymentCategoryCombo.SelectedItem =
-                MainWindow.PaymentCategory.SingleOrDefault(p => p.Id.Equals("4"));
-            AdjustCaseCombo.SelectedItem =
-                AdjustCases.SingleOrDefault(a => a.Id.Equals("1"));
-            CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = new DiseaseCode();
-            CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = new DiseaseCode();
-            CurrentPrescription.Treatment.TreatmentDate = DateTime.Now;
-            CurrentPrescription.Treatment.AdjustDate = DateTime.Now;
+            CurrentPrescription.Treatment.Copayment = Copayments.SingleOrDefault(c => c.Name.Equals("加收部分負擔"));
+            CurrentPrescription.Treatment.PaymentCategory = PaymentCategories.SingleOrDefault(p => p.Name.Equals("普通疾病"));
+            CurrentPrescription.Treatment.AdjustCase = AdjustCases.SingleOrDefault(a => a.Name.Equals("一般處方調劑"));
+            CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = TreatmentCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
             SpecialCodeCombo.SelectedIndex = -1;
             CurrentPrescription.ChronicSequence = string.Empty;
             CurrentPrescription.ChronicTotal = string.Empty;
@@ -1876,32 +1869,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PaidText.Text = string.Empty;
             CustomerSelected = false;
             medBag = new MedBagReport();
-            AdjustCases = MainWindow.AdjustCases;
         }
 
         private void ReloadCardReader()
         {
             SetCardStatusContent("重新讀取中...");
             string cardReaderStatus;
-            var res = HisApiBase.csOpenCom(0);
+            var res = HisApiBase.csVerifySAMDC();
             if (res == 0)
             {
-                res = HisApiBase.csVerifySAMDC();
-                
-                if (res == 0)
-                {
-                    SetCardStatusContent("安全模組認證成功");
-                    res = HisApiBase.hisGetCardStatus(2);
-                    cardReaderStatus = MainWindow.GetEnumDescription((CardStatusReturnCode)res);
-                    SetCardStatusContent(cardReaderStatus);
-                    if (cardReaderStatus.Contains("成功"))
-                        CurrentPrescription.IsGetIcCard = true;
-                }
-                else
-                {
-                    cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)res);
-                    SetCardStatusContent(cardReaderStatus);
-                }
+                SetCardStatusContent("安全模組認證成功");
+                res = HisApiBase.hisGetCardStatus(2);
+                cardReaderStatus = MainWindow.GetEnumDescription((CardStatusReturnCode)res);
+                SetCardStatusContent(cardReaderStatus);
+                if (cardReaderStatus.Contains("成功"))
+                    CurrentPrescription.IsGetIcCard = true;
             }
             else
             {

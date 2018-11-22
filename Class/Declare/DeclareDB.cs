@@ -926,7 +926,7 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("ID", DBNull.Value));
             parameters.Add(new SqlParameter("UPLOAD_DATA", dataXml));
             parameters.Add(new SqlParameter("UPLOAD_STATUS", 0));
-            parameters.Add(new SqlParameter("CREATE_DATE", DateTime.Now.ToShortDateString()));
+            parameters.Add(new SqlParameter("CREATE_DATE", DateTime.Today.Date));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDailyUploadData]", parameters);
         }
 

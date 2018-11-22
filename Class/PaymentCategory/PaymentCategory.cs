@@ -26,5 +26,10 @@ namespace His_Pos.Class.PaymentCategory
         {
             Id = !string.IsNullOrEmpty(d.Dbody.D5) ? d.Dbody.D5 : string.Empty;
         }
+
+        public PaymentCategory ShallowCopy()
+        {
+            return (PaymentCategory)MemberwiseClone();
+        }
     }
 }

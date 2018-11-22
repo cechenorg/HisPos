@@ -24,7 +24,7 @@ namespace His_Pos.Class
             IsGetIcCard = false;
             EList = new ErrorList();
         }
-     
+
         public Prescription(Customer customer, Pharmacy.Pharmacy pharmacy, Treatment treatment, ObservableCollection<AbstractClass.Product> medicines)
         {
             Customer = customer;

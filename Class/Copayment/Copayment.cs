@@ -25,5 +25,10 @@ namespace His_Pos.Class.Copayment
         }
 
         public int Point { get; set; }
+
+        public Copayment ShallowCopy()
+        {
+            return (Copayment)MemberwiseClone();
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace His_Pos
     public partial class MainWindow
     {
         public static string CardReaderStatus;
-        public static int Res { get; set; } = -1;
+        public static int Res { get; set; }
         public static Pharmacy CurrentPharmacy;
         public static MainWindow MainWindowInstance;
         public static bool ItemSourcesSet { get; set; }
@@ -67,6 +67,7 @@ namespace His_Pos
         public static ObservableCollection<Position> Positions { get; set; }
         public MainWindow(User userLogin)
         {
+            Res = -1;
             FeatureFactory();
             InitializeComponent();
             WindowState = WindowState.Maximized;
@@ -226,7 +227,7 @@ namespace His_Pos
 
         private void VerifySam()
         {
-            var Res = HisApiBase.csOpenCom(0);
+            Res = HisApiBase.csOpenCom(0);
             if (Res == 0)
             {
                 Res = HisApiBase.csVerifySAMDC();

@@ -90,10 +90,10 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8" Orientation="Horizontal">
                     <Label VerticalAlignment="Center" Content="釋出院所" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <controls:AutoCompleteBox x:Name="ReleaseHospital" Width="450" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Style="{StaticResource AutoCompleteBoxStyle}"
+                    <controls:AutoCompleteBox x:Name="ReleaseHospital" Width="200" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Style="{StaticResource AutoCompleteBoxStyle}"
                                               Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" FontSize="16" FontStretch="ExtraExpanded" 
                                               ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" MinimumPrefixLength="4" InputScope="AlphanumericHalfWidth"
-                                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay}" ValueMemberPath="FullName" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp"
+                                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ValueMemberPath="FullName" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp"
                                               Populating="ReleaseHospital_Populating" PreviewKeyDown="ReleaseHospital_PreviewKeyDown" DropDownClosed="ReleaseHospital_DropDownClosed">
                         <controls:AutoCompleteBox.ItemTemplate>
                             <DataTemplate>

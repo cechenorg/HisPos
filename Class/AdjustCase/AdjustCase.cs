@@ -23,5 +23,10 @@ namespace His_Pos.Class.AdjustCase
         {
             Id = !string.IsNullOrEmpty(d.Dhead.D1) ? d.Dhead.D1 : string.Empty;
         }
+
+        public AdjustCase ShallowCopy()
+        {
+            return (AdjustCase)MemberwiseClone();
+        }
     }
 }

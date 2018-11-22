@@ -127,7 +127,9 @@ namespace His_Pos.Class.Declare
         private void CheckDayPay(int dayPay)
         {
             DrugsPoint = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
-            Prescription.Treatment.AdjustCase.Id = "3";//將調劑案件轉換為日劑藥費
+            AdjustCase.AdjustCase tmpAdjustCase = Prescription.Treatment.AdjustCase.ShallowCopy();
+            tmpAdjustCase.Id = "3";
+            Prescription.Treatment.AdjustCase = tmpAdjustCase;//將調劑案件轉換為日劑藥費
             switch (dayPay)
             {
                 case 22:

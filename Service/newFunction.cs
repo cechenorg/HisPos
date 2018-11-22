@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 
 namespace His_Pos.Service
@@ -310,6 +311,24 @@ namespace His_Pos.Service
             }
 
             return value;
+        }
+
+        public static T DeepCloneViaJson<T>(this T source)
+        {
+            if (source != null)
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings
+                {
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                    TypeNameHandling = TypeNameHandling.Auto
+                };
+
+                var serializedObj = JsonConvert.SerializeObject(source, Formatting.Indented, jsonSerializerSettings);
+                return JsonConvert.DeserializeObject<T>(serializedObj, jsonSerializerSettings);
+            }
+            else
+            { return default(T); }
+
         }
     }
 }
