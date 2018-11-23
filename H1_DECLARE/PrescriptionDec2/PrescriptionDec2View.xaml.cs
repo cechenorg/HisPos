@@ -857,7 +857,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DeclareMedicine declareMedicine;
             int currentRow;
             currentRow = GetCurrentRowIndex(sender);
-            if (string.IsNullOrEmpty(((IProductDeclare)medicineCodeAuto.SelectedItem).Forms))
+            if (string.IsNullOrEmpty(((IProductDeclare)medicineCodeAuto.SelectedItem)?.Forms))
             {
                 prescriptionOtc = (PrescriptionOTC)((PrescriptionOTC)medicineCodeAuto.SelectedItem)?.Clone();
                 if (CurrentPrescription.Medicines.Count > 0)
@@ -885,7 +885,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else
             {
-                declareMedicine = (DeclareMedicine)((DeclareMedicine)medicineCodeAuto.SelectedItem)?.Clone();
+                declareMedicine = ((DeclareMedicine)medicineCodeAuto.SelectedItem).DeepCloneViaJson();
                 if (declareMedicine != null && (declareMedicine.Id.EndsWith("00")|| declareMedicine.Id.EndsWith("G0")))
                     declareMedicine.Position = Positions.SingleOrDefault(p=>p.Id.Contains("PO"))?.Id;
                 if (CurrentPrescription.Medicines.Count > 0)
@@ -1876,6 +1876,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             SetCardStatusContent("重新讀取中...");
             string cardReaderStatus;
             var res = HisApiBase.csVerifySAMDC();
+            MainWindow.Res = res;
             if (res == 0)
             {
                 SetCardStatusContent("安全模組認證成功");
