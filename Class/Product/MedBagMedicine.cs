@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -34,7 +35,7 @@ namespace His_Pos.Class.Product
                 SideEffect = "副作用:" + Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = "適應症:" + Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 MedicineDays = "共" + m.Days + "天";
-                Dosage = m.Dosage;
+                Dosage = m.Dosage.ToString(CultureInfo.InvariantCulture);
                 Total = m.Days + "天" + m.Amount;
                 if (m.Id.EndsWith("00") || m.Id.EndsWith("G0"))
                     Total += "顆";

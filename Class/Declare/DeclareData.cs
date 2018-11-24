@@ -245,14 +245,12 @@ namespace His_Pos.Class.Declare
             var count = 1;
             foreach (var medicine in Prescription.Medicines)
             {
-                if (medicine is DeclareMedicine declare)
-                {
-                    var detail = new DeclareDetail(declare, Prescription.Treatment.AdjustCase, count);
-                    if (!declare.PaySelf)
-                        CountDeclarePoint(detail);
-                    DeclareDetails.Add(detail);
-                    count++;
-                }
+                if (!(medicine is DeclareMedicine declare)) continue;
+                var detail = new DeclareDetail(declare, Prescription.Treatment.AdjustCase, count);
+                if (!declare.PaySelf)
+                    CountDeclarePoint(detail);
+                DeclareDetails.Add(detail);
+                count++;
             }
         }
 

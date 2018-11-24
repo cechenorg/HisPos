@@ -515,7 +515,7 @@ namespace His_Pos.Class.StoreOrder
                 if (declareMedicine is DeclareMedicine)
                 {
                     Dtl_data.Append(((DeclareMedicine)declareMedicine).Id.PadRight(12, ' ')); //健保碼
-                    Dtl_data.Append(((DeclareMedicine)declareMedicine).MedicalCategory.Dosage.PadLeft(8, ' ')); //每次使用數量
+                    Dtl_data.Append(((DeclareMedicine)declareMedicine).MedicalCategory.Dosage.ToString().PadLeft(8, ' ')); //每次使用數量
                     Dtl_data.Append(((DeclareMedicine)declareMedicine).Usage.Name.PadRight(16, ' ')); //使用頻率
                     Dtl_data.Append(((DeclareMedicine)declareMedicine).Days.PadRight(3, ' ')); //使用天數
                     Dtl_data.Append(((DeclareMedicine)declareMedicine).Amount.ToString().PadRight(8, ' ')); //使用總量

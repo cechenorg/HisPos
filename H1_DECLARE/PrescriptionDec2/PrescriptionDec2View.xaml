@@ -30,12 +30,9 @@
                 <Label x:Name="PromName" Width="350" Content="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
-        <local:GenderConverter x:Key="GenderConverter" />
-        <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter" />
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
-        <hisPos:NullTextBoxConverter x:Key="NullTextBoxConverter" />
         <hisPos:DateConverter x:Key="DateConverter" />
-        <hisPos:DateValidationRule x:Key="BirthDayValidationRule"/>
+        <hisPos:DoubleConverter x:Key="DoubleConverter" />
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">
         <Grid Name="PrescriptionGrid" Width="1365" Height="839">
@@ -282,7 +279,7 @@
                             <DataTemplate x:Name="DosageDataTemplate">
                                 <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" InputScope="Number" IsReadOnlyCaretVisible="True" CaretIndex="0" PreviewTextInput="ChronicSequence_PreviewTextInput"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="MedTotalPrice_GotFocus" CaretBrush="Red"
-                                         PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
+                                         PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DoubleConverter},Delay=400}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

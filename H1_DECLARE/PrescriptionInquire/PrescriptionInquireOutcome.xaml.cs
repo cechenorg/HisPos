@@ -356,7 +356,7 @@ namespace His_Pos.PrescriptionInquire
             med.Days = string.Empty;
             med.Position = string.Empty;
             med.Source = string.Empty;
-            med.Dosage = string.Empty;
+            med.Dosage = 0;
         }
 
         private void ClearPrescriptionOtc(PrescriptionOTC med)
@@ -371,7 +371,7 @@ namespace His_Pos.PrescriptionInquire
             med.Days = string.Empty;
             med.Position = string.Empty;
             med.Source = string.Empty;
-            med.Dosage = string.Empty;
+            med.Dosage = 0;
         }
         private void Dosage_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {

@@ -48,7 +48,7 @@ namespace His_Pos.Class.Product
                 source = string.Empty;
                 MedicalCategory = new Medicate
                 {
-                    Dosage = string.Empty,
+                    Dosage = 0,
                     Unit = string.Empty,
                     Form = dataRow["HISMED_FORM"].ToString()
                 };
@@ -73,7 +73,7 @@ namespace His_Pos.Class.Product
                 }
                 else
                 {
-                    Dosage = string.IsNullOrEmpty(dataRow["HISDECDET_AMOUNT"].ToString())? string.Empty : dataRow["HISDECDET_AMOUNT"].ToString();
+                    Dosage = string.IsNullOrEmpty(dataRow["HISDECDET_AMOUNT"].ToString())? 0 : double.Parse(dataRow["HISDECDET_AMOUNT"].ToString());
                     UsageName = string.IsNullOrEmpty(dataRow["HISFEQ_ID"].ToString())? string.Empty : dataRow["HISFEQ_ID"].ToString();
                     Days = string.IsNullOrEmpty(dataRow["HISDECDET_DRUGDAY"].ToString())? string.Empty : dataRow["HISDECDET_DRUGDAY"].ToString();
                     Position = string.IsNullOrEmpty(dataRow["HISWAY_ID"].ToString())? string.Empty : dataRow["HISWAY_ID"].ToString();
@@ -173,20 +173,20 @@ namespace His_Pos.Class.Product
                 {
                     _usageName = value;
                     Usage = MainWindow.Usages.SingleOrDefault(u => u.Name.Replace(" ", "").Equals(_usageName.ToString().Replace(" ", "")));
-                    if (double.TryParse(Dosage, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
+                    if ((Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
                         CalculateAmount();
                     NotifyPropertyChanged(nameof(UsageName));
                 }
             }
         }
 
-        public string Dosage
+        public double Dosage
         {
-            get => MedicalCategory != null ? MedicalCategory.Dosage : string.Empty;
+            get => MedicalCategory.Dosage;
             set
             {
                 MedicalCategory.Dosage = value;
-                if (double.TryParse(value, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
+                if (Id != null && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
                     CalculateAmount();
                 NotifyPropertyChanged(nameof(Dosage));
             }
@@ -200,7 +200,7 @@ namespace His_Pos.Class.Product
             set
             {
                 _days = value;
-                if (int.TryParse(value, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && double.TryParse(Dosage, out _))
+                if (int.TryParse(value, out _) && (Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName))
                     CalculateAmount();
                 NotifyPropertyChanged(nameof(Days));
             }
@@ -283,7 +283,7 @@ namespace His_Pos.Class.Product
 
         string IProductDeclare.ProductId { get => Id; set => Id = value; }
         string IProductDeclare.ProductName { get => Name; set => Name=value; }
-        string IProductDeclare.Dosage { get => Dosage; set => Dosage = value; }
+        double IProductDeclare.Dosage { get => Dosage; set => Dosage = value; }
         string IProductDeclare.Usage { get => Usage.Name; set => Usage.Name = value; }
         string IProductDeclare.Position { get => Position; set => Position = value; }
         string IProductDeclare.Days { get => Days; set => Days = value; }
@@ -313,7 +313,7 @@ namespace His_Pos.Class.Product
                 tmpUsage = u;
                 find = true;
             }
-            Amount = find ? double.Parse(Dosage)*UsagesFunction.CheckUsage(int.Parse(_days), tmpUsage) : double.Parse(Dosage)*UsagesFunction.CheckUsage(int.Parse(_days));
+            Amount = find ? Dosage * UsagesFunction.CheckUsage(int.Parse(_days), tmpUsage) : Dosage * UsagesFunction.CheckUsage(int.Parse(_days));
         }
 
         public object Clone()

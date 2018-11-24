@@ -1124,6 +1124,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\HisReceipt.rdlc" />
     <EmbeddedResource Include="RDLC\InventoryCheckSheet.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>

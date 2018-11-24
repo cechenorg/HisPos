@@ -304,17 +304,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var medDays = 0;
             foreach (var med in CurrentPrescription.Medicines)
             {
-                if (med is DeclareMedicine)
+                if (!(med is DeclareMedicine declare)) continue;
+                if (string.IsNullOrEmpty(((IProductDeclare)declare).Days))
                 {
-                    if (string.IsNullOrEmpty(((IProductDeclare)(DeclareMedicine)med).Days))
-                    {
-                        var messageWindow = new MessageWindow(med.Id + "的給藥日份不可為空", MessageType.ERROR, true);
-                        messageWindow.ShowDialog();
-                        return;
-                    }
-                    if (int.Parse(((IProductDeclare)(DeclareMedicine)med).Days) > medDays)
-                        medDays = int.Parse(((IProductDeclare)(DeclareMedicine)med).Days);
+                    var messageWindow = new MessageWindow(declare.Id + "的給藥日份不可為空", MessageType.ERROR, true);
+                    messageWindow.ShowDialog();
+                    return;
                 }
+                if (int.Parse(((IProductDeclare)declare).Days) > medDays)
+                    medDays = int.Parse(((IProductDeclare)declare).Days);
             }
             CurrentPrescription.Treatment.MedicineDays = medDays.ToString();
 
@@ -413,7 +411,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             } 
         }
         
-        private void InsertPrescription(string Type)
+        private void InsertPrescription(string type)
         {
             MessageWindow m;
             _currentDeclareData = new DeclareData(CurrentPrescription);
@@ -422,9 +420,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             string medServiceName = string.Empty;
             string medCopayName = string.Empty;
             SetEntryType( ref medEntryName, ref medServiceName, ref medCopayName);
-            bool buckleCondition = Type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"); //扣庫條件
+            bool buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"); //扣庫條件
              var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
-            int caseType = 0;
+            int caseType;
 
             if (string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) && string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && string.IsNullOrEmpty(_currentDecMasId) && CurrentPrescription.Treatment.TreatmentDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
                 caseType = 1; //一般處方調劑
@@ -867,7 +865,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         var m = CurrentPrescription.Medicines[currentRow - 1];
                         Debug.Assert(prescriptionOtc != null, nameof(prescriptionOtc) + " != null");
                         prescriptionOtc.Usage = new Usage();
-                        prescriptionOtc.Dosage = string.Empty;
+                        prescriptionOtc.Dosage = 0;
                         prescriptionOtc.Days = string.Empty;
                         CurrentPrescription.Medicines.Add(prescriptionOtc);
                         medicineCodeAuto.Text = string.Empty;
@@ -1121,7 +1119,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             med.Days = string.Empty;
             med.Position = string.Empty;
             med.Source = string.Empty;
-            med.Dosage = string.Empty;
+            med.Dosage = 0;
         }
 
         private void ClearPrescriptionOtc(PrescriptionOTC med)
@@ -1136,7 +1134,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             med.Days = string.Empty;
             med.Position = string.Empty;
             med.Source = string.Empty;
-            med.Dosage = string.Empty;
+            med.Dosage = 0;
         }
 
         private void SetChanged()
