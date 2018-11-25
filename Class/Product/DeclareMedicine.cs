@@ -33,19 +33,22 @@ namespace His_Pos.Class.Product
         public DeclareMedicine(XmlNode xml)
         {
             Id = xml.Attributes["id"].Value;
-            HcPrice = 0.0000;
             Ingredient = string.Empty;
+            Usage = new Usage();
+            UsageName = xml.Attributes["freq"].Value;
+            Days = xml.Attributes["days"].Value;
+            Position = xml.Attributes["way"].Value;
+            Amount = Convert.ToDouble(xml.Attributes["total_dose"].Value);  
             MedicalCategory = new Medicate();
+            MedicalCategory.Dosage = MainWindow.Usages.SingleOrDefault(x => x.QuickName == xml.Attributes["daily_dose"].Value).Name;
+            Dosage = xml.Attributes["divided_dose"].Value;
+            PaySelf = xml.Attributes["remark"].Value == "*" ? true : false; 
+            Price = PaySelf ? Convert.ToDouble(xml.Attributes["price"].Value) : 0;
             Cost = 0;
-            Price = 0;
             TotalPrice = 0;
-            Amount = 0;
             CountStatus = string.Empty;
             FocusColumn = string.Empty;
-            Usage = new Usage();
-            _days = string.Empty;
-            Position = string.Empty;
-            IsBuckle = true;
+            IsBuckle = false;
             source = string.Empty;
             SideEffect = string.Empty;
             Indication = string.Empty;

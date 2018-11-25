@@ -53,6 +53,7 @@ using RadioButton = System.Windows.Controls.RadioButton;
 using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.H1_DECLARE.PrescriptionInquire;
+using System.Xml;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -109,6 +110,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private DeclareData _currentDeclareData;
         private string _currentDecMasId = string.Empty;
         private string _firstTimeDecMasId = string.Empty;
+        private XmlDocument _clinicXml = new XmlDocument();
+        private string _clinicDeclareId = string.Empty;
         private int _prescriptionCount;
 
         public int PrescriptionCount
@@ -396,11 +399,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void SetEntryType(ref string medEntryName, ref string medServiceName, ref string medCopayName) {
             switch (CurrentPrescription.Treatment.MedicalInfo.Hospital.Id)
             {
-                case "3532016964":
-                case "3532052317":
+                case "3532072408":
                 case "3532071956":
                 case "3531066077":
                 case "3532082253":
+                case "3532016964":
                     medEntryName = "合作診所調劑耗用";
                     medServiceName = "合作診所藥服費";
                     medCopayName = "合作診所部分負擔";
@@ -426,7 +429,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
              var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             int caseType = 0;
 
-            if (string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) && string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && string.IsNullOrEmpty(_currentDecMasId) && CurrentPrescription.Treatment.TreatmentDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
+            if (string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) && string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && string.IsNullOrEmpty(_currentDecMasId) && CurrentPrescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
                 caseType = 1; //一般處方調劑
             else if (!string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) && !string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && !string.IsNullOrEmpty(_currentDecMasId))
                 caseType = 2; //帶出預約慢箋
@@ -554,7 +557,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 medicalPerson.PrescriptionCount++;
                 break;
             }
+            if (!string.IsNullOrEmpty(_clinicDeclareId)) {
 
+                declareDb.SaveCooperClinicDeclare(_clinicDeclareId,_clinicXml);
+            }
             PrintMedBag();
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
@@ -1325,13 +1331,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 MedicalNumber.Text = tmpMedicalNumber;
             }
         }
-        public void SetValueByPrescription(Prescription prescription)
-        { 
-            CurrentPrescription = prescription;
-            DivisionCombo.SelectedItem =
-                Divisions.SingleOrDefault(d => d.Id.Equals(prescription.Treatment.MedicalInfo.Hospital.Division.Id));
-           // TreatmentCaseCombo.SelectedItem =
-            //    TreatmentCases.SingleOrDefault(t => t.Id.Equals(prescription.Treatment.MedicalInfo.TreatmentCase.Id));
+        public void SetValueByPrescription(CooperativeClinic cooperativeClinic)
+        {
+            _clinicDeclareId = cooperativeClinic.DeclareId;
+            _clinicXml = cooperativeClinic.Xml;
+            foreach (DeclareMedicine declareMedicine in cooperativeClinic.Prescription.Medicines) {
+                declareMedicine.Name = DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id).Name;
+                declareMedicine.HcPrice = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).HcPrice;
+                declareMedicine.Stock = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).Stock; 
+            }
+
+            CurrentPrescription = cooperativeClinic.Prescription;
+            DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d => d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
+            TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id));
             var diseaseCode = CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
             if (!string.IsNullOrEmpty(diseaseCode))
                 CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
@@ -1812,12 +1824,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public void CheckChronicExist()
         {
             if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
-            var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id);
+            var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id,CurrentPrescription.Customer.IcNumber);
             chronicSelectWindow.ShowDialog();
         }
 
         public void ClearPrescription()
         {
+            _firstTimeDecMasId = string.Empty;
+            _currentDecMasId = string.Empty;
+            _clinicDeclareId = string.Empty;
+            _clinicXml = new XmlDocument();
             CurrentPrescription = new Prescription();
             CurrentPrescription.Treatment.MedicalInfo.Hospital = new Hospital();
             DivisionCombo.SelectedIndex = -1;
@@ -1862,5 +1878,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             medBag = new MedBagReport();
             AdjustCases = MainWindow.AdjustCases;
         }
+       
     }
 }

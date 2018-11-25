@@ -14,7 +14,7 @@ namespace His_Pos.Class.Division
         }
         public Division(XmlDocument xml)
         {
-            Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/insurance").Attributes["release_type"].Value;
+            Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["subject"].Value;
         }
         public Division(DataRow dataRow)
         {

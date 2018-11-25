@@ -1008,5 +1008,34 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("ERROR_DECLARE", errorDeclare)); 
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareRegister]", parameters);
         }
+        public void SaveCooperClinicDeclare(string declareId,XmlDocument xml)
+        {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            parameters.Add(new SqlParameter("DECLARE_ID", declareId)); 
+            parameters.Add(new SqlParameter("DECLARE_XML", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader((string)xml.InnerXml, XmlNodeType.Document, null))
+            });
+            conn.ExecuteProc("[HIS_POS_DB].[API].[SaveCooperClinicDeclare]", parameters);
+        }
+        public void SendUnSendCooperClinicDeclare()
+        {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            DataTable table = conn.ExecuteProc("[HIS_POS_DB].[API].[GetUnSendCooperClinicDeclare]");
+            if (table.Rows.Count == 0)
+                return;
+            List<CooperativeClinic> cooperativeClinics = new List<CooperativeClinic>();
+            foreach (DataRow row in table.Rows) {
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(row["API_DELCARE_XML"].ToString());
+                cooperativeClinics.Add(new CooperativeClinic(xmlDocument));
+            }
+            CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson(cooperativeClinics);
+            WebApi.SendToCooperClinic(cooperativeClinicJson);
+            conn.ExecuteProc("[HIS_POS_DB].[API].[UpdateUnSendCooperClinicStatus]");
+        }
+         
     }
 }

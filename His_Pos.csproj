@@ -271,6 +271,7 @@
     <Compile Include="Class\Chronic.cs" />
     <Compile Include="Class\ChronicDb.cs" />
     <Compile Include="Class\CooperativeClinic.cs" />
+    <Compile Include="Class\CooperativeClinicJson.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryHis.cs" />

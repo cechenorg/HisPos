@@ -70,7 +70,7 @@ namespace His_Pos.Class.Person
 
             Name = xmlcus.Attributes["name"].Value;
             string birstring = xmlcus.Attributes["birth"].Value.Substring(0, 3) + "-" + xmlcus.Attributes["birth"].Value.Substring(3, 2) + "-" + xmlcus.Attributes["birth"].Value.Substring(5, 2);
-            Birthday = Convert.ToDateTime(birstring); 
+            Birthday = Convert.ToDateTime(birstring).AddYears(1911); 
             
         }
         public Customer(XmlNode xml) {

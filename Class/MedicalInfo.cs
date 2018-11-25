@@ -64,6 +64,7 @@ namespace His_Pos.Class
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = xml.SelectNodes("DeclareXml/DeclareXmlDocument/case/study/diseases/item")[0].Attributes["code"].Value;
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
+            TreatmentCase = new TreatmentCase.TreatmentCase(xml);
         }
 
         public MedicalInfo(DeclareFileDdata d)

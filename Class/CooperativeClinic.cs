@@ -14,9 +14,13 @@ namespace His_Pos.Class
         public CooperativeClinic() { }
         public CooperativeClinic(XmlDocument xmlDocument) { 
             DeclareId = xmlDocument.SelectSingleNode("DeclareXml/DeclareId").InnerText;
-            Prescription = new Prescription(xmlDocument); 
+            Remark = xmlDocument.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/profile/person/remark").InnerText.Trim();
+            Prescription = new Prescription(xmlDocument);
+            Xml = xmlDocument;
         }
         public string DeclareId { get; set; } 
+        public string Remark { get; set; }
         public Prescription Prescription { get; set; }
+        public XmlDocument Xml { get; set; }
     }
 }
