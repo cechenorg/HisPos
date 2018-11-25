@@ -51,6 +51,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             Chronic chronic = new Chronic();
             chronic.hospital.Name = "新增新處方單";
             ChronicCollection.Add(chronic);
+            if (ChronicCollection.Count == 0 & CooperativeClinicCollection.Count == 0)
+                Close();
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {

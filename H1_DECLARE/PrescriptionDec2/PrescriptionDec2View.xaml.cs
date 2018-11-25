@@ -1335,7 +1335,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             _clinicDeclareId = cooperativeClinic.DeclareId;
             _clinicXml = cooperativeClinic.Xml;
-            foreach (DeclareMedicine declareMedicine in cooperativeClinic.Prescription.Medicines) {
+            for (int i = 0; i < cooperativeClinic.Prescription.Medicines.Count; i++) {
+                if (DeclareMedicines.Count(med => med.Id == cooperativeClinic.Prescription.Medicines[i].Id) == 0)
+                    cooperativeClinic.Prescription.Medicines.Remove(cooperativeClinic.Prescription.Medicines[i]);
+            }
+
+            foreach (DeclareMedicine declareMedicine in cooperativeClinic.Prescription.Medicines) { 
                 declareMedicine.Name = DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id).Name;
                 declareMedicine.HcPrice = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).HcPrice;
                 declareMedicine.Stock = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).Stock; 
@@ -1823,7 +1828,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void CheckChronicExist()
         {
-            if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
+            //if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
             var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id,CurrentPrescription.Customer.IcNumber);
             chronicSelectWindow.ShowDialog();
         }
