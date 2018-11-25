@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Microsoft.International.Formatters;
 using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 
@@ -329,6 +331,11 @@ namespace His_Pos.Service
             else
             { return default(T); }
 
+        }
+
+        public static string ConvertToAsiaMoneyFormat(int cost)
+        {
+            return EastAsiaNumericFormatter.FormatWithCulture("L", cost, null, new CultureInfo("zh-TW")) + "元整";
         }
     }
 }

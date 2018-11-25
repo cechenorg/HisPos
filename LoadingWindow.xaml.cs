@@ -891,13 +891,39 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void PrintMedbag(ReportViewer rptViewer, PrescriptionDec2View prescriptionDec2View)
+        public void PrintMedbag(ReportViewer rptViewer, PrescriptionDec2View prescriptionDec2View,bool printReceipt)
         {
             prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("藥袋列印中...");
                 Export(rptViewer.LocalReport,22,24);
+                ReportPrint();
+                Dispatcher.Invoke((Action)(() =>
+                {
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionDec2View.PrescriptionViewBox.IsEnabled = true;
+                    if(!printReceipt)
+                        prescriptionDec2View.ClearPrescription();
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        public void PrintReceipt(ReportViewer rptViewer, PrescriptionDec2View prescriptionDec2View)
+        {
+            prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("收據列印中...");
+                Export(rptViewer.LocalReport, 22, 24);
                 ReportPrint();
                 Dispatcher.Invoke((Action)(() =>
                 {

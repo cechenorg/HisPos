@@ -191,7 +191,7 @@ namespace His_Pos.Class
 
         private void CheckReleaseInstitution()
         {
-            if (string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Id))
+            if (Treatment.MedicalInfo.Hospital is null || string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Id))
             {
                 AddError("0", "未選擇釋出院所");
                 return;

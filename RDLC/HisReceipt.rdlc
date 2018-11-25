@@ -338,7 +338,7 @@
                     <Value>=Parameters!Hospital.Value</Value>
                     <Style>
                       <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>13pt</FontSize>
+                      <FontSize>11pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
@@ -347,7 +347,7 @@
             </Paragraphs>
             <Top>2.5cm</Top>
             <Left>4.55cm</Left>
-            <Height>0.46771cm</Height>
+            <Height>0.44cm</Height>
             <Width>3.7cm</Width>
             <ZIndex>13</ZIndex>
             <Style>
@@ -816,7 +816,6 @@
           <Rectangle Name="Rectangle1">
             <ReportItems>
               <Textbox Name="Textbox35">
-                <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
                 <Paragraphs>
                   <Paragraph>
@@ -874,7 +873,6 @@
           <Rectangle Name="Rectangle3">
             <ReportItems>
               <Textbox Name="Textbox37">
-                <CanGrow>true</CanGrow>
                 <KeepTogether>true</KeepTogether>
                 <Paragraphs>
                   <Paragraph>
@@ -890,7 +888,6 @@
                   </Paragraph>
                 </Paragraphs>
                 <rd:DefaultName>Textbox37</rd:DefaultName>
-                <Top>0cm</Top>
                 <Left>0.08cm</Left>
                 <Height>0.75535cm</Height>
                 <Width>10.328cm</Width>
@@ -997,6 +994,8 @@
     </ReportParameter>
     <ReportParameter Name="Doctor">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="MedicalNumber">

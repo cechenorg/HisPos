@@ -14,6 +14,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -693,17 +694,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             d.InsertDailyUpload(icRecord.SerializeObject());
         }
         #endregion
+        #region 藥袋.收據列印
         private void PrintMedBag()
         {
-            var messageBoxResult = new YesNoMessageWindow("是否列印一藥一袋");
-            bool singleMode = (bool)messageBoxResult.ShowDialog();
-            //var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
-            //File.WriteAllText(ReportService.ReportPath, string.Empty);
-            //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
-            //for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
-            //{
-            //    ReportService.CreatePdf(defaultMedBag,i);
-            //}
+            var medBagResult = new YesNoMessageWindow("是否列印一藥一袋","請選擇藥袋列印模式");
+            var singleMode = (bool)medBagResult.ShowDialog();
+            var receiptResult = new YesNoMessageWindow("是否列印收據","列印收據");
+            var receiptPrint = (bool)receiptResult.ShowDialog();
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
             var medBagMedicines = new ObservableCollection<MedBagMedicine>();
@@ -719,7 +716,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         break;
                 }
             }
-
             if (singleMode)
             {
                 foreach (var m in medBagMedicines)
@@ -766,7 +762,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     rptViewer.LocalReport.Refresh();
                     var loadingWindow = new LoadingWindow();
                     loadingWindow.Show();
-                    loadingWindow.PrintMedbag(rptViewer, Instance);
+                    loadingWindow.PrintMedbag(rptViewer, Instance, receiptPrint);
                 }
             }
             else
@@ -775,14 +771,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     .Select(group => new { UsageName = group.Key, count = group.Count() })
                     .OrderBy(x => x.UsageName))
                 {
-                    int i = 1;
+                    var i = 1;
                     foreach (var med in medBagMedicines)
                     {
-                        if (med.Usage.Equals(m.UsageName))
-                        {
-                            med.MedNo = i.ToString();
-                            i++;
-                        }
+                        if (!med.Usage.Equals(m.UsageName)) continue;
+                        med.MedNo = i.ToString();
+                        i++;
                     }
                 }
                 var json = JsonConvert.SerializeObject(medBagMedicines);
@@ -820,9 +814,60 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 rptViewer.LocalReport.Refresh();
                 var loadingWindow = new LoadingWindow();
                 loadingWindow.Show();
-                loadingWindow.PrintMedbag(rptViewer, Instance);
+                loadingWindow.PrintMedbag(rptViewer, Instance, receiptPrint);
             }
+            if (receiptPrint)
+                PrintReceipt();
+            //var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
+            //File.WriteAllText(ReportService.ReportPath, string.Empty);
+            //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
+            //for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            //{
+            //    ReportService.CreatePdf(defaultMedBag,i);
+            //}
         }
+
+        private void PrintReceipt()
+        {
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\HisReceipt.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var adjustDate =
+                DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.AdjustDate, true);
+            var doctor =
+                CurrentPrescription.Treatment.MedicalInfo.Hospital.Id.Equals(CurrentPrescription.Treatment.MedicalInfo
+                    .Hospital.Doctor.IcNumber)
+                    ? CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.Name
+                    : string.Empty;
+            var totalMedicalCost = MedicinePoint + _currentDeclareData.MedicalServicePoint;
+            var parameters = new List<ReportParameter>
+                    {
+                        new ReportParameter("Pharmacy", MainWindow.CurrentPharmacy.Name),
+                        new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
+                        new ReportParameter("Gender", CurrentPrescription.Customer.IcNumber[1].Equals('1')?"男":"女"),
+                        new ReportParameter("Birthday",  DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday,true)),
+                        new ReportParameter("AdjustDate", adjustDate),
+                        new ReportParameter("Hospital",CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
+                        new ReportParameter("Doctor", doctor),//病歷號
+                        new ReportParameter("MedicalNumber", CurrentPrescription.Customer.IcCard.MedicalNumber),
+                        new ReportParameter("MedicineCost", MedicinePoint.ToString(CultureInfo.InvariantCulture)),
+                        new ReportParameter("MedicalServiceCost", _currentDeclareData.MedicalServicePoint.ToString()),
+                        new ReportParameter("TotalMedicalCost", Convert.ToInt16(Math.Ceiling(totalMedicalCost / 3)).ToString(CultureInfo.InvariantCulture)),
+                        new ReportParameter("CopaymentCost", _currentDeclareData.CopaymentPoint.ToString()),
+                        new ReportParameter("HcPay", _currentDeclareData.DeclarePoint.ToString()),
+                        new ReportParameter("SelfCost", SelfCost.ToString()),
+                        new ReportParameter("ActualReceive", Pay.ToString()),
+                        new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(Pay))
+                    };
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.Refresh();
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.Show();
+            loadingWindow.PrintReceipt(rptViewer, Instance);
+        }
+        #endregion
         private void MedicineCodeAuto_Populating(object sender, PopulatingEventArgs e)
         {
             if (!(sender is AutoCompleteBox medicineCodeAuto)) return;

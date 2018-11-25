@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace His_Pos.Service
 {
@@ -19,22 +7,25 @@ namespace His_Pos.Service
     /// </summary>
     public partial class YesNoMessageWindow : Window
     {
-        public YesNoMessageWindow(string message)
+        public string Message { get; set; }
+        public YesNoMessageWindow(string message,string title)
         {
             InitializeComponent();
-            Message.Content = message;
+            Message = message;
+            TitleLabel.Content = title;
+            DataContext = this;
         }
 
         private void Yes_ButtonClick(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
-            this.Close();
+            Close();
         }
 
         private void NoButton_OnClick_ButtonClick(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
-            this.Close();
+            Close();
         }
     }
 }
