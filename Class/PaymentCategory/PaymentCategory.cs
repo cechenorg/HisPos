@@ -14,7 +14,11 @@ namespace His_Pos.Class.PaymentCategory
         {
             Id = xml.SelectSingleNode("d5") == null ? null : xml.SelectSingleNode("d5").InnerText;
         }
-
+        public PaymentCategory(XmlDocument xml)
+        {
+            Id = "4";
+        }
+        
         public PaymentCategory(DataRow dataRow)
         {
             Id = dataRow["HISPAYCAT_ID"].ToString();
@@ -25,6 +29,11 @@ namespace His_Pos.Class.PaymentCategory
         public PaymentCategory(DeclareFileDdata d)
         {
             Id = !string.IsNullOrEmpty(d.Dbody.D5) ? d.Dbody.D5 : string.Empty;
+        }
+
+        public PaymentCategory ShallowCopy()
+        {
+            return (PaymentCategory)MemberwiseClone();
         }
     }
 }

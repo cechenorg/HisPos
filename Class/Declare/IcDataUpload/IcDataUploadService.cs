@@ -12,7 +12,6 @@ namespace His_Pos.Class.Declare.IcDataUpload
     public class IcDataUploadService
     {
         public IcDataUpload IcDataUploadTable { get; set; }
-
     }
     public class IcDataUpload
     {
@@ -36,7 +35,11 @@ namespace His_Pos.Class.Declare.IcDataUpload
 
         public IcRecord(DataRow row)
         {
-            
+        }
+
+        public IcRecord()
+        {
+
         }
 
         [XmlElement(ElementName = "MSH")]
@@ -48,6 +51,10 @@ namespace His_Pos.Class.Declare.IcDataUpload
     [XmlRoot(ElementName = "MSH")]
     public class Header
     {
+        public Header()
+        {
+        }
+
         /*
          * V : 必填欄位 ~ : 不填欄位 * : 選填欄位
          * 資料格式 :
@@ -72,6 +79,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
     [XmlRoot(ElementName = "MB")]
     public class MainMessage
     {
+        public MainMessage() { }
         public MainMessage(IcData icData)
         {
             IcMessage = icData;
@@ -85,6 +93,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
     [XmlRoot(ElementName = "MB1")]
     public class IcData
     {
+        public IcData() { }
         public IcData(SeqNumber seq,Prescription currentPrescription,BasicData customerData,DeclareData currentDeclareData)
         {
             SamCode = seq.SamId;

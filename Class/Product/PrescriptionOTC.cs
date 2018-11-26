@@ -19,7 +19,7 @@ namespace His_Pos.Class.Product
             Source = string.Empty;
             CountStatus = string.Empty;
             FocusColumn = string.Empty;
-            Dosage = "0";
+            Dosage = 0;
             Usage = new Usage();
             Position = string.Empty;
             Days = string.Empty;
@@ -38,7 +38,7 @@ namespace His_Pos.Class.Product
             Source = string.Empty;
             CountStatus = string.Empty;
             FocusColumn = string.Empty;
-            Dosage = "0";
+            Dosage = 0;
             Usage = new Usage();
             Position = string.Empty;
             Days = string.Empty;
@@ -112,8 +112,8 @@ namespace His_Pos.Class.Product
         }
         public string CountStatus { get; set; }
         public string FocusColumn { get; set; }
-        private string _dosage;
-        public string Dosage
+        private double _dosage;
+        public double Dosage
         {
             get => _dosage;
             set
@@ -201,7 +201,7 @@ namespace His_Pos.Class.Product
         string ITrade.FocusColumn { get => FocusColumn; set => FocusColumn = value; }
         string IProductDeclare.ProductId { get => Id; set => Id = value; }
         string IProductDeclare.ProductName { get => Name; set => Name = value; }
-        string IProductDeclare.Dosage { get => Dosage; set => Dosage = value; }
+        double IProductDeclare.Dosage { get => Dosage; set => Dosage = value; }
         string IProductDeclare.Usage { get => UsageName; set => UsageName = value; }
         string IProductDeclare.Position { get => PositionId; set => PositionId = value; }
         string IProductDeclare.Days { get => Days; set => Days = value; }

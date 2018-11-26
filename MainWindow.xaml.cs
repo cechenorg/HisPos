@@ -16,6 +16,7 @@ using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Authority;
 using His_Pos.Class.Copayment;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
@@ -41,6 +42,7 @@ namespace His_Pos
     public partial class MainWindow
     {
         public static string CardReaderStatus;
+        public static int Res { get; set; }
         public static Pharmacy CurrentPharmacy;
         public static MainWindow MainWindowInstance;
         public static bool ItemSourcesSet { get; set; }
@@ -66,6 +68,7 @@ namespace His_Pos
         public static ObservableCollection<Position> Positions { get; set; }
         public MainWindow(User userLogin)
         {
+            Res = -1;
             FeatureFactory();
             InitializeComponent();
             WindowState = WindowState.Maximized;
@@ -76,7 +79,7 @@ namespace His_Pos
             StratClock();
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
-            CurrentPharmacy = new Pharmacy("5932012975", "杏昌藥局", "330桃園市桃園區中正路1100號", "03-3573268");
+            CurrentPharmacy = new Pharmacy("5932013534", "杏昌藥局", "330桃園市桃園區中正路1100號", "03-3573268");
             CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
         }
@@ -208,6 +211,8 @@ namespace His_Pos
             //var d = new DeclareDb();
             //d.StartDailyUpload();
             ProductDb.UpdateDailyStockValue();
+            DeclareDb declareDb = new DeclareDb();
+            declareDb.SendUnSendCooperClinicDeclare();
             Application.Current.Shutdown();
         }
 
@@ -225,14 +230,14 @@ namespace His_Pos
 
         private void VerifySam()
         {
-            var res = HisApiBase.csOpenCom(0);
-            if (res == 0)
+            Res = HisApiBase.csOpenCom(0);
+            if (Res == 0)
             {
-                res = HisApiBase.csVerifySAMDC();
-                CardReaderStatus = GetEnumDescription((ErrorCode)res);
+                Res = HisApiBase.csVerifySAMDC();
+                CardReaderStatus = GetEnumDescription((ErrorCode)Res);
             }
             else
-                CardReaderStatus = GetEnumDescription((ErrorCode)res);
+                CardReaderStatus = GetEnumDescription((ErrorCode)Res);
         }
 
         public static string GetEnumDescription(Enum value)

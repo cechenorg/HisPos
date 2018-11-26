@@ -128,7 +128,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
 
                 if (string.IsNullOrEmpty(d.Id)) continue;
 
-                d.Dosage = p.P3.TrimStart('0');
+                d.Dosage = double.Parse(p.P3.TrimStart('0'));
                 d.UsageName = p.P4;
                 d.Position = p.P5;
                 d.Amount = double.Parse(p.P7);
@@ -224,7 +224,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
             med.Days = string.Empty;
             med.Position = string.Empty;
             med.Source = string.Empty;
-            med.Dosage = string.Empty;
+            med.Dosage = 0;
         }
 
         private void MedicineCodeAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)

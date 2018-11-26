@@ -4,6 +4,7 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using His_Pos.Class.Declare;
+using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class
@@ -56,6 +57,16 @@ namespace His_Pos.Class
             SecondDiseaseCode.Id = xml.SelectSingleNode("d9") == null ? null : xml.SelectSingleNode("d9").InnerText;
             TreatmentCase = new TreatmentCase.TreatmentCase(xml);
         }
+        public MedicalInfo(XmlDocument xml)
+        {
+            Hospital = new Hospital(xml);
+            SpecialCode = new SpecialCode.SpecialCode(xml);
+            MainDiseaseCode = new DiseaseCode.DiseaseCode();
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode();
+            MainDiseaseCode.Id = xml.SelectNodes("DeclareXml/DeclareXmlDocument/case/study/diseases/item")[0].Attributes["code"].Value;
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode();
+            TreatmentCase = new TreatmentCase.TreatmentCase(xml);
+        }
 
         public MedicalInfo(DeclareFileDdata d)
         {
@@ -75,7 +86,7 @@ namespace His_Pos.Class
             get => _hospital;
             set
             {
-                _hospital = value;
+                _hospital = value.DeepCloneViaJson();
                 OnPropertyChanged(nameof(Hospital));
             }
         } //d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
@@ -87,7 +98,7 @@ namespace His_Pos.Class
             get => _specialCode;
             set
             {
-                _specialCode = value;
+                _specialCode = value.DeepCloneViaJson();
                 OnPropertyChanged(nameof(SpecialCode));
             }
         } //d26 原處方服務機構之特定治療項目代號
@@ -99,7 +110,7 @@ namespace His_Pos.Class
             get => _mainDiseaseCode;
             set
             {
-                _mainDiseaseCode = value;
+                _mainDiseaseCode = value.DeepCloneViaJson();
                 OnPropertyChanged(nameof(MainDiseaseCode));
             }
         } //d8 國際疾病分類碼
@@ -111,7 +122,7 @@ namespace His_Pos.Class
             get => _secondDiseaseCode;
             set
             {
-                _secondDiseaseCode = value;
+                _secondDiseaseCode = value.DeepCloneViaJson();
                 OnPropertyChanged(nameof(SecondDiseaseCode));
             }
         } //d9 國際疾病分類碼

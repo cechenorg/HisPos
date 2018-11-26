@@ -12,6 +12,10 @@ namespace His_Pos.Class.Copayment
         public Copayment(XmlNode xml) {
             Id = xml.SelectSingleNode("d15") == null ? null : xml.SelectSingleNode("d15").InnerText;
         }
+        public Copayment(XmlDocument xml)
+        {
+            Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/insurance").Attributes["copayment_code"].Value;
+        }
         public Copayment(DataRow dataRow)
         {
             Id = dataRow["HISCOP_ID"].ToString();
@@ -25,5 +29,10 @@ namespace His_Pos.Class.Copayment
         }
 
         public int Point { get; set; }
+
+        public Copayment ShallowCopy()
+        {
+            return (Copayment)MemberwiseClone();
+        }
     }
 }

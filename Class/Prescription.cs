@@ -24,7 +24,7 @@ namespace His_Pos.Class
             IsGetIcCard = false;
             EList = new ErrorList();
         }
-     
+
         public Prescription(Customer customer, Pharmacy.Pharmacy pharmacy, Treatment treatment, ObservableCollection<AbstractClass.Product> medicines)
         {
             Customer = customer;
@@ -63,7 +63,16 @@ namespace His_Pos.Class
             ChronicTotal = !string.IsNullOrEmpty(d.Dbody.D36) ? d.Dbody.D36 : string.Empty;
             OriginalMedicalNumber = !string.IsNullOrEmpty(d.Dbody.D43) ? d.Dbody.D43 : string.Empty;
         }
-
+        public Prescription(XmlDocument xml)
+        {
+            Customer = new Customer(xml);
+            Pharmacy = new Pharmacy.Pharmacy(xml);
+            Treatment = new Treatment(xml);
+            Medicines = new ObservableCollection<AbstractClass.Product>();
+            foreach (XmlNode xmlNode in xml.SelectNodes("DeclareXml/DeclareXmlDocument/case/orders/item")){
+                Medicines.Add(new DeclareMedicine(xmlNode));
+            } 
+        }
         private Customer _customer;
 
         public Customer Customer
@@ -191,7 +200,7 @@ namespace His_Pos.Class
 
         private void CheckReleaseInstitution()
         {
-            if (string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Id))
+            if (Treatment.MedicalInfo.Hospital is null || string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Id))
             {
                 AddError("0", "未選擇釋出院所");
                 return;

@@ -597,7 +597,7 @@ namespace His_Pos.Class.Declare
             row["D14"] = declareData.Prescription.Treatment.TreatmentDate;
             row["D15"] = declareData.Prescription.Treatment.Copayment.Id;
             row["D16"] = declareData.DeclarePoint.ToString();
-            row["D17"] = declareData.Prescription.Treatment.Copayment.Point.ToString();
+            row["D17"] = declareData.CopaymentPoint.ToString();
             row["D18"] = declareData.TotalPoint.ToString();
             row["D19"] = CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString());
             row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;
@@ -925,8 +925,8 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             parameters.Add(new SqlParameter("ID", DBNull.Value));
             parameters.Add(new SqlParameter("UPLOAD_DATA", dataXml));
-            parameters.Add(new SqlParameter("UPLOAD_STATUS", 0));
-            parameters.Add(new SqlParameter("CREATE_DATE", DateTime.Now.ToShortDateString()));
+            parameters.Add(new SqlParameter("UPLOAD_STATUS", false));
+            parameters.Add(new SqlParameter("CREATE_DATE", DateTime.Today.Date));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDailyUploadData]", parameters);
         }
 
@@ -1008,5 +1008,34 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("ERROR_DECLARE", errorDeclare)); 
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareRegister]", parameters);
         }
+        public void SaveCooperClinicDeclare(string declareId,XmlDocument xml)
+        {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            parameters.Add(new SqlParameter("DECLARE_ID", declareId)); 
+            parameters.Add(new SqlParameter("DECLARE_XML", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader((string)xml.InnerXml, XmlNodeType.Document, null))
+            });
+            conn.ExecuteProc("[HIS_POS_DB].[API].[SaveCooperClinicDeclare]", parameters);
+        }
+        public void SendUnSendCooperClinicDeclare()
+        {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            DataTable table = conn.ExecuteProc("[HIS_POS_DB].[API].[GetUnSendCooperClinicDeclare]");
+            if (table.Rows.Count == 0)
+                return;
+            List<CooperativeClinic> cooperativeClinics = new List<CooperativeClinic>();
+            foreach (DataRow row in table.Rows) {
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(row["API_DELCARE_XML"].ToString());
+                cooperativeClinics.Add(new CooperativeClinic(xmlDocument));
+            }
+            CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson(cooperativeClinics);
+            WebApi.SendToCooperClinic(cooperativeClinicJson);
+            conn.ExecuteProc("[HIS_POS_DB].[API].[UpdateUnSendCooperClinicStatus]");
+        }
+         
     }
 }

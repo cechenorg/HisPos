@@ -68,6 +68,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
             InitializeComponent();
             DataContext = this;
             InitData(DecMasId);
+            if (ChronicRegisterCollection.Count == 0)
+                this.Close();
         }
         private void InitData(string DecMasId) {
             ChronicRegisterCollection = ChronicDb.GetChronicGroupById(DecMasId);

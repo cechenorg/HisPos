@@ -24,13 +24,13 @@
                 <RowDefinition Height="839"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="1065"/>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="1055"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Vertical">
                 <DataGrid Name="DeclareFileList" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" ItemsSource="{Binding Path=DeclareFiles,UpdateSourceTrigger=PropertyChanged}"
                       VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" HeadersVisibility="None" Background="{StaticResource GridHalfTransBackground}"
-                      Height="839" SelectionChanged="DeclareFileList_SelectionChanged">
+                      Height="839" SelectionChanged="DeclareFileList_SelectionChanged" AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn Width="320">
                             <DataGridTemplateColumn.CellStyle>
@@ -131,7 +131,7 @@
                             </controls:AutoCompleteBox>
                         </StackPanel>
                     </StackPanel>
-                    <Button Name="ButtonSearch"  Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="88,0,10,0" Click="SearchButtonClick"/>
+                    <Button x:Name="ButtonSearch"  Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Margin="61,0,10,0" Click="SearchButtonClick"/>
                 </StackPanel>
                 <DataGrid
                      Name="PrescriptionList" Height="630"  Background="{StaticResource Shadow}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" 
@@ -258,15 +258,15 @@
                         </DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid Margin="10" Height="50">
+                <Grid Margin="10" Height="50" Background="{StaticResource Shadow}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3.5*"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <WrapPanel VerticalAlignment="Center">
+                    <WrapPanel VerticalAlignment="Center" Background="Transparent">
                         <CheckBox Name="ErrorDec" Margin="10" Content="錯誤不申報" FontSize="18" FontFamily="Segoe UI Semibold" IsChecked="True" Click="ErrorDec_OnClick" Visibility="Hidden"/>
                     </WrapPanel>
-                    <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,0" Background="IndianRed" Content="轉出申報檔" Click="CreateDeclareFileClick"/>
+                    <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Margin="0,0,10,0" Background="IndianRed" BorderThickness="0" Content="轉出申報檔" Click="CreateDeclareFileClick"/>
                 </Grid>
             </StackPanel>
             </Grid>
