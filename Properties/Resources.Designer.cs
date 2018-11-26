@@ -124,6 +124,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 合作診所調劑耗用 的當地語系化字串。
+        /// </summary>
+        internal static string CooperativeAdjustReport {
+            get {
+                return ResourceManager.GetString("CooperativeAdjustReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 顧客管理 的當地語系化字串。
         /// </summary>
         internal static string CustomerManage {

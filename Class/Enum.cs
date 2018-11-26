@@ -55,7 +55,8 @@ namespace His_Pos.Class
         顧客管理 = 19,
         每日作業 = 20,
         庫存現值查詢 = 21,
-        進退貨報表查詢 = 22
+        進退貨報表查詢 = 22,
+        合作診所調劑耗用 = 23
     }
 
     public enum StoreOrderProductType

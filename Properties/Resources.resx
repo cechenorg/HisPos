@@ -273,4 +273,7 @@
   <data name="PurchaseReturnReport" xml:space="preserve">
     <value>進退貨報表查詢</value>
   </data>
+  <data name="CooperativeAdjustReport" xml:space="preserve">
+    <value>合作診所調劑耗用</value>
+  </data>
 </root>
