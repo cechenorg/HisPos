@@ -75,7 +75,7 @@ namespace His_Pos.Class
             get => _division;
             set
             {
-                _division = value.DeepCloneViaJson();
+                _division = value;
                 NotifyPropertyChanged(nameof(Division));
             }
         }

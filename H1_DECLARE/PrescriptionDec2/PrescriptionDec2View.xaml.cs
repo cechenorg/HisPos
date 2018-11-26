@@ -557,8 +557,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 break;
             }
             if (!string.IsNullOrEmpty(_clinicDeclareId)) {
-
                 declareDb.SaveCooperClinicDeclare(_clinicDeclareId,_clinicXml);
+                WebApi.UpdateXmlStatus(_clinicDeclareId);
             }
             PrintMedBag();
             CustomerSelected = false;
@@ -1440,10 +1440,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 declareMedicine.HcPrice = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).HcPrice;
                 declareMedicine.Stock = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).Stock; 
             }
-
             CurrentPrescription = cooperativeClinic.Prescription;
-            DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d => d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
-            TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id));
+            string tempTreatmentId = CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id;
+           
+            DivisionCombo.SelectedItem =Divisions.SingleOrDefault(d => d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
+
+            CurrentPrescription.Treatment.AdjustCase = AdjustCases.SingleOrDefault(t => t.Id == CurrentPrescription.Treatment.AdjustCase.Id);
+            AdjustCaseCombo.SelectedItem = AdjustCases.SingleOrDefault(t => t.Id == CurrentPrescription.Treatment.AdjustCase.Id);
+
+            CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = TreatmentCases.SingleOrDefault(t => t.Id.Equals(tempTreatmentId));
+            TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id.Equals(tempTreatmentId));
+
             var diseaseCode = CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
             if (!string.IsNullOrEmpty(diseaseCode))
                 CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
@@ -1458,6 +1465,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         SpecialCodeCombo.SelectedItem = s;
                 }
             }
+            CountMedicinesCost();
         }
             public void SetValueByDecMasId(string decMasId) {
             if (decMasId is null) return;
@@ -1465,7 +1473,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
             CurrentPrescription = prescription;
             DivisionCombo.SelectedItem =
-                Divisions.SingleOrDefault(d => d.Id.Equals(prescription.Treatment.MedicalInfo.Hospital.Division.Id));
+                Divisions.Single(d => d.Id.Equals(prescription.Treatment.MedicalInfo.Hospital.Division.Id));
             TreatmentCaseCombo.SelectedItem =
                 TreatmentCases.SingleOrDefault(t => t.Id.Equals(prescription.Treatment.MedicalInfo.TreatmentCase.Id));
             var diseaseCode = CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
@@ -1482,7 +1490,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         SpecialCodeCombo.SelectedItem = s;
                 }
             }
-
+            CountMedicinesCost();
             //}
             //    SpecialCodeCombo.SelectedItem = SpecialCodes.Single(s => s.Id.Equals());
             //DivisionCombo.Text = prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
@@ -1910,7 +1918,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             //if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
             var chronicSelectWindow = new ChronicSelectWindow(CurrentPrescription.Customer.Id,CurrentPrescription.Customer.IcNumber);
-            chronicSelectWindow.ShowDialog();
+            if (chronicSelectWindow.ChronicCollection.Count == 1 & chronicSelectWindow.CooperativeClinicCollection.Count == 0)
+                chronicSelectWindow.Close();
+            else
+               chronicSelectWindow.ShowDialog();
+            
         }
 
         public void ClearPrescription()

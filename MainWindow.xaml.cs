@@ -79,7 +79,7 @@ namespace His_Pos
             StratClock();
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
-            CurrentPharmacy = new Pharmacy("5932013534", "杏昌藥局", "330桃園市桃園區中正路1100號", "03-3573268");
+            CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
         }

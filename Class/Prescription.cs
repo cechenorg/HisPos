@@ -71,7 +71,10 @@ namespace His_Pos.Class
             Medicines = new ObservableCollection<AbstractClass.Product>();
             foreach (XmlNode xmlNode in xml.SelectNodes("DeclareXml/DeclareXmlDocument/case/orders/item")){
                 Medicines.Add(new DeclareMedicine(xmlNode));
-            } 
+            }
+            ChronicSequence = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["count"].Value;
+            ChronicTotal = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["total"].Value;
+
         }
         private Customer _customer;
 

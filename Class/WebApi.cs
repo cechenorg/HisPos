@@ -44,7 +44,7 @@ namespace His_Pos.Class
         { 
             string json = JsonConvert.SerializeObject(cooperativeClinicJson); 
             HttpMethod httpMethod = new HttpMethod();
-            httpMethod.PostJson(@"http://api.ihis.com.tw/irxexg/" + MainWindow.CurrentPharmacy.Id, json);
+            httpMethod.PostJson(@"http://api.ihis.com.tw/irxexg/" + MainWindow.CurrentPharmacy.Id + "/", json);
         }
     }
 }

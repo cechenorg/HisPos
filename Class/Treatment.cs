@@ -57,8 +57,8 @@ namespace His_Pos.Class
             MedicalInfo = new MedicalInfo(xml);
             PaymentCategory = new PaymentCategory.PaymentCategory(xml);
             AdjustCase = new AdjustCase.AdjustCase();
-
-            string treatDate = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case").Attributes["date"].Value;
+            AdjustCase.Id = "1";
+            string treatDate = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["start_at"].Value == "" ? xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case").Attributes["date"].Value : xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["start_at"].Value;
             TreatmentDate = Convert.ToDateTime(treatDate.Substring(0, 3) + "-" + treatDate.Substring(3, 2) + "-" + treatDate.Substring(5, 2)).AddYears(1911);
             AdjustDate = DateTime.Now;
             MedicineDays = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/orders").Attributes["days"].Value;

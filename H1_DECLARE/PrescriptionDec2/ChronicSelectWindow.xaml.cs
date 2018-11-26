@@ -4,6 +4,9 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Linq;
+using His_Pos.Service;
+using His_Pos.Class.Division;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
     /// <summary>
@@ -45,14 +48,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
             DataContext = this;
         }
         private void InitData() {
-            ChronicCollection = ChronicDb.GetChronicDeclareById(CusId);
+            ChronicCollection = ChronicDb.GetChronicDeclareById(CusId); 
             CooperativeClinicCollection = WebApi.GetXmlByMedicalNum(MainWindow.CurrentPharmacy.Id, CusIcNum);
-
+          
             Chronic chronic = new Chronic();
             chronic.hospital.Name = "新增新處方單";
             ChronicCollection.Add(chronic);
-            if (ChronicCollection.Count == 0 & CooperativeClinicCollection.Count == 0)
-                Close();
+         
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
@@ -68,6 +70,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
         {
             var selectedItem = (sender as DataGridRow).Item;
             PrescriptionDec2View.Instance.SetValueByPrescription(((CooperativeClinic)selectedItem));
+            
             Close();
         }
     }

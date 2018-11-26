@@ -13,11 +13,7 @@ namespace His_Pos.Class.AdjustCase
         public AdjustCase(XmlNode xml) {
            Id = xml.SelectSingleNode("d1") == null ? null : xml.SelectSingleNode("d1").InnerText;
         }
-        public AdjustCase(XmlDocument xml)
-        {
-            Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/insurance").Attributes["case_type"].Value;
-            
-        }
+        
         public AdjustCase(DataRow dataRow)
         {
             Id = dataRow["ADJUSTCASE_ID"].ToString();
