@@ -724,9 +724,9 @@ namespace His_Pos.Class.Declare
                     row["P6"] = function.ToInvCulture(detail.Percent);
                     row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                     row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                    row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                    row["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
                     row["P10"] = detail.Sequence.ToString();
-                    row["P11"] = detail.Days.ToString();
+                    row["P11"] = detail.Days.ToString().PadLeft(2,'0');
                     row["PAY_BY_YOURSELF"] = paySelf;
 
                     pDataTable.Rows.Add(row);
@@ -754,10 +754,27 @@ namespace His_Pos.Class.Declare
                 count++;
             }
             var percent = CountAdditionPercent(declareData);
-            var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            var detail = new DeclareDetail("1", declareData.DayPayCode, percent,
-                declareData.MedicalServicePoint, count + 1, currentDate,
-                currentDate);
+            int dayPay = 0;
+            switch (declareData.DayPayCode)
+            {
+                case "MA1":
+                    dayPay = 22;
+                    break;
+                case "MA2":
+                    dayPay = 31;
+                    break;
+                case "MA3":
+                    dayPay = 37;
+                    break;
+                case "MA4":
+                    dayPay = 41;
+                    break;
+            }
+            var dayPayPrice = double.Parse(declareData.Prescription.Treatment.MedicineDays) * dayPay;
+            var currentDate = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+            var detail = new DeclareDetail("1", declareData.DayPayCode, percent, double.Parse(declareData.Prescription.Treatment.MedicineDays),
+                dayPayPrice, count + 1, currentDate,
+                currentDate,"dayPay");
             var pData = pDataTable.NewRow();
             SetMedicalServiceCostDataRow(pData, declareData, detail);
             declareData.DeclareDetails.Add(detail);
@@ -784,9 +801,9 @@ namespace His_Pos.Class.Declare
                     row["P6"] = function.ToInvCulture(detail.Percent);
                     row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                     row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                    row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                    row["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
                     row["P10"] = detail.Sequence.ToString();
-                    row["P11"] = detail.Days.ToString();
+                    row["P11"] = detail.Days.ToString().PadLeft(2, '0');
                     row["PAY_BY_YOURSELF"] = paySelf;
                     pDataTable.Rows.Add(row);
             }
@@ -797,11 +814,11 @@ namespace His_Pos.Class.Declare
          */
         private void AddMedicalServiceCostPData(DeclareData declareData, DataTable pDataTable)
         {
-            double percent = 100;
-            var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            var detail = new DeclareDetail("9", declareData.MedicalServiceCode, percent,
+            var percent = CountAdditionPercent(declareData);
+            var currentDate = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+            var detail = new DeclareDetail("9", declareData.MedicalServiceCode, percent, 1,
                 declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate,
-                currentDate);
+                currentDate,"service");
             var pData = pDataTable.NewRow();
             SetMedicalServiceCostDataRow(pData, declareData, detail);
             declareData.DeclareDetails.Add(detail);
@@ -833,7 +850,7 @@ namespace His_Pos.Class.Declare
                 pData["P6"] = function.ToInvCulture(detail.Percent);
                 pData["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                 pData["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                pData["P9"] = function.SetStrFormatInt(  Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,  MidpointRounding.AwayFromZero))), "{0:D8}");
+                pData["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
                 pData["P10"] = function.SetStrFormatInt(declarecount, "{0:D3}");
                 pData["P12"] = detail.StartDate;
                 pData["P13"] = detail.EndDate;

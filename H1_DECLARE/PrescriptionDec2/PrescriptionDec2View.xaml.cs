@@ -118,6 +118,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             set
             {
                 _prescriptionCount = value;
+                NotifyPropertyChanged(nameof(PrescriptionCount));
             }
         }
 
@@ -129,7 +130,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             set
             {
                 _currentPrescription = value;
-                NotifyPropertyChanged("CurrentPrescription");
+                NotifyPropertyChanged(nameof(CurrentPrescription));
             }
         }
 
@@ -141,6 +142,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             set
             {
                 _medicinePoint = value;
+                NotifyPropertyChanged(nameof(MedicinePoint));
             }
         }
 
@@ -1203,23 +1205,25 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             double purchaseCosts = 0;//藥品總進貨成本
             foreach (var medicine in CurrentPrescription.Medicines)
             {
-                if (medicine is DeclareMedicine declareMedicine)
+                switch (medicine)
                 {
-                    if (!declareMedicine.PaySelf)
-                        medicinesHcCost += declareMedicine.TotalPrice;
-                    else
-                        medicinesSelfCost += declareMedicine.TotalPrice;
-                    purchaseCosts += declareMedicine.Cost * declareMedicine.Amount;
+                    case DeclareMedicine declareMedicine:
+                    {
+                        if (!declareMedicine.PaySelf)
+                            medicinesHcCost += declareMedicine.TotalPrice;
+                        else
+                            medicinesSelfCost += declareMedicine.TotalPrice;
+                        purchaseCosts += declareMedicine.Cost * declareMedicine.Amount;
+                        break;
+                    }
+                    case PrescriptionOTC otc:
+                        medicinesSelfCost += otc.TotalPrice;
+                        purchaseCosts += otc.Cost * otc.Amount;
+                        break;
                 }
-                else if(medicine is PrescriptionOTC otc)
-                {
-                    medicinesSelfCost += otc.TotalPrice;
-                    purchaseCosts += otc.Cost * otc.Amount;
-                }
-                
             }
             SelfCost = Convert.ToInt16(Math.Ceiling(medicinesSelfCost));//自費金額
-            if(!CurrentPrescription.Treatment.Copayment.Name.Equals("其他免收"))
+            if(!NewFunction.CheckCopaymentFreeProject(CurrentPrescription.Treatment.Copayment.Id))
                 Copayment = CountCopaymentCost(medicinesHcCost);//部分負擔
             MedProfit = (medicinesHcCost + medicinesSelfCost - purchaseCosts);//藥品毛利
             MedicinePoint = medicinesHcCost;
@@ -1725,9 +1729,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DeclareSubmit.IsEnabled = AdjustDate.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
             IsSendToServer.IsChecked = false;
             if (AdjustCaseCombo.SelectedItem == null) return;
-            IsSendToServer.IsEnabled = DeclareSubmit.IsEnabled ? false : true;
-            IsSendToServer.IsChecked = DeclareSubmit.IsEnabled ? false : true;
-            ButtonDeclareRegister.IsEnabled = DeclareSubmit.IsEnabled ? false : true;
+            IsSendToServer.IsEnabled = !DeclareSubmit.IsEnabled;
+            IsSendToServer.IsChecked = !DeclareSubmit.IsEnabled;
+            ButtonDeclareRegister.IsEnabled = !DeclareSubmit.IsEnabled;
         }
 
         private void SelectionStart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

@@ -80,8 +80,10 @@ namespace His_Pos.Class.Product
                     Amount = string.IsNullOrEmpty(dataRow["HISDECDET_QTY"].ToString())? 0 : Convert.ToDouble(dataRow["HISDECDET_QTY"].ToString());
                 }
                 Ingredient = dataRow["HISMED_INGREDIENT"].ToString();
-                Price = double.Parse(dataRow["PRO_LASTPRICE"].ToString());
+                Price = double.Parse(dataRow["PRO_SELL_PRICE"].ToString());
+                Cost = double.Parse(dataRow["PRO_LASTPRICE"].ToString());
                 Note = dataRow["HISMED_NOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_NOTE"].ToString();
+                HcNote = dataRow["HISMED_HCNOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_HCNOTE"].ToString();
             }
             ControlLevel = dataRow["HISMED_CONTROL"].ToString();
             IsFrozMed = bool.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
@@ -260,6 +262,9 @@ namespace His_Pos.Class.Product
         }
 
         public string Note { get; set; }
+
+        public string HcNote { get; set; }
+
         private bool isBuckle;
         public bool IsBuckle
         {

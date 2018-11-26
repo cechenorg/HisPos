@@ -162,7 +162,6 @@ namespace His_Pos.IndexView
             DailyTakeChronicListCollection = ChronicDb.DailyTakeChronic();
             DailtChronicPhoneCallCollection = ChronicDb.DailyChronicPhoneCall();
         }
-       
 
         private void TransferToStoord_Click(object sender, RoutedEventArgs e) {
             if(ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList().Count != 0)

@@ -7,20 +7,60 @@ namespace His_Pos.Class.Declare
 {
     public class DeclareDetail : ICloneable
     {
-        public DeclareDetail(string medicalOrder,string medicalId, double percent, double price, int sequence, string start, string end)
+        public DeclareDetail(string medicalOrder,string medicalId, double percent,double total, double price, int sequence, string start, string end,string type)
         {
-            MedicalOrder = medicalOrder;
-            MedicalId = medicalId;
-            Dosage = 0;
-            Total = 00001.0;
-            Price = price;
-            Percent = percent;
-            CountPoint();
-            Sequence = sequence;
-            SetDate(start, end);
+            switch (type)
+            {
+                case "service":
+                    MedicalOrder = medicalOrder;//p1
+                    MedicalId = medicalId;//p2
+                    Percent = percent;//p6 支付成數
+                    Total = total;//p7 總量
+                    Price = price;//p8 單價
+                    CountPoint();
+                    Sequence = sequence;//p10
+                    SetDate(start, end);
+                    break;
+                case "dayPay":
+                    MedicalOrder = medicalOrder;//p1
+                    MedicalId = medicalId;//p2
+                    Dosage = 0001.00;//p3
+                    Percent = percent;//p6 支付成數
+                    Total = total;//p7 總量
+                    Price = price;//p8 單價
+                    CountPoint();//p9
+                    Sequence = sequence;//p10
+                    Days = int.Parse(Total.ToString());
+                    SetDate(start, end);
+                    break;
+            }
+            /*
+             *<p1>9</p1>
+             *<p2>05202B</p2>
+             *<p6>100</p6>
+             *<p7>00001.0</p7>
+             *<p8>0000048.00</p8>
+             *<p9>00000048</p9>
+             *<p10>002</p10>
+             *<p12>10610020000</p12>
+             *<p13>10610020000</p13>
+             */
+            /*
+             *<p1>1</p1>
+             *<p2>MA1</p2>
+             *<p3>0001.00</p3>
+             *<p6>100</p6>
+             *<p7>00003.0</p7>
+             *<p8>0000022.00</p8>
+             *<p9>00000066</p9>
+             *<p10>002</p10>
+             *<p11>03</p11>
+             *<p12>10610020000</p12>
+             *<p13>10610040000</p13>
+             */
         }
 
-        public DeclareDetail(DeclareMedicine medicine, AdjustCase.AdjustCase adjustCase, int sequence)
+        public DeclareDetail(DeclareMedicine medicine, int sequence)
         {
             const string medicationDetail = "1"; //p1 醫令類別 用藥明細
             const string notPriced = "4"; //p1 醫令類別 不得另計價之藥品
@@ -53,7 +93,7 @@ namespace His_Pos.Class.Declare
             Percent = xml.SelectSingleNode("p6") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p6").InnerText);
             Total = xml.SelectSingleNode("p7") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p7").InnerText);
             Price = xml.SelectSingleNode("p8") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p8").InnerText);
-            Point = xml.SelectSingleNode("p9") == null ? 0 : Convert.ToDouble(xml.SelectSingleNode("p9").InnerText);
+            Point = xml.SelectSingleNode("p9") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("p9").InnerText);
             Sequence = xml.SelectSingleNode("p10") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("p10").InnerText);
             Days = xml.SelectSingleNode("p11") == null ? 0 : Convert.ToInt32(xml.SelectSingleNode("p11").InnerText);
             StartDate = xml.SelectSingleNode("p12") == null ? null : xml.SelectSingleNode("p12").InnerText;
@@ -86,7 +126,7 @@ namespace His_Pos.Class.Declare
         public double Percent { get; set; }//p6
         public double Total { get; set; }//p7
         public double Price { get; set; }//p8
-        public double Point { get; set; }//p9
+        public int Point { get; set; }//p9
         public int Sequence { get; set; }//p10
         public int Days { get; set; }//p11
         public string StartDate { get; set; }//p12
@@ -124,11 +164,18 @@ namespace His_Pos.Class.Declare
                 Point = 0;
             else
             {
-                if (MedicalOrder == "1")
-                    Point = Price * Total;
+                //醫令類別1（用藥明細）：以單價＊總量
+                if (MedicalOrder == "1" || (MedicalOrder=="4" && MedicalId.Length == 10))
+                    Point = Convert.ToInt32(Math.Round(Price * Total, MidpointRounding.AwayFromZero));
+                /*
+                 *醫令類別4（不得另計價之藥品、檢驗（查）、診療項目或材料）：
+                 *醫令類別4且醫令代碼長度10碼者，以單價＊總量。
+                 *醫令類別4且醫令代碼不為10碼者，以單價＊總量＊支付成數。
+                 */
                 else
                 {
-                    Point = Price * Total * Percent;
+                    var addition = Percent * 0.01;
+                    Point = Convert.ToInt32(Math.Round(Price * Total * addition, MidpointRounding.AwayFromZero));
                 }
             }
         }
