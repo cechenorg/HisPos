@@ -46,7 +46,7 @@ namespace His_Pos.Class
             Name = MainWindow.Hospitals.SingleOrDefault(hos => hos.Id == Id).Name;
             FullName = MainWindow.Hospitals.SingleOrDefault(hos => hos.Id == Id).FullName;
             Doctor.IcNumber = Id;
-            Division = new Division.Division(xml);
+            Division = MainWindow.Divisions.SingleOrDefault(div => div.Id == xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["subject"].Value);
         }
         public Hospital(DeclareFileDdata d)
         {
