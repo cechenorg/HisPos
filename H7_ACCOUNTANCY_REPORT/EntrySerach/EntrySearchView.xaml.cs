@@ -72,7 +72,7 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
                 NotifyPropertyChanged("TotalDailyStock");
             }
         }
-        private DateTime startDate = DateTime.Now.AddMonths(-1);
+        private DateTime startDate = DateTime.Now.AddDays(-DateTime.Now.Day + 1);
         public DateTime StartDate
         {
             get => startDate;
