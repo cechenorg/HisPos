@@ -64,8 +64,8 @@ namespace His_Pos.Resource
             newItem.Header = itemName;
             newItem.Height = double.NaN;
             newItem.Padding = new Thickness(60, 6, 0, 6);
-            newItem.FontSize = 17;
-            newItem.Width = 320;
+            newItem.FontSize = 16;
+            newItem.Width = 330;
             newItem.VerticalContentAlignment = VerticalAlignment.Stretch;
             newItem.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Stretch;
             newItem.FlowDirection = System.Windows.FlowDirection.LeftToRight;

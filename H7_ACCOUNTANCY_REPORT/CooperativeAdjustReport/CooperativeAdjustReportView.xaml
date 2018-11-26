@@ -18,7 +18,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="700"/>
+            <ColumnDefinition Width="500"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
@@ -102,15 +102,7 @@
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="期初庫存" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                </DataGridTextColumn> 
                 <DataGridTextColumn Header="耗用量" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
@@ -118,15 +110,7 @@
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="期末庫存" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="HorizontalAlignment"  Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                </DataGridTextColumn> 
             </DataGrid.Columns>
         </DataGrid>
         <Label Content="調劑處方" Grid.Row="1" Grid.Column="1" FontFamily="Segoe UI Semibold" FontSize="30" VerticalAlignment="Bottom" Margin="20,0,0,0"/>
