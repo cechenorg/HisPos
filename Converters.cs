@@ -269,4 +269,20 @@ namespace His_Pos
             return null;
         }
     }
+
+    [ValueConversion(typeof(double), typeof(string))]
+    public class DoubleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var doubleType = (double)value;
+            return doubleType.ToString(CultureInfo.InvariantCulture);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var strValue = value as string;
+            return double.TryParse(strValue, out var resultDouble) ? resultDouble : 0;
+        }
+    }
 }

@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Microsoft.International.Formatters;
+using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 
 namespace His_Pos.Service
@@ -310,6 +313,29 @@ namespace His_Pos.Service
             }
 
             return value;
+        }
+
+        public static T DeepCloneViaJson<T>(this T source)
+        {
+            if (source != null)
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings
+                {
+                    PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                    TypeNameHandling = TypeNameHandling.Auto
+                };
+
+                var serializedObj = JsonConvert.SerializeObject(source, Formatting.Indented, jsonSerializerSettings);
+                return JsonConvert.DeserializeObject<T>(serializedObj, jsonSerializerSettings);
+            }
+            else
+            { return default(T); }
+
+        }
+
+        public static string ConvertToAsiaMoneyFormat(int cost)
+        {
+            return EastAsiaNumericFormatter.FormatWithCulture("L", cost, null, new CultureInfo("zh-TW")) + "元整";
         }
     }
 }

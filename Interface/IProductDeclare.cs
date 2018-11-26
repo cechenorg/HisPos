@@ -10,7 +10,7 @@ namespace His_Pos.Interface
     {
         string ProductId { get; set; }
         string ProductName { get; set; }
-        string Dosage { get; set; }
+        double Dosage { get; set; }
         string Usage { get; set; }
         string Position { get; set; }
         string Days { get; set; }

@@ -13,6 +13,7 @@ using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.Person;
 using His_Pos.HisApi;
+using His_Pos.Service;
 using His_Pos.Struct.IcData;
 using JetBrains.Annotations;
 
@@ -180,7 +181,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void SetSelectedCustomer()
         {
-            PrescriptionDec2View.Instance.CurrentPrescription.Customer = SelectedCustomer;
+            PrescriptionDec2View.Instance.CurrentPrescription.Customer = SelectedCustomer.DeepCloneViaJson();
             CustomerDb.UpdateCustomerLastEdit(SelectedCustomer);
             PrescriptionDec2View.Instance.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(PrescriptionDec2View.Instance.CurrentPrescription.Customer.Id);
             PrescriptionDec2View.Instance.CusHistoryMaster.ItemsSource = PrescriptionDec2View.Instance.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;

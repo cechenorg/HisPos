@@ -32,9 +32,7 @@ namespace His_Pos.Service
         public static string SerializeObject<T>(this T value)
         {
             if (value == null)
-            {
                 return string.Empty;
-            }
             try
             {
                 var xmlserializer = new XmlSerializer(value.GetType());

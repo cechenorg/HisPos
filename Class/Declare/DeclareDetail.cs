@@ -22,13 +22,11 @@ namespace His_Pos.Class.Declare
 
         public DeclareDetail(DeclareMedicine medicine, AdjustCase.AdjustCase adjustCase, int sequence)
         {
-            if (!medicine.PaySelf || adjustCase.Id == "3")//p1
-                MedicalOrder = "1";
-            else
-                MedicalOrder = "4";
+            const string medicationDetail = "1"; //p1 醫令類別 用藥明細
+            const string notPriced = "4"; //p1 醫令類別 不得另計價之藥品
+            MedicalOrder = !medicine.PaySelf ? medicationDetail : notPriced;
             PaySelf = medicine.PaySelf;
             SetMedicine(medicine);
-            SetMedicate(medicine);
             Sequence = sequence;
             CountPoint();
         }
@@ -98,21 +96,15 @@ namespace His_Pos.Class.Declare
         public string Name { get; set; }
         public bool PaySelf { get; set; }
 
-
-        private void SetMedicate(DeclareMedicine medicine)
-        {
-            Dosage = string.IsNullOrEmpty(medicine.MedicalCategory.Dosage)? 0.00
-                : double.Parse(medicine.MedicalCategory.Dosage);//p3
-            Usage = medicine.Usage.Id;//p4
-            Position = medicine.Position;//p5
-            Days = string.IsNullOrEmpty(medicine.Days)? 0: int.Parse(medicine.Days); //p11
-        }
-
         private void SetMedicine(DeclareMedicine medicine, bool paySelf = false)
         {
-            MedicalId = medicine.Id;//p2
-            Total = medicine.Amount;//p7
-            Price = paySelf ? medicine.Price : medicine.HcPrice;
+            MedicalId = medicine.Id;//p2 藥品代號 
+            Total = medicine.Amount;//p7 總量
+            Price = paySelf ? medicine.Price : medicine.HcPrice;//p8 單價
+            Dosage = medicine.MedicalCategory.Dosage;//p3
+            Usage = medicine.Usage.Id;//p4
+            Position = medicine.Position;//p5
+            Days = string.IsNullOrEmpty(medicine.Days) ? 0 : int.Parse(medicine.Days); //p11
         }
 
         private void SetDate(string start, string end)

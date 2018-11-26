@@ -6,7 +6,7 @@ namespace His_Pos.Class
     {
         public Medicate()
         {
-            Dosage = "";
+            Dosage = 0;
             Form = "";
         }
 
@@ -17,7 +17,7 @@ namespace His_Pos.Class
         }
 
         public string Unit { get; set; }
-        public string Dosage { get; set; }
+        public double Dosage { get; set; }
         public string Form { get; set; }
     }
 }

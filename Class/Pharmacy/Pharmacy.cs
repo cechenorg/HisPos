@@ -3,6 +3,7 @@ using His_Pos.Class.Person;
 using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
+using His_Pos.Service;
 
 namespace His_Pos.Class.Pharmacy
 {
@@ -47,7 +48,7 @@ namespace His_Pos.Class.Pharmacy
             get => _medicalPersonnel;
             set
             {
-                _medicalPersonnel = value;
+                _medicalPersonnel = value.DeepCloneViaJson();
                 NotifyPropertyChanged(nameof(MedicalPersonnel));
             }
         }

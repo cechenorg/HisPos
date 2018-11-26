@@ -30,12 +30,9 @@
                 <Label x:Name="PromName" Width="350" Content="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
-        <local:GenderConverter x:Key="GenderConverter" />
-        <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter" />
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
-        <hisPos:NullTextBoxConverter x:Key="NullTextBoxConverter" />
         <hisPos:DateConverter x:Key="DateConverter" />
-        <hisPos:DateValidationRule x:Key="BirthDayValidationRule"/>
+        <hisPos:DoubleConverter x:Key="DoubleConverter" />
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">
         <Grid Name="PrescriptionGrid" Width="1365" Height="839">
@@ -93,7 +90,7 @@
                     <controls:AutoCompleteBox x:Name="ReleaseHospital" Width="450" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Style="{StaticResource AutoCompleteBoxStyle}"
                                               Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" FontSize="16" FontStretch="ExtraExpanded" 
                                               ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" MinimumPrefixLength="4" InputScope="AlphanumericHalfWidth"
-                                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay}" ValueMemberPath="FullName" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp"
+                                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ValueMemberPath="FullName" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp"
                                               Populating="ReleaseHospital_Populating" PreviewKeyDown="ReleaseHospital_PreviewKeyDown" DropDownClosed="ReleaseHospital_DropDownClosed">
                         <controls:AutoCompleteBox.ItemTemplate>
                             <DataTemplate>
@@ -282,7 +279,7 @@
                             <DataTemplate x:Name="DosageDataTemplate">
                                 <TextBox x:Name="Dosage" MinWidth="60" HorizontalContentAlignment="Center" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" InputScope="Number" IsReadOnlyCaretVisible="True" CaretIndex="0" PreviewTextInput="ChronicSequence_PreviewTextInput"
                                          FontSize="14" FontWeight="Bold" IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}" PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown" GotFocus="MedTotalPrice_GotFocus" CaretBrush="Red"
-                                         PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
+                                         PreviewMouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding Dosage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DoubleConverter},Delay=400}" MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -501,11 +498,11 @@
                         <Label Width="90" Height="35" HorizontalContentAlignment="Center" Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="4">
-                        <CheckBox Name="IsSendToServer" Grid.Row="4" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"/>
-                        <Button Width="180" Name="ButtonDeclareRegister" IsEnabled="False" Margin="20,0,0,0" Background="BlueViolet" BorderThickness="0" Click="ButtonDeclareRegister_Click"  Content="處方登錄" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                        <CheckBox Name="IsSendToServer" Background="RoyalBlue" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"/>
+                        <Button Width="180" Name="ButtonDeclareRegister" IsEnabled="False" Margin="20,0,0,0" Background="RoyalBlue" BorderThickness="0" Click="ButtonDeclareRegister_Click"  Content="處方登錄" FontFamily="Segoe UI Semibold" FontSize="16"/>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Margin="8" Orientation="Horizontal">
-                        <Button Width="125" Background="{StaticResource Shadow}" BorderThickness="0" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Click="Button_Click" />
+                        <Button Width="125" Background="DimGray" BorderThickness="0" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Click="Button_Click" />
                         <Button Width="180" Name="DeclareSubmit" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" Click="Submit_ButtonClick" Content="調劑" FontFamily="Segoe UI Semibold" FontSize="16"/>
                         <Button Width="180" Name="NotDeclareSubmit" Margin="20,0,0,0" Background="IndianRed" BorderThickness="0" Click="NotDeclareSubmit_OnClickSubmit_ButtonClick" Content="自費調劑" FontFamily="Segoe UI Semibold" FontSize="16" Visibility="Collapsed"/>
                     </StackPanel>

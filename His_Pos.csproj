@@ -142,6 +142,9 @@
     <Reference Include="DotNet Common Library, Version=4.5.0.5, Culture=neutral, PublicKeyToken=fa81e3c46e3914cc, processorArchitecture=MSIL">
       <HintPath>packages\DotNetCommonLibrary.4.5.0.5\lib\net40-Client\DotNet Common Library.dll</HintPath>
     </Reference>
+    <Reference Include="EastAsiaNumericFormatter, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e1e67937c016e5b2, processorArchitecture=MSIL">
+      <HintPath>packages\EastAsiaNumericFormatter.1.0.0\lib\net40\EastAsiaNumericFormatter.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
       <HintPath>packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
@@ -716,6 +719,9 @@
     </Compile>
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
+    <Compile Include="Service\YesNoMessageWindow.xaml.cs">
+      <DependentUpon>YesNoMessageWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Struct\IcData\BasicData.cs" />
     <Compile Include="Struct\IcData\IcPrescriptData.cs" />
@@ -1085,6 +1091,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Service\YesNoMessageWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SystemSettings\SettingControl\DatabaseControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1121,11 +1131,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RDLC\HisReceipt.rdlc" />
     <EmbeddedResource Include="RDLC\InventoryCheckSheet.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="RDLC\MedBagReport.rdlc" />
-    <EmbeddedResource Include="RDLC\MedBagReport1.rdlc" />
+    <EmbeddedResource Include="RDLC\MedBagReportSingle.rdlc" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -1292,6 +1303,7 @@
     <Resource Include="Images\icons8-delete-32.png" />
     <Content Include="csHis.dll" />
     <Resource Include="Images\Ph.png" />
+    <Resource Include="Images\QuestionMark.png" />
     <Content Include="Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">

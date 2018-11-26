@@ -3,6 +3,7 @@ using System.Linq;
 using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
+using His_Pos.Service;
 
 namespace His_Pos.Class
 {
@@ -74,7 +75,7 @@ namespace His_Pos.Class
             get => _division;
             set
             {
-                _division = value;
+                _division = value.DeepCloneViaJson();
                 NotifyPropertyChanged(nameof(Division));
             }
         }
