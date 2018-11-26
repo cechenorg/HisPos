@@ -579,6 +579,10 @@
       <DependentUpon>ExportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="H6_DECLAREFILE\Export\Export.cs" />
+    <Compile Include="H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReport.cs" />
+    <Compile Include="H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml.cs">
+      <DependentUpon>CooperativeAdjustReportView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
       <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -961,6 +965,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -1304,6 +1312,9 @@
     <Content Include="csHis.dll" />
     <Resource Include="Images\Ph.png" />
     <Resource Include="Images\QuestionMark.png" />
+    <Resource Include="Images\CloseRecord.png" />
+    <Resource Include="Images\OpenRecord.png" />
+    <Resource Include="Images\OpenRecord2Detail.png" />
     <Content Include="Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
