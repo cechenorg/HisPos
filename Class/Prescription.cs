@@ -70,7 +70,10 @@ namespace His_Pos.Class
             Treatment = new Treatment(xml);
             Medicines = new ObservableCollection<AbstractClass.Product>();
             foreach (XmlNode xmlNode in xml.SelectNodes("DeclareXml/DeclareXmlDocument/case/orders/item")){
-                Medicines.Add(new DeclareMedicine(xmlNode));
+                if(xmlNode.Attributes["id"].Value.Length < 10)
+                    Medicines.Add(new PrescriptionOTC(xmlNode));
+                else
+                    Medicines.Add(new DeclareMedicine(xmlNode));
             }
             ChronicSequence = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["count"].Value;
             ChronicTotal = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["total"].Value;

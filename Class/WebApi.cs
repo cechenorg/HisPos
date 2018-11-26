@@ -41,7 +41,7 @@ namespace His_Pos.Class
         }
         
         internal static void SendToCooperClinic(CooperativeClinicJson cooperativeClinicJson)
-        { 
+        {
             string json = JsonConvert.SerializeObject(cooperativeClinicJson); 
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.PostJson(@"http://api.ihis.com.tw/irxexg/" + MainWindow.CurrentPharmacy.Id + "/", json);

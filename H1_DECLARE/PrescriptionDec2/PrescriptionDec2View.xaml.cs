@@ -113,6 +113,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private string _firstTimeDecMasId = string.Empty;
         private XmlDocument _clinicXml = new XmlDocument();
         private string _clinicDeclareId = string.Empty;
+        private bool _IsReceiveCopayMent = true;
         private int _prescriptionCount;
 
         public int PrescriptionCount
@@ -1428,17 +1429,22 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
         public void SetValueByPrescription(CooperativeClinic cooperativeClinic)
         {
+            _IsReceiveCopayMent = cooperativeClinic.Remark.Substring(16,1) == "Y" ? false :true;
             _clinicDeclareId = cooperativeClinic.DeclareId;
             _clinicXml = cooperativeClinic.Xml;
             for (int i = 0; i < cooperativeClinic.Prescription.Medicines.Count; i++) {
-                if (DeclareMedicines.Count(med => med.Id == cooperativeClinic.Prescription.Medicines[i].Id) == 0)
-                    cooperativeClinic.Prescription.Medicines.Remove(cooperativeClinic.Prescription.Medicines[i]);
+                if (DeclareMedicines.Count(med => med.Id == cooperativeClinic.Prescription.Medicines[i].Id) == 0) { 
+                    ProductDb.InsertMedicine(cooperativeClinic.Prescription.Medicines[i].Id, cooperativeClinic.Prescription.Medicines[i].Name);
+                    DeclareMedicines.Add((PrescriptionOTC)cooperativeClinic.Prescription.Medicines[i]);
+                }
             }
 
-            foreach (DeclareMedicine declareMedicine in cooperativeClinic.Prescription.Medicines) { 
+            foreach (Product declareMedicine in cooperativeClinic.Prescription.Medicines) { 
                 declareMedicine.Name = DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id).Name;
-                declareMedicine.HcPrice = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).HcPrice;
-                declareMedicine.Stock = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).Stock; 
+                if (declareMedicine is DeclareMedicine) {
+                    ((DeclareMedicine)declareMedicine).HcPrice = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).HcPrice;
+                    ((DeclareMedicine)declareMedicine).Stock = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).Stock; 
+                } 
             }
             CurrentPrescription = cooperativeClinic.Prescription;
             string tempTreatmentId = CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id;
@@ -1930,6 +1936,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             _firstTimeDecMasId = string.Empty;
             _currentDecMasId = string.Empty;
             _clinicDeclareId = string.Empty;
+            _IsReceiveCopayMent = true;
             _clinicXml = new XmlDocument();
             CurrentPrescription = new Prescription();
             DivisionCombo.SelectedIndex = -1;

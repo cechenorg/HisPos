@@ -20,7 +20,7 @@ namespace His_Pos.Class
             foreach (CooperativeClinic declareData in cooperativeClinics) {
                 msMedList msMedList = new msMedList();
                 msMedList.sMedDate = declareData.Prescription.Treatment.TreatmentDate.AddYears(-1911).ToString("yyyMMdd");
-                msMedList.sShtId = declareData.Remark;
+                msMedList.sShtId = declareData.Remark.Substring(0,16);
                 foreach (var declareDetail in declareData.Prescription.Medicines)
                 {
                     if (declareDetail is DeclareMedicine)

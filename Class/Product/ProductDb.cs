@@ -582,6 +582,13 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PROWAR_ID", '1'));
             parameters.Add(new SqlParameter("RecoveryAmount", RecoveryAmount)); 
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[RecoveryInventory]", parameters);
+        }
+        internal static void InsertMedicine(string proId,string proName) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("PRO_NAME", proName)); 
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertMedicine]", parameters);
         } 
     }
 } 

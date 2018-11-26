@@ -33,6 +33,9 @@ namespace His_Pos.Class.Product
         public DeclareMedicine(XmlNode xml)
         {
             Id = xml.Attributes["id"].Value;
+            Name = xml.Attributes["desc"].Value;
+            ChiName = xml.Attributes["desc"].Value;
+            EngName = string.Empty;
             Ingredient = string.Empty;
             Usage = new Usage();
             UsageName = xml.Attributes["freq"].Value;
