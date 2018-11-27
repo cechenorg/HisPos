@@ -25,7 +25,7 @@ namespace His_Pos.Class.Copayment
 
         public Copayment(DeclareFileDdata d)
         {
-            Id = !string.IsNullOrEmpty(d.Dbody.D15) ? d.Dbody.D15 : string.Empty;
+            Id = !string.IsNullOrEmpty(d.Dhead.D15) ? d.Dhead.D15 : string.Empty;
         }
 
         public int Point { get; set; }

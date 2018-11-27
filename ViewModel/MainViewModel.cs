@@ -323,6 +323,7 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.合作診所藥品耗用):
                     newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[3], Icon = MainWindow.HisFeatures[5].Icon };
+                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:
                     return;

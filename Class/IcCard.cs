@@ -83,8 +83,8 @@ namespace His_Pos.Class
 
         public IcCard(DeclareFileDdata d)
         {
-            IcNumber = !string.IsNullOrEmpty(d.Dbody.D3) ? d.Dbody.D3 : string.Empty;
-            MedicalNumber = !string.IsNullOrEmpty(d.Dbody.D7) ? d.Dbody.D7 : string.Empty;
+            IcNumber = !string.IsNullOrEmpty(d.Dhead.D3) ? d.Dhead.D3 : string.Empty;
+            MedicalNumber = !string.IsNullOrEmpty(d.Dhead.D7) ? d.Dhead.D7 : string.Empty;
         }
 
         public string MedicalNumber

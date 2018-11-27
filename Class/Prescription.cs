@@ -147,8 +147,6 @@ namespace His_Pos.Class
             CheckPaymentCategory();
             CheckCopayment();
             CheckChronicTimes();
-            Pharmacy = MainWindow.CurrentPharmacy;
-            Pharmacy.MedicalPersonnel.IcNumber = MainWindow.CurrentUser.IcNumber;
             return _errorMessage;
         }
 

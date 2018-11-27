@@ -22,7 +22,7 @@ namespace His_Pos.Class.Division
 
         public Division(DeclareFileDdata d)
         {
-            Id = !string.IsNullOrEmpty(d.Dbody.D13) ? d.Dbody.D13 : string.Empty;
+            Id = !string.IsNullOrEmpty(d.Dhead.D13) ? d.Dhead.D13 : string.Empty;
         }
     }
 }

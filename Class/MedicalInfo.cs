@@ -74,8 +74,8 @@ namespace His_Pos.Class
             SpecialCode = new SpecialCode.SpecialCode(d);
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
-            MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dbody.D8) ? d.Dbody.D8 : string.Empty;
-            SecondDiseaseCode.Id = !string.IsNullOrEmpty(d.Dbody.D9) ? d.Dbody.D9 : string.Empty;
+            MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D8) ? d.Dhead.D8 : string.Empty;
+            SecondDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D9) ? d.Dhead.D9 : string.Empty;
             TreatmentCase = new TreatmentCase.TreatmentCase(d);
         }
 

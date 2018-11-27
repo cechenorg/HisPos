@@ -111,5 +111,15 @@ namespace His_Pos.Service
             var day = int.Parse(dateStr.Substring(5, 2));
             return new DateTime(year,month,day);
         }
+
+        public static string ConvertToTaiwanCalenderWithTime(DateTime d)
+        {
+            var year = (d.Year - 1911).ToString().PadLeft(3, '0');
+            var month = (d.Month).ToString().PadLeft(2, '0');
+            var day = (d.Day).ToString().PadLeft(2, '0');
+            var hour = (d.Hour).ToString().PadLeft(2, '0');
+            var minute = (d.Minute).ToString().PadLeft(2, '0');
+            return year + month + day + hour + minute;
+        }
     }
 }

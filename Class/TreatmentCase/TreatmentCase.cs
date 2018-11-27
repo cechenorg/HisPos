@@ -27,7 +27,7 @@ namespace His_Pos.Class.TreatmentCase
         }
         public TreatmentCase(DeclareFileDdata d)
         {
-            Id = !string.IsNullOrEmpty(d.Dbody.D22) ? d.Dbody.D22 : string.Empty;
+            Id = !string.IsNullOrEmpty(d.Dhead.D22) ? d.Dhead.D22 : string.Empty;
         }
     }
 }

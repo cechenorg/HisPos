@@ -35,7 +35,17 @@ namespace His_Pos.Class.Declare
             var pDataTable = SetPDataTable(); //設定PData datatable columns
             AddPData(declareData, pDataTable); //加入PData sqlparameters
             
-               
+            var tmpDetails = new ObservableCollection<DeclareDetail>();
+            foreach (var d in declareData.DeclareDetails)
+            {
+                if(d.PaySelf) continue;
+                tmpDetails.Add(d.DeepCloneViaJson());
+            }
+            declareData.DeclareDetails.Clear();
+            foreach (var d in tmpDetails)
+            {
+                declareData.DeclareDetails.Add(d);
+            }
             var xmlStr = declareData.SerializeObject<Ddata>();
             var errorStr = declareData.Prescription.EList.SerializeObject<ErrorList>();
             if (string.IsNullOrEmpty(errorStr))
@@ -117,9 +127,9 @@ namespace His_Pos.Class.Declare
                 T5 = "1",
                 T6 = (DateTime.Now.Year - 1911) + DateTime.Now.Month.ToString().PadLeft(2, '0'),
                 T7 = CountPrescriptionByCase(sortedCaseList, 1).ToString(),
-                T8 = sortedCaseList.Where(d => !d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dbody.D16)).ToString(),
+                T8 = sortedCaseList.Where(d => !d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dhead.D16)).ToString(),
                 T9 = CountPrescriptionByCase(sortedCaseList, 2).ToString(),
-                T10 = sortedCaseList.Where(d => d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dbody.D16)).ToString(),
+                T10 = sortedCaseList.Where(d => d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dhead.D16)).ToString(),
                 T11 = sortedCaseList.Count.ToString()
             };
             tdata.T12 = (int.Parse(tdata.T8) + int.Parse(tdata.T10)).ToString();
@@ -139,7 +149,7 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
             AddParameterDData(parameters, declareData); //加入DData sqlparameters
-            var pDataTable = SetUpdatePDataTable(); //設定PData datatable columns
+            var pDataTable = SetPDataTable(); //設定PData datatable columns
             AddPData(declareData, pDataTable); //加入PData sqlparameters
             parameters.Add(new SqlParameter("ID", declareData.DecMasId));
             var xmlStr = declareData.SerializeObject<Ddata>();
@@ -175,7 +185,7 @@ namespace His_Pos.Class.Declare
         {
             if (PrescriptionDB.GetPrescriptionXmlByDate(declareDate).Count == 0) return new List<Ddata>();
             //依調劑藥師分組
-            var ddatas = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).GroupBy(d => d.Dbody.D25)
+            var ddatas = PrescriptionDB.GetPrescriptionXmlByDate(declareDate).GroupBy(d => d.Dhead.D25)
                 .ToList();
             var result = new List<Ddata>();
             //每位調劑藥師處方排序
@@ -361,7 +371,6 @@ namespace His_Pos.Class.Declare
                     parameters.Add(new SqlParameter(tag.Key, tag.Value));
                 }
             }
-
             AddUnusedParameters(parameters); //設定免填欄位Parameters D10 D11 D12 D27 D28 D29
             CheckChronicAdjust(declareData, parameters); //判斷慢箋調劑欄位D35 D36
         }
@@ -629,34 +638,7 @@ namespace His_Pos.Class.Declare
             row["XML"] = new SqlXml(new XmlTextReader(xmlStr, XmlNodeType.Document, null));
             declareMaster.Rows.Add(row);
         }
-        private DataTable SetUpdatePDataTable()
-        {
-            var pDataTable = new DataTable();
-            var columnsDictionary = new Dictionary<string, Type>
-                    {
-                        {"P10", typeof(int)},
-                        {"P1", typeof(string)},
-                        {"P2", typeof(string)},
-                        {"P7", typeof(double)},
-                        {"P8", typeof(double)},
-                        {"P9", typeof(int)},
-                        {"P3", typeof(double)},
-                        {"P4", typeof(string)},
-                        {"P5", typeof(string)},
-                        {"P6", typeof(string)},
-                        {"P11", typeof(string)},
-                        {"P12", typeof(string)},
-                        {"P13", typeof(string)},
-                        {"PAY_BY_YOURSELF", typeof(string)},
-                        {"IS_BUCKLE", typeof(bool)}
-                    };
-            foreach (var col in columnsDictionary)
-            {
-                pDataTable.Columns.Add(col.Key, col.Value);
-            }
 
-            return pDataTable;
-        }
         private DataTable SetPDataTable()
         {
             var importPDataTable = new DataTable();
@@ -701,22 +683,10 @@ namespace His_Pos.Class.Declare
 
         private void AddPData(DeclareData declareData, DataTable pDataTable)
         {
-            for (var i = 0; i < declareData.DeclareDetails.Count; i++)
+            for (int i = 0 ;i < declareData.DeclareDetails.Count;i++)
             {
-                if (declareData.Prescription.Medicines[i] is DeclareMedicine med)
-                {
-                    var row = pDataTable.NewRow();
                     var detail = declareData.DeclareDetails[i];
-                    if (detail.PaySelf) continue;
-                    detail.Usage = declareData.Prescription.Medicines == null
-                        ? detail.Usage
-                        : med.UsageName;
-                    var paySelf = /*declareData.Prescription.Medicines == null ? "0" :*/
-                        med.PaySelf ? "1" : "0";
-                    //if (!String.IsNullOrEmpty(declareData.DecMasId))
-                    //    row["DecMasId"] = declareData.DecMasId;
-
-
+                    var row = pDataTable.NewRow();
                     var function = new Function();
                     row["P1"] = detail.MedicalOrder;
                     row["P2"] = detail.MedicalId;
@@ -726,13 +696,17 @@ namespace His_Pos.Class.Declare
                     row["P6"] = function.ToInvCulture(detail.Percent);
                     row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                     row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                    row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                    row["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
                     row["P10"] = detail.Sequence.ToString();
                     row["P11"] = detail.Days.ToString();
-                    row["PAY_BY_YOURSELF"] = paySelf;
-                    row["IS_BUCKLE"] = ((DeclareMedicine)declareData.Prescription.Medicines[i]).IsBuckle;
+                    row["PAY_BY_YOURSELF"] = detail.PaySelf ? "1" : "0";
+                    if(declareData.Prescription.Medicines[i] is DeclareMedicine)
+                        row["IS_BUCKLE"] = ((DeclareMedicine)declareData.Prescription.Medicines[i]).IsBuckle;
+                    else
+                    {
+                        row["IS_BUCKLE"] = true;
+                    }
                     pDataTable.Rows.Add(row);
-                }
             }
 
             if (declareData.Prescription.Treatment.AdjustCase.Id == "3")
@@ -756,10 +730,27 @@ namespace His_Pos.Class.Declare
                 count++;
             }
             var percent = CountAdditionPercent(declareData);
-            var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            var detail = new DeclareDetail("1", declareData.DayPayCode, percent,
-                declareData.MedicalServicePoint, count + 1, currentDate,
-                currentDate);
+            int dayPay = 0;
+            switch (declareData.DayPayCode)
+            {
+                case "MA1":
+                    dayPay = 22;
+                    break;
+                case "MA2":
+                    dayPay = 31;
+                    break;
+                case "MA3":
+                    dayPay = 37;
+                    break;
+                case "MA4":
+                    dayPay = 41;
+                    break;
+            }
+            var dayPayPrice = double.Parse(declareData.Prescription.Treatment.MedicineDays) * dayPay;
+            var currentDate = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+            var detail = new DeclareDetail("1", declareData.DayPayCode, percent, double.Parse(declareData.Prescription.Treatment.MedicineDays),
+                dayPayPrice, count + 1, currentDate,
+                currentDate,"dayPay");
             var pData = pDataTable.NewRow();
             SetMedicalServiceCostDataRow(pData, declareData, detail);
             declareData.DeclareDetails.Add(detail);
@@ -786,9 +777,9 @@ namespace His_Pos.Class.Declare
                     row["P6"] = function.ToInvCulture(detail.Percent);
                     row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                     row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                    row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                    row["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
                     row["P10"] = detail.Sequence.ToString();
-                    row["P11"] = detail.Days.ToString();
+                    row["P11"] = detail.Days.ToString().PadLeft(2, '0');
                     row["PAY_BY_YOURSELF"] = paySelf;
                     pDataTable.Rows.Add(row);
             }
@@ -799,11 +790,17 @@ namespace His_Pos.Class.Declare
          */
         private void AddMedicalServiceCostPData(DeclareData declareData, DataTable pDataTable)
         {
-            double percent = 100;
-            var currentDate = DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            var detail = new DeclareDetail("9", declareData.MedicalServiceCode, percent,
-                declareData.MedicalServicePoint, declareData.DeclareDetails.Count + 1, currentDate,
-                currentDate);
+            int maxSequence = 0;
+            foreach (var d in declareData.DeclareDetails)
+            {
+                if (d.Sequence > maxSequence)
+                    maxSequence = d.Sequence;
+            }
+            var percent = CountAdditionPercent(declareData);
+            var currentDate = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
+            var detail = new DeclareDetail("9", declareData.MedicalServiceCode, percent, 1,
+                declareData.MedicalServicePoint, maxSequence + 1, currentDate,
+                currentDate,"service");
             var pData = pDataTable.NewRow();
             SetMedicalServiceCostDataRow(pData, declareData, detail);
             declareData.DeclareDetails.Add(detail);
@@ -835,7 +832,7 @@ namespace His_Pos.Class.Declare
                 pData["P6"] = function.ToInvCulture(detail.Percent);
                 pData["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                 pData["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                pData["P9"] = function.SetStrFormatInt(  Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0,  MidpointRounding.AwayFromZero))), "{0:D8}");
+                pData["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
                 pData["P10"] = function.SetStrFormatInt(declarecount, "{0:D3}");
                 pData["P12"] = detail.StartDate;
                 pData["P13"] = detail.EndDate;

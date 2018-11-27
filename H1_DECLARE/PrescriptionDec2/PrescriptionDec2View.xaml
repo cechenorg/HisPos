@@ -201,7 +201,7 @@
                 </StackPanel>
             </Grid>
             <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" 
-                      CanUserAddRows="True" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" 
+                      CanUserAddRows="True" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="False"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
@@ -471,7 +471,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <Label Content="藥品點數 : " FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center"/>
-                        <Label Content="" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center"/>
+                        <Label Content="{Binding MedicinePoint,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
                         <Label Width="60" Content="部分 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />

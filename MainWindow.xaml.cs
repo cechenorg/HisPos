@@ -107,8 +107,8 @@ namespace His_Pos
             HisFeatures.Add(new Feature(@"..\Images\ClockIn.png", Properties.Resources.Attend,
                             new string[] { Properties.Resources.ClockIn, Properties.Resources.WorkScheduleManage }));
 
-            HisFeatures.Add(new Feature(@"..\Images\StockTaking.png", Properties.Resources.ReportSystem,
-              new string[] { Properties.Resources.EntrySearch, Properties.Resources.PurchaseReturnReport, Properties.Resources.CooperativeEntry, Properties.Resources.CooperativeAdjustReport}));
+            HisFeatures.Add(new Feature(@"..\Images\Report.png", Properties.Resources.ReportSystem,
+              new string[] { Properties.Resources.EntrySearch, Properties.Resources.PurchaseReturnReport }));
         }
         
         private void InitializeMenu()

@@ -68,18 +68,6 @@ namespace His_Pos.Class.Declare
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    [XmlRoot(ElementName = "dbody")]
-    public class Dbody:INotifyPropertyChanged
-    {
         private string _d3;
         [XmlElement(ElementName = "d3")]
         public string D3
@@ -300,6 +288,19 @@ namespace His_Pos.Class.Declare
                 OnPropertyChanged(nameof(D25));
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    [XmlRoot(ElementName = "dbody")]
+    public class Dbody:INotifyPropertyChanged
+    {
         private string _d26;
         [XmlElement(ElementName = "d26")]
         public string D26
