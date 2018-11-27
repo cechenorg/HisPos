@@ -838,7 +838,7 @@ namespace His_Pos
             }
         }
 
-        public void LoginIcData(PrescriptionDec2View prescriptionDec2View)
+        public void LoginIcData(PrescriptionDec2View prescriptionDec2View, IcErrorCodeWindow.IcErrorCode errorCode = null)
         {
             prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
             backgroundWorker.DoWork += (s, o) =>
@@ -851,7 +851,7 @@ namespace His_Pos
                         prescriptionDec2View.CreatIcUploadData();
                     else if(!prescriptionDec2View.IsMedicalNumberGet)
                     {
-                        prescriptionDec2View.CreatIcErrorUploadData();
+                        prescriptionDec2View.CreatIcErrorUploadData(errorCode);
                     }
                 }));
             };

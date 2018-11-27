@@ -536,18 +536,23 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             
             if (CurrentPrescription.IsGetIcCard)
             {
-                var loading = new LoadingWindow();
-                loading.LoginIcData(Instance);
+                //var loading = new LoadingWindow();
+                //loading.LoginIcData(Instance);
+                //loading.Show();
+                LogInIcData();
+                CreatIcUploadData();
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
             else
             {
-                //icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
-                //icErrorWindow.ShowDialog();
+                icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
+                icErrorWindow.ShowDialog();
                 //var loading = new LoadingWindow();
-                //if (!string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
-                //    loading.LoginIcData(Instance);
+                //loading.LoginIcData(Instance, icErrorWindow.SelectedItem);
+                //loading.Show();
+                LogInIcData();
+                CreatIcErrorUploadData(icErrorWindow.SelectedItem);
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
@@ -651,11 +656,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             d.InsertDailyUpload(icRecord.SerializeObject());
         }
         //異常上傳
-        public void CreatIcErrorUploadData()
+        public void CreatIcErrorUploadData(IcErrorCodeWindow.IcErrorCode errorCode)
         {
             var medicalDatas = new List<MedicalData>();
             if(icErrorWindow.SelectedItem == null) return;
-            var icData = new IcData(CurrentPrescription,icErrorWindow.SelectedItem,_currentDeclareData);
+            var icData = new IcData(CurrentPrescription, errorCode, _currentDeclareData);
             var mainMessage = new MainMessage(icData);
             var headerMessage = new Header { DataFormat = "2" };
             var icRecord = new IcRecord(headerMessage, mainMessage);
