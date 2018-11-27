@@ -273,6 +273,8 @@
     <Compile Include="Class\Authority\AuthorityDb.cs" />
     <Compile Include="Class\Chronic.cs" />
     <Compile Include="Class\ChronicDb.cs" />
+    <Compile Include="Class\CooperativeClinic.cs" />
+    <Compile Include="Class\CooperativeClinicJson.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDb.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryDetail.cs" />
     <Compile Include="Class\CustomerHistory\CustomerHistoryHis.cs" />
@@ -401,6 +403,7 @@
     <Compile Include="Class\Vaccination.cs" />
     <Compile Include="Class\WareHouse.cs" />
     <Compile Include="Class\WareHouseDb.cs" />
+    <Compile Include="Class\WebApi.cs" />
     <Compile Include="Class\WorkSchedule\UserIconData.cs" />
     <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
     <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
@@ -701,6 +704,7 @@
     <Compile Include="Service\DateTimeExtensions.cs" />
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
+    <Compile Include="Service\HttpMethod.cs" />
     <Compile Include="Service\newFunction.cs" />
     <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecord.cs" />
     <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
@@ -954,6 +958,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\Export\ExportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1300,6 +1312,9 @@
     <Content Include="csHis.dll" />
     <Resource Include="Images\Ph.png" />
     <Resource Include="Images\QuestionMark.png" />
+    <Resource Include="Images\CloseRecord.png" />
+    <Resource Include="Images\OpenRecord.png" />
+    <Resource Include="Images\OpenRecord2Detail.png" />
     <Resource Include="Images\Report.png" />
     <Content Include="Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />

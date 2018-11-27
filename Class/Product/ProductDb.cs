@@ -491,6 +491,16 @@ namespace His_Pos.Class.Product
             var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[InsertEntry]",parameters);
              
         }
+        internal static void InsertCashFow(string cashflowName, string cashflowValue, string cashflowSource, string cashflowSourceId) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("CASHFLOW_NAME", cashflowName));
+            parameters.Add(new SqlParameter("CASHFLOW_VALUE", cashflowValue));
+            parameters.Add(new SqlParameter("CASHFLOW_SOURCE", cashflowSource));
+            parameters.Add(new SqlParameter("CASHFLOW_SOURCE_ID", cashflowSourceId));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[InsertCashFow]", parameters);
+
+        } 
         internal static string GetBucklePrice(string proId,string buckleAmount) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
@@ -582,6 +592,13 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PROWAR_ID", '1'));
             parameters.Add(new SqlParameter("RecoveryAmount", RecoveryAmount)); 
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[RecoveryInventory]", parameters);
+        }
+        internal static void InsertMedicine(string proId,string proName) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            parameters.Add(new SqlParameter("PRO_NAME", proName)); 
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertMedicine]", parameters);
         } 
     }
 } 

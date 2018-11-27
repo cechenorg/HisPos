@@ -57,6 +57,16 @@ namespace His_Pos.Class
             SecondDiseaseCode.Id = xml.SelectSingleNode("d9") == null ? null : xml.SelectSingleNode("d9").InnerText;
             TreatmentCase = new TreatmentCase.TreatmentCase(xml);
         }
+        public MedicalInfo(XmlDocument xml)
+        {
+            Hospital = new Hospital(xml);
+            SpecialCode = new SpecialCode.SpecialCode(xml);
+            MainDiseaseCode = new DiseaseCode.DiseaseCode();
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode();
+            MainDiseaseCode.Id = xml.SelectNodes("DeclareXml/DeclareXmlDocument/case/study/diseases/item")[0].Attributes["code"].Value;
+            SecondDiseaseCode = new DiseaseCode.DiseaseCode();
+            TreatmentCase = new TreatmentCase.TreatmentCase(xml);
+        }
 
         public MedicalInfo(DeclareFileDdata d)
         {

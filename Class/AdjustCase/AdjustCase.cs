@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Xml;
 using His_Pos.Class.Declare;
 
@@ -12,6 +13,7 @@ namespace His_Pos.Class.AdjustCase
         public AdjustCase(XmlNode xml) {
            Id = xml.SelectSingleNode("d1") == null ? null : xml.SelectSingleNode("d1").InnerText;
         }
+        
         public AdjustCase(DataRow dataRow)
         {
             Id = dataRow["ADJUSTCASE_ID"].ToString();

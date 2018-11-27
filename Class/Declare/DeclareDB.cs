@@ -606,7 +606,7 @@ namespace His_Pos.Class.Declare
             row["D14"] = declareData.Prescription.Treatment.TreatmentDate;
             row["D15"] = declareData.Prescription.Treatment.Copayment.Id;
             row["D16"] = declareData.DeclarePoint.ToString();
-            row["D17"] = declareData.Prescription.Treatment.Copayment.Point.ToString();
+            row["D17"] = declareData.CopaymentPoint.ToString();
             row["D18"] = declareData.TotalPoint.ToString();
             row["D19"] = CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString());
             row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;
@@ -656,6 +656,7 @@ namespace His_Pos.Class.Declare
             importPDataTable.Columns.Add("P12", typeof(string));
             importPDataTable.Columns.Add("P13", typeof(string));
             importPDataTable.Columns.Add("PAY_BY_YOURSELF", typeof(string));
+            importPDataTable.Columns.Add("IS_BUCKLE", typeof(bool));
             return importPDataTable;
         }
 
@@ -684,24 +685,29 @@ namespace His_Pos.Class.Declare
         {
             foreach (var detail in declareData.DeclareDetails)
             {
-                var row = pDataTable.NewRow();
-                var paySelf = detail.PaySelf ? "1" : "0";
-                //if (!String.IsNullOrEmpty(declareData.DecMasId))
-                //    row["DecMasId"] = declareData.DecMasId;
-                var function = new Function();
-                row["P1"] = detail.MedicalOrder;
-                row["P2"] = detail.MedicalId;
-                row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
-                row["P4"] = detail.Usage;
-                row["P5"] = detail.Position;
-                row["P6"] = function.ToInvCulture(detail.Percent);
-                row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
-                row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                row["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
-                row["P10"] = detail.Sequence.ToString();
-                row["P11"] = detail.Days.ToString().PadLeft(2,'0');
-                row["PAY_BY_YOURSELF"] = paySelf;
-                pDataTable.Rows.Add(row);
+                    var row = pDataTable.NewRow();
+                    detail.Usage = declareData.Prescription.Medicines == null
+                        ? detail.Usage
+                        : med.UsageName;
+                    var paySelf = 
+                        med.PaySelf ? "1" : "0";
+
+
+                    var function = new Function();
+                    row["P1"] = detail.MedicalOrder;
+                    row["P2"] = detail.MedicalId;
+                    row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
+                    row["P4"] = detail.Usage;
+                    row["P5"] = detail.Position;
+                    row["P6"] = function.ToInvCulture(detail.Percent);
+                    row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
+                    row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
+                    row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                    row["P10"] = detail.Sequence.ToString();
+                    row["P11"] = detail.Days.ToString();
+                    row["PAY_BY_YOURSELF"] = paySelf;
+                    row["IS_BUCKLE"] = ((DeclareMedicine)declareData.Prescription.Medicines[i]).IsBuckle;
+                    pDataTable.Rows.Add(row);
             }
 
             if (declareData.Prescription.Treatment.AdjustCase.Id == "3")
@@ -1002,5 +1008,34 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("ERROR_DECLARE", errorDeclare)); 
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareRegister]", parameters);
         }
+        public void SaveCooperClinicDeclare(string declareId,XmlDocument xml)
+        {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            parameters.Add(new SqlParameter("DECLARE_ID", declareId)); 
+            parameters.Add(new SqlParameter("DECLARE_XML", SqlDbType.Xml)
+            {
+                Value = new SqlXml(new XmlTextReader((string)xml.InnerXml, XmlNodeType.Document, null))
+            });
+            conn.ExecuteProc("[HIS_POS_DB].[API].[SaveCooperClinicDeclare]", parameters);
+        }
+        public void SendUnSendCooperClinicDeclare()
+        {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_global);
+            DataTable table = conn.ExecuteProc("[HIS_POS_DB].[API].[GetUnSendCooperClinicDeclare]");
+            if (table.Rows.Count == 0)
+                return;
+            List<CooperativeClinic> cooperativeClinics = new List<CooperativeClinic>();
+            foreach (DataRow row in table.Rows) {
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(row["API_DELCARE_XML"].ToString());
+                cooperativeClinics.Add(new CooperativeClinic(xmlDocument));
+            }
+            CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson(cooperativeClinics);
+            WebApi.SendToCooperClinic(cooperativeClinicJson);
+            conn.ExecuteProc("[HIS_POS_DB].[API].[UpdateUnSendCooperClinicStatus]");
+        }
+         
     }
 }

@@ -21,7 +21,10 @@ namespace His_Pos.Class.TreatmentCase
         {
             Id = xml.SelectSingleNode("d22") == null ? null : xml.SelectSingleNode("d22").InnerText;
         }
-
+        public TreatmentCase(XmlDocument xml)
+        {
+            Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/insurance").Attributes["case_type"].Value;
+        }
         public TreatmentCase(DeclareFileDdata d)
         {
             Id = !string.IsNullOrEmpty(d.Dhead.D22) ? d.Dhead.D22 : string.Empty;

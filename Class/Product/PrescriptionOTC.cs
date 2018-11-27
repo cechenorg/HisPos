@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Linq;
+using System.Xml;
 using His_Pos.Interface;
 using His_Pos.Service;
 
@@ -26,7 +27,24 @@ namespace His_Pos.Class.Product
             Stock = new InStock();
             ControlLevel = string.Empty;
         }
-
+        public PrescriptionOTC(XmlNode xml) {
+            Id = xml.Attributes["id"].Value;
+            Name = xml.Attributes["desc"].Value;
+            ChiName = xml.Attributes["desc"].Value;
+            EngName = string.Empty; 
+            Usage = new Usage();
+            UsageName = xml.Attributes["freq"].Value;
+            Position = xml.Attributes["way"].Value;
+            Amount = Convert.ToDouble(xml.Attributes["total_dose"].Value); 
+            Dosage = Convert.ToDouble(xml.Attributes["divided_dose"].Value);
+            Days = xml.Attributes["days"].Value;
+            PaySelf = xml.Attributes["remark"].Value == "*" ? true : false;
+            Cost = 0;
+            TotalPrice = PaySelf ? Convert.ToDouble(xml.Attributes["price"].Value) : 0;
+            Price = TotalPrice / Amount;
+            CountStatus = string.Empty;
+            FocusColumn = string.Empty;  
+        }
         public PrescriptionOTC(DataRow dataRow) : base(dataRow)
         {
             PaySelf = true;

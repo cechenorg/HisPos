@@ -16,7 +16,7 @@ namespace His_Pos.Class
         Printer = 2,
         Database = 3
     }
-    
+
     public enum StoreOrderCategory
     {
         PURCHASE = 0,
@@ -55,7 +55,9 @@ namespace His_Pos.Class
         顧客管理 = 19,
         每日作業 = 20,
         庫存現值查詢 = 21,
-        進退貨報表查詢 = 22
+        進退貨報表查詢 = 22,
+        合作診所藥品耗用 = 23,
+        合作診所調劑費用 = 24
     }
 
     public enum StoreOrderProductType
@@ -71,7 +73,7 @@ namespace His_Pos.Class
     }
     public enum OrderType
     {
-        UNPROCESSING= 0,
+        UNPROCESSING = 0,
         PROCESSING = 1,
         DONE = 2,
         ALL = 3,
@@ -79,7 +81,7 @@ namespace His_Pos.Class
         SCRAP = 5,
         ERROR = 100
     }
-   
+
     public enum AddOrderType
     {
         RETURNBYMANUFACTORY = 1,
@@ -122,7 +124,7 @@ namespace His_Pos.Class
     {
         LOG_IN = 0,
         UPDATE = 1,
-        DECLAREFILE_UPDATE=2
+        DECLAREFILE_UPDATE = 2
     }
 
     public enum MedBagMode
@@ -602,5 +604,5 @@ namespace His_Pos.Class
         SqlServer = 0,
         NySql = 1
     }
-
+  
 }

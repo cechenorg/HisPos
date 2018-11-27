@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.Interface;
 using His_Pos.Service;
@@ -29,7 +30,32 @@ namespace His_Pos.Class.Product
             SideEffect = string.Empty;
             Indication = string.Empty;
         }
-
+        public DeclareMedicine(XmlNode xml)
+        {
+            Id = xml.Attributes["id"].Value;
+            Name = xml.Attributes["desc"].Value;
+            ChiName = xml.Attributes["desc"].Value;
+            EngName = string.Empty;
+            Ingredient = string.Empty;
+            Usage = new Usage();
+            UsageName = xml.Attributes["freq"].Value;
+            Position = xml.Attributes["way"].Value;
+            Amount = Convert.ToDouble(xml.Attributes["total_dose"].Value);  
+            MedicalCategory = new Medicate();
+            MedicalCategory.Dosage = double.Parse(xml.Attributes["daily_dose"].Value);
+            Dosage = Convert.ToDouble(xml.Attributes["divided_dose"].Value);
+            Days = xml.Attributes["days"].Value;
+            PaySelf = xml.Attributes["remark"].Value == "*" ? true : false;  
+            Cost = 0;
+            TotalPrice = PaySelf ? Convert.ToDouble(xml.Attributes["price"].Value) : 0;
+            Price = TotalPrice / Amount;
+            CountStatus = string.Empty;
+            FocusColumn = string.Empty;
+            IsBuckle = false;
+            source = string.Empty;
+            SideEffect = string.Empty;
+            Indication = string.Empty;
+        }
         public DeclareMedicine(DataRow dataRow,string type) : base(dataRow)
         {
             MedicalCategory = new Medicate();

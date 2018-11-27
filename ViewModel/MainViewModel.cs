@@ -28,6 +28,8 @@ using His_Pos.IndexView;
 using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.H3_STOCKTAKING.StockTaking;
 using His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
+using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
+using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 
 namespace His_Pos.ViewModel
 {
@@ -205,6 +207,10 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
                     break;
+                case nameof(FeatureItem.合作診所調劑費用):
+                    break;
+                case nameof(FeatureItem.合作診所藥品耗用):
+                    break;
                 default:
                     return;
             }
@@ -304,10 +310,19 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.排班管理):
                     newTab = new WorkScheduleManage() { TabName = MainWindow.HisFeatures[4].Functions[1], Icon = MainWindow.HisFeatures[4].Icon };
                     break;
+
+                //報表
                 case nameof(FeatureItem.庫存現值查詢):
                     newTab = new EntrySearch() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
+                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                case nameof(FeatureItem.合作診所調劑費用):
+                    newTab = new CooperativeEntry() { TabName = MainWindow.HisFeatures[5].Functions[2], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                case nameof(FeatureItem.合作診所藥品耗用):
+                    newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[3], Icon = MainWindow.HisFeatures[5].Icon };
                     newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:

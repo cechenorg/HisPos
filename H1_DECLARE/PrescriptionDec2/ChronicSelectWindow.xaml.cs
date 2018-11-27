@@ -4,6 +4,9 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Linq;
+using His_Pos.Service;
+using His_Pos.Class.Division;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
     /// <summary>
@@ -24,19 +27,34 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
                 NotifyPropertyChanged("ChronicCollection");
             }
         }
+        private ObservableCollection<CooperativeClinic> cooperativeClinicCollection;
+        public ObservableCollection<CooperativeClinic> CooperativeClinicCollection
+        {
+            get => cooperativeClinicCollection;
+            set
+            {
+                cooperativeClinicCollection = value;
+                NotifyPropertyChanged("CooperativeClinicCollection");
+            }
+        }
         private string CusId;
+        private string CusIcNum;
         public Chronic selectChronic;
-        public ChronicSelectWindow(string cusId) {
+        public ChronicSelectWindow(string cusId,string cusIcNum) {
             InitializeComponent();
             CusId = cusId;
+            CusIcNum = cusIcNum;
             InitData();
             DataContext = this;
         }
         private void InitData() {
-            ChronicCollection = ChronicDb.GetChronicDeclareById(CusId);
+            ChronicCollection = ChronicDb.GetChronicDeclareById(CusId); 
+            CooperativeClinicCollection = WebApi.GetXmlByMedicalNum(MainWindow.CurrentPharmacy.Id, CusIcNum);
+          
             Chronic chronic = new Chronic();
             chronic.hospital.Name = "新增新處方單";
             ChronicCollection.Add(chronic);
+         
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
@@ -45,6 +63,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
                 Close();
             string decMasId = ((Chronic)selectedItem).DecMasId;
             PrescriptionDec2View.Instance.SetValueByDecMasId(decMasId);
+            Close();
+        }
+
+        private void CooperativeClinicRow_MouseDoubleClick_1(object sender, MouseButtonEventArgs e)
+        {
+            var selectedItem = (sender as DataGridRow).Item;
+            PrescriptionDec2View.Instance.SetValueByPrescription(((CooperativeClinic)selectedItem));
+            
             Close();
         }
     }

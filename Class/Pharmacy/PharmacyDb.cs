@@ -126,5 +126,13 @@ namespace His_Pos.Class.Pharmacy
             var t = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetMedicalPersonPrescriptionCount]", parameters);
             return int.Parse(t.Rows[0][0].ToString());
         }
+        internal static Pharmacy GetCurrentPharmacy() {
+            
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetCurrentPharmacy]");
+            DataRow row = table.Rows[0];
+            Pharmacy pharmacy = new Pharmacy(row["CURPHA_ID"].ToString(), row["CURPHA_NAME"].ToString(), row["CURPHA_ADDR"].ToString(), row["CURPHA_TEL"].ToString()); 
+            return pharmacy;
+        } 
     }
 }

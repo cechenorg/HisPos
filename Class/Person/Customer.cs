@@ -62,6 +62,17 @@ namespace His_Pos.Class.Person
             
                 
         }
+        public Customer(XmlDocument xml) {
+            XmlNode xmlcus = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/profile/person");
+            IcCard = new IcCard();
+            IcCard.IcNumber = xmlcus.Attributes["id"].Value;
+            IcCard.MedicalNumber = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/insurance").Attributes["serial_code"].Value;
+
+            Name = xmlcus.Attributes["name"].Value;
+            string birstring = xmlcus.Attributes["birth"].Value.Substring(0, 3) + "-" + xmlcus.Attributes["birth"].Value.Substring(3, 2) + "-" + xmlcus.Attributes["birth"].Value.Substring(5, 2);
+            Birthday = Convert.ToDateTime(birstring).AddYears(1911); 
+            
+        }
         public Customer(XmlNode xml) {
             IcCard = new IcCard(xml);
             Name = xml.SelectSingleNode("d20") == null ? null : xml.SelectSingleNode("d20")?.InnerText;

@@ -63,7 +63,22 @@ namespace His_Pos.Class
             ChronicTotal = !string.IsNullOrEmpty(d.Dbody.D36) ? d.Dbody.D36 : string.Empty;
             OriginalMedicalNumber = !string.IsNullOrEmpty(d.Dbody.D43) ? d.Dbody.D43 : string.Empty;
         }
+        public Prescription(XmlDocument xml)
+        {
+            Customer = new Customer(xml);
+            Pharmacy = new Pharmacy.Pharmacy(xml);
+            Treatment = new Treatment(xml);
+            Medicines = new ObservableCollection<AbstractClass.Product>();
+            foreach (XmlNode xmlNode in xml.SelectNodes("DeclareXml/DeclareXmlDocument/case/orders/item")){
+                if(xmlNode.Attributes["id"].Value.Length < 10)
+                    Medicines.Add(new PrescriptionOTC(xmlNode));
+                else
+                    Medicines.Add(new DeclareMedicine(xmlNode));
+            }
+            ChronicSequence = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["count"].Value;
+            ChronicTotal = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["total"].Value;
 
+        }
         private Customer _customer;
 
         public Customer Customer

@@ -16,6 +16,7 @@ using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Authority;
 using His_Pos.Class.Copayment;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
@@ -78,7 +79,7 @@ namespace His_Pos
             StratClock();
             _openWindows = new List<DockingWindow>();
             MainWindowInstance = this;
-            CurrentPharmacy = new Pharmacy("5932012975", "杏昌藥局", "330桃園市桃園區中正路1100號", "03-3573268");
+            CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
         }
@@ -210,6 +211,8 @@ namespace His_Pos
             //var d = new DeclareDb();
             //d.StartDailyUpload();
             ProductDb.UpdateDailyStockValue();
+            DeclareDb declareDb = new DeclareDb();
+            declareDb.SendUnSendCooperClinicDeclare();
             Application.Current.Shutdown();
         }
 

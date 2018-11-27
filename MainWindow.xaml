@@ -30,6 +30,8 @@
     xmlns:stockTaking1="clr-namespace:His_Pos.H3_STOCKTAKING.StockTaking"
     xmlns:entrySearch="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach"
     xmlns:PurchaseReturnReport="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
+    xmlns:cooperativeAdjustReport="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
+    xmlns:CooperativeEntry="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Width}"
     Height="{Binding Source={x:Static SystemParameters.WorkArea}, Path=Height}"
@@ -107,6 +109,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type PurchaseReturnReport:PurchaseReturnReport}">
             <PurchaseReturnReport:PurchaseReturnReportView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type cooperativeAdjustReport:CooperativeAdjustReport}">
+            <cooperativeAdjustReport:CooperativeAdjustReportView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type CooperativeEntry:CooperativeEntry}">
+            <CooperativeEntry:CooperativeEntryView/>
         </DataTemplate>
         <Style x:Key="ScrollBarPageButton" TargetType="{x:Type RepeatButton}">
             <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -274,7 +282,7 @@
                 <DockPanel.Background>
                     <ImageBrush ImageSource="Images/onlyoneeeeeee.jpg" />
                 </DockPanel.Background>
-                <chromeTabs:ChromeTabControl Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab" PinnedTabWidth="135"
+                <chromeTabs:ChromeTabControl Name="Tabs" MaximumTabWidth="200" TabPersistBehavior="All" AddTabButtonBehavior="OpenNewTab" PinnedTabWidth="120"
                              Background="AliceBlue" ItemsSource="{Binding ItemCollection}" SelectedItem="{Binding SelectedTab}" SelectedTabBrush="White" PinTabCommand="{Binding PinTabCommand}"
                              CanMoveTabs="{Binding CanMoveTabs}" DragWindowWithOneTab="True" IsAddButtonVisible="{Binding ShowAddButton}" AddTabCommand="{Binding AddTabCommand}"
                              CloseTabCommand="{Binding CloseTabCommand}" ReorderTabsCommand="{Binding ReorderTabsCommand}" Height="900" SelectionChanged="Tabs_SelectionChanged"
@@ -321,7 +329,7 @@
                                         Margin="10,0,0,0"
                                         VerticalAlignment="Center"
                                         FontFamily="Segoe UI Semibold"
-                                        FontSize="18"
+                                        FontSize="15"
                                         Text="{Binding TabName}"
                                         TextTrimming="CharacterEllipsis"
                                         TextWrapping="NoWrap" />

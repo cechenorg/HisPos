@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Linq;
 using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
@@ -38,7 +39,15 @@ namespace His_Pos.Class
             Doctor.IcNumber = xml.SelectSingleNode("d24") == null ? null : xml.SelectSingleNode("d24").InnerText;
             Division = new Division.Division(xml);
         }
-
+        public Hospital(XmlDocument xml)
+        {
+            Doctor = new MedicalPersonnel();
+            Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["doctor_id"].Value;
+            Name = MainWindow.Hospitals.SingleOrDefault(hos => hos.Id == Id).Name;
+            FullName = MainWindow.Hospitals.SingleOrDefault(hos => hos.Id == Id).FullName;
+            Doctor.IcNumber = Id;
+            Division = MainWindow.Divisions.SingleOrDefault(div => div.Id == xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["subject"].Value);
+        }
         public Hospital(DeclareFileDdata d)
         {
             Doctor = new MedicalPersonnel();
@@ -66,7 +75,7 @@ namespace His_Pos.Class
             get => _division;
             set
             {
-                _division = value.DeepCloneViaJson();
+                _division = value;
                 NotifyPropertyChanged(nameof(Division));
             }
         }
