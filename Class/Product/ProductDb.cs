@@ -546,10 +546,6 @@ namespace His_Pos.Class.Product
                 ReturnValue += Convert.ToInt32(daily.ReturnValue);
                 StockCheckValue += Convert.ToInt32(daily.StockCheckValue);
                 MedUseValue += Convert.ToInt32(daily.MedUseValue);
-                MedIncomeValue += Convert.ToInt32(daily.MedIncomeValue);
-                CopayMentValue += Convert.ToInt32(daily.CopayMentValue);
-                PaySelfValue += Convert.ToInt32(daily.PaySelfValue);
-                DepositValue += Convert.ToInt32(daily.DepositValue);
             } 
 
                 totalStock.Date = "總和";
@@ -558,10 +554,6 @@ namespace His_Pos.Class.Product
                 totalStock.ReturnValue = ReturnValue.ToString();
                 totalStock.StockCheckValue = StockCheckValue.ToString();
                 totalStock.MedUseValue = MedUseValue.ToString();
-                totalStock.MedIncomeValue = MedIncomeValue.ToString();
-                totalStock.CopayMentValue = CopayMentValue.ToString();
-                totalStock.PaySelfValue = PaySelfValue.ToString();
-                totalStock.DepositValue = DepositValue.ToString();
                 totalStock.FinalStockValue = FinalStockValue; 
             return collection;
         }
