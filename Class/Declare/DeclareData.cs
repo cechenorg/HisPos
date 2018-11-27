@@ -164,7 +164,7 @@ namespace His_Pos.Class.Declare
                 case "3" when treatmentCaseId == westMedNormal && medicineDays > daysLimit:
                     //throw new ArgumentException(Resources.MedicineDaysOutOfRange, "original");
                     break;
-                case "1" when (treatmentCaseId == westMedNormal || treatmentCaseId == westMedOther) :
+                case "1" :
                 case "3":
                     if (medicineDays <= normalDaysLimit)
                     {
