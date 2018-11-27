@@ -647,7 +647,8 @@ namespace His_Pos.Class.Declare
                         {"P11", typeof(string)},
                         {"P12", typeof(string)},
                         {"P13", typeof(string)},
-                        {"PAY_BY_YOURSELF", typeof(string)}
+                        {"PAY_BY_YOURSELF", typeof(string)},
+                        {"IS_BUCKLE", typeof(bool)}
                     };
             foreach (var col in columnsDictionary)
             {
@@ -673,6 +674,7 @@ namespace His_Pos.Class.Declare
             importPDataTable.Columns.Add("P12", typeof(string));
             importPDataTable.Columns.Add("P13", typeof(string));
             importPDataTable.Columns.Add("PAY_BY_YOURSELF", typeof(string));
+            importPDataTable.Columns.Add("IS_BUCKLE", typeof(bool));
             return importPDataTable;
         }
 
@@ -728,7 +730,7 @@ namespace His_Pos.Class.Declare
                     row["P10"] = detail.Sequence.ToString();
                     row["P11"] = detail.Days.ToString();
                     row["PAY_BY_YOURSELF"] = paySelf;
-
+                    row["IS_BUCKLE"] = ((DeclareMedicine)declareData.Prescription.Medicines[i]).IsBuckle;
                     pDataTable.Rows.Add(row);
                 }
             }

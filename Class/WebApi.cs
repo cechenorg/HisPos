@@ -42,9 +42,14 @@ namespace His_Pos.Class
         
         internal static void SendToCooperClinic(CooperativeClinicJson cooperativeClinicJson)
         {
-            string json = JsonConvert.SerializeObject(cooperativeClinicJson); 
+            string json = JsonConvert.SerializeObject(cooperativeClinicJson);
+            Dictionary<string, string> keyValues;
+            keyValues = new Dictionary<string, string> {
+                    {"pharmacyMedicalNum",MainWindow.CurrentPharmacy.Id },
+                     {"json",json }
+                };
             HttpMethod httpMethod = new HttpMethod();
-            httpMethod.PostJson(@"http://api.ihis.com.tw/irxexg/" + MainWindow.CurrentPharmacy.Id + "/", json);
+            httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/SendToCooperClinic", keyValues);
         }
     }
 }

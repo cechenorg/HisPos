@@ -1715,6 +1715,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (PrescriptionMedicines.SelectedItem == null || CurrentPrescription.Medicines.Count == 0) return;
             var temp = (sender as ContextMenu);
             var menuitem = temp.Items[0] as MenuItem;
+            if (!(PrescriptionMedicines.SelectedItem is DeclareMedicine)) return;
             _selectedMedId = ((DeclareMedicine)PrescriptionMedicines.SelectedItem).Id;
             if (((DeclareMedicine)PrescriptionMedicines.SelectedItem).IsBuckle)
                 menuitem.Header = "申報不扣庫";
