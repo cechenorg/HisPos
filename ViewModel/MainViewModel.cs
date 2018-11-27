@@ -29,6 +29,7 @@ using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.H3_STOCKTAKING.StockTaking;
 using His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
 using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
+using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 
 namespace His_Pos.ViewModel
 {
@@ -206,7 +207,9 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
                     break;
-                case nameof(FeatureItem.合作診所調劑耗用):
+                case nameof(FeatureItem.合作診所調劑費用):
+                    break;
+                case nameof(FeatureItem.合作診所藥品耗用):
                     break;
                 default:
                     return;
@@ -315,8 +318,11 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.進退貨報表查詢):
                     newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
-                case nameof(FeatureItem.合作診所調劑耗用):
-                    newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[2], Icon = MainWindow.HisFeatures[5].Icon };
+                case nameof(FeatureItem.合作診所調劑費用):
+                    newTab = new CooperativeEntry() { TabName = MainWindow.HisFeatures[5].Functions[2], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                case nameof(FeatureItem.合作診所藥品耗用):
+                    newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[3], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:
                     return;

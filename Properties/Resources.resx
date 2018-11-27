@@ -274,6 +274,9 @@
     <value>進退貨報表查詢</value>
   </data>
   <data name="CooperativeAdjustReport" xml:space="preserve">
-    <value>合作診所調劑耗用</value>
+    <value>合作診所藥品耗用</value>
+  </data>
+  <data name="CooperativeEntry" xml:space="preserve">
+    <value>合作診所調劑費用</value>
   </data>
 </root>
