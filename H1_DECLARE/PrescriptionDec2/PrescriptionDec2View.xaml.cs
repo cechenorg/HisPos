@@ -442,9 +442,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case 1: //一般處方調劑
                     _firstTimeDecMasId = declareDb.InsertDeclareData(_currentDeclareData);
 
-                    ProductDb.InsertEntry(medCopayName, declareTrade.CopayMent, "DecMasId", _firstTimeDecMasId);
-                    ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
-                    ProductDb.InsertEntry("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
+                    ProductDb.InsertCashFow(medCopayName, declareTrade.CopayMent, "DecMasId", _firstTimeDecMasId);
+                    ProductDb.InsertCashFow("自費", declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
+                    ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
                     ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _firstTimeDecMasId);
                     if (buckleCondition)
                     {
@@ -481,9 +481,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     }
                     if (buckleCondition)
                     {
-                        ProductDb.InsertEntry(medCopayName, declareTrade.CopayMent, "DecMasId", _currentDecMasId);
-                        ProductDb.InsertEntry("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
-                        ProductDb.InsertEntry("押金", declareTrade.Deposit, "DecMasId", _currentDecMasId);
+                        //ProductDb.InsertEntry(medCopayName, declareTrade.CopayMent, "DecMasId", _currentDecMasId);
+                        ProductDb.InsertCashFow("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
+                        ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _currentDecMasId);
                         ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _currentDecMasId);
                             var medTotalPrice = 0.00;
                             foreach (var med in _currentDeclareData.Prescription.Medicines)

@@ -491,6 +491,16 @@ namespace His_Pos.Class.Product
             var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[InsertEntry]",parameters);
              
         }
+        internal static void InsertCashFow(string cashflowName, string cashflowValue, string cashflowSource, string cashflowSourceId) {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("CASHFLOW_NAME", cashflowName));
+            parameters.Add(new SqlParameter("CASHFLOW_VALUE", cashflowValue));
+            parameters.Add(new SqlParameter("CASHFLOW_SOURCE", cashflowSource));
+            parameters.Add(new SqlParameter("CASHFLOW_SOURCE_ID", cashflowSourceId));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[InsertCashFow]", parameters);
+
+        } 
         internal static string GetBucklePrice(string proId,string buckleAmount) {
             var dd = new DbConnection(Settings.Default.SQL_global);
             var parameters = new List<SqlParameter>();
