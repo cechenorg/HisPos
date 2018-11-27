@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -30,13 +29,11 @@ using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.DiseaseCode;
-using His_Pos.Class.MedBag;
 using His_Pos.Class.Person;
 using His_Pos.Class.Position;
 using His_Pos.Class.ReportClass;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.StoreOrder;
-using His_Pos.Properties;
 using His_Pos.Struct.IcData;
 using Microsoft.Reporting.WinForms;
 using MoreLinq;
@@ -94,6 +91,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public IcErrorCodeWindow icErrorWindow;
         #endregion
 
+
         #region 健保卡作業相關變數
         public bool IsMedicalNumberGet;//是否取得就醫序號
         public int GetMedicalNumberErrorCode = 0;
@@ -113,7 +111,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private string _firstTimeDecMasId = string.Empty;
         private XmlDocument _clinicXml = new XmlDocument();
         private string _clinicDeclareId = string.Empty;
-        private bool _IsReceiveCopayMent = true;
+        private bool _isReceiveCopayment = true;
         private int _prescriptionCount;
 
         public int PrescriptionCount
@@ -447,7 +445,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     ProductDb.InsertCashFow(medCopayName, declareTrade.CopayMent, "DecMasId", _firstTimeDecMasId);
                     ProductDb.InsertCashFow("自費", declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
                     ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
-                    ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _firstTimeDecMasId);
+                    ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _firstTimeDecMasId);
                     if (buckleCondition)
                     {
                         var medTotalPrice = 0.00;
@@ -486,7 +484,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         //ProductDb.InsertEntry(medCopayName, declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                         ProductDb.InsertCashFow("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
                         ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _currentDecMasId);
-                        ProductDb.InsertEntry(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _currentDecMasId);
+                        ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _currentDecMasId);
                             var medTotalPrice = 0.00;
                             foreach (var med in _currentDeclareData.Prescription.Medicines)
                             {
@@ -905,13 +903,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 else
                     return;
             }
-            PrescriptionOTC prescriptionOtc;
-            DeclareMedicine declareMedicine;
-            int currentRow;
-            currentRow = GetCurrentRowIndex(sender);
+            var currentRow = GetCurrentRowIndex(sender);
             if (string.IsNullOrEmpty(((IProductDeclare)medicineCodeAuto.SelectedItem)?.Forms))
             {
-                prescriptionOtc = (PrescriptionOTC)((PrescriptionOTC)medicineCodeAuto.SelectedItem)?.Clone();
+                var prescriptionOtc = (PrescriptionOTC)((PrescriptionOTC)medicineCodeAuto.SelectedItem)?.Clone();
                 if (CurrentPrescription.Medicines.Count > 0)
                 {
                     if (CurrentPrescription.Medicines.Count == currentRow)
@@ -937,7 +932,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             else
             {
-                declareMedicine = ((DeclareMedicine)medicineCodeAuto.SelectedItem).DeepCloneViaJson();
+                var declareMedicine = ((DeclareMedicine)medicineCodeAuto.SelectedItem).DeepCloneViaJson();
                 if (declareMedicine != null && (declareMedicine.Id.EndsWith("00")|| declareMedicine.Id.EndsWith("G0")))
                     declareMedicine.Position = Positions.SingleOrDefault(p=>p.Id.Contains("PO"))?.Id;
                 if (CurrentPrescription.Medicines.Count > 0)
@@ -1285,7 +1280,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void NullTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox t && string.IsNullOrEmpty(t.Text))
+            {
                 t.Text = "0";
+                t.SelectAll();
+            }
+            CountMedicinesCost();
         }
 
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
@@ -1433,7 +1432,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
         public void SetValueByPrescription(CooperativeClinic cooperativeClinic)
         {
-            _IsReceiveCopayMent = cooperativeClinic.Remark.Substring(16,1) == "Y" ? false :true;
+            _isReceiveCopayment = cooperativeClinic.Remark.Substring(16,1) == "Y" ? false :true;
             _clinicDeclareId = cooperativeClinic.DeclareId;
             _clinicXml = cooperativeClinic.Xml;
             for (int i = 0; i < cooperativeClinic.Prescription.Medicines.Count; i++) {
@@ -1941,7 +1940,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             _firstTimeDecMasId = string.Empty;
             _currentDecMasId = string.Empty;
             _clinicDeclareId = string.Empty;
-            _IsReceiveCopayMent = true;
+            _isReceiveCopayment = true;
             _clinicXml = new XmlDocument();
             CurrentPrescription = new Prescription();
             DivisionCombo.SelectedIndex = -1;

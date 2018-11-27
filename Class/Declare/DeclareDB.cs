@@ -683,16 +683,10 @@ namespace His_Pos.Class.Declare
 
         private void AddPData(DeclareData declareData, DataTable pDataTable)
         {
-            foreach (var detail in declareData.DeclareDetails)
+            for (int i = 0 ;i < declareData.DeclareDetails.Count;i++)
             {
+                    var detail = declareData.DeclareDetails[i];
                     var row = pDataTable.NewRow();
-                    detail.Usage = declareData.Prescription.Medicines == null
-                        ? detail.Usage
-                        : med.UsageName;
-                    var paySelf = 
-                        med.PaySelf ? "1" : "0";
-
-
                     var function = new Function();
                     row["P1"] = detail.MedicalOrder;
                     row["P2"] = detail.MedicalId;
@@ -702,11 +696,16 @@ namespace His_Pos.Class.Declare
                     row["P6"] = function.ToInvCulture(detail.Percent);
                     row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
                     row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                    row["P9"] = function.SetStrFormatInt(Convert.ToInt32(Math.Truncate(Math.Round(detail.Point, 0, MidpointRounding.AwayFromZero))), "{0:D8}");
+                    row["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
                     row["P10"] = detail.Sequence.ToString();
                     row["P11"] = detail.Days.ToString();
-                    row["PAY_BY_YOURSELF"] = paySelf;
-                    row["IS_BUCKLE"] = ((DeclareMedicine)declareData.Prescription.Medicines[i]).IsBuckle;
+                    row["PAY_BY_YOURSELF"] = detail.PaySelf ? "1" : "0";
+                    if(declareData.Prescription.Medicines[i] is DeclareMedicine)
+                        row["IS_BUCKLE"] = ((DeclareMedicine)declareData.Prescription.Medicines[i]).IsBuckle;
+                    else
+                    {
+                        row["IS_BUCKLE"] = true;
+                    }
                     pDataTable.Rows.Add(row);
             }
 

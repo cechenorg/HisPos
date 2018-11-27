@@ -78,6 +78,7 @@ namespace His_Pos.Class.Declare
         public int MedicalServicePoint { get; set; }//D38藥事服務費點數
         public Ddata DeclareXml { get; set; } = new Ddata();
         public string Id { get; set; }
+        
 
         private void SetCopaymentPoint()
         {
@@ -302,7 +303,6 @@ namespace His_Pos.Class.Declare
                 },
                 Dbody = new Dbody
                 {
-                    
                     D30 = t.MedicineDays,
                     D31 = SpecailMaterialPoint.ToString(),
                     D32 = DiagnosisPoint.ToString(),
@@ -355,7 +355,7 @@ namespace His_Pos.Class.Declare
                     P7 = function.SetStrFormat(detail.Total, "{0:00000.0}"),
                     P8 = function.SetStrFormat(detail.Price, "{0:0000000.00}"),
                     P9 = function.SetStrFormatInt(detail.Point,"{0:D8}"),
-                    P10 = function.SetStrFormatInt(DeclareDetails.Count + 1, "{0:D3}"),
+                    P10 = function.SetStrFormatInt(declareCount, "{0:D3}"),
                     P11 = detail.Days.ToString(),
                     P12 = detail.StartDate,
                     P13 = detail.EndDate,
