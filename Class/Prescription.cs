@@ -147,7 +147,6 @@ namespace His_Pos.Class
             CheckPaymentCategory();
             CheckCopayment();
             CheckChronicTimes();
-            Pharmacy = MainWindow.CurrentPharmacy;
             return _errorMessage;
         }
 

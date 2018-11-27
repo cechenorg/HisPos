@@ -280,6 +280,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             DeclareMedicines = new ObservableCollection<Product>();
             TreatmentCases = new ObservableCollection<TreatmentCase>();
+            CurrentPrescription.Pharmacy = MainWindow.CurrentPharmacy.DeepCloneViaJson();
             var loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(Instance);
             loadingWindow.Show();
