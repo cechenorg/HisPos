@@ -34,7 +34,7 @@ namespace His_Pos.Class.Pharmacy
         public Pharmacy(DeclareFileDdata d)
         {
             MedicalPersonnel = new MedicalPersonnel();
-            MedicalPersonnel.IcNumber = !string.IsNullOrEmpty(d.Dbody.D25) ? d.Dbody.D25 : string.Empty;
+            MedicalPersonnel.IcNumber = !string.IsNullOrEmpty(d.Dhead.D25) ? d.Dhead.D25 : string.Empty;
         }
 
         private MedicalPersonnel _medicalPersonnel;

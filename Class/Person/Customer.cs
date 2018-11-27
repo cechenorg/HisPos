@@ -84,10 +84,10 @@ namespace His_Pos.Class.Person
         public Customer(DeclareFileDdata d)
         {
             IcCard = new IcCard(d);
-            Name = !string.IsNullOrEmpty(d.Dbody.D20) ? d.Dbody.D20 : string.Empty;
-            IcNumber = !string.IsNullOrEmpty(d.Dbody.D3) ? d.Dbody.D3 : string.Empty;
+            Name = !string.IsNullOrEmpty(d.Dhead.D20) ? d.Dhead.D20 : string.Empty;
+            IcNumber = !string.IsNullOrEmpty(d.Dhead.D3) ? d.Dhead.D3 : string.Empty;
             Gender = IcNumber.Substring(1, 1) == "1";
-            var nodeStr = d.Dbody.D6;
+            var nodeStr = d.Dhead.D6;
             if (!string.IsNullOrEmpty(nodeStr))
             {
                 var year = int.Parse(nodeStr.Substring(0, 3)) + 1911;

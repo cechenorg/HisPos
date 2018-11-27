@@ -1300,6 +1300,7 @@
     <Content Include="csHis.dll" />
     <Resource Include="Images\Ph.png" />
     <Resource Include="Images\QuestionMark.png" />
+    <Resource Include="Images\Report.png" />
     <Content Include="Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">

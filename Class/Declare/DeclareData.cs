@@ -27,7 +27,9 @@ namespace His_Pos.Class.Declare
             if (prescription.Treatment.AdjustCase.Id.Equals("0")) return;
             SetCopaymentPoint();
             var cusAge = DateTimeExtensions.CalculateAge(Prescription.Customer.Birthday);
-            CountDeclareDeatailPoint(cusAge);
+            var medFormCount = CountOralLiquidAgent();
+            var dayPay = CountDayPayAmount(cusAge, medFormCount);
+            CountDeclareDeatailPoint(dayPay);
         }
      
         public DeclareData(DataRow row)
@@ -76,23 +78,16 @@ namespace His_Pos.Class.Declare
         public int MedicalServicePoint { get; set; }//D38藥事服務費點數
         public Ddata DeclareXml { get; set; } = new Ddata();
         public string Id { get; set; }
-        private int medFormCount = 0;
 
         private void SetCopaymentPoint()
         {
-            var copaymentPoint = 0;
             var copaymentId = Prescription.Treatment.Copayment.Id;
-            if (NewFunction.CheckCopaymentFreeProject(copaymentId))//免收部分負擔
-                copaymentPoint = 0;
-            if (copaymentId.Equals("I20") || copaymentId.Equals("Z00"))//I20:藥費大於100須收部分負擔 Z00:戒菸服務補助計畫加收部分負擔
-                copaymentPoint = Prescription.Treatment.Copayment.Point;
+            var copaymentPoint = NewFunction.CheckCopaymentFreeProject(copaymentId) ? 0 : Prescription.Treatment.Copayment.Point;
             SetAssistProjectCopaymentPoint(copaymentPoint);
         }
 
-        private void CountDeclareDeatailPoint(double cusAge)
+        private void CountDeclareDeatailPoint(int dayPay)
         {
-            var medFormCount = CountOralLiquidAgent();
-            var dayPay = CountDayPayAmount(cusAge, medFormCount);
             SetMedicalServiceCode(dayPay);//判斷藥事服務費項目代碼
             SetCopaymentPoint();//計算部分負擔點數
             TotalPoint = SpecailMaterialPoint + DiagnosisPoint + DrugsPoint + MedicalServicePoint;//計算總申報點數
@@ -114,12 +109,10 @@ namespace His_Pos.Class.Declare
             const string oralLiquidAgent = "口服液劑(原瓶包裝)";
             foreach (var med in Prescription.Medicines)
             {
-                if (med is DeclareMedicine declare)
-                {
-                    if (declare.HcNote == null) continue;
-                    if (declare.HcNote.Equals(oralLiquidAgent) && !declare.PaySelf)
-                        medFormCount++;
-                }
+                if (!(med is DeclareMedicine declare)) continue;
+                if (declare.HcNote == null) continue;
+                if (declare.HcNote.Contains(oralLiquidAgent) && !declare.PaySelf)
+                    medFormCount++;
             }
             return medFormCount;
         }
@@ -137,15 +130,12 @@ namespace His_Pos.Class.Declare
                 case 22:
                     DayPayCode = "MA1";
                     break;
-
                 case 31:
                     DayPayCode = "MA2";
                     break;
-
                 case 37:
                     DayPayCode = "MA3";
                     break;
-
                 case 41:
                     DayPayCode = "MA4";
                     break;
@@ -197,7 +187,6 @@ namespace His_Pos.Class.Declare
             var copaymentId = Prescription.Treatment.Copayment.Id;
 
             #region 代碼對照
-
             /* 003:合於社會救助法規定之低收入戶之保險對象
              * 004:榮民、榮民遺眷之家戶代表
              * 005:經登記列管結核病患至衛生福利部疾病管制署公告指定之醫療院所就醫者
@@ -208,7 +197,6 @@ namespace His_Pos.Class.Declare
              * 904:行政協助愛滋病案件、愛滋防治替代治療計畫
              * 906:內政部役政署補助替代役役男全民健康保險自行負擔醫療費用
              */
-
             #endregion 代碼對照
 
             var assistProjectCopaymentList = new List<string>() { "003", "004", "005", "006", "901", "902", "903", "904", "906" };
@@ -227,12 +215,27 @@ namespace His_Pos.Class.Declare
             var count = 1;
             foreach (var medicine in Prescription.Medicines)
             {
-                if (!(medicine is DeclareMedicine declare)) continue;
-                var detail = new DeclareDetail(declare, count);
-                if (!declare.PaySelf)
-                    CountDeclarePoint(detail);
-                DeclareDetails.Add(detail);
-                count++;
+                switch (medicine)
+                {
+                    case PrescriptionOTC otc:
+                        var detailOtc = new DeclareDetail(otc);
+                        DeclareDetails.Add(detailOtc);
+                        break;
+                    case DeclareMedicine declare:
+                        if (!declare.PaySelf)
+                        {
+                            var detail = new DeclareDetail(declare, count);
+                            CountDeclarePoint(detail);
+                            DeclareDetails.Add(detail);
+                            count++;
+                        }
+                        else
+                        {
+                            var detail = new DeclareDetail(declare, 0);
+                            DeclareDetails.Add(detail);
+                        }
+                        break;
+                }
             }
         }
 
@@ -274,17 +277,17 @@ namespace His_Pos.Class.Declare
             var ic = c.IcCard;
             DeclareXml = new Ddata
             {
-                Dhead = new Dhead { D1 = Prescription.Treatment.AdjustCase.Id },
-                Dbody = new Dbody
+                Dhead = new Dhead
                 {
+                    D1 = Prescription.Treatment.AdjustCase.Id,
                     D3 = c.IcNumber,
                     D5 = t.PaymentCategory.Id,
-                    D6 = DateTimeExtensions.ConvertToTaiwanCalender(c.Birthday,false),
+                    D6 = DateTimeExtensions.ConvertToTaiwanCalender(c.Birthday, false),
                     D7 = CheckXmlEmptyValue(ic.MedicalNumber),
                     D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id),
                     D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id),
                     D13 = CheckXmlEmptyValue(m.Hospital.Division.Id),
-                    D14 = DateTimeExtensions.ConvertToTaiwanCalender(t.TreatmentDate,false),
+                    D14 = DateTimeExtensions.ConvertToTaiwanCalender(t.TreatmentDate, false),
                     D15 = CheckXmlEmptyValue(t.Copayment.Id),
                     D16 = DeclarePoint.ToString(),
                     D17 = CopaymentPoint.ToString(),
@@ -294,8 +297,12 @@ namespace His_Pos.Class.Declare
                     D21 = CheckXmlEmptyValue(m.Hospital.Id),
                     D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
                     D23 = DateTimeExtensions.ConvertToTaiwanCalender(t.AdjustDate, false),
-                    D24 = string.IsNullOrEmpty(m.Hospital.Doctor.IcNumber)? m.Hospital.Id: m.Hospital.Doctor.IcNumber,
-                    D25 = p.Pharmacy.MedicalPersonnel.IcNumber,
+                    D24 = string.IsNullOrEmpty(m.Hospital.Doctor.IcNumber) ? m.Hospital.Id : m.Hospital.Doctor.IcNumber,
+                    D25 = p.Pharmacy.MedicalPersonnel.IcNumber
+                },
+                Dbody = new Dbody
+                {
+                    
                     D30 = t.MedicineDays,
                     D31 = SpecailMaterialPoint.ToString(),
                     D32 = DiagnosisPoint.ToString(),
@@ -309,7 +316,7 @@ namespace His_Pos.Class.Declare
             };
             if (!string.IsNullOrEmpty(DeclareMakeUp))
             {
-                DeclareXml.Dbody.D4 = DeclareMakeUp;
+                DeclareXml.Dhead.D4 = DeclareMakeUp;
             }
 
             if (!string.IsNullOrEmpty(t.AdjustCase.Id) && !t.AdjustCase.Id.StartsWith("D") && !t.AdjustCase.Id.StartsWith("5"))
@@ -319,7 +326,7 @@ namespace His_Pos.Class.Declare
                     m.Hospital.Doctor.IcNumber = m.Hospital.Id;
                 }
 
-                DeclareXml.Dbody.D24 = m.Hospital.Doctor.IcNumber;
+                DeclareXml.Dhead.D24 = m.Hospital.Doctor.IcNumber;
                 DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode is null? string.Empty: t.MedicalInfo.SpecialCode.Id;
             }
 
@@ -383,6 +390,5 @@ namespace His_Pos.Class.Declare
                 return value.Length > 0 ? value : string.Empty;
             return null;
         }
-
     }
 }

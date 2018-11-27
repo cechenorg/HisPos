@@ -308,7 +308,7 @@ namespace His_Pos.ViewModel
                     newTab = new EntrySearch() { TabName = MainWindow.HisFeatures[5].Functions[0], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
-                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[6].Icon };
+                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:
                     return;

@@ -71,6 +71,20 @@ namespace His_Pos.Class.Declare
             CountPoint();
         }
 
+        public DeclareDetail(PrescriptionOTC otc)
+        {
+            MedicalOrder = "0";
+            PaySelf = true;
+            MedicalId = otc.Id;//p2 藥品代號 
+            Total = otc.Amount;//p7 總量
+            Price = otc.Price;//p8 單價
+            Dosage = otc.Dosage;//p3
+            Usage = otc.Usage?.Id;//p4
+            Position = string.IsNullOrEmpty(otc.Position)? otc.Position:string.Empty;//p5
+            Days = string.IsNullOrEmpty(otc.Days) ? 0 : int.Parse(otc.Days); //p11
+            Point = 0;
+        }
+
         public DeclareDetail()
         {
         }

@@ -24,7 +24,7 @@ namespace His_Pos.Class.PaymentCategory
 
         public PaymentCategory(DeclareFileDdata d)
         {
-            Id = !string.IsNullOrEmpty(d.Dbody.D5) ? d.Dbody.D5 : string.Empty;
+            Id = !string.IsNullOrEmpty(d.Dhead.D5) ? d.Dhead.D5 : string.Empty;
         }
 
         public PaymentCategory ShallowCopy()

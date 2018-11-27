@@ -263,7 +263,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
         {
             var d = (DeclareFileDdata)item;
             var startDateAccept = true;
-            var date = new DateTime(int.Parse(d.Dbody.D23.Substring(0,3)) +1911, int.Parse(d.Dbody.D23.Substring(3, 2)), int.Parse(d.Dbody.D23.Substring(5, 2)));
+            var date = new DateTime(int.Parse(d.Dhead.D23.Substring(0,3)) +1911, int.Parse(d.Dhead.D23.Substring(3, 2)), int.Parse(d.Dhead.D23.Substring(5, 2)));
             var startDateValid = DateTime.TryParse($"{Start.Text.Split('/')[0]}/{Start.Text.Split('/')[1]}/{Start.Text.Split('/')[2]}", out _);
             if (!Start.Text.Contains(" ") && startDateValid)
                 startDateAccept = date.Date >= StartDate.Date;
@@ -276,7 +276,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 adjustCaseAccept = d.Dhead.D1.Equals(((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Trim());
             var hospitalAccept = true;
             if (!string.IsNullOrEmpty(ReleasePalace.Text) && ReleasePalace.SelectedItem != null)
-                hospitalAccept = d.Dbody.D21.Equals(((Hospital) ReleasePalace.SelectedItem).Id.Trim());
+                hospitalAccept = d.Dhead.D21.Equals(((Hospital) ReleasePalace.SelectedItem).Id.Trim());
             return startDateAccept && endDateAccept && adjustCaseAccept && hospitalAccept;
         }
 
@@ -296,24 +296,24 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 T5 = "1",
                 T6 = (DateTime.Now.Year - 1911) + DateTime.Now.Month.ToString().PadLeft(2, '0'),
                 T7 = declareDb.CountPrescriptionByCase(declaredPharmacy.Ddata, 1).ToString(),
-                T8 = declaredPharmacy.Ddata.Where(d => !d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dbody.D16)).ToString(),
+                T8 = declaredPharmacy.Ddata.Where(d => !d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dhead.D16)).ToString(),
                 T9 = declareDb.CountPrescriptionByCase(declaredPharmacy.Ddata, 2).ToString(),
-                T10 = declaredPharmacy.Ddata.Where(d => d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dbody.D16)).ToString(),
+                T10 = declaredPharmacy.Ddata.Where(d => d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dhead.D16)).ToString(),
                 T11 = declaredPharmacy.Ddata.Count.ToString()
             };
             var firstAdjustDate = "31";
             foreach (var d in declaredPharmacy.Ddata)
             {
-                if (int.Parse(d.Dbody.D23.Split('/')[2]) < int.Parse(firstAdjustDate))
-                    firstAdjustDate = d.Dbody.D23.Split('/')[2];
+                if (int.Parse(d.Dhead.D23.Split('/')[2]) < int.Parse(firstAdjustDate))
+                    firstAdjustDate = d.Dhead.D23.Split('/')[2];
             }
             tdata.T12 = (int.Parse(tdata.T8) + int.Parse(tdata.T10)).ToString();
             tdata.T13 = (int.Parse(SelectedFile.DeclareYear)-1911) + "/" + SelectedFile.DeclareMonth + "/" + firstAdjustDate;
             var lastAdjustDate = "01";
             foreach (var d in declaredPharmacy.Ddata)
             {
-                if (int.Parse(d.Dbody.D23.Split('/')[2]) > int.Parse(lastAdjustDate))
-                    lastAdjustDate = d.Dbody.D23.Split('/')[2];
+                if (int.Parse(d.Dhead.D23.Split('/')[2]) > int.Parse(lastAdjustDate))
+                    lastAdjustDate = d.Dhead.D23.Split('/')[2];
             }
             tdata.T14 = (int.Parse(SelectedFile.DeclareYear)-1911) + "/" + SelectedFile.DeclareMonth + "/" + lastAdjustDate;
             declaredPharmacy.Tdata = tdata;
@@ -357,7 +357,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
                 }
             }
             
-            var ddatas = canDeclared.GroupBy(d => d.Dbody.D25)
+            var ddatas = canDeclared.GroupBy(d => d.Dhead.D25)
                 .ToList();
             var sorteDdatas = new List<Ddata>();
             //每位調劑藥師處方排序
