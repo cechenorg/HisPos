@@ -7,6 +7,54 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="620">
     <Grid Background="LightGray">
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Text="AAA藥局" FontSize="50" FontFamily="Segoe UI Semibold" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <Border Grid.Row="0" BorderBrush="DimGray" BorderThickness="0,0,0,1" Width="450"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock Text="機構代碼" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock Text="123456789" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+        </StackPanel>
+        <TextBlock Grid.Row="2" Text="AADEFEGRGRGE" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+        <TextBlock Grid.Row="3" Text="0912345678" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+        <Grid Grid.Row="4" Margin="10" Background="{StaticResource Shadow}">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <TextBlock Text="讀卡機設定" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+                <TextBlock Text="COM" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40,0,0,0"/>
+                <ComboBox Margin="10,0,0,0" Width="150" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" HorizontalContentAlignment="Center" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
+                    <TextBlock Text="COM1" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                    <TextBlock Text="COM2" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                    <TextBlock Text="COM3" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                    <TextBlock Text="COM4" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                    <TextBlock Text="COM5" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                    <TextBlock Text="COM6" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                    <TextBlock Text="COM7" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                    <TextBlock Text="COM8" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                    <TextBlock Text="COM9" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
+                </ComboBox>
+                <TextBlock Text="新" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40,0,0,0"/>
+                <ToggleButton Margin="10,0,0,0" Background="White"/>
+                <TextBlock Text="舊" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                <TextBlock Text="V P N 設定" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,0,0,0"/>
+                <TextBox FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" Margin="20,0,0,8" Width="400" HorizontalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
+                <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>
+                <Button Name="CancelBtn" Margin="0,0,20,0" Width="110" Content="取消" FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" IsEnabled="False"/>
+                <Button Name="ConfirmBtn" Width="150" Content="確認" FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" IsEnabled="False" Margin="0,0,10,0"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
