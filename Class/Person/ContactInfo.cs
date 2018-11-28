@@ -28,7 +28,17 @@ namespace His_Pos.Class.Person
                 OnPropertyChanged(nameof(Tel));
             }
         }
-        public string Email { get; set; }
+        public string Email { get; set; } 
+        private string phone;
+        public string Phone
+        {
+            get => phone;
+            set
+            {
+                phone = value;
+                OnPropertyChanged(nameof(Phone));
+            }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

@@ -38,6 +38,10 @@ namespace His_Pos.Class.Person
             GenderName = customer.GenderName;
             IcCard = customer.IcCard;
             ContactInfo = customer.ContactInfo;
+            UrgentContactName = customer.UrgentContactName;
+            UrgentContactPhone = customer.UrgentContactPhone; 
+            UrgentContactTel = customer.UrgentContactTel;
+            Description = customer.Description;
         }
         public Customer(DataRow row,string type)
         {
@@ -57,7 +61,13 @@ namespace His_Pos.Class.Person
                 IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
                 ContactInfo = new ContactInfo();
                 ContactInfo.Tel = row["CUS_TEL"].ToString();
+                ContactInfo.Phone = row["CUS_PHONE"].ToString();
+                ContactInfo.Address = row["CUS_ADDR"].ToString();
                 LastEdit = string.IsNullOrEmpty(row["CUS_LASTEDIT"].ToString()) ? new DateTime().ToLocalTime() : Convert.ToDateTime(row["CUS_LASTEDIT"].ToString()).ToLocalTime();
+                UrgentContactName = row["CUS_URGENTPERSON"].ToString();
+                UrgentContactPhone = row["CUS_URGENTPHONE"].ToString();
+                UrgentContactTel = row["CUS_URGENTTEL"].ToString();
+                Description = row["CUS_DESC"].ToString();
             }
             
                 
@@ -134,7 +144,46 @@ namespace His_Pos.Class.Person
                 OnPropertyChanged(nameof(Gender));
             }
         }
-
+        private string urgentContactTel;
+        public string UrgentContactTel
+        {
+            get => urgentContactTel;
+            set
+            {
+                urgentContactTel = value;
+                OnPropertyChanged(nameof(UrgentContactTel));
+            }
+        }
+        private string urgentContactName;
+        public string UrgentContactName
+        {
+            get => urgentContactName;
+            set
+            {
+                urgentContactName = value;
+                OnPropertyChanged(nameof(UrgentContactName));
+            }
+        }
+        private string urgentContactPhone;
+        public string UrgentContactPhone
+        {
+            get => urgentContactPhone;
+            set
+            {
+                urgentContactPhone = value;
+                OnPropertyChanged(nameof(UrgentContactPhone));
+            }
+        }
+        private string description;
+        public string Description
+        {
+            get => description;
+            set
+            {
+                description = value;
+                OnPropertyChanged(nameof(Description));
+            }
+        }
         private IcCard _icCard;
 
         public IcCard IcCard
