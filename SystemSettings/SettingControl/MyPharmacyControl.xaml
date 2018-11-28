@@ -14,14 +14,14 @@
             <RowDefinition Height="60"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" Text="AAA藥局" FontSize="50" FontFamily="Segoe UI Semibold" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10"/>
+        <TextBlock Grid.Row="0" Text="{Binding Name}" FontSize="50" FontFamily="Segoe UI Semibold" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10"/>
         <Border Grid.Row="0" BorderBrush="DimGray" BorderThickness="0,0,0,1" Width="450"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
             <TextBlock Text="機構代碼" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock Text="123456789" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBlock Text="{Binding Id}" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
         </StackPanel>
-        <TextBlock Grid.Row="2" Text="AADEFEGRGRGE" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
-        <TextBlock Grid.Row="3" Text="0912345678" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+        <TextBlock Grid.Row="2" Text="{Binding Address}" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
+        <TextBlock Grid.Row="3" Text="{Binding Telephone}" FontSize="28" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20,0,0,0"/>
         <Grid Grid.Row="4" Margin="10" Background="{StaticResource Shadow}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -43,12 +43,12 @@
                     <TextBlock Text="COM9" FontSize="20" FontFamily="Segoe UI Semi" Foreground="DimGray"/>
                 </ComboBox>
                 <TextBlock Text="新" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="40,0,0,0"/>
-                <ToggleButton Margin="10,0,0,0" Background="White"/>
+                <ToggleButton Margin="10,0,0,0" Background="White" IsChecked="{Binding IsReaderNew}"/>
                 <TextBlock Text="舊" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,0,0,0"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <TextBlock Text="V P N 設定" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,0,0,0"/>
-                <TextBox FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" Margin="20,0,0,8" Width="400" HorizontalContentAlignment="Center"/>
+                <TextBox Text="{Binding VPN}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" Margin="20,0,0,8" Width="400" HorizontalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
                 <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>

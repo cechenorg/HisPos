@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using His_Pos.Class.Person;
+using His_Pos.SystemSettings.SettingControl;
 
 namespace His_Pos.Class.Pharmacy
 {
@@ -45,6 +46,11 @@ namespace His_Pos.Class.Pharmacy
             var table = dd.ExecuteProc("[HIS_POS_DB].[PharmacyManageView].[AddNewManagePharmacy]");
 
             return new ManagePharmacy(table.Rows[0]);
+        }
+
+        internal static MyPharmacyControl.MyPharmacy GetMyPharmacy()
+        {
+            throw new NotImplementedException();
         }
 
         internal static void UpdateManagePharmacy(ManagePharmacy pharmacy)
