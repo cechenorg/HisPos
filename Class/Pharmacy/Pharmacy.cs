@@ -63,8 +63,7 @@ namespace His_Pos.Class.Pharmacy
                 _medicalPersonnelCollection = value;
                 NotifyPropertyChanged(nameof(MedicalPersonnelCollection));
             }
-        }
-
+        } 
         public string Address { get; set; }
         public string Tel { get; set; }
     }

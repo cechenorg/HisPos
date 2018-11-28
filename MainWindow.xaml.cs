@@ -81,7 +81,7 @@ namespace His_Pos
             MainWindowInstance = this;
             CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
-            AddNewTab("每日作業");
+            AddNewTab("每日作業"); 
         }
         
         private void InitialUserBlock()

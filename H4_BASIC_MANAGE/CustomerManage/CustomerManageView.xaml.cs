@@ -68,7 +68,7 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
         private void DataGridCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((sender as DataGrid).SelectedItem == null) return;
-            CustomerDetail = (Customer)((Customer)(sender as DataGrid).SelectedItem).Clone();
+            CustomerDetail = ((Customer)(sender as DataGrid).SelectedItem).DeepCopy();
             richtextboxDesc.Document.Blocks.Clear();
             richtextboxDesc.AppendText(CustomerDetail.Description);
             InitDataChanged();
@@ -104,7 +104,7 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             Customer newcustomer = CustomerCollection.Where(customer => customer.Id == CustomerDetail.Id).ToList()[0];
-            CustomerDetail = (Customer)newcustomer.Clone();
+            CustomerDetail = newcustomer.DeepCopy();
             richtextboxDesc.Document.Blocks.Clear();
             richtextboxDesc.AppendText(CustomerDetail.Description);
             InitDataChanged();
@@ -118,7 +118,7 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
             messageWindow.ShowDialog();
             for (int i = 0; i < CustomerCollection.Count; i++){
                 if (CustomerCollection[i].Id == CustomerDetail.Id) {
-                    CustomerCollection[i] = (Customer)CustomerDetail.Clone();
+                    CustomerCollection[i] =  CustomerDetail.DeepCopy();
                 }
             } 
             richtextboxDesc.Document.Blocks.Clear();

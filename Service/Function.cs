@@ -20,11 +20,12 @@ using His_Pos.Service;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NChinese.Phonetic;
+using His_Pos.Class.Person;
 
 namespace His_Pos
 {
 
-    public class Function
+    public class Function 
     {
 
         //用途:將中文字轉成注音符號再轉成英文字母
@@ -257,5 +258,6 @@ namespace His_Pos
             var iBufferLength = 50;
             HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
         }
+      
     }
 }
