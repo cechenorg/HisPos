@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
@@ -68,7 +69,8 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
         {
             if ((sender as DataGrid).SelectedItem == null) return;
             CustomerDetail = (Customer)((Customer)(sender as DataGrid).SelectedItem).Clone();
-           
+            richtextboxDesc.Document.Blocks.Clear();
+            richtextboxDesc.AppendText(CustomerDetail.Description);
             InitDataChanged();
         }
         private void DataChanged()
@@ -103,14 +105,35 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
         {
             Customer newcustomer = CustomerCollection.Where(customer => customer.Id == CustomerDetail.Id).ToList()[0];
             CustomerDetail = (Customer)newcustomer.Clone();
+            richtextboxDesc.Document.Blocks.Clear();
+            richtextboxDesc.AppendText(CustomerDetail.Description);
             InitDataChanged();
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e) {
+            CustomerDetail.Description = new TextRange(richtextboxDesc.Document.ContentStart, richtextboxDesc.Document.ContentEnd).Text;
+
             CustomerDb.UpdateCustomerById(CustomerDetail);
-            MessageWindow messageWindow = new MessageWindow("修改完成!",Class.MessageType.SUCCESS);
+            MessageWindow messageWindow = new MessageWindow("修改完成!", Class.MessageType.SUCCESS);
             messageWindow.ShowDialog();
+            for (int i = 0; i < CustomerCollection.Count; i++){
+                if (CustomerCollection[i].Id == CustomerDetail.Id) {
+                    CustomerCollection[i] = (Customer)CustomerDetail.Clone();
+                }
+            } 
+            richtextboxDesc.Document.Blocks.Clear();
+            richtextboxDesc.AppendText(CustomerDetail.Description); 
             InitDataChanged();
+        }
+
+        private void EmpId_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            DataGridCustomer.Items.Filter= ((o) => {
+                if (((Customer)o).Id.Contains(EmpId.Text) || ((Customer)o).Name.Contains(EmpId.Text))
+                    return true;
+                else
+                    return false;
+            } );
         }
     }
 }

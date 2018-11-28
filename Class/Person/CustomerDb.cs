@@ -119,6 +119,26 @@ namespace His_Pos.Class.Person
                 parameters.Add(new SqlParameter("CUS_EMERGENTTEL", DBNull.Value));
             else
                 parameters.Add(new SqlParameter("CUS_EMERGENTTEL", customer.EmergentTel));
+            if (string.IsNullOrEmpty(customer.ContactInfo.Phone))
+                parameters.Add(new SqlParameter("CUS_PHONE", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_PHONE", customer.ContactInfo.Phone));
+            if (string.IsNullOrEmpty(customer.UrgentContactName))
+                parameters.Add(new SqlParameter("CUS_URGENTPERSON", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_URGENTPERSON", customer.UrgentContactName));
+            if (string.IsNullOrEmpty(customer.UrgentContactPhone))
+                parameters.Add(new SqlParameter("CUS_URGENTPHONE", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_URGENTPHONE", customer.UrgentContactPhone));
+            if (string.IsNullOrEmpty(customer.UrgentContactTel))
+                parameters.Add(new SqlParameter("CUS_URGENTTEL", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_URGENTTEL", customer.UrgentContactTel));
+            if (string.IsNullOrEmpty(customer.Description))
+                parameters.Add(new SqlParameter("CUS_DESC", DBNull.Value));
+            else
+                parameters.Add(new SqlParameter("CUS_DESC", customer.Description)); 
             parameters.Add(new SqlParameter("CUS_LASTEDIT", DateTime.Now));
 
             dd.ExecuteProc("[HIS_POS_DB].[CustomerManageView].[UpdateCustomerById]",parameters);
