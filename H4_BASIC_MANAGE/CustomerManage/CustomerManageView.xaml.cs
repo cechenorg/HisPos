@@ -1,4 +1,5 @@
 ﻿using His_Pos.Class.Person;
+using His_Pos.Service;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -67,8 +68,9 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
 
         private void DataGridCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
             if ((sender as DataGrid).SelectedItem == null) return;
-            CustomerDetail = ((Customer)(sender as DataGrid).SelectedItem).DeepCopy();
+            CustomerDetail = NewFunction.DeepCloneViaJson ((Customer)(sender as DataGrid).SelectedItem);
             richtextboxDesc.Document.Blocks.Clear();
             richtextboxDesc.AppendText(CustomerDetail.Description);
             InitDataChanged();
@@ -104,7 +106,7 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             Customer newcustomer = CustomerCollection.Where(customer => customer.Id == CustomerDetail.Id).ToList()[0];
-            CustomerDetail = newcustomer.DeepCopy();
+            CustomerDetail = NewFunction.DeepCloneViaJson(newcustomer);
             richtextboxDesc.Document.Blocks.Clear();
             richtextboxDesc.AppendText(CustomerDetail.Description);
             InitDataChanged();
@@ -118,7 +120,7 @@ namespace His_Pos.H4_BASIC_MANAGE.CustomerManage
             messageWindow.ShowDialog();
             for (int i = 0; i < CustomerCollection.Count; i++){
                 if (CustomerCollection[i].Id == CustomerDetail.Id) {
-                    CustomerCollection[i] =  CustomerDetail.DeepCopy();
+                    CustomerCollection[i] = NewFunction.DeepCloneViaJson(CustomerDetail);
                 }
             } 
             richtextboxDesc.Document.Blocks.Clear();

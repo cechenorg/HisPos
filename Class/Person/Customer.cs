@@ -72,11 +72,7 @@ namespace His_Pos.Class.Person
             
                 
         }
-        public Customer DeepCopy()
-        {
-            Customer othercopy = (Customer)this.MemberwiseClone();
-            return othercopy;
-        }
+        
         public Customer(XmlDocument xml) {
             XmlNode xmlcus = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/profile/person");
             IcCard = new IcCard();
