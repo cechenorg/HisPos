@@ -397,7 +397,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
             }
         }
-        private void SetEntryType(ref string medEntryName, ref string medServiceName, ref string medCopayName) {
+        private void SetEntryType(ref string medEntryName, ref string medServiceName, ref string medCopayName,ref string medPaySelf) {
             switch (CurrentPrescription.Treatment.MedicalInfo.Hospital.Id)
             {
                 case "3532072408":
@@ -408,11 +408,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     medEntryName = "合作診所調劑耗用";
                     medServiceName = "合作診所藥服費";
                     medCopayName = "合作診所部分負擔";
+                    medPaySelf = "合作診所自費";
                     break;
                 default:
                     medEntryName = "調劑耗用";
                     medServiceName = "藥服費";
                     medCopayName = "部分負擔";
+                    medPaySelf = "自費";
                     break;
             } 
         }
@@ -425,7 +427,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             string medEntryName = string.Empty;
             string medServiceName = string.Empty;
             string medCopayName = string.Empty;
-            SetEntryType( ref medEntryName, ref medServiceName, ref medCopayName);
+            string medPaySelf = string.Empty;
+            SetEntryType( ref medEntryName, ref medServiceName, ref medCopayName,ref medPaySelf);
             bool buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"); //扣庫條件
              var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             int caseType;
@@ -444,7 +447,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     _firstTimeDecMasId = declareDb.InsertDeclareData(_currentDeclareData);
 
                     ProductDb.InsertCashFow(medCopayName, declareTrade.CopayMent, "DecMasId", _firstTimeDecMasId);
-                    ProductDb.InsertCashFow("自費", declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
+                    ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
                     ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
                     ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _firstTimeDecMasId);
                     if (buckleCondition)
@@ -483,7 +486,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (buckleCondition)
                     {
                         //ProductDb.InsertEntry(medCopayName, declareTrade.CopayMent, "DecMasId", _currentDecMasId);
-                        ProductDb.InsertCashFow("自費", declareTrade.PaySelf, "DecMasId", _currentDecMasId);
+                        ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _currentDecMasId);
                         ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _currentDecMasId);
                         ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(), "DecMasId", _currentDecMasId);
                             var medTotalPrice = 0.00;

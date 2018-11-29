@@ -14,6 +14,8 @@ using LiveCharts;
 using LiveCharts.Wpf;
 using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.InventoryManagement;
+using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
+using System.Linq;
 
 namespace His_Pos.Class.Product
 {
@@ -591,6 +593,51 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("PRO_ID", proId));
             parameters.Add(new SqlParameter("PRO_NAME", proName)); 
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertMedicine]", parameters);
-        } 
+        }
+
+        internal static ObservableCollection<CooperativeEntryView.CopaymentEntry> GetCopayMentValue(CooperativeEntryView.CopaymentEntry totalStock, string startdate = null, string enddate = null)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = new DataTable();
+            if (startdate == null)
+                table = dd.ExecuteProc("[HIS_POS_DB].[CooperativeEntryView].[GetCopayMentValue]");
+            else
+            {
+                
+                   var parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("STARTDATE", startdate));
+                parameters.Add(new SqlParameter("ENDDATE", enddate));
+                table = dd.ExecuteProc("[HIS_POS_DB].[CooperativeEntryView].[GetCopayMentValue]", parameters);
+            }
+            ObservableCollection<CooperativeEntryView.CopaymentEntry> collection = new ObservableCollection<CooperativeEntryView.CopaymentEntry>();
+            double CopaymentValue = 0;
+            double ClinicCopaymentValue = 0;
+            double MedServiceValue = 0;
+            double ClinicMedServiceValue = 0;
+            double PaySelfValue = 0;
+            double ClinicPaySelfValue = 0;
+            double DepositValue = 0;
+            foreach (DataRow row in table.Rows)
+            {
+                CooperativeEntryView.CopaymentEntry daily = new CooperativeEntryView.CopaymentEntry(row);
+                CopaymentValue += Convert.ToDouble(daily.CopaymentValue);
+                ClinicCopaymentValue += Convert.ToDouble(daily.ClinicCopaymentValue);
+                MedServiceValue += Convert.ToDouble(daily.MedServiceValue);
+                ClinicMedServiceValue += Convert.ToDouble(daily.ClinicMedServiceValue);
+                PaySelfValue += Convert.ToDouble(daily.PaySelfValue);
+                ClinicPaySelfValue += Convert.ToDouble(daily.ClinicPaySelfValue);
+                DepositValue += Convert.ToDouble(daily.DepositValue);
+                collection.Add(daily);
+            }
+            totalStock.CopaymentValue = CopaymentValue.ToString();
+            totalStock.ClinicCopaymentValue = ClinicCopaymentValue.ToString();
+            totalStock.MedServiceValue = MedServiceValue.ToString();
+            totalStock.ClinicMedServiceValue = ClinicMedServiceValue.ToString();
+            totalStock.PaySelfValue = PaySelfValue.ToString();
+            totalStock.ClinicPaySelfValue = ClinicPaySelfValue.ToString();
+            totalStock.DepositValue = DepositValue.ToString();
+
+            return collection;
+        }
     }
 } 

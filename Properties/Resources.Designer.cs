@@ -133,7 +133,7 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
-        ///   查詢類似 合作診所調劑費用 的當地語系化字串。
+        ///   查詢類似 部分負擔自費報表 的當地語系化字串。
         /// </summary>
         internal static string CooperativeEntry {
             get {

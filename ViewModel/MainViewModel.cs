@@ -207,7 +207,7 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.進退貨報表查詢):
                     break;
-                case nameof(FeatureItem.合作診所調劑費用):
+                case nameof(FeatureItem.部分負擔自費報表):
                     break;
                 case nameof(FeatureItem.合作診所藥品耗用):
                     break;
@@ -318,12 +318,11 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.進退貨報表查詢):
                     newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
-                case nameof(FeatureItem.合作診所調劑費用):
-                    newTab = new CooperativeEntry() { TabName = MainWindow.HisFeatures[5].Functions[2], Icon = MainWindow.HisFeatures[5].Icon };
-                    break;
                 case nameof(FeatureItem.合作診所藥品耗用):
-                    newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[3], Icon = MainWindow.HisFeatures[5].Icon };
-                    newTab = new PurchaseReturnReport() { TabName = MainWindow.HisFeatures[5].Functions[1], Icon = MainWindow.HisFeatures[5].Icon };
+                    newTab = new CooperativeAdjustReport() { TabName = MainWindow.HisFeatures[5].Functions[2], Icon = MainWindow.HisFeatures[5].Icon };
+                    break;
+                case nameof(FeatureItem.部分負擔自費報表):
+                    newTab = new CooperativeEntry() { TabName = MainWindow.HisFeatures[5].Functions[3], Icon = MainWindow.HisFeatures[5].Icon };
                     break;
                 default:
                     return;
