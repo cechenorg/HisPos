@@ -111,9 +111,16 @@ namespace His_Pos.Class.Pharmacy
             }
         }
 
-        internal static void SetMyPharmacy(MyPharmacyControl.MyPharmacy myPharmacy)
+        internal static void SetMyPharmacy(MyPharmacyControl.MyPharmacy pharmacy)
         {
-            throw new NotImplementedException();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("COM", pharmacy.ReaderCom));
+            parameters.Add(new SqlParameter("VPN", pharmacy.VPN));
+            parameters.Add(new SqlParameter("ISNEW", pharmacy.IsReaderNew));
+
+            dd.ExecuteProc("[HIS_POS_DB].[SystemSettings].[SetMyPharmacyData]", parameters);
         }
 
         internal static ObservableCollection<MedicalPersonnel> GetPharmacyMedicalPersonData()

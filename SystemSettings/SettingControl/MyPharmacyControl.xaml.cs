@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using His_Pos.Class;
 using His_Pos.Class.Pharmacy;
 
 namespace His_Pos.SystemSettings.SettingControl
@@ -14,7 +16,7 @@ namespace His_Pos.SystemSettings.SettingControl
     public partial class MyPharmacyControl : UserControl, INotifyPropertyChanged
     {
         #region ----- Define Struct -----
-        public struct MyPharmacy
+        public class MyPharmacy
         {
             public MyPharmacy(DataRow dataRow)
             {
@@ -130,7 +132,27 @@ namespace His_Pos.SystemSettings.SettingControl
 
         private void ConfirmBtn_OnClick(object sender, RoutedEventArgs e)
         {
+            if (!IsVPNValid())
+            {
+                MessageWindow messageWindow = new MessageWindow("VPN 格式錯誤!", MessageType.ERROR);
+                messageWindow.ShowDialog();
+
+                return;
+            }
+
             PharmacyDb.SetMyPharmacy(myPharmacy);
+
+            ClearDataChangedStatus();
+        }
+
+        private bool IsVPNValid()
+        {
+            Regex VPNReg = new Regex(@"[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}");
+            Match match;
+
+            match = VPNReg.Match(myPharmacy.VPN);
+
+            return match.Success;
         }
 
         private void MyPharmacyControl_OnGotFocus(object sender, RoutedEventArgs e)
