@@ -185,7 +185,7 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D20,UpdateSourceTrigger=PropertyChanged}" Header="病患姓名" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
+                            Width="100" Binding="{Binding Dhead.D20,UpdateSourceTrigger=PropertyChanged}" Header="病患姓名" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -194,7 +194,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="250" Binding="{Binding Dbody.D21,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ReleaseInsConverter}}" Header="釋出院所" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
+                            Width="250" Binding="{Binding Dhead.D21,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ReleaseInsConverter}}" Header="釋出院所" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Left" />
@@ -203,7 +203,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="80" Binding="{Binding Dbody.D13,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DivisionConverter}}" Header="科別" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
+                            Width="80" Binding="{Binding Dhead.D13,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DivisionConverter}}" Header="科別" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -212,7 +212,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D23,UpdateSourceTrigger=PropertyChanged}"  Header="調劑日期" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
+                            Width="100" Binding="{Binding Dhead.D23,UpdateSourceTrigger=PropertyChanged}"  Header="調劑日期" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -221,7 +221,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D25,UpdateSourceTrigger=PropertyChanged}"  Header="調劑藥師" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
+                            Width="100" Binding="{Binding Dhead.D25,UpdateSourceTrigger=PropertyChanged}"  Header="調劑藥師" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -239,7 +239,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="100" Binding="{Binding Dbody.D17,UpdateSourceTrigger=PropertyChanged}"  Header="部分負擔" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
+                            Width="100" Binding="{Binding Dhead.D17,UpdateSourceTrigger=PropertyChanged}"  Header="部分負擔" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />
@@ -248,7 +248,7 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
                         <DataGridTextColumn
-                            Width="80" Binding="{Binding Dbody.D18,UpdateSourceTrigger=PropertyChanged}"  Header="總點數" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
+                            Width="80" Binding="{Binding Dhead.D18,UpdateSourceTrigger=PropertyChanged}"  Header="總點數" FontFamily="Segoe UI Semibold" FontSize="16" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="HorizontalAlignment" Value="Center" />

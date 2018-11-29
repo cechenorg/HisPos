@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using His_Pos.Class.Person;
 using System.Data;
+using System.Linq;
 using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Service;
@@ -38,7 +39,8 @@ namespace His_Pos.Class.Pharmacy
         public Pharmacy(DeclareFileDdata d)
         {
             MedicalPersonnel = new MedicalPersonnel();
-            MedicalPersonnel.IcNumber = !string.IsNullOrEmpty(d.Dhead.D25) ? d.Dhead.D25 : string.Empty;
+            MedicalPersonnel = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
+                p.IcNumber.Equals(d.Dhead.D25)).DeepCloneViaJson();
         }
 
         private MedicalPersonnel _medicalPersonnel;

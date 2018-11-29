@@ -101,21 +101,18 @@ namespace His_Pos.H6_DECLAREFILE.Export
         public DeclareDdataOutcome(DeclareFileDdata d)
         {
             InitializeComponent();
-            DataContext = this;
             Instance = this;
-            CurrentFile = d;
-            CurrentPrescription = new Prescription(CurrentFile);
-            var loadingWindow = new LoadingWindow();
-            loadingWindow.ChangeLoadingMessage("處方申報資料載入中...");
-            loadingWindow.SetDeclareFileData(Instance,d);
-            loadingWindow.Show();
             InitData(d);
             InitDataChanged();
+            DataContext = this;
+            OnPropertyChanged(nameof(CurrentPrescription));
         }
 
         private void InitData(DeclareFileDdata declareFileDdata)
         {
             if (ExportView.Instance is null) return;
+            CurrentFile = declareFileDdata;
+            CurrentPrescription = new Prescription(CurrentFile);
             PrescriptionMedicines = new ObservableCollection<Product>();
             foreach (var p in declareFileDdata.Dbody.Pdata)
             {

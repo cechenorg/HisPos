@@ -89,14 +89,14 @@ namespace His_Pos.Service
             {
                 switch (ex.Message)
                 {
-                    //case "建立連接至 SQL Server 時，發生網路相關或執行個體特定的錯誤。找不到或無法存取伺服器。確認執行個名稱是否正確，以及 SQL Server 是否設定為允許遠端連線。 (provider: TCP Provider, error: 0 - 等候操作已逾時。)":
-                    //    MessageWindow messageWindowConnectFail = new MessageWindow("網路異常 無法連線到資料庫", MessageType.ERROR);
-                    //    messageWindowConnectFail.ShowDialog();
-                    //    break;
-                    //default:
-                    //    MessageWindow messageWindowSQLerror = new MessageWindow("預存程序 " + procName + "執行失敗", MessageType.ERROR);
-                    //    messageWindowSQLerror.ShowDialog();
-                    //    break;
+                    case "建立連接至 SQL Server 時，發生網路相關或執行個體特定的錯誤。找不到或無法存取伺服器。確認執行個名稱是否正確，以及 SQL Server 是否設定為允許遠端連線。 (provider: TCP Provider, error: 0 - 等候操作已逾時。)":
+                        MessageWindow messageWindowConnectFail = new MessageWindow("網路異常 無法連線到資料庫", MessageType.ERROR);
+                        messageWindowConnectFail.ShowDialog();
+                        break;
+                    default:
+                        MessageWindow messageWindowSQLerror = new MessageWindow("預存程序 " + procName + "執行失敗", MessageType.ERROR);
+                        messageWindowSQLerror.ShowDialog();
+                        break;
                 }
             }
             return table;
