@@ -116,6 +116,7 @@ namespace His_Pos.SystemSettings
             switch (settingTab)
             {
                 case SettingTabs.MyPharmacy:
+                    myPharmacyControl.ResetPharmacy();
                     CurrentControl = myPharmacyControl;
                     break;
                 case SettingTabs.Printer:
