@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
@@ -13,10 +14,12 @@ using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Class.DiseaseCode;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Position;
 using His_Pos.Class.Product;
+using His_Pos.Class.SpecialCode;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.H1_DECLARE.PrescriptionInquire;
@@ -24,6 +27,7 @@ using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
+using MoreLinq;
 
 namespace His_Pos.PrescriptionInquire
 {
@@ -58,6 +62,16 @@ namespace His_Pos.PrescriptionInquire
             {
                 _adjustCaseCollection = value;
                 NotifyPropertyChanged(nameof(AdjustCaseCollection));
+            }
+        }
+        private ObservableCollection<SpecialCode> specialCodes;
+        public ObservableCollection<SpecialCode> SpecialCodes
+        {
+            get => specialCodes;
+            set
+            {
+                specialCodes = value;
+                NotifyPropertyChanged(nameof(SpecialCodes));
             }
         }
         private ObservableCollection<PaymentCategory> _paymentCategoryCollection;
@@ -145,34 +159,13 @@ namespace His_Pos.PrescriptionInquire
         }
         private ObservableCollection<object> _medicines;
         private readonly string _decMasId;
-        public PrescriptionInquireOutcome(DeclareData inquired)
+        public PrescriptionInquireOutcome(string decMasId)
         {
             InitializeComponent();
             IsAdjust = false;
             _isFirst = true;
             DataContext = this;
-            DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
-            _decMasId = inquired.DecMasId;
-            InquiredPrescription = inquired;
-            foreach (var newDeclareDetail in InquiredPrescription.Prescription.Medicines) {
-                if (newDeclareDetail is DeclareMedicine)
-                {
-                    var declareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
-                    declareDetailClone.Amount = ((DeclareMedicine)newDeclareDetail).Amount;
-                    DeclareDetails.Add(declareDetailClone);
-                    var tempdeclareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
-                    tempdeclareDetailClone.Amount = ((DeclareMedicine)newDeclareDetail).Amount;
-                    OriginDeclareDetails.Add(tempdeclareDetailClone);
-                }
-                else if (newDeclareDetail is PrescriptionOTC)
-                {
-                    var otc = (PrescriptionOTC)((PrescriptionOTC)newDeclareDetail).Clone();
-                    DeclareDetails.Add(otc);
-                    var tempotc = (PrescriptionOTC)((PrescriptionOTC)newDeclareDetail).Clone();
-                    OriginDeclareDetails.Add(tempotc);
-                }
-            }
-            InitData();
+            InitData(decMasId); 
             InitDataChanged();
         }
 
@@ -198,7 +191,7 @@ namespace His_Pos.PrescriptionInquire
 
             ButtonImportXml.IsEnabled = false;
         }
-        private void InitData() {
+        private void InitData(string decMasId) {
             if (PrescriptionInquireView.Instance is null) return;
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.ChangeLoadingMessage("處方詳細資料載入中...");
@@ -210,10 +203,13 @@ namespace His_Pos.PrescriptionInquire
             TreatmentCaseCollection = PrescriptionInquireView.Instance.TreatmentCaseCollection;
             HospitalCollection = PrescriptionInquireView.Instance.HospitalCollection;
             DeclareMedicinesData = PrescriptionInquireView.Instance.DeclareMedicinesData;
-            SetTreatmentData();
+            SpecialCodes = PrescriptionInquireView.Instance.SpecialCodes; 
+            SetValueByDecMasId(decMasId);
+           //SetTreatmentData();
             InquiredPrescription.Prescription.Treatment.Copayment = CopaymentCollection.SingleOrDefault(c =>
                 c.Id.Equals(InquiredPrescription.Prescription.Treatment.Copayment.Id));
             loadingWindow.Close();
+
         }
 
         private void SetTreatmentData()
@@ -252,10 +248,7 @@ namespace His_Pos.PrescriptionInquire
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
-        {
-            var tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
-            ReleasePalace.ItemsSource = tempCollection;
-            ReleasePalace.PopulateComplete();
+        { 
         }
 
         private void MedicineCodeAuto_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -594,15 +587,7 @@ namespace His_Pos.PrescriptionInquire
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             InquiredPrescription = PrescriptionDB.GetDeclareDataById(_decMasId);
-
-          ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
-          Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
-          CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
-          PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
-          AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
-          TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
-
-
+             
             DeclareDetails.Clear();
             foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines)
             {
@@ -765,11 +750,313 @@ namespace His_Pos.PrescriptionInquire
         #endregion
 
         private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            if (sender is System.Windows.Controls.TextBox t)
+            if (sender is TextBox t)
             {
                 t.SelectionStart = 0;
                 t.SelectionLength = t.Text.Length;
             }
+        }
+
+        private void ReleaseHospital_Populating(object sender, PopulatingEventArgs e)
+        {
+            if (HospitalCollection is null) HospitalCollection = HospitalDb.GetData();
+            var tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50).ToList());
+            ReleaseHospital.ItemsSource = tempCollection;
+            ReleaseHospital.PopulateComplete();
+        }
+
+        private void SelectionStart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            switch (sender)
+            {
+                case AutoCompleteBox a:
+                    if (a.Template.FindName("Text", a) is TextBox txt)
+                    {
+                        txt.SelectionStart = 0;
+                        txt.SelectionLength = txt.Text.Length;
+                    }
+                    break;
+                case TextBox t:
+                    t.SelectionStart = 0;
+                    t.SelectionLength = t.Text.Length;
+                    break;
+            }
+        }
+
+        private void ReleaseHospital_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (!(sender is AutoCompleteBox a)) return;
+            a.Text = a.Text.TrimStart(' ');
+            if (a.IsDropDownOpen && a.Text.Length <= 10)
+                a.ItemsSource = HospitalCollection.Where(x => x.Id.Contains(a.Text)).Take(50).ToList();
+        }
+
+        private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            if (!(sender is AutoCompleteBox a) || a.SelectedItem == null) return;
+            InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber =
+                InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Id;
+            DivisionCombo.Focus();
+        }
+
+        private void DivisionCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!(sender is ComboBox c)) return;
+            if (c.SelectedItem is null) return;
+            if (((Division)c.SelectedItem).Name.Equals("牙科"))
+            {
+                TreatmentCaseCombo.SelectedItem = TreatmentCaseCollection.SingleOrDefault(t => t.Name.Equals("牙醫其他專案"));
+                CopaymentCombo.SelectedItem = CopaymentCollection.SingleOrDefault(p => p.Name.Equals("其他免收"));
+            }
+            else
+            {
+                TreatmentCaseCombo.SelectedItem = TreatmentCaseCollection.SingleOrDefault(t => t.Name.Equals("一般案件"));
+                CopaymentCombo.SelectedItem = CopaymentCollection.SingleOrDefault(p => p.Name.Equals("加收部分負擔"));
+            }
+        }
+        private void Combo_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            switch (sender)
+            {
+                case ComboBox _ when e.Key != Key.Enter:
+                    return;
+                case ComboBox c:
+                    DependencyObject combo = c;
+                    var cName = combo.GetValue(NameProperty) as string;
+                    switch (cName)
+                    {
+                        case "DivisionCombo":
+                                TreatmentCaseCombo.Focus();
+                            break;
+                        case "HisPerson":
+                            if (string.IsNullOrEmpty(MedicalNumber.Text.Trim()))
+                                MedicalNumber.Focus();
+                            else
+                                MainDiagnosis.Focus();
+                            break;
+                        case "TreatmentCaseCombo":
+                            CopaymentCombo.Focus();
+                            break;
+                        case "PaymentCategoryCombo":
+                            AdjustCaseCombo.Focus();
+                            break;
+                        case "CopaymentCombo":
+                            SpecialCodeCombo.Focus();
+                            break;
+                        case "AdjustCaseCombo":
+                            TreatmentCaseCombo.Focus();
+                            break;
+                        case "SpecialCodeCombo":
+                            var nextAutoCompleteBox = new List<AutoCompleteBox>();
+                            NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto", ref nextAutoCompleteBox);
+                            nextAutoCompleteBox[0].Focus();
+                            break;
+                    }
+
+                    break;
+                case TextBox _ when e.Key != Key.Enter:
+                    return;
+                case TextBox t:
+                    DependencyObject text = t;
+                    var tName = text.GetValue(NameProperty) as string;
+                    switch (tName)
+                    {
+                        case "DoctorId":
+                            MedicalNumber.Focus();
+                            break;
+                        case "PaymentCategoryCombo":
+                            AdjustCaseCombo.Focus();
+                            break;
+                        case "ChronicSequence":
+                            if (string.IsNullOrEmpty(ChronicTotal.Text) && !int.TryParse(ChronicSequence.Text, out var s))
+                            {
+                                var m = new MessageWindow("總領藥次數有值，需填寫領藥次數", MessageType.WARNING, true);
+                                m.ShowDialog();
+                                ChronicTotal.Focus();
+
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrEmpty(ChronicTotal.Text) && int.TryParse(ChronicSequence.Text, out var seq) && seq > 1)
+                                {
+                                    AdjustCaseCombo.SelectedIndex = 1;
+                                    SpecialCodeCombo.Focus();
+                                }
+                            }
+                            break;
+                        case "ChronicTotal":
+                            if (string.IsNullOrEmpty(t.Text))
+                                SpecialCodeCombo.Focus();
+                            else
+                                ChronicSequence.Focus();
+                            break;
+                        case "MedicalNumber":
+                            TreatmentDate.Focus();
+                            break;
+                        case "TreatmentDate":
+                            AdjustDate.Focus();
+                            break;
+                        case "AdjustDate":
+                            MainDiagnosis.Focus();
+                            break;
+                    }
+                    break;
+            }
+
+        }
+        private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+            if (!(sender is TextBox textBox)) return;
+            if (e.Key != Key.Enter)
+            {
+                if (textBox.Text.Contains(" "))
+                    textBox.Text = string.Empty;
+                return;
+            }
+
+            DependencyObject textBoxDependency = textBox;
+            var name = textBoxDependency.GetValue(NameProperty);
+            if (name.Equals("MainDiagnosis"))
+            {
+                if ((!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id) && textBox.Text.Contains(" ")) || string.IsNullOrEmpty(textBox.Text.Trim()))
+                {
+                    SecondDiagnosis.Focus();
+                    return;
+                }
+            }
+            else if (name.Equals("SecondDiagnosis"))
+            {
+                if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                {
+                    ChronicTotal.Focus();
+                    return;
+                }
+            }
+            if (textBox.Text.Length < 3)
+            {
+                var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING, true);
+                m.ShowDialog();
+                return;
+            }
+            if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).DistinctBy(d => d.ICD10.Id).DistinctBy(d => d.ICD9.Id).ToList().Count == 1)
+            {
+                var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
+                if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
+                {
+                    var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
+                    {
+                        Owner = Application.Current.MainWindow
+                    };
+                    m.ShowDialog();
+                    return;
+                }
+                if (textBoxDependency.GetValue(NameProperty) is string && textBoxDependency.GetValue(NameProperty).Equals("MainDiagnosis"))
+                    InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode = selectedDiseaseCode;
+                else
+                {
+                    if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
+                    {
+                        var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
+                        {
+                            Owner = Application.Current.MainWindow
+                        };
+                        m.ShowDialog();
+                        return;
+                    }
+                    if ((selectedDiseaseCode.Id.Equals("查無疾病代碼") && textBox.Text.Contains(" ")) || string.IsNullOrEmpty(textBox.Text.Trim()))
+                    {
+                        ChronicTotal.Focus();
+                    }
+                    else
+                    {
+                        InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode = selectedDiseaseCode;
+                    }
+                }
+            }
+            else
+            {
+                var disease = new DiseaseCodeSelectDialog(textBox.Text, (string)name);
+                if (disease.DiseaseCollection.Count > 1)
+                    disease.Show();
+            }
+        }
+        private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var t = sender as TextBox;
+            var tmpMedicalNumber = MedicalNumber.Text;
+            if (string.IsNullOrEmpty(t.Text))
+            {
+                AdjustCaseCombo.SelectedIndex = 0;
+                TreatmentCaseCombo.SelectedItem = TreatmentCaseCollection.SingleOrDefault(c => c.Name.Equals("一般案件"));
+                return;
+            }
+
+            AdjustCaseCombo.SelectedItem = AdjustCaseCollection.SingleOrDefault(a => a.Name.Contains("慢性病連續處方調劑"));
+            TreatmentCaseCombo.SelectedItem = TreatmentCaseCollection.SingleOrDefault(c => c.Name.Equals("慢性病"));
+            if (!int.TryParse(t.Text, out var seqence)) return;
+            if (seqence > 1)
+            {
+                var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
+                BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+                MedicalNumber.Text = tmpMedicalNumber;
+                InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = "IC0" + t.Text;
+                InquiredPrescription.Prescription.OriginalMedicalNumber = tmpMedicalNumber;
+            }
+            else
+            {
+                var myBinding = new Binding("CurrentPrescription.Customer.IcCard.MedicalNumber");
+                BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+                MedicalNumber.Text = tmpMedicalNumber;
+            }
+        }
+        private void ChronicSequence_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = new System.Text.RegularExpressions.Regex("[^0-9]+").IsMatch(e.Text);
+        }
+        public void SetValueByDecMasId(string decMasId)
+        {
+            if (decMasId is null) return; 
+            InquiredPrescription = PrescriptionDB.GetDeclareDataById(decMasId);
+            DivisionCombo.SelectedItem =
+                DivisionCollection.Single(d => d.Id.Equals(InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.Id)).FullName;
+            TreatmentCaseCombo.SelectedItem =
+                TreatmentCaseCollection.SingleOrDefault(t => t.Id.Equals(InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.Id));
+            var diseaseCode = InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
+            if (!string.IsNullOrEmpty(diseaseCode))
+                InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
+            diseaseCode = InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
+            if (!string.IsNullOrEmpty(diseaseCode))
+                InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
+            if (!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.SpecialCode.Id))
+            {
+                foreach (var s in SpecialCodes)
+                {
+                    if (s.Id.Contains(InquiredPrescription.Prescription.Treatment.MedicalInfo.SpecialCode.Id))
+                        SpecialCodeCombo.SelectedItem = s;
+                }
+            }
+            foreach (var newDeclareDetail in InquiredPrescription.Prescription.Medicines)
+            {
+                if (newDeclareDetail is DeclareMedicine)
+                {
+                    var declareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
+                    declareDetailClone.Amount = ((DeclareMedicine)newDeclareDetail).Amount;
+                    DeclareDetails.Add(declareDetailClone);
+                    var tempdeclareDetailClone = (DeclareMedicine)((DeclareMedicine)newDeclareDetail).Clone();
+                    tempdeclareDetailClone.Amount = ((DeclareMedicine)newDeclareDetail).Amount;
+                    OriginDeclareDetails.Add(tempdeclareDetailClone);
+                }
+                else if (newDeclareDetail is PrescriptionOTC)
+                {
+                    var otc = (PrescriptionOTC)((PrescriptionOTC)newDeclareDetail).Clone();
+                    DeclareDetails.Add(otc);
+                    var tempotc = (PrescriptionOTC)((PrescriptionOTC)newDeclareDetail).Clone();
+                    OriginDeclareDetails.Add(tempotc);
+                }
+            }
+            NotifyPropertyChanged("InquiredPrescription");
+            CountMedicinesCost(); 
         }
     }
 }
