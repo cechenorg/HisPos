@@ -85,6 +85,7 @@ namespace His_Pos.Class.Product
                 PaySelf = false;
                 Stock = new InStock(dataRow);
                 Cost = 1;
+                Usage = new Usage();
                 if (dataRow.Table.Columns.Contains("PRO_SELL_PRICE"))
                     Price = Double.Parse(dataRow["PRO_SELL_PRICE"].ToString());
                 TotalPrice = 0;
@@ -100,7 +101,7 @@ namespace His_Pos.Class.Product
                 else
                 {
                     Dosage = string.IsNullOrEmpty(dataRow["HISDECDET_AMOUNT"].ToString())? 0 : double.Parse(dataRow["HISDECDET_AMOUNT"].ToString());
-                    UsageName = string.IsNullOrEmpty(dataRow["HISFEQ_ID"].ToString())? string.Empty : dataRow["HISFEQ_ID"].ToString();
+                    UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Id == dataRow["HISFEQ_ID"].ToString()).Name ;
                     Days = string.IsNullOrEmpty(dataRow["HISDECDET_DRUGDAY"].ToString())? string.Empty : dataRow["HISDECDET_DRUGDAY"].ToString();
                     Position = string.IsNullOrEmpty(dataRow["HISWAY_ID"].ToString())? string.Empty : dataRow["HISWAY_ID"].ToString();
                     Amount = string.IsNullOrEmpty(dataRow["HISDECDET_QTY"].ToString())? 0 : Convert.ToDouble(dataRow["HISDECDET_QTY"].ToString());

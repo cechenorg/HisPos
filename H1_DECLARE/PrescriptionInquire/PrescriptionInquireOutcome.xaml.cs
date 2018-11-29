@@ -13,6 +13,7 @@ using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Class.DiseaseCode;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Position;
@@ -230,7 +231,7 @@ namespace His_Pos.PrescriptionInquire
                 tmpHospital.Doctor = doctor;
                 InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital = tmpHospital;
             }
-
+            Division.SelectedItem = tmpDivision;
             var tmpCopayment = CopaymentCollection.SingleOrDefault(c =>
                 c.Id.Equals(InquiredPrescription.Prescription.Treatment.Copayment.Id));
 
@@ -239,7 +240,7 @@ namespace His_Pos.PrescriptionInquire
                 tmpCopayment.Point = InquiredPrescription.Prescription.Treatment.Copayment.Point;
                 InquiredPrescription.Prescription.Treatment.Copayment = tmpCopayment;
             }
-
+            InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode =  DiseaseCodeDb.GetDiseaseCodeById(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id)[0].ICD10;
             InquiredPrescription.Prescription.Treatment.AdjustCase = AdjustCaseCollection.SingleOrDefault(a =>
                 a.Id.Equals(InquiredPrescription.Prescription.Treatment.AdjustCase.Id));
 

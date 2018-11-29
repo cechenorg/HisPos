@@ -69,8 +69,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
                         temp.AdjustAmount = ((DeclareMedicine)tempadjust).Amount.ToString();
 
                     temp.Adjustmethod = Convert.ToInt32(temp.AdjustAmount) >= Convert.ToInt32(temp.OriginAmount) ? "扣庫" : "補回庫存";
-                    if (Convert.ToInt32(temp.AdjustAmount) == Convert.ToInt32(temp.OriginAmount))
+                    if (Convert.ToInt32(temp.AdjustAmount) == Convert.ToInt32(temp.OriginAmount)) {
                         temp.Adjustmethod = "不調整";
+                        continue;
+                    }
+                     
 
                     switch (temp.Adjustmethod) {
                         case "扣庫":
