@@ -50,7 +50,10 @@ namespace His_Pos.Class.Pharmacy
 
         internal static MyPharmacyControl.MyPharmacy GetMyPharmacy()
         {
-            throw new NotImplementedException();
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[SystemSettings].[GetMyPharmacyData]");
+
+            return new MyPharmacyControl.MyPharmacy(table.Rows[0]);
         }
 
         internal static void UpdateManagePharmacy(ManagePharmacy pharmacy)
@@ -106,6 +109,11 @@ namespace His_Pos.Class.Pharmacy
 
                 dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
             }
+        }
+
+        internal static void SetMyPharmacy(MyPharmacyControl.MyPharmacy myPharmacy)
+        {
+            throw new NotImplementedException();
         }
 
         internal static ObservableCollection<MedicalPersonnel> GetPharmacyMedicalPersonData()
