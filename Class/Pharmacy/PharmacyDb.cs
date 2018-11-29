@@ -7,6 +7,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using His_Pos.Class.Person;
+using His_Pos.SystemSettings.SettingControl;
 
 namespace His_Pos.Class.Pharmacy
 {
@@ -45,6 +46,14 @@ namespace His_Pos.Class.Pharmacy
             var table = dd.ExecuteProc("[HIS_POS_DB].[PharmacyManageView].[AddNewManagePharmacy]");
 
             return new ManagePharmacy(table.Rows[0]);
+        }
+
+        internal static MyPharmacyControl.MyPharmacy GetMyPharmacy()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[SystemSettings].[GetMyPharmacyData]");
+
+            return new MyPharmacyControl.MyPharmacy(table.Rows[0]);
         }
 
         internal static void UpdateManagePharmacy(ManagePharmacy pharmacy)
@@ -100,6 +109,18 @@ namespace His_Pos.Class.Pharmacy
 
                 dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[UpdateManageManufactory]", parameters);
             }
+        }
+
+        internal static void SetMyPharmacy(MyPharmacyControl.MyPharmacy pharmacy)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("COM", pharmacy.ReaderCom));
+            parameters.Add(new SqlParameter("VPN", pharmacy.VPN));
+            parameters.Add(new SqlParameter("ISNEW", pharmacy.IsReaderNew));
+
+            dd.ExecuteProc("[HIS_POS_DB].[SystemSettings].[SetMyPharmacyData]", parameters);
         }
 
         internal static ObservableCollection<MedicalPersonnel> GetPharmacyMedicalPersonData()
