@@ -15,7 +15,6 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.SpecialCode;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -52,7 +51,6 @@ namespace His_Pos.PrescriptionInquire
         public ObservableCollection<Division> DivisionCollection { get; set; }
         public ObservableCollection<Hospital> HospitalCollection { get; set; }
         public ObservableCollection<Product> DeclareMedicinesData { get; set; }
-        public ObservableCollection<SpecialCode> SpecialCodes { get; set; }
         public static PrescriptionInquireView Instance;
         private Function f = new Function();
 
@@ -171,7 +169,7 @@ namespace His_Pos.PrescriptionInquire
         private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = (PrescriptionOverview)(sender as DataGridRow).Item;
-            PrescriptionInquireOutcome prescriptionInquireOutcome = new PrescriptionInquireOutcome(selectedItem.Decmas_Id);
+            PrescriptionInquireOutcome prescriptionInquireOutcome = new PrescriptionInquireOutcome(PrescriptionDB.GetDeclareDataById(selectedItem.Decmas_Id));
             prescriptionInquireOutcome.Show();
         }
 

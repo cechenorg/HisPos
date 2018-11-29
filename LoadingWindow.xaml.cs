@@ -549,7 +549,6 @@ namespace His_Pos
                     prescriptionInquireView.PaymentCategoryCollection = MainWindow.PaymentCategory;
                     prescriptionInquireView.AdjustCaseCollection = MainWindow.AdjustCases;
                     prescriptionInquireView.TreatmentCaseCollection = MainWindow.TreatmentCase;
-                    prescriptionInquireView.SpecialCodes = MainWindow.SpecialCode;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
