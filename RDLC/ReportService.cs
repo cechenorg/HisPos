@@ -132,7 +132,6 @@ namespace His_Pos.RDLC
             {
                 element.Save(xmlWriter);
             }
-
             return stringBuilder.ToString();
         }
         public static void CreatePdf(MedBag selectedMedBag,int medicineIndex)

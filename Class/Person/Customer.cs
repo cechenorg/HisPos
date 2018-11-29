@@ -61,13 +61,19 @@ namespace His_Pos.Class.Person
                 IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
                 ContactInfo = new ContactInfo();
                 ContactInfo.Tel = row["CUS_TEL"].ToString();
-                ContactInfo.Phone = row["CUS_PHONE"].ToString();
-                ContactInfo.Address = row["CUS_ADDR"].ToString();
+                if(row.Table.Columns.Contains("CUS_PHONE"))
+                    ContactInfo.Phone = row["CUS_PHONE"].ToString();
+                if (row.Table.Columns.Contains("CUS_ADDR"))
+                    ContactInfo.Address = row["CUS_ADDR"].ToString();
                 LastEdit = string.IsNullOrEmpty(row["CUS_LASTEDIT"].ToString()) ? new DateTime().ToLocalTime() : Convert.ToDateTime(row["CUS_LASTEDIT"].ToString()).ToLocalTime();
-                UrgentContactName = row["CUS_URGENTPERSON"].ToString();
-                UrgentContactPhone = row["CUS_URGENTPHONE"].ToString();
-                UrgentContactTel = row["CUS_URGENTTEL"].ToString();
-                Description = row["CUS_DESC"].ToString();
+                if (row.Table.Columns.Contains("CUS_URGENTPERSON"))
+                    UrgentContactName = row["CUS_URGENTPERSON"].ToString();
+                if (row.Table.Columns.Contains("CUS_URGENTPHONE"))
+                    UrgentContactPhone = row["CUS_URGENTPHONE"].ToString();
+                if (row.Table.Columns.Contains("CUS_URGENTTEL"))
+                    UrgentContactTel = row["CUS_URGENTTEL"].ToString();
+                if (row.Table.Columns.Contains("CUS_DESC"))
+                    Description = row["CUS_DESC"].ToString();
             }
             
                 

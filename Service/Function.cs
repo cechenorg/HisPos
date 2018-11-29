@@ -103,15 +103,8 @@ namespace His_Pos
             var year = twc.GetYear(DateTime.Now).ToString();
             var month = GetDateFormat(twc.GetMonth(DateTime.Now).ToString());
             var day = GetDateFormat(twc.GetDayOfMonth(DateTime.Now).ToString());
-            var pathsplit = Environment.CurrentDirectory.Split(new string[] { "\\" }, StringSplitOptions.RemoveEmptyEntries);
-            var path = pathsplit[0];
-            for (var i = 1; i < pathsplit.Length; i++)
-            {
-                path += "\\" + pathsplit[i];
-                if (pathsplit[i] == "System") break;
-            }
-
-            path += "\\" + FileTypeName; // "健保資料上傳"  "匯出申報XML檔案"
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            path += "\\藥健康\\"+FileTypeName;
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
             var path_file = path_ym + "\\" + day + "\\" + year + month + day;
@@ -246,16 +239,16 @@ namespace His_Pos
         {
             var filePath = ExportXml(dailyUpload, "每日上傳");
             var fileName = filePath + ".xml";
-            var cs = new ConvertData();
-            var fileNameArr = cs.StringToBytes(fileName, fileName.Length);
-            var currentFile = Directory.GetFiles(filePath)[0];//每日上傳檔案
-            var fileInfo = new FileInfo(currentFile);
-            var fileSize = cs.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
-            var element = dailyUpload.Root.Element("REC");
-            var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
-            var pBuffer = new byte[50];
-            var iBufferLength = 50;
-            HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+            //var cs = new ConvertData();
+            //var fileNameArr = cs.StringToBytes(fileName, fileName.Length);
+            //var currentFile = Directory.GetFiles(filePath)[0];//每日上傳檔案
+            //var fileInfo = new FileInfo(currentFile);
+            //var fileSize = cs.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
+            //var element = dailyUpload.Root.Element("REC");
+            //var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
+            //var pBuffer = new byte[50];
+            //var iBufferLength = 50;
+            //HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
         }
     }
 }

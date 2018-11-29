@@ -102,6 +102,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
             CurrentFile = d;
             CurrentPrescription = new Prescription(CurrentFile);
             var loadingWindow = new LoadingWindow();

@@ -13,14 +13,12 @@ namespace His_Pos.Service
         public static T Deserialize<T>(string s)
         {
             XmlDocument xdoc = new XmlDocument();
-
             try
             {
                 xdoc.LoadXml(s);
                 XmlNodeReader reader = new XmlNodeReader(xdoc.DocumentElement);
                 XmlSerializer ser = new XmlSerializer(typeof(T));
                 object obj = ser.Deserialize(reader);
-
                 return (T)obj;
             }
             catch
