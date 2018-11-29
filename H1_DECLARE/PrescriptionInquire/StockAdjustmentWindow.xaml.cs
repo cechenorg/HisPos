@@ -62,12 +62,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionInquire
             DataContext = this;
             foreach (Product pro in originMedCollection) {
                 if (pro is DeclareMedicine) {
+                   
                     StockAdjust temp = new StockAdjust(pro);
                     temp.OriginAmount = ((DeclareMedicine)pro).Amount.ToString();
                     var tempadjust = adjustMedCollection.SingleOrDefault(x => x.Id == temp.ProId);
                     if (tempadjust != null)
                         temp.AdjustAmount = ((DeclareMedicine)tempadjust).Amount.ToString();
-
+                    if (((DeclareMedicine)pro).IsBuckle == false) {
+                        temp.OriginAmount = "0";
+                    }
+                       
                     temp.Adjustmethod = Convert.ToInt32(temp.AdjustAmount) >= Convert.ToInt32(temp.OriginAmount) ? "扣庫" : "補回庫存";
                     if (Convert.ToInt32(temp.AdjustAmount) == Convert.ToInt32(temp.OriginAmount)) {
                         temp.Adjustmethod = "不調整";

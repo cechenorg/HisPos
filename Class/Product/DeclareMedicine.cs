@@ -60,6 +60,7 @@ namespace His_Pos.Class.Product
         {
             MedicalCategory = new Medicate();
             Usage = new Usage();
+            IsBuckle = true;
             if (type.Equals("DeclareFile"))
             {
                 Cost = 0;
@@ -111,11 +112,13 @@ namespace His_Pos.Class.Product
                 Cost = double.Parse(dataRow["PRO_LASTPRICE"].ToString());
                 Note = dataRow["HISMED_NOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_NOTE"].ToString();
                 HcNote = dataRow["HISMED_HCNOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_HCNOTE"].ToString();
+                if(type.Equals("Get"))
+                IsBuckle = Convert.ToBoolean(dataRow["IS_BUCKLE"].ToString());
             }
             ControlLevel = dataRow["HISMED_CONTROL"].ToString();
             IsFrozMed = bool.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
             HcPrice = double.TryParse(dataRow["HISMED_PRICE"].ToString(), out var hcPrice) ? hcPrice : 0.0000;
-            IsBuckle = true;
+           
         }
 
         public bool IsControl => !string.IsNullOrEmpty(ControlLevel);

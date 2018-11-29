@@ -378,29 +378,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn
-                        MinWidth="40"
-                        Header="總量"
-                        IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate x:Name="MedicineAmountDataTemplate">
-                                <TextBox
-                                    x:Name="MedicineTotal"
-                                    MinWidth="40"
-                                    HorizontalContentAlignment="Center"
-                                    BorderBrush="DimGray"
-                                    BorderThickness="0,0,0,1"
-                                    FontFamily="Segoe UI Semibold"
-                                    FontSize="14"
-                                    FontWeight="Bold"
-                                    IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
-                                    PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
-                                    GotFocus="TextBox_GotFocus"
-                                    Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    TextChanged="NullTextBox_TextChanged" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                   
                     <DataGridTemplateColumn
                         MinWidth="40"
                         Header="途徑"
@@ -423,6 +401,29 @@
                                     TextChanged="NullTextBox_TextChanged"
                                     Text="{Binding Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
+                        MinWidth="40"
+                        Header="總量"
+                        IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:Name="MedicineAmountDataTemplate">
+                                <TextBox
+                                    x:Name="MedicineTotal"
+                                    MinWidth="40"
+                                    HorizontalContentAlignment="Center"
+                                    BorderBrush="DimGray"
+                                    BorderThickness="0,0,0,1"
+                                    FontFamily="Segoe UI Semibold"
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    IsEnabled="{Binding Converter={StaticResource LastRowIsEnableConverter}}"
+                                    PreviewKeyDown="PrescriptionMedicines_PreviewKeyDown"
+                                    GotFocus="TextBox_GotFocus"
+                                    Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    TextChanged="NullTextBox_TextChanged" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
