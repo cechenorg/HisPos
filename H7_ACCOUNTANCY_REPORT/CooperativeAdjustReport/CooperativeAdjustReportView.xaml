@@ -47,11 +47,11 @@
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Button Name="SearchButton" Tag="ByUser" Width="120" Margin="20,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="LightBlue" BorderThickness="0"/>
-            <Button Width="150" Tag="ThisMonth" Content="當月查詢" Margin="685,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0"/>
+            <Button Name="SearchButton" Tag="ByUser" Width="120" Margin="20,0,0,0" Content="查詢" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="{StaticResource ForeGround}" Background="LightBlue" BorderThickness="0" Click="SearchButton_Click"/>
+            <Button Width="150" Tag="ThisMonth" Content="當月查詢" Margin="685,0,0,0" Height="35" FontSize="20" FontFamily="Segoe UI Semibold" Background="RoyalBlue" BorderThickness="0" Click="Button_Click"/>
         </StackPanel>
         <Label Content="調劑耗用" Grid.Row="1" Grid.Column="0" FontFamily="Segoe UI Semibold" FontSize="30" VerticalAlignment="Bottom" Margin="20,0,0,0"/>
-        <DataGrid Grid.Row="2" Grid.Column="0" Background="White" Margin="10"
+        <DataGrid Grid.Row="2" Grid.Column="0" Background="White" Margin="10" ItemsSource="{Binding CooperativeAdjustMedCollection,UpdateSourceTrigger=PropertyChanged}"
                   ColumnHeaderStyle="{StaticResource GreenDataGridColumnHeaderStyle}" Height="Auto" AutoGenerateColumns="False"
                   BorderThickness="2" BorderBrush="DarkSeaGreen" CanUserSortColumns="False" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Disabled">
             <DataGrid.Resources>
@@ -87,7 +87,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="商品代碼" Width="120" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ProductId}">
+                <DataGridTextColumn Header="商品代碼" Width="120" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedId}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -95,15 +95,15 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="商品名稱" Width="250" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ProductName}">
+                <DataGridTextColumn Header="商品名稱" Width="250" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedName}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Left"/>
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn> 
-                <DataGridTextColumn Header="耗用量" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Amount}">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="耗用量" Width="100" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding MedUseAmount}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>

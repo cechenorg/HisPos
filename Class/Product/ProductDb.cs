@@ -16,6 +16,7 @@ using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using His_Pos.InventoryManagement;
 using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 using System.Linq;
+using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
 
 namespace His_Pos.Class.Product
 {
@@ -639,5 +640,18 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
+        internal static ObservableCollection<CooperativeAdjustReportView.CooperativeAdjustMed> GetCooperativeAdjustMed(DateTime sDate, DateTime eDate)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_global);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@SDATE", sDate));
+            parameters.Add(new SqlParameter("@EDATE", eDate));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[CooperativeAdjustReportView].[GetCooperativeAdjustMed]", parameters);
+            ObservableCollection<CooperativeAdjustReportView.CooperativeAdjustMed> cooperativeAdjustMeds = new ObservableCollection<CooperativeAdjustReportView.CooperativeAdjustMed>();
+            foreach (DataRow row in table.Rows) {
+                cooperativeAdjustMeds.Add(new CooperativeAdjustReportView.CooperativeAdjustMed(row)); 
+            }
+            return cooperativeAdjustMeds;
+        } 
     }
 } 
