@@ -15,7 +15,7 @@ namespace His_Pos.Class.Employee
         {
             ObservableCollection<Employee> collection = new ObservableCollection<Employee>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetEmployeeData]");
 
             foreach (DataRow row in table.Rows)
@@ -26,7 +26,7 @@ namespace His_Pos.Class.Employee
         }
         public static ObservableCollection<EmpClockIn> GetEmpClockIn()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
            var table = dd.ExecuteProc("[HIS_POS_DB].[ClockInView].[GetEmpClockIn]");
             ObservableCollection<EmpClockIn> empClockIns = new ObservableCollection<EmpClockIn>();
             foreach (DataRow row in table.Rows) {
@@ -36,7 +36,7 @@ namespace His_Pos.Class.Employee
         }
         internal static DataTable SaveEmployeeData(Employee employee)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID",employee.Id));
@@ -61,7 +61,7 @@ namespace His_Pos.Class.Employee
         }
         internal static void DeleteEmployeeData(Employee employee)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", employee.Id));
             dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[DeleteEmployeeData]", parameters);

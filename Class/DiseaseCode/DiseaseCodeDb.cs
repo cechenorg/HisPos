@@ -12,7 +12,7 @@ namespace His_Pos.Class.DiseaseCode
         public static ObservableCollection<DiseaseCode9To10> GetDiseaseCodeById(string id)
         {
             var diseaseCollection = new ObservableCollection<DiseaseCode9To10>();
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter> {new SqlParameter("ID", id)};
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDiseaseCode]", parameters);

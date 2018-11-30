@@ -13,7 +13,7 @@ namespace His_Pos.Class.Person
     {
         internal static string CheckCustomerExist(Customer customer)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("CUS_NAME", customer.Name));
@@ -26,7 +26,7 @@ namespace His_Pos.Class.Person
         }
         internal static ObservableCollection<Customer> GetCustomerData()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[CustomerManageView].[GetCustomerData]");
             ObservableCollection<Customer> data = new ObservableCollection<Customer>();
             foreach (DataRow row in table.Rows) {
@@ -38,7 +38,7 @@ namespace His_Pos.Class.Person
         internal static ObservableCollection<Customer> LoadCustomerData(Customer c)
         {
             var customerLCollection = new ObservableCollection<Customer>();
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>
             {
                 string.IsNullOrEmpty(c.Id)
@@ -62,7 +62,7 @@ namespace His_Pos.Class.Person
             return customerLCollection;
         }
         internal static Collection<string> GetPositionData() {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetPositionData]");
             Collection<string> data = new Collection<string>();
             foreach (DataRow row in table.Rows)
@@ -75,7 +75,7 @@ namespace His_Pos.Class.Person
         internal static ObservableCollection<Customer> GetData()
         {
             var customerLCollection = new ObservableCollection<Customer>();
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetAllCustomerData]");
             foreach (DataRow row in table.Rows)
             {
@@ -85,7 +85,7 @@ namespace His_Pos.Class.Person
         }
         internal static void UpdateCustomerById(Customer customer) {
             var customerLCollection = new ObservableCollection<Customer>();
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
           
                 parameters.Add(new SqlParameter("CUS_ID", customer.Id));
@@ -146,7 +146,7 @@ namespace His_Pos.Class.Person
 
         internal static void UpdateCustomerLastEdit(Customer customer)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var lastEdit = DateTime.Now;
             var sqlFormattedDate = lastEdit.ToString("yyyy-MM-dd HH:mm:ss.fff");
             var parameters = new List<SqlParameter>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
@@ -117,6 +118,8 @@ namespace His_Pos
 
             if (!user.Id.Equals(""))
             {
+                CheckDBVersion();
+
                 var loadingWindow = new LoadingWindow();
                 loadingWindow.Show();
                 loadingWindow.GetNecessaryData(user);
@@ -129,18 +132,22 @@ namespace His_Pos
             }
         }
 
-        private void UpdateUserAuthPos(List<string> authArray) {
-            int value = 0;
-            foreach (string auth in authArray) {
-                value += (int)(LoginAuth)Enum.Parse(typeof(LoginAuth),auth);
+        private void CheckDBVersion()
+        {
+            string versionId = FunctionDb.GetSystemVersionId();
+            if (!versionId.Equals(Assembly.GetExecutingAssembly().GetName().Version))
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                startInfo.FileName = Directory.GetCurrentDirectory() + "\\..\\..\\sqlpackage.exe";
+                startInfo.Arguments = @"/a:Publish /sf:""" + @"ServerDb.dacpac"" /tsn:" + Properties.Settings.Default.SQL_local + @" /tdn:HIS_POS_DB /pr:""" + @"ServerDb.publish.xml""";
+                process.StartInfo = startInfo;
+                process.Start();
+
+                FunctionDb.UpdateSystemVersionId();
             }
-            List<SqlParameter> listparam = new List<SqlParameter>();
-            SqlParameter sqlEmpId= new SqlParameter("@EMPID", MainWindow.CurrentUser.Id);
-            SqlParameter sqlAuth = new SqlParameter("@AUTH", value);
-            listparam.Add(sqlEmpId);
-            listparam.Add(sqlAuth);
-            DbConnection dbConn = new DbConnection(Properties.Settings.Default.SQL_local);
-            dbConn.ExecuteProc( "[POSHIS_Test].[DBO].[UPDATEUSERAUTH_POS]", listparam);
+
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

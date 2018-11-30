@@ -16,7 +16,7 @@ namespace His_Pos.Class.Declare
         public static ObservableCollection<DeclareFile> GetDeclareFilesData()
         {
             ObservableCollection<DeclareFile> declareFiles = new ObservableCollection<DeclareFile>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var dbConnection = new DbConnection(Settings.Default.SQL_local);
             var divisionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[DeclareFileExportView].[GetDeclareFilesData]");
             foreach (DataRow declareFile in divisionTable.Rows)
             {
@@ -84,7 +84,7 @@ namespace His_Pos.Class.Declare
             var errorStr = file.ErrorPrescriptionList.SerializeObject();
             if (string.IsNullOrEmpty(errorStr))
                 errorStr = "<ErrorPrescriptions></ErrorPrescriptions>";
-            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var dbConnection = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("SEND_DATE", date.ToShortDateString()));
             parameters.Add(new SqlParameter("PHARMACY_ID", p.Tdata.T2));
             parameters.Add(new SqlParameter("FILE_CONTENT", SqlDbType.Xml)
@@ -117,7 +117,7 @@ namespace His_Pos.Class.Declare
         {
             DeclareFile file = new DeclareFile();
             var parameters = new List<SqlParameter>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var dbConnection = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("SEND_DATE", declareTime));
             parameters.Add(new SqlParameter("PHARMACY_ID", MainWindow.CurrentPharmacy.Id));
             var fileTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDeclareFileData]", parameters);

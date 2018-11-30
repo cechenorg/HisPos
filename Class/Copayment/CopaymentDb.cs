@@ -10,7 +10,7 @@ namespace His_Pos.Class.Copayment
         public static ObservableCollection<Copayment> GetData()
         {
             ObservableCollection<Copayment> copayments = new ObservableCollection<Copayment>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var dbConnection = new DbConnection(Settings.Default.SQL_local);
             var divisionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetCopaymentsData]");
             foreach (DataRow copayment in divisionTable.Rows)
             {

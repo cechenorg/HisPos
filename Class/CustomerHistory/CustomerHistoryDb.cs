@@ -9,7 +9,7 @@ namespace His_Pos.Class.CustomerHistory
     {
         public static CustomerHistoryMaster GetDataByCUS_ID(string CUS_ID)
         {
-            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var dbConnection = new DbConnection(Settings.Default.SQL_local);
             var masterParameters = new List<SqlParameter>();
             masterParameters.Add(new SqlParameter("CUS_ID", CUS_ID));
 

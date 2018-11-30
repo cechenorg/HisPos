@@ -1199,6 +1199,7 @@
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
     </None>
     <None Include="ReaderCFG.ini" />
+    <None Include="SQLPackage\sqlpackage.exe.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -1325,6 +1326,7 @@
     <Resource Include="Images\OpenRecord2Detail.png" />
     <Resource Include="Images\Report.png" />
     <Content Include="Reader.dll" />
+    <Content Include="SQLPackage\sqlpackage.exe" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

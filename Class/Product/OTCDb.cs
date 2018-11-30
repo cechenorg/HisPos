@@ -14,11 +14,11 @@ namespace His_Pos.Class.Product
     {
         public static DataTable GetOtcData()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             return dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetOtc]");
         }
         public static InventoryOtc GetOtcDetail(string proId) {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
             InventoryOtc otc = null;
@@ -33,7 +33,7 @@ namespace His_Pos.Class.Product
 
         internal static DataTable GetInventoryOtcs()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             return dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[GetInventoryOtc]");
         }
 
@@ -41,7 +41,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<CusOrderOverview> collection = new ObservableCollection<CusOrderOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("OTCID", OtcID));
@@ -60,7 +60,7 @@ namespace His_Pos.Class.Product
         {
             ChartValues<double> chartValues = new ChartValues<double>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("OTCID", OtcID));
@@ -79,7 +79,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<OTCStoreOrderOverview> collection = new ObservableCollection<OTCStoreOrderOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("OTCID", OtcID));
