@@ -16,6 +16,7 @@ using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.RDLC;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase;
 using His_Pos.Interface;
+using His_Pos.Class.Person;
 
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 
@@ -382,7 +383,8 @@ namespace His_Pos.Class.Declare
         private void AddParameterTreatment(ICollection<SqlParameter> parameters, DeclareData declareData)
         {
             AddParameterMedicalInfo(parameters, declareData);
-
+            if (string.IsNullOrEmpty(declareData.Prescription.Customer.Id))
+                declareData.Prescription.Customer.Id = CustomerDb.CheckCustomerExist(declareData.Prescription.Customer);
             var tagsDictionary = new Dictionary<string, string>
                     {
                         {"D1", declareData.Prescription.Treatment.AdjustCase.Id},
