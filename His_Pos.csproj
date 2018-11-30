@@ -1319,13 +1319,13 @@
     <Resource Include="Images\Printer.png" />
     <Resource Include="LOGO_HISPOS.ico" />
     <Resource Include="Images\icons8-delete-32.png" />
-    <Content Include="csHis.dll" />
     <Resource Include="Images\Ph.png" />
     <Resource Include="Images\QuestionMark.png" />
     <Resource Include="Images\CloseRecord.png" />
     <Resource Include="Images\OpenRecord.png" />
     <Resource Include="Images\OpenRecord2Detail.png" />
     <Resource Include="Images\Report.png" />
+    <Content Include="csHis.dll" />
     <Content Include="Reader.dll" />
     <Content Include="SQLPackage\sqlpackage.exe" />
     <Content Include="SqlServerTypes\readme.htm" />
@@ -1343,16 +1343,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PublishFile Include="csHis.dll">
-      <Visible>False</Visible>
-      <Group>
-      </Group>
-      <TargetPath>
-      </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
-      <FileType>File</FileType>
-    </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.CoreUtility">
       <Visible>False</Visible>
       <Group>

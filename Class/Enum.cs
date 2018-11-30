@@ -245,7 +245,7 @@ namespace His_Pos.Class
     public enum ErrorCode {
         [Description("讀卡機連接埠連線失敗")]
         ErrorCode1 = -1,
-        [Description("成功")]
+        [Description("讀卡機正常運作中")]
         ErrorCode0 = 0,
         [Description("讀卡機逾時")]
         ErrorCode4000 = 4000,

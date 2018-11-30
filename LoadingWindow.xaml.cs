@@ -46,6 +46,7 @@ using His_Pos.H6_DECLAREFILE.Export;
 using His_Pos.HisApi;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
+using MaterialDesignThemes.Wpf;
 using Microsoft.Reporting.WinForms;
 using StockTakingView = His_Pos.H3_STOCKTAKING.StockTaking.StockTakingView;
 
@@ -590,18 +591,18 @@ namespace His_Pos
                 ChangeLoadingMessage("申報資料處理中...");
                 exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
                 var tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
+                exportView.HospitalCollection = MainWindow.Hospitals;
+                exportView.DivisionCollection = MainWindow.Divisions;
+                exportView.AdjustCaseCollection = MainWindow.AdjustCases;
+                exportView.PaymentCategoryCollection = MainWindow.PaymentCategory;
+                exportView.TreatmentCaseCollection = MainWindow.TreatmentCase;
+                exportView.CopaymentCollection = MainWindow.Copayments;
                 Dispatcher.Invoke((Action)(() =>
                 {
                     exportView.DeclareMedicinesData = tmpDeclareMedicine;
-                    exportView.HospitalCollection = MainWindow.Hospitals;
-                    exportView.DivisionCollection = MainWindow.Divisions;
-                    exportView.AdjustCaseCollection = MainWindow.AdjustCases;
-                    exportView.PaymentCategoryCollection = MainWindow.PaymentCategory;
-                    exportView.TreatmentCaseCollection = MainWindow.TreatmentCase;
-                    exportView.CopaymentCollection = MainWindow.Copayments;
-                    exportView.AdjustCaseCombo.ItemsSource = MainWindow.AdjustCases;
                     exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                     exportView.ReleasePalace.ItemsSource = MainWindow.Hospitals;
+                    exportView.AdjustCaseCombo.ItemsSource = MainWindow.AdjustCases;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -777,7 +778,7 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("卡片資料讀取中...");
-                LoadPatentDataFromIcCard(prescriptionDec2View);
+                prescriptionDec2View.LoadPatentDataFromIcCard();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     if (prescriptionDec2View.CurrentPrescription.IsGetIcCard)
@@ -809,36 +810,7 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        private void LoadPatentDataFromIcCard(PrescriptionDec2View prescriptionDec2View)
-        {
-            if (MainWindow.Res != 0)
-            {
-                prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
-                prescriptionDec2View.SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
-            }
-            else
-            {
-                var strLength = 72;
-                var icData = new byte[72];
-                var res = HisApiBase.hisGetBasicData(icData, ref strLength);
-                icData.CopyTo(prescriptionDec2View.BasicDataArr, 0);
-                if (res == 0)
-                {
-                    prescriptionDec2View.SetCardStatusContent("健保卡讀取成功");
-                    prescriptionDec2View.CurrentPrescription.IsGetIcCard = true;
-                    prescriptionDec2View.CusBasicData = new BasicData(icData);
-                    prescriptionDec2View.CurrentPrescription.Customer = new Customer(prescriptionDec2View.CusBasicData);
-                    CustomerDb.LoadCustomerData(prescriptionDec2View.CurrentPrescription.Customer);
-                }
-                else
-                {
-                    prescriptionDec2View.CurrentPrescription.IsGetIcCard = false;
-                    prescriptionDec2View.SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)res));
-                }
-            }
-        }
-
-        public void LoginIcData(PrescriptionDec2View prescriptionDec2View)
+        public void LoginIcData(PrescriptionDec2View prescriptionDec2View, IcErrorCodeWindow.IcErrorCode errorCode = null)
         {
             prescriptionDec2View.PrescriptionViewBox.IsEnabled = false;
             backgroundWorker.DoWork += (s, o) =>
@@ -851,7 +823,7 @@ namespace His_Pos
                         prescriptionDec2View.CreatIcUploadData();
                     else if(!prescriptionDec2View.IsMedicalNumberGet)
                     {
-                        prescriptionDec2View.CreatIcErrorUploadData();
+                        prescriptionDec2View.CreatIcErrorUploadData(errorCode);
                     }
                 }));
             };
@@ -1032,55 +1004,6 @@ namespace His_Pos
             m_currentPageIndex++;
             ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
         }
-
-        public void SetDeclareFileData(DeclareDdataOutcome outcome,DeclareFileDdata dData)
-        {
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("取得申報檔處方資料...");
-                var tmpHospitals = MainWindow.Hospitals;
-                var tmpDivisions = MainWindow.Divisions;
-                var tmpAdjustCases = MainWindow.AdjustCases;
-                var tmpPaymentCategroies = MainWindow.PaymentCategory;
-                var tmpCopayments = MainWindow.Copayments;
-                var tmpTreatmentCases = MainWindow.TreatmentCase;
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    outcome.Hospitals = tmpHospitals;
-                    outcome.Divisions = tmpDivisions;
-                    outcome.AdjustCases = tmpAdjustCases;
-                    outcome.PaymentCategories = tmpPaymentCategroies;
-                    outcome.Copayments = tmpCopayments;
-                    outcome.TreatmentCases = tmpTreatmentCases;
-                    outcome.CurrentPrescription.Treatment.Copayment = outcome.Copayments.SingleOrDefault(c =>
-                        c.Id.Equals(outcome.CurrentPrescription.Treatment.Copayment.Id));
-                    outcome.CurrentPrescription.Treatment.TreatmentDate = DateTimeExtensions.ConvertDeclareFileDate(dData.Dhead.D14);
-                    outcome.CurrentPrescription.Treatment.AdjustDate = DateTimeExtensions.ConvertDeclareFileDate(dData.Dhead.D23);
-                    outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital = outcome.Hospitals.SingleOrDefault(h => h.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Id));
-                    if (outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital != null)
-                    {
-                        outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = outcome.Divisions.SingleOrDefault(d =>
-                            d.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
-                        outcome.CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.IcNumber = dData.Dhead.D24;
-                    }
-                    outcome.CurrentPrescription.Treatment.PaymentCategory =
-                        outcome.PaymentCategories.SingleOrDefault(p =>
-                            p.Id.Equals(outcome.CurrentPrescription.Treatment.PaymentCategory.Id));
-                    outcome.CurrentPrescription.Treatment.AdjustCase = outcome.AdjustCases.SingleOrDefault(a =>
-                        a.Id.Equals(outcome.CurrentPrescription.Treatment.AdjustCase.Id));
-                    outcome.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = outcome.TreatmentCases.SingleOrDefault(t =>
-                        t.Id.Equals(outcome.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id));
-
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Close();
-                }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
+        
     }
 }

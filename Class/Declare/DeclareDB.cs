@@ -931,15 +931,13 @@ namespace His_Pos.Class.Declare
 
         public void StartDailyUpload()
         {
-            var parameters = new List<SqlParameter>();
             var conn = new DbConnection(Settings.Default.SQL_local);
-            parameters.Add(new SqlParameter("CREATE_DATE", DateTime.Now.ToShortDateString()));
-            var dailyUploadTable = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDailyUploadDataByDate]", parameters);
-            var icDataUpload = new IcRecordList {RecordList = new List<IcRecord>()};
+            var dailyUploadTable = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDailyUploadDataByDate]");
+            var icDataUpload = new RECS { REC = new List<REC>()};
 
             foreach (DataRow row in dailyUploadTable.Rows)
             {
-                icDataUpload.RecordList.Add(XmlService.Deserialize<IcRecord>(row["UPLOADDATA_CONTENT"].ToString()));
+                icDataUpload.REC.Add(XmlService.Deserialize<REC>(row["UPLOADDATA_CONTENT"].ToString()));
             }
             var f = new Function();
             XDocument result;
@@ -963,7 +961,7 @@ namespace His_Pos.Class.Declare
             var parameters = new List<SqlParameter>();
             var conn = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("ID", DBNull.Value));
-            parameters.Add(new SqlParameter("UPLOAD_DATE", DateTime.Now.ToShortDateString()));
+            parameters.Add(new SqlParameter("UPLOAD_DATE", DateTime.Today.Date));
             parameters.Add(new SqlParameter("FILE_CONTENT", fileContent.ToString()));
             conn.ExecuteProc("[HIS_POS_DB].[MainWindowView].[InsertDailyUploadFileData]", parameters);
         }

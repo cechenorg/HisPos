@@ -720,7 +720,7 @@ namespace His_Pos.PrescriptionInquire
             var icData = new IcData(seq, InquiredPrescription.Prescription, cusBasicData, _currentDeclareData);
             var mainMessage = new MainMessage(icData);
             var headerMessage = new Header { DataFormat = "1" };
-            var icRecord = new IcRecord(headerMessage, mainMessage);
+            var icRecord = new REC(headerMessage, mainMessage);
 
             for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
             {

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Xml;
 using His_Pos.Service;
 using System.Data;
+using System.Linq;
 using His_Pos.Class.Declare;
 
 namespace His_Pos.Class
@@ -67,10 +68,18 @@ namespace His_Pos.Class
         public Treatment(DeclareFileDdata d)
         {
             MedicalInfo = new MedicalInfo(d);
-            PaymentCategory = new PaymentCategory.PaymentCategory(d);
-            Copayment = new Copayment.Copayment(d);
-            AdjustCase = new AdjustCase.AdjustCase(d);
+            PaymentCategory = MainWindow.PaymentCategory.SingleOrDefault(p=>p.Id.Equals(d.Dhead.D5))?.DeepCloneViaJson();
+            Copayment = MainWindow.Copayments.SingleOrDefault(c=>c.Id.Equals(d.Dhead.D15))?.DeepCloneViaJson();
+            AdjustCase = MainWindow.AdjustCases.SingleOrDefault(a=>a.Id.Equals(d.Dhead.D1))?.DeepCloneViaJson();
             MedicineDays = !string.IsNullOrEmpty(d.Dbody.D30) ? d.Dbody.D30 : string.Empty;
+            var year = int.Parse(d.Dhead.D14.Substring(0, 3)) + 1911;
+            var month = int.Parse(d.Dhead.D14.Substring(3, 2));
+            var date = int.Parse(d.Dhead.D14.Substring(5, 2));
+            TreatmentDate = new DateTime(year,month,date);
+            year = int.Parse(d.Dhead.D23.Substring(0, 3)) + 1911;
+            month = int.Parse(d.Dhead.D23.Substring(3, 2));
+            date = int.Parse(d.Dhead.D23.Substring(5, 2));
+            AdjustDate = new DateTime(year, month, date);
         }
 
         private MedicalInfo _medicalInfo;
