@@ -118,7 +118,15 @@ namespace His_Pos
 
             if (!user.Id.Equals(""))
             {
-                CheckDBVersion();
+                try
+                {
+                    CheckDBVersion();
+                }
+                catch (Exception ex)
+                {
+                    MessageWindow messageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
+                    messageWindow.ShowDialog();
+                }
 
                 var loadingWindow = new LoadingWindow();
                 loadingWindow.Show();
@@ -143,8 +151,8 @@ namespace His_Pos
                 System.Diagnostics.Process process = new System.Diagnostics.Process();
                 System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-                startInfo.FileName = Directory.GetCurrentDirectory() + "\\..\\..\\SQLPackage\\sqlpackage.exe";
-                startInfo.Arguments = @"/a:Publish /sf:""" + Directory.GetCurrentDirectory() + @"\..\..\SQLPackage\ServerDb.dacpac"" /tsn:" + match.Groups[1].Value + @" /tdn:HIS_POS_DB /pr:""C:\Program Files\HISPOS\ServerDb.publish.xml""";
+                startInfo.FileName = "SQLPackage\\sqlpackage.exe";
+                startInfo.Arguments = @"/a:Publish /sf:""SQLPackage\ServerDb.dacpac"" /tsn:" + match.Groups[1].Value + @" /tdn:HIS_POS_DB /pr:""C:\Program Files\HISPOS\ServerDb.publish.xml""";
                 process.StartInfo = startInfo;
                 process.Start();
 
