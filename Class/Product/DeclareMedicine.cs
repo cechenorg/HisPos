@@ -102,7 +102,10 @@ namespace His_Pos.Class.Product
                 else
                 {
                     Dosage = string.IsNullOrEmpty(dataRow["HISDECDET_AMOUNT"].ToString())? 0 : double.Parse(dataRow["HISDECDET_AMOUNT"].ToString());
-                    UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Id == dataRow["HISFEQ_ID"].ToString()).Name ;
+                    if(MainWindow.Usages.SingleOrDefault(usg => usg.Id == dataRow["HISFEQ_ID"].ToString()) is null)
+                        UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Name == dataRow["HISFEQ_ID"].ToString()).Name;
+                    else
+                        UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Id == dataRow["HISFEQ_ID"].ToString()).Name ;
                     Days = string.IsNullOrEmpty(dataRow["HISDECDET_DRUGDAY"].ToString())? string.Empty : dataRow["HISDECDET_DRUGDAY"].ToString();
                     Position = string.IsNullOrEmpty(dataRow["HISWAY_ID"].ToString())? string.Empty : dataRow["HISWAY_ID"].ToString();
                     Amount = string.IsNullOrEmpty(dataRow["HISDECDET_QTY"].ToString())? 0 : Convert.ToDouble(dataRow["HISDECDET_QTY"].ToString());

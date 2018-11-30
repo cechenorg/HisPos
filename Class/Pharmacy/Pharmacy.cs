@@ -17,13 +17,16 @@ namespace His_Pos.Class.Pharmacy
         public Pharmacy(DataRow row) {
             MedicalPersonnel = new MedicalPersonnel(row,false);
         }
-        public Pharmacy(string id, string name,string address,string tel)
+        public Pharmacy(string id, string name,string address,string tel,string readerCom,string vpnIp,string newReader)
         {
             Id = id;
             Name = name;
             FullName = id + " " + name;
             Address = address;
             Tel = tel;
+            ReaderCom = int.Parse(readerCom);
+            VpnIp = vpnIp;
+            NewReader = !newReader.Equals("0");
             MedicalPersonnel = new MedicalPersonnel();
             MedicalPersonnelCollection = new ObservableCollection<MedicalPersonnel>();
         }
@@ -68,5 +71,11 @@ namespace His_Pos.Class.Pharmacy
         } 
         public string Address { get; set; }
         public string Tel { get; set; }
+
+        public int ReaderCom { get; set; }
+
+        public string VpnIp { get; set; }
+
+        public bool NewReader { get; set; }
     }
 }

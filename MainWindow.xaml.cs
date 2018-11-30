@@ -44,7 +44,6 @@ namespace His_Pos
         public static string CardReaderStatus;
         public static int Res { get; set; } = -1;
         public static Pharmacy CurrentPharmacy;
-        public static MainWindow MainWindowInstance;
         public static bool ItemSourcesSet { get; set; }
         public static ObservableCollection<Hospital> Hospitals { get; set; }
         public static ObservableCollection<Division> Divisions { get; set; }
@@ -59,7 +58,9 @@ namespace His_Pos
                 _adjustCases = value;
             }
         }
-
+        public static bool IsConnectionOpened { get; set; } = false;
+        public static bool IsHpcValid { get; set; } = false;
+        public static bool IsVerifySamDc { get; set; } = false;
         public static ObservableCollection<PaymentCategory> PaymentCategory { get; set; }
         public static ObservableCollection<TreatmentCase> TreatmentCase { get;set; }
         public static ObservableCollection<Copayment> Copayments { get; set; }
@@ -78,10 +79,14 @@ namespace His_Pos
             InitialUserBlock();
             StratClock();
             _openWindows = new List<DockingWindow>();
-            MainWindowInstance = this;
             CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
-            AddNewTab("每日作業"); 
+            AddNewTab("每日作業");
+            WindowState = WindowState.Minimized;
+            var loadingWindow = new LoadingWindow();
+            loadingWindow.VerifyCardReaderStatus(Instance);
+            loadingWindow.ShowDialog();
+            WindowState = WindowState.Maximized;
         }
         
         private void InitialUserBlock()
@@ -224,20 +229,51 @@ namespace His_Pos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var t1 = new Thread(VerifySam);
-            t1.Start();
+            //var t1 = new Thread(VerifySam);
+            //t1.Start();
         }
 
         public void VerifySam()
         {
-            Res = HisApiBase.csOpenCom(0);
-            if (Res == 0)
+            var thread = new Thread(() =>
             {
-                Res = HisApiBase.csVerifySAMDC();
+                Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
+                Res = HisApiBase.csSoftwareReset(0);
+                Res = HisApiBase.csCloseCom();
+                if (Res == 0)
+                {
+                    Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
+                    if (Res == 0)
+                    {
+                        IsConnectionOpened = true;
+                        Res = HisApiBase.csVerifySAMDC();
+                        Res = HisApiBase.csCloseCom();
+                        if (Res == 0)
+                        {
+                            IsVerifySamDc = true;
+                            var status = 0;
+                            Res = HisApiBase.hpcGetHPCStatus(1, ref status);
+                            if (status == 1 && Res == 0)
+                            {
+                                Res = HisApiBase.hpcVerifyHPCPIN();
+                                if (Res == 0)
+                                    IsHpcValid = true;
+                            }
+                        }
+                    }
+                }
+            });
+            thread.Start();
+            if (thread.Join(60000))
+            {
                 CardReaderStatus = GetEnumDescription((ErrorCode)Res);
             }
             else
+            {
+                thread.Abort();
                 CardReaderStatus = GetEnumDescription((ErrorCode)Res);
+                CardReaderStatus = "讀卡機逾時";
+            }
         }
 
         public static string GetEnumDescription(Enum value)

@@ -12,7 +12,6 @@
         public SeqNumber(byte[] pBuffer)
         {
             var f = new Function();
-
             TreatDateTime = f.ByteArrayToString(13, pBuffer, 0);
             MedicalNumber = f.ByteArrayToString(4, pBuffer, 13).Trim();
             InstitutionId = f.ByteArrayToString(10, pBuffer, 17);
