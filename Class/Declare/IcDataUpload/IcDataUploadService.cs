@@ -186,13 +186,13 @@ namespace His_Pos.Class.Declare.IcDataUpload
         [XmlElement(ElementName = "A17")]
         public string TreatmentDateTime { get; set; } //健保資料段 8-3.就診日期時間 (get by HISAPI : hisGetSeqNumber256)
 
-        //V
-        [XmlElement(ElementName = "A19")]
-        public string MakeUpMark { get; set; } = "1";//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
-
         //*
         [XmlElement(ElementName = "A18")]
         public string MedicalNumber { get; set; }//健保資料段 8-5.就醫序號(get by HISAPI : hisGetSeqNumber256)
+
+        //V
+        [XmlElement(ElementName = "A19")]
+        public string MakeUpMark { get; set; } = "1";//健保資料段 8-4.補卡註記(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
         //V
         [XmlElement(ElementName = "A14")]

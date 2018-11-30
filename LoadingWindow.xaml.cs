@@ -855,7 +855,7 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("藥袋列印中...");
                 Export(rptViewer.LocalReport,22,24);
-                ReportPrint();
+                ReportPrint(Properties.Settings.Default.MedBagPrinter);
                 Dispatcher.Invoke((Action)(() =>
                 {
 
@@ -880,8 +880,8 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("收據列印中...");
-                Export(rptViewer.LocalReport, 22, 24);
-                ReportPrint();
+                Export(rptViewer.LocalReport, 25.4, 9.3);
+                ReportPrint(Properties.Settings.Default.ReceiptPrinter);
                 Dispatcher.Invoke((Action)(() =>
                 {
 
@@ -948,12 +948,12 @@ namespace His_Pos
                 stream.Position = 0;
         }
 
-        private void ReportPrint()
+        private void ReportPrint(string printer)
         {
             if (m_streams == null || m_streams.Count == 0)
                 throw new Exception("Error: no stream to print.");
             PrintDocument printDoc = new PrintDocument();
-            printDoc.PrinterSettings.PrinterName = Properties.Settings.Default.MedBagPrinter;
+            printDoc.PrinterSettings.PrinterName = printer;
             if (!printDoc.PrinterSettings.IsValid)
             {
                 throw new Exception("Error: cannot find printer.");

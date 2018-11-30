@@ -640,9 +640,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     m.ShowDialog();
                 }
             }
-
-            m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
-            m.ShowDialog();
+            else
+            {
+                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
+                m.ShowDialog();
+            }
 
             foreach (var medicalPerson in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
             {
@@ -936,11 +938,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 rptViewer.LocalReport.DataSources.Add(rd);
                 rptViewer.LocalReport.Refresh();
                 var loadingWindow = new LoadingWindow();
-                loadingWindow.Show();
                 loadingWindow.PrintMedbag(rptViewer, Instance, receiptPrint);
+                loadingWindow.Show();
             }
-
-            if (receiptPrint)
+            if(receiptPrint)
                 PrintReceipt();
             //var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
             //File.WriteAllText(ReportService.ReportPath, string.Empty);
@@ -951,7 +952,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             //}
         }
 
-        private void PrintReceipt()
+        public void PrintReceipt()
         {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
@@ -964,7 +965,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     .Hospital.Doctor.IcNumber)
                     ? CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.Name
                     : string.Empty;
-            var totalMedicalCost = MedicinePoint + _currentDeclareData.MedicalServicePoint;
             var parameters = new List<ReportParameter>
             {
                 new ReportParameter("Pharmacy", MainWindow.CurrentPharmacy.Name),
@@ -978,8 +978,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 new ReportParameter("MedicalNumber", CurrentPrescription.Customer.IcCard.MedicalNumber),
                 new ReportParameter("MedicineCost", MedicinePoint.ToString(CultureInfo.InvariantCulture)),
                 new ReportParameter("MedicalServiceCost", _currentDeclareData.MedicalServicePoint.ToString()),
-                new ReportParameter("TotalMedicalCost",
-                    Convert.ToInt16(Math.Ceiling(totalMedicalCost / 3)).ToString(CultureInfo.InvariantCulture)),
+                new ReportParameter("TotalMedicalCost",_currentDeclareData.DeclarePoint.ToString()),
                 new ReportParameter("CopaymentCost", _currentDeclareData.CopaymentPoint.ToString()),
                 new ReportParameter("HcPay", _currentDeclareData.DeclarePoint.ToString()),
                 new ReportParameter("SelfCost", SelfCost.ToString()),
@@ -990,8 +989,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.Refresh();
             var loadingWindow = new LoadingWindow();
-            loadingWindow.Show();
             loadingWindow.PrintReceipt(rptViewer, Instance);
+            loadingWindow.Show();
+            
         }
 
         #endregion
@@ -1679,20 +1679,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
 
             CountMedicinesCost();
-            //}
-            //    SpecialCodeCombo.SelectedItem = SpecialCodes.Single(s => s.Id.Equals());
-            //DivisionCombo.Text = prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
-            //AdjustCaseCombo.Text = prescription.Treatment.AdjustCase.FullName;
-            //TreatmentCaseCombo.Text = prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
-            //PaymentCategoryCombo.Text = prescription.Treatment.PaymentCategory.FullName;
-            //CopaymentCombo.Text = prescription.Treatment.Copayment.FullName;
-            //SpecialCodeCombo.Text = prescription.Treatment.MedicalInfo.SpecialCode.Id;
-            //ReleaseHospital.Text = prescription.Treatment.MedicalInfo.Hospital.Id;
-            //
-            //TreatmentDate.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.TreatmentDate);
-            //AdjustDate.Text = DateTimeExtensions.ToSimpleTaiwanDate(prescription.Treatment.AdjustDate); 
-            //CurrentPrescription.Medicines = MedicineDb.GetDeclareMedicineByMasId(decMasId);
-            //PrescriptionMedicines.ItemsSource = Instance.CurrentPrescription.Medicines;
         }
 
         private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -2075,10 +2061,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void ReloadCardReader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void ReloadCardReader_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
-            var t1 = new Thread(ReloadCardReader);
-            t1.Start();
+            ReloadCardReader();
         }
 
         public void ReadTreatRecord()
@@ -2140,7 +2125,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void CheckChronicExist()
         {
-            //if (!ChronicDb.CheckChronicExistById(CurrentPrescription.Customer.Id)) return;
+            if (string.IsNullOrEmpty(CurrentPrescription.Customer.Id)) return;
             var chronicSelectWindow =
                 new ChronicSelectWindow(CurrentPrescription.Customer.Id, CurrentPrescription.Customer.IcNumber);
             if (chronicSelectWindow.ChronicCollection.Count == 1 &
@@ -2203,7 +2188,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public void ReloadCardReader()
         {
             SetCardStatusContent("重新讀取中...");
-            if (!MainWindow.IsConnectionOpened)
+            MainWindow.Res = MainWindow.Res = HisApiBase.csSoftwareReset(3);
+            if (MainWindow.Res == 0)
             {
                 MainWindow.Res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
                 if (MainWindow.Res == 0)
@@ -2214,12 +2200,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         MainWindow.IsVerifySamDc = true;
                 }
             }
-            else if(!MainWindow.IsVerifySamDc)
-            {
-                MainWindow.Res = HisApiBase.csVerifySAMDC();
-                if (MainWindow.Res == 0)
-                    MainWindow.IsVerifySamDc = true;
-            }
             var cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res);
             SetCardStatusContent(cardReaderStatus);
         }
@@ -2229,7 +2209,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (MainWindow.IsVerifySamDc)
             {
                 MainWindow.Res = HisApiBase.hisGetCardStatus(2);
-                if (MainWindow.Res == 0)
+                if (MainWindow.Res != 0 && MainWindow.Res != 9 && MainWindow.Res != 4000)
                 {
                     var strLength = 72;
                     var icData = new byte[72];
