@@ -20,6 +20,8 @@ namespace His_Pos.Class.Person
             parameters.Add(customer.Birthday.Year!=1
                 ? new SqlParameter("CUS_BIRTH", customer.Birthday)
                 : new SqlParameter("CUS_BIRTH", DBNull.Value));
+            if (string.IsNullOrEmpty(customer.IcNumber))
+                customer.IcNumber = customer.IcCard.IcNumber;
             parameters.Add(new SqlParameter("CUS_IDNUM", customer.IcNumber));
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[CheckCustomerExist]", parameters);
             return table.Rows[0][0].ToString();
