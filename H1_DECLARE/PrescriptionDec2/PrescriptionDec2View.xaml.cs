@@ -621,22 +621,28 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break;
             }
 
-            if (IsMedicalNumberGet)
+            if (type.Equals("Adjustment"))
             {
-                var loading = new LoadingWindow();
-                loading.LoginIcData(Instance);
-                loading.ShowDialog();
-                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
-                m.ShowDialog();
+                if (IsMedicalNumberGet)
+                {
+                    var loading = new LoadingWindow();
+                    loading.LoginIcData(Instance);
+                    loading.ShowDialog();
+                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
+                    m.ShowDialog();
+                }
+                else
+                {
+                    var loading = new LoadingWindow();
+                    loading.LoginIcData(Instance, SelectedErrorCode);
+                    loading.ShowDialog();
+                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
+                    m.ShowDialog();
+                }
             }
-            else
-            {
-                var loading = new LoadingWindow();
-                loading.LoginIcData(Instance, SelectedErrorCode);
-                loading.ShowDialog();
-                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
-                m.ShowDialog();
-            }
+
+            m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
+            m.ShowDialog();
 
             foreach (var medicalPerson in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
             {
@@ -2220,9 +2226,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void LoadPatentDataFromIcCard()
         {
-            var thread = new Thread(() =>
+            if (MainWindow.IsVerifySamDc)
             {
-                if (MainWindow.IsVerifySamDc)
+                MainWindow.Res = HisApiBase.hisGetCardStatus(2);
+                if (MainWindow.Res == 0)
                 {
                     var strLength = 72;
                     var icData = new byte[72];
@@ -2235,20 +2242,20 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         CusBasicData = new BasicData(icData);
                         CurrentPrescription.Customer = new Customer(CusBasicData);
                         CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
+                        SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
+                    }
+                    else
+                    {
+                        SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
                     }
                 }
-                System.Windows.Threading.Dispatcher.Run();
-            });
-
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-            if (thread.Join(8000))
-            {
-                SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
+                else
+                {
+                    SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
+                }
             }
             else
             {
-                thread.Abort();
                 SetCardStatusContent("讀卡機逾時");
                 ShowCustomerSelectionWindow(new CustomerSelectWindow(string.Empty, 0));
             }
