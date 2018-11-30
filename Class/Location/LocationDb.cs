@@ -14,7 +14,7 @@ namespace His_Pos.Class
         {
             ObservableCollection<string> sourceBig = new ObservableCollection<string>();
             sourceBig.Add("尚未有櫃位產品");
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationData]");
             foreach (DataRow row in table.Rows)
             {
@@ -24,12 +24,12 @@ namespace His_Pos.Class
         }
         internal static DataTable GetLocationData()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationData]");
         }
         internal static void SaveLocationData(ObservableCollection<Location> locations)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             foreach (var location in locations) {
                 parameters.Clear();
@@ -45,13 +45,13 @@ namespace His_Pos.Class
         }
         internal static DataTable GetLocationDetail(string id)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("LOC_ID", id));
             return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationDetail]", parameters);
         }
         internal static ObservableCollection<string> ObservableGetLocationDetail() {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("LOC_ID", DBNull.Value));
            var table = dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetLocationDetail]", parameters);
@@ -64,7 +64,7 @@ namespace His_Pos.Class
         }
         internal static void UpdateLocationDetail(LocationDetail location)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
           
                 parameters.Add(new SqlParameter("LOC_ID", location.id));
@@ -76,7 +76,7 @@ namespace His_Pos.Class
         }
         internal static DataTable UpdateLocationDetail(string id, string newvalue)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", id));
             parameters.Add(new SqlParameter("NEW_VALUE", newvalue));
@@ -85,7 +85,7 @@ namespace His_Pos.Class
 
         internal static void DeleteLocationDetail(LocationDetail location)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
           
                 parameters.Add(new SqlParameter("LOC_ID", location.id));
@@ -97,7 +97,7 @@ namespace His_Pos.Class
         }
         internal static void UpdateLocationName(string locId,string name)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("LOC_ID", locId));
             parameters.Add(new SqlParameter("NAME", name));
@@ -105,7 +105,7 @@ namespace His_Pos.Class
         }
         internal static bool CheckProductExist(string locId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("LOC_ID", locId));
            DataTable table = dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[CheckProductExist]", parameters);
@@ -116,13 +116,13 @@ namespace His_Pos.Class
         }
         internal static void DeleteLocation(string locId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("LOC_ID", locId));
             dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[DeleteLocation]", parameters);
         }
         internal static DataTable GetProductLocation() {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             return dd.ExecuteProc("[HIS_POS_DB].[LocationManageView].[GetProductLocation]");
         }
        

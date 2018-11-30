@@ -137,7 +137,7 @@ namespace His_Pos.Service
             {
                 parameValues += row.ParameterName + ":" + row.Value.ToString() + "\r\n";
             }
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PROC_NAME", procName));
             parameters.Add(new SqlParameter("PROC_PARAM", parameValues));

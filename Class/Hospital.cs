@@ -51,9 +51,7 @@ namespace His_Pos.Class
         public Hospital(DeclareFileDdata d)
         {
             Doctor = new MedicalPersonnel();
-            Id = d.Dhead.D21;
             Doctor.IcNumber = !string.IsNullOrEmpty(d.Dhead.D24) ? d.Dhead.D24 : string.Empty;
-            Division = new Division.Division(d);
         }
 
         private MedicalPersonnel _doctor;

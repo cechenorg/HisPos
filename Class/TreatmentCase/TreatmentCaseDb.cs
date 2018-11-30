@@ -10,7 +10,7 @@ namespace His_Pos.Class.TreatmentCase
         public static ObservableCollection<TreatmentCase> GetData()
         {
             ObservableCollection<TreatmentCase> treatmentCases = new ObservableCollection<TreatmentCase>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var dbConnection = new DbConnection(Settings.Default.SQL_local);
             var prescriptionCaseTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetTreatmentCasesData]");
             foreach (DataRow treatmentCase in prescriptionCaseTable.Rows)
             {

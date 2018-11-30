@@ -15,29 +15,31 @@ namespace His_Pos.Class.Declare.IcDataUpload
     }
     public class IcDataUpload
     {
-        public IcRecordList IcDataList { get; set; }
+        public RECS IcDataList { get; set; }
     }
 
     [XmlRoot(ElementName = "RECS")]
-    public class IcRecordList
+    public class RECS
     {
-        public List<IcRecord> RecordList { get; set; }
+        [XmlElement(ElementName = "REC")]
+        public List<REC> REC { get; set; }
     }
 
+
     [XmlRoot(ElementName = "REC")]
-    public class IcRecord
+    public class REC
     {
-        public IcRecord(Header header, MainMessage main)
+        public REC(Header header, MainMessage main)
         {
             HeaderMessage = header;
             MainMessage = main;
         }
 
-        public IcRecord(DataRow row)
+        public REC(DataRow row)
         {
         }
 
-        public IcRecord()
+        public REC()
         {
 
         }

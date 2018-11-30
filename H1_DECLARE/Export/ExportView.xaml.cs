@@ -215,7 +215,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
             {
                 SelectedFile.PrescriptionDdatas.Add(new DeclareFileDdata(ddata));
             }
-
             foreach (var d in SelectedFile.PrescriptionDdatas)
             {
                 foreach (var errorList in SelectedFile.ErrorPrescriptionList.ErrorList)
@@ -225,7 +224,6 @@ namespace His_Pos.H6_DECLAREFILE.Export
                     d.CanDeclare = false;
                 }
             }
-
             PrescriptionCollection = new ObservableCollection<DeclareFileDdata>(SelectedFile.PrescriptionDdatas);
             if (ErrorDec.IsChecked == true)
             {
@@ -244,6 +242,7 @@ namespace His_Pos.H6_DECLAREFILE.Export
                     d.CanDeclare = true;
                 }
             }
+
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
@@ -304,18 +303,18 @@ namespace His_Pos.H6_DECLAREFILE.Export
             var firstAdjustDate = "31";
             foreach (var d in declaredPharmacy.Ddata)
             {
-                if (int.Parse(d.Dhead.D23.Split('/')[2]) < int.Parse(firstAdjustDate))
-                    firstAdjustDate = d.Dhead.D23.Split('/')[2];
+                if (int.Parse(d.Dhead.D23.Substring(5,2)) < int.Parse(firstAdjustDate))
+                    firstAdjustDate = d.Dhead.D23.Substring(5, 2);
             }
             tdata.T12 = (int.Parse(tdata.T8) + int.Parse(tdata.T10)).ToString();
-            tdata.T13 = (int.Parse(SelectedFile.DeclareYear)-1911) + "/" + SelectedFile.DeclareMonth + "/" + firstAdjustDate;
+            tdata.T13 = (int.Parse(SelectedFile.DeclareYear)-1911) + SelectedFile.DeclareMonth  + firstAdjustDate;
             var lastAdjustDate = "01";
             foreach (var d in declaredPharmacy.Ddata)
             {
-                if (int.Parse(d.Dhead.D23.Split('/')[2]) > int.Parse(lastAdjustDate))
-                    lastAdjustDate = d.Dhead.D23.Split('/')[2];
+                if (int.Parse(d.Dhead.D23.Substring(5, 2)) > int.Parse(lastAdjustDate))
+                    lastAdjustDate = d.Dhead.D23.Substring(5, 2);
             }
-            tdata.T14 = (int.Parse(SelectedFile.DeclareYear)-1911) + "/" + SelectedFile.DeclareMonth + "/" + lastAdjustDate;
+            tdata.T14 = (int.Parse(SelectedFile.DeclareYear)-1911) + SelectedFile.DeclareMonth  + lastAdjustDate;
             declaredPharmacy.Tdata = tdata;
 
             var f = new Function();

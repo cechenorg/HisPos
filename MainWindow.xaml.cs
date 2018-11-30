@@ -42,7 +42,7 @@ namespace His_Pos
     public partial class MainWindow
     {
         public static string CardReaderStatus;
-        public static int Res { get; set; }
+        public static int Res { get; set; } = -1;
         public static Pharmacy CurrentPharmacy;
         public static MainWindow MainWindowInstance;
         public static bool ItemSourcesSet { get; set; }
@@ -208,8 +208,8 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //var d = new DeclareDb();
-            //d.StartDailyUpload();
+            var d = new DeclareDb();
+            d.StartDailyUpload();
             ProductDb.UpdateDailyStockValue();
             DeclareDb declareDb = new DeclareDb();
             declareDb.SendUnSendCooperClinicDeclare();
@@ -228,7 +228,7 @@ namespace His_Pos
             t1.Start();
         }
 
-        private void VerifySam()
+        public void VerifySam()
         {
             Res = HisApiBase.csOpenCom(0);
             if (Res == 0)

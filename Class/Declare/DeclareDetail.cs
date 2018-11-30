@@ -28,36 +28,12 @@ namespace His_Pos.Class.Declare
                     Percent = percent;//p6 支付成數
                     Total = total;//p7 總量
                     Price = price;//p8 單價
-                    CountPoint();//p9
-                    Sequence = sequence;//p10
-                    Days = int.Parse(Total.ToString());
-                    SetDate(start, end);
+                    CountPoint();//p9 點數
+                    Sequence = sequence;//p10 循序號
+                    Days = int.Parse(Total.ToString());//天數
+                    SetDate(start, end);//起屹日期
                     break;
             }
-            /*
-             *<p1>9</p1>
-             *<p2>05202B</p2>
-             *<p6>100</p6>
-             *<p7>00001.0</p7>
-             *<p8>0000048.00</p8>
-             *<p9>00000048</p9>
-             *<p10>002</p10>
-             *<p12>10610020000</p12>
-             *<p13>10610020000</p13>
-             */
-            /*
-             *<p1>1</p1>
-             *<p2>MA1</p2>
-             *<p3>0001.00</p3>
-             *<p6>100</p6>
-             *<p7>00003.0</p7>
-             *<p8>0000022.00</p8>
-             *<p9>00000066</p9>
-             *<p10>002</p10>
-             *<p11>03</p11>
-             *<p12>10610020000</p12>
-             *<p13>10610040000</p13>
-             */
         }
 
         public DeclareDetail(DeclareMedicine medicine, int sequence)
@@ -165,11 +141,6 @@ namespace His_Pos.Class.Declare
         {
             StartDate = start;//p12
             EndDate = end;//p13
-        }
-
-        private void SetMedicalPersonnelIcNumber(string icNum)
-        {
-            MedicalPersonnelIcNumber = icNum;
         }
 
         private void CountPoint()//p9

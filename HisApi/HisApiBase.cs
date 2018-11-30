@@ -159,7 +159,7 @@ namespace His_Pos.HisApi
         public static extern byte[] csGetVersionEx(byte[] pPath);
         [DllImport("csHis.dll")]
         //1.52 提供His重置讀卡機或卡片的API
-        public static extern int csSoftwareReset(long iType);
+        public static extern int csSoftwareReset(int iType);
         // 2.1 安全模組認證
         [DllImport("csHis.dll")]
         public static extern int csVerifySAMDC();

@@ -17,7 +17,7 @@ namespace His_Pos
         {
             DatabaseControl.ConfirmConnectionChange_Click(sender, e);
 
-            if(DatabaseControl.LocalConnection.ConnectionPass && DatabaseControl.GlobalConnection.ConnectionPass)
+            if(DatabaseControl.LocalConnection.ConnectionPass)
                 Close();
             else
             {

@@ -15,7 +15,7 @@ namespace His_Pos.Class.Position
         public static ObservableCollection<Position> GetData()
         {
             var positions = new ObservableCollection<Position>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_global);
+            var dbConnection = new DbConnection(Settings.Default.SQL_local);
             var divisionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPositionData]");
             foreach (DataRow row in divisionTable.Rows)
             {

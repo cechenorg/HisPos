@@ -181,7 +181,7 @@ namespace His_Pos
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string divisionName = "";
-            foreach (var d in ExportView.Instance.DivisionCollection)
+            foreach (var d in MainWindow.Divisions)
             {
                 if (d.Id.Equals(value))
                     divisionName = d.Name;
@@ -200,7 +200,7 @@ namespace His_Pos
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string divisionName = "";
-            foreach (var d in ExportView.Instance.HospitalCollection)
+            foreach (var d in MainWindow.Hospitals)
             {
                 if (d.Id.Equals(value))
                     divisionName = d.Name;

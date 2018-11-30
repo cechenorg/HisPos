@@ -386,8 +386,6 @@ namespace His_Pos.H1_DECLARE.MedBagManage
         private bool CheckMedBagCollectionEmpty()
         {
             var m = new MessageWindow("未新增藥袋", MessageType.WARNING, true);
-            m.SetLabelFontSize(16);
-            m.SetLabelContentAlignment(HorizontalAlignment.Center);
             if (MedBagCollection.Count == 0)
             {
                 m.Show();

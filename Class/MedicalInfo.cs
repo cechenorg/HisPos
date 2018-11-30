@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Person;
 using His_Pos.Service;
 using JetBrains.Annotations;
 
@@ -70,13 +72,20 @@ namespace His_Pos.Class
 
         public MedicalInfo(DeclareFileDdata d)
         {
-            Hospital = new Hospital(d);
+            Hospital = MainWindow.Hospitals.SingleOrDefault(h => h.Id.Equals(d.Dhead.D21))?.DeepCloneViaJson();
+            if (Hospital != null)
+            {
+                Hospital.Doctor = new MedicalPersonnel();
+                Hospital.Doctor.IcNumber = !string.IsNullOrEmpty(d.Dhead.D24) ? d.Dhead.D24 : string.Empty;
+                Hospital.Division = MainWindow.Divisions.SingleOrDefault(div => div.Id.Equals(d.Dhead.D13))
+                    ?.DeepCloneViaJson();
+            }
             SpecialCode = new SpecialCode.SpecialCode(d);
             MainDiseaseCode = new DiseaseCode.DiseaseCode();
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D8) ? d.Dhead.D8 : string.Empty;
             SecondDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D9) ? d.Dhead.D9 : string.Empty;
-            TreatmentCase = new TreatmentCase.TreatmentCase(d);
+            TreatmentCase = MainWindow.TreatmentCase.SingleOrDefault(t => t.Id.Equals(d.Dhead.D22))?.DeepCloneViaJson();
         }
 
         private Hospital _hospital;

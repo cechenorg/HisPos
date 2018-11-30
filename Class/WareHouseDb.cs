@@ -13,7 +13,7 @@ namespace His_Pos.Class
     {
         internal static ObservableCollection<WareHouse> GetWareHouseData()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[GetWareHouseData]");
             ObservableCollection<WareHouse> data = new ObservableCollection<WareHouse>();
             
@@ -25,7 +25,7 @@ namespace His_Pos.Class
         }
         internal static ObservableCollection<OtcDetail.WareStcok> GetWareStockById(string id)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", id));
             var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetWareStockById]", parameters);
@@ -36,7 +36,7 @@ namespace His_Pos.Class
             return data;
         }
         internal static ObservableCollection<DemolitionWindow.WareHouseInventory> GetWareHouseInventoryById(string id) {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", id));
             var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetWareStockById]", parameters);

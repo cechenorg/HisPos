@@ -64,7 +64,7 @@
                     <Label Name="PatientName" Width="150" Margin="0,0,30,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" Foreground="{StaticResource ForeGround}" Content="{Binding CurrentPrescription.Customer.Name, UpdateSourceTrigger=PropertyChanged}" />
                     <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" />
                     <Label Name="PatientBirthday" Width="100" Margin="5,0,0,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" 
-                         Foreground="{StaticResource ForeGround}" Content="{Binding CurrentPrescription.Customer.Birthday, UpdateSourceTrigger=PropertyChanged}" />
+                         Foreground="{StaticResource ForeGround}" Content="{Binding CurrentPrescription.Customer.Birthday, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource DateConverter}}" />
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
@@ -81,7 +81,7 @@
             <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Height="30" Margin="10">
                 <Label Content="調劑藥師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch" HorizontalAlignment="Right"/>
                 <Label Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalAlignment="Right"
-                         HorizontalContentAlignment="Center" Content="{Binding CurrentPrescription.Pharmacy.MedicalPersonnel,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                         HorizontalContentAlignment="Center" Content="{Binding CurrentPrescription.Pharmacy.MedicalPersonnel.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="4" Margin="10">
                 <Label Content="就醫日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>

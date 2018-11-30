@@ -61,7 +61,7 @@ namespace His_Pos.Class.Declare
             });
             //parameters.Add(new SqlParameter("HISDECMAS_GETCARD", declareData.Prescription.IsGetIcCard));
             //parameters.Add(new SqlParameter("HISDECMAS_DECLARE", declareData.Prescription.Declare));
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             var table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId
         }
@@ -70,7 +70,7 @@ namespace His_Pos.Class.Declare
         {
             ObservableCollection<DeclareDataDetailOverview.PurchaseDeclareDataOverview> collection = new ObservableCollection<DeclareDataDetailOverview.PurchaseDeclareDataOverview>();
 
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORDER_ID", storeOrderId));
@@ -94,7 +94,7 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("TreatDate", declareData.Prescription.Treatment.AdjustDate));
             parameters.Add(new SqlParameter("EmpId", declareData.Prescription.Pharmacy.MedicalPersonnel.Id));
             parameters.Add(new SqlParameter("PrescribeDetail", prescribeDataTable));
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             var table = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertPrescribeData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId
         }
@@ -105,7 +105,7 @@ namespace His_Pos.Class.Declare
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DECMAS_ID", decMasId));
             parameters.Add(new SqlParameter("DECLARETRADE", dataTradeTable));
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertTradeData]", parameters);
         }
 
@@ -146,7 +146,7 @@ namespace His_Pos.Class.Declare
         }
         public void UpdateDeclareData(DeclareData declareData)
         {
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             AddParameterDData(parameters, declareData); //加入DData sqlparameters
             var pDataTable = SetPDataTable(); //設定PData datatable columns
@@ -266,7 +266,7 @@ namespace His_Pos.Class.Declare
          */
         public void ImportDeclareData(ObservableCollection<DeclareData> declareDataCollection, string decId)
         {
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
 
             var customerTable = SetCustomerTable();
@@ -289,7 +289,7 @@ namespace His_Pos.Class.Declare
 
         public string CheckXmlFileExist(XmlDocument xml)
         {
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("XML", xml.SelectSingleNode("pharmacy/tdata").InnerXml));
             var table = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[CheckXMLFileExist]",
@@ -306,7 +306,7 @@ namespace His_Pos.Class.Declare
         public void InsertInventoryDb(DeclareData declareData, string way,string decMasId)
         {
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             foreach (var declareDetail in declareData.Prescription.Medicines)
             {
                 parameters.Clear();
@@ -335,7 +335,7 @@ namespace His_Pos.Class.Declare
 
         public int GetMaxDecMasId()
         {
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             var table = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[GetMaxDecMasId]");
             return Convert.ToInt32(table.Rows[0][0].ToString());
         }
@@ -904,7 +904,7 @@ namespace His_Pos.Class.Declare
         public void SetSameGroupChronic(string decMasId,string continueNum) { //同GROUP慢箋預約
 
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
                 parameters.Add(new SqlParameter("DecMasId", decMasId));
                 parameters.Add(new SqlParameter("COUTINUENUM", continueNum));
                 conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[SetSameGroupChronic]", parameters);
@@ -913,7 +913,7 @@ namespace His_Pos.Class.Declare
         { //同GROUP慢箋預約
 
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("DecMasId", decMasId));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[SetNewGroupChronic]", parameters);
         }
@@ -921,7 +921,7 @@ namespace His_Pos.Class.Declare
         public void InsertDailyUpload(string dataXml)
         {
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("ID", DBNull.Value));
             parameters.Add(new SqlParameter("UPLOAD_DATA", dataXml));
             parameters.Add(new SqlParameter("UPLOAD_STATUS", false));
@@ -931,15 +931,13 @@ namespace His_Pos.Class.Declare
 
         public void StartDailyUpload()
         {
-            var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
-            parameters.Add(new SqlParameter("CREATE_DATE", DateTime.Now.ToShortDateString()));
-            var dailyUploadTable = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDailyUploadDataByDate]", parameters);
-            var icDataUpload = new IcRecordList {RecordList = new List<IcRecord>()};
+            var conn = new DbConnection(Settings.Default.SQL_local);
+            var dailyUploadTable = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDailyUploadDataByDate]");
+            var icDataUpload = new RECS { REC = new List<REC>()};
 
             foreach (DataRow row in dailyUploadTable.Rows)
             {
-                icDataUpload.RecordList.Add(XmlService.Deserialize<IcRecord>(row["UPLOADDATA_CONTENT"].ToString()));
+                icDataUpload.REC.Add(XmlService.Deserialize<REC>(row["UPLOADDATA_CONTENT"].ToString()));
             }
             var f = new Function();
             XDocument result;
@@ -961,15 +959,15 @@ namespace His_Pos.Class.Declare
         private void InsertDailyUploadFile(XDocument fileContent)
         {
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("ID", DBNull.Value));
-            parameters.Add(new SqlParameter("UPLOAD_DATE", DateTime.Now.ToShortDateString()));
+            parameters.Add(new SqlParameter("UPLOAD_DATE", DateTime.Today.Date));
             parameters.Add(new SqlParameter("FILE_CONTENT", fileContent.ToString()));
             conn.ExecuteProc("[HIS_POS_DB].[MainWindowView].[InsertDailyUploadFileData]", parameters);
         }
         public void CheckPredictChronicExist(string decMasId) { //判斷是否有重複預約慢箋 
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("DecMasId", decMasId));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[CheckPredictChronicExist]", parameters);
         }
@@ -997,7 +995,7 @@ namespace His_Pos.Class.Declare
         public void InsertDeclareRegister(string decMasId, bool isSentToServer, bool isReg, bool isGetCard, bool isDeclare, bool errorDeclare,bool isAdjust)
         {
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("DECMAS_ID", decMasId));
             parameters.Add(new SqlParameter("IS_SENDTOSERVER", isSentToServer));
             parameters.Add(new SqlParameter("IS_REG", isReg));
@@ -1010,7 +1008,7 @@ namespace His_Pos.Class.Declare
         public void SaveCooperClinicDeclare(string declareId,XmlDocument xml)
         {
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("DECLARE_ID", declareId)); 
             parameters.Add(new SqlParameter("DECLARE_XML", SqlDbType.Xml)
             {
@@ -1021,7 +1019,7 @@ namespace His_Pos.Class.Declare
         public void SendUnSendCooperClinicDeclare()
         {
             var parameters = new List<SqlParameter>();
-            var conn = new DbConnection(Settings.Default.SQL_global);
+            var conn = new DbConnection(Settings.Default.SQL_local);
             DataTable table = conn.ExecuteProc("[HIS_POS_DB].[API].[GetUnSendCooperClinicDeclare]");
             if (table.Rows.Count == 0)
                 return;

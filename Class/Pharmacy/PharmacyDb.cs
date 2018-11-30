@@ -17,7 +17,7 @@ namespace His_Pos.Class.Pharmacy
         {
             ObservableCollection<ManagePharmacy> collection = new ObservableCollection<ManagePharmacy>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[PharmacyManageView].[GetManagePharmacy]");
 
             foreach (DataRow row in table.Rows)
@@ -41,7 +41,7 @@ namespace His_Pos.Class.Pharmacy
 
         internal static ManagePharmacy AddNewManagePharmacy()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[PharmacyManageView].[AddNewManagePharmacy]");
 
@@ -50,7 +50,7 @@ namespace His_Pos.Class.Pharmacy
 
         internal static MyPharmacyControl.MyPharmacy GetMyPharmacy()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[SystemSettings].[GetMyPharmacyData]");
 
             return new MyPharmacyControl.MyPharmacy(table.Rows[0]);
@@ -58,7 +58,7 @@ namespace His_Pos.Class.Pharmacy
 
         internal static void UpdateManagePharmacy(ManagePharmacy pharmacy)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", pharmacy.Id));
@@ -113,7 +113,7 @@ namespace His_Pos.Class.Pharmacy
 
         internal static void SetMyPharmacy(MyPharmacyControl.MyPharmacy pharmacy)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("COM", pharmacy.ReaderCom));
@@ -126,7 +126,7 @@ namespace His_Pos.Class.Pharmacy
         internal static ObservableCollection<MedicalPersonnel> GetPharmacyMedicalPersonData()
         {
             ObservableCollection<MedicalPersonnel> medicalPersonnels = new ObservableCollection<MedicalPersonnel>();
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetPharmacyMedicalPersonData]");
             foreach (DataRow row in table.Rows)
             {
@@ -149,7 +149,7 @@ namespace His_Pos.Class.Pharmacy
         }
         internal static Pharmacy GetCurrentPharmacy() {
             
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetCurrentPharmacy]");
             DataRow row = table.Rows[0];
             Pharmacy pharmacy = new Pharmacy(row["CURPHA_ID"].ToString(), row["CURPHA_NAME"].ToString(), row["CURPHA_ADDR"].ToString(), row["CURPHA_TEL"].ToString()); 
