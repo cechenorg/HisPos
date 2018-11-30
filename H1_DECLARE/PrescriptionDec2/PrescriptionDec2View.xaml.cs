@@ -52,6 +52,7 @@ using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.H1_DECLARE.PrescriptionInquire;
 using System.Xml;
+using MaterialDesignThemes.Wpf;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -94,15 +95,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public IcErrorCodeWindow icErrorWindow;
-
+        private IcErrorCodeWindow icErrorWindow;
+        private IcErrorCodeWindow.IcErrorCode SelectedErrorCode { get; set; }
         #endregion
 
 
         #region 健保卡作業相關變數
 
         public bool IsMedicalNumberGet; //是否取得就醫序號
-        public int GetMedicalNumberErrorCode = 0;
+        public int GetMedicalNumberErrorCode = -1;
         public readonly byte[] BasicDataArr = new byte[72];
         public BasicData CusBasicData;
         public SeqNumber Seq; //取得之就醫序號資料
@@ -316,17 +317,32 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
+            MessageWindow m;
+            if (!CurrentPrescription.IsGetIcCard)
+            {
+                icErrorWindow =
+                    new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
+                icErrorWindow.ShowDialog();
+                if (icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
+                {
+                    m = new MessageWindow("健保卡讀取異常，請選擇異常代碼或重新過卡", MessageType.WARNING, true);
+                    m.ShowDialog();
+                    return;
+                }
+                SelectedErrorCode = new IcErrorCodeWindow.IcErrorCode();
+                SelectedErrorCode = icErrorWindow.SelectedItem;
+            }
             if (TreatmentDate.Text.Contains(" "))
             {
-                var m = new MessageWindow("就醫日期錯誤", MessageType.ERROR, true);
-                m.Show();
+                m = new MessageWindow("就醫日期錯誤", MessageType.ERROR, true);
+                m.ShowDialog();
                 return;
             }
 
             if (AdjustDate.Text.Contains(" "))
             {
-                var m = new MessageWindow("調劑日期錯誤", MessageType.ERROR, true);
-                m.Show();
+                m = new MessageWindow("調劑日期錯誤", MessageType.ERROR, true);
+                m.ShowDialog();
                 return;
             }
 
@@ -605,26 +621,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break;
             }
 
-            if (CurrentPrescription.IsGetIcCard)
+            if (IsMedicalNumberGet)
             {
-                //var loading = new LoadingWindow();
-                //loading.LoginIcData(Instance);
-                //loading.Show();
-                LogInIcData();
-                CreatIcUploadData();
+                var loading = new LoadingWindow();
+                loading.LoginIcData(Instance);
+                loading.ShowDialog();
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
             else
             {
-                icErrorWindow =
-                    new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
-                icErrorWindow.ShowDialog();
-                //var loading = new LoadingWindow();
-                //loading.LoginIcData(Instance, icErrorWindow.SelectedItem);
-                //loading.Show();
-                LogInIcData();
-                CreatIcErrorUploadData(icErrorWindow.SelectedItem);
+                var loading = new LoadingWindow();
+                loading.LoginIcData(Instance, SelectedErrorCode);
+                loading.ShowDialog();
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
@@ -1422,6 +1431,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var loading = new LoadingWindow();
             loading.LoadIcData(Instance);
             loading.ShowDialog();
+            ReadCustomerTreatRecord();
         }
 
         public void SetCardStatusContent(string content)
@@ -2079,8 +2089,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     : cs.StringToBytes(" ", 2);
                 //補卡註記,長度一個char
                 var cTreatAfterCheck = new byte[] {1};
+                MainWindow.Res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
                 var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData,
                     ref strLength);
+                MainWindow.Res = HisApiBase.csCloseCom();
                 //取得就醫序號
                 if (res == 0)
                 {
@@ -2098,7 +2110,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //取得就醫紀錄
                 strLength = 498;
                 icData = new byte[498];
+                MainWindow.Res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
                 res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+                MainWindow.Res = HisApiBase.csCloseCom();
                 if (res == 0)
                 {
                     var startIndex = 84;
@@ -2133,6 +2147,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void ClearPrescription()
         {
+            ResetCardReader();
             _firstTimeDecMasId = string.Empty;
             _currentDecMasId = string.Empty;
             _clinicDeclareId = string.Empty;
@@ -2182,45 +2197,97 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         public void ReloadCardReader()
         {
             SetCardStatusContent("重新讀取中...");
-            MainWindow.Res = HisApiBase.csOpenCom(0);
-            if (MainWindow.Res == 0)
+            if (!MainWindow.IsConnectionOpened)
             {
-                MainWindow.Res = HisApiBase.csSoftwareReset(3);
+                MainWindow.Res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
                 if (MainWindow.Res == 0)
                 {
+                    MainWindow.IsConnectionOpened = true;
                     MainWindow.Res = HisApiBase.csVerifySAMDC();
+                    if (MainWindow.Res == 0)
+                        MainWindow.IsVerifySamDc = true;
                 }
+            }
+            else if(!MainWindow.IsVerifySamDc)
+            {
+                MainWindow.Res = HisApiBase.csVerifySAMDC();
+                if (MainWindow.Res == 0)
+                    MainWindow.IsVerifySamDc = true;
             }
             var cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res);
             SetCardStatusContent(cardReaderStatus);
-            if (cardReaderStatus.Contains("成功"))
-                CurrentPrescription.IsGetIcCard = true;
         }
 
         public void LoadPatentDataFromIcCard()
         {
-            MainWindow.Res = HisApiBase.csSoftwareReset(3);
-            if (MainWindow.Res == 0)
+            var thread = new Thread(() =>
             {
-                var strLength = 72;
-                var icData = new byte[72];
-                MainWindow.Res = HisApiBase.hisGetBasicData(icData, ref strLength);
-                icData.CopyTo(BasicDataArr, 0);
-                if (MainWindow.Res == 0)
+                if (MainWindow.IsVerifySamDc)
                 {
-                    SetCardStatusContent("健保卡讀取成功");
-                    CurrentPrescription.IsGetIcCard = true;
-                    CusBasicData = new BasicData(icData);
-                    CurrentPrescription.Customer = new Customer(CusBasicData);
-                    CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
+                    var strLength = 72;
+                    var icData = new byte[72];
+                    MainWindow.Res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                    icData.CopyTo(BasicDataArr, 0);
+                    if (MainWindow.Res == 0)
+                    {
+                        SetCardStatusContent("健保卡讀取成功");
+                        CurrentPrescription.IsGetIcCard = true;
+                        CusBasicData = new BasicData(icData);
+                        CurrentPrescription.Customer = new Customer(CusBasicData);
+                        CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
+                    }
                 }
+                System.Windows.Threading.Dispatcher.Run();
+            });
+
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            if (thread.Join(8000))
+            {
+                SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
             }
-            SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
+            else
+            {
+                thread.Abort();
+                SetCardStatusContent("讀卡機逾時");
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(string.Empty, 0));
+            }
         }
 
         private void MedicalNumber_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (sender is TextBox t) Seq.MedicalNumber = t.Text;
+            if (sender is TextBox t && CurrentPrescription.IsGetIcCard) Seq.MedicalNumber = t.Text;
+        }
+
+        private void ReadCustomerTreatRecord()
+        {
+            if (CurrentPrescription.IsGetIcCard)
+            {
+                var c = new CustomerSelectWindow(CurrentPrescription.Customer.IcCard.IcNumber, 3);
+                if (string.IsNullOrEmpty(CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                    !string.IsNullOrEmpty(MedicalNumber.Text.Trim()))
+                    CurrentPrescription.Customer.IcCard.MedicalNumber = MedicalNumber.Text;
+                if (!string.IsNullOrEmpty(CurrentPrescription.Customer.IcCard.MedicalNumber) &&
+                    string.IsNullOrEmpty(MedicalNumber.Text.Trim()))
+                    MedicalNumber.Text = CurrentPrescription.Customer.IcCard.MedicalNumber;
+                CheckChronicExist();
+            }
+            else
+            {
+                ShowCustomerSelectionWindow(new CustomerSelectWindow(string.Empty, 0));
+            }
+        }
+
+        private void ResetCardReader()
+        {
+            var thread = new Thread(() =>
+            {
+                MainWindow.Res = HisApiBase.csSoftwareReset(3);
+                System.Windows.Threading.Dispatcher.Run();
+            });
+
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
         }
     }
 }

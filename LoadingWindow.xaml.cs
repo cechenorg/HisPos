@@ -781,21 +781,7 @@ namespace His_Pos
                 prescriptionDec2View.LoadPatentDataFromIcCard();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    if (prescriptionDec2View.CurrentPrescription.IsGetIcCard)
-                    {
-                        var c = new CustomerSelectWindow(prescriptionDec2View.CurrentPrescription.Customer.IcCard.IcNumber,3);
-                        if (string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                            !string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text.Trim()))
-                            prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber = prescriptionDec2View.MedicalNumber.Text;
-                        if (!string.IsNullOrEmpty(prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber) &&
-                            string.IsNullOrEmpty(prescriptionDec2View.MedicalNumber.Text.Trim()))
-                            prescriptionDec2View.MedicalNumber.Text = prescriptionDec2View.CurrentPrescription.Customer.IcCard.MedicalNumber;
-                        prescriptionDec2View.CheckChronicExist();
-                    }
-                    else
-                    {
-                        prescriptionDec2View.SearchCustomer();
-                    }
+                    
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
@@ -817,14 +803,13 @@ namespace His_Pos
             {
                 ChangeLoadingMessage("卡片資料寫入中...");
                 prescriptionDec2View.LogInIcData();
+                if (prescriptionDec2View.IsMedicalNumberGet)
+                    prescriptionDec2View.CreatIcUploadData();
+                else
+                    prescriptionDec2View.CreatIcErrorUploadData(errorCode);
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    if (prescriptionDec2View.IsMedicalNumberGet)
-                        prescriptionDec2View.CreatIcUploadData();
-                    else if(!prescriptionDec2View.IsMedicalNumberGet)
-                    {
-                        prescriptionDec2View.CreatIcErrorUploadData(errorCode);
-                    }
+                    
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
@@ -1004,6 +989,22 @@ namespace His_Pos
             m_currentPageIndex++;
             ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
         }
-        
+
+        public void VerifyCardReaderStatus(MainWindow mainWindow)
+        {
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("讀卡機認證中...");
+                mainWindow.VerifySam();
+                Dispatcher.Invoke((Action)(() =>
+                {
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (s, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() => { Close(); }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
     }
 }

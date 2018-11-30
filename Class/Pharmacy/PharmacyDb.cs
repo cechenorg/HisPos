@@ -148,11 +148,10 @@ namespace His_Pos.Class.Pharmacy
             return int.Parse(t.Rows[0][0].ToString());
         }
         internal static Pharmacy GetCurrentPharmacy() {
-            
             var dd = new DbConnection(Settings.Default.SQL_global);
             var table = dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetCurrentPharmacy]");
             DataRow row = table.Rows[0];
-            Pharmacy pharmacy = new Pharmacy(row["CURPHA_ID"].ToString(), row["CURPHA_NAME"].ToString(), row["CURPHA_ADDR"].ToString(), row["CURPHA_TEL"].ToString()); 
+            Pharmacy pharmacy = new Pharmacy(row["CURPHA_ID"].ToString(), row["CURPHA_NAME"].ToString(), row["CURPHA_ADDR"].ToString(), row["CURPHA_TEL"].ToString(), row["CURPHA_READERCOM"].ToString(), row["CURPHA_VPN"].ToString(), row["CURPHA_VPN"].ToString()); 
             return pharmacy;
         } 
     }
