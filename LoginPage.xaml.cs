@@ -120,7 +120,7 @@ namespace His_Pos
             {
                 try
                 {
-                    CheckDBVersion();
+                    //CheckDBVersion();
                 }
                 catch (Exception ex)
                 {
@@ -143,7 +143,7 @@ namespace His_Pos
         private void CheckDBVersion()
         {
             string versionId = FunctionDb.GetSystemVersionId();
-            if (!versionId.Equals(Assembly.GetExecutingAssembly().GetName().Version))
+            if (!versionId.Equals(Assembly.GetExecutingAssembly().GetName().Version.ToString()))
             {
                 Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
                 Match match = reg.Match(Properties.Settings.Default.SQL_local);
@@ -152,9 +152,10 @@ namespace His_Pos
                 System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
                 startInfo.FileName = "SQLPackage\\sqlpackage.exe";
-                startInfo.Arguments = @"/a:Publish /sf:""SQLPackage\ServerDb.dacpac"" /tsn:" + match.Groups[1].Value + @" /tdn:HIS_POS_DB /pr:""C:\Program Files\HISPOS\ServerDb.publish.xml""";
+                startInfo.Arguments = @"/a:Publish /sf:""SQLPackage\\ServerDb.dacpac"" /tsn:" + match.Groups[1].Value + @" /tdn:HIS_POS_DB /pr:""C:\Program Files\HISPOS\ServerDb.publish.xml""";
                 process.StartInfo = startInfo;
                 process.Start();
+                process.WaitForExit();
 
                 FunctionDb.UpdateSystemVersionId();
             }
