@@ -1199,6 +1199,7 @@
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
     </None>
     <None Include="ReaderCFG.ini" />
+    <None Include="SQLPackage\ServerDb.dacpac" />
     <None Include="SQLPackage\sqlpackage.exe.config" />
   </ItemGroup>
   <ItemGroup>

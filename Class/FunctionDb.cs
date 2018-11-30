@@ -4,6 +4,7 @@ using His_Pos.Service;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Reflection;
 using static His_Pos.Function;
 
 namespace His_Pos.Class
@@ -42,12 +43,21 @@ namespace His_Pos.Class
 
         internal static string GetSystemVersionId()
         {
-            throw new NotImplementedException();
+            var dd = new DbConnection(Settings.Default.SQL_local);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetSystemVersion]");
+
+            return table.Rows[0]["VERSION"].ToString();
         }
 
         internal static void UpdateSystemVersionId()
         {
-            throw new NotImplementedException();
+            var dd = new DbConnection(Settings.Default.SQL_local);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("VER", Assembly.GetExecutingAssembly().GetName().Version.ToString()));
+
+            dd.ExecuteProc("[HIS_POS_DB].[dbo].[UpdateSystemVersion]", parameters);
         }
     }
   

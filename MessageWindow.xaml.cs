@@ -30,7 +30,7 @@ namespace His_Pos
                     Icon.Source = new BitmapImage(new Uri(@"..\Images\Error.png", UriKind.Relative));
                     break;
             }
-            Message.Content = message;
+            Message.Text = message;
             if(buttonFocus)
                 OkButton.Focus();
         }
@@ -38,15 +38,6 @@ namespace His_Pos
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
-
-        public void SetLabelFontSize(double size)
-        {
-            Message.FontSize = size;
-        }
-        public void SetLabelContentAlignment(HorizontalAlignment alignment)
-        {
-            Message.HorizontalContentAlignment = alignment;
         }
 
         private void Grid_PreviewKeyDown(object sender, KeyEventArgs e)

@@ -137,17 +137,19 @@ namespace His_Pos
             string versionId = FunctionDb.GetSystemVersionId();
             if (!versionId.Equals(Assembly.GetExecutingAssembly().GetName().Version))
             {
+                Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
+                Match match = reg.Match(Properties.Settings.Default.SQL_local);
+                
                 System.Diagnostics.Process process = new System.Diagnostics.Process();
                 System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                startInfo.FileName = Directory.GetCurrentDirectory() + "\\..\\..\\sqlpackage.exe";
-                startInfo.Arguments = @"/a:Publish /sf:""" + @"ServerDb.dacpac"" /tsn:" + Properties.Settings.Default.SQL_local + @" /tdn:HIS_POS_DB /pr:""" + @"ServerDb.publish.xml""";
+                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                startInfo.FileName = Directory.GetCurrentDirectory() + "\\..\\..\\SQLPackage\\sqlpackage.exe";
+                startInfo.Arguments = @"/a:Publish /sf:""" + Directory.GetCurrentDirectory() + @"\..\..\SQLPackage\ServerDb.dacpac"" /tsn:" + match.Groups[1].Value + @" /tdn:HIS_POS_DB /pr:""C:\Program Files\HISPOS\ServerDb.publish.xml""";
                 process.StartInfo = startInfo;
                 process.Start();
 
                 FunctionDb.UpdateSystemVersionId();
             }
-
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
