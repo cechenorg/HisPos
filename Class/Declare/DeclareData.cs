@@ -284,7 +284,7 @@ namespace His_Pos.Class.Declare
                     D3 = c.IcNumber,
                     D5 = t.PaymentCategory.Id,
                     D6 = DateTimeExtensions.ConvertToTaiwanCalender(c.Birthday, false),
-                    D7 = CheckXmlEmptyValue(ic.MedicalNumber),
+                    D7 = CheckXmlEmptyValue(ic.MedicalNumber.PadLeft(4,'0')),
                     D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id),
                     D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id),
                     D13 = CheckXmlEmptyValue(m.Hospital.Division.Id),
@@ -325,7 +325,6 @@ namespace His_Pos.Class.Declare
                 {
                     m.Hospital.Doctor.IcNumber = m.Hospital.Id;
                 }
-
                 DeclareXml.Dhead.D24 = m.Hospital.Doctor.IcNumber;
                 DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode is null? string.Empty: t.MedicalInfo.SpecialCode.Id;
             }
