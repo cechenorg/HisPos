@@ -12,7 +12,7 @@ namespace His_Pos.Class.MedBagLocation
         internal static ObservableCollection<MedBagLocation> ObservableGetLocationData(string medBagId)
         {
             var medBagLocations = new ObservableCollection<MedBagLocation>();
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>
             {
                 new SqlParameter("MEDBAG_ID", medBagId),

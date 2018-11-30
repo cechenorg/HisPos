@@ -45,8 +45,7 @@ namespace His_Pos.SystemSettings.SettingControl
 
         enum ConnectionTarget
         {
-            LOCAL = 1,
-            GLOBAL = 2
+            LOCAL = 1
         }
 
         private ConnectionData localConnection;
@@ -60,21 +59,9 @@ namespace His_Pos.SystemSettings.SettingControl
             }
         }
 
-        private ConnectionData globalConnection;
-        public ConnectionData GlobalConnection
-        {
-            get { return globalConnection; }
-            set
-            {
-                globalConnection = value;
-                NotifyPropertyChanged("GlobalConnection");
-            }
-        }
-
         public bool IsDataChanged { get; set; } = false;
 
         BackgroundWorker LocalConnectionWorker = new BackgroundWorker();
-        BackgroundWorker GlobalConnectionWorker = new BackgroundWorker();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -94,7 +81,6 @@ namespace His_Pos.SystemSettings.SettingControl
             InitConnectioData();
 
             CheckConnection(ConnectionTarget.LOCAL);
-            CheckConnection(ConnectionTarget.GLOBAL);
         }
 
         #region ----- Init Data -----
@@ -108,13 +94,7 @@ namespace His_Pos.SystemSettings.SettingControl
             LocalConnection = new ConnectionData(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value);
             LocalPasswordBox.Password = LocalConnection.Password;
 
-            string globalConnection = Properties.Settings.Default.SQL_global;
-            match = reg.Match(globalConnection);
-            GlobalConnection = new ConnectionData(match.Groups[1].Value, match.Groups[2].Value, match.Groups[3].Value, match.Groups[4].Value);
-            GlobalPasswordBox.Password = GlobalConnection.Password;
-
             LocalConnectionWorker.WorkerSupportsCancellation = true;
-            GlobalConnectionWorker.WorkerSupportsCancellation = true;
         }
 
         #endregion
@@ -171,10 +151,6 @@ namespace His_Pos.SystemSettings.SettingControl
                     connection = new DbConnection(LocalConnection.ToString());
                     currentWorker = LocalConnectionWorker;
                     break;
-                case ConnectionTarget.GLOBAL:
-                    connection = new DbConnection(GlobalConnection.ToString());
-                    currentWorker = GlobalConnectionWorker;
-                    break;
                 default:
                     return;
             }
@@ -215,9 +191,6 @@ namespace His_Pos.SystemSettings.SettingControl
                 case ConnectionTarget.LOCAL:
                     IPMatch = IPReg.Match(LocalConnection.IPAddr);
                     break;
-                case ConnectionTarget.GLOBAL:
-                    IPMatch = IPReg.Match(GlobalConnection.IPAddr);
-                    break;
                 default:
                     return false;
             }
@@ -245,14 +218,6 @@ namespace His_Pos.SystemSettings.SettingControl
 
                     localConnection.ConnectionPass = false;
                     break;
-                case ConnectionTarget.GLOBAL:
-                    if (GConnectingStack.Visibility == Visibility.Visible) return;
-                    GSuccessStack.Visibility = Visibility.Collapsed;
-                    GConnectingStack.Visibility = Visibility.Hidden;
-                    GErrorStack.Visibility = Visibility.Collapsed;
-
-                    globalConnection.ConnectionPass = false;
-                    break;
                 default:
                     return;
             }
@@ -266,11 +231,6 @@ namespace His_Pos.SystemSettings.SettingControl
                     LSuccessStack.Visibility = Visibility.Collapsed;
                     LConnectingStack.Visibility = Visibility.Visible;
                     LErrorStack.Visibility = Visibility.Collapsed;
-                    break;
-                case ConnectionTarget.GLOBAL:
-                    GSuccessStack.Visibility = Visibility.Collapsed;
-                    GConnectingStack.Visibility = Visibility.Visible;
-                    GErrorStack.Visibility = Visibility.Collapsed;
                     break;
             }
         }
@@ -295,24 +255,6 @@ namespace His_Pos.SystemSettings.SettingControl
                         LErrorStack.Visibility = Visibility.Visible;
 
                         localConnection.ConnectionPass = false;
-                    }
-                    break;
-                case ConnectionTarget.GLOBAL:
-                    if (connectionState)
-                    {
-                        GSuccessStack.Visibility = Visibility.Visible;
-                        GConnectingStack.Visibility = Visibility.Collapsed;
-                        GErrorStack.Visibility = Visibility.Collapsed;
-
-                        globalConnection.ConnectionPass = true;
-                    }
-                    else
-                    {
-                        GSuccessStack.Visibility = Visibility.Collapsed;
-                        GConnectingStack.Visibility = Visibility.Collapsed;
-                        GErrorStack.Visibility = Visibility.Visible;
-
-                        globalConnection.ConnectionPass = false;
                     }
                     break;
             }
@@ -375,9 +317,6 @@ namespace His_Pos.SystemSettings.SettingControl
                 case ConnectionTarget.LOCAL:
                     LocalConnection.Password = LocalPasswordBox.Password;
                     break;
-                case ConnectionTarget.GLOBAL:
-                    GlobalConnection.Password = GlobalPasswordBox.Password;
-                    break;
             }
 
             CheckConnection(connectionTarget, true);
@@ -393,16 +332,12 @@ namespace His_Pos.SystemSettings.SettingControl
             InitConnectioData();
 
             CheckConnection(ConnectionTarget.LOCAL);
-            CheckConnection(ConnectionTarget.GLOBAL);
 
             ClearDataChangedStatus();
         }
 
         public void ConfirmConnectionChange_Click(object sender, RoutedEventArgs e)
         {
-            GlobalConnection.Password = GlobalPasswordBox.Password;
-            Properties.Settings.Default.SQL_global = GlobalConnection.ToString();
-
             LocalConnection.Password = LocalPasswordBox.Password;
             Properties.Settings.Default.SQL_local = LocalConnection.ToString();
 

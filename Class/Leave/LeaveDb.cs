@@ -14,7 +14,7 @@ namespace His_Pos.Class.Leave
         {
             ObservableCollection<Leave> collection = new ObservableCollection<Leave>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[GetLeaveType]");
 
@@ -30,7 +30,7 @@ namespace His_Pos.Class.Leave
         {
             Collection<LeaveRecord> collection = new Collection<LeaveRecord>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("YEAR", year));
@@ -48,7 +48,7 @@ namespace His_Pos.Class.Leave
         
         internal static string AddNewLeave(string id, string leaveType, DateTime startDate, DateTime endDate, string note)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("EMP_ID", id));

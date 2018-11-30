@@ -13,7 +13,7 @@ namespace His_Pos.Class.Manufactory
    public class ManufactoryDb
     {
         public static DataTable GetProductByManId(string id) {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", id));
             return dd.ExecuteProc("[HIS_POS_DB].[GET].[MANBYID]", parameters); 
@@ -22,7 +22,7 @@ namespace His_Pos.Class.Manufactory
         {
             ObservableCollection<Manufactory> collection = new ObservableCollection<Manufactory>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetManufactory]");
 
             foreach (DataRow row in table.Rows)
@@ -34,7 +34,7 @@ namespace His_Pos.Class.Manufactory
         }
         internal static void UpdateProductManufactory(string productId, ManufactoryChanged manufactoryChanged)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", productId));
@@ -48,7 +48,7 @@ namespace His_Pos.Class.Manufactory
         {
             ObservableCollection<ManageManufactory> collection = new ObservableCollection<ManageManufactory>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[GetManageManufactory]");
 
             foreach (DataRow row in table.Rows)
@@ -74,7 +74,7 @@ namespace His_Pos.Class.Manufactory
         {
             ObservableCollection<ManufactoryPayOverview> collection = new ObservableCollection<ManufactoryPayOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", manId));
 
@@ -94,7 +94,7 @@ namespace His_Pos.Class.Manufactory
 
             collection.Add(new PurchasePrincipal("無"));
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", manId));
 
@@ -114,7 +114,7 @@ namespace His_Pos.Class.Manufactory
         {
             ObservableCollection<ProductDetailManufactory> manufactories = new ObservableCollection<ProductDetailManufactory>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -130,7 +130,7 @@ namespace His_Pos.Class.Manufactory
 
         internal static void AddNewOrderBasicSafe(StoreOrderProductType type, WareHouse wareHouse, Manufactory manufactory)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", (type == StoreOrderProductType.BASIC) ? "BASIC" : "SAFE"));
@@ -147,7 +147,7 @@ namespace His_Pos.Class.Manufactory
 
         internal static ManageManufactory AddNewManageManufactory()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ManufactoryManageView].[AddNewManageManufactory]");
 
@@ -156,7 +156,7 @@ namespace His_Pos.Class.Manufactory
 
         internal static void DeleteManageManufactory(string manId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAN_ID", manId));
@@ -166,7 +166,7 @@ namespace His_Pos.Class.Manufactory
 
         internal static void UpdateManageManufactory(ManageManufactory manufactory)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", manufactory.Id));

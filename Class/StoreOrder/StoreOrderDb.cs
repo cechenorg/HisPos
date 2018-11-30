@@ -24,7 +24,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<StoreOrder> StoreOrderOverviewCollection = new ObservableCollection<StoreOrder>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", type.ToString()));
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrder]", parameters);
@@ -38,7 +38,7 @@ namespace His_Pos.Class.StoreOrder
         }
         internal static void DeleteOrder(string Id)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", Id));
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[DeleteOrder]", parameters);
@@ -46,7 +46,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static StoreOrder AddReturnOrderByPurchace(string orderId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("OLD_ORDER_ID", orderId));
@@ -58,7 +58,7 @@ namespace His_Pos.Class.StoreOrder
         }
 
         internal static void PurchaseAndReturn(StoreOrder storeOrder) {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             foreach (var product in storeOrder.Products) {
                 parameters.Add(new SqlParameter("TYPE", storeOrder.Category.CategoryName.Substring(0, 1)));
@@ -73,7 +73,7 @@ namespace His_Pos.Class.StoreOrder
         {
             Collection<StoreOrderOverview> collection = new Collection<StoreOrderOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderOverview]");
 
@@ -89,7 +89,7 @@ namespace His_Pos.Class.StoreOrder
         {
             Collection<PurchaseReturnReportView.PurchaseReturnRecord> collection = new Collection<PurchaseReturnReportView.PurchaseReturnRecord>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SDATE", sDate));
@@ -106,7 +106,7 @@ namespace His_Pos.Class.StoreOrder
         }
 
         internal static void SaveOrderDetail(StoreOrder storeOrder) {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
             parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
@@ -211,7 +211,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static string SaveOrderDeclareData(string declareId, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> declareMedicines)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DEC_ID", declareId));
@@ -258,7 +258,7 @@ namespace His_Pos.Class.StoreOrder
         internal static void GetNewStoreOrderBySingde()
         {
             var sindgdeConnection = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
-            var localConnection = new DbConnection(Settings.Default.SQL_global);
+            var localConnection = new DbConnection(Settings.Default.SQL_local);
 
             DataTable dataTable = sindgdeConnection.MySqlQueryBySqlString($"call GetNewStoreOrderBySingde('{MainWindow.CurrentPharmacy.Id}')");
 
@@ -316,7 +316,7 @@ namespace His_Pos.Class.StoreOrder
         {
             Collection<ReturnControl.BatchNumOverview> collection = new Collection<ReturnControl.BatchNumOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -349,7 +349,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static string GetNewOrderId(string OrdEmpId, string wareId, string manId, string orderType)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDEMP_ID", OrdEmpId));
@@ -366,7 +366,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", ordId));
@@ -392,7 +392,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", ordId));
@@ -606,7 +606,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static void AddDailyOrder(StoreOrderCategory storeOrderCategory, List<IndexView.IndexView.ProductPurchaseList> declareMedicines)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDER_TYPE", (storeOrderCategory == StoreOrderCategory.PURCHASE)? "進" : "退"));

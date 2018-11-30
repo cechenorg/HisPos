@@ -14,13 +14,13 @@ namespace His_Pos.Class.Product
     {
         public static DataTable GetMedicineData()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             return dd.ExecuteProc("[HIS_POS_DB].[MainWindowView].[GetMedicine]");
         }
        
         public static InventoryMedicine GetMedDetail(string proId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
             InventoryMedicine med = null;
@@ -33,7 +33,7 @@ namespace His_Pos.Class.Product
 
         internal static DataTable GetInventoryMedicines()
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             return dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[GetInventoryMedicine]");
         }
 
@@ -41,7 +41,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<AbstractClass.Product> collection = new ObservableCollection<AbstractClass.Product>();
 
-           var dd = new DbConnection(Settings.Default.SQL_global);
+           var dd = new DbConnection(Settings.Default.SQL_local);
             
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetMedicinesData]");
 
@@ -60,7 +60,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<AbstractClass.Product> collection = new ObservableCollection<AbstractClass.Product>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAS_ID", decmasId));
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDeclareMedicineByMasId]", parameters);
@@ -80,7 +80,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<DeclareMedicine> collection = new ObservableCollection<DeclareMedicine>();
 
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[DeclareFileExportView].[GetDeclareFileMedicineData]");
 
@@ -133,7 +133,7 @@ namespace His_Pos.Class.Product
                 r["HISMEDTEM_EDATE"] = ParseMedicineSdateEdateStr(row.Col10.Text);
                 medicinesTable.Rows.Add(r);
             }
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>
             {
                 new SqlParameter("MEDICINE",medicinesTable)
@@ -181,7 +181,7 @@ namespace His_Pos.Class.Product
 
         internal static void UpdateInventoryMedicineData(InventoryMedicine inventoryMedicine)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", inventoryMedicine.Id));

@@ -15,7 +15,7 @@ namespace His_Pos.Class.MedBag
         internal static ObservableCollection<MedBag> ObservableGetMedBagData()
         {
             var medBags = new ObservableCollection<MedBag>();
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[MedBagManageView].[GetMedBagData]");
             foreach (DataRow row in table.Rows)
             {
@@ -26,7 +26,7 @@ namespace His_Pos.Class.MedBag
 
         internal static MedBag GetDefaultMedBagData(MedBagMode medBagMode)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>
             {
                 new SqlParameter("MEDBAG_MODE", medBagMode)
@@ -40,7 +40,7 @@ namespace His_Pos.Class.MedBag
         internal static void SaveMedBagData(MedBag medBag)
         {
             var locationDataTable = MedBagLocationDb.AddLocationData(medBag);
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>
             {
                 new SqlParameter("MEDBAG_ID", medBag.Id),
@@ -57,7 +57,7 @@ namespace His_Pos.Class.MedBag
 
         internal static void DeleteMedBagData(MedBag medBag)
         {
-            var dd = new DbConnection(Settings.Default.SQL_global);
+            var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>
             {
                 new SqlParameter("MEDBAG_ID", medBag.Id)
