@@ -238,7 +238,7 @@ namespace His_Pos
             var thread = new Thread(() =>
             {
                 Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                Res = HisApiBase.csSoftwareReset(0);
+                //Res = HisApiBase.csSoftwareReset(0);
                 Res = HisApiBase.csCloseCom();
                 if (Res == 0)
                 {
