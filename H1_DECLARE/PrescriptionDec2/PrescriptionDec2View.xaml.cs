@@ -582,8 +582,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case 3: //第一次慢箋
                     if (string.IsNullOrEmpty(_firstTimeDecMasId))
                         _firstTimeDecMasId = declareDb.InsertDeclareData(_currentDeclareData);
-                    var prescriptionAdjust = new YesNoMessageWindow("是否調劑處方?", "處方調劑確認");
-                    var isAdjust = (bool)prescriptionAdjust.ShowDialog();
+                    YesNoMessageWindow prescriptionAdjust;
+                    bool isAdjust = false;
+                    if (CurrentPrescription.Treatment.AdjustDate == DateTime.Now) {
+                         prescriptionAdjust = new YesNoMessageWindow("是否調劑處方?", "處方調劑確認");
+                         isAdjust = (bool)prescriptionAdjust.ShowDialog();
+                    }
 
                     if (IsSendToServer.IsChecked != null && (bool) IsSendToServer.IsChecked)
                     {
