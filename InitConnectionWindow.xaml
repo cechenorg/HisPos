@@ -7,10 +7,10 @@
         xmlns:settingControl="clr-namespace:His_Pos.SystemSettings.SettingControl"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         mc:Ignorable="d"
-        Title="初始化連線" Height="400" Width="620" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="初始化連線" Height="240" Width="620" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
-            <RowDefinition Height="320"/>
+            <RowDefinition Height="160"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <settingControl:DatabaseControl x:Name="DatabaseControl" Grid.Row="0"/>
