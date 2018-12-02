@@ -28,8 +28,10 @@ using His_Pos.Class.TreatmentCase;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.HisApi;
 using His_Pos.Resource;
+using His_Pos.Service;
 using His_Pos.SystemSettings;
 using His_Pos.ViewModel;
+using MaterialDesignThemes.Wpf;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
@@ -213,7 +215,10 @@ namespace His_Pos
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var d = new DeclareDb();
-            d.StartDailyUpload();
+            var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
+            var upload = (bool)dailyUploadConfirm.ShowDialog();
+            if(upload)
+                d.StartDailyUpload();
             ProductDb.UpdateDailyStockValue();
             DeclareDb declareDb = new DeclareDb();
             declareDb.SendUnSendCooperClinicDeclare();

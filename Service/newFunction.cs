@@ -393,7 +393,7 @@ namespace His_Pos.Service
             {
                 foreach (var m in medBagMedicines)
                 {
-                    rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReportSingle.rdlc";
+                    rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReportSingle.rdlc";
                     rptViewer.ProcessingMode = ProcessingMode.Local;
 
                     string treatmentDate =
@@ -465,7 +465,7 @@ namespace His_Pos.Service
                 var json = JsonConvert.SerializeObject(medBagMedicines);
                 var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
 
-                rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
+                rptViewer.LocalReport.ReportPath = @"RDLC\MedBagReport.rdlc";
                 rptViewer.ProcessingMode = ProcessingMode.Local;
 
                 string treatmentDate =
@@ -528,7 +528,7 @@ namespace His_Pos.Service
         public static void PrintReceipt(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint,int SelfCost ,int Pay,string from, PrescriptionDec2View decInstance = null, PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null) {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
-            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\HisReceipt.rdlc";
+            rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
             rptViewer.ProcessingMode = ProcessingMode.Local;
             var adjustDate =
                 DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.AdjustDate, true);

@@ -404,7 +404,7 @@ namespace His_Pos.H3_STOCKTAKING.StockTaking
             var recEmp = string.IsNullOrEmpty(TakingEmp.Text) ? MainWindow.CurrentUser.Name : TakingEmp.Text;
             parameters[0] = new ReportParameter("CurrentUser", recEmp);
             parameters[1] = new ReportParameter("ProductCount", TakingCollection.Count.ToString());
-            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\InventoryCheckSheet.rdlc";
+            rptViewer.LocalReport.ReportPath = @"RDLC\InventoryCheckSheet.rdlc";
             rptViewer.LocalReport.SetParameters(parameters);
             rptViewer.LocalReport.Refresh();
             rptViewer.ProcessingMode = ProcessingMode.Local;

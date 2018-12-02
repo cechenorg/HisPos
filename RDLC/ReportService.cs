@@ -23,7 +23,7 @@ namespace His_Pos.RDLC
 {
     public static class ReportService
     {
-        public const string ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
+        public const string ReportPath = @"RDLC\MedBagReport.rdlc";
         public static Report CreatReport(MedBag selectedMedBag,Prescription p, int medicineIndex)
         {
             var medBagReport = new Report
@@ -147,7 +147,7 @@ namespace His_Pos.RDLC
                              "</DeviceInfo>";
             deviceInfo = string.Format(deviceInfo, selectedMedBag.BagWidth, selectedMedBag.BagHeight);
             var viewer = new ReportViewer { ProcessingMode = ProcessingMode.Local };
-            viewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
+            viewer.LocalReport.ReportPath = @"RDLC\MedBagReport.rdlc";
             var bytes = viewer.LocalReport.Render("PDF", deviceInfo:"");
 
             using (var fs = new FileStream("output"+ medicineIndex +".pdf", FileMode.Create))
@@ -275,7 +275,7 @@ namespace His_Pos.RDLC
         public static void Run(MedBag selectedMedBag)
         {
             LocalReport report = new LocalReport();
-            report.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
+            report.ReportPath = @"RDLC\MedBagReport.rdlc";
             Export(report, selectedMedBag);
             Print();
         }
