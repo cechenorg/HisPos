@@ -156,11 +156,20 @@ namespace His_Pos.IndexView
         }
 
         public void InitData() {
-            IsGetMed = false;
-            IsNoGetMed = false;
-            ProductListCollection = ProductDb.DailyPurchaseReturn();
-            DailyTakeChronicListCollection = ChronicDb.DailyTakeChronic();
-            DailtChronicPhoneCallCollection = ChronicDb.DailyChronicPhoneCall();
+            try
+            {
+                IsGetMed = false;
+                IsNoGetMed = false;
+                ProductListCollection = ProductDb.DailyPurchaseReturn();
+                DailyTakeChronicListCollection = ChronicDb.DailyTakeChronic();
+                DailtChronicPhoneCallCollection = ChronicDb.DailyChronicPhoneCall();
+            }
+            catch (Exception ex)
+            {
+                var m = new MessageWindow("InitData()", MessageType.ERROR, true);
+                m.ShowDialog();
+                return;
+            }
         }
 
         private void TransferToStoord_Click(object sender, RoutedEventArgs e) {

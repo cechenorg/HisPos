@@ -39,7 +39,7 @@
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
         <hisPos:NullTextBoxConverter x:Key="NullTextBoxConverter" />
     </Window.Resources>
-    <Viewbox Stretch="Fill">
+    <Viewbox Stretch="Fill" Name="PrescriptionViewBox">
         <Grid Width="1200" Height="595">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
@@ -518,8 +518,9 @@
                 <Label Name="Change" Content="{Binding DeclareTrade.Change}" Width="80" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 
                 <Label Name="Changed" Width="100" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Margin="30,0,0,0"/>
-                <Button Name="ButtonCancel" Width="120" Content="取消"  FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Margin="10,0,10,0" Click="ButtonCancel_Click"/>
-                <Button Name="ButtonImportXml" Width="120" Content="修改確定"  FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Click="ButtonImportXml_Click"/>
+                <Button Name="ButtonPrintMedBag" Width="95" Content="藥袋列印"  FontFamily="Segoe UI Semibold" FontSize="16" Background="RoyalBlue" BorderThickness="0" Margin="10,0,10,0" Click="ButtonPrintMedBag_Click" />
+                <Button Name="ButtonCancel" Width="65" Content="取消"  FontFamily="Segoe UI Semibold" FontSize="16" Background="DimGray" BorderThickness="0" Margin="10,0,10,0" Click="ButtonCancel_Click"/>
+                <Button Name="ButtonImportXml" Width="65" Content="修改"  FontFamily="Segoe UI Semibold" FontSize="16" Background="IndianRed" BorderThickness="0" Click="ButtonImportXml_Click"/>
             </StackPanel>
         </Grid>
     </Viewbox>

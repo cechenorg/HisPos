@@ -121,7 +121,6 @@ namespace His_Pos
             
             for (int i = 0; i < HisFeatures.Count; i++)
             {
-               
                     (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelText(HisFeatures[i].Title);
                     (HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem).SetLabelImage(HisFeatures[i].Icon);
                     SetFeaturesItem((HisMenu.FindName("HisFeature" + (i + 1)) as MenuListItem), HisFeatures[i].Functions);
@@ -238,26 +237,69 @@ namespace His_Pos
             var thread = new Thread(() =>
             {
                 Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                Res = HisApiBase.csSoftwareReset(0);
-                Res = HisApiBase.csCloseCom();
                 if (Res == 0)
                 {
-                    Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                    if (Res == 0)
+                    IsConnectionOpened = true;
+                    Res = HisApiBase.hisGetCardStatus(1);
+                    if (Res != 2)
                     {
-                        IsConnectionOpened = true;
+                        HisApiBase.csCloseCom();
+                        Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
                         Res = HisApiBase.csVerifySAMDC();
-                        Res = HisApiBase.csCloseCom();
                         if (Res == 0)
                         {
                             IsVerifySamDc = true;
-                            var status = 0;
-                            Res = HisApiBase.hpcGetHPCStatus(1, ref status);
-                            if (status == 1 && Res == 0)
+                            HisApiBase.csCloseCom();
+                            //var status = 0;
+                            //Res = HisApiBase.hpcGetHPCStatus(1, ref status);
+                            //if (status == 1 && Res == 0)
+                            //{
+                            //    Res = HisApiBase.hpcVerifyHPCPIN();
+                            //    if (Res == 0)
+                            //        IsHpcValid = true;
+                            //}
+                        }
+                    }
+                    else
+                    {
+                        HisApiBase.csCloseCom();
+                        IsVerifySamDc = true;
+                    }
+                }
+                else
+                {
+                    Res = HisApiBase.csSoftwareReset(0);
+                    Res = HisApiBase.csCloseCom();
+                    if (Res == 0)
+                    {
+                        Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
+                        if (Res == 0)
+                        {
+                            IsConnectionOpened = true;
+                            Res = HisApiBase.hisGetCardStatus(1);
+                            if (Res != 2)
                             {
-                                Res = HisApiBase.hpcVerifyHPCPIN();
+                                HisApiBase.csCloseCom();
+                                Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
+                                Res = HisApiBase.csVerifySAMDC();
                                 if (Res == 0)
-                                    IsHpcValid = true;
+                                {
+                                    IsVerifySamDc = true;
+                                    HisApiBase.csCloseCom();
+                                    //var status = 0;
+                                    //Res = HisApiBase.hpcGetHPCStatus(1, ref status);
+                                    //if (status == 1 && Res == 0)
+                                    //{
+                                    //    Res = HisApiBase.hpcVerifyHPCPIN();
+                                    //    if (Res == 0)
+                                    //        IsHpcValid = true;
+                                    //}
+                                }
+                            }
+                            else
+                            {
+                                HisApiBase.csCloseCom();
+                                IsVerifySamDc = true;
                             }
                         }
                     }

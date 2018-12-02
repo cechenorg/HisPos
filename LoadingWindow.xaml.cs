@@ -899,6 +899,52 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
+        public void PrintMedbagFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire, bool printReceipt) {
+            prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("藥袋列印中...");
+                Export(rptViewer.LocalReport, 22, 24);
+                ReportPrint(Properties.Settings.Default.MedBagPrinter);
+                Dispatcher.Invoke((Action)(() =>
+                {
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionInquire.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
+        public void PrintReceiptFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire) {
+            prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("收據列印中...");
+                Export(rptViewer.LocalReport, 25.4, 9.3);
+                ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+                Dispatcher.Invoke((Action)(() =>
+                {
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionInquire.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
+
         private static void CreatePdf(ReportViewer viewer,string fileName,double width,double height)
         {
             var deviceInfo = "<DeviceInfo>" +
@@ -931,63 +977,87 @@ namespace His_Pos
 
         private void Export(LocalReport report, double width, double height)
         {
-            string deviceInfo =
+            try
+            {
+                string deviceInfo =
                 @"<DeviceInfo>
-                <OutputFormat>EMF</OutputFormat>"+
+                <OutputFormat>EMF</OutputFormat>" +
                  "  <PageWidth>" + width + "cm</PageWidth>" +
                  "  <PageHeight>" + height + "cm</PageHeight>" +
                  "  <MarginTop>0cm</MarginTop>" +
                  "  <MarginLeft>0cm</MarginLeft>" +
                  "  <MarginRight>0cm</MarginRight>" +
                  "  <MarginBottom>0cm</MarginBottom>" +
-            "</DeviceInfo>";
-            Warning[] warnings;
-            m_streams = new List<Stream>();
-            report.Render("Image", deviceInfo, CreateStream, out warnings);
-            foreach (Stream stream in m_streams)
-                stream.Position = 0;
+                "</DeviceInfo>";
+                Warning[] warnings;
+                m_streams = new List<Stream>();
+                report.Render("Image", deviceInfo, CreateStream, out warnings);
+                foreach (Stream stream in m_streams)
+                    stream.Position = 0;
+            }
+            catch (Exception ex)
+            {
+                var m = new MessageWindow("Export()", MessageType.ERROR, true);
+                m.ShowDialog();
+                return;
+            }
         }
 
         private void ReportPrint(string printer)
         {
+            MessageWindow m;
             if (m_streams == null || m_streams.Count == 0)
-                throw new Exception("Error: no stream to print.");
-            PrintDocument printDoc = new PrintDocument();
-            printDoc.PrinterSettings.PrinterName = printer;
-            if (!printDoc.PrinterSettings.IsValid)
             {
-                throw new Exception("Error: cannot find printer.");
+                m = new MessageWindow("ReportPrint()_1", MessageType.ERROR,true);
+                m.ShowDialog();
+                return;
             }
-            else
+            try
             {
+                PrintDocument printDoc = new PrintDocument();
+                printDoc.PrinterSettings.PrinterName = printer;
                 printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintPage);
                 m_currentPageIndex = 0;
                 printDoc.Print();
             }
-
+            catch (Exception ex)
+            {
+                m = new MessageWindow("ReportPrint()_2", MessageType.ERROR, true);
+                m.ShowDialog();
+                return;
+            }
         }
 
         private void printDoc_PrintPage(object sender, PrintPageEventArgs ev)
         {
-            Metafile pageImage = new
-            Metafile(m_streams[m_currentPageIndex]);
+            try
+            {
+                Metafile pageImage = new
+                Metafile(m_streams[m_currentPageIndex]);
 
-            // Adjust rectangular area with printer margins.
-            Rectangle adjustedRect = new Rectangle(
-                ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
-                ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
-                ev.PageBounds.Width,
-                ev.PageBounds.Height);
+                // Adjust rectangular area with printer margins.
+                Rectangle adjustedRect = new Rectangle(
+                    ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
+                    ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
+                    ev.PageBounds.Width,
+                    ev.PageBounds.Height);
 
-            // Draw a white background for the report
-            ev.Graphics.FillRectangle(Brushes.White, adjustedRect);
+                // Draw a white background for the report
+                ev.Graphics.FillRectangle(Brushes.White, adjustedRect);
 
-            // Draw the report content
-            ev.Graphics.DrawImage(pageImage, adjustedRect);
+                // Draw the report content
+                ev.Graphics.DrawImage(pageImage, adjustedRect);
 
-            // Prepare for the next page. Make sure we haven't hit the end.
-            m_currentPageIndex++;
-            ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
+                // Prepare for the next page. Make sure we haven't hit the end.
+                m_currentPageIndex++;
+                ev.HasMorePages = (m_currentPageIndex < m_streams.Count);
+            }
+            catch (Exception ex)
+            {
+                var m = new MessageWindow("printDoc_PrintPage()", MessageType.ERROR, true);
+                m.ShowDialog();
+                return;
+            }
         }
 
         public void VerifyCardReaderStatus(MainWindow mainWindow)

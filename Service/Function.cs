@@ -238,18 +238,26 @@ namespace His_Pos
 
         public void DailyUpload(XDocument dailyUpload)
         {
-            var filePath = ExportXml(dailyUpload, "每日上傳");
-            var fileName = filePath + ".xml";
-            //var cs = new ConvertData();
-            //var fileNameArr = cs.StringToBytes(fileName, fileName.Length);
-            //var currentFile = Directory.GetFiles(filePath)[0];//每日上傳檔案
-            //var fileInfo = new FileInfo(currentFile);
-            //var fileSize = cs.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
-            //var element = dailyUpload.Root.Element("REC");
-            //var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
-            //var pBuffer = new byte[50];
-            //var iBufferLength = 50;
-            //HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+            try
+            {
+                var filePath = ExportXml(dailyUpload, "每日上傳");
+                var fileName = filePath + ".xml";
+                var cs = new ConvertData();
+                var fileNameArr = cs.StringToBytes(fileName, fileName.Length);
+                var fileInfo = new FileInfo(fileName);//每日上傳檔案
+                var fileSize = cs.StringToBytes(fileInfo.Length.ToString(), fileInfo.Length.ToString().Length);//檔案大小
+                var element = dailyUpload.Root.Element("REC");
+                var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
+                var pBuffer = new byte[50];
+                var iBufferLength = 50;
+                HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+            }
+            catch (Exception ex)
+            {
+                var m = new MessageWindow("DailyUpload()", MessageType.ERROR, true);
+                m.ShowDialog();
+                return;
+            }
         }
       
     }

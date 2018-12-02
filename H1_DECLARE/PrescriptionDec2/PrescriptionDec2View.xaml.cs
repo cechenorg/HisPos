@@ -646,11 +646,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m.ShowDialog();
             }
 
-            foreach (var medicalPerson in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
+            if(MainWindow.CurrentPharmacy.MedicalPersonnelCollection != null && MainWindow.CurrentPharmacy.MedicalPersonnelCollection.Count > 0)
             {
-                if (!medicalPerson.IcNumber.Equals(CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber)) continue;
-                medicalPerson.PrescriptionCount++;
-                break;
+                foreach (var medicalPerson in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
+                {
+                    if (!medicalPerson.IcNumber.Equals(CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber)) continue;
+                    medicalPerson.PrescriptionCount++;
+                    break;
+                }
             }
 
             if (!string.IsNullOrEmpty(_clinicDeclareId))
@@ -659,7 +662,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 WebApi.UpdateXmlStatus(_clinicDeclareId);
             }
 
-            PrintMedBag();
+            var medBagPrint = new YesNoMessageWindow("是否列印藥袋及收據", "列印確認");
+            var print = (bool)medBagPrint.ShowDialog();
+            if(print)
+                NewFunction.PrintMedBag(CurrentPrescription,_currentDeclareData,MedicinePoint,SelfCost,Pay,"登錄",Instance,null);
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
             IndexView.IndexView.Instance.InitData();
@@ -669,329 +675,169 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void LogInIcData()
         {
-            var cs = new ConvertData();
-            var icPrescripList = new List<IcPrescriptData>();
-            foreach (var med in CurrentPrescription.Medicines)
+            try
             {
-                if (!(med is DeclareMedicine)) continue;
-                if (!((DeclareMedicine) med).PaySelf)
+                var cs = new ConvertData();
+                var icPrescripList = new List<IcPrescriptData>();
+                foreach (var med in CurrentPrescription.Medicines)
                 {
-                    icPrescripList.Add(new IcPrescriptData((DeclareMedicine) med));
+                    if (!(med is DeclareMedicine)) continue;
+                    if (!((DeclareMedicine)med).PaySelf)
+                    {
+                        icPrescripList.Add(new IcPrescriptData((DeclareMedicine)med));
+                    }
+                }
+
+                var pPatientId = new byte[10];
+                var pPatientBitrhDay = new byte[10];
+                Array.Copy(BasicDataArr, 32, pPatientId, 0, 10);
+                Array.Copy(BasicDataArr, 42, pPatientBitrhDay, 0, 7);
+                var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
+                foreach (var icPrescript in icPrescripList)
+                {
+                    var pData = cs.StringToBytes(icPrescript.DataStr, 61);
+                    var pDataInput = pDateTime.Concat(pData).ToArray();
+                    var strLength = 40;
+                    var icData = new byte[40];
+                    var res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
+                        icData, ref strLength);
+                    if (res == 0)
+                        _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                    else
+                        break;
                 }
             }
-
-            var pPatientId = new byte[10];
-            var pPatientBitrhDay = new byte[10];
-            Array.Copy(BasicDataArr, 32, pPatientId, 0, 10);
-            Array.Copy(BasicDataArr, 42, pPatientBitrhDay, 0, 7);
-            var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
-            foreach (var icPrescript in icPrescripList)
+            catch (Exception ex)
             {
-                var pData = cs.StringToBytes(icPrescript.DataStr, 61);
-                var pDataInput = pDateTime.Concat(pData).ToArray();
-                var strLength = 40;
-                var icData = new byte[40];
-                var res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
-                    icData, ref strLength);
-                if (res == 0)
-                    _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
-                else
-                    break;
+                var m = new MessageWindow("LogInIcData()", MessageType.ERROR, true);
+                m.ShowDialog();
+                return;
             }
         }
 
         public void CreatIcUploadData()
         {
-            var medicalDatas = new List<MedicalData>();
-            var icData = new IcData(Seq, _currentPrescription, CusBasicData, _currentDeclareData);
-            var mainMessage = new MainMessage(icData);
-            var headerMessage = new Header {DataFormat = "1"};
-            var icRecord = new REC(headerMessage, mainMessage);
-
-            for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            try
             {
-                if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
-                    continue;
-                var medicalData = new MedicalData
+                var medicalDatas = new List<MedicalData>();
+                var icData = new IcData(Seq, _currentPrescription, CusBasicData, _currentDeclareData);
+                var mainMessage = new MainMessage(icData);
+                var headerMessage = new Header { DataFormat = "1" };
+                var icRecord = new REC(headerMessage, mainMessage);
+
+                for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
                 {
-                    MedicalOrderTreatDateTime = Seq.TreatDateTime,
-                    MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
-                    TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
-                    Usage = _currentDeclareData.DeclareDetails[i].Usage,
-                    Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
-                    TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
-                    PrescriptionSignature = _prescriptionSignatureList[i],
-                };
-                if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
-                    medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
-                switch (medicalData.MedicalOrderCategory)
-                {
-                    case "1":
-                    case "A":
-                        medicalData.PrescriptionDeliveryMark = "02";
-                        break;
-                    case "2":
-                    case "B":
-                        medicalData.PrescriptionDeliveryMark = "06";
-                        break;
-                    case "3":
-                    case "C":
-                    case "4":
-                    case "D":
-                    case "5":
-                    case "E":
-                        medicalData.PrescriptionDeliveryMark = "04";
-                        break;
+                    if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
+                        continue;
+                    var medicalData = new MedicalData
+                    {
+                        MedicalOrderTreatDateTime = Seq.TreatDateTime,
+                        MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
+                        TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
+                        Usage = _currentDeclareData.DeclareDetails[i].Usage,
+                        Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
+                        TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
+                        PrescriptionSignature = _prescriptionSignatureList[i],
+                    };
+                    if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
+                        medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
+                    switch (medicalData.MedicalOrderCategory)
+                    {
+                        case "1":
+                        case "A":
+                            medicalData.PrescriptionDeliveryMark = "02";
+                            break;
+                        case "2":
+                        case "B":
+                            medicalData.PrescriptionDeliveryMark = "06";
+                            break;
+                        case "3":
+                        case "C":
+                        case "4":
+                        case "D":
+                        case "5":
+                        case "E":
+                            medicalData.PrescriptionDeliveryMark = "04";
+                            break;
+                    }
+
+                    medicalDatas.Add(medicalData);
                 }
 
-                medicalDatas.Add(medicalData);
+                icRecord.MainMessage.MedicalMessageList = medicalDatas;
+                icRecord.SerializeObject();
+                var d = new DeclareDb();
+                d.InsertDailyUpload(icRecord.SerializeObject());
             }
-
-            icRecord.MainMessage.MedicalMessageList = medicalDatas;
-            icRecord.SerializeObject();
-            var d = new DeclareDb();
-            d.InsertDailyUpload(icRecord.SerializeObject());
+            catch (Exception ex)
+            {
+                var m = new MessageWindow("CreatIcUploadData()", MessageType.ERROR, true);
+                m.ShowDialog();
+                return;
+            }
         }
 
         //異常上傳
         public void CreatIcErrorUploadData(IcErrorCodeWindow.IcErrorCode errorCode)
         {
-            var medicalDatas = new List<MedicalData>();
-            if (icErrorWindow.SelectedItem == null) return;
-            var icData = new IcData(CurrentPrescription, errorCode, _currentDeclareData);
-            var mainMessage = new MainMessage(icData);
-            var headerMessage = new Header {DataFormat = "2"};
-            var icRecord = new REC(headerMessage, mainMessage);
-
-            for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            try
             {
-                if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
-                    continue;
-                var medicalData = new MedicalData
+                var medicalDatas = new List<MedicalData>();
+                if (icErrorWindow.SelectedItem == null) return;
+                var icData = new IcData(CurrentPrescription, errorCode, _currentDeclareData);
+                var mainMessage = new MainMessage(icData);
+                var headerMessage = new Header { DataFormat = "2" };
+                var icRecord = new REC(headerMessage, mainMessage);
+
+                for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
                 {
-                    MedicalOrderTreatDateTime = icData.TreatmentDateTime,
-                    MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
-                    TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
-                    Usage = _currentDeclareData.DeclareDetails[i].Usage,
-                    Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
-                    TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
-                };
-                if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
-                    medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
-                switch (medicalData.MedicalOrderCategory)
-                {
-                    case "1":
-                    case "A":
-                        medicalData.PrescriptionDeliveryMark = "02";
-                        break;
-                    case "2":
-                    case "B":
-                        medicalData.PrescriptionDeliveryMark = "06";
-                        break;
-                    case "3":
-                    case "C":
-                    case "4":
-                    case "D":
-                    case "5":
-                    case "E":
-                        medicalData.PrescriptionDeliveryMark = "04";
-                        break;
-                }
-
-                medicalDatas.Add(medicalData);
-            }
-
-            icRecord.MainMessage.MedicalMessageList = medicalDatas;
-            icRecord.SerializeObject();
-            var d = new DeclareDb();
-            d.InsertDailyUpload(icRecord.SerializeObject());
-        }
-
-        #endregion
-
-        #region 藥袋.收據列印
-
-        private void PrintMedBag()
-        {
-            var medBagResult = new YesNoMessageWindow("是否列印一藥一袋", "請選擇藥袋列印模式");
-            var singleMode = (bool) medBagResult.ShowDialog();
-            var receiptResult = new YesNoMessageWindow("是否列印收據", "列印收據");
-            var receiptPrint = (bool) receiptResult.ShowDialog();
-            var rptViewer = new ReportViewer();
-            rptViewer.LocalReport.DataSources.Clear();
-            var medBagMedicines = new ObservableCollection<MedBagMedicine>();
-            foreach (var m in CurrentPrescription.Medicines)
-            {
-                switch (m)
-                {
-                    case DeclareMedicine medicine:
-                        medBagMedicines.Add(new MedBagMedicine(medicine, singleMode));
-                        break;
-                    case PrescriptionOTC otc:
-                        medBagMedicines.Add(new MedBagMedicine(otc, singleMode));
-                        break;
-                }
-            }
-
-            if (singleMode)
-            {
-                foreach (var m in medBagMedicines)
-                {
-                    rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReportSingle.rdlc";
-                    rptViewer.ProcessingMode = ProcessingMode.Local;
-
-                    string treatmentDate =
-                        DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate, true);
-                    string treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
-                                              treatmentDate.Split('/')[2] + "日";
-                    var parameters = new List<ReportParameter>
+                    if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
+                        continue;
+                    var medicalData = new MedicalData
                     {
-                        new ReportParameter("PharmacyName_Id",
-                            MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
-                        new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
-                        new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
-                        new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
-                        new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
-                        new ReportParameter("PatientGender_Birthday",
-                            (CurrentPrescription.Customer.Gender ? "男" : "女") + "/" +
-                            DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
-                        new ReportParameter("TreatmentDate", treatmentDateChi),
-                        new ReportParameter("RecId", " "), //病歷號
-                        new ReportParameter("Division",
-                            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name),
-                        new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
-                        new ReportParameter("PaySelf", SelfCost.ToString()),
-                        new ReportParameter("ServicePoint", _currentDeclareData.MedicalServicePoint.ToString()),
-                        new ReportParameter("TotalPoint", _currentDeclareData.TotalPoint.ToString()),
-                        new ReportParameter("CopaymentPoint", _currentDeclareData.CopaymentPoint.ToString()),
-                        new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()),
-                        new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString()),
-                        new ReportParameter("MedicineId", m.Id),
-                        new ReportParameter("MedicineName", m.Name),
-                        new ReportParameter("MedicineChineseName", m.ChiName),
-                        new ReportParameter("Ingredient", m.Ingredient),
-                        new ReportParameter("Indication", m.Indication),
-                        new ReportParameter("SideEffect", m.SideEffect),
-                        new ReportParameter("Note", m.Note),
-                        new ReportParameter("Usage", m.Usage),
-                        new ReportParameter("MedicineDay", m.MedicineDays),
-                        new ReportParameter("Amount", m.Total),
-                        new ReportParameter("Form", m.Form)
+                        MedicalOrderTreatDateTime = icData.TreatmentDateTime,
+                        MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
+                        TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
+                        Usage = _currentDeclareData.DeclareDetails[i].Usage,
+                        Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
+                        TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
                     };
-                    rptViewer.LocalReport.SetParameters(parameters);
-                    rptViewer.LocalReport.DataSources.Clear();
-                    rptViewer.LocalReport.Refresh();
-                    var loadingWindow = new LoadingWindow();
-                    loadingWindow.Show();
-                    loadingWindow.PrintMedbag(rptViewer, Instance, receiptPrint);
-                }
-            }
-            else
-            {
-                foreach (var m in medBagMedicines.GroupBy(info => info.Usage)
-                    .Select(group => new {UsageName = group.Key, count = group.Count()})
-                    .OrderBy(x => x.UsageName))
-                {
-                    var i = 1;
-                    foreach (var med in medBagMedicines)
+                    if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
+                        medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
+                    switch (medicalData.MedicalOrderCategory)
                     {
-                        if (!med.Usage.Equals(m.UsageName)) continue;
-                        med.MedNo = i.ToString();
-                        i++;
+                        case "1":
+                        case "A":
+                            medicalData.PrescriptionDeliveryMark = "02";
+                            break;
+                        case "2":
+                        case "B":
+                            medicalData.PrescriptionDeliveryMark = "06";
+                            break;
+                        case "3":
+                        case "C":
+                        case "4":
+                        case "D":
+                        case "5":
+                        case "E":
+                            medicalData.PrescriptionDeliveryMark = "04";
+                            break;
                     }
+
+                    medicalDatas.Add(medicalData);
                 }
 
-                var json = JsonConvert.SerializeObject(medBagMedicines);
-                var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
-
-                rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
-                rptViewer.ProcessingMode = ProcessingMode.Local;
-
-                string treatmentDate =
-                    DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate, true);
-                string treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
-                                          treatmentDate.Split('/')[2] + "日";
-                var parameters = new List<ReportParameter>
-                {
-                    new ReportParameter("PharmacyName_Id",
-                        MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
-                    new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
-                    new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
-                    new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
-                    new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
-                    new ReportParameter("PatientGender_Birthday",
-                        (CurrentPrescription.Customer.Gender ? "男" : "女") + "/" +
-                        DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
-                    new ReportParameter("TreatmentDate", treatmentDateChi),
-                    new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
-                    new ReportParameter("PaySelf", SelfCost.ToString()),
-                    new ReportParameter("ServicePoint", _currentDeclareData.MedicalServicePoint.ToString()),
-                    new ReportParameter("TotalPoint", _currentDeclareData.TotalPoint.ToString()),
-                    new ReportParameter("CopaymentPoint", _currentDeclareData.CopaymentPoint.ToString()),
-                    new ReportParameter("HcPoint", _currentDeclareData.DeclarePoint.ToString()),
-                    new ReportParameter("MedicinePoint", _currentDeclareData.CopaymentPoint.ToString()),
-                    new ReportParameter("Division", CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name)
-                };
-                rptViewer.LocalReport.SetParameters(parameters);
-                rptViewer.LocalReport.DataSources.Clear();
-                var rd = new ReportDataSource("DataSet1", dataTable);
-                rptViewer.LocalReport.DataSources.Add(rd);
-                rptViewer.LocalReport.Refresh();
-                var loadingWindow = new LoadingWindow();
-                loadingWindow.PrintMedbag(rptViewer, Instance, receiptPrint);
-                loadingWindow.Show();
+                icRecord.MainMessage.MedicalMessageList = medicalDatas;
+                icRecord.SerializeObject();
+                var d = new DeclareDb();
+                d.InsertDailyUpload(icRecord.SerializeObject());
             }
-            if(receiptPrint)
-                PrintReceipt();
-            //var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
-            //File.WriteAllText(ReportService.ReportPath, string.Empty);
-            //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
-            //for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
-            //{
-            //    ReportService.CreatePdf(defaultMedBag,i);
-            //}
-        }
-
-        public void PrintReceipt()
-        {
-            var rptViewer = new ReportViewer();
-            rptViewer.LocalReport.DataSources.Clear();
-            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\HisReceipt.rdlc";
-            rptViewer.ProcessingMode = ProcessingMode.Local;
-            var adjustDate =
-                DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.AdjustDate, true);
-            var doctor =
-                CurrentPrescription.Treatment.MedicalInfo.Hospital.Id.Equals(CurrentPrescription.Treatment.MedicalInfo
-                    .Hospital.Doctor.IcNumber)
-                    ? CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.Name
-                    : string.Empty;
-            var parameters = new List<ReportParameter>
+            catch (Exception ex)
             {
-                new ReportParameter("Pharmacy", MainWindow.CurrentPharmacy.Name),
-                new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
-                new ReportParameter("Gender", CurrentPrescription.Customer.IcNumber[1].Equals('1') ? "男" : "女"),
-                new ReportParameter("Birthday",
-                    DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
-                new ReportParameter("AdjustDate", adjustDate),
-                new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
-                new ReportParameter("Doctor", doctor), //病歷號
-                new ReportParameter("MedicalNumber", CurrentPrescription.Customer.IcCard.MedicalNumber),
-                new ReportParameter("MedicineCost", MedicinePoint.ToString(CultureInfo.InvariantCulture)),
-                new ReportParameter("MedicalServiceCost", _currentDeclareData.MedicalServicePoint.ToString()),
-                new ReportParameter("TotalMedicalCost",_currentDeclareData.DeclarePoint.ToString()),
-                new ReportParameter("CopaymentCost", _currentDeclareData.CopaymentPoint.ToString()),
-                new ReportParameter("HcPay", _currentDeclareData.DeclarePoint.ToString()),
-                new ReportParameter("SelfCost", SelfCost.ToString()),
-                new ReportParameter("ActualReceive", Pay.ToString()),
-                new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(Pay))
-            };
-            rptViewer.LocalReport.SetParameters(parameters);
-            rptViewer.LocalReport.DataSources.Clear();
-            rptViewer.LocalReport.Refresh();
-            var loadingWindow = new LoadingWindow();
-            loadingWindow.PrintReceipt(rptViewer, Instance);
-            loadingWindow.Show();
-            
+                var m = new MessageWindow("CreatIcErrorUploadData()", MessageType.ERROR, true);
+                m.ShowDialog();
+                return;
+            }
         }
 
         #endregion
@@ -2237,7 +2083,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else
             {
                 SetCardStatusContent("讀卡機逾時");
-                ShowCustomerSelectionWindow(new CustomerSelectWindow(string.Empty, 0));
             }
         }
 

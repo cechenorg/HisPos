@@ -22,7 +22,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Pharmacy</rd:DefaultName>
-            <Left>9.2941cm</Left>
+            <Top>0.3cm</Top>
+            <Left>9.27125cm</Left>
             <Height>0.6cm</Height>
             <Width>4.02361cm</Width>
             <Style>
@@ -47,8 +48,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>0.85cm</Top>
-            <Left>2.25cm</Left>
+            <Top>1.15cm</Top>
+            <Left>2.22715cm</Left>
             <Height>0.6cm</Height>
             <Width>1.4cm</Width>
             <ZIndex>1</ZIndex>
@@ -74,8 +75,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>0.85cm</Top>
-            <Left>3.65cm</Left>
+            <Top>1.15cm</Top>
+            <Left>3.62715cm</Left>
             <Height>0.6cm</Height>
             <Width>2.62361cm</Width>
             <ZIndex>2</ZIndex>
@@ -101,8 +102,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>0.85cm</Top>
-            <Left>6.45cm</Left>
+            <Top>1.15cm</Top>
+            <Left>6.42715cm</Left>
             <Height>0.6cm</Height>
             <Width>1.2cm</Width>
             <ZIndex>3</ZIndex>
@@ -128,8 +129,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>0.85cm</Top>
-            <Left>7.65cm</Left>
+            <Top>1.15cm</Top>
+            <Left>7.62715cm</Left>
             <Height>0.6cm</Height>
             <Width>0.64792cm</Width>
             <ZIndex>4</ZIndex>
@@ -155,8 +156,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>0.85cm</Top>
-            <Left>8.45cm</Left>
+            <Top>1.15cm</Top>
+            <Left>8.42715cm</Left>
             <Height>0.6cm</Height>
             <Width>2.1825cm</Width>
             <ZIndex>5</ZIndex>
@@ -182,8 +183,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>0.85cm</Top>
-            <Left>10.6325cm</Left>
+            <Top>1.1cm</Top>
+            <Left>10.60965cm</Left>
             <Height>0.6cm</Height>
             <Width>2.68521cm</Width>
             <ZIndex>6</ZIndex>
@@ -208,8 +209,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>1.91363cm</Top>
-            <Left>2.1cm</Left>
+            <Top>2.21363cm</Top>
+            <Left>2.07715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.95cm</Width>
             <ZIndex>7</ZIndex>
@@ -218,8 +219,8 @@
             </Style>
           </Textbox>
           <Line Name="Line1">
-            <Top>2.45cm</Top>
-            <Left>2.1cm</Left>
+            <Top>2.75cm</Top>
+            <Left>2.07715cm</Left>
             <Height>0cm</Height>
             <Width>11.36772cm</Width>
             <ZIndex>8</ZIndex>
@@ -245,8 +246,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>1.91363cm</Top>
-            <Left>4.55cm</Left>
+            <Top>2.21363cm</Top>
+            <Left>4.52715cm</Left>
             <Height>0.5cm</Height>
             <Width>2.84958cm</Width>
             <ZIndex>9</ZIndex>
@@ -270,8 +271,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>1.91363cm</Top>
-            <Left>8.32437cm</Left>
+            <Top>2.21363cm</Top>
+            <Left>8.30152cm</Left>
             <Height>0.5cm</Height>
             <Width>1.95cm</Width>
             <ZIndex>10</ZIndex>
@@ -295,8 +296,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>1.91363cm</Top>
-            <Left>10.75cm</Left>
+            <Top>2.21363cm</Top>
+            <Left>10.72715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.95cm</Width>
             <ZIndex>11</ZIndex>
@@ -320,9 +321,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.5cm</Top>
-            <Left>2.1cm</Left>
-            <Height>0.46771cm</Height>
+            <Top>2.8cm</Top>
+            <Left>2.07715cm</Left>
+            <Height>0.57361cm</Height>
             <Width>2.45cm</Width>
             <ZIndex>12</ZIndex>
             <Style>
@@ -345,9 +346,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.5cm</Top>
-            <Left>4.55cm</Left>
-            <Height>0.44cm</Height>
+            <Top>2.8cm</Top>
+            <Left>4.52715cm</Left>
+            <Height>0.48cm</Height>
             <Width>3.7cm</Width>
             <ZIndex>13</ZIndex>
             <Style>
@@ -370,9 +371,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.52056cm</Top>
-            <Left>8.25cm</Left>
-            <Height>0.46771cm</Height>
+            <Top>2.82056cm</Top>
+            <Left>8.22715cm</Left>
+            <Height>0.55305cm</Height>
             <Width>2.48cm</Width>
             <ZIndex>14</ZIndex>
             <Style>
@@ -395,9 +396,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.52056cm</Top>
-            <Left>10.76528cm</Left>
-            <Height>0.46771cm</Height>
+            <Top>2.82056cm</Top>
+            <Left>10.74243cm</Left>
+            <Height>0.55305cm</Height>
             <Width>1.96751cm</Width>
             <ZIndex>15</ZIndex>
             <Style>
@@ -420,8 +421,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.3cm</Top>
-            <Left>2.1cm</Left>
+            <Top>3.81472cm</Top>
+            <Left>2.07715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.36521cm</Width>
             <ZIndex>16</ZIndex>
@@ -447,8 +448,8 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>3cm</Top>
-            <Left>4.4cm</Left>
+            <Top>3.51472cm</Top>
+            <Left>4.37715cm</Left>
             <Height>0.41167cm</Height>
             <Width>0.80667cm</Width>
             <ZIndex>17</ZIndex>
@@ -475,8 +476,8 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>3.41167cm</Top>
-            <Left>4.2cm</Left>
+            <Top>3.92639cm</Top>
+            <Left>4.17715cm</Left>
             <Height>0.38833cm</Height>
             <Width>1.23cm</Width>
             <ZIndex>18</ZIndex>
@@ -501,8 +502,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.3cm</Top>
-            <Left>5.6cm</Left>
+            <Top>3.81472cm</Top>
+            <Left>5.57715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.82944cm</Width>
             <ZIndex>19</ZIndex>
@@ -526,8 +527,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.3cm</Top>
-            <Left>7.5cm</Left>
+            <Top>3.81472cm</Top>
+            <Left>7.47715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.7409cm</Width>
             <ZIndex>20</ZIndex>
@@ -551,8 +552,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.3cm</Top>
-            <Left>9.4cm</Left>
+            <Top>3.81472cm</Top>
+            <Left>9.37715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.76375cm</Width>
             <ZIndex>21</ZIndex>
@@ -576,8 +577,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.3cm</Top>
-            <Left>11.4cm</Left>
+            <Top>3.81472cm</Top>
+            <Left>11.37715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.36521cm</Width>
             <ZIndex>22</ZIndex>
@@ -586,8 +587,8 @@
             </Style>
           </Textbox>
           <Line Name="Line2">
-            <Top>3.83528cm</Top>
-            <Left>2.1cm</Left>
+            <Top>4.35cm</Top>
+            <Left>2.07715cm</Left>
             <Height>0cm</Height>
             <Width>10.66521cm</Width>
             <ZIndex>23</ZIndex>
@@ -613,8 +614,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>4.05cm</Top>
-            <Left>2.1cm</Left>
+            <Top>4.56472cm</Top>
+            <Left>2.07715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.36521cm</Width>
             <ZIndex>24</ZIndex>
@@ -640,8 +641,8 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>4.05cm</Top>
-            <Left>4.2cm</Left>
+            <Top>4.56472cm</Top>
+            <Left>4.17715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.23cm</Width>
             <ZIndex>25</ZIndex>
@@ -668,8 +669,8 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>4.05cm</Top>
-            <Left>5.6cm</Left>
+            <Top>4.56472cm</Top>
+            <Left>5.57715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.82944cm</Width>
             <ZIndex>26</ZIndex>
@@ -696,8 +697,8 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>4.05cm</Top>
-            <Left>7.5cm</Left>
+            <Top>4.56472cm</Top>
+            <Left>7.47715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.7409cm</Width>
             <ZIndex>27</ZIndex>
@@ -724,8 +725,8 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>4.05cm</Top>
-            <Left>9.42285cm</Left>
+            <Top>4.56472cm</Top>
+            <Left>9.4cm</Left>
             <Height>0.5cm</Height>
             <Width>1.7409cm</Width>
             <ZIndex>28</ZIndex>
@@ -752,8 +753,8 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>4.05cm</Top>
-            <Left>11.4cm</Left>
+            <Top>4.56472cm</Top>
+            <Left>11.37715cm</Left>
             <Height>0.5cm</Height>
             <Width>1.36521cm</Width>
             <ZIndex>29</ZIndex>
@@ -778,8 +779,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>4.95cm</Top>
-            <Left>2.37676cm</Left>
+            <Top>5.46472cm</Top>
+            <Left>2.35391cm</Left>
             <Height>0.5cm</Height>
             <Width>1.08845cm</Width>
             <ZIndex>30</ZIndex>
@@ -803,8 +804,8 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>4.95cm</Top>
-            <Left>3.46521cm</Left>
+            <Top>5.46472cm</Top>
+            <Left>3.44236cm</Left>
             <Height>0.5cm</Height>
             <Width>1.332cm</Width>
             <ZIndex>31</ZIndex>
@@ -846,8 +847,8 @@
               </Textbox>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
-            <Top>4.95cm</Top>
-            <Left>5.5cm</Left>
+            <Top>5.46472cm</Top>
+            <Left>5.47715cm</Left>
             <Height>0.5cm</Height>
             <Width>5.91885cm</Width>
             <ZIndex>32</ZIndex>
@@ -870,54 +871,6 @@
               </RightBorder>
             </Style>
           </Rectangle>
-          <Rectangle Name="Rectangle3">
-            <ReportItems>
-              <Textbox Name="Textbox37">
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>※此明細表茲證明該病患至本藥局繳費明細，未加蓋收訖章者無效。</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style />
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox37</rd:DefaultName>
-                <Left>0.08cm</Left>
-                <Height>0.75535cm</Height>
-                <Width>10.328cm</Width>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <PaddingLeft>2pt</PaddingLeft>
-                  <PaddingRight>2pt</PaddingRight>
-                  <PaddingTop>2pt</PaddingTop>
-                  <PaddingBottom>2pt</PaddingBottom>
-                </Style>
-              </Textbox>
-            </ReportItems>
-            <KeepTogether>true</KeepTogether>
-            <Top>6.4cm</Top>
-            <Left>2.37676cm</Left>
-            <Height>0.75535cm</Height>
-            <Width>10.408cm</Width>
-            <ZIndex>33</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <BackgroundImage>
-                <Source>Embedded</Source>
-                <Value>roundedRectangle213</Value>
-              </BackgroundImage>
-            </Style>
-          </Rectangle>
           <Textbox Name="PharmacyName">
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
@@ -936,14 +889,46 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Left>2.25cm</Left>
+            <Top>0.3cm</Top>
+            <Left>2.22715cm</Left>
             <Height>0.6cm</Height>
             <Width>6.9909cm</Width>
-            <ZIndex>34</ZIndex>
+            <ZIndex>33</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox37">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>※此明細表茲證明該病患至本藥局繳費明細，未加蓋收訖章者無效。</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox37</rd:DefaultName>
+            <Top>6.3cm</Top>
+            <Left>2.37676cm</Left>
+            <Height>0.6cm</Height>
+            <Width>11.01096cm</Width>
+            <ZIndex>34</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
         </ReportItems>

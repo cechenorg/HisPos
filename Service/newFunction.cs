@@ -1,12 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using His_Pos.Class;
+using His_Pos.Class.Declare;
+using His_Pos.Class.Product;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 using Microsoft.International.Formatters;
+using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
 using PrintDialog = System.Windows.Controls.PrintDialog;
 
@@ -357,5 +364,214 @@ namespace His_Pos.Service
             }
             return false;
         }
+
+        #region 藥袋.收據列印
+
+        public static void PrintMedBag(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint, int SelfCost,int Pay, string from, PrescriptionDec2View decInstance = null, PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null) {
+
+            var medBagResult = new YesNoMessageWindow("是否列印一藥一袋", "請選擇藥袋列印模式");
+            var singleMode = (bool)medBagResult.ShowDialog();
+            var receiptResult = new YesNoMessageWindow("是否列印收據", "列印收據");
+            var receiptPrint = (bool)receiptResult.ShowDialog();
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            var medBagMedicines = new ObservableCollection<MedBagMedicine>();
+            foreach (var m in CurrentPrescription.Medicines)
+            {
+                switch (m)
+                {
+                    case DeclareMedicine medicine:
+                        medBagMedicines.Add(new MedBagMedicine(medicine, singleMode));
+                        break;
+                    case PrescriptionOTC otc:
+                        medBagMedicines.Add(new MedBagMedicine(otc, singleMode));
+                        break;
+                }
+            }
+
+            if (singleMode)
+            {
+                foreach (var m in medBagMedicines)
+                {
+                    rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReportSingle.rdlc";
+                    rptViewer.ProcessingMode = ProcessingMode.Local;
+
+                    string treatmentDate =
+                        DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate, true);
+                    string treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
+                                              treatmentDate.Split('/')[2] + "日";
+                    var parameters = new List<ReportParameter>
+                    {
+                        new ReportParameter("PharmacyName_Id",
+                            MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
+                        new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
+                        new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
+                        new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
+                        new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
+                        new ReportParameter("PatientGender_Birthday",
+                            (CurrentPrescription.Customer.Gender ? "男" : "女") + "/" +
+                            DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
+                        new ReportParameter("TreatmentDate", treatmentDateChi),
+                        new ReportParameter("RecId", " "), //病歷號
+                        new ReportParameter("Division",
+                            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name),
+                        new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
+                        new ReportParameter("PaySelf", SelfCost.ToString()),
+                        new ReportParameter("ServicePoint", CurrentDeclareData.MedicalServicePoint.ToString()),
+                        new ReportParameter("TotalPoint", CurrentDeclareData.TotalPoint.ToString()),
+                        new ReportParameter("CopaymentPoint", CurrentDeclareData.CopaymentPoint.ToString()),
+                        new ReportParameter("HcPoint", CurrentDeclareData.DeclarePoint.ToString()),
+                        new ReportParameter("MedicinePoint", MedicinePoint.ToString(CultureInfo.InvariantCulture)),
+                        new ReportParameter("MedicineId", m.Id),
+                        new ReportParameter("MedicineName", m.Name),
+                        new ReportParameter("MedicineChineseName", m.ChiName),
+                        new ReportParameter("Ingredient", m.Ingredient),
+                        new ReportParameter("Indication", m.Indication),
+                        new ReportParameter("SideEffect", m.SideEffect),
+                        new ReportParameter("Note", m.Note),
+                        new ReportParameter("Usage", m.Usage),
+                        new ReportParameter("MedicineDay", m.MedicineDays),
+                        new ReportParameter("Amount", m.Total),
+                        new ReportParameter("Form", m.Form)
+                    };
+                    rptViewer.LocalReport.SetParameters(parameters);
+                    rptViewer.LocalReport.DataSources.Clear();
+                    rptViewer.LocalReport.Refresh();
+                    var loadingWindow = new LoadingWindow();
+                    if (from.Equals("登錄"))
+                        loadingWindow.PrintMedbag(rptViewer, decInstance, receiptPrint);
+                    else
+                    {
+                        loadingWindow.PrintMedbagFromInquire(rptViewer, inquireOutcome, receiptPrint);
+                    }
+                    loadingWindow.Show();
+                }
+            }
+            else
+            {
+                foreach (var m in medBagMedicines.GroupBy(info => info.Usage)
+                    .Select(group => new { UsageName = group.Key, count = group.Count() })
+                    .OrderBy(x => x.UsageName))
+                {
+                    var i = 1;
+                    foreach (var med in medBagMedicines)
+                    {
+                        if (!med.Usage.Equals(m.UsageName)) continue;
+                        med.MedNo = i.ToString();
+                        i++;
+                    }
+                }
+
+                var json = JsonConvert.SerializeObject(medBagMedicines);
+                var dataTable = JsonConvert.DeserializeObject<DataTable>(json);
+
+                rptViewer.LocalReport.ReportPath = @"..\..\RDLC\MedBagReport.rdlc";
+                rptViewer.ProcessingMode = ProcessingMode.Local;
+
+                string treatmentDate =
+                    DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.TreatmentDate, true);
+                string treatmentDateChi = treatmentDate.Split('/')[0] + "年" + treatmentDate.Split('/')[1] + "月" +
+                                          treatmentDate.Split('/')[2] + "日";
+                var parameters = new List<ReportParameter>
+                {
+                    new ReportParameter("PharmacyName_Id",
+                        MainWindow.CurrentPharmacy.Name + "(" + MainWindow.CurrentPharmacy.Id + ")"),
+                    new ReportParameter("PharmacyAddress", MainWindow.CurrentPharmacy.Address),
+                    new ReportParameter("PharmacyTel", MainWindow.CurrentPharmacy.Tel),
+                    new ReportParameter("MedicalPerson", CurrentPrescription.Pharmacy.MedicalPersonnel.Name),
+                    new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
+                    new ReportParameter("PatientGender_Birthday",
+                        (CurrentPrescription.Customer.Gender ? "男" : "女") + "/" +
+                        DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
+                    new ReportParameter("TreatmentDate", treatmentDateChi),
+                    new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
+                    new ReportParameter("PaySelf", SelfCost.ToString()),
+                    new ReportParameter("ServicePoint", CurrentDeclareData.MedicalServicePoint.ToString()),
+                    new ReportParameter("TotalPoint", CurrentDeclareData.TotalPoint.ToString()),
+                    new ReportParameter("CopaymentPoint", CurrentDeclareData.CopaymentPoint.ToString()),
+                    new ReportParameter("HcPoint", CurrentDeclareData.DeclarePoint.ToString()),
+                    new ReportParameter("MedicinePoint", MedicinePoint.ToString(CultureInfo.InvariantCulture)),
+                    new ReportParameter("Division", CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name)
+                };
+                rptViewer.LocalReport.SetParameters(parameters);
+                rptViewer.LocalReport.DataSources.Clear();
+                var rd = new ReportDataSource("DataSet1", dataTable);
+                rptViewer.LocalReport.DataSources.Add(rd);
+                rptViewer.LocalReport.Refresh();
+                var loadingWindow = new LoadingWindow();
+                if (from.Equals("登錄"))
+                    loadingWindow.PrintMedbag(rptViewer, decInstance, receiptPrint);
+                else
+                {
+                    loadingWindow.PrintMedbagFromInquire(rptViewer, inquireOutcome, receiptPrint);
+                }
+                loadingWindow.Show();
+            }
+            if (receiptPrint)
+            {
+                if (from.Equals("登錄"))
+                    PrintReceipt(CurrentPrescription, CurrentDeclareData, MedicinePoint, SelfCost,Pay, from, decInstance ,null);
+                else
+                {
+                    PrintReceipt(CurrentPrescription, CurrentDeclareData, MedicinePoint, SelfCost, Pay,from, null, inquireOutcome);
+                }
+            }
+            //var defaultMedBag = MedBagDb.GetDefaultMedBagData(messageBoxResult == MessageBoxResult.Yes ? MedBagMode.SINGLE : MedBagMode.MULTI);
+            //File.WriteAllText(ReportService.ReportPath, string.Empty);
+            //File.AppendAllText(ReportService.ReportPath, ReportService.SerializeObject<Report>(ReportService.CreatReport(defaultMedBag, CurrentPrescription)));
+            //for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+            //{
+            //    ReportService.CreatePdf(defaultMedBag,i);
+            //}
+        }
+
+        public static void PrintReceipt(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint,int SelfCost ,int Pay,string from, PrescriptionDec2View decInstance = null, PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null) {
+            var rptViewer = new ReportViewer();
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.ReportPath = @"..\..\RDLC\HisReceipt.rdlc";
+            rptViewer.ProcessingMode = ProcessingMode.Local;
+            var adjustDate =
+                DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Treatment.AdjustDate, true);
+            var doctor =
+                CurrentPrescription.Treatment.MedicalInfo.Hospital.Id.Equals(CurrentPrescription.Treatment.MedicalInfo
+                    .Hospital.Doctor.IcNumber)
+                    ? CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.Name
+                    : string.Empty;
+            var parameters = new List<ReportParameter>
+            {
+                new ReportParameter("Pharmacy", MainWindow.CurrentPharmacy.Name),
+                new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
+                new ReportParameter("Gender", CurrentPrescription.Customer.IcNumber[1].Equals('1') ? "男" : "女"),
+                new ReportParameter("Birthday",
+                    DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
+                new ReportParameter("AdjustDate", adjustDate),
+                new ReportParameter("Hospital", CurrentPrescription.Treatment.MedicalInfo.Hospital.Name),
+                new ReportParameter("Doctor", doctor), //病歷號
+                new ReportParameter("MedicalNumber", CurrentPrescription.Customer.IcCard.MedicalNumber),
+                new ReportParameter("MedicineCost", MedicinePoint.ToString(CultureInfo.InvariantCulture)),
+                new ReportParameter("MedicalServiceCost", CurrentDeclareData.MedicalServicePoint.ToString()),
+                new ReportParameter("TotalMedicalCost",CurrentDeclareData.DeclarePoint.ToString()),
+                new ReportParameter("CopaymentCost", CurrentDeclareData.CopaymentPoint.ToString()),
+                new ReportParameter("HcPay", CurrentDeclareData.DeclarePoint.ToString()),
+                new ReportParameter("SelfCost", SelfCost.ToString()),
+                new ReportParameter("ActualReceive", Pay.ToString()),
+                new ReportParameter("ActualReceiveChinese", NewFunction.ConvertToAsiaMoneyFormat(Pay))
+            };
+            rptViewer.LocalReport.SetParameters(parameters);
+            rptViewer.LocalReport.DataSources.Clear();
+            rptViewer.LocalReport.Refresh();
+            var loadingWindow = new LoadingWindow();
+
+            if(from.Equals("登錄"))
+                loadingWindow.PrintReceipt(rptViewer, decInstance);
+            else
+            {
+                loadingWindow.PrintReceiptFromInquire(rptViewer, inquireOutcome);
+            }
+            loadingWindow.Show();
+        }
+
+        #endregion
+
     }
 }

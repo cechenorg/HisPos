@@ -37,6 +37,7 @@ namespace His_Pos.PrescriptionInquire
         private bool _isFirst = true;
         private DeclareData _currentDeclareData;
         public event PropertyChangedEventHandler PropertyChanged;
+        public PrescriptionInquireOutcome Instance;
         private void NotifyPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
@@ -149,6 +150,7 @@ namespace His_Pos.PrescriptionInquire
         public PrescriptionInquireOutcome(DeclareData inquired)
         {
             InitializeComponent();
+            Instance = this;
             IsAdjust = false;
             _isFirst = true;
             DataContext = this;
@@ -563,7 +565,6 @@ namespace His_Pos.PrescriptionInquire
                     //Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
                     //Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
                     //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
-
                     //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
                     declareDb.UpdateDeclareData(_currentDeclareData);
                     m = new MessageWindow("處方修改成功", MessageType.SUCCESS, true);
@@ -764,13 +765,18 @@ namespace His_Pos.PrescriptionInquire
             d.InsertDailyUpload(icRecord.SerializeObject());
         }
         #endregion
-
         private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            if (sender is System.Windows.Controls.TextBox t)
+            if (sender is TextBox t)
             {
                 t.SelectionStart = 0;
                 t.SelectionLength = t.Text.Length;
             }
+        }
+
+        //自費 實收新增資料 SelfCost:自費 Pay:實收
+        private void ButtonPrintMedBag_Click(object sender, RoutedEventArgs e) {
+            var declareData = new DeclareData(InquiredPrescription.Prescription);
+            NewFunction.PrintMedBag(InquiredPrescription.Prescription, declareData, declareData.DrugsPoint, 0, 0, "查詢", null, Instance);
         }
     }
 }
