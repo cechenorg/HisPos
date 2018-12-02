@@ -574,7 +574,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.UpdateDeclareFile(_currentDeclareData);
                     }
 
-                    declareDb.InsertDeclareRegister(_currentDecMasId, IsSend, true, false, false, false, false); //處方登錄
+                    declareDb.InsertDeclareRegister(_currentDecMasId, IsSend, true, false, true, false, true); //處方登錄
                     _currentDeclareData.DecMasId = _currentDecMasId;
                     declareDb.UpdateDeclareData(_currentDeclareData); //更新慢箋
                     ChronicDb.UpdateChronicData(_currentDecMasId); //重算預約慢箋  
@@ -582,6 +582,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case 3: //第一次慢箋
                     if (string.IsNullOrEmpty(_firstTimeDecMasId))
                         _firstTimeDecMasId = declareDb.InsertDeclareData(_currentDeclareData);
+                    var prescriptionAdjust = new YesNoMessageWindow("是否調劑處方?", "處方調劑確認");
+                    var isAdjust = (bool)prescriptionAdjust.ShowDialog();
+
                     if (IsSendToServer.IsChecked != null && (bool) IsSendToServer.IsChecked)
                     {
                         var chronicSendToServerWindow =
@@ -597,8 +600,26 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             declareTrade, PrescriptionSendData); //送到singde
                     }
 
-                    declareDb.InsertDeclareRegister(_firstTimeDecMasId, IsSend, true, CurrentPrescription.IsGetIcCard,
-                        false, false, false); //處方登錄
+                    declareDb.InsertDeclareRegister(_firstTimeDecMasId, IsSend, true, CurrentPrescription.IsGetIcCard, isAdjust, false, isAdjust); //處方登錄
+                    if (isAdjust)
+                    {
+                        //ProductDb.InsertEntry(medCopayName, declareTrade.CopayMent, "DecMasId", _currentDecMasId);
+                        ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
+                        ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
+                        ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),
+                            "DecMasId", _firstTimeDecMasId);
+                        var medTotalPrice = 0.00;
+                        foreach (var med in _currentDeclareData.Prescription.Medicines)
+                        {
+                            medTotalPrice += double.Parse(ProductDb.GetBucklePrice(med.Id,
+                                ((IProductDeclare)(DeclareMedicine)med).Amount.ToString()));
+                        }
+
+                        ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _firstTimeDecMasId);
+                        declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
+
+                        declareDb.UpdateDeclareFile(_currentDeclareData);
+                    }
                     declareDb.CheckPredictChronicExist(_firstTimeDecMasId); //刪除同人同科別預約慢箋
 
                     var intDecMasId = Convert.ToInt32(_firstTimeDecMasId);
@@ -670,6 +691,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
+            ClearPrescription();
             IndexView.IndexView.Instance.InitData();
         }
 
