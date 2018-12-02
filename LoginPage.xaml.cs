@@ -105,9 +105,6 @@ namespace His_Pos
 
             DbConnection localConnection = new DbConnection(Properties.Settings.Default.SQL_local);
             if (!localConnection.CheckConnection()) return false;
-            
-            DbConnection globalConnection = new DbConnection(Properties.Settings.Default.SQL_global);
-            if (!globalConnection.CheckConnection()) return false;
 
             return true;
         }
