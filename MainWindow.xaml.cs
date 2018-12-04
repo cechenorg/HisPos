@@ -222,7 +222,8 @@ namespace His_Pos
             ProductDb.UpdateDailyStockValue();
             DeclareDb declareDb = new DeclareDb();
             declareDb.SendUnSendCooperClinicDeclare();
-            Application.Current.Shutdown();
+           
+            Environment.Exit(0);
         }
 
         private void Settings_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
