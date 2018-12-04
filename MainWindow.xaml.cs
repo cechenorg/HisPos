@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -31,6 +32,7 @@ using His_Pos.Resource;
 using His_Pos.Service;
 using His_Pos.SystemSettings;
 using His_Pos.ViewModel;
+using JetBrains.Annotations;
 using MaterialDesignThemes.Wpf;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
@@ -43,8 +45,17 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
-        public static string CardReaderStatus;
-        public static int Res { get; set; } = -1;
+        private static int hisApiErrorCode;
+        public int HisApiErrorCode
+        {
+            get => hisApiErrorCode;
+            set
+            {
+                hisApiErrorCode = value;
+                SetCardReaderStatus(hisApiErrorCode);
+            }
+        }
+
         public static Pharmacy CurrentPharmacy;
         public static bool ItemSourcesSet { get; set; }
         public static ObservableCollection<Hospital> Hospitals { get; set; }
@@ -60,9 +71,7 @@ namespace His_Pos
                 _adjustCases = value;
             }
         }
-        public static bool IsConnectionOpened { get; set; } = false;
-        public static bool IsHpcValid { get; set; } = false;
-        public static bool IsVerifySamDc { get; set; } = false;
+        
         public static ObservableCollection<PaymentCategory> PaymentCategory { get; set; }
         public static ObservableCollection<TreatmentCase> TreatmentCase { get;set; }
         public static ObservableCollection<Copayment> Copayments { get; set; }
@@ -71,7 +80,6 @@ namespace His_Pos
         public static ObservableCollection<Position> Positions { get; set; }
         public MainWindow(User userLogin)
         {
-            Res = -1;
             FeatureFactory();
             InitializeComponent();
             WindowState = WindowState.Maximized;
@@ -84,11 +92,6 @@ namespace His_Pos
             CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
             CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
-            WindowState = WindowState.Minimized;
-            var loadingWindow = new LoadingWindow();
-            loadingWindow.VerifyCardReaderStatus(Instance);
-            loadingWindow.ShowDialog();
-            WindowState = WindowState.Maximized;
         }
         
         private void InitialUserBlock()
@@ -233,93 +236,35 @@ namespace His_Pos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //var t1 = new Thread(VerifySam);
-            //t1.Start();
+            VerifySam();
         }
 
-        public void VerifySam()
+        private void VerifySam()
         {
             var thread = new Thread(() =>
             {
-                Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                if (Res == 0)
+                HisApiBase.OpenCom();
+                Action VerifySamDc = delegate
                 {
-                    IsConnectionOpened = true;
-                    Res = HisApiBase.hisGetCardStatus(1);
-                    if (Res != 2)
+                    if (!((ViewModelMainWindow) DataContext).IsConnectionOpened) return;
+                    HisApiBase.CheckCardStatus(1);
+                    if (!((ViewModelMainWindow)DataContext).IsVerifySamDc)
                     {
-                        HisApiBase.csCloseCom();
-                        Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                        Res = HisApiBase.csVerifySAMDC();
-                        if (Res == 0)
-                        {
-                            IsVerifySamDc = true;
-                            HisApiBase.csCloseCom();
-                            //var status = 0;
-                            //Res = HisApiBase.hpcGetHPCStatus(1, ref status);
-                            //if (status == 1 && Res == 0)
-                            //{
-                            //    Res = HisApiBase.hpcVerifyHPCPIN();
-                            //    if (Res == 0)
-                            //        IsHpcValid = true;
-                            //}
-                        }
+                        HisApiBase.VerifySamDc();
                     }
                     else
                     {
                         HisApiBase.csCloseCom();
-                        IsVerifySamDc = true;
+                        ((ViewModelMainWindow)DataContext).IsVerifySamDc = true;
                     }
-                }
-                else
-                {
-                    Res = HisApiBase.csSoftwareReset(0);
-                    Res = HisApiBase.csCloseCom();
-                    if (Res == 0)
-                    {
-                        Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                        if (Res == 0)
-                        {
-                            IsConnectionOpened = true;
-                            Res = HisApiBase.hisGetCardStatus(1);
-                            if (Res != 2)
-                            {
-                                HisApiBase.csCloseCom();
-                                Res = HisApiBase.csOpenCom(CurrentPharmacy.ReaderCom);
-                                Res = HisApiBase.csVerifySAMDC();
-                                if (Res == 0)
-                                {
-                                    IsVerifySamDc = true;
-                                    HisApiBase.csCloseCom();
-                                    //var status = 0;
-                                    //Res = HisApiBase.hpcGetHPCStatus(1, ref status);
-                                    //if (status == 1 && Res == 0)
-                                    //{
-                                    //    Res = HisApiBase.hpcVerifyHPCPIN();
-                                    //    if (Res == 0)
-                                    //        IsHpcValid = true;
-                                    //}
-                                }
-                            }
-                            else
-                            {
-                                HisApiBase.csCloseCom();
-                                IsVerifySamDc = true;
-                            }
-                        }
-                    }
-                }
+                };
+                Instance.Dispatcher.BeginInvoke(VerifySamDc);
+                
             });
             thread.Start();
-            if (thread.Join(60000))
-            {
-                CardReaderStatus = GetEnumDescription((ErrorCode)Res);
-            }
-            else
+            if (!thread.Join(60000))
             {
                 thread.Abort();
-                CardReaderStatus = GetEnumDescription((ErrorCode)Res);
-                CardReaderStatus = "讀卡機逾時";
             }
         }
 
@@ -329,6 +274,42 @@ namespace His_Pos
             if (fi == null) return string.Empty;
             var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute),false);
             return attributes.Length > 0 ? attributes[0].Description : value.ToString();
+        }
+
+        private void SetCardReaderStatus(int res)
+        {
+            void MethodDelegate()
+            {
+                ((ViewModelMainWindow) DataContext).CardReaderStatus = "讀卡機狀態 : " + GetEnumDescription((ErrorCode) res);
+            }
+            Dispatcher.BeginInvoke((Action) MethodDelegate);
+        }
+
+        public void SetCardReaderStatus(string status)
+        {
+            void MethodDelegate()
+            {
+                ((ViewModelMainWindow)DataContext).CardReaderStatus = "讀卡機狀態 : " + status;
+            }
+            Dispatcher.BeginInvoke((Action)MethodDelegate);
+        }
+
+        public void SetHpcCardStatus(string status)
+        {
+            void MethodDelegate()
+            {
+                ((ViewModelMainWindow)DataContext).HpcCardStatus = "醫事卡認證狀態 : " + status;
+            }
+            Dispatcher.BeginInvoke((Action)MethodDelegate);
+        }
+
+        public void SetSamDcStatus(string status)
+        {
+            void MethodDelegate()
+            {
+                ((ViewModelMainWindow)DataContext).HpcCardStatus = "安全模組狀態 : " + status;
+            }
+            Dispatcher.BeginInvoke((Action)MethodDelegate);
         }
     }
 }

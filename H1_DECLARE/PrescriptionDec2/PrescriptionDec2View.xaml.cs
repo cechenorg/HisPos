@@ -52,6 +52,7 @@ using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.H1_DECLARE.PrescriptionInquire;
 using System.Xml;
+using His_Pos.ViewModel;
 using MaterialDesignThemes.Wpf;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
@@ -300,7 +301,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             Deposit = 0;
             Pay = 0;
             Change = 0;
-            SetCardStatusContent(MainWindow.CardReaderStatus);
         }
 
         private void GetPrescriptionData()
@@ -1928,10 +1928,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     : cs.StringToBytes(" ", 2);
                 //補卡註記,長度一個char
                 var cTreatAfterCheck = new byte[] {1};
-                MainWindow.Res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+                MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
                 var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData,
                     ref strLength);
-                MainWindow.Res = HisApiBase.csCloseCom();
+                MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
                 //取得就醫序號
                 if (res == 0)
                 {
@@ -1949,9 +1949,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //取得就醫紀錄
                 strLength = 498;
                 icData = new byte[498];
-                MainWindow.Res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+                MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
                 res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
-                MainWindow.Res = HisApiBase.csCloseCom();
+                MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
                 if (res == 0)
                 {
                     var startIndex = 84;
@@ -1986,7 +1986,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void ClearPrescription()
         {
-            ResetCardReader();
             _firstTimeDecMasId = string.Empty;
             _currentDecMasId = string.Empty;
             _clinicDeclareId = string.Empty;
@@ -2031,60 +2030,38 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PaidText.Text = string.Empty;
             CustomerSelected = false;
             medBag = new MedBagReport();
+            ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = false;
         }
 
         public void ReloadCardReader()
         {
-            SetCardStatusContent("重新讀取中...");
-            MainWindow.Res = MainWindow.Res = HisApiBase.csSoftwareReset(3);
-            if (MainWindow.Res == 0)
-            {
-                MainWindow.Res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
-                if (MainWindow.Res == 0)
-                {
-                    MainWindow.IsConnectionOpened = true;
-                    MainWindow.Res = HisApiBase.csVerifySAMDC();
-                    if (MainWindow.Res == 0)
-                        MainWindow.IsVerifySamDc = true;
-                }
-            }
-            var cardReaderStatus = MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res);
-            SetCardStatusContent(cardReaderStatus);
+            HisApiBase.ResetCardReader();
         }
 
         public void LoadPatentDataFromIcCard()
         {
-            if (MainWindow.IsVerifySamDc)
+            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
             {
-                MainWindow.Res = HisApiBase.hisGetCardStatus(2);
-                if (MainWindow.Res != 0 && MainWindow.Res != 9 && MainWindow.Res != 4000)
+                HisApiBase.CheckCardStatus(2);
+                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsIcCardValid)
                 {
                     var strLength = 72;
                     var icData = new byte[72];
-                    MainWindow.Res = HisApiBase.hisGetBasicData(icData, ref strLength);
+                    MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);
                     icData.CopyTo(BasicDataArr, 0);
-                    if (MainWindow.Res == 0)
+                    if (MainWindow.Instance.HisApiErrorCode == 0)
                     {
-                        SetCardStatusContent("健保卡讀取成功");
+                        MainWindow.Instance.SetCardReaderStatus("健保卡讀取成功");
                         CurrentPrescription.IsGetIcCard = true;
                         CusBasicData = new BasicData(icData);
                         CurrentPrescription.Customer = new Customer(CusBasicData);
                         CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
-                        SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
                     }
-                    else
-                    {
-                        SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
-                    }
-                }
-                else
-                {
-                    SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Res));
                 }
             }
             else
             {
-                SetCardStatusContent("讀卡機逾時");
+                MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
             }
         }
 
@@ -2116,7 +2093,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             var thread = new Thread(() =>
             {
-                MainWindow.Res = HisApiBase.csSoftwareReset(3);
+                MainWindow.Instance.HisApiErrorCode = HisApiBase.csSoftwareReset(3);
                 System.Windows.Threading.Dispatcher.Run();
             });
 

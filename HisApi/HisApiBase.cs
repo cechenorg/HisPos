@@ -1,4 +1,10 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Windows.Threading;
+using His_Pos.Class;
+using His_Pos.Class.Person;
+using His_Pos.Struct.IcData;
+using His_Pos.ViewModel;
 
 namespace His_Pos.HisApi
 {
@@ -199,5 +205,164 @@ namespace His_Pos.HisApi
         [DllImport("csHis.dll")]
         //5.2 進行疾病診斷碼解押碼
         public static extern int hisGetICD10DeC(byte[] pIN, byte[] pOUT);
+
+        public static void OpenCom()
+        {
+            MainWindow.Instance.SetCardReaderStatus("開啟讀卡機連接...");
+            MainWindow.Instance.HisApiErrorCode = csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            Action methodDelegate = delegate ()
+            {
+                ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened = MainWindow.Instance.HisApiErrorCode == 0;
+                MainWindow.Instance.SetCardReaderStatus(
+                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened ? "讀卡機連接開啟成功" : "讀卡機連接開啟失敗");
+            };
+            MainWindow.Instance.Dispatcher.BeginInvoke(methodDelegate);
+        }
+
+        public static void CloseCom()
+        {
+            if(csCloseCom() == 0)
+                ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened = false;
+        }
+
+        public static void CheckCardStatus(int type)
+        {
+            OpenCom();
+            if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+                return;
+            string status;
+            switch (type)
+            {
+                case 1:
+                    status = "安全模組檢查中...";
+                    break;
+                case 2:
+                    status = "健保IC卡檢查中...";
+                    break;
+                case 3:
+                    status = "醫事人員卡檢查中...";
+                    break;
+                default:
+                    status = "檢查中...";
+                    break;
+            }
+
+            MainWindow.Instance.SetCardReaderStatus(status);
+            MainWindow.Instance.HisApiErrorCode = hisGetCardStatus(type);
+            switch (type)
+            {
+                case 1:
+                    ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = MainWindow.Instance.HisApiErrorCode == 2;
+                    switch (MainWindow.Instance.HisApiErrorCode)
+                    {
+                        case 4000:
+                            MainWindow.Instance.SetSamDcStatus("讀卡機逾時");
+                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                            break;
+                        case 1:
+                            MainWindow.Instance.SetHpcCardStatus("未認證");
+                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                            break;
+                        case 2:
+                            MainWindow.Instance.SetHpcCardStatus("認證成功");
+                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = true;
+                            break;
+                        default:
+                            MainWindow.Instance.SetHpcCardStatus("所置入非安全模組檔");
+                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                            break;
+                    }
+                    break;
+                case 2:
+                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsIcCardValid = MainWindow.Instance.HisApiErrorCode == 2;
+                    MainWindow.Instance.SetCardReaderStatus("健保卡讀取失敗");
+                    break;
+                case 3:
+                    if (MainWindow.Instance.HisApiErrorCode == 3)
+                    {
+                        MainWindow.Instance.SetHpcCardStatus("認證成功");
+                        ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                    }
+                    else
+                    {
+                        MainWindow.Instance.SetHpcCardStatus("未認證");
+                        ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                    }
+                    break;
+            }
+            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened = MainWindow.Instance.HisApiErrorCode == 0;
+            CloseCom();
+        }
+
+        public static void VerifySamDc()
+        {
+            MainWindow.Instance.SetSamDcStatus("與健保局連線認證中，請稍後...");
+            OpenCom();
+            if(!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+                return;
+            MainWindow.Instance.HisApiErrorCode = csVerifySAMDC();
+            if (MainWindow.Instance.HisApiErrorCode == 0)
+            {
+                ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = true;
+                MainWindow.Instance.SetSamDcStatus("認證成功");
+            }
+            else
+            {
+                ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                MainWindow.Instance.SetSamDcStatus("未認證");
+            }
+            CloseCom();
+        }
+
+        public static void ResetCardReader()
+        {
+            ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened = false;
+            ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = false;
+            ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsHpcValid = false;
+            OpenCom();
+            if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+                return;
+            csSoftwareReset(3);
+            CloseCom();
+            VerifySamDc();
+        }
+
+        //public static BasicData GetBasicData()
+        //{
+        //    OpenCom();
+        //    if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+        //    {
+        //        CheckCardStatus(2);
+        //        if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsIcCardValid)
+        //        {
+        //            var strLength = 72;
+        //            var icData = new byte[72];
+        //            MainWindow.Instance.HisApiErrorCode = hisGetBasicData(icData, ref strLength);
+        //            icData.CopyTo(BasicDataArr, 0);
+        //            if (MainWindow.Instance.HisApiErrorCode == 0)
+        //            {
+        //                SetCardStatusContent("健保卡讀取成功");
+        //                CurrentPrescription.IsGetIcCard = true;
+        //                CusBasicData = new BasicData(icData);
+        //                CurrentPrescription.Customer = new Customer(CusBasicData);
+        //                CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
+        //                SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Instance.HisApiErrorCode));
+        //            }
+        //            else
+        //            {
+        //                SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Instance.HisApiErrorCode));
+        //            }
+        //        }
+        //        else
+        //        {
+        //            SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Instance.HisApiErrorCode));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        SetCardStatusContent("讀卡機逾時");
+        //    }
+        //    CloseCom();
+        //}
     }
 }

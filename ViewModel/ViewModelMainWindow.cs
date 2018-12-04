@@ -33,6 +33,61 @@ namespace His_Pos.ViewModel
             }
         }
 
+        private string _cardReaderStatus;
+        public string CardReaderStatus
+        {
+            get => _cardReaderStatus;
+            set
+            {
+                _cardReaderStatus = value;
+                OnPropertyChanged(nameof(CardReaderStatus));
+            }
+        }
+        private string _samDcStatus;
+        public string SamDcStatus
+        {
+            get => _samDcStatus;
+            set
+            {
+                _samDcStatus = value;
+                OnPropertyChanged(nameof(SamDcStatus));
+            }
+        }
+
+        private string _hpcCardStatus;
+        public string HpcCardStatus
+        {
+            get => _hpcCardStatus;
+            set
+            {
+                _hpcCardStatus = value;
+                OnPropertyChanged(nameof(HpcCardStatus));
+            }
+        }
+
+        private bool _isConnectionOpened;
+
+        public bool IsConnectionOpened
+        {
+            get => _isConnectionOpened;
+            set
+            {
+                _isConnectionOpened = value;
+            }
+        }
+        private bool _isIcCardValid;
+        public bool IsIcCardValid
+        {
+            get => _isIcCardValid;
+            set
+            {
+                _isIcCardValid = value;
+            }
+        }
+
+        public bool IsHpcValid { get; set; } = false;
+        public bool IsVerifySamDc { get; set; } = false;
+
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
