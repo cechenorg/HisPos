@@ -35,6 +35,7 @@ namespace His_Pos.PrescriptionInquire
     {
         public static bool IsAdjust = false;
         private bool _isFirst = true;
+        private bool _isPredictChronic;
         private DeclareData _currentDeclareData;
         public event PropertyChangedEventHandler PropertyChanged;
         public PrescriptionInquireOutcome Instance;
@@ -147,13 +148,14 @@ namespace His_Pos.PrescriptionInquire
         }
         private ObservableCollection<object> _medicines;
         private readonly string _decMasId;
-        public PrescriptionInquireOutcome(DeclareData inquired)
+        public PrescriptionInquireOutcome(DeclareData inquired,bool isPredictChronic)
         {
             InitializeComponent();
             Instance = this;
             IsAdjust = false;
             _isFirst = true;
             DataContext = this;
+            _isPredictChronic = isPredictChronic;
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             _decMasId = inquired.DecMasId;
             InquiredPrescription = inquired;
@@ -555,9 +557,14 @@ namespace His_Pos.PrescriptionInquire
             {
                 _currentDeclareData = new DeclareData(InquiredPrescription.Prescription);
                 _currentDeclareData.DecMasId = InquiredPrescription.DecMasId;
-                StockAdjustmentWindow stockAdjustmentWindow = new StockAdjustmentWindow(InquiredPrescription.DecMasId, OriginDeclareDetails, DeclareDetails);
-                stockAdjustmentWindow.ShowDialog();
-                if (IsAdjust) { 
+
+
+                if (!_isPredictChronic)
+                {
+                    StockAdjustmentWindow stockAdjustmentWindow = new StockAdjustmentWindow(InquiredPrescription.DecMasId, OriginDeclareDetails, DeclareDetails);
+                    stockAdjustmentWindow.ShowDialog();
+                }
+                if (IsAdjust || _isPredictChronic) { 
                     var declareDb = new DeclareDb();
                     //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
                     //Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();

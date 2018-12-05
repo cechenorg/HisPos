@@ -48,6 +48,7 @@ namespace His_Pos.PrescriptionInquire
         public double MedUseePrice { get; set; }
         public double CopaymentPrice { get; set; }
         public double Profit { get; set; }
+        public bool IsPredictChronic { get; set; }
         
     }
 }

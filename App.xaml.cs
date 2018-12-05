@@ -15,7 +15,7 @@ namespace His_Pos
         {
             base.OnStartup(e);
 
-            CheckAdministrator();
+            //CheckAdministrator();
             StartupUri = new Uri("LoginPage.xaml", UriKind.RelativeOrAbsolute);
         }
         private void CheckAdministrator()

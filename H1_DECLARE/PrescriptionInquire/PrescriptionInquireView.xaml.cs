@@ -169,7 +169,7 @@ namespace His_Pos.PrescriptionInquire
         private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = (PrescriptionOverview)(sender as DataGridRow).Item;
-            PrescriptionInquireOutcome prescriptionInquireOutcome = new PrescriptionInquireOutcome(PrescriptionDB.GetDeclareDataById(selectedItem.Decmas_Id));
+            PrescriptionInquireOutcome prescriptionInquireOutcome = new PrescriptionInquireOutcome(PrescriptionDB.GetDeclareDataById(selectedItem.Decmas_Id), selectedItem.IsPredictChronic);
             prescriptionInquireOutcome.Show();
         }
 
