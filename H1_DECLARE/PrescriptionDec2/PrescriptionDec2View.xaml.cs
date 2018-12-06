@@ -483,8 +483,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             SetEntryType( ref medEntryName, ref medServiceName, ref medCopayName,ref medPaySelf);
             bool buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"); //扣庫條件
              var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
-            int caseType;
-
+            int caseType; 
             if (string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) &&
                 string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && string.IsNullOrEmpty(_currentDecMasId) &&
                 CurrentPrescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
@@ -531,8 +530,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         ProductDb.InsertEntry(medEntryName, (medTotalPrice * -1).ToString(), "DecMasId",
                             _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
-                        declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true,
-                            CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
+                        declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true,CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
+                        declareDb.InsertDeclareTrade(_firstTimeDecMasId,declareTrade);//Insert Trade
                     }
 
                     declareDb.UpdateDeclareFile(_currentDeclareData);
@@ -570,7 +569,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _currentDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _currentDecMasId); //庫存扣庫
-
+                        declareDb.InsertDeclareTrade(_currentDecMasId, declareTrade);//Insert Trade
                         declareDb.UpdateDeclareFile(_currentDeclareData);
                     }
 
@@ -621,7 +620,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
-
+                        declareDb.InsertDeclareTrade(_firstTimeDecMasId, declareTrade);//Insert Trade
                         declareDb.UpdateDeclareFile(_currentDeclareData);
                     }
                     declareDb.CheckPredictChronicExist(_firstTimeDecMasId); //刪除同人同科別預約慢箋
