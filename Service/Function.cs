@@ -21,6 +21,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NChinese.Phonetic;
 using His_Pos.Class.Person;
+using His_Pos.ViewModel;
 
 namespace His_Pos
 {
@@ -254,7 +255,10 @@ namespace His_Pos
                 var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
-                HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                HisApiBase.OpenCom();
+                if(((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+                    HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                HisApiBase.CloseCom();
             }
             catch (Exception ex)
             {

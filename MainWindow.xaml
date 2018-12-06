@@ -245,6 +245,7 @@
                 </ScrollViewer>
             </StackPanel>
             <StackPanel
+                Grid.Row="0"
                 Grid.Column="0"
                 VerticalAlignment="Bottom"
                 Background="#FF333337"

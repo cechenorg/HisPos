@@ -268,7 +268,7 @@ namespace His_Pos
             }
         }
 
-        public static string GetEnumDescription(Enum value)
+        private static string GetEnumDescription(Enum value)
         {
             var fi = value.GetType().GetField(value.ToString());
             if (fi == null) return string.Empty;

@@ -10,7 +10,7 @@ namespace His_Pos.Class.CustomerHistory
 {
     public class CustomerHistoryMaster : INotifyPropertyChanged
     {
-        public CustomerHistoryMaster(SystemType type, string date, string customerHistoryDetailId, string customerHistoryData)
+        public CustomerHistoryMaster(SystemType type, DateTime date, string customerHistoryDetailId, string customerHistoryData)
         {
             Type = type;
             Date = date;
@@ -33,24 +33,24 @@ namespace His_Pos.Class.CustomerHistory
 
         public BitmapImage TypeIcon
         {
-            get { return typeIcon; }
+            get => typeIcon;
             set
             {
                 typeIcon = value;
-                OnPropertyChanged("TypeIcon");
+                OnPropertyChanged(nameof(TypeIcon));
             }
         }
 
         public SystemType Type { get; }
-        private string date;
+        private DateTime date;
 
-        public string Date
+        public DateTime Date
         {
-            get { return date; }
+            get => date;
             set
             {
                 date = value;
-                OnPropertyChanged("Date");
+                OnPropertyChanged(nameof(Date));
             }
         }
 
@@ -59,11 +59,11 @@ namespace His_Pos.Class.CustomerHistory
 
         public string CustomerHistoryData
         {
-            get { return customerHistoryData; }
+            get => customerHistoryData;
             set
             {
                 customerHistoryData = value;
-                OnPropertyChanged("CustomerHistoryData");
+                OnPropertyChanged(nameof(CustomerHistoryData));
             }
         }
 
@@ -86,7 +86,7 @@ namespace His_Pos.Class.CustomerHistory
 
             foreach (DataRow row in customerHistoryMasters.Rows)
             {
-                CustomerHistoryMasterCollection.Add(new CustomerHistoryMaster((SystemType)row["TYPE"], row["DATE"].ToString(), row["HISTORY_ID"].ToString(), row["HISTORY_DATA"].ToString()));
+                CustomerHistoryMasterCollection.Add(new CustomerHistoryMaster((SystemType)row["TYPE"], (DateTime)row["DATE"], row["HISTORY_ID"].ToString(), row["HISTORY_CONTENT"].ToString()));
             }
 
             CustomerHistoryDetails = customerHistoryDetails;

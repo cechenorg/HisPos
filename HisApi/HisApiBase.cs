@@ -326,43 +326,6 @@ namespace His_Pos.HisApi
             CloseCom();
             VerifySamDc();
         }
-
-        //public static BasicData GetBasicData()
-        //{
-        //    OpenCom();
-        //    if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
-        //    {
-        //        CheckCardStatus(2);
-        //        if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsIcCardValid)
-        //        {
-        //            var strLength = 72;
-        //            var icData = new byte[72];
-        //            MainWindow.Instance.HisApiErrorCode = hisGetBasicData(icData, ref strLength);
-        //            icData.CopyTo(BasicDataArr, 0);
-        //            if (MainWindow.Instance.HisApiErrorCode == 0)
-        //            {
-        //                SetCardStatusContent("健保卡讀取成功");
-        //                CurrentPrescription.IsGetIcCard = true;
-        //                CusBasicData = new BasicData(icData);
-        //                CurrentPrescription.Customer = new Customer(CusBasicData);
-        //                CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
-        //                SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Instance.HisApiErrorCode));
-        //            }
-        //            else
-        //            {
-        //                SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Instance.HisApiErrorCode));
-        //            }
-        //        }
-        //        else
-        //        {
-        //            SetCardStatusContent(MainWindow.GetEnumDescription((ErrorCode)MainWindow.Instance.HisApiErrorCode));
-        //        }
-        //    }
-        //    else
-        //    {
-        //        SetCardStatusContent("讀卡機逾時");
-        //    }
-        //    CloseCom();
-        //}
+        
     }
 }

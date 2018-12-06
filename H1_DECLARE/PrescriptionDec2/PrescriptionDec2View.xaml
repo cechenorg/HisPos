@@ -65,11 +65,9 @@
                 <Image Width="30" Source="../../Images/Phone.png" />
                 <TextBox Name="PatientTel" Width="150" Margin="0,0,20,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="聯絡電話" FontSize="18" Foreground="{StaticResource ForeGround}" 
                          Text="{Binding CurrentPrescription.Customer.ContactInfo.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown"/>
-                <Label VerticalAlignment="Center" Content="張數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                <Label VerticalAlignment="Center" Content="處方張數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                 <Label VerticalAlignment="Center" Content="{Binding PrescriptionCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="70"  FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                <Label Width="auto" Content="讀卡機" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                <Label x:Name="IcCardStatus" Width="143" HorizontalContentAlignment="Left" FontFamily="Segoe UI Semibold" FontSize="14" VerticalContentAlignment="Bottom" Content="{Binding CardStatus,UpdateSourceTrigger=PropertyChanged}"/>
-                <Button Content="重置讀卡機" Background="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" Width="105" Padding="0" Click="ReloadCardReader_MouseLeftButtonDown" BorderThickness="0"/>
+                <Button Content="重置讀卡機" Background="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" Width="105" Padding="0" Click="ReloadCardReader_MouseLeftButtonDown" BorderThickness="0" Margin="170,0,0,0"/>
                 <Button MinWidth="128" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0"/>
             </StackPanel>
             <Grid Name="TrementGrid" Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">
@@ -389,11 +387,11 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Background="{StaticResource GridBackGround}" Orientation="Horizontal">
-                        <RadioButton Tag="1" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="交易" FontFamily="Segoe UI Semibold" FontSize="16" Checked="RadioButton_Checked" />
+                        <RadioButton Tag="1" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="自費調劑" FontFamily="Segoe UI Semibold" FontSize="16" Checked="RadioButton_Checked" />
                         <Image Width="18" Source="/Images/OrangeDot.png" />
-                        <RadioButton Tag="0" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="調劑" FontFamily="Segoe UI Semibold" FontSize="16" Checked="RadioButton_Checked" />
+                        <RadioButton Tag="0" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="處方" FontFamily="Segoe UI Semibold" FontSize="16" Checked="RadioButton_Checked" />
                         <Image Width="18" Source="/Images/DarkerHisDot.png" />
-                        <RadioButton Tag="2" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="全部顯示" FontFamily="Segoe UI Semibold" 
+                        <RadioButton Tag="2" Margin="20,0,5,0" VerticalAlignment="Center" VerticalContentAlignment="Center" Content="全部" FontFamily="Segoe UI Semibold" 
                                      FontSize="16" IsChecked="True" Checked="RadioButton_Checked" />
                         <Image Width="27" Margin="0,0,15,0" Source="/Images/OrangeLightBlueDot.png" />
                     </StackPanel>
@@ -410,6 +408,7 @@
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="FontSize" Value="14" />
                                 <Setter Property="Height" Value="35" />
+                                <EventSetter Event="MouseDoubleClick" Handler="PrescriptionCopy" />
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
@@ -425,7 +424,7 @@
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Setter Property="HorizontalAlignment" Value="Center" />
                                         <Setter Property="VerticalAlignment" Value="Center" />
-                                        <Setter Property="Text" Value="{Binding Date}" />
+                                        <Setter Property="Text" Value="{Binding Date,Converter={StaticResource DateConverter}}" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>

@@ -15,7 +15,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -677,44 +676,52 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void LogInIcData()
         {
-            try
+            Action logInIcDataDelegate = delegate ()
             {
-                var cs = new ConvertData();
-                var icPrescripList = new List<IcPrescriptData>();
-                foreach (var med in CurrentPrescription.Medicines)
+                try
                 {
-                    if (!(med is DeclareMedicine)) continue;
-                    if (!((DeclareMedicine)med).PaySelf)
+                    var cs = new ConvertData();
+                    var icPrescripList = new List<IcPrescriptData>();
+                    foreach (var med in CurrentPrescription.Medicines)
                     {
-                        icPrescripList.Add(new IcPrescriptData((DeclareMedicine)med));
+                        if (!(med is DeclareMedicine)) continue;
+                        if (!((DeclareMedicine)med).PaySelf)
+                        {
+                            icPrescripList.Add(new IcPrescriptData((DeclareMedicine)med));
+                        }
+                    }
+                    if (!CurrentPrescription.IsGetIcCard) return;
+                    var pPatientId = new byte[10];
+                    var pPatientBitrhDay = new byte[10];
+                    Array.Copy(BasicDataArr, 32, pPatientId, 0, 10);
+                    Array.Copy(BasicDataArr, 42, pPatientBitrhDay, 0, 7);
+                    var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
+                    foreach (var icPrescript in icPrescripList)
+                    {
+                        var pData = cs.StringToBytes(icPrescript.DataStr, 61);
+                        var pDataInput = pDateTime.Concat(pData).ToArray();
+                        var strLength = 40;
+                        var icData = new byte[40];
+                        HisApiBase.OpenCom();
+                        if (((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened)
+                        {
+                            MainWindow.Instance.HisApiErrorCode = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
+                                icData, ref strLength);
+                            if (MainWindow.Instance.HisApiErrorCode == 0)
+                                _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                            HisApiBase.CloseCom();
+                        }
+                        else
+                            break;
                     }
                 }
-
-                var pPatientId = new byte[10];
-                var pPatientBitrhDay = new byte[10];
-                Array.Copy(BasicDataArr, 32, pPatientId, 0, 10);
-                Array.Copy(BasicDataArr, 42, pPatientBitrhDay, 0, 7);
-                var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
-                foreach (var icPrescript in icPrescripList)
+                catch (Exception ex)
                 {
-                    var pData = cs.StringToBytes(icPrescript.DataStr, 61);
-                    var pDataInput = pDateTime.Concat(pData).ToArray();
-                    var strLength = 40;
-                    var icData = new byte[40];
-                    var res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
-                        icData, ref strLength);
-                    if (res == 0)
-                        _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
-                    else
-                        break;
+                    var m = new MessageWindow("LogInIcData()", MessageType.ERROR, true);
+                    m.ShowDialog();
                 }
-            }
-            catch (Exception ex)
-            {
-                var m = new MessageWindow("LogInIcData()", MessageType.ERROR, true);
-                m.ShowDialog();
-                return;
-            }
+            };
+            Instance.Dispatcher.BeginInvoke(logInIcDataDelegate);
         }
 
         public void CreatIcUploadData()
@@ -765,7 +772,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
                     medicalDatas.Add(medicalData);
                 }
-
                 icRecord.MainMessage.MedicalMessageList = medicalDatas;
                 icRecord.SerializeObject();
                 var d = new DeclareDb();
@@ -773,73 +779,78 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
             catch (Exception ex)
             {
-                var m = new MessageWindow("CreatIcUploadData()", MessageType.ERROR, true);
-                m.ShowDialog();
-                return;
+                Action creatIcUploadDataDelegate = delegate ()
+                {
+                    var m = new MessageWindow("CreatIcUploadData()", MessageType.ERROR, true);
+                    m.ShowDialog();
+                };
+                Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
             }
         }
 
         //異常上傳
         public void CreatIcErrorUploadData(IcErrorCodeWindow.IcErrorCode errorCode)
         {
-            try
+            Action creatIcUploadDataDelegate = delegate ()
             {
-                var medicalDatas = new List<MedicalData>();
-                if (icErrorWindow.SelectedItem == null) return;
-                var icData = new IcData(CurrentPrescription, errorCode, _currentDeclareData);
-                var mainMessage = new MainMessage(icData);
-                var headerMessage = new Header { DataFormat = "2" };
-                var icRecord = new REC(headerMessage, mainMessage);
-
-                for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+                try
                 {
-                    if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
-                        continue;
-                    var medicalData = new MedicalData
+                    var medicalDatas = new List<MedicalData>();
+                    if (icErrorWindow.SelectedItem == null) return;
+                    var icData = new IcData(CurrentPrescription, errorCode, _currentDeclareData);
+                    var mainMessage = new MainMessage(icData);
+                    var headerMessage = new Header { DataFormat = "2" };
+                    var icRecord = new REC(headerMessage, mainMessage);
+
+                    for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
                     {
-                        MedicalOrderTreatDateTime = icData.TreatmentDateTime,
-                        MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
-                        TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
-                        Usage = _currentDeclareData.DeclareDetails[i].Usage,
-                        Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
-                        TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
-                    };
-                    if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
-                        medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
-                    switch (medicalData.MedicalOrderCategory)
-                    {
-                        case "1":
-                        case "A":
-                            medicalData.PrescriptionDeliveryMark = "02";
-                            break;
-                        case "2":
-                        case "B":
-                            medicalData.PrescriptionDeliveryMark = "06";
-                            break;
-                        case "3":
-                        case "C":
-                        case "4":
-                        case "D":
-                        case "5":
-                        case "E":
-                            medicalData.PrescriptionDeliveryMark = "04";
-                            break;
+                        if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
+                            continue;
+                        var medicalData = new MedicalData
+                        {
+                            MedicalOrderTreatDateTime = icData.TreatmentDateTime,
+                            MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
+                            TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
+                            Usage = _currentDeclareData.DeclareDetails[i].Usage,
+                            Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
+                            TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
+                        };
+                        if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
+                            medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
+                        switch (medicalData.MedicalOrderCategory)
+                        {
+                            case "1":
+                            case "A":
+                                medicalData.PrescriptionDeliveryMark = "01";
+                                break;
+                            case "2":
+                            case "B":
+                                medicalData.PrescriptionDeliveryMark = "06";
+                                break;
+                            case "3":
+                            case "C":
+                            case "4":
+                            case "D":
+                            case "5":
+                            case "E":
+                                medicalData.PrescriptionDeliveryMark = "04";
+                                break;
+                        }
+                        medicalDatas.Add(medicalData);
                     }
 
-                    medicalDatas.Add(medicalData);
+                    icRecord.MainMessage.MedicalMessageList = medicalDatas;
+                    icRecord.SerializeObject();
+                    var d = new DeclareDb();
+                    d.InsertDailyUpload(icRecord.SerializeObject());
                 }
-
-                icRecord.MainMessage.MedicalMessageList = medicalDatas;
-                icRecord.SerializeObject();
-                var d = new DeclareDb();
-                d.InsertDailyUpload(icRecord.SerializeObject());
-            }
-            catch (Exception ex)
-            {
-                var m = new MessageWindow("CreatIcErrorUploadData()", MessageType.ERROR, true);
-                m.ShowDialog();
-                return;
-            }
+                catch (Exception ex)
+                {
+                    var m = new MessageWindow(ex.Message, MessageType.ERROR, true);
+                    m.ShowDialog();
+                }
+            };
+            Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
         }
 
         #endregion
@@ -1916,7 +1927,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void ReadTreatRecord()
         {
-            var thread = new Thread(() =>
+            void ReadTreatDelegate()
             {
                 var strLength = 296;
                 var icData = new byte[296];
@@ -1929,8 +1940,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 //補卡註記,長度一個char
                 var cTreatAfterCheck = new byte[] {1};
                 MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
-                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData,
-                    ref strLength);
+                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
                 MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
                 //取得就醫序號
                 if (res == 0)
@@ -1957,18 +1967,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     var startIndex = 84;
                     for (var i = 0; i < 6; i++)
                     {
-                        if (icData[startIndex + 3] == 32)
-                            break;
+                        if (icData[startIndex + 3] == 32) break;
                         TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
                         startIndex += 69;
                     }
                 }
+            }
 
-                System.Windows.Threading.Dispatcher.Run();
-            });
-
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+            Dispatcher.BeginInvoke((Action) ReadTreatDelegate);
         }
 
         public void CheckChronicExist()
@@ -2031,38 +2037,40 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CustomerSelected = false;
             medBag = new MedBagReport();
             ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = false;
+            var myBinding = new Binding("CurrentPrescription.Customer.IcCard.MedicalNumber");
+            BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
         }
 
-        public void ReloadCardReader()
+        private void ReloadCardReader()
         {
             HisApiBase.ResetCardReader();
         }
 
         public void LoadPatentDataFromIcCard()
         {
-            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+            Action methodDelegate = delegate ()
             {
-                HisApiBase.CheckCardStatus(2);
-                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsIcCardValid)
+                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
                 {
                     var strLength = 72;
                     var icData = new byte[72];
                     MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);
-                    icData.CopyTo(BasicDataArr, 0);
                     if (MainWindow.Instance.HisApiErrorCode == 0)
                     {
                         MainWindow.Instance.SetCardReaderStatus("健保卡讀取成功");
                         CurrentPrescription.IsGetIcCard = true;
+                        icData.CopyTo(BasicDataArr, 0);
                         CusBasicData = new BasicData(icData);
                         CurrentPrescription.Customer = new Customer(CusBasicData);
                         CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
                     }
                 }
-            }
-            else
-            {
-                MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
-            }
+                else
+                {
+                    MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
+                }
+            };
+            MainWindow.Instance.Dispatcher.BeginInvoke(methodDelegate);
         }
 
         private void MedicalNumber_TextChanged(object sender, TextChangedEventArgs e)
@@ -2089,16 +2097,40 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void ResetCardReader()
+        private void PrescriptionCopy(object sender, MouseButtonEventArgs e)
         {
-            var thread = new Thread(() =>
+            var selectedItem = (sender as DataGridRow)?.Item;
+            if (CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Contains(selectedItem))
             {
-                MainWindow.Instance.HisApiErrorCode = HisApiBase.csSoftwareReset(3);
-                System.Windows.Threading.Dispatcher.Run();
-            });
-
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
+                if (((CustomerHistoryMaster) selectedItem).Type.Equals(SystemType.HIS))
+                {
+                    var tmpCustomer = CurrentPrescription.Customer;
+                    var declareCopied = PrescriptionDB.GetDeclareDataById(((CustomerHistoryMaster)selectedItem).CustomerHistoryDetailId);
+                    CurrentPrescription = declareCopied.Prescription;
+                    CurrentPrescription.Customer.ContactInfo = tmpCustomer.ContactInfo.DeepCloneViaJson();
+                    DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d=>d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
+                    if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id))
+                    {
+                        CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id)[0].ICD10;
+                        if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
+                        {
+                            CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id)[0].ICD10;
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(CurrentPrescription.ChronicSequence))
+                    {
+                        var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
+                        BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+                        NotifyPropertyChanged(CurrentPrescription.OriginalMedicalNumber);
+                    }
+                    else
+                    {
+                        var myBinding = new Binding("CurrentPrescription.Customer.IcCard.MedicalNumber");
+                        BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+                        NotifyPropertyChanged(CurrentPrescription.Customer.IcCard.MedicalNumber);
+                    }
+                }
+            }
         }
     }
 }

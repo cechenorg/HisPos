@@ -9,6 +9,7 @@ using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
+using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class
@@ -130,7 +131,18 @@ namespace His_Pos.Class
             }
         }
 
-        public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
+        private string _originalMedicalNumber;
+
+        public string OriginalMedicalNumber
+        {
+            get => _originalMedicalNumber;
+            set
+            {
+                _originalMedicalNumber = value;
+                OnPropertyChanged(nameof(OriginalMedicalNumber));
+            }
+        } //D43原處方就醫序號
+
         public ErrorList EList = new ErrorList();
         private bool adjustCaseNull = false;
         public bool Declare { get; set; }
@@ -172,13 +184,17 @@ namespace His_Pos.Class
             if (!string.IsNullOrEmpty(ChronicSequence))
             {
                 if (int.Parse(ChronicSequence) > 1)
+                {
+                    OriginalMedicalNumber = Customer.IcCard.MedicalNumber.DeepCloneViaJson();
                     Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
+                }
+                    
             }
             if (CheckHomeCareAndSmokingCessation())
                 Customer.IcCard.MedicalNumber = "N";
             if (!Customer.IcCard.MedicalNumber.Contains("IC") && Customer.IcCard.MedicalNumber != "N")
             {
-                Regex medicalNumberReg = new Regex(@"\d+");
+                var medicalNumberReg = new Regex(@"\d+");
                 if (!medicalNumberReg.IsMatch(Customer.IcCard.MedicalNumber))
                     AddError("0", "就醫序號輸入格式錯誤");
             }
