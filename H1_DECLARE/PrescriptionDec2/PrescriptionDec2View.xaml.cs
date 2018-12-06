@@ -584,7 +584,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         _firstTimeDecMasId = declareDb.InsertDeclareData(_currentDeclareData);
                     YesNoMessageWindow prescriptionAdjust;
                     bool isAdjust = false;
-                    if (CurrentPrescription.Treatment.AdjustDate == DateTime.Now) {
+                    if (CurrentPrescription.Treatment.AdjustDate == DateTime.Today) {
                          prescriptionAdjust = new YesNoMessageWindow("是否調劑處方?", "處方調劑確認");
                          isAdjust = (bool)prescriptionAdjust.ShowDialog();
                     }
@@ -1423,13 +1423,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             else if (((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Equals("1"))
                 CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
 
-            IsSendToServer.IsChecked = false;
-            IsSendToServer.IsEnabled = ((AdjustCase) AdjustCaseCombo.SelectedItem).Id == "02" ||
-                                       ((AdjustCase) AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text !=
-                                       DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            IsSendToServer.IsChecked = ((AdjustCase) AdjustCaseCombo.SelectedItem).Id == "02" ||
-                                       ((AdjustCase) AdjustCaseCombo.SelectedItem).Id == "2" && AdjustDate.Text !=
-                                       DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
+            SetSubmmitButton();
         }
 
         private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e)
@@ -1460,6 +1454,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
                 MedicalNumber.Text = tmpMedicalNumber;
             }
+            SetSubmmitButton();
         }
 
         public void SetValueByPrescription(CooperativeClinic cooperativeClinic)
@@ -1836,13 +1831,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void AdjustDate_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (DeclareSubmit == null) return;
-            DeclareSubmit.IsEnabled = AdjustDate.Text == DateTimeExtensions.ToSimpleTaiwanDate(DateTime.Now);
-            IsSendToServer.IsChecked = false;
-            if (AdjustCaseCombo.SelectedItem == null) return;
-            IsSendToServer.IsEnabled = !DeclareSubmit.IsEnabled;
-            IsSendToServer.IsChecked = !DeclareSubmit.IsEnabled;
-            ButtonDeclareRegister.IsEnabled = !DeclareSubmit.IsEnabled;
+            SetSubmmitButton();
         }
 
         private void SelectionStart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -2148,6 +2137,57 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
+        }
+        private void SetSubmmitButton() {
+            if (IsSendToServer is null || ButtonDeclareRegister is null || DeclareSubmit is null)
+                return;
+            int caseType = 0;
+            bool isAdjustDayToday = CurrentPrescription.Treatment.AdjustDate == DateTime.Today ? true : false;
+            bool isNormalPres = string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) && string.IsNullOrEmpty(CurrentPrescription.ChronicSequence);
+            if ( string.IsNullOrEmpty(_currentDecMasId) && isAdjustDayToday && isNormalPres)
+                caseType = 1; //一般處方
+            else if (!string.IsNullOrEmpty(_currentDecMasId) && isAdjustDayToday && !isNormalPres)
+                caseType = 2; //調劑日今天 預約慢箋
+            else if (!string.IsNullOrEmpty(_currentDecMasId) && !isAdjustDayToday && !isNormalPres)
+                caseType = 3; //調劑日明天以後 預約慢箋
+            else if (string.IsNullOrEmpty(_currentDecMasId) && isAdjustDayToday && !isNormalPres)
+                caseType = 4; //調劑日今天 第一次慢箋
+            else if (string.IsNullOrEmpty(_currentDecMasId) && !isAdjustDayToday && !isNormalPres)
+                caseType = 5; //調劑日明天以後 第一次慢箋
+            
+            switch (caseType) {
+                case 1:
+                    IsSendToServer.IsEnabled = false;
+                    IsSendToServer.IsChecked = false;
+                    ButtonDeclareRegister.IsEnabled = false;
+                    DeclareSubmit.IsEnabled = true; 
+                    break;
+                case 2:
+                    IsSendToServer.IsEnabled = false;
+                    IsSendToServer.IsChecked = false;
+                    ButtonDeclareRegister.IsEnabled = false;
+                    DeclareSubmit.IsEnabled = true; 
+                    break;
+                case 3:
+                    IsSendToServer.IsEnabled = true;
+                    IsSendToServer.IsChecked = true;
+                    ButtonDeclareRegister.IsEnabled = true;
+                    DeclareSubmit.IsEnabled = false; 
+                    break;
+                case 4:
+                    IsSendToServer.IsEnabled = false;
+                    IsSendToServer.IsChecked = false;
+                    ButtonDeclareRegister.IsEnabled = true;
+                    DeclareSubmit.IsEnabled = false; 
+                    break;
+                case 5:
+                    IsSendToServer.IsEnabled = true;
+                    IsSendToServer.IsChecked = true;
+                    ButtonDeclareRegister.IsEnabled = true;
+                    DeclareSubmit.IsEnabled = false;
+                    break; 
+            }
+
         }
     }
 }
