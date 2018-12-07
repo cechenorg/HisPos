@@ -647,7 +647,7 @@ namespace His_Pos.Class.StoreOrder
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[InsertNewStoreOrderFromDaily]", parameters);
         }
 
-        internal static void AddDeclareOrder(List<DeclareMedicine> declareMedicines)
+        internal static void AddDeclareOrder(List<AbstractClass.Product> declareMedicines)
         {
             var dd = new DbConnection(Settings.Default.SQL_local);
             string orderMedicines = "";
@@ -672,7 +672,7 @@ namespace His_Pos.Class.StoreOrder
                 var newRow = details.NewRow();
 
                 newRow["PRO_ID"] = product.Id;
-                newRow["ORDERQTY"] = product.Amount - product.Stock.Inventory;
+                newRow["ORDERQTY"] = ((IProductDeclare)product).Amount - ((IProductDeclare)product).Stock.Inventory;
                 newRow["QTY"] = 0;
                 newRow["PRICE"] = "0";
                 newRow["DESCRIPTION"] = "";
@@ -686,9 +686,7 @@ namespace His_Pos.Class.StoreOrder
 
                 orderMedicines += product.Id.PadRight(12, ' ');
 
-                orderMedicines += ((IProductPurchase)product).OrderAmount.ToString().PadLeft(10, ' ');
-
-                orderMedicines += ((IProductPurchase)product).Note;
+                orderMedicines += (((IProductDeclare)product).Amount - ((IProductDeclare)product).Stock.Inventory).ToString().PadLeft(10, ' '); 
                 orderMedicines += "\r\n";
             }
 
