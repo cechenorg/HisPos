@@ -6,6 +6,7 @@ using His_Pos.H1_DECLARE.PrescriptionDec2;
 using His_Pos.HisApi;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
+using His_Pos.ViewModel;
 
 namespace His_Pos.Class.Declare.IcDataUpload
 {
@@ -122,14 +123,24 @@ namespace His_Pos.Class.Declare.IcDataUpload
             var cs = new ConvertData();
             var pBuffer = new byte[13];
             var iBufferlength = 13;
-            var res = HisApiBase.csGetDateTime(pBuffer, ref iBufferlength);
-            if (res == 0)
+            HisApiBase.OpenCom();
+            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
             {
-                TreatmentDateTime = cs.ByToString(pBuffer, 0, iBufferlength);
-                pBuffer = new byte[10];
-                iBufferlength = 10;
-                HisApiBase.csGetHospID(pBuffer, ref iBufferlength);
-                PharmacyId = cs.ByToString(pBuffer, 0, iBufferlength);
+                MainWindow.Instance.HisApiErrorCode = HisApiBase.csGetDateTime(pBuffer, ref iBufferlength);
+                if (MainWindow.Instance.HisApiErrorCode == 0)
+                {
+                    TreatmentDateTime = cs.ByToString(pBuffer, 0, iBufferlength);
+                    HisApiBase.CloseCom();
+                }
+                else
+                {
+                    TreatmentDateTime = (DateTime.Now.Year - 1911) +
+                                        DateTime.Now.Month.ToString().PadLeft(2, '0') +
+                                        DateTime.Now.Day.ToString().PadLeft(2, '0') +
+                                        DateTime.Now.Hour.ToString().PadLeft(2, '0') +
+                                        DateTime.Now.Minute.ToString().PadLeft(2, '0') +
+                                        DateTime.Now.Second.ToString().PadLeft(2, '0');
+                }
             }
             else
             {
@@ -139,15 +150,15 @@ namespace His_Pos.Class.Declare.IcDataUpload
                                     DateTime.Now.Hour.ToString().PadLeft(2, '0') +
                                     DateTime.Now.Minute.ToString().PadLeft(2, '0') +
                                     DateTime.Now.Second.ToString().PadLeft(2, '0');
-                PharmacyId = MainWindow.CurrentPharmacy.Id;
             }
+            PharmacyId = MainWindow.CurrentPharmacy.Id;
             MedicalNumber = errorCode.Id;
             MedicalPersonIcNumber = current.Pharmacy.MedicalPersonnel.IcNumber;
             MainDiagnosisCode = current.Treatment.MedicalInfo.MainDiseaseCode.Id;
             if (!string.IsNullOrEmpty(current.Treatment.MedicalInfo.SecondDiseaseCode.Id))
                 SecondDiagnosisCode = current.Treatment.MedicalInfo.SecondDiseaseCode.Id;
             OutpatientFee = (currentDeclareData.DrugsPoint + currentDeclareData.SpecailMaterialPoint +
-                             currentDeclareData.CopaymentPoint).ToString();
+                             currentDeclareData.CopaymentPoint + currentDeclareData.MedicalServicePoint).ToString();
             OutpatientCopaymentFee = currentDeclareData.CopaymentPoint.ToString();
         }
         //1,3 V  2,4 ~ 

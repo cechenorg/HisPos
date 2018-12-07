@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using His_Pos.Class.Product;
 using His_Pos.RDLC;
 using His_Pos.Service;
+using Microsoft.VisualBasic;
 
 namespace His_Pos.Class.Declare
 {
@@ -294,7 +295,7 @@ namespace His_Pos.Class.Declare
                     D17 = CopaymentPoint.ToString(),
                     D18 = TotalPoint.ToString(),
                     D19 = CheckXmlEmptyValue(AssistProjectCopaymentPoint.ToString()),
-                    D20 = c.Name,
+                    D20 = Strings.StrConv(c.Name, VbStrConv.Narrow),
                     D21 = CheckXmlEmptyValue(m.Hospital.Id),
                     D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
                     D23 = DateTimeExtensions.ConvertToTaiwanCalender(t.AdjustDate, false),
@@ -311,7 +312,7 @@ namespace His_Pos.Class.Declare
                     D36 = CheckXmlEmptyValue(p.ChronicTotal),
                     D37 = MedicalServiceCode,
                     D38 = MedicalServicePoint.ToString(),
-                    D44 = DateTimeExtensions.ConvertToTaiwanCalender(ic.IcMarks.NewbornsData.Birthday, false)
+                    D44 = t.Copayment.Id.Equals("903")?DateTimeExtensions.ConvertToTaiwanCalender(ic.IcMarks.NewbornsData.Birthday, false):string.Empty
                 }
             };
             if (!string.IsNullOrEmpty(DeclareMakeUp))
@@ -333,7 +334,7 @@ namespace His_Pos.Class.Declare
             {
                 if (int.Parse(p.ChronicSequence) >= 2)
                 {
-                    DeclareXml.Dbody.D43 = p.OriginalMedicalNumber;
+                    DeclareXml.Dbody.D43 = p.OriginalMedicalNumber.PadLeft(4,'0');
                 }
             }
 

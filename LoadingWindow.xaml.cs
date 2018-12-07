@@ -1059,22 +1059,5 @@ namespace His_Pos
                 return;
             }
         }
-
-        public void VerifyCardReaderStatus(MainWindow mainWindow)
-        {
-            backgroundWorker.DoWork += (s, o) =>
-            {
-                ChangeLoadingMessage("讀卡機認證中...");
-                mainWindow.VerifySam();
-                Dispatcher.Invoke((Action)(() =>
-                {
-                }));
-            };
-            backgroundWorker.RunWorkerCompleted += (s, args) =>
-            {
-                Dispatcher.BeginInvoke(new Action(() => { Close(); }));
-            };
-            backgroundWorker.RunWorkerAsync();
-        }
     }
 }

@@ -21,6 +21,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NChinese.Phonetic;
 using His_Pos.Class.Person;
+using His_Pos.ViewModel;
 
 namespace His_Pos
 {
@@ -108,7 +109,11 @@ namespace His_Pos
             path += "\\藥健康\\"+FileTypeName;
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
-            var path_file = path_ym + "\\" + day + "\\" + year + month + day;
+            var path_file = path_ym + "\\" + day + "\\";
+            if (FileTypeName.Equals("匯出申報XML檔案"))
+                path_file += "DRUGT";
+            else
+                path_file +=  year + month + day;
             if (!Directory.Exists(path_ym)) Directory.CreateDirectory(path_ym);
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
             var settings = new XmlWriterSettings();
@@ -250,7 +255,10 @@ namespace His_Pos
                 var count = cs.StringToBytes(element.Elements().Count().ToString(), element.Elements().Count().ToString().Length);
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
-                HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                HisApiBase.OpenCom();
+                if(((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+                    HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
+                HisApiBase.CloseCom();
             }
             catch (Exception ex)
             {

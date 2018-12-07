@@ -13,6 +13,7 @@ namespace His_Pos.Class.Person
         public Customer()
         {
             IcCard = new IcCard();
+            ContactInfo = new ContactInfo();
         }
 
         public Customer(BasicData basicData)
@@ -25,6 +26,7 @@ namespace His_Pos.Class.Person
             IcNumber = basicData.IcNumber;
             Gender = basicData.Gender;
             IcCard = new IcCard(basicData);
+            ContactInfo = new ContactInfo();
         }
 
         public Customer(Customer customer)
@@ -202,7 +204,18 @@ namespace His_Pos.Class.Person
                 OnPropertyChanged(nameof(IcCard));
             }
         }
-        public ContactInfo ContactInfo { get; set; } = new ContactInfo();
+        private ContactInfo _contactInfo;
+
+        public ContactInfo ContactInfo
+        {
+            get => _contactInfo;
+            set
+            {
+                _contactInfo = value;
+                OnPropertyChanged(nameof(ContactInfo));
+            }
+        }
+
         public object Clone()
         {
             return new Customer(this);
