@@ -86,7 +86,7 @@ namespace His_Pos.Class.CustomerHistory
 
             foreach (DataRow row in customerHistoryMasters.Rows)
             {
-                CustomerHistoryMasterCollection.Add(new CustomerHistoryMaster((SystemType)row["TYPE"], row["DATE"].ToString(), row["HISTORY_ID"].ToString(), row["HISTORY_CONTENT"].ToString()));
+                CustomerHistoryMasterCollection.Add(new CustomerHistoryMaster((SystemType)row["TYPE"], (DateTime)row["DATE"], row["HISTORY_ID"].ToString(), row["HISTORY_CONTENT"].ToString()));
             }
 
             CustomerHistoryDetails = customerHistoryDetails;
