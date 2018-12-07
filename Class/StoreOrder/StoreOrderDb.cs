@@ -646,5 +646,62 @@ namespace His_Pos.Class.StoreOrder
 
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[InsertNewStoreOrderFromDaily]", parameters);
         }
+
+        internal static void AddDeclareOrder(List<DeclareMedicine> declareMedicines)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            string orderMedicines = "";
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("ORDEMP", MainWindow.CurrentUser.Id));
+
+            DataTable details = new DataTable();
+            details.Columns.Add("PRO_ID", typeof(string));
+            details.Columns.Add("ORDERQTY", typeof(int));
+            details.Columns.Add("QTY", typeof(int));
+            details.Columns.Add("PRICE", typeof(string));
+            details.Columns.Add("DESCRIPTION", typeof(string));
+            details.Columns.Add("VALIDDATE", typeof(string));
+            details.Columns.Add("BATCHNUMBER", typeof(string));
+            details.Columns.Add("FREEQTY", typeof(int));
+            details.Columns.Add("INVOICE", typeof(string));
+            details.Columns.Add("TOTAL", typeof(string));
+
+            foreach (var product in declareMedicines)
+            {
+                var newRow = details.NewRow();
+
+                newRow["PRO_ID"] = product.Id;
+                newRow["ORDERQTY"] = product.Amount - product.Stock.Inventory;
+                newRow["QTY"] = 0;
+                newRow["PRICE"] = "0";
+                newRow["DESCRIPTION"] = "";
+                newRow["VALIDDATE"] = "";
+                newRow["BATCHNUMBER"] = "";
+                newRow["FREEQTY"] = 0;
+                newRow["INVOICE"] = "";
+                newRow["TOTAL"] = "0";
+
+                details.Rows.Add(newRow);
+
+                orderMedicines += product.Id.PadRight(12, ' ');
+
+                orderMedicines += ((IProductPurchase)product).OrderAmount.ToString().PadLeft(10, ' ');
+
+                orderMedicines += ((IProductPurchase)product).Note;
+                orderMedicines += "\r\n";
+            }
+
+            parameters.Add(new SqlParameter("DETAILS", details));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[InsertNewStoreOrderFromDeclare]", parameters);
+
+            if (!table.Rows[0]["RESULT"].Equals("FAIL"))
+            {
+                var singdeConn = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+
+                singdeConn.MySqlNonQueryBySqlString($"call InsertNewOrder('{MainWindow.CurrentPharmacy.Id}','{table.Rows[0]["RESULT"].ToString()}', '', '{orderMedicines}')");
+            }
+        }
     }
 }
