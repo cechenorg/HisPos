@@ -108,7 +108,11 @@ namespace His_Pos
             path += "\\藥健康\\"+FileTypeName;
             var path_ym = path + "\\" + year + month;
             var path_ymd = path + "\\" + year + month + "\\" + day;
-            var path_file = path_ym + "\\" + day + "\\" + year + month + day;
+            var path_file = path_ym + "\\" + day + "\\";
+            if (FileTypeName.Equals("匯出申報XML檔案"))
+                path_file += "DRUGT";
+            else
+                path_file +=  year + month + day;
             if (!Directory.Exists(path_ym)) Directory.CreateDirectory(path_ym);
             if (!Directory.Exists(path_ymd)) Directory.CreateDirectory(path_ymd);
             var settings = new XmlWriterSettings();
