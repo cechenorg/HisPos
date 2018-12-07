@@ -112,7 +112,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
             if (!string.IsNullOrEmpty(currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
                 SecondDiagnosisCode = currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
             OutpatientFee = (currentDeclareData.DrugsPoint + currentDeclareData.SpecailMaterialPoint +
-                             currentDeclareData.CopaymentPoint).ToString();
+                             currentDeclareData.CopaymentPoint + currentDeclareData.MedicalServicePoint).ToString();
             OutpatientCopaymentFee = currentDeclareData.CopaymentPoint.ToString();
         }
 

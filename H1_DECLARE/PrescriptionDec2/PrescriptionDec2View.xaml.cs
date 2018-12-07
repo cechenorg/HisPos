@@ -101,7 +101,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
 
         #region 健保卡作業相關變數
-        public bool IsDeposit = false;//是否押金
         public bool IsMedicalNumberGet; //是否取得就醫序號
         public int GetMedicalNumberErrorCode = -1;
         public readonly byte[] BasicDataArr = new byte[72];
@@ -325,11 +324,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 if (icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
                 {
                     var y = new YesNoMessageWindow("尚未選擇異常代碼，是否自費押金", "是否押金");
-                    IsDeposit = (bool)y.ShowDialog();
-                    if(!IsDeposit)
+                    CurrentPrescription.IsDeposit = (bool)y.ShowDialog();
+                    if(!CurrentPrescription.IsDeposit)
                         return;
                 }
-                if (!IsDeposit)
+                if (!CurrentPrescription.IsDeposit)
                 {
                     SelectedErrorCode = new IcErrorCodeWindow.IcErrorCode();
                     SelectedErrorCode = icErrorWindow.SelectedItem;
@@ -508,7 +507,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     _firstTimeDecMasId = declareDb.InsertDeclareData(_currentDeclareData);
                     ProductDb.InsertCashFow(medCopayName, declareTrade.CopayMent, "DecMasId", _firstTimeDecMasId);
                     ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
-                    if(!CurrentPrescription.IsGetIcCard && IsDeposit)
+                    if(!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
                     ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),
                         "DecMasId", _firstTimeDecMasId);
@@ -533,7 +532,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         ProductDb.InsertEntry(medEntryName, (medTotalPrice * -1).ToString(), "DecMasId",
                             _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
-                        if(!CurrentPrescription.IsGetIcCard && IsDeposit)
+                        if(!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                             declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
                         else
                         {
@@ -541,7 +540,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         }
                         declareDb.InsertDeclareTrade(_firstTimeDecMasId,declareTrade);//Insert Trade
                     }
-
                     declareDb.UpdateDeclareFile(_currentDeclareData);
                     break;
                 case 2: //帶出預約慢箋
@@ -565,7 +563,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     {
                         //ProductDb.InsertEntry(medCopayName, declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                         ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _currentDecMasId);
-                        ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _currentDecMasId);
+                        if(CurrentPrescription.IsDeposit)
+                            ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _currentDecMasId);
                         ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),
                             "DecMasId", _currentDecMasId);
                         var medTotalPrice = 0.00;
@@ -580,7 +579,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.InsertDeclareTrade(_currentDecMasId, declareTrade);//Insert Trade
                         declareDb.UpdateDeclareFile(_currentDeclareData);
                     }
-                    if (!CurrentPrescription.IsGetIcCard && IsDeposit)
+                    if (!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
                     else
                     {
@@ -608,11 +607,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             if (icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
                             {
                                 var y = new YesNoMessageWindow("尚未選擇異常代碼，是否自費押金", "是否押金");
-                                IsDeposit = (bool)y.ShowDialog();
-                                if (!IsDeposit)
+                                CurrentPrescription.IsDeposit = (bool)y.ShowDialog();
+                                if (!CurrentPrescription.IsDeposit)
                                     return;
                             }
-                            if (!IsDeposit)
+                            if (!CurrentPrescription.IsDeposit)
                             {
                                 SelectedErrorCode = new IcErrorCodeWindow.IcErrorCode();
                                 SelectedErrorCode = icErrorWindow.SelectedItem;
@@ -622,17 +621,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             _firstTimeDecMasId = declareDb.InsertDeclareData(_currentDeclareData);
                         //ProductDb.InsertEntry(medCopayName, declareTrade.CopayMent, "DecMasId", _currentDecMasId);
                         ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
-                        if (!CurrentPrescription.IsGetIcCard && IsDeposit)
+                        if (!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         {
                             declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
                             ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
                         }
                         else
                         {
-                            declareDb.InsertDeclareRegister(_currentDecMasId, IsSend, true, CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
+                            declareDb.InsertDeclareRegister(_firstTimeDecMasId, IsSend, true, CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
                         }
-                        ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),
-                            "DecMasId", _firstTimeDecMasId);
+                        if(!CurrentPrescription.IsDeposit)
+                            ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),"DecMasId", _firstTimeDecMasId);
                         var medTotalPrice = 0.00;
                         foreach (var med in _currentDeclareData.Prescription.Medicines)
                         {
@@ -666,7 +665,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             declareTrade, PrescriptionSendData); //送到singde
                     }
 
-                    declareDb.CheckPredictChronicExist(_firstTimeDecMasId); //刪除同人同科別預約慢箋
+                    //declareDb.CheckPredictChronicExist(_firstTimeDecMasId); //刪除同人同科別預約慢箋
 
                     var intDecMasId = Convert.ToInt32(_firstTimeDecMasId);
                     for (var i = Convert.ToInt32(CurrentPrescription.ChronicSequence) + 1;
@@ -1996,7 +1995,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     for (var i = 0; i < 6; i++)
                     {
                         if (icData[startIndex + 3] == 32) break;
-                        TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex));
+                        TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex,false));
                         startIndex += 69;
                     }
                 }
