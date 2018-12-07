@@ -1496,6 +1496,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
 
             CountMedicinesCost();
+            SetSubmmitButton();
         }
 
         public void SetValueByDecMasId(string decMasId)
@@ -1526,6 +1527,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
 
             CountMedicinesCost();
+            SetSubmmitButton();
         }
 
         private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -2164,14 +2166,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break; 
             }
             var tmpMedicalNumber = MedicalNumber.Text;
-            if (!int.TryParse(MedicalNumber.Text, out var seqence)) return;
-            if (seqence > 1)
+            if (!int.TryParse(ChronicSequence.Text, out var seqence))
             {
-                var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
+                var myBinding = new Binding("CurrentPrescription.Customer.IcCard.MedicalNumber");
                 BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
                 MedicalNumber.Text = tmpMedicalNumber;
-                CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + MedicalNumber.Text;
-                CurrentPrescription.OriginalMedicalNumber = tmpMedicalNumber;
+                return;
+            }
+            
+            if (seqence > 1)
+            {
+               var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
+               BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+               MedicalNumber.Text = tmpMedicalNumber;
+               CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence.Text;
+               CurrentPrescription.OriginalMedicalNumber = tmpMedicalNumber;
             }
             else
             {
