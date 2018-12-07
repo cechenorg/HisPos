@@ -2062,21 +2062,27 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void LoadPatentDataFromIcCard()
         {
-            Action methodDelegate = delegate ()
+            Action loadPatentDataDelegate = delegate ()
             {
                 if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
                 {
                     var strLength = 72;
                     var icData = new byte[72];
-                    MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);
-                    if (MainWindow.Instance.HisApiErrorCode == 0)
+                    HisApiBase.OpenCom();
+                    if (((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened)
                     {
-                        MainWindow.Instance.SetCardReaderStatus("健保卡讀取成功");
-                        CurrentPrescription.IsGetIcCard = true;
-                        icData.CopyTo(BasicDataArr, 0);
-                        CusBasicData = new BasicData(icData);
-                        CurrentPrescription.Customer = new Customer(CusBasicData);
-                        CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
+                        MainWindow.Instance.SetCardReaderStatus("健保卡資料讀取中...");
+                        MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);
+                        if (MainWindow.Instance.HisApiErrorCode == 0)
+                        {
+                            MainWindow.Instance.SetCardReaderStatus("健保卡讀取成功");
+                            CurrentPrescription.IsGetIcCard = true;
+                            icData.CopyTo(BasicDataArr, 0);
+                            CusBasicData = new BasicData(icData);
+                            HisApiBase.CloseCom();
+                            CurrentPrescription.Customer = new Customer(CusBasicData);
+                            CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
+                        }
                     }
                 }
                 else
@@ -2084,7 +2090,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
                 }
             };
-            MainWindow.Instance.Dispatcher.BeginInvoke(methodDelegate);
+            MainWindow.Instance.Dispatcher.BeginInvoke(loadPatentDataDelegate);
         }
 
         private void MedicalNumber_TextChanged(object sender, TextChangedEventArgs e)
