@@ -565,7 +565,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             medTotalPrice += double.Parse(ProductDb.GetBucklePrice(med.Id,
                                 ((IProductDeclare) (DeclareMedicine) med).Amount.ToString()));
                         }
-
+                        declareDb.AdjustChronicById(_currentDecMasId);
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _currentDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _currentDecMasId); //庫存扣庫
                         declareDb.InsertDeclareTrade(_currentDecMasId, declareTrade);//Insert Trade
@@ -616,7 +616,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             medTotalPrice += double.Parse(ProductDb.GetBucklePrice(med.Id,
                                 ((IProductDeclare)(DeclareMedicine)med).Amount.ToString()));
                         }
-
+                        declareDb.AdjustChronicById(_firstTimeDecMasId);
                         ProductDb.InsertEntry(medEntryName, "-" + medTotalPrice, "DecMasId", _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
                         declareDb.InsertDeclareTrade(_firstTimeDecMasId, declareTrade);//Insert Trade
@@ -1259,23 +1259,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (CurrentPrescription.Medicines.Count <= 0) return;
             if (CurrentPrescription.Treatment.AdjustCase.Id != "2") return;
             var adjustBtnEnable = CurrentPrescription.Treatment.AdjustDate.Date.Equals(DateTime.Now.Date);
-            foreach (var m in CurrentPrescription.Medicines)
-            {
-                if (!(m is DeclareMedicine med)) continue;
-                if (med.Amount > med.Stock.Inventory)
-                    adjustBtnEnable = false;
-            }
-
-            if (adjustBtnEnable == false)
-            {
-                DeclareSubmit.IsEnabled = false;
-                ButtonDeclareRegister.IsEnabled = true;
-            }
-            else
-            {
-                DeclareSubmit.IsEnabled = true;
-                ButtonDeclareRegister.IsEnabled = false;
-            }
+           
         }
 
         private void CountCharge()
@@ -1438,32 +1422,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ChronicSequence_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var t = sender as TextBox;
-            var tmpMedicalNumber = MedicalNumber.Text;
+            var t = sender as TextBox; 
             if (string.IsNullOrEmpty(t.Text))
             {
                 AdjustCaseCombo.SelectedIndex = 0;
                 TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
                 return;
-            }
-
+            } 
             AdjustCaseCombo.SelectedItem = AdjustCases.SingleOrDefault(a => a.Name.Contains("慢性病連續處方調劑"));
             TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(c => c.Name.Equals("慢性病"));
-            if (!int.TryParse(t.Text, out var seqence)) return;
-            if (seqence > 1)
-            {
-                var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
-                BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
-                MedicalNumber.Text = tmpMedicalNumber;
-                CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + t.Text;
-                CurrentPrescription.OriginalMedicalNumber = tmpMedicalNumber;
-            }
-            else
-            {
-                var myBinding = new Binding("CurrentPrescription.Customer.IcCard.MedicalNumber");
-                BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
-                MedicalNumber.Text = tmpMedicalNumber;
-            }
+          
             SetSubmmitButton();
         }
 
@@ -2195,7 +2163,22 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     DeclareSubmit.IsEnabled = false;
                     break; 
             }
-
+            var tmpMedicalNumber = MedicalNumber.Text;
+            if (!int.TryParse(MedicalNumber.Text, out var seqence)) return;
+            if (seqence > 1)
+            {
+                var myBinding = new Binding("CurrentPrescription.OriginalMedicalNumber");
+                BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+                MedicalNumber.Text = tmpMedicalNumber;
+                CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + MedicalNumber.Text;
+                CurrentPrescription.OriginalMedicalNumber = tmpMedicalNumber;
+            }
+            else
+            {
+                var myBinding = new Binding("CurrentPrescription.Customer.IcCard.MedicalNumber");
+                BindingOperations.SetBinding(MedicalNumber, TextBox.TextProperty, myBinding);
+                MedicalNumber.Text = tmpMedicalNumber;
+            }
         }
     }
 }

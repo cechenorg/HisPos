@@ -1035,6 +1035,11 @@ namespace His_Pos.Class.Declare
             WebApi.SendToCooperClinic(cooperativeClinicJson);
             conn.ExecuteProc("[HIS_POS_DB].[API].[UpdateUnSendCooperClinicStatus]");
         }
-         
+        public void AdjustChronicById(string declareId) {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_local);
+            parameters.Add(new SqlParameter("DECMAS_ID", declareId));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[AdjustChronicById]", parameters);
+        } 
     }
 }
