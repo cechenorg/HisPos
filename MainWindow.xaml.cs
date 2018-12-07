@@ -244,10 +244,8 @@ namespace His_Pos
         {
             var thread = new Thread(() =>
             {
-                HisApiBase.OpenCom();
                 Action VerifySamDc = delegate
                 {
-                    if (!((ViewModelMainWindow) DataContext).IsConnectionOpened) return;
                     HisApiBase.CheckCardStatus(1);
                     if (!((ViewModelMainWindow)DataContext).IsVerifySamDc)
                     {
@@ -255,12 +253,10 @@ namespace His_Pos
                     }
                     else
                     {
-                        HisApiBase.csCloseCom();
                         ((ViewModelMainWindow)DataContext).IsVerifySamDc = true;
                     }
                 };
                 Instance.Dispatcher.BeginInvoke(VerifySamDc);
-                
             });
             thread.Start();
             if (!thread.Join(60000))
