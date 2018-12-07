@@ -35,7 +35,7 @@ using System.Runtime.CompilerServices;
 
 namespace His_Pos.ViewModel
 {
-    public class MainViewModel : ViewModelBase,INotifyPropertyChanged
+    public class MainViewModel : ViewModelBase
     {
         //since we don't know what kind of objects are bound, so the sorting happens outside with the ReorderTabsCommand.
         public RelayCommand<TabReorder> ReorderTabsCommand { get; set; }
@@ -411,14 +411,6 @@ namespace His_Pos.ViewModel
             }
             
             return false;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

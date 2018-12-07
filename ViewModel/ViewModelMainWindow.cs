@@ -10,7 +10,7 @@ namespace His_Pos.ViewModel
         private bool _canMoveTabs;
         public bool CanMoveTabs
         {
-            get { return _canMoveTabs; }
+            get => _canMoveTabs;
             set
             {
                 if (_canMoveTabs != value)
@@ -23,7 +23,7 @@ namespace His_Pos.ViewModel
         private bool _showAddButton;
         public bool ShowAddButton
         {
-            get { return _showAddButton; }
+            get => _showAddButton;
             set
             {
                 if (_showAddButton != value)
@@ -39,8 +39,7 @@ namespace His_Pos.ViewModel
             get => _cardReaderStatus;
             set
             {
-                _cardReaderStatus = value;
-                OnPropertyChanged(nameof(CardReaderStatus));
+                Set(() => CardReaderStatus, ref _cardReaderStatus, value);
             }
         }
         private string _samDcStatus;
@@ -50,7 +49,7 @@ namespace His_Pos.ViewModel
             set
             {
                 _samDcStatus = value;
-                OnPropertyChanged(nameof(SamDcStatus));
+                Set(() => SamDcStatus, ref _samDcStatus, value);
             }
         }
 
@@ -61,7 +60,7 @@ namespace His_Pos.ViewModel
             set
             {
                 _hpcCardStatus = value;
-                OnPropertyChanged(nameof(HpcCardStatus));
+                Set(() => HpcCardStatus, ref _hpcCardStatus, value);
             }
         }
 
@@ -84,9 +83,27 @@ namespace His_Pos.ViewModel
                 _isIcCardValid = value;
             }
         }
+        private bool _isHpcValid;
 
-        public bool IsHpcValid { get; set; } = false;
-        public bool IsVerifySamDc { get; set; } = false;
+        public bool IsHpcValid
+        {
+            get => _isHpcValid;
+            set
+            {
+                Set(() => IsHpcValid, ref _isHpcValid, value);
+            }
+        }
+
+        private bool _isVerifySamDc;
+
+        public bool IsVerifySamDc
+        {
+            get => _isVerifySamDc;
+            set
+            {
+                Set(() => IsVerifySamDc, ref _isVerifySamDc, value);
+            }
+        }
 
         public ViewModelMainWindow()
         {

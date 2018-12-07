@@ -246,6 +246,7 @@
             </StackPanel>
             <StackPanel
                 Grid.Row="0"
+                Grid.RowSpan="2"
                 Grid.Column="0"
                 VerticalAlignment="Bottom"
                 Background="#FF333337"
@@ -334,7 +335,7 @@
                     </chromeTabs:ChromeTabControl.ItemTemplate>
                 </chromeTabs:ChromeTabControl>
             </DockPanel>
-            <StatusBar  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="#FF333337">
+            <StatusBar  Grid.Row="1" Grid.Column="1" Background="#FF4B4B4D">
                 <StatusBar.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Grid>
@@ -355,11 +356,11 @@
                 </StatusBarItem>
                 <StatusBarItem Grid.Column="1">
                     <TextBlock Foreground="White" FontFamily="Segoe UI Semi"
-                               FontSize="14" Margin="10,0,0,0"><Run Text="安全模組:已認證"/></TextBlock>
+                               FontSize="14" Margin="10,0,0,0" Text="{Binding SamDcStatus, UpdateSourceTrigger=PropertyChanged}"/>
                 </StatusBarItem>
                 <StatusBarItem Grid.Column="2">
                     <TextBlock Foreground="White" FontFamily="Segoe UI Semi"
-                               FontSize="14" Margin="10,0,0,0"><Run Text="醫事人員卡:正常(未輸入PIN碼)"/></TextBlock>
+                               FontSize="14" Margin="10,0,0,0" Text="{Binding HpcCardStatus, UpdateSourceTrigger=PropertyChanged}"/>
                 </StatusBarItem>
             </StatusBar>
         </Grid>
