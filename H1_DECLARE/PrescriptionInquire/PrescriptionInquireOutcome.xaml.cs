@@ -665,94 +665,78 @@ namespace His_Pos.PrescriptionInquire
         #region 每日上傳.讀寫卡相關函數
         public void LogInIcData()
         {
-            Action cardMakeUpDelegate = delegate ()
-            {
-                var treatRecCollection = new ObservableCollection<TreatmentDataNoNeedHpc>();//就醫紀錄
-                var prescriptionSignatureList = new List<string>();//處方簽章
-                var basicDataArr = new byte[72];
-                var strLength = 72;
-                var icData = new byte[72];
+            var treatRecCollection = new ObservableCollection<TreatmentDataNoNeedHpc>();//就醫紀錄
+            var prescriptionSignatureList = new List<string>();//處方簽章
+            var basicDataArr = new byte[72];
+            var strLength = 72;
+            var icData = new byte[72];
 
-                HisApiBase.OpenCom();
-                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+            HisApiBase.OpenCom();
+            if (MainWindow.Instance.HisApiErrorCode == 0 && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+            {
+                MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);//讀取基本資料
+                if (MainWindow.Instance.HisApiErrorCode == 0)
                 {
-                    MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);//讀取基本資料
+                    HisApiBase.CloseCom();
+                    icData.CopyTo(basicDataArr, 0);
+                    InquiredPrescription.Prescription.IsGetIcCard = true;
+                    CusBasicData = new BasicData(icData);
+                    ////取得就醫紀錄
+                    strLength = 498;
+                    icData = new byte[498];
+                    HisApiBase.OpenCom();
+                    MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);//取得就醫紀錄
+                    var startIndex = 84;
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (icData[startIndex + 3] == 32)
+                            break;
+                        treatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex, true));
+                        startIndex += 69;
+                    }
+                    HisApiBase.CloseCom();
+                    strLength = 296;
+                    icData = new byte[296];
+                    var cs = new ConvertData();
+                    var cTreatItem = cs.StringToBytes("AF\0", 3);
+                    //新生兒就醫註記,長度兩個char
+                    var cBabyTreat = treatRecCollection.Count > 0 ? cs.StringToBytes(treatRecCollection[0].NewbornTreatmentMark + "\0", 3) : cs.StringToBytes(" ", 2);
+                    //補卡註記,長度一個char
+                    var cTreatAfterCheck = new byte[] { 1 };
+                    Seq = new SeqNumber(icData);
+                    HisApiBase.OpenCom();
+                    MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+                    //取得就醫序號
                     if (MainWindow.Instance.HisApiErrorCode == 0)
                     {
-                        HisApiBase.CloseCom();
-                        icData.CopyTo(basicDataArr, 0);
-                        InquiredPrescription.Prescription.IsGetIcCard = true;
-                        CusBasicData = new BasicData(icData);
-                        ////取得就醫紀錄
-                        strLength = 498;
-                        icData = new byte[498];
-                        HisApiBase.OpenCom();
-                        MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);//取得就醫紀錄
-                        var startIndex = 84;
-                        for (var i = 0; i < 6; i++)
+                        IsGetMedicalNumber = true;
+                        InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = Seq.MedicalNumber;
+                        var icPrescripList = new List<IcPrescriptData>();
+                        foreach (var med in InquiredPrescription.Prescription.Medicines)
                         {
-                            if (icData[startIndex + 3] == 32)
-                                break;
-                            treatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex, true));
-                            startIndex += 69;
-                        }
-                        HisApiBase.CloseCom();
-                        strLength = 296;
-                        icData = new byte[296];
-                        var cs = new ConvertData();
-                        var cTreatItem = cs.StringToBytes("AF\0", 3);
-                        //新生兒就醫註記,長度兩個char
-                        var cBabyTreat = treatRecCollection.Count > 0 ? cs.StringToBytes(treatRecCollection[0].NewbornTreatmentMark + "\0", 3) : cs.StringToBytes(" ", 2);
-                        //補卡註記,長度一個char
-                        var cTreatAfterCheck = new byte[] { 1 };
-                        Seq = new SeqNumber(icData);
-                        HisApiBase.OpenCom();
-                        MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
-                        //取得就醫序號
-                        if (MainWindow.Instance.HisApiErrorCode == 0)
-                        {
-                            IsGetMedicalNumber = true;
-                            InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = Seq.MedicalNumber;
-                            var icPrescripList = new List<IcPrescriptData>();
-                            foreach (var med in InquiredPrescription.Prescription.Medicines)
+                            if (!(med is DeclareMedicine)) continue;
+                            if (!((DeclareMedicine)med).PaySelf)
                             {
-                                if (!(med is DeclareMedicine)) continue;
-                                if (!((DeclareMedicine)med).PaySelf)
-                                {
-                                    icPrescripList.Add(new IcPrescriptData((DeclareMedicine)med));
-                                }
-                            }
-                            var pPatientId = new byte[10];
-                            var pPatientBitrhDay = new byte[10];
-                            Array.Copy(basicDataArr, 32, pPatientId, 0, 10);
-                            Array.Copy(basicDataArr, 42, pPatientBitrhDay, 0, 7);
-                            var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
-                            foreach (var icPrescript in icPrescripList)
-                            {
-                                var pData = cs.StringToBytes(icPrescript.DataStr, 61);
-                                var pDataInput = pDateTime.Concat(pData).ToArray();
-                                strLength = 40;
-                                icData = new byte[40];
-                                HisApiBase.OpenCom();
-                                MainWindow.Instance.HisApiErrorCode = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput, icData, ref strLength);
-                                if (MainWindow.Instance.HisApiErrorCode == 0)
-                                    prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
-                                HisApiBase.CloseCom();
+                                icPrescripList.Add(new IcPrescriptData((DeclareMedicine)med));
                             }
                         }
-                    }
-                    else
-                    {
-                        icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), MainWindow.Instance.HisApiErrorCode));
-                        icErrorWindow.ShowDialog();
-                        while (icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
+                        var pPatientId = new byte[10];
+                        var pPatientBitrhDay = new byte[10];
+                        Array.Copy(basicDataArr, 32, pPatientId, 0, 10);
+                        Array.Copy(basicDataArr, 42, pPatientBitrhDay, 0, 7);
+                        var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
+                        foreach (var icPrescript in icPrescripList)
                         {
-                            icErrorWindow.ShowDialog();
-                            var m = new MessageWindow("讀卡機異常，請選擇異常代碼", MessageType.ERROR, true);
-                            m.ShowDialog();
+                            var pData = cs.StringToBytes(icPrescript.DataStr, 61);
+                            var pDataInput = pDateTime.Concat(pData).ToArray();
+                            strLength = 40;
+                            icData = new byte[40];
+                            HisApiBase.OpenCom();
+                            MainWindow.Instance.HisApiErrorCode = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput, icData, ref strLength);
+                            if (MainWindow.Instance.HisApiErrorCode == 0)
+                                prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                            HisApiBase.CloseCom();
                         }
-                        SelectedErrorCode = new IcErrorCodeWindow.IcErrorCode();
-                        SelectedErrorCode = icErrorWindow.SelectedItem;
                     }
                 }
                 else
@@ -762,14 +746,26 @@ namespace His_Pos.PrescriptionInquire
                     while (icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
                     {
                         icErrorWindow.ShowDialog();
-                        var m = new MessageWindow("讀卡機異常，請選擇異常代碼",MessageType.ERROR,true);
+                        var m = new MessageWindow("讀卡機異常，請選擇異常代碼", MessageType.ERROR, true);
                         m.ShowDialog();
                     }
                     SelectedErrorCode = new IcErrorCodeWindow.IcErrorCode();
                     SelectedErrorCode = icErrorWindow.SelectedItem;
                 }
-            };
-            Instance.Dispatcher.BeginInvoke(cardMakeUpDelegate);
+            }
+            else
+            {
+                icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), MainWindow.Instance.HisApiErrorCode));
+                icErrorWindow.ShowDialog();
+                while (icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(icErrorWindow.SelectedItem.Id))
+                {
+                    icErrorWindow.ShowDialog();
+                    var m = new MessageWindow("讀卡機異常，請選擇異常代碼", MessageType.ERROR, true);
+                    m.ShowDialog();
+                }
+                SelectedErrorCode = new IcErrorCodeWindow.IcErrorCode();
+                SelectedErrorCode = icErrorWindow.SelectedItem;
+            }
         }
 
         public void CreatIcUploadData()
@@ -781,10 +777,21 @@ namespace His_Pos.PrescriptionInquire
                 var mainMessage = new MainMessage(icData);
                 var headerMessage = new Header { DataFormat = "1" };
                 var icRecord = new REC(headerMessage, mainMessage);
-
+                int sigCount = 0;
                 for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
                 {
                     if (InquiredPrescription.DeclareDetails[i].MedicalOrder.Equals("9"))
+                        continue;
+                    bool isMedicine = false;
+                    foreach (var m in InquiredPrescription.Prescription.Medicines)
+                    {
+                        if (_currentDeclareData.DeclareDetails[i].MedicalId.Equals(m.Id))
+                        {
+                            isMedicine = true;
+                            break;
+                        }
+                    }
+                    if (!isMedicine)
                         continue;
                     var medicalData = new MedicalData
                     {
@@ -794,7 +801,7 @@ namespace His_Pos.PrescriptionInquire
                         Usage = InquiredPrescription.DeclareDetails[i].Usage,
                         Days = InquiredPrescription.DeclareDetails[i].Days.ToString(),
                         TotalAmount = InquiredPrescription.DeclareDetails[i].Total.ToString(),
-                        PrescriptionSignature = _prescriptionSignatureList[i],
+                        PrescriptionSignature = _prescriptionSignatureList[sigCount],
                     };
                     if (!string.IsNullOrEmpty(InquiredPrescription.DeclareDetails[i].Position))
                         medicalData.TreatmentPosition = InquiredPrescription.DeclareDetails[i].Position;
@@ -817,7 +824,7 @@ namespace His_Pos.PrescriptionInquire
                             medicalData.PrescriptionDeliveryMark = "04";
                             break;
                     }
-
+                    sigCount++;
                     medicalDatas.Add(medicalData);
                 }
                 icRecord.MainMessage.MedicalMessageList = medicalDatas;

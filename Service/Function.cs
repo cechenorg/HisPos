@@ -256,7 +256,7 @@ namespace His_Pos
                 var pBuffer = new byte[50];
                 var iBufferLength = 50;
                 HisApiBase.OpenCom();
-                if(((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+                if(MainWindow.Instance.HisApiErrorCode == 0 && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
                     HisApiBase.csUploadData(fileNameArr, fileSize, count, pBuffer, ref iBufferLength);
                 HisApiBase.CloseCom();
             }

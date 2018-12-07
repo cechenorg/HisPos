@@ -304,7 +304,7 @@ namespace His_Pos
         {
             void MethodDelegate()
             {
-                ((ViewModelMainWindow)DataContext).HpcCardStatus = "安全模組狀態 : " + status;
+                ((ViewModelMainWindow)DataContext).SamDcStatus = "安全模組狀態 : " + status;
             }
             Dispatcher.BeginInvoke((Action)MethodDelegate);
         }

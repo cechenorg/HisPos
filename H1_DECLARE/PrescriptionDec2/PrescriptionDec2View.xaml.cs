@@ -15,6 +15,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -744,52 +745,48 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void LogInIcData()
         {
-            Action logInIcDataDelegate = delegate ()
+            try
             {
-                try
+                var cs = new ConvertData();
+                var icPrescripList = new List<IcPrescriptData>();
+                foreach (var med in CurrentPrescription.Medicines)
                 {
-                    var cs = new ConvertData();
-                    var icPrescripList = new List<IcPrescriptData>();
-                    foreach (var med in CurrentPrescription.Medicines)
+                    if (!(med is DeclareMedicine)) continue;
+                    if (!((DeclareMedicine)med).PaySelf)
                     {
-                        if (!(med is DeclareMedicine)) continue;
-                        if (!((DeclareMedicine)med).PaySelf)
-                        {
-                            icPrescripList.Add(new IcPrescriptData((DeclareMedicine)med));
-                        }
-                    }
-                    if (!CurrentPrescription.IsGetIcCard) return;
-                    var pPatientId = new byte[10];
-                    var pPatientBitrhDay = new byte[10];
-                    Array.Copy(BasicDataArr, 32, pPatientId, 0, 10);
-                    Array.Copy(BasicDataArr, 42, pPatientBitrhDay, 0, 7);
-                    var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
-                    foreach (var icPrescript in icPrescripList)
-                    {
-                        var pData = cs.StringToBytes(icPrescript.DataStr, 61);
-                        var pDataInput = pDateTime.Concat(pData).ToArray();
-                        var strLength = 40;
-                        var icData = new byte[40];
-                        HisApiBase.OpenCom();
-                        if (((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened)
-                        {
-                            MainWindow.Instance.HisApiErrorCode = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
-                                icData, ref strLength);
-                            if (MainWindow.Instance.HisApiErrorCode == 0)
-                                _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
-                            HisApiBase.CloseCom();
-                        }
-                        else
-                            break;
+                        icPrescripList.Add(new IcPrescriptData((DeclareMedicine)med));
                     }
                 }
-                catch (Exception ex)
+                if (!CurrentPrescription.IsGetIcCard) return;
+                var pPatientId = new byte[10];
+                var pPatientBitrhDay = new byte[10];
+                Array.Copy(BasicDataArr, 32, pPatientId, 0, 10);
+                Array.Copy(BasicDataArr, 42, pPatientBitrhDay, 0, 7);
+                var pDateTime = cs.StringToBytes(Seq.TreatDateTime + " ", 14);
+                foreach (var icPrescript in icPrescripList)
                 {
-                    var m = new MessageWindow("LogInIcData()", MessageType.ERROR, true);
-                    m.ShowDialog();
+                    var pData = cs.StringToBytes(icPrescript.DataStr, 61);
+                    var pDataInput = pDateTime.Concat(pData).ToArray();
+                    var strLength = 40;
+                    var icData = new byte[40];
+                    var res = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+                    if (res == 0)
+                    {
+                        res = HisApiBase.hisWritePrescriptionSign(pDateTime, pPatientId, pPatientBitrhDay, pDataInput,
+                            icData, ref strLength);
+                        if (res == 0)
+                            _prescriptionSignatureList.Add(cs.ByToString(icData, 0, 40));
+                        HisApiBase.csCloseCom();
+                    }
+                    else
+                        break;
                 }
-            };
-            Instance.Dispatcher.BeginInvoke(logInIcDataDelegate);
+            }
+            catch (Exception ex)
+            {
+                var m = new MessageWindow("LogInIcData()", MessageType.ERROR, true);
+                m.ShowDialog();
+            }
         }
 
         public void CreatIcUploadData()
@@ -801,10 +798,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var mainMessage = new MainMessage(icData);
                 var headerMessage = new Header { DataFormat = "1" };
                 var icRecord = new REC(headerMessage, mainMessage);
-
-                for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+                int sigCount = 0;
+                for (var i = 0; i < _currentDeclareData.DeclareDetails.Count; i++)
                 {
                     if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
+                        continue;
+                    bool isMedicine = false;
+                    foreach (var m in CurrentPrescription.Medicines)
+                    {
+                        if (_currentDeclareData.DeclareDetails[i].MedicalId.Equals(m.Id))
+                        {
+                            isMedicine = true;
+                            break;
+                        }
+                    }
+                    if(!isMedicine)
                         continue;
                     var medicalData = new MedicalData
                     {
@@ -814,7 +822,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         Usage = _currentDeclareData.DeclareDetails[i].Usage,
                         Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
                         TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
-                        PrescriptionSignature = _prescriptionSignatureList[i],
+                        PrescriptionSignature = _prescriptionSignatureList[sigCount],
                     };
                     if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
                         medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
@@ -837,8 +845,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             medicalData.PrescriptionDeliveryMark = "04";
                             break;
                     }
-
                     medicalDatas.Add(medicalData);
+                    sigCount++;
                 }
                 icRecord.MainMessage.MedicalMessageList = medicalDatas;
                 icRecord.SerializeObject();
@@ -849,7 +857,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 Action creatIcUploadDataDelegate = delegate ()
                 {
-                    var m = new MessageWindow("CreatIcUploadData()", MessageType.ERROR, true);
+                    var m = new MessageWindow("產生健保資料:"+ex.Message, MessageType.ERROR, true);
                     m.ShowDialog();
                 };
                 Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
@@ -1339,7 +1347,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 t.Text = "0";
                 t.SelectAll();
             }
-
             CountMedicinesCost();
         }
 
@@ -1954,54 +1961,49 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void ReadTreatRecord()
         {
-            void ReadTreatDelegate()
+            var strLength = 296;
+            var icData = new byte[296];
+            var cs = new ConvertData();
+            var cTreatItem = cs.StringToBytes("AF\0", 3);
+            //新生兒就醫註記,長度兩個char
+            var cBabyTreat = TreatRecCollection.Count > 0
+                ? cs.StringToBytes(TreatRecCollection[0].NewbornTreatmentMark + "\0", 3)
+                : cs.StringToBytes(" ", 2);
+            //補卡註記,長度一個char
+            var cTreatAfterCheck = new byte[] {1};
+            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
+            MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
+            //取得就醫序號
+            if (res == 0)
             {
-                var strLength = 296;
-                var icData = new byte[296];
-                var cs = new ConvertData();
-                var cTreatItem = cs.StringToBytes("AF\0", 3);
-                //新生兒就醫註記,長度兩個char
-                var cBabyTreat = TreatRecCollection.Count > 0
-                    ? cs.StringToBytes(TreatRecCollection[0].NewbornTreatmentMark + "\0", 3)
-                    : cs.StringToBytes(" ", 2);
-                //補卡註記,長度一個char
-                var cTreatAfterCheck = new byte[] {1};
-                MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
-                var res = HisApiBase.hisGetSeqNumber256(cTreatItem, cBabyTreat, cTreatAfterCheck, icData, ref strLength);
-                MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
-                //取得就醫序號
-                if (res == 0)
-                {
-                    IsMedicalNumberGet = true;
-                    Seq = new SeqNumber(icData);
-                    CurrentPrescription.Customer.IcCard.MedicalNumber = Seq.MedicalNumber;
-                    NotifyPropertyChanged(nameof(CurrentPrescription.Customer.IcCard));
-                }
-                //未取得就醫序號
-                else
-                {
-                    GetMedicalNumberErrorCode = res;
-                }
-
-                //取得就醫紀錄
-                strLength = 498;
-                icData = new byte[498];
-                MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
-                res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
-                MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
-                if (res == 0)
-                {
-                    var startIndex = 84;
-                    for (var i = 0; i < 6; i++)
-                    {
-                        if (icData[startIndex + 3] == 32) break;
-                        TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex,false));
-                        startIndex += 69;
-                    }
-                }
+                IsMedicalNumberGet = true;
+                Seq = new SeqNumber(icData);
+                CurrentPrescription.Customer.IcCard.MedicalNumber = Seq.MedicalNumber;
+                NotifyPropertyChanged(nameof(CurrentPrescription.Customer.IcCard));
+            }
+            //未取得就醫序號
+            else
+            {
+                GetMedicalNumberErrorCode = res;
             }
 
-            Dispatcher.BeginInvoke((Action) ReadTreatDelegate);
+            //取得就醫紀錄
+            strLength = 498;
+            icData = new byte[498];
+            MainWindow.Instance.HisApiErrorCode = HisApiBase.csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            res = HisApiBase.hisGetTreatmentNoNeedHPC(icData, ref strLength);
+            MainWindow.Instance.HisApiErrorCode = HisApiBase.csCloseCom();
+            if (res == 0)
+            {
+                var startIndex = 84;
+                for (var i = 0; i < 6; i++)
+                {
+                    if (icData[startIndex + 3] == 32) break;
+                    TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex,false));
+                    startIndex += 69;
+                }
+            }
         }
 
         public void CheckChronicExist()
@@ -2097,7 +2099,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
                 }
             };
-            MainWindow.Instance.Dispatcher.BeginInvoke(methodDelegate);
+            Instance.Dispatcher.InvokeAsync(methodDelegate);
         }
 
         private void MedicalNumber_TextChanged(object sender, TextChangedEventArgs e)
