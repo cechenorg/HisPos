@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStyle="None"
         mc:Ignorable="d" Title="選擇異常代碼" Height="365" Width="450" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="HideHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
@@ -10,7 +11,14 @@
         </Style>
     </Window.Resources>
      <Grid>
-        <StackPanel Orientation="Vertical" Margin="10,10,10,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+         <StackPanel Grid.Row="0">
+            <Label Background="#FF2D2D30" Height="25" Content="選擇異常代碼" Foreground="GhostWhite"/>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Margin="10,10,10,10" Grid.Row="1">
             <Label Content="{Binding ErrorMessage}" Height="30" Margin="0,0,0,10"/>
             <ListView x:Name="lv" SelectionMode="Single" ItemsSource="{Binding IcErrorCodes,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="220">
                     <ListView.View>

@@ -1059,5 +1059,28 @@ namespace His_Pos
                 return;
             }
         }
+
+        public void LoginIcData(PrescriptionInquireOutcome prescriptionInquireOutcome)
+        {
+            prescriptionInquireOutcome.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("卡片資料寫入中...");
+                prescriptionInquireOutcome.LogInIcData();
+                Dispatcher.Invoke((Action)(() =>
+                {
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    prescriptionInquireOutcome.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
     }
 }

@@ -285,4 +285,19 @@ namespace His_Pos
             return double.TryParse(strValue, out var resultDouble) ? resultDouble : 0;
         }
     }
+
+    [ValueConversion(typeof(bool), typeof(string))]
+    public class IsGetCardConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var isGetCard = (bool)value;
+            return isGetCard ? "已過卡" : "未過卡";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

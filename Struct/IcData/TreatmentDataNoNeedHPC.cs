@@ -26,13 +26,13 @@
          * 住院部分負擔費用【當次急性30天， 慢性180天以下】(140-146)
          * 住院部分負擔費用【當次急性31天， 慢性181天以上】(147-153)
          */
-        public TreatmentDataNoNeedHpc(byte[] pBuffer, int startIndex)
+        public TreatmentDataNoNeedHpc(byte[] pBuffer, int startIndex,bool isMakeUp)
         {
             var f = new Function();
             TreatmentCategory = f.ByteArrayToString(2, pBuffer, startIndex);
             NewbornTreatmentMark = f.ByteArrayToString(1, pBuffer, startIndex + 2);
             TreatmentDateTime = f.ByteArrayToString(13, pBuffer, startIndex + 3);
-            MakeUpMark = f.ByteArrayToString(1, pBuffer, startIndex + 16);
+            MakeUpMark = isMakeUp ? "2" : f.ByteArrayToString(1, pBuffer, startIndex + 16);
             MedicalNumber = f.ByteArrayToString(4, pBuffer, startIndex + 17);
             HospitalId = f.ByteArrayToString(10, pBuffer, startIndex + 21);
             TreatmentFee = f.ByteArrayToString(8, pBuffer, startIndex + 31);
