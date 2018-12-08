@@ -216,7 +216,7 @@ namespace His_Pos.HisApi
                 MainWindow.Instance.SetCardReaderStatus(
                     ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened ? "讀卡機連接開啟成功" : "讀卡機連接開啟失敗");
             };
-            MainWindow.Instance.Dispatcher.BeginInvoke(methodDelegate);
+            MainWindow.Instance.Dispatcher.InvokeAsync(methodDelegate);
         }
 
         public static void CloseCom()
@@ -228,8 +228,6 @@ namespace His_Pos.HisApi
         public static void CheckCardStatus(int type)
         {
             OpenCom();
-            if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
-                return;
             string status;
             switch (type)
             {
@@ -298,8 +296,12 @@ namespace His_Pos.HisApi
         {
             MainWindow.Instance.SetSamDcStatus("與健保局連線認證中，請稍後...");
             OpenCom();
-            if(!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+            if (!((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened && MainWindow.Instance.HisApiErrorCode != 0)
+            {
+                ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                MainWindow.Instance.SetSamDcStatus("認證失敗");
                 return;
+            }
             MainWindow.Instance.HisApiErrorCode = csVerifySAMDC();
             if (MainWindow.Instance.HisApiErrorCode == 0)
             {
@@ -320,7 +322,7 @@ namespace His_Pos.HisApi
             ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = false;
             ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsHpcValid = false;
             OpenCom();
-            if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+            if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && MainWindow.Instance.HisApiErrorCode != 0)
                 return;
             csSoftwareReset(3);
             CloseCom();

@@ -48,7 +48,6 @@ namespace His_Pos.ViewModel
             get => _samDcStatus;
             set
             {
-                _samDcStatus = value;
                 Set(() => SamDcStatus, ref _samDcStatus, value);
             }
         }
@@ -59,7 +58,6 @@ namespace His_Pos.ViewModel
             get => _hpcCardStatus;
             set
             {
-                _hpcCardStatus = value;
                 Set(() => HpcCardStatus, ref _hpcCardStatus, value);
             }
         }

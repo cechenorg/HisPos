@@ -43,6 +43,11 @@ namespace His_Pos.Class
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
             ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
+            DataColumnCollection columns = row.Table.Columns;
+            if (columns.Contains("IS_GETCARD"))
+            {
+                IsGetIcCard = row["IS_GETCARD"].ToString().Equals("1");
+            }
         }
 
         public Prescription(XmlNode xml)
@@ -118,7 +123,16 @@ namespace His_Pos.Class
                 OnPropertyChanged(nameof(IsGetIcCard));
             }
         }
-
+        private bool _isDeposit;
+        public bool IsDeposit
+        {
+            get => _isDeposit;
+            set
+            {
+                _isDeposit = value;
+                OnPropertyChanged(nameof(IsDeposit));
+            }
+        }//是否押金
         private ObservableCollection<AbstractClass.Product> _medicines;
 
         public ObservableCollection<AbstractClass.Product> Medicines
@@ -181,15 +195,15 @@ namespace His_Pos.Class
                 AddError("0", "就醫序號未填寫");
                 return;
             }
-            if (!string.IsNullOrEmpty(ChronicSequence))
-            {
-                if (int.Parse(ChronicSequence) > 1)
-                {
-                    OriginalMedicalNumber = Customer.IcCard.MedicalNumber.DeepCloneViaJson();
-                    Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
-                }
+            //if (!string.IsNullOrEmpty(ChronicSequence))
+            //{
+            //    if (int.Parse(ChronicSequence) > 1)
+            //    {
+            //        OriginalMedicalNumber = Customer.IcCard.MedicalNumber.DeepCloneViaJson();
+            //        Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
+            //    }
                     
-            }
+            //}
             if (CheckHomeCareAndSmokingCessation())
                 Customer.IcCard.MedicalNumber = "N";
             if (!Customer.IcCard.MedicalNumber.Contains("IC") && Customer.IcCard.MedicalNumber != "N")

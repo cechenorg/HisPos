@@ -112,7 +112,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
             if (!string.IsNullOrEmpty(currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
                 SecondDiagnosisCode = currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
             OutpatientFee = (currentDeclareData.DrugsPoint + currentDeclareData.SpecailMaterialPoint +
-                             currentDeclareData.CopaymentPoint).ToString();
+                             currentDeclareData.CopaymentPoint + currentDeclareData.MedicalServicePoint).ToString();
             OutpatientCopaymentFee = currentDeclareData.CopaymentPoint.ToString();
         }
 
@@ -124,7 +124,7 @@ namespace His_Pos.Class.Declare.IcDataUpload
             var pBuffer = new byte[13];
             var iBufferlength = 13;
             HisApiBase.OpenCom();
-            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
             {
                 MainWindow.Instance.HisApiErrorCode = HisApiBase.csGetDateTime(pBuffer, ref iBufferlength);
                 if (MainWindow.Instance.HisApiErrorCode == 0)

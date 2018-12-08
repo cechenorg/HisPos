@@ -38,6 +38,7 @@
         <hisPos:AutoCompleteIsEnableConverter x:Key="AutoCompleteIsEnableConverter" />
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
         <hisPos:NullTextBoxConverter x:Key="NullTextBoxConverter" />
+        <hisPos:IsGetCardConverter x:Key="IsGetCardConverter" />
     </Window.Resources>
     <Viewbox Stretch="Fill" Name="PrescriptionViewBox">
         <Grid Width="1200" Height="595">
@@ -75,7 +76,7 @@
                                  HorizontalContentAlignment="Center"  Text="{Binding InquiredPrescription.Prescription.Pharmacy.MedicalPersonnel.IcNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged"/>
                         <Label Content="過卡狀態" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch" HorizontalAlignment="Right" Visibility="Collapsed"/>
                         <Label Width="100" MinWidth="50" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalAlignment="Right"
-                                 HorizontalContentAlignment="Center"  Content="" Visibility="Collapsed"/>
+                                 HorizontalContentAlignment="Center"  Content="{Binding InquiredPrescription.Prescription.IsGetIcCard,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource IsGetCardConverter}}" Visibility="Collapsed"/>
                         <Button Content ="補卡" Click="MakeUp_ButtonClick" Margin="10,0,0,0" Visibility="Collapsed"/>
                     </StackPanel>
                 </StackPanel>
