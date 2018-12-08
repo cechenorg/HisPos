@@ -1040,6 +1040,13 @@ namespace His_Pos.Class.Declare
             var conn = new DbConnection(Settings.Default.SQL_local);
             parameters.Add(new SqlParameter("DECMAS_ID", declareId));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[AdjustChronicById]", parameters);
-        } 
+        }
+        public static void UpdateDeclareRegisterMakeUp(string decMasId)
+        {
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_local);
+            parameters.Add(new SqlParameter("ID", decMasId));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateDeclareRegisterByMakeUp]", parameters);
+        }
     }
 }

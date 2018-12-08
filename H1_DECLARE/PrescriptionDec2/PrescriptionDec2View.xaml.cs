@@ -594,7 +594,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break;
                 case 3: //第一次慢箋
                     YesNoMessageWindow prescriptionAdjust;
-                    bool isAdjust = false;
+                    var isAdjust = false;
                     if (CurrentPrescription.Treatment.AdjustDate == DateTime.Today) {
                          prescriptionAdjust = new YesNoMessageWindow("是否調劑處方?", "處方調劑確認");
                          isAdjust = (bool)prescriptionAdjust.ShowDialog();
@@ -735,8 +735,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var medBagPrint = new YesNoMessageWindow("是否列印藥袋及收據", "列印確認");
             var print = (bool)medBagPrint.ShowDialog();
             if(print)
-                NewFunction.PrintMedBag(CurrentPrescription,_currentDeclareData,MedicinePoint,SelfCost,Pay,"登錄",Instance,null);
-
+                NewFunction.PrintMedBag(CurrentPrescription,_currentDeclareData,MedicinePoint,SelfCost,Pay,"登錄",Instance);
 
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
@@ -2080,35 +2079,32 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void LoadPatentDataFromIcCard()
         {
-            Action loadPatentDataDelegate = delegate ()
+            if (HisApiBase.GetStatus(2))
             {
-                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+                var strLength = 72;
+                var icData = new byte[72];
+                HisApiBase.OpenCom();
+                if (MainWindow.Instance.HisApiErrorCode == 0)
                 {
-                    var strLength = 72;
-                    var icData = new byte[72];
-                    HisApiBase.OpenCom();
-                    if (((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened)
+                    MainWindow.Instance.SetCardReaderStatus("健保卡資料讀取中...");
+                    MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);
+                    if (MainWindow.Instance.HisApiErrorCode == 0)
                     {
-                        MainWindow.Instance.SetCardReaderStatus("健保卡資料讀取中...");
-                        MainWindow.Instance.HisApiErrorCode = HisApiBase.hisGetBasicData(icData, ref strLength);
-                        if (MainWindow.Instance.HisApiErrorCode == 0)
-                        {
-                            MainWindow.Instance.SetCardReaderStatus("健保卡讀取成功");
-                            CurrentPrescription.IsGetIcCard = true;
-                            icData.CopyTo(BasicDataArr, 0);
-                            CusBasicData = new BasicData(icData);
-                            HisApiBase.CloseCom();
-                            CurrentPrescription.Customer = new Customer(CusBasicData);
-                            CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
-                        }
+                        MainWindow.Instance.SetCardReaderStatus("健保卡讀取成功");
+                        CurrentPrescription.IsGetIcCard = true;
+                        icData.CopyTo(BasicDataArr, 0);
+                        CusBasicData = new BasicData(icData);
+                        HisApiBase.CloseCom();
+                        CurrentPrescription.Customer = new Customer(CusBasicData);
+                        CustomerDb.LoadCustomerData(CurrentPrescription.Customer);
                     }
+                    HisApiBase.CloseCom();
                 }
-                else
-                {
-                    MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
-                }
-            };
-            MainWindow.Instance.Dispatcher.BeginInvoke(loadPatentDataDelegate);
+            }
+            else
+            {
+                MainWindow.Instance.SetCardReaderStatus("安全模組未認證");
+            }
         }
 
         private void MedicalNumber_TextChanged(object sender, TextChangedEventArgs e)

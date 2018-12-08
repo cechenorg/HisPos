@@ -46,7 +46,7 @@ namespace His_Pos.Class
             DataColumnCollection columns = row.Table.Columns;
             if (columns.Contains("IS_GETCARD"))
             {
-                IsGetIcCard = row["IS_GETCARD"].ToString().Equals("1");
+                IsGetIcCard = (bool)row["IS_GETCARD"];
             }
         }
 

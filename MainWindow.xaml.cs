@@ -187,7 +187,6 @@ namespace His_Pos
         private void Tabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //if (Tabs.SelectedItem is null) return;
-
             //((ViewModelMainWindow)DataContext).AddTabCommandAction(((TabBase)Tabs.SelectedItem).TabName);
         }
 
@@ -225,7 +224,8 @@ namespace His_Pos
             ProductDb.UpdateDailyStockValue();
             DeclareDb declareDb = new DeclareDb();
             declareDb.SendUnSendCooperClinicDeclare();
-           
+            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
+                HisApiBase.CloseCom();
             Environment.Exit(0);
         }
 
@@ -237,32 +237,33 @@ namespace His_Pos
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            VerifySam();
+            var bw = new BackgroundWorker
+            {
+                WorkerSupportsCancellation = true, WorkerReportsProgress = true
+            };
+            bw.DoWork += VerifySam;
+            bw.ProgressChanged += DuringVerify;
+            bw.RunWorkerCompleted += AfterVerify;
+            bw.RunWorkerAsync();
         }
 
-        private void VerifySam()
+        private void VerifySam(object sender, DoWorkEventArgs e)
         {
-            var thread = new Thread(() =>
+            HisApiBase.CheckCardStatus(1);
+            if (!HisApiBase.GetStatus(2))
             {
-                Action VerifySamDc = delegate
-                {
-                    HisApiBase.CheckCardStatus(1);
-                    if (!((ViewModelMainWindow)DataContext).IsVerifySamDc)
-                    {
-                        HisApiBase.VerifySamDc();
-                    }
-                    else
-                    {
-                        ((ViewModelMainWindow)DataContext).IsVerifySamDc = true;
-                    }
-                };
-                Instance.Dispatcher.BeginInvoke(VerifySamDc);
-            });
-            thread.Start();
-            if (!thread.Join(60000))
-            {
-                thread.Abort();
+                HisApiBase.VerifySamDc();
             }
+        }
+
+        private void DuringVerify(object sender, ProgressChangedEventArgs e)
+        {
+            SetSamDcStatus("安全模組認證中...");
+        }
+
+        private void AfterVerify(object sender, RunWorkerCompletedEventArgs e)
+        {
+            SetSamDcStatus(((ViewModelMainWindow) DataContext).IsVerifySamDc ? "認證成功" : "認證失敗");
         }
 
         private static string GetEnumDescription(Enum value)

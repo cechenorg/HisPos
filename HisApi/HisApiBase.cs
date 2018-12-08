@@ -210,19 +210,15 @@ namespace His_Pos.HisApi
         {
             MainWindow.Instance.SetCardReaderStatus("開啟讀卡機連接...");
             MainWindow.Instance.HisApiErrorCode = csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
-            Action methodDelegate = delegate ()
-            {
-                ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened = MainWindow.Instance.HisApiErrorCode == 0;
-                MainWindow.Instance.SetCardReaderStatus(
-                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened ? "讀卡機連接開啟成功" : "讀卡機連接開啟失敗");
-            };
-            MainWindow.Instance.Dispatcher.InvokeAsync(methodDelegate);
+            var res = MainWindow.Instance.HisApiErrorCode;
+            SetStatus(res == 0,1);
+            MainWindow.Instance.SetCardReaderStatus(res == 0 ? "讀卡機連接開啟成功" : "讀卡機連接開啟失敗");
         }
 
         public static void CloseCom()
         {
             if(csCloseCom() == 0)
-                ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened = false;
+                SetStatus(false,1);
         }
 
         public static void CheckCardStatus(int type)
@@ -250,77 +246,81 @@ namespace His_Pos.HisApi
             switch (type)
             {
                 case 1:
-                    ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = MainWindow.Instance.HisApiErrorCode == 2;
                     switch (MainWindow.Instance.HisApiErrorCode)
                     {
                         case 4000:
                             MainWindow.Instance.SetSamDcStatus("讀卡機逾時");
-                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                            SetStatus(false, 2);
                             break;
                         case 1:
                             MainWindow.Instance.SetHpcCardStatus("未認證");
-                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                            SetStatus(false, 2);
                             break;
                         case 2:
                             MainWindow.Instance.SetHpcCardStatus("認證成功");
-                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = true;
+                            SetStatus(true, 2);
                             break;
                         default:
                             MainWindow.Instance.SetHpcCardStatus("所置入非安全模組檔");
-                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                            SetStatus(false, 2);
                             break;
                     }
                     break;
                 case 2:
-                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsIcCardValid = MainWindow.Instance.HisApiErrorCode == 2;
+                    SetStatus(MainWindow.Instance.HisApiErrorCode == 2,4);
                     MainWindow.Instance.SetCardReaderStatus("健保卡讀取失敗");
                     break;
                 case 3:
-                    if (MainWindow.Instance.HisApiErrorCode == 3)
+                    switch (MainWindow.Instance.HisApiErrorCode)
                     {
-                        MainWindow.Instance.SetHpcCardStatus("認證成功");
-                        ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
-                    }
-                    else
-                    {
-                        MainWindow.Instance.SetHpcCardStatus("未認證");
-                        ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                        case 2:
+                            MainWindow.Instance.SetHpcCardStatus("認證成功(未驗PIN)");
+                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                            break;
+                        case 3:
+                            MainWindow.Instance.SetHpcCardStatus("認證成功(已驗PIN)");
+                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                            break;
+                        default:
+                            MainWindow.Instance.SetHpcCardStatus("未認證");
+                            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                            break;
                     }
                     break;
             }
-            ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened = MainWindow.Instance.HisApiErrorCode == 0;
             CloseCom();
         }
 
         public static void VerifySamDc()
         {
+            bool status;
             MainWindow.Instance.SetSamDcStatus("與健保局連線認證中，請稍後...");
             OpenCom();
-            if (!((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened && MainWindow.Instance.HisApiErrorCode != 0)
+            if (!GetStatus(1))
             {
-                ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                status = false;
                 MainWindow.Instance.SetSamDcStatus("認證失敗");
-                return;
             }
             MainWindow.Instance.HisApiErrorCode = csVerifySAMDC();
             if (MainWindow.Instance.HisApiErrorCode == 0)
             {
-                ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = true;
+                status = true;
                 MainWindow.Instance.SetSamDcStatus("認證成功");
             }
             else
             {
-                ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc = false;
+                status = false;
                 MainWindow.Instance.SetSamDcStatus("未認證");
             }
+            SetStatus(status,2);
             CloseCom();
         }
 
         public static void ResetCardReader()
         {
-            ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened = false;
-            ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = false;
-            ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsHpcValid = false;
+            SetStatus(false,1);
+            SetStatus(false, 2);
+            SetStatus(false, 3);
             OpenCom();
             if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && MainWindow.Instance.HisApiErrorCode != 0)
                 return;
@@ -328,6 +328,75 @@ namespace His_Pos.HisApi
             CloseCom();
             VerifySamDc();
         }
-        
+
+        public static void SetStatus(bool status,int type)
+        {
+            void Status()
+            {
+                switch (type)
+                {
+                    case 1:
+                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened = status;
+                        break;
+                    case 2:
+                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = status;
+                        break;
+                    case 3:
+                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsHpcValid = status;
+                        break;
+                    case 4:
+                        status = ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid;
+                        break;
+                }
+            }
+            MainWindow.Instance.Dispatcher.BeginInvoke((Action) Status);
+        }
+
+        public static bool GetStatus(int type)
+        {
+            bool status = false;
+            MainWindow.Instance.Dispatcher.Invoke((Action)(() =>
+            {
+                switch (type)
+                {
+                    case 1:
+                        status = ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened;
+                        break;
+                    case 2:
+                        status = ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc;
+                        break;
+                    case 3:
+                        status = ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid;
+                        break;
+                    case 4:
+                        status = ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsIcCardValid;
+                        break;
+                }
+            }));
+            return status;
+        }
+
+        public static void SetStatus(int type,bool s)
+        {
+            void Status()
+            {
+                switch (type)
+                {
+                    case 1:
+                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened = s;
+                        break;
+                    case 2:
+                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = s;
+                        break;
+                    case 3:
+                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsHpcValid = s;
+                        break;
+                    case 4:
+                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = s;
+                        break;
+                }
+            }
+            MainWindow.Instance.Dispatcher.InvokeAsync(Status);
+        }
     }
 }
