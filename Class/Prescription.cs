@@ -9,6 +9,7 @@ using System.Xml;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
+using His_Pos.Service;
 using JetBrains.Annotations;
 
 namespace His_Pos.Class
@@ -42,6 +43,11 @@ namespace His_Pos.Class
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
             ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
+            DataColumnCollection columns = row.Table.Columns;
+            if (columns.Contains("IS_GETCARD"))
+            {
+                IsGetIcCard = (bool)row["IS_GETCARD"];
+            }
         }
 
         public Prescription(XmlNode xml)
@@ -117,7 +123,16 @@ namespace His_Pos.Class
                 OnPropertyChanged(nameof(IsGetIcCard));
             }
         }
-
+        private bool _isDeposit;
+        public bool IsDeposit
+        {
+            get => _isDeposit;
+            set
+            {
+                _isDeposit = value;
+                OnPropertyChanged(nameof(IsDeposit));
+            }
+        }//是否押金
         private ObservableCollection<AbstractClass.Product> _medicines;
 
         public ObservableCollection<AbstractClass.Product> Medicines
@@ -130,7 +145,18 @@ namespace His_Pos.Class
             }
         }
 
-        public string OriginalMedicalNumber { get; set; } //D43原處方就醫序號
+        private string _originalMedicalNumber;
+
+        public string OriginalMedicalNumber
+        {
+            get => _originalMedicalNumber;
+            set
+            {
+                _originalMedicalNumber = value;
+                OnPropertyChanged(nameof(OriginalMedicalNumber));
+            }
+        } //D43原處方就醫序號
+
         public ErrorList EList = new ErrorList();
         private bool adjustCaseNull = false;
         public bool Declare { get; set; }
@@ -169,16 +195,20 @@ namespace His_Pos.Class
                 AddError("0", "就醫序號未填寫");
                 return;
             }
-            if (!string.IsNullOrEmpty(ChronicSequence))
-            {
-                if (int.Parse(ChronicSequence) > 1)
-                    Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
-            }
+            //if (!string.IsNullOrEmpty(ChronicSequence))
+            //{
+            //    if (int.Parse(ChronicSequence) > 1)
+            //    {
+            //        OriginalMedicalNumber = Customer.IcCard.MedicalNumber.DeepCloneViaJson();
+            //        Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
+            //    }
+                    
+            //}
             if (CheckHomeCareAndSmokingCessation())
                 Customer.IcCard.MedicalNumber = "N";
             if (!Customer.IcCard.MedicalNumber.Contains("IC") && Customer.IcCard.MedicalNumber != "N")
             {
-                Regex medicalNumberReg = new Regex(@"\d+");
+                var medicalNumberReg = new Regex(@"\d+");
                 if (!medicalNumberReg.IsMatch(Customer.IcCard.MedicalNumber))
                     AddError("0", "就醫序號輸入格式錯誤");
             }

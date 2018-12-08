@@ -189,7 +189,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PrescriptionDec2View.Instance.CustomerSelected = true;
             PrescriptionDec2View.Instance.NotifyPropertyChanged(nameof(PrescriptionDec2View.Instance.CurrentPrescription));
             if (PrescriptionDec2View.Instance.CurrentPrescription.IsGetIcCard)
-                PrescriptionDec2View.Instance.ReadTreatRecord();
+            {
+                Thread t1 = new Thread(PrescriptionDec2View.Instance.ReadTreatRecord);
+                t1.Start();
+            }
             Close();
         }
         

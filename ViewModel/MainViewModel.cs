@@ -30,6 +30,8 @@ using His_Pos.H3_STOCKTAKING.StockTaking;
 using His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
 using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
 using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
+using JetBrains.Annotations;
+using System.Runtime.CompilerServices;
 
 namespace His_Pos.ViewModel
 {

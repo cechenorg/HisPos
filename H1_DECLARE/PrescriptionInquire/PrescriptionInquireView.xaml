@@ -16,7 +16,7 @@
     <UserControl.Resources>
         <hisPos:DateConverter x:Key="DateConverter" />
     </UserControl.Resources>
-    <Viewbox Stretch="Fill" Width="1363">
+    <Viewbox Name="InquireViewBox" Stretch="Fill" Width="1363">
         <Grid Width="1418" Height="839">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>

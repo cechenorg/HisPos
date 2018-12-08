@@ -10,7 +10,7 @@ namespace His_Pos.ViewModel
         private bool _canMoveTabs;
         public bool CanMoveTabs
         {
-            get { return _canMoveTabs; }
+            get => _canMoveTabs;
             set
             {
                 if (_canMoveTabs != value)
@@ -23,13 +23,83 @@ namespace His_Pos.ViewModel
         private bool _showAddButton;
         public bool ShowAddButton
         {
-            get { return _showAddButton; }
+            get => _showAddButton;
             set
             {
                 if (_showAddButton != value)
                 {
                     Set(() => ShowAddButton, ref _showAddButton, value);
                 }
+            }
+        }
+
+        private string _cardReaderStatus;
+        public string CardReaderStatus
+        {
+            get => _cardReaderStatus;
+            set
+            {
+                Set(() => CardReaderStatus, ref _cardReaderStatus, value);
+            }
+        }
+        private string _samDcStatus;
+        public string SamDcStatus
+        {
+            get => _samDcStatus;
+            set
+            {
+                Set(() => SamDcStatus, ref _samDcStatus, value);
+            }
+        }
+
+        private string _hpcCardStatus;
+        public string HpcCardStatus
+        {
+            get => _hpcCardStatus;
+            set
+            {
+                Set(() => HpcCardStatus, ref _hpcCardStatus, value);
+            }
+        }
+
+        private bool _isConnectionOpened;
+
+        public bool IsConnectionOpened
+        {
+            get => _isConnectionOpened;
+            set
+            {
+                _isConnectionOpened = value;
+            }
+        }
+        private bool _isIcCardValid;
+        public bool IsIcCardValid
+        {
+            get => _isIcCardValid;
+            set
+            {
+                _isIcCardValid = value;
+            }
+        }
+        private bool _isHpcValid;
+
+        public bool IsHpcValid
+        {
+            get => _isHpcValid;
+            set
+            {
+                Set(() => IsHpcValid, ref _isHpcValid, value);
+            }
+        }
+
+        private bool _isVerifySamDc;
+
+        public bool IsVerifySamDc
+        {
+            get => _isVerifySamDc;
+            set
+            {
+                Set(() => IsVerifySamDc, ref _isVerifySamDc, value);
             }
         }
 

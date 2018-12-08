@@ -94,7 +94,7 @@ namespace His_Pos.Service
                         messageWindowConnectFail.ShowDialog();
                         break;
                     default:
-                        MessageWindow messageWindowSQLerror = new MessageWindow("預存程序 " + procName + "執行失敗", MessageType.ERROR);
+                        MessageWindow messageWindowSQLerror = new MessageWindow("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
                         messageWindowSQLerror.ShowDialog();
                         break;
                 }

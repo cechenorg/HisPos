@@ -27,7 +27,9 @@ namespace His_Pos.Class.Declare
 
             foreach (DataRow row in table.Rows)
             {
-                prescriptionOverviews.Add(new PrescriptionOverview(row));
+                PrescriptionOverview prescriptionOverview = new PrescriptionOverview(row);
+                prescriptionOverview.IsPredictChronic = true;
+                prescriptionOverviews.Add(prescriptionOverview);
             }
             return prescriptionOverviews;
         }
@@ -47,7 +49,9 @@ namespace His_Pos.Class.Declare
 
             foreach (DataRow row in table.Rows)
             {
-                prescriptionOverviews.Add(new PrescriptionOverview(row));
+                PrescriptionOverview prescriptionOverview = new PrescriptionOverview(row);
+                prescriptionOverview.IsPredictChronic = false;
+                prescriptionOverviews.Add(prescriptionOverview);
             }
             return prescriptionOverviews;
         }
