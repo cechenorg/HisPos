@@ -1215,7 +1215,6 @@
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ReaderCFG.ini" />
     <Content Include="SQLPackage\ServerDb.dacpac">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

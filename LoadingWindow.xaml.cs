@@ -538,6 +538,7 @@ namespace His_Pos
         }
         public void GetMedicinesData(PrescriptionInquireView prescriptionInquireView)
         {
+            prescriptionInquireView.InquireViewBox.IsEnabled = false;
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("載入基本資料中...");
@@ -554,6 +555,7 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {
+                prescriptionInquireView.InquireViewBox.IsEnabled = true;
                 Dispatcher.BeginInvoke(new Action(Close));
             };
             backgroundWorker.RunWorkerAsync();
@@ -784,6 +786,10 @@ namespace His_Pos
                     
                 }));
             };
+            backgroundWorker.ProgressChanged += (s, o) =>
+            {
+                ChangeLoadingMessage("卡片資料讀取中...");
+            };
             backgroundWorker.RunWorkerCompleted += (sender, args) =>
             {
                 Dispatcher.BeginInvoke(new Action(() =>
@@ -806,7 +812,10 @@ namespace His_Pos
                 if (prescriptionDec2View.IsMedicalNumberGet)
                     prescriptionDec2View.CreatIcUploadData();
                 else
-                    prescriptionDec2View.CreatIcErrorUploadData(errorCode);
+                {
+                    if(!prescriptionDec2View.CurrentPrescription.IsDeposit)
+                        prescriptionDec2View.CreatIcErrorUploadData(errorCode);
+                }
                 Dispatcher.Invoke((Action)(() =>
                 {
                     

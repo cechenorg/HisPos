@@ -123,33 +123,26 @@ namespace His_Pos.Class.Declare.IcDataUpload
             var cs = new ConvertData();
             var pBuffer = new byte[13];
             var iBufferlength = 13;
-            HisApiBase.OpenCom();
-            if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsVerifySamDc)
+            var now = DateTime.Now;
+            if (HisApiBase.GetStatus(1) && HisApiBase.GetStatus(2))
             {
-                MainWindow.Instance.HisApiErrorCode = HisApiBase.csGetDateTime(pBuffer, ref iBufferlength);
-                if (MainWindow.Instance.HisApiErrorCode == 0)
+                if (HisApiBase.csGetDateTime(pBuffer, ref iBufferlength) == 0)
                 {
                     TreatmentDateTime = cs.ByToString(pBuffer, 0, iBufferlength);
                     HisApiBase.CloseCom();
                 }
                 else
                 {
-                    TreatmentDateTime = (DateTime.Now.Year - 1911) +
-                                        DateTime.Now.Month.ToString().PadLeft(2, '0') +
-                                        DateTime.Now.Day.ToString().PadLeft(2, '0') +
-                                        DateTime.Now.Hour.ToString().PadLeft(2, '0') +
-                                        DateTime.Now.Minute.ToString().PadLeft(2, '0') +
-                                        DateTime.Now.Second.ToString().PadLeft(2, '0');
+                    TreatmentDateTime = (now.Year - 1911) + now.Month.ToString().PadLeft(2, '0') +
+                                        now.Day.ToString().PadLeft(2, '0') + now.Hour.ToString().PadLeft(2, '0') +
+                                        now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0');
                 }
             }
             else
             {
-                TreatmentDateTime = (DateTime.Now.Year - 1911) +
-                                    DateTime.Now.Month.ToString().PadLeft(2, '0') +
-                                    DateTime.Now.Day.ToString().PadLeft(2, '0') +
-                                    DateTime.Now.Hour.ToString().PadLeft(2, '0') +
-                                    DateTime.Now.Minute.ToString().PadLeft(2, '0') +
-                                    DateTime.Now.Second.ToString().PadLeft(2, '0');
+                TreatmentDateTime = (now.Year - 1911) + now.Month.ToString().PadLeft(2, '0') +
+                                    now.Day.ToString().PadLeft(2, '0') + now.Hour.ToString().PadLeft(2, '0') +
+                                    now.Minute.ToString().PadLeft(2, '0') + now.Second.ToString().PadLeft(2, '0');
             }
             PharmacyId = MainWindow.CurrentPharmacy.Id;
             MedicalNumber = errorCode.Id;
@@ -244,6 +237,9 @@ namespace His_Pos.Class.Declare.IcDataUpload
         //*
         [XmlElement(ElementName = "A35")]
         public string HospitalizationCopaymentFeeMore { get; set; }//健保資料段8-10-5.住院部分負擔費用（當次急性31天、慢性181天以上）(get by HISAPI : hisGetTreatmentNoNeedHPC)
+
+        [XmlElement(ElementName = "A54")]
+        public string ActualTreatDate { get; set; }//健保資料段8-10-5.住院部分負擔費用（當次急性31天、慢性181天以上）(get by HISAPI : hisGetTreatmentNoNeedHPC)
 
     }
 
