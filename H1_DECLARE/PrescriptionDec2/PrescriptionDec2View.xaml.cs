@@ -69,7 +69,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private bool _isChanged;
         public bool CustomerSelected;
         private string _cardStatus;
-
+        private bool IsPrescribe;
         public string CardStatus
         {
             get => _cardStatus;
@@ -99,7 +99,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private IcErrorCodeWindow icErrorWindow;
         private IcErrorCodeWindow.IcErrorCode SelectedErrorCode { get; set; }
         #endregion
-
 
         #region 健保卡作業相關變數
         public bool IsMedicalNumberGet; //是否取得就醫序號
@@ -218,6 +217,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             set
             {
                 _charge = value;
+                Pay = _charge;
                 NotifyPropertyChanged(nameof(Charge));
             }
         }
@@ -791,8 +791,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public void CreatIcUploadData()
-        {
+        public void 
+            CreatIcUploadData()
+            {
             try
             {
                 var medicalDatas = new List<MedicalData>();
@@ -995,6 +996,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var declareMedicine = ((DeclareMedicine) medicineCodeAuto.SelectedItem).DeepCloneViaJson();
                 if (declareMedicine != null && (declareMedicine.Id.EndsWith("00") || declareMedicine.Id.EndsWith("G0")))
                     declareMedicine.Position = Positions.SingleOrDefault(p => p.Id.Contains("PO"))?.Id;
+                if (IsPrescribe)
+                    if (declareMedicine != null)
+                        declareMedicine.PaySelf = true;
                 if (CurrentPrescription.Medicines.Count > 0)
                 {
                     if (CurrentPrescription.Medicines.Count == currentRow)
@@ -1318,7 +1322,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void CountCharge()
         {
             Charge = Deposit + SelfCost + Copayment;
-            Change = _pay - Charge;
+            Change = Pay - Charge;
         }
 
         /*
@@ -1453,12 +1457,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 DeclareSubmit.Visibility = Visibility.Collapsed;
                 NotDeclareSubmit.Visibility = Visibility.Visible;
                 CurrentPrescription.Declare = false;
+                IsPrescribe = true;
             }
             else
             {
                 DeclareSubmit.Visibility = Visibility.Visible;
                 NotDeclareSubmit.Visibility = Visibility.Collapsed;
                 CurrentPrescription.Declare = true;
+                IsPrescribe = false;
             }
 
             if (((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Equals("2"))
@@ -1683,7 +1689,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             if (!MainWindow.CurrentUser.Id.Equals((HisPerson.SelectedItem as MedicalPersonnel).Id))
                                 HisPerson.Focus();
                             else
-                                TreatmentCaseCombo.Focus();
+                                MedicalNumber.Focus();
                             break;
                         case "HisPerson":
                             if (string.IsNullOrEmpty(MedicalNumber.Text.Trim()))
@@ -1843,6 +1849,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", decMasId); //庫存扣庫
             var m = new MessageWindow("調劑登錄成功", MessageType.SUCCESS, true);
             m.ShowDialog();
+            ClearPrescription();
         }
 
         private void MedTotalPrice_GotFocus(object sender, RoutedEventArgs e)
@@ -2027,6 +2034,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             _currentDecMasId = string.Empty;
             _clinicDeclareId = string.Empty;
             _isReceiveCopayment = true;
+            IsPrescribe = false;
             _clinicXml = new XmlDocument();
             CurrentPrescription = new Prescription();
             DivisionCombo.SelectedIndex = -1;

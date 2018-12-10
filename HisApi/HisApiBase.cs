@@ -240,7 +240,6 @@ namespace His_Pos.HisApi
                     status = "檢查中...";
                     break;
             }
-
             MainWindow.Instance.SetCardReaderStatus(status);
             MainWindow.Instance.HisApiErrorCode = hisGetCardStatus(type);
             switch (type)

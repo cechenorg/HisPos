@@ -97,7 +97,18 @@ namespace His_Pos.Class
             }
         }
 
-        public Pharmacy.Pharmacy Pharmacy { get; set; } //藥局
+        private Pharmacy.Pharmacy _pharmacy;
+
+        public Pharmacy.Pharmacy Pharmacy
+        {
+            get => _pharmacy;
+            set
+            {
+                _pharmacy = value;
+                OnPropertyChanged(nameof(Pharmacy));
+            }
+        } //藥局
+
         private Treatment _treatment;
 
         public Treatment Treatment

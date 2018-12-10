@@ -537,11 +537,12 @@ namespace His_Pos.Service
                     .Hospital.Doctor.IcNumber)
                     ? CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.Name
                     : string.Empty;
+            var cusGender = CurrentPrescription.Customer.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
             var parameters = new List<ReportParameter>
             {
                 new ReportParameter("Pharmacy", MainWindow.CurrentPharmacy.Name),
                 new ReportParameter("PatientName", CurrentPrescription.Customer.Name),
-                new ReportParameter("Gender", CurrentPrescription.Customer.IcNumber[1].Equals('1') ? "男" : "女"),
+                new ReportParameter("Gender", cusGender),
                 new ReportParameter("Birthday",
                     DateTimeExtensions.ConvertToTaiwanCalender(CurrentPrescription.Customer.Birthday, true)),
                 new ReportParameter("AdjustDate", adjustDate),

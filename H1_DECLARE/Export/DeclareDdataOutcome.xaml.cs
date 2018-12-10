@@ -86,7 +86,8 @@ namespace His_Pos.H6_DECLAREFILE.Export
             set
             {
                 _currentDeclareFileDdata = value;
-                Gender = _currentDeclareFileDdata.Customer.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
+                if(_currentDeclareFileDdata.Customer.IcNumber.Length > 1)
+                    Gender = _currentDeclareFileDdata.Customer.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
                 OnPropertyChanged(nameof(CurrentPrescription));
             }
         }
