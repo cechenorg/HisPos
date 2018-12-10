@@ -732,10 +732,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 WebApi.UpdateXmlStatus(_clinicDeclareId);
             }
 
-            var medBagPrint = new YesNoMessageWindow("是否列印藥袋及收據", "列印確認");
+            var medBagPrint = new YesNoMessageWindow("是否列印藥袋", "列印確認");
             var print = (bool)medBagPrint.ShowDialog();
             if(print)
-                NewFunction.PrintMedBag(CurrentPrescription,_currentDeclareData,MedicinePoint,SelfCost,Pay,"登錄",Instance);
+                NewFunction.PrintMedBag(CurrentPrescription,_currentDeclareData,MedicinePoint,SelfCost,Pay,"登錄",Charge,Instance);
 
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
@@ -1031,6 +1031,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void MedicineCodeMoveFocus(int currentRow)
         {
+            if(currentRow == -1) return;
             PrescriptionMedicines.CurrentCell = new DataGridCellInfo(
                 PrescriptionMedicines.Items[currentRow], DosageText);
             if (PrescriptionMedicines.CurrentCell.Item is null) return;
@@ -1738,12 +1739,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                                 var m = new MessageWindow("總領藥次數有值，需填寫領藥次數", MessageType.WARNING, true);
                                 m.ShowDialog();
                                 ChronicTotal.Focus();
-
                             }
                             else
                             {
                                 if (!string.IsNullOrEmpty(ChronicTotal.Text) &&
-                                    int.TryParse(ChronicSequence.Text, out var seq) && seq > 1)
+                                    int.TryParse(ChronicSequence.Text, out var seq) && seq >= 1)
                                 {
                                     AdjustCaseCombo.SelectedIndex = 1;
                                     SpecialCodeCombo.Focus();
