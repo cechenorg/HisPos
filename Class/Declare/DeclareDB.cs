@@ -1029,7 +1029,7 @@ namespace His_Pos.Class.Declare
             foreach (DataRow row in table.Rows) {
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(row["API_DELCARE_XML"].ToString());
-                cooperativeClinics.Add(new CooperativeClinic(xmlDocument));
+                cooperativeClinics.Add(new CooperativeClinic(xmlDocument,"SendToClinic"));
             }
             CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson(cooperativeClinics);
             WebApi.SendToCooperClinic(cooperativeClinicJson);

@@ -2253,5 +2253,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 MedicalNumber.Text = tmpMedicalNumber;
             }
         }
+
+        private void ButtonCooperativeClinic_Click(object sender, RoutedEventArgs e)
+        {
+            CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = new CooperativePrescriptSelectWindow();
+            cooperativePrescriptSelectWindow.ShowDialog();
+        }
     }
 }
