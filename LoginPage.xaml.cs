@@ -205,7 +205,7 @@ namespace His_Pos
                 System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
                 startInfo.FileName = "SQLPackage\\sqlpackage.exe";
-                startInfo.Arguments = $@"/a:Publish /sf:""SQLPackage\\ServerDb.dacpac"" /tsn:{match.Groups[1].Value} /tu:singde /tp:city1234 /tdn:HIS_POS_DB /p:""IncludeCompositeObjects = True"" /p:""BlockOnPossibleDataLoss = False"" /p:""DropObjectsNotInSource = True"" /p:""DoNotDropObjectType = Permissions"" /p:""DoNotDropObjectType = DatabaseRoles""  /p:""DoNotDropObjectType = Logins"" /p:""DoNotDropObjectType = ServerRoles""";
+                startInfo.Arguments = $@"/a:Publish /sf:""SQLPackage\\ServerDb.dacpac"" /tsn:{match.Groups[1].Value} /tu:singde /tp:city1234 /tdn:HIS_POS_DB /p:""IncludeCompositeObjects=True"" /p:""BlockOnPossibleDataLoss=False"" /p:""DropObjectsNotInSource=True"" /p:""DoNotDropObjectTypes=Permissions;Logins;Users""";
                 process.StartInfo = startInfo;
                 process.Start();
                 process.WaitForExit();
