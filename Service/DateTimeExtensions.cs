@@ -71,7 +71,6 @@ namespace His_Pos.Service
             var day = birthDate.Day.ToString();
             month = CheckDateLessTen(month);
             day = CheckDateLessTen(day);
-            birthDate = DateTime.ParseExact(birthDate.Year + "/" + month + "/" + day, "yyyy/MM/dd", CultureInfo.InvariantCulture);
             var ts = DateTime.Now - birthDate;
             var age = ts.TotalDays / 365.2422;
             return age;
