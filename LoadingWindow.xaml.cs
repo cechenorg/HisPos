@@ -670,6 +670,18 @@ namespace His_Pos
                     prescriptionDec2View.CurrentPrescription.Treatment.PaymentCategory = prescriptionDec2View.PaymentCategories.SingleOrDefault(p => p.Name.Equals("普通疾病"));
                     prescriptionDec2View.CurrentPrescription.Treatment.AdjustCase = prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Name.Equals("一般處方調劑"));
                     prescriptionDec2View.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = prescriptionDec2View.TreatmentCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
+                    
+                    if (MainWindow.CurrentUser.Authority.AuthorityValue.Equals("3"))
+                    {
+                        for (int i = 0; i < prescriptionDec2View.MedicalPersonnels.Count; i++)
+                        {
+                            if (prescriptionDec2View.MedicalPersonnels[i].Name.Equals(MainWindow.CurrentUser.Name))
+                            {
+                                prescriptionDec2View.HisPerson.SelectedIndex = i;
+                            }
+                        }
+                    }
+                        
                     prescriptionDec2View.DataContext = prescriptionDec2View;
                     Close();
                 }));

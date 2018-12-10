@@ -45,7 +45,7 @@ namespace His_Pos.Class.Product
             MedicalCategory.Dosage = double.Parse(xml.Attributes["daily_dose"].Value);
             Dosage = Convert.ToDouble(xml.Attributes["divided_dose"].Value);
             Days = xml.Attributes["days"].Value;
-            PaySelf = xml.Attributes["remark"].Value == "*" ? true : false;  
+            PaySelf = xml.Attributes["remark"].Value == "*" ? true : false; 
             Cost = 0;
             TotalPrice = PaySelf ? Convert.ToDouble(xml.Attributes["price"].Value) : 0;
             Price = TotalPrice / Amount;
@@ -117,6 +117,8 @@ namespace His_Pos.Class.Product
                 HcNote = dataRow["HISMED_HCNOTE"].ToString().Equals(string.Empty) ? string.Empty : dataRow["HISMED_HCNOTE"].ToString();
                 if(type.Equals("Get"))
                 IsBuckle = Convert.ToBoolean(dataRow["IS_BUCKLE"].ToString());
+                Indication = dataRow["HISMED_INDICATION"].ToString();
+                SideEffect = dataRow["HISMED_SIDEFFECT"].ToString();
             }
             ControlLevel = dataRow["HISMED_CONTROL"].ToString();
             IsFrozMed = bool.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
@@ -125,7 +127,6 @@ namespace His_Pos.Class.Product
         }
 
         public bool IsControl => !string.IsNullOrEmpty(ControlLevel);
-
         private string _controlLevel;
         public string ControlLevel
         {
