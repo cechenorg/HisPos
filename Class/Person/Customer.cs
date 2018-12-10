@@ -53,13 +53,15 @@ namespace His_Pos.Class.Person
             Birthday = string.IsNullOrEmpty(row["CUS_BIRTH"].ToString()) ? new DateTime() : Convert.ToDateTime(row["CUS_BIRTH"].ToString());
             Name = row["CUS_NAME"].ToString();
             Qname = row["CUS_QNAME"].ToString();
-            Gender = string.IsNullOrEmpty(row["CUS_GENDER"].ToString()) || Convert.ToBoolean(row["CUS_GENDER"].ToString());
-            
+            Gender = false;
+            if(IcNumber.Length > 1)
+                Gender = !IcNumber.Substring(1, 1).Equals("2");
+
             if (type.Equals("fromXml"))
                 IcCard = new IcCard(row,DataSource.GetMedicalIcCard);
             if(type.Equals("fromDb"))
             {
-                GenderName = row["CUS_GENDER"].ToString() == "True" ? "男" : "女";
+                GenderName = Gender ? "男" : "女";
                 IcCard = new IcCard(row, DataSource.InitMedicalIcCard);
                 ContactInfo = new ContactInfo();
                 ContactInfo.Tel = row["CUS_TEL"].ToString();
@@ -96,7 +98,7 @@ namespace His_Pos.Class.Person
             IcCard = new IcCard(xml);
             Name = xml.SelectSingleNode("d20") == null ? null : xml.SelectSingleNode("d20")?.InnerText;
             IcNumber = xml.SelectSingleNode("d3") == null ? null : xml.SelectSingleNode("d3")?.InnerText;
-            Gender = IcNumber.Substring(1, 1) == "1" ? true : false;
+            Gender = !IcNumber.Substring(1, 1).Equals("2");
             var nodeStr = xml.SelectSingleNode("d6")?.InnerText;
             if (!string.IsNullOrEmpty(nodeStr))
             {
@@ -116,7 +118,8 @@ namespace His_Pos.Class.Person
             IcCard = new IcCard(d);
             Name = !string.IsNullOrEmpty(d.Dhead.D20) ? d.Dhead.D20 : string.Empty;
             IcNumber = !string.IsNullOrEmpty(d.Dhead.D3) ? d.Dhead.D3 : string.Empty;
-            Gender = IcNumber.Substring(1, 1) == "1";
+            if(IcNumber.Length > 1)
+                Gender = !IcNumber.Substring(1, 1).Equals("2");
             var nodeStr = d.Dhead.D6;
             if (!string.IsNullOrEmpty(nodeStr))
             {
@@ -150,7 +153,7 @@ namespace His_Pos.Class.Person
             set
             {
                 _genderName = value;
-                OnPropertyChanged(nameof(Gender));
+                OnPropertyChanged(nameof(GenderName));
             }
         }
         private string urgentContactTel;

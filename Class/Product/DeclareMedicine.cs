@@ -382,7 +382,9 @@ namespace His_Pos.Class.Product
                 Position = Position,
                 Source = Source,
                 IsBuckle = IsBuckle,
-                ControlLevel = ControlLevel
+                ControlLevel = ControlLevel,
+                Indication = Indication,
+                SideEffect = SideEffect
             };
             return declareMedicine;
         }
