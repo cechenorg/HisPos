@@ -9,6 +9,8 @@ using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.Service;
+using Microsoft.SqlServer.Dts.Runtime;
+using Application = System.Windows.Application;
 
 namespace His_Pos
 {
@@ -118,6 +120,7 @@ namespace His_Pos
                 try
                 {
                     CheckDBVersion();
+                    SyncNewProductDataFromSingde();
                 }
                 catch (Exception ex)
                 {
@@ -137,6 +140,59 @@ namespace His_Pos
             }
         }
 
+        private void SyncNewProductDataFromSingde()
+        {
+            Microsoft.SqlServer.Dts.Runtime.Application app = new Microsoft.SqlServer.Dts.Runtime.Application();
+            Microsoft.SqlServer.Dts.Runtime.Package package = null;
+
+            try
+            {
+                Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
+                Match match = reg.Match(Properties.Settings.Default.SQL_local);
+
+                package = app.LoadPackage(Directory.GetCurrentDirectory() + @"\SSIS_Package\SyncProductDataFromSingdePackage.dtsx", null);
+                Variables myVars = package.Variables;
+                
+                myVars["LocalConn"].Value = $"Data Source={match.Groups[1].Value};Initial Catalog=HIS_POS_DB;Persist Security Info=True;User ID=singde;Password=city1234;";
+
+                DTSExecResult results = package.Execute(null, myVars, null, null, null);
+
+                if (results == DTSExecResult.Failure)
+                {
+                    string errorMessage = "";
+
+                    foreach (DtsError error in package.Errors)
+                    {
+                        errorMessage += error.ErrorCode.ToString() + error.Description.ToString() + "\n";
+                    }
+
+                    string filePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\packageError.txt";
+
+                    try
+                    {
+                        using (TextWriter fileWriter = new StreamWriter(filePath))
+                        {
+                            fileWriter.WriteLine(errorMessage);
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        throw exception;
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageWindow messageWindow = new MessageWindow(exception.Message, MessageType.ERROR);
+                messageWindow.ShowDialog();
+            }
+            finally
+            {
+                package.Dispose();
+                package = null;
+            }
+        }
+
         private void CheckDBVersion()
         {
             string versionId = FunctionDb.GetSystemVersionId();
@@ -149,7 +205,7 @@ namespace His_Pos
                 System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
                 startInfo.FileName = "SQLPackage\\sqlpackage.exe";
-                startInfo.Arguments = @"/a:Publish /sf:""SQLPackage\\ServerDb.dacpac"" /tsn:" + match.Groups[1].Value + @" /tu:singde /tp:city1234 /tdn:HIS_POS_DB /p:""IncludeCompositeObjects = True"" /p:""BlockOnPossibleDataLoss = False"" /p:""DropObjectsNotInSource = True"" /p:""DoNotDropObjectType = Permissions"" /p:""DoNotDropObjectType = DatabaseRoles""  /p:""DoNotDropObjectType = Logins"" /p:""DoNotDropObjectType = ServerRoles""";
+                startInfo.Arguments = $@"/a:Publish /sf:""SQLPackage\\ServerDb.dacpac"" /tsn:{match.Groups[1].Value} /tu:singde /tp:city1234 /tdn:HIS_POS_DB /p:""IncludeCompositeObjects = True"" /p:""BlockOnPossibleDataLoss = False"" /p:""DropObjectsNotInSource = True"" /p:""DoNotDropObjectType = Permissions"" /p:""DoNotDropObjectType = DatabaseRoles""  /p:""DoNotDropObjectType = Logins"" /p:""DoNotDropObjectType = ServerRoles""";
                 process.StartInfo = startInfo;
                 process.Start();
                 process.WaitForExit();
