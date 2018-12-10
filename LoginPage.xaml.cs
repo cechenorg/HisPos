@@ -148,16 +148,11 @@ namespace His_Pos
                 System.Diagnostics.Process process = new System.Diagnostics.Process();
                 System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
                 startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-                startInfo.RedirectStandardError = true;
-                startInfo.UseShellExecute = false;
                 startInfo.FileName = "SQLPackage\\sqlpackage.exe";
-                startInfo.Arguments = @"/a:Publish /sf:""SQLPackage\\ServerDb.dacpac"" /tsn:" + match.Groups[1].Value + @" /tdn:HIS_POS_DB /pr:""C:\Program Files\HISPOS\ServerDb.publish.xml""";
+                startInfo.Arguments = @"/a:Publish /sf:""SQLPackage\\ServerDb.dacpac"" /tsn:" + match.Groups[1].Value + @" /tu:singde /tp:city1234 /tdn:HIS_POS_DB /p:""IncludeCompositeObjects = True"" /p:""BlockOnPossibleDataLoss = False"" /p:""DropObjectsNotInSource = True"" /p:""DoNotDropObjectType = Permissions"" /p:""DoNotDropObjectType = DatabaseRoles""  /p:""DoNotDropObjectType = Logins"" /p:""DoNotDropObjectType = ServerRoles""";
                 process.StartInfo = startInfo;
                 process.Start();
                 process.WaitForExit();
-
-                if (process.StandardError.EndOfStream)
-                    throw new Exception(process.StandardError.ReadToEnd());
 
                 FunctionDb.UpdateSystemVersionId();
             }
