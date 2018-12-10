@@ -24,6 +24,7 @@ using His_Pos.Class.Declare;
 using His_Pos.HisApi;
 using Visibility = System.Windows.Visibility;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
@@ -1441,10 +1442,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ReleaseHospital_Populating(object sender, PopulatingEventArgs e)
         {
+            var a = sender as AutoCompleteBox;
             if (Hospitals is null) Hospitals = HospitalDb.GetData();
             var tempCollection =
                 new ObservableCollection<Hospital>(Hospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50)
                     .ToList());
+            if (tempCollection.Count == 1)
+            {
+                if (a != null) a.SelectedItem = tempCollection[0];
+                ReleaseHospital.PopulateComplete();
+                DivisionCombo.Focus();
+                return;
+            }
             ReleaseHospital.ItemsSource = tempCollection;
             ReleaseHospital.PopulateComplete();
         }
@@ -1776,8 +1785,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is AutoCompleteBox a)) return;
             a.Text = a.Text.TrimStart(' ');
-            if (a.IsDropDownOpen && a.Text.Length <= 10)
-                a.ItemsSource = Hospitals.Where(x => x.Id.Contains(a.Text)).Take(50).ToList();
         }
 
         private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)

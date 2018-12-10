@@ -104,7 +104,7 @@
                 <StackPanel Grid.Row="0" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫科別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="DivisionCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" ItemsSource="{Binding Divisions}"
+                              IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}"
                               SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" KeyDown="Combo_PreviewKeyDown" SelectionChanged="DivisionCombo_SelectionChanged"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="3" Margin="8" Orientation="Horizontal">
@@ -176,13 +176,13 @@
                 <StackPanel Grid.Row="2" Grid.Column="1" Margin="8" Orientation="Horizontal">
                     <Label Content="處方案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="TreatmentCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              FontFamily="Segoe UI Semibold" FontSize="14" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding TreatmentCases}"
+                              FontFamily="Segoe UI Semibold" FontSize="14" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding TreatmentCases}" StaysOpenOnEdit="True"
                               SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Content="部分負擔" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="CopaymentCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" ItemsSource="{Binding Copayments}"
+                              IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="14"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="True" ItemsSource="{Binding Copayments}"
                               SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
@@ -444,19 +444,19 @@
                     <DataGrid x:Name="CusHistoryDetailPos" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" 
                               ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" DataContext="{Binding CustomerHistoryPos}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="250" Binding="{Binding ProductName}" Header="品名" />
-                            <DataGridTextColumn MinWidth="90" Binding="{Binding Price}" Header="單價" />
-                            <DataGridTextColumn MinWidth="90" Binding="{Binding Amount}" Header="數量" />
-                            <DataGridTextColumn MinWidth="70" Binding="{Binding SubTotal}" Header="小計" />
+                            <DataGridTextColumn Width="250" Binding="{Binding ProductName, Mode=OneWay}" Header="品名" />
+                            <DataGridTextColumn MinWidth="90" Binding="{Binding Price, Mode=OneWay}" Header="單價" />
+                            <DataGridTextColumn MinWidth="90" Binding="{Binding Amount, Mode=OneWay}" Header="數量" />
+                            <DataGridTextColumn MinWidth="70" Binding="{Binding SubTotal, Mode=OneWay}" Header="小計" />
                         </DataGrid.Columns>
                     </DataGrid>
                     <DataGrid x:Name="CusHistoryDetailHis" Height="290" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" CanUserAddRows="False" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                               DataContext="{Binding CustomerHistoryHis}" VerticalScrollBarVisibility="Auto" Visibility="Collapsed">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Width="250" Binding="{Binding MedicineName}" Header="藥品" />
-                            <DataGridTextColumn MinWidth="90" Binding="{Binding Usage}" Header="用法" />
-                            <DataGridTextColumn MinWidth="90" Binding="{Binding Position}" Header="途徑" />
-                            <DataGridTextColumn MinWidth="70" Binding="{Binding Dosage}" Header="用量" />
+                            <DataGridTextColumn Width="250" Binding="{Binding MedicineName, Mode=OneWay}" Header="藥品" />
+                            <DataGridTextColumn MinWidth="90" Binding="{Binding Usage, Mode=OneWay}" Header="用法" />
+                            <DataGridTextColumn MinWidth="90" Binding="{Binding Position, Mode=OneWay}" Header="途徑" />
+                            <DataGridTextColumn MinWidth="70" Binding="{Binding Dosage, Mode=OneWay}" Header="用量" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
