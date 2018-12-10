@@ -540,7 +540,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
                         }
                         declareDb.InsertDeclareTrade(_firstTimeDecMasId,declareTrade);//Insert Trade
-                        StoreOrderDb.AddDeclareOrder(CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList()); //缺藥直接訂貨
+                        var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
+                        if(medorder.Count > 0 )
+                            StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
                     }
                     declareDb.UpdateDeclareFile(_currentDeclareData);
                     break;
@@ -580,7 +582,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _currentDecMasId); //庫存扣庫
                         declareDb.InsertDeclareTrade(_currentDecMasId, declareTrade);//Insert Trade
                         declareDb.UpdateDeclareFile(_currentDeclareData);
-                        StoreOrderDb.AddDeclareOrder(CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList()); //缺藥直接訂貨
+                        var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
+                        if (medorder.Count > 0)
+                            StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
                     }
                     if (!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
@@ -646,7 +650,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
                         declareDb.InsertDeclareTrade(_firstTimeDecMasId, declareTrade);//Insert Trade
                         declareDb.UpdateDeclareFile(_currentDeclareData);
-                        StoreOrderDb.AddDeclareOrder(CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList()); //缺藥直接訂貨
+                        var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
+                        if (medorder.Count > 0)
+                            StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
                     }
                     else
                     {
