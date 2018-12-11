@@ -689,7 +689,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case -1:
                     m = new MessageWindow("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR, true);
                     m.ShowDialog();
-                    break;
+                    return;
             }
 
             if (type.Equals("Adjustment"))
