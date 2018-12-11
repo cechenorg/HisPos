@@ -1048,5 +1048,13 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("ID", decMasId));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateDeclareRegisterByMakeUp]", parameters);
         }
+        public void GetNeedPredictImportChronicAndDo(string DecId) {
+            List<string> decmasList = new List<string>();
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_local);
+            parameters.Add(new SqlParameter("DecId", DecId));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[GetNeedPredictImportChronicAndDo]", parameters); 
+        }
+     
     }
 }
