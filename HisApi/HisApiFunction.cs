@@ -113,11 +113,10 @@ namespace His_Pos.HisApi
         public void ErrorDetect(int _res)
         {
             var _message = new StringBuilder(100);
-            var errorDescription = new Function();
             _message.Clear();
             if (_res == 0)
                 return;
-            var errorCodrDescription = errorDescription.GetEnumDescription("ErrorCode", _res.ToString());
+            var errorCodrDescription = Function.GetEnumDescription("ErrorCode", _res.ToString());
             _message.Append(errorCodrDescription);
         }
     }

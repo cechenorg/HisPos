@@ -711,7 +711,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m.ShowDialog();
             }
 
-            if(MainWindow.CurrentPharmacy.MedicalPersonnelCollection != null && MainWindow.CurrentPharmacy.MedicalPersonnelCollection.Count > 0)
+            CustomerDb.UpdateCustomerBasicDataBuCusId(CurrentPrescription.Customer);
+
+            if (MainWindow.CurrentPharmacy.MedicalPersonnelCollection != null && MainWindow.CurrentPharmacy.MedicalPersonnelCollection.Count > 0)
             {
                 foreach (var medicalPerson in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
                 {
@@ -1718,7 +1720,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             break;
                         case "ChronicSequence":
                             if (string.IsNullOrEmpty(ChronicTotal.Text) &&
-                                !int.TryParse(ChronicSequence.Text, out var s))
+                                !int.TryParse(ChronicSequence.Text, out _))
                             {
                                 var m = new MessageWindow("總領藥次數有值，需填寫領藥次數", MessageType.WARNING, true);
                                 m.ShowDialog();
@@ -2127,10 +2129,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 if (((CustomerHistoryMaster) selectedItem).Type.Equals(SystemType.HIS))
                 {
-                    var tmpCustomer = CurrentPrescription.Customer;
+                    var tmpCustomer = CurrentPrescription.Customer.DeepCloneViaJson();
                     var declareCopied = PrescriptionDB.GetDeclareDataById(((CustomerHistoryMaster)selectedItem).CustomerHistoryDetailId);
                     CurrentPrescription = declareCopied.Prescription;
-                    CurrentPrescription.Customer.ContactInfo = tmpCustomer.ContactInfo.DeepCloneViaJson();
+                    CurrentPrescription.Customer = tmpCustomer;
                     DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d=>d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
                     if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id))
                     {
@@ -2194,12 +2196,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void SpecialCodeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var t = sender as TextBox;
-            t?.Select(0, t.Text.Length);
-        }
-
         private void CheckMedicalNumber()
         {
             if (!string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && int.Parse(CurrentPrescription.ChronicSequence) > 1)
@@ -2211,6 +2207,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 CurrentPrescription.Customer.IcCard.MedicalNumber = TempMedicalNumber;
             }
+        }
+
+        private void SpecialCodeCombo_OnDropDownClosed(object sender, EventArgs e)
+        {
+            if (!(sender is ComboBox c)) return;
+            var cmbTextBox = (TextBox)c.Template.FindName("PART_EditableTextBox", c);
+            cmbTextBox.CaretIndex = 0;
         }
     }
 }
