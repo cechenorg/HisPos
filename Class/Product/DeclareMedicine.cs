@@ -29,6 +29,9 @@ namespace His_Pos.Class.Product
             source = string.Empty;
             SideEffect = string.Empty;
             Indication = string.Empty;
+            IsControl = false;
+            IsCommon = false;
+            IsFrozen = false;
         }
         public DeclareMedicine(XmlNode xml)
         {
@@ -121,24 +124,64 @@ namespace His_Pos.Class.Product
                 SideEffect = dataRow["HISMED_SIDEFFECT"].ToString();
             }
             ControlLevel = dataRow["HISMED_CONTROL"].ToString();
-            IsFrozMed = bool.Parse(dataRow["HISMED_FROZ"].ToString().Equals(string.Empty) ? "False" : dataRow["HISMED_FROZ"].ToString());
+            IsFrozen = dataRow["HISMED_FROZ"].ToString().Equals("True");
+            IsCommon = dataRow["HISMED_COMMON"].ToString().Equals("True");
             HcPrice = double.TryParse(dataRow["HISMED_PRICE"].ToString(), out var hcPrice) ? hcPrice : 0.0000;
-           
         }
+        private bool _isControl;
 
-        public bool IsControl => !string.IsNullOrEmpty(ControlLevel);
+        public bool IsControl
+        {
+            get => _isControl;
+            set
+            {
+                _isControl = value;
+                NotifyPropertyChanged(nameof(IsControl));
+            }
+        }
+        private bool _isCommon;
+
+        public bool IsCommon
+        {
+            get => _isCommon;
+            set
+            {
+                _isCommon = value;
+                NotifyPropertyChanged(nameof(IsCommon));
+            }
+        }
         private string _controlLevel;
         public string ControlLevel
         {
             get => _controlLevel;
             set
             {
-                _controlLevel = value.Equals("0") ? string.Empty : value;
+                if (!string.IsNullOrEmpty(value) && value.Equals("0") || string.IsNullOrEmpty(value))
+                {
+                    _controlLevel = string.Empty;
+                    IsControl = false;
+                }
+                else
+                {
+                    _controlLevel = value;
+                    IsControl = true;
+                }
                 NotifyPropertyChanged(nameof(ControlLevel));
             }
         }
 
-        public bool IsFrozMed { get; set; }
+        private bool _isFrozen;
+
+        public bool IsFrozen
+        {
+            get => _isFrozen;
+            set
+            {
+                _isFrozen = value;
+                NotifyPropertyChanged(nameof(IsFrozen));
+            }
+        }
+
         private bool payself;
 
         public bool PaySelf
@@ -363,7 +406,7 @@ namespace His_Pos.Class.Product
                 Name = Name,
                 ChiName = ChiName,
                 EngName = EngName,
-                IsFrozMed = IsFrozMed,
+                IsFrozen = IsFrozen,
                 PaySelf = PaySelf,
                 HcPrice = HcPrice,
                 Ingredient = Ingredient,
@@ -384,7 +427,9 @@ namespace His_Pos.Class.Product
                 IsBuckle = IsBuckle,
                 ControlLevel = ControlLevel,
                 Indication = Indication,
-                SideEffect = SideEffect
+                SideEffect = SideEffect,
+                IsControl = IsControl,
+                IsCommon = IsCommon
             };
             return declareMedicine;
         }

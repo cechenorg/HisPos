@@ -206,15 +206,6 @@ namespace His_Pos.Class
                 AddError("0", "就醫序號未填寫");
                 return;
             }
-            //if (!string.IsNullOrEmpty(ChronicSequence))
-            //{
-            //    if (int.Parse(ChronicSequence) > 1)
-            //    {
-            //        OriginalMedicalNumber = Customer.IcCard.MedicalNumber.DeepCloneViaJson();
-            //        Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
-            //    }
-                    
-            //}
             if (CheckHomeCareAndSmokingCessation())
                 Customer.IcCard.MedicalNumber = "N";
             if (!Customer.IcCard.MedicalNumber.Contains("IC") && Customer.IcCard.MedicalNumber != "N")
