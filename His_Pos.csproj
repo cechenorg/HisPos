@@ -718,6 +718,9 @@
     <Compile Include="Service\DbConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="Service\HttpMethod.cs" />
+    <Compile Include="Service\MedBagSelectionWindow.xaml.cs">
+      <DependentUpon>MedBagSelectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Service\newFunction.cs" />
     <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecord.cs" />
     <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
@@ -1112,6 +1115,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Service\MedBagSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Service\YesNoMessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1152,6 +1159,8 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Resource Include="Images\capsule.png" />
+    <Resource Include="Images\medicine.png" />
     <Content Include="RDLC\HisReceipt.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

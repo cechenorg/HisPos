@@ -368,8 +368,7 @@ namespace His_Pos.Service
         #region 藥袋.收據列印
 
         public static void PrintMedBag(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint, int SelfCost,int Pay, string from, int Charge, PrescriptionDec2View decInstance = null, PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null) {
-
-            var medBagResult = new YesNoMessageWindow("是否列印一藥一袋", "請選擇藥袋列印模式");
+            var medBagResult = new MedBagSelectionWindow();
             var singleMode = (bool)medBagResult.ShowDialog();
             var receiptResult = new YesNoMessageWindow("是否列印收據", "列印收據");
             var receiptPrint = false;
