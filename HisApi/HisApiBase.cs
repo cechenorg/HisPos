@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Threading;
 using His_Pos.Class;
 using His_Pos.Class.Person;
@@ -241,7 +242,17 @@ namespace His_Pos.HisApi
                     break;
             }
             MainWindow.Instance.SetCardReaderStatus(status);
-            MainWindow.Instance.HisApiErrorCode = hisGetCardStatus(type);
+            try
+            {
+                MainWindow.Instance.HisApiErrorCode = hisGetCardStatus(type);
+            }
+            catch (Exception e)
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    MessageWindow m = new MessageWindow("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR, true);
+                    m.ShowDialog();
+                });
+            }
             switch (type)
             {
                 case 1:
@@ -300,7 +311,17 @@ namespace His_Pos.HisApi
                 status = false;
                 MainWindow.Instance.SetSamDcStatus("認證失敗");
             }
-            MainWindow.Instance.HisApiErrorCode = csVerifySAMDC();
+            try
+            {
+                MainWindow.Instance.HisApiErrorCode = csVerifySAMDC();
+            }
+            catch (Exception e)
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate {
+                    MessageWindow m = new MessageWindow("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR, true);
+                    m.ShowDialog();
+                });
+            }
             if (MainWindow.Instance.HisApiErrorCode == 0)
             {
                 status = true;

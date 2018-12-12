@@ -870,7 +870,8 @@ namespace His_Pos.PrescriptionInquire
         //自費 實收新增資料 SelfCost:自費 Pay:實收
         private void ButtonPrintMedBag_Click(object sender, RoutedEventArgs e) {
             var declareData = new DeclareData(InquiredPrescription.Prescription);
-            NewFunction.PrintMedBag(InquiredPrescription.Prescription, declareData, declareData.DrugsPoint, 0, 0, "查詢", null, Instance);
+            int.TryParse(DeclareTrade.ReceiveMoney, out var receive);
+            NewFunction.PrintMedBag(InquiredPrescription.Prescription, declareData, declareData.DrugsPoint, 0, 0, "查詢", receive, null, Instance);
         }
 
         private void ReadCustomerTreatRecord()

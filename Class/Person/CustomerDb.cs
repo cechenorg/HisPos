@@ -158,5 +158,33 @@ namespace His_Pos.Class.Person
             };
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateCustomerLastEdit]", parameters);
         }
+
+        internal static void UpdateCustomerBasicDataBuCusId(Customer customer)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("ID", int.Parse(customer.Id)),
+                !string.IsNullOrEmpty(customer.Name)
+                    ? new SqlParameter("NAME",customer.Name)
+                    : new SqlParameter("NAME", DBNull.Value),
+                !string.IsNullOrEmpty(customer.Qname)
+                    ? new SqlParameter("QNAME",customer.Qname)
+                    : new SqlParameter("QNAME", DBNull.Value),
+                customer.Birthday.Year > 1911
+                    ? new SqlParameter("BIRTH",customer.Birthday)
+                    : new SqlParameter("BIRTH", DBNull.Value),
+                !string.IsNullOrEmpty(customer.ContactInfo.Tel)
+                    ? new SqlParameter("TEL",customer.ContactInfo.Tel)
+                    : new SqlParameter("TEL", DBNull.Value),
+                !string.IsNullOrEmpty(customer.IcCard.IcNumber)
+                    ? new SqlParameter("IDNUM",customer.IcCard.IcNumber)
+                    : new SqlParameter("IDNUM", DBNull.Value),
+                !string.IsNullOrEmpty(customer.IcCard.IcNumber)
+                    ? new SqlParameter("GEMDER", customer.IcCard.IcNumber.Substring(1, 1).Equals("1"))
+                    : new SqlParameter("GEMDER", DBNull.Value)
+            };
+            dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateCustomerBasicData]", parameters);
+        }
     }
 }

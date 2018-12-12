@@ -525,8 +525,7 @@ namespace His_Pos.Class.Declare
             row["CUS_BIRTH"] = declareData.Prescription.Customer.Birthday;
             row["CUS_IDNUM"] = declareData.Prescription.Customer.IcCard.IcNumber;
             row["CUS_GENDER"] = declareData.Prescription.Customer.Gender ? "1" : "0";
-            Function function = new Function();
-            row["CUS_QNAME"] = function.ChangeNameToEnglish((string)declareData.Prescription.Customer.Name);
+            row["CUS_QNAME"] = Function.ChangeNameToEnglish((string)declareData.Prescription.Customer.Name);
             customerTable.Rows.Add(row);
         }
 

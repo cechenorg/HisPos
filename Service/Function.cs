@@ -32,7 +32,7 @@ namespace His_Pos
         //用途:將中文字轉成注音符號再轉成英文字母
         //輸入:中文字串
         //輸出:英文字串
-        public string ChangeNameToEnglish(string txtInput)
+        public static string ChangeNameToEnglish(string txtInput)
         {
             string resultOutput = string.Empty;
             // 取得一串中文字的注音字根
@@ -48,7 +48,7 @@ namespace His_Pos
         //用途:取得Enum Description value
         //輸入:Enum值
         //輸出:Description值
-        public string GetEnumDescription(string type, string value)
+        public static string GetEnumDescription(string type, string value)
         {
             var reply = string.Empty;
             if (type == "ErrorCode")
