@@ -33,6 +33,7 @@
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
         <hisPos:DateConverter x:Key="DateConverter" />
         <hisPos:DoubleConverter x:Key="DoubleConverter" />
+        <Image x:Key="PrescriptionHistory" Source="C:\HisPos\Images\medical-history.png"/>
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">
         <Grid Name="PrescriptionGrid" Width="1365" Height="839">
@@ -42,16 +43,16 @@
                 <RowDefinition />
                 <RowDefinition Height="300" />
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Margin="9" Orientation="Horizontal">
-                <Image Name="IcPatientId" Width="30" Source="../../Images/ID_Card.png" Margin="20,0,15,0"/>
-                <TextBox Name="PatientId" Width="150" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
+            <StackPanel Grid.Row="0" Margin="10,0,10,0" Orientation="Horizontal">
+                <Image Name="IcPatientId" Width="30" Source="../../Images/ID_Card.png" Margin="20,10,15,10"/>
+                <TextBox Name="PatientId" Width="150" Margin="0,10,20,10" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="身分證字號" 
                          InputMethod.IsInputMethodEnabled="False" CharacterCasing="Upper" FontSize="18" Foreground="{StaticResource ForeGround}" 
                          Text="{Binding CurrentPrescription.Customer.IcCard.IcNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown"/>
-                <Image Name="IcPatientName" Width="25" Source="../../Images/User_48px.png" />
-                <TextBox Name="PatientName" Width="150" Margin="0,0,20,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                <Image Name="IcPatientName" Width="25" Source="../../Images/User_48px.png" Margin="0,10,0,10"/>
+                <TextBox Name="PatientName" Width="150" Margin="0,10,20,10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="姓名" FontSize="18" Foreground="{StaticResource ForeGround}" 
                          Text="{Binding CurrentPrescription.Customer.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown"/>
-                <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" />
-                <xctk:MaskedTextBox Name="PatientBirthday" Width="100" Margin="0,0,20,0" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                <Image Name="IcPatientBirthday" Width="30" Source="..\..\Images\birthday.png" Margin="0,10,0,10"/>
+                <xctk:MaskedTextBox Name="PatientBirthday" Width="100" Margin="0,10,20,10" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
                          Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="CurrentPrescription.Customer.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
@@ -62,12 +63,13 @@
                         </Binding>
                     </xctk:MaskedTextBox.Text>
                 </xctk:MaskedTextBox>
-                <Image Width="30" Source="../../Images/Phone.png" />
-                <TextBox Name="PatientTel" Width="150" Margin="0,0,20,0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="聯絡電話" FontSize="18" Foreground="{StaticResource ForeGround}" 
+                <Image Width="30" Source="../../Images/Phone.png" Margin="0,10,0,10"/>
+                <TextBox Name="PatientTel" Width="150" Margin="0,10,20,10" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" materialDesign:HintAssist.Hint="聯絡電話" FontSize="18" Foreground="{StaticResource ForeGround}" 
                          Text="{Binding CurrentPrescription.Customer.ContactInfo.Tel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp" PreviewKeyDown="PatientId_PreviewKeyDown"/>
-                <Label VerticalAlignment="Center" Content="處方張數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
+                <Button Name="PrescriptionHistory" Content="{StaticResource PrescriptionHistory}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Padding="0" Visibility="Hidden"/>
+                <Label VerticalAlignment="Center" Content="處方張數" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}"/>
                 <Label VerticalAlignment="Center" Content="{Binding PrescriptionCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="70"  FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                <Button Content="重置讀卡機" Background="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" Width="105" Padding="0" Click="ReloadCardReader_MouseLeftButtonDown" BorderThickness="0" Margin="170,0,0,0"/>
+                <Button Content="重置讀卡機" Background="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" Width="105" Padding="0" Click="ReloadCardReader_MouseLeftButtonDown" BorderThickness="0" Margin="118,0,0,0"/>
                 <Button MinWidth="128" Background="RoyalBlue" BorderThickness="0" Click="LoadCustomerDataButtonClick" Content="取得病患資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0"/>
             </StackPanel>
             <Grid Name="TrementGrid" Grid.Row="1" Margin="10,0,10,10" Background="{StaticResource GridBackGround}" Height="150" VerticalAlignment="Bottom">

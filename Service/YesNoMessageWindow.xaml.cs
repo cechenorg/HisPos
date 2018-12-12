@@ -14,6 +14,7 @@ namespace His_Pos.Service
             Message = message;
             TitleLabel.Content = title;
             DataContext = this;
+            YesButton.Focus();
         }
 
         private void Yes_ButtonClick(object sender, RoutedEventArgs e)

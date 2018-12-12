@@ -1161,6 +1161,7 @@
     </EmbeddedResource>
     <Resource Include="Images\capsule.png" />
     <Resource Include="Images\medicine.png" />
+    <Resource Include="Images\medical-history.png" />
     <Content Include="RDLC\HisReceipt.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
