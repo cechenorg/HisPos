@@ -257,7 +257,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static void GetNewStoreOrderBySingde()
         {
-            var sindgdeConnection = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var sindgdeConnection = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
             var localConnection = new DbConnection(Settings.Default.SQL_local);
 
             DataTable dataTable = sindgdeConnection.MySqlQueryBySqlString($"call GetNewStoreOrderBySingde('{MainWindow.CurrentPharmacy.Id}')");
@@ -336,7 +336,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<ProductPurchaseView.SindeOrderDetail> collection = new ObservableCollection<ProductPurchaseView.SindeOrderDetail>();
 
-            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
             
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
             
@@ -444,7 +444,7 @@ namespace His_Pos.Class.StoreOrder
                 orderMedicines += "\r\n";
             }
             
-            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
             
             var table = dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{MainWindow.CurrentPharmacy.Id}','{storeOrderData.Id}', '{storeOrderData.Note}', '{orderMedicines}')");
 
@@ -459,7 +459,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static OrderType GetOrderStatusFromSinde(string orderId)
         {
-            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
             
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
 
@@ -586,14 +586,14 @@ namespace His_Pos.Class.StoreOrder
                 i++;
             }
             
-            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
 
             dd.MySqlNonQueryBySqlString($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{declareData.Prescription.Customer.Name}','{Dtl_data}','{declareData.Prescription.Treatment.AdjustDate.AddYears(-1911).ToString("yyyMMdd")}')");
         }
         
         internal static OrderType GetDeclareOrderStatusFromSinde(string orderId)
         {
-            var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
 
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetDeclareOrderStatus('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
 
@@ -703,7 +703,7 @@ namespace His_Pos.Class.StoreOrder
 
             if (!table.Rows[0]["RESULT"].Equals("FAIL"))
             {
-                var singdeConn = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
+                var singdeConn = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
 
                 singdeConn.MySqlNonQueryBySqlString($"call InsertNewOrder('{MainWindow.CurrentPharmacy.Id}','{table.Rows[0]["RESULT"].ToString()}', '', '{orderMedicines}')");
             }
