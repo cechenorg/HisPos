@@ -90,9 +90,10 @@ namespace His_Pos.Class.Person
             IcCard.MedicalNumber = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/insurance").Attributes["serial_code"].Value;
 
             Name = xmlcus.Attributes["name"].Value;
-            string birstring = xmlcus.Attributes["birth"].Value.Substring(0, 3) + "-" + xmlcus.Attributes["birth"].Value.Substring(3, 2) + "-" + xmlcus.Attributes["birth"].Value.Substring(5, 2);
-            Birthday = Convert.ToDateTime(birstring).AddYears(1911); 
-            
+            string birstring =Convert.ToInt32(xmlcus.Attributes["birth"].Value.Substring(0, 3)) + 1911 + "-" + xmlcus.Attributes["birth"].Value.Substring(3, 2) + "-" + xmlcus.Attributes["birth"].Value.Substring(5, 2);
+
+            Birthday = Convert.ToDateTime(birstring);
+
         }
         public Customer(XmlNode xml) {
             IcCard = new IcCard(xml);

@@ -61,7 +61,7 @@ namespace His_Pos.Class
             AdjustCase.Id = "1";
             string treatDate = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["start_at"].Value == "" ? xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case").Attributes["date"].Value : xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["start_at"].Value;
             TreatmentDate = Convert.ToDateTime(treatDate.Substring(0, 3) + "-" + treatDate.Substring(3, 2) + "-" + treatDate.Substring(5, 2)).AddYears(1911);
-            TreatChineseDate = Convert.ToDateTime(treatDate.Substring(0, 3) + "-" + treatDate.Substring(3, 2) + "-" + treatDate.Substring(5, 2));
+            TreatChineseDate = treatDate.Substring(0, 3) + "/" + treatDate.Substring(3, 2) + "/" + treatDate.Substring(5, 2);
             AdjustDate = DateTime.Now;
             MedicineDays = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/orders").Attributes["days"].Value;
             Copayment = new Copayment.Copayment(xml);
@@ -142,9 +142,9 @@ namespace His_Pos.Class
                 NotifyPropertyChanged(nameof(TreatmentDate));
             }
         }
-        private DateTime treatChineseDate;
+        private string treatChineseDate;
 
-        public DateTime TreatChineseDate//d14 就醫(處方)日期 民國
+        public string TreatChineseDate//d14 就醫(處方)日期 民國
         {
             get => treatChineseDate;
             set

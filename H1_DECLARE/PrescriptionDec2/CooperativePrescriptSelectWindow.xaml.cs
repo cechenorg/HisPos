@@ -1,6 +1,12 @@
-﻿using His_Pos.Class;
+﻿using His_Pos.AbstractClass;
+using His_Pos.Class;
+using His_Pos.Class.Declare;
+using His_Pos.Class.Product;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,12 +24,192 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     /// <summary>
     /// CooperativePrescriptSelectWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class CooperativePrescriptSelectWindow : Window
+    public partial class CooperativePrescriptSelectWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        private ObservableCollection<CooperativeClinic> cooperativeCollection;
+        public ObservableCollection<CooperativeClinic> CooperativeCollection
+        {
+            get
+            {
+                return cooperativeCollection;
+            }
+            set
+            {
+                cooperativeCollection = value;
+                NotifyPropertyChanged("CooperativeCollection");
+            }
+        }
+        private ObservableCollection<CustomerDeclare> customerDeclaresCollection;
+        public ObservableCollection<CustomerDeclare> CustomerDeclaresCollection
+        {
+            get
+            {
+                return customerDeclaresCollection;
+            }
+            set
+            {
+                customerDeclaresCollection = value;
+                NotifyPropertyChanged("CustomerDeclaresCollection");
+            }
+        }
+        private ObservableCollection<Product> medicineInfo;
+        public ObservableCollection<Product> MedicineInfo
+        {
+            get
+            {
+                return medicineInfo;
+            }
+            set
+            {
+                medicineInfo = value;
+                NotifyPropertyChanged("MedicineInfo");
+            }
+        }
+        public class CustomerDeclare{
+            public CustomerDeclare() { }
+            public CustomerDeclare(DataRow dataRow) {
+                DecMasId = dataRow["HISDECMAS_ID"].ToString();
+                HospitalName = dataRow["INS_NAME"].ToString();
+                DivName = dataRow["HISDIV_NAME"].ToString();
+                AdjustDate = Convert.ToDateTime(dataRow["HISDECMAS_TREATDATE"].ToString()).AddYears(-1911).ToString("yyy/MM/dd");
+                Point = dataRow["HISDECMAS_TOTALPOINT"].ToString();
+                Medicines = MedicineDb.GetDeclareMedicineByMasId(DecMasId);
+            }  
+            public string DecMasId { get; set; }
+            public string HospitalName { get; set; }
+            public string DivName { get; set; }
+            public string AdjustDate { get; set; }
+            public string Point { get; set; }
+
+            public ObservableCollection<Product> medicines;
+            public ObservableCollection<Product> Medicines
+            {
+                get
+                {
+                    return medicines;
+                }
+                set
+                {
+                    medicines = value;
+                    NotifyPropertyChanged("Medicines");
+                }
+            }
+            public event PropertyChangedEventHandler PropertyChanged;
+
+            private void NotifyPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        private bool unPrescript = true;
+        public bool UnPrescript
+        {
+            get => unPrescript;
+            set
+            {
+                unPrescript = value;
+                NotifyPropertyChanged("UnPrescript");
+            }
+        }
+        private bool prescript = false;
+        public bool Prescript
+        {
+            get => prescript;
+            set
+            {
+                prescript = value;
+                NotifyPropertyChanged("Prescript");
+            }
+        }
+        private DateTime startDate = DateTime.Today;
+        public DateTime StartDate
+        {
+            get => startDate;
+            set
+            {
+                startDate = value;
+                NotifyPropertyChanged("StartDate");
+            }
+        }
+        private DateTime endDate = DateTime.Today;
+        public DateTime EndDate
+        {
+            get => endDate;
+            set
+            {
+                endDate = value;
+                NotifyPropertyChanged("EndDate");
+            }
+        }
+  
         public CooperativePrescriptSelectWindow()
         {
             InitializeComponent();
-            WebApi.GetXmlByDate("5932084604",DateTime.Today.AddDays(-5), DateTime.Today.AddDays(-5));
+            DataContext = this;
+            InitData();
+        }
+        private void InitData() {
+            CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
+        }
+        private void ButtonSearch_Click(object sender, RoutedEventArgs e)
+        {
+            CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
+        }
+
+        private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is System.Windows.Controls.TextBox t)
+            {
+                t.SelectionStart = 0;
+                t.SelectionLength = t.Text.Length;
+            }
+        }
+
+        private void UnPrescript_Checked(object sender,  EventArgs e)
+        {
+
+        }
+
+        private void DataGridCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectitem = (sender as DataGrid).SelectedItem;
+            if (selectitem is null) return;
+            CustomerDeclaresCollection = DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IcNumber);
+            MedicineInfo = null;
+        }
+
+        private void UnPrescript_Checked(object sender, RoutedEventArgs e)
+        {
+            DataGridCustomer.Items.Filter = ((o) => {
+                var temp = (CooperativeClinic)o;
+                if (temp.DeclareStatus == "未調劑" && UnPrescript && (temp.Prescription.Customer.IcCard.IcNumber.Contains(Condition.Text) || string.IsNullOrEmpty(Condition.Text)))
+                    return true;
+                else if (temp.DeclareStatus == "已調劑" && Prescript && (temp.Prescription.Customer.IcCard.IcNumber.Contains(Condition.Text) || string.IsNullOrEmpty(Condition.Text)))
+                    return true;
+                else
+                    return false;
+            });
+        }
+
+        private void DataGridCooperativeClinic_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectitem = (sender as DataGrid).SelectedItem;
+            if (selectitem is null) return;
+            MedicineInfo = ((CustomerDeclare)selectitem).Medicines;
+        }
+
+        private void DataGridCustomer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var selectedItem = DataGridCustomer.SelectedItem;
+            if (selectedItem is null) return;
+            PrescriptionDec2View.Instance.SetValueByPrescription(((CooperativeClinic)selectedItem)); 
+            Close();
         }
     }
 }
