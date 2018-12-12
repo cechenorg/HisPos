@@ -18,6 +18,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
     /// </summary>
     public partial class EmployeeManageView : UserControl, INotifyPropertyChanged
     {
+        #region ----- Define Variables -----
         private bool isFirst = true;
 
         public Collection<string> positionCollection;
@@ -69,20 +70,22 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
+        #endregion
+
         public EmployeeManageView()
         {
             InitializeComponent();
             GetEmployeeData();
             DataContext = this;
-            PositionCollection = CustomerDb.GetPositionData();
-             
         }
+
         private void GetEmployeeData() {
             LoadingWindow loadingWindow = new LoadingWindow();
             loadingWindow.GetEmployeeData(this);
             loadingWindow.Topmost = true;
             loadingWindow.Show();
         }
+
         private void DataGridEmployee_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((sender as DataGrid).SelectedItem == null) return;
@@ -100,6 +103,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             richtextbox.AppendText(Employee.Description);
             InitDataChanged();
         }
+
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 0; i < EmployeeCollection.Count; i++) {
@@ -166,8 +170,13 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
                     return true;
                 else
                     return false;
-
             }); 
+        }
+
+        private void ChangePassword_OnClick(object sender, RoutedEventArgs e)
+        {
+            ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow(Employee.Id);
+            changePasswordWindow.ShowDialog();
         }
     }
 }

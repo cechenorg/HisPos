@@ -61,11 +61,7 @@
                         <Image Source="/Images/Delete.png" Width="30" Name="ButtonDelete" MouseLeftButtonDown="ButtonDelete_MouseLeftButtonDown"/>
                     </StackPanel>
                 </Grid>
-                <Grid Grid.Column="1" Background="{StaticResource GridDarkerBackGround}" Margin="0,0,10,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="201*"/>
-                        <ColumnDefinition Width="20*"/>
-                    </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1" Background="{StaticResource GridDarkerBackGround}" Margin="0,0,10,10"> 
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="300"/>
@@ -76,6 +72,7 @@
                         <TextBox Text="{Binding Employee.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名" TextChanged="Text_TextChanged" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0"/>
                         <TextBox Text="{Binding Employee.NickName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱" TextChanged="Text_TextChanged" VerticalAlignment="Center" Foreground="DimGray" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,12,0,0" BorderThickness="0"/>
                     </StackPanel>
+                    <Button Content="更改密碼" Grid.Row="0" FontSize="20" Height="40" Width="150" BorderThickness="0" HorizontalAlignment="Right" Background="RoyalBlue" Margin="0,0,20,0" FontFamily="Segoe UI Semi" Click="ChangePassword_OnClick"/>
                     <!--<StackPanel Orientation="Vertical"  Background="{StaticResource GridBackGround}" Grid.Row="0" Margin="478,10,376.698,10" Width="150">
                         <Label Content="本月銷售金額" Width="150" VerticalAlignment="Center" Height="25" Foreground="Black" FontSize="12" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <Label Content="555" Width="100" VerticalAlignment="Top" Height="35" Foreground="Black" FontSize="15" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="30,0,20,0"/>
