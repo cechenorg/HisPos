@@ -425,7 +425,7 @@ namespace His_Pos.Class.StoreOrder
             return StoreOrderCollection;
         }
 
-        internal static void SendOrderToSinde(StoreOrder storeOrderData)
+        internal static bool SendOrderToSinde(StoreOrder storeOrderData)
         {
             string orderMedicines = "";
 
@@ -446,8 +446,15 @@ namespace His_Pos.Class.StoreOrder
             
             var dd = new DbConnection("Database=rx_center;Server=59.124.201.229;Port=3311;User Id=SD;Password=1234;SslMode=none", SqlConnectionType.NySql);
             
-            dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{MainWindow.CurrentPharmacy.Id}','{storeOrderData.Id}', '{storeOrderData.Note}', '{orderMedicines}')");
+            var table = dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{MainWindow.CurrentPharmacy.Id}','{storeOrderData.Id}', '{storeOrderData.Note}', '{orderMedicines}')");
 
+            if (table.Rows.Count == 0)
+                return false;
+
+            if (table.Rows[0]["RESULT"].ToString().Equals("SUCCESS"))
+                return true;
+            else
+                return false;
         }
 
         internal static OrderType GetOrderStatusFromSinde(string orderId)
