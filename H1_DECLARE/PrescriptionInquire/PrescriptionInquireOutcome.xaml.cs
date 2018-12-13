@@ -28,6 +28,7 @@ using His_Pos.Service;
 using His_Pos.Struct.IcData;
 using His_Pos.ViewModel;
 using MaterialDesignThemes.Wpf;
+using MoreLinq;
 
 namespace His_Pos.PrescriptionInquire
 {
@@ -1002,7 +1003,91 @@ namespace His_Pos.PrescriptionInquire
             if (!(sender is TextBox textBox)) return;
             textBox.SelectAll();
         }
+        private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+            if (!(sender is TextBox textBox)) return;
+            if (e.Key != Key.Enter)
+            {
+                if (textBox.Text.Contains(" "))
+                    textBox.Text = string.Empty;
+                return;
+            }
 
-        
+            DependencyObject textBoxDependency = textBox;
+            var name = textBoxDependency.GetValue(NameProperty);
+            if (name.Equals("MainDiagnosis"))
+            {
+                if ((!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id) &&
+                     textBox.Text.Contains(" ")) || string.IsNullOrEmpty(textBox.Text.Trim()))
+                {
+                    SecondDiagnosis.Focus();
+                    return;
+                }
+            }
+            else if (name.Equals("SecondDiagnosis"))
+            {
+                if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                {
+                    ChronicTotal.Focus();
+                    return;
+                }
+            }
+
+            if (textBox.Text.Length < 3)
+            {
+                var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING, true);
+                m.ShowDialog();
+                return;
+            }
+
+            if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).DistinctBy(d => d.ICD10.Id).DistinctBy(d => d.ICD9.Id)
+                    .ToList().Count == 1)
+            {
+                var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
+                if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
+                {
+                    var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
+                    {
+                        Owner = Application.Current.MainWindow
+                    };
+                    m.ShowDialog();
+                    return;
+                }
+
+                if (textBoxDependency.GetValue(NameProperty) is string &&
+                    textBoxDependency.GetValue(NameProperty).Equals("MainDiagnosis"))
+                    InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode = selectedDiseaseCode;
+                else
+                {
+                    if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
+                    {
+                        var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
+                        {
+                            Owner = Application.Current.MainWindow
+                        };
+                        m.ShowDialog();
+                        return;
+                    }
+
+                    if ((selectedDiseaseCode.Id.Equals("查無疾病代碼") && textBox.Text.Contains(" ")) ||
+                        string.IsNullOrEmpty(textBox.Text.Trim()))
+                    {
+                        ChronicTotal.Focus();
+                    }
+                    else
+                    {
+                        InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode = selectedDiseaseCode;
+                    }
+                }
+            }
+            else
+            {
+                var disease = new DiseaseCodeSelectDialog(textBox.Text, (string)name);
+                if (disease.DiseaseCollection.Count > 1)
+                    disease.Show();
+            }
+        }
+
     }
 }

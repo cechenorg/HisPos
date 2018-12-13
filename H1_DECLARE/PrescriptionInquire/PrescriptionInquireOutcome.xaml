@@ -157,11 +157,11 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="2" Margin="10">
                 <Label Content="主要診斷" Foreground="#FF424040" Width="auto" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox IsReadOnly="True" x:Name="MainDiagnosis" Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.FullName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="auto" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="Text_TextChanged"/>
+                <TextBox x:Name="MainDiagnosis" Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.FullName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="auto" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="Text_TextChanged"  PreviewKeyDown="DiseaseCode_PreviewKeyDown" GotFocus="TextBox_GotFocus"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="3" Margin="10">
                 <Label Width="auto" Content="次要診斷" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-                <TextBox IsReadOnly="True"  x:Name="SeconDiagnosis" Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="auto" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="Text_TextChanged"/>
+                <TextBox  x:Name="SecondDiagnosis" Text="{Binding InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.FullName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="auto" MinWidth="147" Height="30" FontSize="14" FontWeight="Bold" FontStretch="ExtraExpanded" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="Text_TextChanged"  PreviewKeyDown="DiseaseCode_PreviewKeyDown" GotFocus="TextBox_GotFocus"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="3" Grid.Column="4" Margin="10">
                 <Label Content="特定治療" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
@@ -197,10 +197,10 @@
             <StackPanel  Grid.Row="2"  Grid.Column="4"  Margin="8"  Orientation="Horizontal">
                 <Label  Content="領藥次數" FontFamily="Segoe UI Semibold"  FontSize="18" Foreground="{StaticResource ForeGround}" />
                 <TextBox  x:Name="ChronicSequence" Width="50" HorizontalContentAlignment="Center"  FontFamily="Segoe UI Semibold"  FontSize="14"
-                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding InquiredPrescription.Prescription.ChronicSequence, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged"/>
+                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding InquiredPrescription.Prescription.ChronicSequence, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" GotFocus="TextBox_GotFocus"/>
                 <Label  Content=" / "  FontFamily="Segoe UI Semibold"  FontSize="16" />
                 <TextBox x:Name="ChronicTotal"   Width="50" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold"  FontSize="14"
-                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"  Text="{Binding InquiredPrescription.Prescription.ChronicTotal, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" />
+                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"  Text="{Binding InquiredPrescription.Prescription.ChronicTotal, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" GotFocus="TextBox_GotFocus" />
             </StackPanel>
             <DataGrid
                 Name="PrescriptionMedicines"
