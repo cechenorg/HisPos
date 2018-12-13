@@ -479,12 +479,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             string medCopayName = string.Empty;
             string medPaySelf = string.Empty;
             SetEntryType( ref medEntryName, ref medServiceName, ref medCopayName,ref medPaySelf);
-            bool buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"); //扣庫條件
+            bool buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.ToString("yyyy/MM/dd") == DateTime.Now.ToString("yyyy/MM/dd"); //扣庫條件
              var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             int caseType; 
             if (string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) &&
                 string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && string.IsNullOrEmpty(_currentDecMasId) &&
-                CurrentPrescription.Treatment.AdjustDate.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd"))
+                CurrentPrescription.Treatment.AdjustDate.ToString("yyyy/MM/dd") == DateTime.Now.ToString("yyyy/MM/dd"))
                 caseType = 1; //一般處方調劑
             else if (!string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) &&
                      !string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) &&
@@ -535,7 +535,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
                         }
                         declareDb.InsertDeclareTrade(_firstTimeDecMasId,declareTrade);//Insert Trade
-                        StoreOrderDb.AddDeclareOrder(CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList()); //缺藥直接訂貨
+                        var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
+                        if(medorder.Count > 0 )
+                            StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
                     }
                     declareDb.UpdateDeclareFile(_currentDeclareData);
                     break;
@@ -575,7 +577,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _currentDecMasId); //庫存扣庫
                         declareDb.InsertDeclareTrade(_currentDecMasId, declareTrade);//Insert Trade
                         declareDb.UpdateDeclareFile(_currentDeclareData);
-                        StoreOrderDb.AddDeclareOrder(CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList()); //缺藥直接訂貨
+                        var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
+                        if (medorder.Count > 0)
+                            StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
                     }
                     if (!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
@@ -590,7 +594,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case 3: //第一次慢箋
                     YesNoMessageWindow prescriptionAdjust;
                     var isAdjust = false;
-                    if (CurrentPrescription.Treatment.AdjustDate == DateTime.Today) {
+                    if (CurrentPrescription.Treatment.AdjustDate.ToString("yyyy/MM/dd") == DateTime.Today.ToString("yyyy/MM/dd")) {
                          prescriptionAdjust = new YesNoMessageWindow("是否調劑處方?", "處方調劑確認");
                          isAdjust = (bool)prescriptionAdjust.ShowDialog();
                     }
@@ -641,7 +645,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
                         declareDb.InsertDeclareTrade(_firstTimeDecMasId, declareTrade);//Insert Trade
                         declareDb.UpdateDeclareFile(_currentDeclareData);
-                        StoreOrderDb.AddDeclareOrder(CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList()); //缺藥直接訂貨
+                        var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
+                        if (medorder.Count > 0)
+                            StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
                     }
                     else
                     {
@@ -936,9 +942,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!(sender is AutoCompleteBox medicineCodeAuto)) return;
 
             var result = DeclareMedicines.Where(x =>
-                x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
+                (x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
-                x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
+                x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())) &&
+                CurrentPrescription.Medicines.Count(med => med.Id == x.Id) == 0
+                ).Take(50).Select(x => x);
             _medicines = new ObservableCollection<object>(result.ToList());
 
             medicineCodeAuto.ItemsSource = _medicines;
@@ -1509,6 +1517,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
 
             CurrentPrescription = cooperativeClinic.Prescription;
+            if (!string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && int.Parse(CurrentPrescription.ChronicSequence) > 1)
+            {
+                CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + CurrentPrescription.ChronicSequence;
+                TempMedicalNumber = CurrentPrescription.OriginalMedicalNumber;
+            }
+            else
+            {
+                TempMedicalNumber = CurrentPrescription.Customer.IcCard.MedicalNumber;
+            }
             string tempTreatmentId = CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id;
 
             DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d =>
@@ -2004,8 +2021,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (string.IsNullOrEmpty(CurrentPrescription.Customer.Id)) return;
             var chronicSelectWindow =
                 new ChronicSelectWindow(CurrentPrescription.Customer.Id, CurrentPrescription.Customer.IcNumber);
-            if (chronicSelectWindow.ChronicCollection.Count == 1 &
-                chronicSelectWindow.CooperativeClinicCollection.Count == 0)
+            if (chronicSelectWindow.ChronicCollection.Count == 0 &&  chronicSelectWindow.CooperativeClinicCollection.Count == 0)
                 chronicSelectWindow.Close();
             else
                 chronicSelectWindow.ShowDialog();
@@ -2149,7 +2165,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (IsSendToServer is null || ButtonDeclareRegister is null || DeclareSubmit is null)
                 return;
             int caseType = 0;
-            bool isAdjustDayToday = CurrentPrescription.Treatment.AdjustDate == DateTime.Today ? true : false;
+            bool isAdjustDayToday = CurrentPrescription.Treatment.AdjustDate.ToString("yyy/MM/dd") == DateTime.Today.ToString("yyy/MM/dd") ? true : false;
             bool isNormalPres = string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) && string.IsNullOrEmpty(CurrentPrescription.ChronicSequence);
             if ( string.IsNullOrEmpty(_currentDecMasId) && isAdjustDayToday && isNormalPres)
                 caseType = 1; //一般處方
@@ -2161,7 +2177,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 caseType = 4; //調劑日今天 第一次慢箋
             else if (string.IsNullOrEmpty(_currentDecMasId) && !isAdjustDayToday && !isNormalPres)
                 caseType = 5; //調劑日明天以後 第一次慢箋
-            
+
+            if (!string.IsNullOrEmpty(_currentDecMasId) && isAdjustDayToday && isNormalPres) {
+                MessageWindow messageWindow = new MessageWindow("不可將預約慢箋改為一般箋\r\n請取消後重新登錄處方",MessageType.ERROR);
+                messageWindow.ShowDialog();
+            }
             switch (caseType) {
                 case 1:
                     IsSendToServer.IsEnabled = false;
@@ -2214,6 +2234,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!(sender is ComboBox c)) return;
             var cmbTextBox = (TextBox)c.Template.FindName("PART_EditableTextBox", c);
             cmbTextBox.CaretIndex = 0;
+        }
+
+        private void ButtonCooperativeClinic_Click(object sender, RoutedEventArgs e)
+        {
+            CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = new CooperativePrescriptSelectWindow();
+            cooperativePrescriptSelectWindow.ShowDialog();
+        }
+
+        private void ChronicTotal_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            SetSubmmitButton();
         }
     }
 }

@@ -24,10 +24,28 @@ namespace His_Pos.Class
              HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByMedicalNum", keyValues);
             foreach (XmlDocument xmlDocument in table) {
-                cooperativeClinics.Add(new CooperativeClinic(xmlDocument));
+                cooperativeClinics.Add(new CooperativeClinic(xmlDocument,"ByNedicalNum"));
             }
             return cooperativeClinics;
         }
+        internal static ObservableCollection<CooperativeClinic> GetXmlByDate(string pharmcyMedicalNum, DateTime sDate,DateTime eDate)
+        {
+            Dictionary<string, string> keyValues;
+            keyValues = new Dictionary<string, string> {
+                    {"pharmcyMedicalNum",pharmcyMedicalNum },
+                     {"sDate",sDate.ToString("yyyy-MM-dd") },
+                     {"eDate",eDate.ToString("yyyy-MM-dd") }
+                };
+            ObservableCollection<CooperativeClinic> cooperativeClinics = new ObservableCollection<CooperativeClinic>();
+            HttpMethod httpMethod = new HttpMethod();
+            List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByDate", keyValues);
+            foreach (XmlDocument xmlDocument in table)
+            {
+                cooperativeClinics.Add(new CooperativeClinic(xmlDocument, "ByDate"));
+            }
+            return cooperativeClinics;
+        }
+
         internal static void UpdateXmlStatus(string DeclareId)
         {
             Dictionary<string, string> keyValues;

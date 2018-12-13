@@ -109,7 +109,7 @@ namespace His_Pos.InventoryManagement
                     if (item is InventoryOtc)
                     {
                         if (
-                            (((InventoryOtc)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
+                            (((InventoryOtc)item).Id.Contains(ID.Text.ToUpper()) || ID.Text == string.Empty) //ID filter
                         && (((InventoryOtc)item).ChiName.ToLower().Contains(Name.Text.ToLower()) || ((InventoryOtc)item).EngName.ToLower().Contains(Name.Text.ToLower()) || Name.Text == string.Empty) //Name filter
                        && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
@@ -126,7 +126,7 @@ namespace His_Pos.InventoryManagement
                 case SearchType.MED:
                     if (item is InventoryMedicine)
                     {
-                        if ((((InventoryMedicine)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
+                        if ((((InventoryMedicine)item).Id.Contains(ID.Text.ToUpper()) || ID.Text == string.Empty) //ID filter
                        && (((InventoryMedicine)item).ChiName.ToLower().Contains(Name.Text.ToLower()) || ((InventoryMedicine)item).EngName.ToLower().Contains(Name.Text.ToLower()) || Name.Text == string.Empty) //Name filter
                         && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter
@@ -145,7 +145,7 @@ namespace His_Pos.InventoryManagement
                     break;
                 case SearchType.ALL:
                     if (
-                        (((Product)item).Id.Contains(ID.Text) || ID.Text == string.Empty) //ID filter
+                        (((Product)item).Id.Contains(ID.Text.ToUpper()) || ID.Text == string.Empty) //ID filter
                           && (((Product)item).ChiName.ToLower().Contains(Name.Text.ToLower()) || ((Product)item).EngName.ToLower().Contains(Name.Text.ToLower()) || Name.Text == string.Empty) //Name filter
                            && ((((IInventory)item).Status && !(bool)IsStop.IsChecked) || (!((IInventory)item).Status && (bool)IsStop.IsChecked)) //Status filter
                         && (((((IInventory)item).Stock.Inventory <= Convert.ToDouble(((IInventory)item).Stock.SafeAmount)) && (bool)BelowSafeAmount.IsChecked) || !(bool)BelowSafeAmount.IsChecked) // SafeAmount filter              
