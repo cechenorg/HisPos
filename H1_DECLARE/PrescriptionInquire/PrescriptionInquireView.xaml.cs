@@ -169,7 +169,14 @@ namespace His_Pos.PrescriptionInquire
         private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = (PrescriptionOverview)(sender as DataGridRow).Item;
-            PrescriptionInquireOutcome prescriptionInquireOutcome = new PrescriptionInquireOutcome(PrescriptionDB.GetDeclareDataById(selectedItem.Decmas_Id), selectedItem.IsPredictChronic);
+            DeclareData declareData = PrescriptionDB.GetDeclareDataById(selectedItem.Decmas_Id);
+            if (declareData is null)
+            {
+                MessageWindow messageWindow = new MessageWindow("查無處方 請聯絡資訊人員", MessageType.ERROR);
+                messageWindow.ShowDialog(); 
+                return;
+            }
+            PrescriptionInquireOutcome prescriptionInquireOutcome = new PrescriptionInquireOutcome(declareData, selectedItem.IsPredictChronic);
             prescriptionInquireOutcome.Show();
         }
 

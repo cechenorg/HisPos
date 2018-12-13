@@ -28,6 +28,7 @@ using His_Pos.Service;
 using His_Pos.Struct.IcData;
 using His_Pos.ViewModel;
 using MaterialDesignThemes.Wpf;
+using MoreLinq;
 
 namespace His_Pos.PrescriptionInquire
 {
@@ -55,6 +56,17 @@ namespace His_Pos.PrescriptionInquire
         private void NotifyPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+        private string _tempMedicalNumber;
+
+        public string TempMedicalNumber
+        {
+            get => _tempMedicalNumber;
+            set
+            {
+                _tempMedicalNumber = value;
+                NotifyPropertyChanged(nameof(TempMedicalNumber));
+            }
         }
         private ObservableCollection<TreatmentCase> _treatmentCaseCollection;
         public ObservableCollection<TreatmentCase> TreatmentCaseCollection
@@ -172,6 +184,17 @@ namespace His_Pos.PrescriptionInquire
             DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             _decMasId = inquired.DecMasId;
             InquiredPrescription = inquired;
+            
+                if (!string.IsNullOrEmpty(InquiredPrescription.Prescription.ChronicSequence) && int.Parse(InquiredPrescription.Prescription.ChronicSequence) > 1)
+                {
+                    InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = "IC0" + InquiredPrescription.Prescription.ChronicSequence;
+                    TempMedicalNumber = InquiredPrescription.Prescription.OriginalMedicalNumber;
+                }
+                else
+                {
+                    TempMedicalNumber = InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber;
+                }
+            
             foreach (var newDeclareDetail in InquiredPrescription.Prescription.Medicines) {
                 if (newDeclareDetail is DeclareMedicine)
                 {
@@ -228,7 +251,7 @@ namespace His_Pos.PrescriptionInquire
             AdjustCaseCollection = PrescriptionInquireView.Instance.AdjustCaseCollection;
             TreatmentCaseCollection = PrescriptionInquireView.Instance.TreatmentCaseCollection;
             HospitalCollection = PrescriptionInquireView.Instance.HospitalCollection;
-            DeclareMedicinesData = PrescriptionInquireView.Instance.DeclareMedicinesData;
+            DeclareMedicinesData =  PrescriptionInquireView.Instance.DeclareMedicinesData;
             SetTreatmentData();
             InquiredPrescription.Prescription.Treatment.Copayment = CopaymentCollection.SingleOrDefault(c =>
                 c.Id.Equals(InquiredPrescription.Prescription.Treatment.Copayment.Id));
@@ -290,8 +313,10 @@ namespace His_Pos.PrescriptionInquire
                 }
                 else
                     return;
-            }
-            var declareMedicine = (DeclareMedicine)(medicineCodeAuto.SelectedItem as DeclareMedicine)?.Clone();
+            } 
+            var declareMedicine = ((DeclareMedicine)medicineCodeAuto.SelectedItem).DeepCloneViaJson();
+            if (declareMedicine != null && (declareMedicine.Id.EndsWith("00") || declareMedicine.Id.EndsWith("G0")))
+                declareMedicine.Position = MainWindow.Positions.SingleOrDefault(p => p.Id.Contains("PO"))?.Id;
             var currentRow = GetCurrentRowIndex(sender);
 
             if (DeclareDetails.Count > 0)
@@ -311,7 +336,26 @@ namespace His_Pos.PrescriptionInquire
             {
                 DeclareDetails.Add(declareMedicine);
                 medicineCodeAuto.Text = "";
+            } 
+            MedicineCodeMoveFocus(GetCurrentRowIndex(sender));
+        }
+        private void MedicineCodeMoveFocus(int currentRow)
+        {
+            if (currentRow == -1) return;
+            PrescriptionMedicines.CurrentCell = new DataGridCellInfo(
+                PrescriptionMedicines.Items[currentRow], DosageText);
+            if (PrescriptionMedicines.CurrentCell.Item is null) return;
+            var focusedCell =
+                PrescriptionMedicines.CurrentCell.Column?.GetCellContent(PrescriptionMedicines.CurrentCell.Item);
+            if (focusedCell is null) return;
+            var firstChild =
+                (UIElement)VisualTreeHelper.GetChild(focusedCell ?? throw new InvalidOperationException(), 0);
+            while (firstChild is ContentPresenter)
+            {
+                firstChild = (UIElement)VisualTreeHelper.GetChild(focusedCell, 0);
             }
+
+            firstChild.Focus();
         }
         private void DataGridRow_MouseEnter(object sender, MouseEventArgs e)
         {
@@ -340,10 +384,13 @@ namespace His_Pos.PrescriptionInquire
         {
             if (!(sender is AutoCompleteBox medicineCodeAuto)) return;
             if (DeclareMedicinesData == null) return;
+            
             var result = DeclareMedicinesData.Where(x =>
-                x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
+                (x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
-                x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
+                x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())) &&
+                DeclareDetails.Count(med => med.Id == x.Id) == 0
+                ).Take(50).Select(x => x); 
             _medicines = new ObservableCollection<object>(result.ToList());
 
             medicineCodeAuto.ItemsSource = _medicines;
@@ -562,6 +609,7 @@ namespace His_Pos.PrescriptionInquire
         private void ButtonImportXml_Click(object sender, RoutedEventArgs e)
         {
             MessageWindow m;
+            CheckMedicalNumber();
             InquiredPrescription.Prescription.Medicines = DeclareDetails;
             InquiredPrescription.Prescription.EList.Error = new List<Error>();
             InquiredPrescription.Prescription.EList.Error.Clear();
@@ -580,14 +628,7 @@ namespace His_Pos.PrescriptionInquire
                 }
                 if (IsAdjust || _isPredictChronic) { 
                     var declareDb = new DeclareDb();
-                    //SelfCost.Content = SelfCost.Content.ToString() == null ? "0" : SelfCost.Content.ToString();
-                    //Deposit.Content = Deposit.Content.ToString() == null ? "0" : Deposit.Content.ToString();
-                    //Charge.Content = Charge.Content.ToString() == null ? "0" : Charge.Content.ToString();
-                    //Copayment.Content = Copayment.Content.ToString() == null ? "0" : Copayment.Content.ToString();
-                    //Pay.Content = Pay.Content.ToString() == null ? "0" : Pay.Content.ToString();
-                    //Change.Content = Change.Content.ToString() == null ? "0" : Change.Content.ToString();
-                    //DeclareTrade declareTrade = new DeclareTrade(InquiredPrescription.Customer.Id, MainWindow.CurrentUser.Id, SelfCost.Content.ToString(), Deposit.Content.ToString(), Charge.Content.ToString(), Copayment.Content.ToString(), Pay.Content.ToString(), Change.Content.ToString(), "現金");
-                    declareDb.UpdateDeclareData(_currentDeclareData);
+                      declareDb.UpdateDeclareData(_currentDeclareData);
                     m = new MessageWindow("處方修改成功", MessageType.SUCCESS, true);
                     m.ShowDialog();
                     InitDataChanged();
@@ -624,8 +665,7 @@ namespace His_Pos.PrescriptionInquire
           PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
           AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
           TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
-
-
+             
             DeclareDetails.Clear();
             foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines)
             {
@@ -943,6 +983,114 @@ namespace His_Pos.PrescriptionInquire
                     TreatRecCollection.Add(new TreatmentDataNoNeedHpc(icData, startIndex, false));
                     startIndex += 69;
                 }
+            }
+        }
+        private void CheckMedicalNumber()
+        {
+            if (!string.IsNullOrEmpty(InquiredPrescription.Prescription.ChronicSequence) && int.Parse(InquiredPrescription.Prescription.ChronicSequence) > 1)
+            {
+                InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = "IC0" + InquiredPrescription.Prescription.ChronicSequence;
+                InquiredPrescription.Prescription.OriginalMedicalNumber = TempMedicalNumber;
+            }
+            else
+            {
+                InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = TempMedicalNumber;
+            }
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectAll();
+        }
+        private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (sender is null) return;
+            if (!(sender is TextBox textBox)) return;
+            if (e.Key != Key.Enter)
+            {
+                if (textBox.Text.Contains(" "))
+                    textBox.Text = string.Empty;
+                return;
+            }
+
+            DependencyObject textBoxDependency = textBox;
+            var name = textBoxDependency.GetValue(NameProperty);
+            if (name.Equals("MainDiagnosis"))
+            {
+                if ((!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id) &&
+                     textBox.Text.Contains(" ")) || string.IsNullOrEmpty(textBox.Text.Trim()))
+                {
+                    SecondDiagnosis.Focus();
+                    return;
+                }
+            }
+            else if (name.Equals("SecondDiagnosis"))
+            {
+                if (string.IsNullOrEmpty(textBox.Text.Trim()))
+                {
+                    ChronicTotal.Focus();
+                    return;
+                }
+            }
+
+            if (textBox.Text.Length < 3)
+            {
+                var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING, true);
+                m.ShowDialog();
+                return;
+            }
+
+            if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).DistinctBy(d => d.ICD10.Id).DistinctBy(d => d.ICD9.Id)
+                    .ToList().Count == 1)
+            {
+                var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
+                if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
+                {
+                    var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
+                    {
+                        Owner = Application.Current.MainWindow
+                    };
+                    m.ShowDialog();
+                    return;
+                }
+
+                if (textBoxDependency.GetValue(NameProperty) is string &&
+                    textBoxDependency.GetValue(NameProperty).Equals("MainDiagnosis"))
+                    InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode = selectedDiseaseCode;
+                else
+                {
+                    if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
+                    {
+                        var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
+                        {
+                            Owner = Application.Current.MainWindow
+                        };
+                        m.ShowDialog();
+                        return;
+                    }
+
+                    if ((selectedDiseaseCode.Id.Equals("查無疾病代碼") && textBox.Text.Contains(" ")) ||
+                        string.IsNullOrEmpty(textBox.Text.Trim()))
+                    {
+                        ChronicTotal.Focus();
+                    }
+                    else
+                    {
+                        InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode = selectedDiseaseCode;
+                    }
+                }
+            }
+            else
+            {
+                var disease = new DiseaseCodeSelectDialog(textBox.Text, (string)name);
+                if (disease.DiseaseCollection.Count > 1)
+                    disease.Show();
+            }
+        }
+
+    }
+}
             }
         }
 

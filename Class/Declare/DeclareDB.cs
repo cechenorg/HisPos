@@ -17,6 +17,7 @@ using His_Pos.RDLC;
 using His_Pos.H2_STOCK_MANAGE.ProductPurchase;
 using His_Pos.Interface;
 using His_Pos.Class.Person;
+using His_Pos.H1_DECLARE.PrescriptionDec2;
 
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 
@@ -1026,7 +1027,7 @@ namespace His_Pos.Class.Declare
             foreach (DataRow row in table.Rows) {
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(row["API_DELCARE_XML"].ToString());
-                cooperativeClinics.Add(new CooperativeClinic(xmlDocument));
+                cooperativeClinics.Add(new CooperativeClinic(xmlDocument,"SendToClinic"));
             }
             CooperativeClinicJson cooperativeClinicJson = new CooperativeClinicJson(cooperativeClinics);
             WebApi.SendToCooperClinic(cooperativeClinicJson);
@@ -1045,5 +1046,25 @@ namespace His_Pos.Class.Declare
             parameters.Add(new SqlParameter("ID", decMasId));
             conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[UpdateDeclareRegisterByMakeUp]", parameters);
         }
+        public void GetNeedPredictImportChronicAndDo(string DecId) {
+            List<string> decmasList = new List<string>();
+            var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_local);
+            parameters.Add(new SqlParameter("DecId", DecId));
+            conn.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[GetNeedPredictImportChronicAndDo]", parameters); 
+        }
+        public static ObservableCollection<CooperativePrescriptSelectWindow.CustomerDeclare> GetDeclareHistoryByCusIdnum(string cusIdnum)
+        {
+            ObservableCollection<CooperativePrescriptSelectWindow.CustomerDeclare> customerDeclares = new ObservableCollection<CooperativePrescriptSelectWindow.CustomerDeclare>();
+             var parameters = new List<SqlParameter>();
+            var conn = new DbConnection(Settings.Default.SQL_local);
+            parameters.Add(new SqlParameter("IDNUM", cusIdnum));
+            DataTable table = conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDeclareHistoryByCusIdnum]", parameters);
+            foreach (DataRow row in table.Rows) {
+                customerDeclares.Add(new CooperativePrescriptSelectWindow.CustomerDeclare(row));
+            }
+            return customerDeclares;
+        }
+       
     }
 }

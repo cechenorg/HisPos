@@ -43,6 +43,7 @@ namespace His_Pos.Class
             Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
             ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
+            OriginalMedicalNumber = row["HISDECMAS_OLDNUMDER"].ToString();
             DataColumnCollection columns = row.Table.Columns;
             if (columns.Contains("IS_GETCARD"))
             {

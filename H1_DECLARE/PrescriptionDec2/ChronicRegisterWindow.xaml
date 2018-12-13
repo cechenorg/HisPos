@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.H1_DECLARE.PrescriptionInquire"
         mc:Ignorable="d"
-        Title="預約慢箋登錄" Height="450" Width="800">
+        Title="預約慢箋登錄" Height="450" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
