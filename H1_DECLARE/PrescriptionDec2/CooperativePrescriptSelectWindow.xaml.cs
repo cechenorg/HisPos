@@ -171,11 +171,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void UnPrescript_Checked(object sender,  EventArgs e)
-        {
-
-        }
-
         private void DataGridCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectitem = (sender as DataGrid).SelectedItem;

@@ -281,7 +281,13 @@ namespace His_Pos.PrescriptionInquire
                 tmpCopayment.Point = InquiredPrescription.Prescription.Treatment.Copayment.Point;
                 InquiredPrescription.Prescription.Treatment.Copayment = tmpCopayment;
             }
-            InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode =  DiseaseCodeDb.GetDiseaseCodeById(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id)[0].ICD10;
+
+            if (!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id))
+            {
+                InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id)[0].ICD10;
+                if(!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
+                    InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id)[0].ICD10;
+            }
             InquiredPrescription.Prescription.Treatment.AdjustCase = AdjustCaseCollection.SingleOrDefault(a =>
                 a.Id.Equals(InquiredPrescription.Prescription.Treatment.AdjustCase.Id));
 
@@ -652,6 +658,8 @@ namespace His_Pos.PrescriptionInquire
 
         private void TextBox_GotFocus(object sender, EventArgs e)
         {
+            if (!(sender is TextBox textBox)) return;
+            textBox.SelectAll();
             DataChanged();
         }
 
@@ -998,11 +1006,6 @@ namespace His_Pos.PrescriptionInquire
             }
         }
 
-        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is TextBox textBox)) return;
-            textBox.SelectAll();
-        }
         private void DiseaseCode_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (sender is null) return;
@@ -1086,11 +1089,6 @@ namespace His_Pos.PrescriptionInquire
                 var disease = new DiseaseCodeSelectDialog(textBox.Text, (string)name);
                 if (disease.DiseaseCollection.Count > 1)
                     disease.Show();
-            }
-        }
-
-    }
-}
             }
         }
 

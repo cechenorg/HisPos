@@ -196,11 +196,11 @@
             </StackPanel> 
             <StackPanel  Grid.Row="2"  Grid.Column="4"  Margin="8"  Orientation="Horizontal">
                 <Label  Content="領藥次數" FontFamily="Segoe UI Semibold"  FontSize="18" Foreground="{StaticResource ForeGround}" />
-                <TextBox  x:Name="ChronicSequence" Width="50" HorizontalContentAlignment="Center"  FontFamily="Segoe UI Semibold"  FontSize="14"
-                         MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding InquiredPrescription.Prescription.ChronicSequence, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" GotFocus="TextBox_GotFocus"/>
-                <Label  Content=" / "  FontFamily="Segoe UI Semibold"  FontSize="16" />
                 <TextBox x:Name="ChronicTotal"   Width="50" HorizontalContentAlignment="Center" FontFamily="Segoe UI Semibold"  FontSize="14"
                          MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown"  Text="{Binding InquiredPrescription.Prescription.ChronicTotal, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" GotFocus="TextBox_GotFocus" />
+                <Label  Content=" - "  FontFamily="Segoe UI Semibold"  FontSize="16" />
+                <TextBox  x:Name="ChronicSequence" Width="50" HorizontalContentAlignment="Center"  FontFamily="Segoe UI Semibold"  FontSize="14"
+                          MouseLeftButtonUp="MedicineTextBox_PreviewMouseLeftButtonDown" Text="{Binding InquiredPrescription.Prescription.ChronicSequence, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" GotFocus="TextBox_GotFocus"/>
             </StackPanel>
             <DataGrid
                 Name="PrescriptionMedicines"
