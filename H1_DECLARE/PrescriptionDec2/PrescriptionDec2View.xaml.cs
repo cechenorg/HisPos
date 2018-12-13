@@ -2248,7 +2248,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (PrescriptionMedicines.SelectedIndex == -1) return;
+            if (PrescriptionMedicines.SelectedIndex == -1 || CurrentPrescription.Medicines.Count == 0) return;
             if (!(CurrentPrescription.Medicines[PrescriptionMedicines.SelectedIndex] is DeclareMedicine med)) return;
             var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(med.Id));
             m.Show();

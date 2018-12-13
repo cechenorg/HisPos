@@ -1094,7 +1094,7 @@ namespace His_Pos.PrescriptionInquire
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (PrescriptionMedicines.SelectedIndex == -1) return;
+            if (PrescriptionMedicines.SelectedIndex == -1 || InquiredPrescription.Prescription.Medicines.Count == 0) return;
             if (!(InquiredPrescription.Prescription.Medicines[PrescriptionMedicines.SelectedIndex] is DeclareMedicine med)) return;
             var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(med.Id));
             m.Show();
