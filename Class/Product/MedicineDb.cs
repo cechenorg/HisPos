@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using His_Pos.InventoryManagement;
 using His_Pos.Properties;
 using His_Pos.Service;
 using Microsoft.VisualBasic;
@@ -139,6 +140,21 @@ namespace His_Pos.Class.Product
             return new DateTime(year, m, d, calendar).AddYears(-1911);
         }
 
+        internal static MedicineDetail.SyncFlag GetMedicineSyncFlag(string id)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("HISMED_ID", id));
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MedicineDetail].[GetMedicineSyncFlag]", parameters);
+
+            if(table.Rows.Count == 0)
+                return new MedicineDetail.SyncFlag(true);
+
+            return new MedicineDetail.SyncFlag(table.Rows[0]);
+        }
+
         private static double TryParseDouble(string str)
         {
             double number;
@@ -181,6 +197,16 @@ namespace His_Pos.Class.Product
             parameters.Add(new SqlParameter("DESCRIPTION", inventoryMedicine.Note));
 
             dd.ExecuteProc("[HIS_POS_DB].[MedicineDetail].[UpdateInventoryMedicineDetail]", parameters);
+        }
+
+        internal static InventoryMedicine ResetMedicineSyncFlag(string id)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("HISMED_ID", id));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[MedicineDetail].[ResetMedicineSyncFlag]", parameters);
+
+            return  new InventoryMedicine(table.Rows[0]);
         }
     }
 }
