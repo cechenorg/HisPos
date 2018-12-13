@@ -942,9 +942,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!(sender is AutoCompleteBox medicineCodeAuto)) return;
 
             var result = DeclareMedicines.Where(x =>
-                x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
+                (x.Id.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
                 x.ChiName.ToLower().Contains(medicineCodeAuto.Text.ToLower()) ||
-                x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())).Take(50).Select(x => x);
+                x.EngName.ToLower().Contains(medicineCodeAuto.Text.ToLower())) &&
+                CurrentPrescription.Medicines.Count(med => med.Id == x.Id) == 0
+                ).Take(50).Select(x => x);
             _medicines = new ObservableCollection<object>(result.ToList());
 
             medicineCodeAuto.ItemsSource = _medicines;
