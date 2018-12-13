@@ -409,10 +409,10 @@ namespace His_Pos.InventoryManagement
         #region ----- Confirm Change -----
         private void ConfirmBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            InventoryMedicine.SideEffect = new TextRange(SideEffectBox.Document.ContentStart, SideEffectBox.Document.ContentEnd).Text;
-            InventoryMedicine.Indication = new TextRange(IndicationBox.Document.ContentStart, IndicationBox.Document.ContentEnd).Text;
-            InventoryMedicine.Warnings = new TextRange(WarningBox.Document.ContentStart, WarningBox.Document.ContentEnd).Text;
-            InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text;
+            InventoryMedicine.SideEffect = new TextRange(SideEffectBox.Document.ContentStart, SideEffectBox.Document.ContentEnd).Text.Replace("\r\n","");
+            InventoryMedicine.Indication = new TextRange(IndicationBox.Document.ContentStart, IndicationBox.Document.ContentEnd).Text.Replace("\r\n", "");
+            InventoryMedicine.Warnings = new TextRange(WarningBox.Document.ContentStart, WarningBox.Document.ContentEnd).Text.Replace("\r\n", "");
+            InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text.Replace("\r\n", "");
 
             MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
             ProductDb.UpdateInventoryProductUnit(InventoryMedicine.Id, ProductUnitCollection);
@@ -509,10 +509,17 @@ namespace His_Pos.InventoryManagement
             InventoryMedicine = MedicineDb.ResetMedicineSyncFlag(InventoryMedicine.Id);
             UpdateNewDataToCurrentMed();
 
+            SideEffectBox.Document.Blocks.Clear();
+            IndicationBox.Document.Blocks.Clear();
+            WarningBox.Document.Blocks.Clear();
+            NoteBox.Document.Blocks.Clear();
+
             SideEffectBox.AppendText(InventoryMedicine.SideEffect);
             IndicationBox.AppendText(InventoryMedicine.Indication);
             WarningBox.AppendText(InventoryMedicine.Warnings);
             NoteBox.AppendText(InventoryMedicine.Note);
+
+            InitMedicineDataChanged();
 
             Flags = new SyncFlag(true);
 
