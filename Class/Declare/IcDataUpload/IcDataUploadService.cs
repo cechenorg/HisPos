@@ -104,16 +104,16 @@ namespace His_Pos.Class.Declare.IcDataUpload
             IcNumber = currentPrescription.Customer.IcCard.IcNumber;
             BirthDay = customerData.Birthday;
             TreatmentDateTime = seq.TreatDateTime;
-            MedicalNumber = seq.MedicalNumber;
+            MedicalNumber = string.Empty;
             PharmacyId = seq.InstitutionId;
             MedicalPersonIcNumber = currentPrescription.Pharmacy.MedicalPersonnel.IcNumber;
             SecuritySignature = seq.SecuritySignature;
             MainDiagnosisCode = currentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
             if (!string.IsNullOrEmpty(currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
                 SecondDiagnosisCode = currentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
-            OutpatientFee = (currentDeclareData.DrugsPoint + currentDeclareData.SpecailMaterialPoint +
-                             currentDeclareData.CopaymentPoint + currentDeclareData.MedicalServicePoint).ToString();
-            OutpatientCopaymentFee = currentDeclareData.CopaymentPoint.ToString();
+            OutpatientFee = (currentDeclareData.D33DrugsPoint + currentDeclareData.D31SpecailMaterialPoint +
+                             currentDeclareData.D17CopaymentPoint + currentDeclareData.D38MedicalServicePoint).ToString();
+            OutpatientCopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
         }
 
         public IcData(Prescription current,IcErrorCodeWindow.IcErrorCode errorCode,DeclareData currentDeclareData)
@@ -150,9 +150,9 @@ namespace His_Pos.Class.Declare.IcDataUpload
             MainDiagnosisCode = current.Treatment.MedicalInfo.MainDiseaseCode.Id;
             if (!string.IsNullOrEmpty(current.Treatment.MedicalInfo.SecondDiseaseCode.Id))
                 SecondDiagnosisCode = current.Treatment.MedicalInfo.SecondDiseaseCode.Id;
-            OutpatientFee = (currentDeclareData.DrugsPoint + currentDeclareData.SpecailMaterialPoint +
-                             currentDeclareData.CopaymentPoint + currentDeclareData.MedicalServicePoint).ToString();
-            OutpatientCopaymentFee = currentDeclareData.CopaymentPoint.ToString();
+            OutpatientFee = (currentDeclareData.D33DrugsPoint + currentDeclareData.D31SpecailMaterialPoint +
+                             currentDeclareData.D17CopaymentPoint + currentDeclareData.D38MedicalServicePoint).ToString();
+            OutpatientCopaymentFee = currentDeclareData.D17CopaymentPoint.ToString();
         }
         //1,3 V  2,4 ~ 
         [XmlElement(ElementName = "A16")]

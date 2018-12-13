@@ -505,7 +505,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
                     if(!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
-                    ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),
+                    ProductDb.InsertCashFow(medServiceName, _currentDeclareData.D38MedicalServicePoint.ToString(),
                         "DecMasId", _firstTimeDecMasId);
                     if (buckleCondition)
                     {
@@ -562,7 +562,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _currentDecMasId);
                         if(CurrentPrescription.IsDeposit)
                             ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _currentDecMasId);
-                        ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),
+                        ProductDb.InsertCashFow(medServiceName, _currentDeclareData.D38MedicalServicePoint.ToString(),
                             "DecMasId", _currentDecMasId);
                         var medTotalPrice = 0.00;
                         foreach (var med in _currentDeclareData.Prescription.Medicines)
@@ -629,7 +629,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             declareDb.InsertDeclareRegister(_firstTimeDecMasId, IsSend, true, CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
                         }
                         if(!CurrentPrescription.IsDeposit)
-                            ProductDb.InsertCashFow(medServiceName, _currentDeclareData.MedicalServicePoint.ToString(),"DecMasId", _firstTimeDecMasId);
+                            ProductDb.InsertCashFow(medServiceName, _currentDeclareData.D38MedicalServicePoint.ToString(),"DecMasId", _firstTimeDecMasId);
                         var medTotalPrice = 0.00;
                         foreach (var med in _currentDeclareData.Prescription.Medicines)
                         {
@@ -801,12 +801,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 int sigCount = 0;
                 for (var i = 0; i < _currentDeclareData.DeclareDetails.Count; i++)
                 {
-                    if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
+                    if (_currentDeclareData.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                         continue;
                     bool isMedicine = false;
                     foreach (var m in CurrentPrescription.Medicines)
                     {
-                        if (_currentDeclareData.DeclareDetails[i].MedicalId.Equals(m.Id))
+                        if (_currentDeclareData.DeclareDetails[i].P2MedicalId.Equals(m.Id))
                         {
                             isMedicine = true;
                             break;
@@ -817,15 +817,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     var medicalData = new MedicalData
                     {
                         MedicalOrderTreatDateTime = Seq.TreatDateTime,
-                        MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
-                        TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
-                        Usage = _currentDeclareData.DeclareDetails[i].Usage,
-                        Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
-                        TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
+                        MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].P1MedicalOrder,
+                        TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].P2MedicalId,
+                        Usage = _currentDeclareData.DeclareDetails[i].P4Usage,
+                        Days = _currentDeclareData.DeclareDetails[i].P11Days.ToString(),
+                        TotalAmount = _currentDeclareData.DeclareDetails[i].P7Total.ToString(),
                         PrescriptionSignature = _prescriptionSignatureList[sigCount],
                     };
-                    if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
-                        medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
+                    if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].P5Position))
+                        medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].P5Position;
                     switch (medicalData.MedicalOrderCategory)
                     {
                         case "1":
@@ -849,9 +849,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     sigCount++;
                 }
                 icRecord.MainMessage.MedicalMessageList = medicalDatas;
-                icRecord.SerializeObject();
+                icRecord.SerializeDailyUploadObject();
                 var d = new DeclareDb();
-                d.InsertDailyUpload(icRecord.SerializeObject());
+                d.InsertDailyUpload(icRecord.SerializeDailyUploadObject());
             }
             catch (Exception ex)
             {
@@ -880,19 +880,19 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
                     for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
                     {
-                        if (_currentDeclareData.DeclareDetails[i].MedicalOrder.Equals("9"))
+                        if (_currentDeclareData.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                             continue;
                         var medicalData = new MedicalData
                         {
                             MedicalOrderTreatDateTime = icData.TreatmentDateTime,
-                            MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].MedicalOrder,
-                            TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].MedicalId,
-                            Usage = _currentDeclareData.DeclareDetails[i].Usage,
-                            Days = _currentDeclareData.DeclareDetails[i].Days.ToString(),
-                            TotalAmount = _currentDeclareData.DeclareDetails[i].Total.ToString(),
+                            MedicalOrderCategory = _currentDeclareData.DeclareDetails[i].P1MedicalOrder,
+                            TreatmentProjectCode = _currentDeclareData.DeclareDetails[i].P2MedicalId,
+                            Usage = _currentDeclareData.DeclareDetails[i].P4Usage,
+                            Days = _currentDeclareData.DeclareDetails[i].P11Days.ToString(),
+                            TotalAmount = _currentDeclareData.DeclareDetails[i].P7Total.ToString(),
                         };
-                        if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].Position))
-                            medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].Position;
+                        if (!string.IsNullOrEmpty(_currentDeclareData.DeclareDetails[i].P5Position))
+                            medicalData.TreatmentPosition = _currentDeclareData.DeclareDetails[i].P5Position;
                         switch (medicalData.MedicalOrderCategory)
                         {
                             case "1":
@@ -916,9 +916,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     }
 
                     icRecord.MainMessage.MedicalMessageList = medicalDatas;
-                    icRecord.SerializeObject();
+                    icRecord.SerializeDailyUploadObject();
                     var d = new DeclareDb();
-                    d.InsertDailyUpload(icRecord.SerializeObject());
+                    d.InsertDailyUpload(icRecord.SerializeDailyUploadObject());
                 }
                 catch (Exception ex)
                 {
@@ -2214,6 +2214,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!(sender is ComboBox c)) return;
             var cmbTextBox = (TextBox)c.Template.FindName("PART_EditableTextBox", c);
             cmbTextBox.CaretIndex = 0;
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (PrescriptionMedicines.SelectedIndex == -1) return;
+            if (!(CurrentPrescription.Medicines[PrescriptionMedicines.SelectedIndex] is DeclareMedicine med)) return;
+            var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(med.Id));
+            m.Show();
         }
     }
 }

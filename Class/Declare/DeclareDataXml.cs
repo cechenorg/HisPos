@@ -211,17 +211,6 @@ namespace His_Pos.Class.Declare
                 OnPropertyChanged(nameof(D18));
             }
         }
-        private string _d19;
-        [XmlElement(ElementName = "d19")]
-        public string D19
-        {
-            get => _d19;
-            set
-            {
-                _d19 = value;
-                OnPropertyChanged(nameof(D19));
-            }
-        }
         private string _d20;
         [XmlElement(ElementName = "d20")]
         public string D20

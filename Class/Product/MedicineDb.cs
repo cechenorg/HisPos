@@ -182,5 +182,14 @@ namespace His_Pos.Class.Product
 
             dd.ExecuteProc("[HIS_POS_DB].[MedicineDetail].[UpdateInventoryMedicineDetail]", parameters);
         }
+
+        internal static MedicineInformation GetMedicalInfoById(string id)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("MedId", id));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetMedInfoByMedId]", parameters);
+            return new MedicineInformation(table.Rows[0]);
+        }
     }
 }

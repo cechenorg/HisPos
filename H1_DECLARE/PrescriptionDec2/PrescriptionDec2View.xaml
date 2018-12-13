@@ -241,6 +241,7 @@
                         </Style.Triggers>
                         <EventSetter Event="MouseEnter" Handler="DataGridRow_MouseEnter" />
                         <EventSetter Event="MouseLeave" Handler="DataGridRow_MouseLeave" />
+                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_MouseDoubleClick" />
                         <Setter Property="ContextMenu" Value="{DynamicResource MedcineContextMenu }"/>
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="BorderBrush" Value="Transparent" />

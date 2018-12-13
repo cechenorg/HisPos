@@ -30,7 +30,7 @@ namespace His_Pos.PrescriptionInquire
             Division = declareData.Prescription.Treatment.MedicalInfo.Hospital.Division;
             MedicalPersonnelName = declareData.Prescription.Treatment.MedicalInfo.Hospital.Doctor.Name;
             AdjustDate = declareData.Prescription.Treatment.AdjustDate.ToShortTimeString();
-            Point = declareData.TotalPoint.ToString();
+            Point = declareData.D18TotalPoint.ToString();
             ChronicStatus =  declareData.Prescription.ChronicTotal + "/" + declareData.Prescription.ChronicSequence ;
         }
         public string Decmas_Id { get; set; }

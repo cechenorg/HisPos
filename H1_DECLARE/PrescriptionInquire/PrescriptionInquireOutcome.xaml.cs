@@ -728,12 +728,12 @@ namespace His_Pos.PrescriptionInquire
                 int sigCount = 0;
                 for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
                 {
-                    if (InquiredPrescription.DeclareDetails[i].MedicalOrder.Equals("9"))
+                    if (InquiredPrescription.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                         continue;
                     bool isMedicine = false;
                     foreach (var m in InquiredPrescription.Prescription.Medicines)
                     {
-                        if (InquiredPrescription.DeclareDetails[i].MedicalId.Equals(m.Id))
+                        if (InquiredPrescription.DeclareDetails[i].P2MedicalId.Equals(m.Id))
                         {
                             isMedicine = true;
                             break;
@@ -744,18 +744,18 @@ namespace His_Pos.PrescriptionInquire
                     var medicalData = new MedicalData
                     {
                         MedicalOrderTreatDateTime = Seq.TreatDateTime,
-                        MedicalOrderCategory = InquiredPrescription.DeclareDetails[i].MedicalOrder,
-                        TreatmentProjectCode = InquiredPrescription.DeclareDetails[i].MedicalId,
-                        Usage = InquiredPrescription.DeclareDetails[i].Usage,
-                        Days = InquiredPrescription.DeclareDetails[i].Days.ToString(),
-                        TotalAmount = InquiredPrescription.DeclareDetails[i].Total.ToString(),
+                        MedicalOrderCategory = InquiredPrescription.DeclareDetails[i].P1MedicalOrder,
+                        TreatmentProjectCode = InquiredPrescription.DeclareDetails[i].P2MedicalId,
+                        Usage = InquiredPrescription.DeclareDetails[i].P4Usage,
+                        Days = InquiredPrescription.DeclareDetails[i].P11Days.ToString(),
+                        TotalAmount = InquiredPrescription.DeclareDetails[i].P7Total.ToString(),
                     };
                     if (_prescriptionSignatureList.Count > 0)
                     {
                         medicalData.PrescriptionSignature = _prescriptionSignatureList[sigCount];
                     }
-                    if (!string.IsNullOrEmpty(InquiredPrescription.DeclareDetails[i].Position))
-                        medicalData.TreatmentPosition = InquiredPrescription.DeclareDetails[i].Position;
+                    if (!string.IsNullOrEmpty(InquiredPrescription.DeclareDetails[i].P5Position))
+                        medicalData.TreatmentPosition = InquiredPrescription.DeclareDetails[i].P5Position;
                     switch (medicalData.MedicalOrderCategory)
                     {
                         case "1":
@@ -779,9 +779,9 @@ namespace His_Pos.PrescriptionInquire
                     medicalDatas.Add(medicalData);
                 }
                 icRecord.MainMessage.MedicalMessageList = medicalDatas;
-                icRecord.SerializeObject();
+                icRecord.SerializeDailyUploadObject();
                 var d = new DeclareDb();
-                d.InsertDailyUpload(icRecord.SerializeObject());
+                d.InsertDailyUpload(icRecord.SerializeDailyUploadObject());
             }
             catch (Exception ex)
             {
@@ -810,19 +810,19 @@ namespace His_Pos.PrescriptionInquire
 
                     for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
                     {
-                        if (InquiredPrescription.DeclareDetails[i].MedicalOrder.Equals("9"))
+                        if (InquiredPrescription.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                             continue;
                         var medicalData = new MedicalData
                         {
                             MedicalOrderTreatDateTime = icData.TreatmentDateTime,
-                            MedicalOrderCategory = InquiredPrescription.DeclareDetails[i].MedicalOrder,
-                            TreatmentProjectCode = InquiredPrescription.DeclareDetails[i].MedicalId,
-                            Usage = InquiredPrescription.DeclareDetails[i].Usage,
-                            Days = InquiredPrescription.DeclareDetails[i].Days.ToString(),
-                            TotalAmount = InquiredPrescription.DeclareDetails[i].Total.ToString(),
+                            MedicalOrderCategory = InquiredPrescription.DeclareDetails[i].P1MedicalOrder,
+                            TreatmentProjectCode = InquiredPrescription.DeclareDetails[i].P2MedicalId,
+                            Usage = InquiredPrescription.DeclareDetails[i].P4Usage,
+                            Days = InquiredPrescription.DeclareDetails[i].P11Days.ToString(),
+                            TotalAmount = InquiredPrescription.DeclareDetails[i].P7Total.ToString(),
                         };
-                        if (!string.IsNullOrEmpty(InquiredPrescription.DeclareDetails[i].Position))
-                            medicalData.TreatmentPosition = InquiredPrescription.DeclareDetails[i].Position;
+                        if (!string.IsNullOrEmpty(InquiredPrescription.DeclareDetails[i].P5Position))
+                            medicalData.TreatmentPosition = InquiredPrescription.DeclareDetails[i].P5Position;
                         switch (medicalData.MedicalOrderCategory)
                         {
                             case "1":
@@ -871,7 +871,7 @@ namespace His_Pos.PrescriptionInquire
         private void ButtonPrintMedBag_Click(object sender, RoutedEventArgs e) {
             var declareData = new DeclareData(InquiredPrescription.Prescription);
             int.TryParse(DeclareTrade.ReceiveMoney, out var receive);
-            NewFunction.PrintMedBag(InquiredPrescription.Prescription, declareData, declareData.DrugsPoint, 0, 0, "查詢", receive, null, Instance);
+            NewFunction.PrintMedBag(InquiredPrescription.Prescription, declareData, declareData.D33DrugsPoint, 0, 0, "查詢", receive, null, Instance);
         }
 
         private void ReadCustomerTreatRecord()
@@ -944,6 +944,14 @@ namespace His_Pos.PrescriptionInquire
                     startIndex += 69;
                 }
             }
+        }
+
+        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (PrescriptionMedicines.SelectedIndex == -1) return;
+            if (!(InquiredPrescription.Prescription.Medicines[PrescriptionMedicines.SelectedIndex] is DeclareMedicine med)) return;
+            var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(med.Id));
+            m.Show();
         }
     }
 }

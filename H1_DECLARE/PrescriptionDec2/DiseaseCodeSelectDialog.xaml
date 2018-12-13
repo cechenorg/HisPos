@@ -20,43 +20,43 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="550"/>
             </Grid.RowDefinitions>
-                <TextBox Name="Condition" Width="170" Height="30" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" TextChanged="Condition_TextChanged" materialDesign:HintAssist.Hint="請輸入查詢字串" HorizontalAlignment="Left"/>
-                <DataGrid Name="SearchResult" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"  HorizontalAlignment="Left"
-                      AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Margin="10" Background="{StaticResource GridBackGround}"
-                  ItemsSource="{Binding DiseaseCollection,UpdateSourceTrigger=PropertyChanged}">
-                    <DataGrid.Resources>
-                        <Style TargetType="{x:Type ScrollBar}">
-                            <Setter Property="SnapsToDevicePixels" Value="True" />
-                            <Setter Property="OverridesDefaultStyle" Value="true" />
-                            <Setter Property="Width" Value="100" />
-                            <Style.Triggers>
-                                <Trigger Property="Orientation" Value="Horizontal">
-                                    <Setter Property="Width" Value="Auto" />
-                                    <Setter Property="Height" Value="15" />
-                                    <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
-                                </Trigger>
-                                <Trigger Property="Orientation" Value="Vertical">
-                                    <Setter Property="Width" Value="15" />
-                                    <Setter Property="Height" Value="Auto" />
-                                    <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGrid.Resources>
-                    <DataGrid.RowStyle>
-                        <Style TargetType="{x:Type DataGridRow}">
-                            <Style.Triggers>
-                                <Trigger Property="DataGridRow.IsSelected" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
-                                </Trigger>
-                            </Style.Triggers>
-                            <Setter Property="Background" Value="Transparent" />
-                            <Setter Property="BorderBrush" Value="Transparent" />
-                            <Setter Property="FontSize" Value="16" />
-                            <Setter Property="Height" Value="40" />
-                            <EventSetter Event="MouseDoubleClick" Handler="DiseaseCode_Select_DoubleClick"/>
-                        </Style>
-                    </DataGrid.RowStyle>
+            <TextBox Name="Condition" Width="170" Height="30" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" TextChanged="Condition_TextChanged" materialDesign:HintAssist.Hint="請輸入查詢字串" HorizontalAlignment="Left"/>
+            <DataGrid Name="SearchResult" Grid.Row="1" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"  HorizontalAlignment="Left"
+                      AutoGenerateColumns="False" FontFamily="Segoe UI Semi" HorizontalScrollBarVisibility="Hidden" Margin="10,10,0,10" Background="{StaticResource GridBackGround}"
+                  ItemsSource="{Binding DiseaseCollection,UpdateSourceTrigger=PropertyChanged}" Width="780">
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="15" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="Height" Value="40" />
+                        <EventSetter Event="MouseDoubleClick" Handler="DiseaseCode_Select_DoubleClick"/>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="ICD-10" Width="100" ElementStyle="{StaticResource TextInMiddleCellStyle}" Binding="{Binding ICD10.Id,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontFamily="Segoe UI Semibold"/>
                     <DataGridTextColumn Header="名稱" Width="260" Binding="{Binding ICD10.Name,UpdateSourceTrigger=PropertyChanged}" IsReadOnly="True" FontFamily="Segoe UI Semibold"/>

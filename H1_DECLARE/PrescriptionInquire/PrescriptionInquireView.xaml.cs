@@ -102,7 +102,7 @@ namespace His_Pos.PrescriptionInquire
             set
             {
                 totalPoint = value;
-                NotifyPropertyChanged("TotalPoint");
+                NotifyPropertyChanged("D18TotalPoint");
             }
         }
         private double medDeclarePrice = 0;

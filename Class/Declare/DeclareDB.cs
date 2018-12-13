@@ -350,17 +350,16 @@ namespace His_Pos.Class.Declare
             //4補報註記 7就醫序號 16申請點數 17部分負擔點數 18合計點數 19行政協助部分負擔點數 31特殊材料明細點數小計 32診療明細點數小計 33用藥明細點數小計 38藥事服務費點數
             var tagsDictionary = new Dictionary<string, string>
                     {
-                        {"D4", declareData.DeclareMakeUp},
+                        {"D4", declareData.D4DeclareMakeUp},
                         {"D7", declareData.Prescription.Customer.IcCard.MedicalNumber},
-                        {"D16", declareData.DeclarePoint.ToString()},
-                        {"D17", declareData.CopaymentPoint.ToString()},
-                        {"D18", declareData.TotalPoint.ToString()},
-                        {"D19", declareData.AssistProjectCopaymentPoint.ToString()},
-                        {"D31", declareData.SpecailMaterialPoint.ToString()},
-                        {"D32", declareData.DiagnosisPoint.ToString()},
-                        {"D33", declareData.DrugsPoint.ToString()},
-                        {"D37", declareData.MedicalServiceCode},
-                        {"D38", declareData.MedicalServicePoint.ToString()}
+                        {"D16", declareData.D16DeclarePoint.ToString()},
+                        {"D17", declareData.D17CopaymentPoint.ToString()},
+                        {"D18", declareData.D18TotalPoint.ToString()},
+                        {"D31", declareData.D31SpecailMaterialPoint.ToString()},
+                        {"D32", declareData.D32DiagnosisPoint.ToString()},
+                        {"D33", declareData.D33DrugsPoint.ToString()},
+                        {"D37", declareData.D37MedicalServiceCode},
+                        {"D38", declareData.D38MedicalServicePoint.ToString()}
                     };
             foreach (var tag in tagsDictionary)
             {
@@ -593,7 +592,7 @@ namespace His_Pos.Class.Declare
 
             row["DecMasId"] = declareData.DecMasId;
             row["D1"] = declareData.Prescription.Treatment.AdjustCase.Id;
-            row["D4"] = CheckXmlDbNullValue(declareData.DeclareMakeUp);
+            row["D4"] = CheckXmlDbNullValue(declareData.D4DeclareMakeUp);
             row["D5"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.PaymentCategory.Id);
             row["D6"] = DateTimeExtensions.ConvertToTaiwanCalender(declareData.Prescription.Customer.Birthday, false);
             row["D7"] = declareData.Prescription.Customer.IcCard.MedicalNumber;
@@ -606,10 +605,9 @@ namespace His_Pos.Class.Declare
                 CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Id);
             row["D14"] = declareData.Prescription.Treatment.TreatmentDate;
             row["D15"] = declareData.Prescription.Treatment.Copayment.Id;
-            row["D16"] = declareData.DeclarePoint.ToString();
-            row["D17"] = declareData.CopaymentPoint.ToString();
-            row["D18"] = declareData.TotalPoint.ToString();
-            row["D19"] = CheckXmlDbNullValue(declareData.AssistProjectCopaymentPoint.ToString());
+            row["D16"] = declareData.D16DeclarePoint.ToString();
+            row["D17"] = declareData.D17CopaymentPoint.ToString();
+            row["D18"] = declareData.D18TotalPoint.ToString();
             row["D21"] = declareData.Prescription.Treatment.MedicalInfo.Hospital.Id;
             row["D22"] = declareData.Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
             row["D23"] = declareData.Prescription.Treatment.AdjustDate;  
@@ -620,9 +618,9 @@ namespace His_Pos.Class.Declare
             row["D28"] = string.Empty;
             row["D29"] = string.Empty;
             row["D30"] = CheckXmlDbNullValue(declareData.Prescription.Treatment.MedicineDays);
-            row["D31"] = CheckXmlDbNullValue(declareData.SpecailMaterialPoint.ToString());
-            row["D32"] = CheckXmlDbNullValue(declareData.DiagnosisPoint.ToString());
-            row["D33"] = CheckXmlDbNullValue(declareData.DrugsPoint.ToString());
+            row["D31"] = CheckXmlDbNullValue(declareData.D31SpecailMaterialPoint.ToString());
+            row["D32"] = CheckXmlDbNullValue(declareData.D32DiagnosisPoint.ToString());
+            row["D33"] = CheckXmlDbNullValue(declareData.D33DrugsPoint.ToString());
             if (string.IsNullOrEmpty(d35))
                 row["D35"] = DBNull.Value;
             else
@@ -631,8 +629,8 @@ namespace His_Pos.Class.Declare
                 row["D36"] = DBNull.Value;
             else
                 row["D36"] = d36;
-            row["D37"] = declareData.MedicalServiceCode;
-            row["D38"] = declareData.MedicalServicePoint.ToString();
+            row["D37"] = declareData.D37MedicalServiceCode;
+            row["D38"] = declareData.D38MedicalServicePoint.ToString();
             row["D43"] = string.IsNullOrEmpty(declareData.Prescription.OriginalMedicalNumber)? "" : declareData.Prescription.OriginalMedicalNumber;
 
             var xmlStr = declareData.SerializeObject<Ddata>(); 
@@ -689,17 +687,17 @@ namespace His_Pos.Class.Declare
                     var detail = declareData.DeclareDetails[i];
                     var row = pDataTable.NewRow();
                     var function = new Function();
-                    row["P1"] = detail.MedicalOrder;
-                    row["P2"] = detail.MedicalId;
-                    row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
-                    row["P4"] = detail.Usage;
-                    row["P5"] = detail.Position;
-                    row["P6"] = function.ToInvCulture(detail.Percent);
-                    row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
-                    row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                    row["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
-                    row["P10"] = detail.Sequence.ToString();
-                    row["P11"] = detail.Days.ToString();
+                    row["P1"] = detail.P1MedicalOrder;
+                    row["P2"] = detail.P2MedicalId;
+                    row["P3"] = function.SetStrFormat(detail.P3Dosage, "{0:0000.00}");
+                    row["P4"] = detail.P4Usage;
+                    row["P5"] = detail.P5Position;
+                    row["P6"] = function.ToInvCulture(detail.P6Percent);
+                    row["P7"] = function.SetStrFormat(detail.P7Total, "{0:00000.0}");
+                    row["P8"] = function.SetStrFormat(detail.P8Price, "{0:0000000.00}");
+                    row["P9"] = function.SetStrFormatInt(detail.P9Point, "{0:D8}");
+                    row["P10"] = detail.P10Sequence.ToString();
+                    row["P11"] = detail.P11Days.ToString();
                     row["PAY_BY_YOURSELF"] = detail.PaySelf ? "1" : "0";
                     if(declareData.Prescription.Medicines[i] is DeclareMedicine)
                         row["IS_BUCKLE"] = ((DeclareMedicine)declareData.Prescription.Medicines[i]).IsBuckle;
@@ -732,7 +730,7 @@ namespace His_Pos.Class.Declare
             }
             var percent = CountAdditionPercent(declareData);
             int dayPay = 0;
-            switch (declareData.DayPayCode)
+            switch (declareData.P2DayPayCode)
             {
                 case "MA1":
                     dayPay = 22;
@@ -749,7 +747,7 @@ namespace His_Pos.Class.Declare
             }
             var dayPayPrice = double.Parse(declareData.Prescription.Treatment.MedicineDays) * dayPay;
             var currentDate = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
-            var detail = new DeclareDetail("1", declareData.DayPayCode, percent, double.Parse(declareData.Prescription.Treatment.MedicineDays),
+            var detail = new DeclareDetail("1", declareData.P2DayPayCode, percent, double.Parse(declareData.Prescription.Treatment.MedicineDays),
                 dayPayPrice, count + 1, currentDate,
                 currentDate,"dayPay");
             var pData = pDataTable.NewRow();
@@ -764,23 +762,23 @@ namespace His_Pos.Class.Declare
             {
                     var row = pDataTable.NewRow();
                     var detail = declareData.DeclareDetails[i];
-                    detail.Usage = declareData.Prescription.Medicines == null
-                        ? detail.Usage : ((DeclareMedicine)declareData.Prescription.Medicines[i]).UsageName;
+                    detail.P4Usage = declareData.Prescription.Medicines == null
+                        ? detail.P4Usage : ((DeclareMedicine)declareData.Prescription.Medicines[i]).UsageName;
                     var paySelf = declareData.Prescription.Medicines == null ? "0" :
                         ((DeclareMedicine)declareData.Prescription.Medicines[i]).PaySelf ? "1" : "0";
 
                     row["DecMasId"] = declareData.DecMasId;
-                    row["P1"] = detail.MedicalOrder;
-                    row["P2"] = detail.MedicalId;
-                    row["P3"] = function.SetStrFormat(detail.Dosage, "{0:0000.00}");
-                    row["P4"] = detail.Usage;
-                    row["P5"] = detail.Position;
-                    row["P6"] = function.ToInvCulture(detail.Percent);
-                    row["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
-                    row["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                    row["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
-                    row["P10"] = detail.Sequence.ToString();
-                    row["P11"] = detail.Days.ToString().PadLeft(2, '0');
+                    row["P1"] = detail.P1MedicalOrder;
+                    row["P2"] = detail.P2MedicalId;
+                    row["P3"] = function.SetStrFormat(detail.P3Dosage, "{0:0000.00}");
+                    row["P4"] = detail.P4Usage;
+                    row["P5"] = detail.P5Position;
+                    row["P6"] = function.ToInvCulture(detail.P6Percent);
+                    row["P7"] = function.SetStrFormat(detail.P7Total, "{0:00000.0}");
+                    row["P8"] = function.SetStrFormat(detail.P8Price, "{0:0000000.00}");
+                    row["P9"] = function.SetStrFormatInt(detail.P9Point, "{0:D8}");
+                    row["P10"] = detail.P10Sequence.ToString();
+                    row["P11"] = detail.P11Days.ToString().PadLeft(2, '0');
                     row["PAY_BY_YOURSELF"] = paySelf;
                     pDataTable.Rows.Add(row);
             }
@@ -794,13 +792,13 @@ namespace His_Pos.Class.Declare
             int maxSequence = 0;
             foreach (var d in declareData.DeclareDetails)
             {
-                if (d.Sequence > maxSequence)
-                    maxSequence = d.Sequence;
+                if (d.P10Sequence > maxSequence)
+                    maxSequence = d.P10Sequence;
             }
             var percent = CountAdditionPercent(declareData);
             var currentDate = DateTimeExtensions.ConvertToTaiwanCalenderWithTime(DateTime.Now);
-            var detail = new DeclareDetail("9", declareData.MedicalServiceCode, percent, 1,
-                declareData.MedicalServicePoint, maxSequence + 1, currentDate,
+            var detail = new DeclareDetail("9", declareData.D37MedicalServiceCode, percent, 1,
+                declareData.D38MedicalServicePoint, maxSequence + 1, currentDate,
                 currentDate,"service");
             var pData = pDataTable.NewRow();
             SetMedicalServiceCostDataRow(pData, declareData, detail);
@@ -828,15 +826,15 @@ namespace His_Pos.Class.Declare
         {
             var declarecount = declareData.DeclareDetails.Count + 1; //藥事服務醫令序
 
-                pData["P1"] = detail.MedicalOrder;
-                pData["P2"] = detail.MedicalId;
-                pData["P6"] = function.ToInvCulture(detail.Percent);
-                pData["P7"] = function.SetStrFormat(detail.Total, "{0:00000.0}");
-                pData["P8"] = function.SetStrFormat(detail.Price, "{0:0000000.00}");
-                pData["P9"] = function.SetStrFormatInt(detail.Point, "{0:D8}");
+                pData["P1"] = detail.P1MedicalOrder;
+                pData["P2"] = detail.P2MedicalId;
+                pData["P6"] = function.ToInvCulture(detail.P6Percent);
+                pData["P7"] = function.SetStrFormat(detail.P7Total, "{0:00000.0}");
+                pData["P8"] = function.SetStrFormat(detail.P8Price, "{0:0000000.00}");
+                pData["P9"] = function.SetStrFormatInt(detail.P9Point, "{0:D8}");
                 pData["P10"] = function.SetStrFormatInt(declarecount, "{0:D3}");
-                pData["P12"] = detail.StartDate;
-                pData["P13"] = detail.EndDate;
+                pData["P12"] = detail.P12StartDate;
+                pData["P13"] = detail.P13EndDate;
         }
 
         /*
@@ -987,9 +985,9 @@ namespace His_Pos.Class.Declare
             foreach (var detail in declareData.DeclareDetails)
             {
                 var row = pDataTable.NewRow();
-                row["PRO_ID"] = detail.MedicalId;
-                row["CUSPRESCRIBE_QTY"] = detail.Total;
-                row["CUSPRESCRIBE_PRICE"] = short.Parse(Math.Ceiling(detail.Total*detail.Price).ToString());
+                row["PRO_ID"] = detail.P2MedicalId;
+                row["CUSPRESCRIBE_QTY"] = detail.P7Total;
+                row["CUSPRESCRIBE_PRICE"] = short.Parse(Math.Ceiling(detail.P7Total * detail.P8Price).ToString());
                 pDataTable.Rows.Add(row);
             }
         }
