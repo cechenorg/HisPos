@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -46,6 +47,7 @@ using UserControl = System.Windows.Controls.UserControl;
 using His_Pos.H1_DECLARE.PrescriptionInquire;
 using System.Xml;
 using His_Pos.ViewModel;
+using MaterialDesignThemes.Wpf;
 
 namespace His_Pos.H1_DECLARE.PrescriptionDec2
 {
@@ -409,23 +411,31 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             ErrorMssageWindow err;
             CurrentPrescription.EList.Error = new List<Error>();
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
-
-            var medDays = 0;
-            foreach (var med in CurrentPrescription.Medicines)
+            
+            if (CurrentPrescription.Treatment.AdjustCase.Id.Equals("D") ||
+                CurrentPrescription.Treatment.AdjustCase.Id.Equals("5"))
             {
-                if (!(med is DeclareMedicine declare)) continue;
-                if (string.IsNullOrEmpty(((IProductDeclare) declare).Days))
+                CurrentPrescription.Treatment.MedicineDays = "0";
+            }
+            else
+            {
+                var medDays = 0;
+                foreach (var med in CurrentPrescription.Medicines)
                 {
-                    var messageWindow = new MessageWindow(declare.Id + "的給藥日份不可為空", MessageType.ERROR, true);
-                    messageWindow.ShowDialog();
-                    return;
+                    if (!(med is DeclareMedicine declare)) continue;
+                    if (string.IsNullOrEmpty(((IProductDeclare)declare).Days))
+                    {
+                        var messageWindow = new MessageWindow(declare.Id + "的給藥日份不可為空", MessageType.ERROR, true);
+                        messageWindow.ShowDialog();
+                        return;
+                    }
+
+                    if (int.Parse(((IProductDeclare)declare).Days) > medDays)
+                        medDays = int.Parse(((IProductDeclare)declare).Days);
                 }
 
-                if (int.Parse(((IProductDeclare) declare).Days) > medDays)
-                    medDays = int.Parse(((IProductDeclare) declare).Days);
+                CurrentPrescription.Treatment.MedicineDays = medDays.ToString();
             }
-
-            CurrentPrescription.Treatment.MedicineDays = medDays.ToString();
 
             if (CurrentPrescription.EList.Error.Count == 0)
             {
@@ -472,7 +482,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void InsertPrescription(string type)
         {
             MessageWindow m;
-            _currentDeclareData = new DeclareData(CurrentPrescription);
+            CurrentPrescription.Customer.Id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
+
+            _currentDeclareData = new DeclareData(CurrentPrescription); 
             var declareDb = new DeclareDb();
             string medEntryName = string.Empty;
             string medServiceName = string.Empty;
@@ -1461,13 +1473,28 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 _isPrescribe = false;
             }
 
-            if (((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Equals("2"))
+            switch (((AdjustCase)AdjustCaseCombo.SelectedItem).Id)
             {
-                CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I22"));
-                ButtonDeclareRegister.IsEnabled = true;
+                case "1":
+                    CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
+                    break;
+                case "2":
+                    CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I22"));
+                    ButtonDeclareRegister.IsEnabled = true;
+                    break;
+                case "D":
+                    CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("009"));
+                    break;
             }
-            else if (((AdjustCase) AdjustCaseCombo.SelectedItem).Id.Equals("1"))
-                CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
+
+            if (CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") || CurrentPrescription.Treatment.AdjustCase.Id.Equals("D"))
+            {
+                PaymentCategoryCombo.SelectedIndex = -1;
+            }
+            else
+            {
+                PaymentCategoryCombo.SelectedIndex = 3;
+            }
 
             SetSubmmitButton();
         }
@@ -1551,8 +1578,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 foreach (var s in SpecialCodes)
                 {
-                    if (s.Id.Contains(CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id))
-                        SpecialCodeCombo.SelectedItem = s;
+                    if (!s.Id.Contains(CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id)) continue;
+                    CurrentPrescription.Treatment.MedicalInfo.SpecialCode = s.DeepCloneViaJson();
+                    break;
                 }
             }
 
@@ -1582,8 +1610,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 foreach (var s in SpecialCodes)
                 {
-                    if (s.Id.Contains(CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id))
-                        SpecialCodeCombo.SelectedItem = s;
+                    if (!s.Id.Contains(CurrentPrescription.Treatment.MedicalInfo.SpecialCode.Id)) continue;
+                    CurrentPrescription.Treatment.MedicalInfo.SpecialCode = s.DeepCloneViaJson();
+                    break;
                 }
             }
 
@@ -1707,16 +1736,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             AdjustCaseCombo.Focus();
                             break;
                         case "CopaymentCombo":
-                            SpecialCodeCombo.Focus();
+                            SpecialCodeText.Focus();
                             break;
                         case "AdjustCaseCombo":
                             TreatmentCaseCombo.Focus();
-                            break;
-                        case "SpecialCodeCombo":
-                            var nextAutoCompleteBox = new List<AutoCompleteBox>();
-                            NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto",
-                                ref nextAutoCompleteBox);
-                            nextAutoCompleteBox[0].Focus();
                             break;
                     }
 
@@ -1748,14 +1771,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                                     int.TryParse(ChronicSequence.Text, out var seq) && seq >= 1)
                                 {
                                     AdjustCaseCombo.SelectedIndex = 1;
-                                    SpecialCodeCombo.Focus();
+                                    SpecialCodeText.Focus();
                                 }
                             }
 
                             break;
                         case "ChronicTotal":
                             if (string.IsNullOrEmpty(t.Text))
-                                SpecialCodeCombo.Focus();
+                                SpecialCodeText.Focus();
                             else
                                 ChronicSequence.Focus();
                             break;
@@ -1767,6 +1790,23 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             break;
                         case "AdjustDate":
                             MainDiagnosis.Focus();
+                            break;
+                        case "SpecialCodeText":
+                            if (t != null && t.Text.Length > 0)
+                            {
+                                foreach (var specialCode in SpecialCodes)
+                                {
+                                    if (!specialCode.Id.Equals(t.Text.ToUpper())) continue;
+                                    CurrentPrescription.Treatment.MedicalInfo.SpecialCode =
+                                        specialCode.DeepCloneViaJson();
+                                    t.CaretIndex = 0;
+                                    break;
+                                }
+                            }
+                            var nextAutoCompleteBox = new List<AutoCompleteBox>();
+                            NewFunction.FindChildGroup(PrescriptionMedicines, "MedicineCodeAuto",
+                                ref nextAutoCompleteBox);
+                            nextAutoCompleteBox[0].Focus();
                             break;
                     }
 
@@ -1788,6 +1828,27 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DivisionCombo.Focus();
         }
 
+        private void CheckHospitalNameContainsDivision(string name)
+        {
+            var divisionMatch = 0;
+            var divisionId = string.Empty;
+            foreach (var d in Divisions)
+            {
+                var r = new Regex(d.Name);
+                if (!r.IsMatch(name)) continue;
+                divisionId = d.Id;
+                divisionMatch++;
+            }
+            if (divisionMatch == 0 && name.Contains("牙醫"))
+            {
+                CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = Divisions.SingleOrDefault(d => d.Id.Equals("40"));
+                return;
+            }
+            if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
+                return;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division =
+                Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
+        }
 
         private void IsBuckle_Click(object sender, RoutedEventArgs e)
         {
@@ -2063,7 +2124,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentPrescription.Treatment.AdjustCase = AdjustCases.SingleOrDefault(a => a.Name.Equals("一般處方調劑"));
             CurrentPrescription.Treatment.MedicalInfo.TreatmentCase =
                 TreatmentCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
-            SpecialCodeCombo.SelectedIndex = -1;
+            CurrentPrescription.Treatment.MedicalInfo.SpecialCode = new SpecialCode();
             CurrentPrescription.ChronicSequence = string.Empty;
             CurrentPrescription.ChronicTotal = string.Empty;
             CurrentPrescription.Medicines.Clear();
@@ -2228,13 +2289,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private void SpecialCodeCombo_OnDropDownClosed(object sender, EventArgs e)
-        {
-            if (!(sender is ComboBox c)) return;
-            var cmbTextBox = (TextBox)c.Template.FindName("PART_EditableTextBox", c);
-            cmbTextBox.CaretIndex = 0;
-        }
-
         private void ButtonCooperativeClinic_Click(object sender, RoutedEventArgs e)
         {
             CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = new CooperativePrescriptSelectWindow();
@@ -2252,6 +2306,41 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (!(CurrentPrescription.Medicines[PrescriptionMedicines.SelectedIndex] is DeclareMedicine med)) return;
             var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(med.Id));
             m.Show();
+        }
+
+        private void ReleaseHospital_OnTextChanged(object sender, RoutedEventArgs e)
+        {
+            if(ReleaseHospital.Text.Length <= 10) return;
+            CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
+        }
+
+        private void SpecialCodeText_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox t) t.CaretIndex = 0;
+        }
+
+        private void PaymentCategoryCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) && (CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") || CurrentPrescription.Treatment.AdjustCase.Id.Equals("D")))
+            {
+                if (PaymentCategoryCombo.SelectedIndex == -1)
+                {
+                    CurrentPrescription.Treatment.PaymentCategory = new PaymentCategory();
+                    return;
+                }
+                MessageWindow m = new MessageWindow("調劑案件為慢性病連續處方箋調劑/藥事居家照護，本欄免填。",MessageType.WARNING,true);
+                m.ShowDialog();
+                CurrentPrescription.Treatment.PaymentCategory = new PaymentCategory();
+                PaymentCategoryCombo.SelectedIndex = -1;
+            }
+            else
+            {
+                if (PaymentCategoryCombo.SelectedIndex > -1 && PaymentCategoryCombo.SelectedIndex < PaymentCategories.Count)
+                {
+                    CurrentPrescription.Treatment.PaymentCategory =
+                        PaymentCategories[PaymentCategoryCombo.SelectedIndex];
+                }
+            }
         }
     }
 }

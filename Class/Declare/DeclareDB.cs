@@ -462,7 +462,7 @@ namespace His_Pos.Class.Declare
         {
             if (declareTrade == null) return;
             var row = tradeTable.NewRow();
-
+           
             row["CUS_ID"] = Convert.ToInt32(declareTrade.CusId);
 
             if (string.IsNullOrEmpty(declareTrade.EmpId))

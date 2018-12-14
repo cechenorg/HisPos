@@ -96,7 +96,6 @@ namespace His_Pos.Class
         }
 
         private PaymentCategory.PaymentCategory _paymentCategory;
-
         public PaymentCategory.PaymentCategory PaymentCategory
         {
             get => _paymentCategory;

@@ -295,7 +295,7 @@ namespace His_Pos.Class
             if (Treatment.PaymentCategory is null) return;
             if (!string.IsNullOrEmpty(Treatment.PaymentCategory.Id)) return;
 
-            if (!Treatment.AdjustCase.Id.Equals("D"))
+            if (!Treatment.AdjustCase.Id.Equals("D") || !Treatment.AdjustCase.Id.Equals("2"))
                 AddError("0", "未選擇給付類別");
         }
 
