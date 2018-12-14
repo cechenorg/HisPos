@@ -430,7 +430,17 @@ namespace His_Pos.ProductPurchase
                 StoreOrderData.Type = OrderType.PROCESSING;
 
             if (StoreOrderData.Type == OrderType.WAITING)
-                StoreOrderDb.SendOrderToSinde(StoreOrderData);
+            {
+                bool success = StoreOrderDb.SendOrderToSinde(StoreOrderData);
+
+                if (!success)
+                {
+                    MessageWindow messageWindow = new MessageWindow("傳送訂單至杏德發生問題, 請稍後在嘗試", MessageType.ERROR);
+                    messageWindow.ShowDialog();
+
+                    return;
+                }
+            }
 
             SaveOrder();
 

@@ -29,13 +29,16 @@ namespace His_Pos.Service
             }  
         }
 
-        public void MySqlNonQueryBySqlString(string sqlString)
-        {  
+        public DataTable MySqlNonQueryBySqlString(string sqlString)
+        {
+            var table = new DataTable();
             try
             {
                 MySqlCommand cmd = new MySqlCommand(sqlString, _sqlMySqlConnection);
                 _sqlMySqlConnection.Open();
                 cmd.ExecuteNonQuery();
+                var sqlDapter = new MySqlDataAdapter(cmd);
+                sqlDapter.Fill(table);
                 _sqlMySqlConnection.Close();
             }
             catch (Exception ex) { 
@@ -50,6 +53,8 @@ namespace His_Pos.Service
                         break; 
                 } 
             }
+
+            return table;
         }
         public DataTable MySqlQueryBySqlString(string sqlString) {
             var table = new DataTable();

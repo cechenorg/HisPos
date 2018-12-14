@@ -59,6 +59,39 @@ namespace His_Pos.InventoryManagement
             public string SC { get; }
             public string Ingredient { get; }
         }
+
+        public struct SyncFlag
+        {
+
+            public SyncFlag(DataRow dataRow)
+            {
+                ChiNameFlag = Boolean.Parse(dataRow["HISMEDSYNC_NAME"].ToString());
+                EngNameFlag = Boolean.Parse(dataRow["HISMEDSYNC_ENGNAME"].ToString());
+                NoteFlag = Boolean.Parse(dataRow["HISMEDSYNC_NOTE"].ToString());
+                SideEffectFlag = Boolean.Parse(dataRow["HISMEDSYNC_SIDEFFECT"].ToString());
+                IndicationFlag = Boolean.Parse(dataRow["HISMEDSYNC_INDICATION"].ToString());
+            }
+
+            public SyncFlag(bool defaultValue)
+            {
+                ChiNameFlag = defaultValue;
+                EngNameFlag = defaultValue;
+                NoteFlag = defaultValue;
+                SideEffectFlag = defaultValue;
+                IndicationFlag = defaultValue;
+            }
+
+            public bool ChiNameFlag { get; set; }
+            public bool EngNameFlag { get; set; }
+            public bool NoteFlag { get; set; }
+            public bool SideEffectFlag { get; set; }
+            public bool IndicationFlag { get; set; }
+
+            public bool IsAllDataSync
+            {
+                get { return ChiNameFlag && EngNameFlag && NoteFlag && SideEffectFlag && IndicationFlag; }
+            }
+        }
         #endregion
 
         #region ----- Define Variables -----
@@ -68,8 +101,7 @@ namespace His_Pos.InventoryManagement
         private InventoryMedicine inventoryMedicineBackup { get; }
 
         public InventoryMedicineDetail MedicineDetails { get; set; }
-
-
+        
         private InventoryMedicine inventoryMedicine;
         public InventoryMedicine InventoryMedicine
         {
@@ -114,6 +146,17 @@ namespace His_Pos.InventoryManagement
             }
         }
 
+        public SyncFlag flags;
+        public SyncFlag Flags
+        {
+            get { return flags; }
+            set
+            {
+                flags = value;
+                NotifyPropertyChanged("Flags");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string info)
         {
@@ -142,6 +185,7 @@ namespace His_Pos.InventoryManagement
             MedicineDetails = ProductDb.GetInventoryMedicineDetail(InventoryMedicine.Id);
             InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
             ProductUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
+            Flags = MedicineDb.GetMedicineSyncFlag(InventoryMedicine.Id);
 
             CalculateStock();
 
@@ -159,7 +203,6 @@ namespace His_Pos.InventoryManagement
             if (!(InventoryMedicine.Control.Equals("0") || InventoryMedicine.Control.Equals("")))
             {
                 ControlStack.Visibility = Visibility.Visible;
-
             }
         }
 
@@ -366,10 +409,10 @@ namespace His_Pos.InventoryManagement
         #region ----- Confirm Change -----
         private void ConfirmBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            InventoryMedicine.SideEffect = new TextRange(SideEffectBox.Document.ContentStart, SideEffectBox.Document.ContentEnd).Text;
-            InventoryMedicine.Indication = new TextRange(IndicationBox.Document.ContentStart, IndicationBox.Document.ContentEnd).Text;
-            InventoryMedicine.Warnings = new TextRange(WarningBox.Document.ContentStart, WarningBox.Document.ContentEnd).Text;
-            InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text;
+            InventoryMedicine.SideEffect = new TextRange(SideEffectBox.Document.ContentStart, SideEffectBox.Document.ContentEnd).Text.Replace("\r\n","");
+            InventoryMedicine.Indication = new TextRange(IndicationBox.Document.ContentStart, IndicationBox.Document.ContentEnd).Text.Replace("\r\n", "");
+            InventoryMedicine.Warnings = new TextRange(WarningBox.Document.ContentStart, WarningBox.Document.ContentEnd).Text.Replace("\r\n", "");
+            InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text.Replace("\r\n", "");
 
             MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
             ProductDb.UpdateInventoryProductUnit(InventoryMedicine.Id, ProductUnitCollection);
@@ -457,6 +500,31 @@ namespace His_Pos.InventoryManagement
         {
             MedicineHistoryPriceWindow medicineHistoryPriceWindow = new MedicineHistoryPriceWindow(InventoryMedicine.Id);
             medicineHistoryPriceWindow.Show();
+        }
+
+        private void DataSync_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is null) return;
+            
+            InventoryMedicine = MedicineDb.ResetMedicineSyncFlag(InventoryMedicine.Id);
+            UpdateNewDataToCurrentMed();
+
+            SideEffectBox.Document.Blocks.Clear();
+            IndicationBox.Document.Blocks.Clear();
+            WarningBox.Document.Blocks.Clear();
+            NoteBox.Document.Blocks.Clear();
+
+            SideEffectBox.AppendText(InventoryMedicine.SideEffect);
+            IndicationBox.AppendText(InventoryMedicine.Indication);
+            WarningBox.AppendText(InventoryMedicine.Warnings);
+            NoteBox.AppendText(InventoryMedicine.Note);
+
+            InitMedicineDataChanged();
+
+            Flags = new SyncFlag(true);
+
+            MessageWindow messageWindow = new MessageWindow("資料已同步!", MessageType.SUCCESS);
+            messageWindow.ShowDialog();
         }
     }
 }

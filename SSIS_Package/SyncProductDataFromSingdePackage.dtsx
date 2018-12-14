@@ -12,8 +12,8 @@
   DTS:LocaleID="1028"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="51"
-  DTS:VersionGUID="{4535A6CF-F031-4B88-96C2-25F159D69924}">
+  DTS:VersionBuild="64"
+  DTS:VersionGUID="{4EFFD76D-1B8D-40E0-926F-C4554E989162}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -28,7 +28,7 @@
           <DTS:Password
             DTS:Name="Password"
             Sensitive="1"
-            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAm11VQm2IgU+H6NERfWUwtgAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAA6N52rHZqTo3uU9Rp5pqQ4sXmHEXLiGp7ykBtNPTnKHwAAAAAOgAAAAAIAACAAAAC9HXuRxwGlqn6iuoeCpHnXpZDV6rmq1m7fCdi1AKC15yAAAADtnavBcUqoVnDooEe1OmjHRfFfUDGlA3XpvkyFzzuRW0AAAACFz2C7xFlaMNxbHmeqpZSNHqSqxZcYjIPHuXGpFp7tvbOUgH6r5RG2DcMGJMZ9tUleM/kgT5zzZePf7pd3V7XO</DTS:Password>
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAm11VQm2IgU+H6NERfWUwtgAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAABvpwCpmz1tPF2pnljsVkLqtOmB4adqUnIkA+40zLNbrwAAAAAOgAAAAAIAACAAAAAk35JSzluTZpbiBvO1zDiBwmX5RwODrlVVQd/svYQ6FyAAAAC7hb1HJ9suNYLH7712/AYT8HPpM7PDXdkNOMpHZje+pEAAAAAK23UMOFtpZkxhkQbR7Jpisf6nCx/d4K4W8ZceJKh5tbdzab/i18IrAfaomNeEIaal3NgX5/YxmPHvaNR9b7rh</DTS:Password>
         </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
@@ -37,10 +37,14 @@
       DTS:CreationName="OLEDB"
       DTS:DTSID="{3D6E3752-50FB-48AC-8BFE-04315B14B688}"
       DTS:ObjectName="localhost.HIS_POS_DB">
-      <DTS:PropertyExpression
-        DTS:Name="ConnectionString">@[User::LocalConn]</DTS:PropertyExpression>
       <DTS:ObjectData>
-        <DTS:ConnectionManager />
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=59.124.201.229,59087;User ID=singde;Initial Catalog=HIS_POS_DB;Provider=SQLNCLI11.1;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAm11VQm2IgU+H6NERfWUwtgAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAAmkkhQrx33R4cR4uUHS68ZfGXUBWoxNPJprTnjLxr45QAAAAAOgAAAAAIAACAAAABzYGhmW1QZwiPjcpLrARhBeB93AY1E3HbOZSz64aOiUCAAAAAAxvltZZHMWq92b2C4QNVkO3uqKs0uddFkn6pDWS4LcUAAAADof5jRXTNmD3BB3cxSj6WC+1jIktGyk86k4wADpjZs3LBOwI3TA1mx1dCK5CN6wdpAYYcKt/VODMLfvOxXx/25</DTS:Password>
+        </DTS:ConnectionManager>
       </DTS:ObjectData>
     </DTS:ConnectionManager>
   </DTS:ConnectionManagers>
@@ -87,6 +91,23 @@
             SQLTask:ResultName="C"
             SQLTask:DtsVariableName="User::Count" />
         </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Delete Old Data"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{984E0590-1B53-4D06-9DDF-F2B8A059FCFC}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Delete Old Data"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017 RC1; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{3D6E3752-50FB-48AC-8BFE-04315B14B688}"
+          SQLTask:SqlStatementSource="DELETE [HIS_POS_DB].[PRO].[SINGDEDATA]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -2826,13 +2847,13 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==]]></arrayElement>
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
-      DTS:refId="Package\Update Data"
+      DTS:refId="Package\Import Singde Data"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
       DTS:DTSID="{2717B421-9D7A-4BFC-9F1A-4DB6419E49F3}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
-      DTS:ObjectName="Update Data"
+      DTS:ObjectName="Import Singde Data"
       DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
       <DTS:Variables />
       <DTS:ObjectData>
@@ -2840,7 +2861,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==]]></arrayElement>
           version="1">
           <components>
             <component
-              refId="Package\Update Data\Conditional Split"
+              refId="Package\Import Singde Data\Conditional Split"
               componentClassID="Microsoft.ConditionalSplit"
               contactInfo="Conditional Split;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
               description="Routes data rows to different outputs depending on the content of the data. Use conditions (SSIS expressions) to specify which rows are routed. For example, separate records that need to be cleaned from those that are ready to be loaded or route only a subset of records."
@@ -2848,48 +2869,42 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==]]></arrayElement>
               usesDispositions="true">
               <inputs>
                 <input
-                  refId="Package\Update Data\Conditional Split.Inputs[Conditional Split Input]"
+                  refId="Package\Import Singde Data\Conditional Split.Inputs[Conditional Split Input]"
                   description="Input to the Conditional Split Transformation"
                   name="Conditional Split Input">
                   <inputColumns>
                     <inputColumn
-                      refId="Package\Update Data\Conditional Split.Inputs[Conditional Split Input].Columns[code]"
+                      refId="Package\Import Singde Data\Conditional Split.Inputs[Conditional Split Input].Columns[type]"
                       cachedDataType="wstr"
-                      cachedLength="12"
-                      cachedName="code"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]" />
-                    <inputColumn
-                      refId="Package\Update Data\Conditional Split.Inputs[Conditional Split Input].Columns[new_code]"
-                      cachedDataType="wstr"
-                      cachedLength="12"
-                      cachedName="new_code"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[new_code]" />
+                      cachedLength="8"
+                      cachedName="type"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[type]" />
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
               </inputs>
               <outputs>
                 <output
-                  refId="Package\Update Data\Conditional Split.Outputs[Not Change]"
+                  refId="Package\Import Singde Data\Conditional Split.Outputs[OTC]"
                   description="Output 1 of the Conditional Split Transformation"
                   errorOrTruncationOperation="Computation"
                   errorRowDisposition="FailComponent"
                   exclusionGroup="1"
-                  name="Not Change"
-                  synchronousInputId="Package\Update Data\Conditional Split.Inputs[Conditional Split Input]"
+                  name="OTC"
+                  synchronousInputId="Package\Import Singde Data\Conditional Split.Inputs[Conditional Split Input]"
                   truncationRowDisposition="FailComponent">
                   <properties>
                     <property
                       containsID="true"
                       dataType="System.String"
                       description="Specifies the expression. This expression version uses lineage identifiers instead of column names."
-                      name="Expression">#{Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]} == #{Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[new_code]}</property>
+                      name="Expression">#{Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[type]} == "OTC"</property>
                     <property
                       containsID="true"
                       dataType="System.String"
                       description="Specifies the friendly version of the expression. This expression version uses column names."
                       expressionType="Notify"
-                      name="FriendlyExpression">code == new_code</property>
+                      name="FriendlyExpression">type == "OTC"</property>
                     <property
                       dataType="System.Int32"
                       description="Specifies the position of the condition in the list of conditions that the transformation evaluates. The evaluation order is from the lowest to the highest value."
@@ -2898,11 +2913,11 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==]]></arrayElement>
                   <externalMetadataColumns />
                 </output>
                 <output
-                  refId="Package\Update Data\Conditional Split.Outputs[Change]"
+                  refId="Package\Import Singde Data\Conditional Split.Outputs[MED]"
                   description="Default Output of the Conditional Split Transformation"
                   exclusionGroup="1"
-                  name="Change"
-                  synchronousInputId="Package\Update Data\Conditional Split.Inputs[Conditional Split Input]">
+                  name="MED"
+                  synchronousInputId="Package\Import Singde Data\Conditional Split.Inputs[Conditional Split Input]">
                   <properties>
                     <property
                       dataType="System.Boolean"
@@ -2911,23 +2926,23 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==]]></arrayElement>
                   <externalMetadataColumns />
                 </output>
                 <output
-                  refId="Package\Update Data\Conditional Split.Outputs[Conditional Split Error Output]"
+                  refId="Package\Import Singde Data\Conditional Split.Outputs[Conditional Split Error Output]"
                   description="Error Output of the Conditional Split Transformation"
                   exclusionGroup="1"
                   isErrorOut="true"
                   name="Conditional Split Error Output"
-                  synchronousInputId="Package\Update Data\Conditional Split.Inputs[Conditional Split Input]">
+                  synchronousInputId="Package\Import Singde Data\Conditional Split.Inputs[Conditional Split Input]">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Update Data\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                      refId="Package\Import Singde Data\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\Update Data\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                      lineageId="Package\Import Singde Data\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\Update Data\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                      refId="Package\Import Singde Data\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\Update Data\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                      lineageId="Package\Import Singde Data\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -2936,52 +2951,384 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==]]></arrayElement>
               </outputs>
             </component>
             <component
-              refId="Package\Update Data\Multicast"
-              componentClassID="Microsoft.Multicast"
-              contactInfo="Multicast;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
-              description="Distributes every input row to every row in one or more outputs. For example, branch your data flow to make a copy of data so that some values can be masked before sharing with external partners."
-              name="Multicast">
+              refId="Package\Import Singde Data\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
               <inputs>
                 <input
-                  refId="Package\Update Data\Multicast.Inputs[Multicast Input 1]"
-                  name="Multicast Input 1">
+                  refId="Package\Import Singde Data\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import Singde Data\Data Conversion.Inputs[Data Conversion Input].Columns[side]"
+                      cachedDataType="nText"
+                      cachedName="side"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[side]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\Data Conversion.Inputs[Data Conversion Input].Columns[note]"
+                      cachedDataType="nText"
+                      cachedName="note"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[note]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\Data Conversion.Inputs[Data Conversion Input].Columns[idn]"
+                      cachedDataType="nText"
+                      cachedName="idn"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[idn]" />
+                  </inputColumns>
                   <externalMetadataColumns />
                 </input>
               </inputs>
               <outputs>
                 <output
-                  refId="Package\Update Data\Multicast.Outputs[Multicast Output 1]"
-                  deleteOutputOnPathDetached="true"
-                  name="Multicast Output 1"
-                  synchronousInputId="Package\Update Data\Multicast.Inputs[Multicast Input 1]">
+                  refId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Import Singde Data\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of side]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="200"
+                      lineageId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of side]"
+                      name="Copy of side"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[side]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of note]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="200"
+                      lineageId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of note]"
+                      name="Copy of note"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[note]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of idn]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="500"
+                      lineageId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of idn]"
+                      name="Copy of idn"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[idn]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
                   <externalMetadataColumns />
                 </output>
                 <output
-                  refId="Package\Update Data\Multicast.Outputs[Multicast Output 2]"
-                  deleteOutputOnPathDetached="true"
-                  name="Multicast Output 2"
-                  synchronousInputId="Package\Update Data\Multicast.Inputs[Multicast Input 1]">
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Update Data\Multicast.Outputs[Multicast Output 3]"
-                  deleteOutputOnPathDetached="true"
-                  name="Multicast Output 3"
-                  synchronousInputId="Package\Update Data\Multicast.Inputs[Multicast Input 1]">
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Update Data\Multicast.Outputs[Multicast Output 5]"
-                  dangling="true"
-                  deleteOutputOnPathDetached="true"
-                  name="Multicast Output 5"
-                  synchronousInputId="Package\Update Data\Multicast.Inputs[Multicast Input 1]">
+                  refId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Import Singde Data\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
                   <externalMetadataColumns />
                 </output>
               </outputs>
             </component>
             <component
-              refId="Package\Update Data\OLE DB Source"
+              refId="Package\Import Singde Data\OLE DB Destination"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="OLE DB Destination"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[PRO].[SINGDEDATA]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">950</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import Singde Data\OLE DB Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[localhost.HIS_POS_DB]"
+                  connectionManagerRefId="Package.ConnectionManagers[localhost.HIS_POS_DB]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[code]"
+                      cachedDataType="wstr"
+                      cachedLength="12"
+                      cachedName="code"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PRO_ID]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[name]"
+                      cachedDataType="wstr"
+                      cachedLength="60"
+                      cachedName="name"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_ENGNAME]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[name]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ch_name]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="ch_name"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_CHINAME]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ch_name]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[high_price]"
+                      cachedDataType="wstr"
+                      cachedLength="1"
+                      cachedName="high_price"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_SPECIAL]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[high_price]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[inv_qty]"
+                      cachedDataType="i4"
+                      cachedName="inv_qty"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_STOCK]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[inv_qty]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[min_order]"
+                      cachedDataType="i4"
+                      cachedName="min_order"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_MINORDER]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[min_order]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[jn_price]"
+                      cachedDataType="cy"
+                      cachedName="jn_price"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_PACKAGEPRICE]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[jn_price]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[ja_price]"
+                      cachedDataType="cy"
+                      cachedName="ja_price"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_PRICE]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ja_price]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[bag_fact]"
+                      cachedDataType="i4"
+                      cachedName="bag_fact"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_PACKAGEQTY]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[bag_fact]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[new_code]"
+                      cachedDataType="wstr"
+                      cachedLength="12"
+                      cachedName="new_code"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_MERGEID]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[new_code]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Copy of side]"
+                      cachedDataType="wstr"
+                      cachedLength="200"
+                      cachedName="Copy of side"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_SIDEFFECT]"
+                      lineageId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of side]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Copy of note]"
+                      cachedDataType="wstr"
+                      cachedLength="200"
+                      cachedName="Copy of note"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_NOTE]"
+                      lineageId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of note]" />
+                    <inputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].Columns[Copy of idn]"
+                      cachedDataType="wstr"
+                      cachedLength="500"
+                      cachedName="Copy of idn"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_INDICATION]"
+                      lineageId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of idn]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PRO_ID]"
+                      dataType="wstr"
+                      length="12"
+                      name="PRO_ID" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_CHINAME]"
+                      dataType="wstr"
+                      length="150"
+                      name="PROSIN_CHINAME" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_ENGNAME]"
+                      dataType="wstr"
+                      length="150"
+                      name="PROSIN_ENGNAME" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_PRICE]"
+                      dataType="cy"
+                      name="PROSIN_PRICE" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_PACKAGEPRICE]"
+                      dataType="cy"
+                      name="PROSIN_PACKAGEPRICE" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_PACKAGEQTY]"
+                      dataType="i4"
+                      name="PROSIN_PACKAGEQTY" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_MINORDER]"
+                      dataType="i4"
+                      name="PROSIN_MINORDER" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_SIDEFFECT]"
+                      dataType="wstr"
+                      length="200"
+                      name="PROSIN_SIDEFFECT" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_INDICATION]"
+                      dataType="wstr"
+                      length="500"
+                      name="PROSIN_INDICATION" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_NOTE]"
+                      dataType="wstr"
+                      length="200"
+                      name="PROSIN_NOTE" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_SPECIAL]"
+                      dataType="wstr"
+                      length="1"
+                      name="PROSIN_SPECIAL" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_MERGEID]"
+                      dataType="wstr"
+                      length="12"
+                      name="PROSIN_MERGEID" />
+                    <externalMetadataColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input].ExternalColumns[PROSIN_STOCK]"
+                      dataType="i4"
+                      name="PROSIN_STOCK" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Import Singde Data\OLE DB Destination.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import Singde Data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import Singde Data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import Singde Data\OLE DB Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Import Singde Data\OLE DB Source"
               componentClassID="Microsoft.OLEDBSource"
               contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
               description="OLE DB Source"
@@ -3045,7 +3392,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==]]></arrayElement>
               </properties>
               <connections>
                 <connection
-                  refId="Package\Update Data\OLE DB Source.Connections[OleDbConnection]"
+                  refId="Package\Import Singde Data\OLE DB Source.Connections[OleDbConnection]"
                   connectionManagerID="Package.ConnectionManagers[59.124.201.229,59087.HIS_POS_Server.SyncPoductUser]"
                   connectionManagerRefId="Package.ConnectionManagers[59.124.201.229,59087.HIS_POS_Server.SyncPoductUser]"
                   description="The OLE DB runtime connection used to access the database."
@@ -3053,782 +3400,320 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==]]></arrayElement>
               </connections>
               <outputs>
                 <output
-                  refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output]"
+                  refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output]"
                   name="OLE DB Source Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[code]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[code]"
                       length="12"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]"
                       name="code"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[new_code]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[new_code]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[new_code]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[new_code]"
                       length="12"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[new_code]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[new_code]"
                       name="new_code"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[name]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[name]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[name]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[name]"
                       length="60"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[name]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[name]"
                       name="name"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ch_name]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ch_name]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ch_name]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ch_name]"
                       length="50"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ch_name]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ch_name]"
                       name="ch_name"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[type]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[type]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[type]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[type]"
                       length="8"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[type]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[type]"
                       name="type"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[high_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[high_price]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[high_price]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[high_price]"
                       length="1"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[high_price]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[high_price]"
                       name="high_price"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[side]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[side]"
                       dataType="nText"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[side]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[side]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[side]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[side]"
                       name="side"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[note]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[note]"
                       dataType="nText"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[note]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[note]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[note]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[note]"
                       name="note"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[idn]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[idn]"
                       dataType="nText"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[idn]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[idn]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[idn]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[idn]"
                       name="idn"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[stop_using]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[stop_using]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[stop_using]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[stop_using]"
                       length="1"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[stop_using]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[stop_using]"
                       name="stop_using"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[inv_qty]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[inv_qty]"
                       dataType="i4"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[inv_qty]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[inv_qty]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[inv_qty]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[inv_qty]"
                       name="inv_qty"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[min_order]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[min_order]"
                       dataType="i4"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[min_order]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[min_order]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[min_order]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[min_order]"
                       name="min_order"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[bag_fact]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[bag_fact]"
                       dataType="i4"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[bag_fact]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[bag_fact]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[bag_fact]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[bag_fact]"
                       name="bag_fact"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ja_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ja_price]"
                       dataType="cy"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ja_price]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ja_price]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ja_price]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ja_price]"
                       name="ja_price"
                       truncationRowDisposition="FailComponent" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[jn_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[jn_price]"
                       dataType="cy"
                       errorOrTruncationOperation="Conversion"
                       errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[jn_price]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[jn_price]"
+                      externalMetadataColumnId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[jn_price]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[jn_price]"
                       name="jn_price"
                       truncationRowDisposition="FailComponent" />
                   </outputColumns>
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[code]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[code]"
                       dataType="wstr"
                       length="12"
                       name="code" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[new_code]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[new_code]"
                       dataType="wstr"
                       length="12"
                       name="new_code" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[name]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[name]"
                       dataType="wstr"
                       length="60"
                       name="name" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ch_name]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ch_name]"
                       dataType="wstr"
                       length="50"
                       name="ch_name" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[type]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[type]"
                       dataType="wstr"
                       length="8"
                       name="type" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[high_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[high_price]"
                       dataType="wstr"
                       length="1"
                       name="high_price" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[side]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[side]"
                       dataType="nText"
                       name="side" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[note]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[note]"
                       dataType="nText"
                       name="note" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[idn]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[idn]"
                       dataType="nText"
                       name="idn" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[stop_using]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[stop_using]"
                       dataType="wstr"
                       length="1"
                       name="stop_using" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[inv_qty]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[inv_qty]"
                       dataType="i4"
                       name="inv_qty" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[min_order]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[min_order]"
                       dataType="i4"
                       name="min_order" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[bag_fact]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[bag_fact]"
                       dataType="i4"
                       name="bag_fact" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ja_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[ja_price]"
                       dataType="cy"
                       name="ja_price" />
                     <externalMetadataColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[jn_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[jn_price]"
                       dataType="cy"
                       name="jn_price" />
                   </externalMetadataColumns>
                 </output>
                 <output
-                  refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output]"
                   isErrorOut="true"
                   name="OLE DB Source Error Output">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[code]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[code]"
                       dataType="wstr"
                       length="12"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[code]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[code]"
                       name="code" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[new_code]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[new_code]"
                       dataType="wstr"
                       length="12"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[new_code]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[new_code]"
                       name="new_code" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[name]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[name]"
                       dataType="wstr"
                       length="60"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[name]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[name]"
                       name="name" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ch_name]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ch_name]"
                       dataType="wstr"
                       length="50"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ch_name]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ch_name]"
                       name="ch_name" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[type]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[type]"
                       dataType="wstr"
                       length="8"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[type]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[type]"
                       name="type" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[high_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[high_price]"
                       dataType="wstr"
                       length="1"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[high_price]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[high_price]"
                       name="high_price" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[side]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[side]"
                       dataType="nText"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[side]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[side]"
                       name="side" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[note]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[note]"
                       dataType="nText"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[note]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[note]"
                       name="note" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[idn]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[idn]"
                       dataType="nText"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[idn]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[idn]"
                       name="idn" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[stop_using]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[stop_using]"
                       dataType="wstr"
                       length="1"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[stop_using]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[stop_using]"
                       name="stop_using" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[inv_qty]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[inv_qty]"
                       dataType="i4"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[inv_qty]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[inv_qty]"
                       name="inv_qty" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[min_order]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[min_order]"
                       dataType="i4"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[min_order]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[min_order]"
                       name="min_order" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[bag_fact]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[bag_fact]"
                       dataType="i4"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[bag_fact]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[bag_fact]"
                       name="bag_fact" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ja_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ja_price]"
                       dataType="cy"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ja_price]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ja_price]"
                       name="ja_price" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[jn_price]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[jn_price]"
                       dataType="cy"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[jn_price]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[jn_price]"
                       name="jn_price" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      refId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
-                      name="ErrorColumn"
-                      specialFlags="2" />
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
-            <component
-              refId="Package\Update Data\Update HIS MEDICINE"
-              componentClassID="Microsoft.OLEDBCommand"
-              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
-              name="Update HIS MEDICINE"
-              usesDispositions="true"
-              version="2">
-              <properties>
-                <property
-                  dataType="System.Int32"
-                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
-                  name="CommandTimeout">0</property>
-                <property
-                  dataType="System.String"
-                  description="The SQL command to be executed."
-                  expressionType="Notify"
-                  name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">UPDATE [HIS_POS_DB].[HIS].[MEDICINE]
-SET [HISMED_CONTROL] = ?
-       ,[HISMED_NOTE] = ?
-       ,[HISMED_SIDEFFECT] = ?
-       ,[HISMED_INDICATION] = ?
-WHERE [HISMED_ID] = ?</property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the column code page to use when code page information is unavailable from the data source."
-                  name="DefaultCodePage">950</property>
-              </properties>
-              <connections>
-                <connection
-                  refId="Package\Update Data\Update HIS MEDICINE.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[localhost.HIS_POS_DB]"
-                  connectionManagerRefId="Package.ConnectionManagers[localhost.HIS_POS_DB]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input
-                  refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input]"
-                  errorOrTruncationOperation="Command Execution"
-                  errorRowDisposition="FailComponent"
-                  hasSideEffects="true"
-                  name="OLE DB Command Input">
-                  <inputColumns>
-                    <inputColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].Columns[high_price]"
-                      cachedDataType="wstr"
-                      cachedLength="1"
-                      cachedName="high_price"
-                      externalMetadataColumnId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[high_price]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].Columns[note]"
-                      cachedDataType="nText"
-                      cachedName="note"
-                      externalMetadataColumnId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[note]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].Columns[side]"
-                      cachedDataType="nText"
-                      cachedName="side"
-                      externalMetadataColumnId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[side]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].Columns[idn]"
-                      cachedDataType="nText"
-                      cachedName="idn"
-                      externalMetadataColumnId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[idn]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].Columns[code]"
-                      cachedDataType="wstr"
-                      cachedLength="12"
-                      cachedName="code"
-                      externalMetadataColumnId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]" />
-                  </inputColumns>
-                  <externalMetadataColumns
-                    isUsed="True">
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      dataType="ui1"
-                      name="Param_0">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
-                      dataType="wstr"
-                      length="200"
-                      name="Param_1">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
-                      dataType="wstr"
-                      length="200"
-                      name="Param_2">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
-                      dataType="wstr"
-                      length="500"
-                      name="Param_3">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
-                      dataType="wstr"
-                      length="10"
-                      name="Param_4">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output
-                  refId="Package\Update Data\Update HIS MEDICINE.Outputs[OLE DB Command Output]"
-                  exclusionGroup="1"
-                  name="OLE DB Command Output"
-                  synchronousInputId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input]">
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Update Data\Update HIS MEDICINE.Outputs[OLE DB Command Error Output]"
-                  exclusionGroup="1"
-                  isErrorOut="true"
-                  name="OLE DB Command Error Output"
-                  synchronousInputId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input]">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      dataType="i4"
-                      lineageId="Package\Update Data\Update HIS MEDICINE.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      name="ErrorCode"
-                      specialFlags="1" />
-                    <outputColumn
-                      refId="Package\Update Data\Update HIS MEDICINE.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      dataType="i4"
-                      lineageId="Package\Update Data\Update HIS MEDICINE.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      name="ErrorColumn"
-                      specialFlags="2" />
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
-            <component
-              refId="Package\Update Data\Update PRO INVID"
-              componentClassID="Microsoft.OLEDBCommand"
-              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
-              name="Update PRO INVID"
-              usesDispositions="true"
-              version="2">
-              <properties>
-                <property
-                  dataType="System.Int32"
-                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
-                  name="CommandTimeout">0</property>
-                <property
-                  dataType="System.String"
-                  description="The SQL command to be executed."
-                  expressionType="Notify"
-                  name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">EXEC [OtcDetail].[MergeProduct] ?, ?</property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the column code page to use when code page information is unavailable from the data source."
-                  name="DefaultCodePage">950</property>
-              </properties>
-              <connections>
-                <connection
-                  refId="Package\Update Data\Update PRO INVID.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[localhost.HIS_POS_DB]"
-                  connectionManagerRefId="Package.ConnectionManagers[localhost.HIS_POS_DB]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input
-                  refId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input]"
-                  errorOrTruncationOperation="Command Execution"
-                  errorRowDisposition="FailComponent"
-                  hasSideEffects="true"
-                  name="OLE DB Command Input">
-                  <inputColumns>
-                    <inputColumn
-                      refId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input].Columns[code]"
-                      cachedDataType="wstr"
-                      cachedLength="12"
-                      cachedName="code"
-                      externalMetadataColumnId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input].ExternalColumns[@SourcePRO_ID]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input].Columns[new_code]"
-                      cachedDataType="wstr"
-                      cachedLength="12"
-                      cachedName="new_code"
-                      externalMetadataColumnId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input].ExternalColumns[@TargetPRO_ID]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[new_code]" />
-                  </inputColumns>
-                  <externalMetadataColumns
-                    isUsed="True">
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input].ExternalColumns[@SourcePRO_ID]"
-                      dataType="wstr"
-                      length="12"
-                      name="@SourcePRO_ID">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input].ExternalColumns[@TargetPRO_ID]"
-                      dataType="wstr"
-                      length="12"
-                      name="@TargetPRO_ID">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output
-                  refId="Package\Update Data\Update PRO INVID.Outputs[OLE DB Command Output]"
-                  exclusionGroup="1"
-                  name="OLE DB Command Output"
-                  synchronousInputId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input]">
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Update Data\Update PRO INVID.Outputs[OLE DB Command Error Output]"
-                  exclusionGroup="1"
-                  isErrorOut="true"
-                  name="OLE DB Command Error Output"
-                  synchronousInputId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input]">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Update Data\Update PRO INVID.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      dataType="i4"
-                      lineageId="Package\Update Data\Update PRO INVID.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      name="ErrorCode"
-                      specialFlags="1" />
-                    <outputColumn
-                      refId="Package\Update Data\Update PRO INVID.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      dataType="i4"
-                      lineageId="Package\Update Data\Update PRO INVID.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      name="ErrorColumn"
-                      specialFlags="2" />
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
-            <component
-              refId="Package\Update Data\Update PRO MASTER"
-              componentClassID="Microsoft.OLEDBCommand"
-              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
-              name="Update PRO MASTER"
-              usesDispositions="true"
-              version="2">
-              <properties>
-                <property
-                  dataType="System.Int32"
-                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
-                  name="CommandTimeout">0</property>
-                <property
-                  dataType="System.String"
-                  description="The SQL command to be executed."
-                  expressionType="Notify"
-                  name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">UPDATE [HIS_POS_DB].[PRO].[SINGDEDATA]
-SET 
-      [PROSIN_PRICE] = ?
-      ,[PROSIN_PACKAGEPRICE] = ?
-      ,[PROSIN_PACKAGEQTY] = ?
-      ,[PROSIN_MINORDER] = ?
-WHERE [PRO_ID] = ?
-</property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the column code page to use when code page information is unavailable from the data source."
-                  name="DefaultCodePage">950</property>
-              </properties>
-              <connections>
-                <connection
-                  refId="Package\Update Data\Update PRO MASTER.Connections[OleDbConnection]"
-                  connectionManagerID="Package.ConnectionManagers[localhost.HIS_POS_DB]"
-                  connectionManagerRefId="Package.ConnectionManagers[localhost.HIS_POS_DB]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input
-                  refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input]"
-                  errorOrTruncationOperation="Command Execution"
-                  errorRowDisposition="FailComponent"
-                  hasSideEffects="true"
-                  name="OLE DB Command Input">
-                  <inputColumns>
-                    <inputColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].Columns[code]"
-                      cachedDataType="wstr"
-                      cachedLength="12"
-                      cachedName="code"
-                      externalMetadataColumnId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[code]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].Columns[min_order]"
-                      cachedDataType="i4"
-                      cachedName="min_order"
-                      externalMetadataColumnId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[min_order]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].Columns[ja_price]"
-                      cachedDataType="cy"
-                      cachedName="ja_price"
-                      externalMetadataColumnId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[ja_price]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].Columns[jn_price]"
-                      cachedDataType="cy"
-                      cachedName="jn_price"
-                      externalMetadataColumnId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[jn_price]" />
-                    <inputColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].Columns[bag_fact]"
-                      cachedDataType="i4"
-                      cachedName="bag_fact"
-                      externalMetadataColumnId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
-                      lineageId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output].Columns[bag_fact]" />
-                  </inputColumns>
-                  <externalMetadataColumns
-                    isUsed="True">
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      dataType="cy"
-                      name="Param_0">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
-                      dataType="cy"
-                      name="Param_1">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
-                      dataType="i4"
-                      name="Param_2">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
-                      dataType="i4"
-                      name="Param_3">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
-                      dataType="wstr"
-                      length="12"
-                      name="Param_4">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output
-                  refId="Package\Update Data\Update PRO MASTER.Outputs[OLE DB Command Output]"
-                  exclusionGroup="1"
-                  name="OLE DB Command Output"
-                  synchronousInputId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input]">
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Update Data\Update PRO MASTER.Outputs[OLE DB Command Error Output]"
-                  exclusionGroup="1"
-                  isErrorOut="true"
-                  name="OLE DB Command Error Output"
-                  synchronousInputId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input]">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Update Data\Update PRO MASTER.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      dataType="i4"
-                      lineageId="Package\Update Data\Update PRO MASTER.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      name="ErrorCode"
-                      specialFlags="1" />
-                    <outputColumn
-                      refId="Package\Update Data\Update PRO MASTER.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      dataType="i4"
-                      lineageId="Package\Update Data\Update PRO MASTER.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      lineageId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -3839,32 +3724,56 @@ WHERE [PRO_ID] = ?
           </components>
           <paths>
             <path
-              refId="Package\Update Data.Paths[Change]"
-              endId="Package\Update Data\Update PRO INVID.Inputs[OLE DB Command Input]"
-              name="Change"
-              startId="Package\Update Data\Conditional Split.Outputs[Change]" />
+              refId="Package\Import Singde Data.Paths[Data Conversion Output]"
+              endId="Package\Import Singde Data\Conditional Split.Inputs[Conditional Split Input]"
+              name="Data Conversion Output"
+              startId="Package\Import Singde Data\Data Conversion.Outputs[Data Conversion Output]" />
             <path
-              refId="Package\Update Data.Paths[Multicast Output 1]"
-              endId="Package\Update Data\Update PRO MASTER.Inputs[OLE DB Command Input]"
-              name="Multicast Output 1"
-              startId="Package\Update Data\Multicast.Outputs[Multicast Output 1]" />
+              refId="Package\Import Singde Data.Paths[MED]"
+              endId="Package\Import Singde Data\OLE DB Destination.Inputs[OLE DB Destination Input]"
+              name="MED"
+              startId="Package\Import Singde Data\Conditional Split.Outputs[MED]" />
             <path
-              refId="Package\Update Data.Paths[Multicast Output 2]"
-              endId="Package\Update Data\Update HIS MEDICINE.Inputs[OLE DB Command Input]"
-              name="Multicast Output 2"
-              startId="Package\Update Data\Multicast.Outputs[Multicast Output 2]" />
-            <path
-              refId="Package\Update Data.Paths[Multicast Output 3]"
-              endId="Package\Update Data\Conditional Split.Inputs[Conditional Split Input]"
-              name="Multicast Output 3"
-              startId="Package\Update Data\Multicast.Outputs[Multicast Output 3]" />
-            <path
-              refId="Package\Update Data.Paths[OLE DB Source Output]"
-              endId="Package\Update Data\Multicast.Inputs[Multicast Input 1]"
+              refId="Package\Import Singde Data.Paths[OLE DB Source Output]"
+              endId="Package\Import Singde Data\Data Conversion.Inputs[Data Conversion Input]"
               name="OLE DB Source Output"
-              startId="Package\Update Data\OLE DB Source.Outputs[OLE DB Source Output]" />
+              startId="Package\Import Singde Data\OLE DB Source.Outputs[OLE DB Source Output]" />
           </paths>
         </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Sync Data"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{CE3AEC5D-EDEE-49A8-AE74-4F330769F32C}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Sync Data"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017 RC1; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{3D6E3752-50FB-48AC-8BFE-04315B14B688}"
+          SQLTask:SqlStatementSource="EXEC [dbo].[SyncNewSingdeData]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Update Sync Flag"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{B77B916E-4995-49B2-80AB-07CF40A95376}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Update Sync Flag"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2017 RC1; © 2017 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="2">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{3D6E3752-50FB-48AC-8BFE-04315B14B688}"
+          SQLTask:SqlStatementSource="UPDATE [dbo].[SYSTEM_VER]&#xA;SET SINGDE_SYNCTIME = GETDATE()" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
   </DTS:Executables>
@@ -3875,7 +3784,7 @@ WHERE [PRO_ID] = ?
       DTS:DTSID="{732D01BC-A3F5-49B9-8B71-120517143B26}"
       DTS:From="Package\Import Data"
       DTS:ObjectName="Constraint"
-      DTS:To="Package\Update Data" />
+      DTS:To="Package\Import Singde Data" />
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
       DTS:CreationName=""
@@ -3894,7 +3803,30 @@ WHERE [PRO_ID] = ?
       DTS:Expression="@[User::Count] &gt; 0"
       DTS:From="Package\Check Data"
       DTS:ObjectName="Constraint 2"
-      DTS:To="Package\Update Data" />
+      DTS:To="Package\Import Singde Data" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 3]"
+      DTS:CreationName=""
+      DTS:DTSID="{9B914E93-20FB-4BD7-8913-1EC91BCD321B}"
+      DTS:From="Package\Delete Old Data"
+      DTS:ObjectName="Constraint 3"
+      DTS:To="Package\Import Singde Data" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{41270761-6160-4C33-9F6D-2DAC35577609}"
+      DTS:From="Package\Import Singde Data"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\Update Sync Flag" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
+      DTS:CreationName=""
+      DTS:DTSID="{630314C3-1A30-40E4-B9EB-BE66E5910A1E}"
+      DTS:From="Package\Update Sync Flag"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 5"
+      DTS:To="Package\Sync Data" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -3907,45 +3839,57 @@ WHERE [PRO_ID] = ?
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="142.4,41.6"
+          Size="142,42"
           Id="Package\Check Data"
-          TopLeft="359.999985694886,105.857137448934" />
+          TopLeft="622.499975264074,33.428569720716" />
         <NodeLayout
-          Size="142.4,41.6"
+          Size="164,42"
+          Id="Package\Delete Old Data"
+          TopLeft="774.999969204268,146.714278218698" />
+        <NodeLayout
+          Size="142,42"
           Id="Package\Import Data"
-          TopLeft="233.3333240615,213.57141766013" />
+          TopLeft="495.833313630688,141.142849931912" />
         <NodeLayout
-          Size="145.6,41.6"
-          Id="Package\Update Data"
-          TopLeft="362.499985595545,322.214269252457" />
+          Size="182,42"
+          Id="Package\Import Singde Data"
+          TopLeft="623.333308564293,279.499985720431" />
+        <NodeLayout
+          Size="134,42"
+          Id="Package\Sync Data"
+          TopLeft="651.666640771761,441.071406037225" />
+        <NodeLayout
+          Size="174,42"
+          Id="Package\Update Sync Flag"
+          TopLeft="630.83330826627,363.071410022221" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="304.3333240615,255.57141766013">
+          TopLeft="566.833313630688,183.142849931912">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="108.166661534045,66.642851592327"
+              EndConnector="103.999994933605,96.357135788519"
               Start="0,0"
-              End="108.166661534045,59.142851592327">
+              End="103.999994933605,88.857135788519">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,35.5522615141453" />
+                    End="0,59.3104646697129" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,35.5522615141453"
-                    Point2="0,39.5522615141453"
-                    Point3="4,39.5522615141453" />
+                    Point1="0,59.3104646697129"
+                    Point2="0,63.3104646697129"
+                    Point3="4,63.3104646697129" />
                   <mssgle:LineSegment
-                    End="104.166661534045,39.5522615141453" />
+                    End="99.999994933605,63.3104646697129" />
                   <mssgle:CubicBezierSegment
-                    Point1="104.166661534045,39.5522615141453"
-                    Point2="108.166661534045,39.5522615141453"
-                    Point3="108.166661534045,43.5522615141453" />
+                    Point1="99.999994933605,63.3104646697129"
+                    Point2="103.999994933605,63.3104646697129"
+                    Point3="103.999994933605,67.3104646697129" />
                   <mssgle:LineSegment
-                    End="108.166661534045,59.142851592327" />
+                    End="103.999994933605,88.857135788519" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -3956,7 +3900,7 @@ WHERE [PRO_ID] = ?
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="408.666652361553,147.857137448934">
+          TopLeft="671.166641930741,75.428569720716">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -3986,32 +3930,110 @@ WHERE [PRO_ID] = ?
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-60.1666641500262,31.7250276067816,16,16"
+              BoundingBox="-60.166664150026,31.7250276067816,16,16"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="455.916652311882,147.857137448934">
+          TopLeft="715.08330858085,75.428569720716">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,174.357131803523"
+              EndConnector="0,204.071415999715"
               Start="0,0"
-              End="0,166.857131803523">
+              End="0,196.571415999715">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,166.857131803523" />
+                    End="0,196.571415999715" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-8,75.4285659017615,16,16"
+              BoundingBox="-8,90.2857079998575,16,16"
               RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 3]"
+          TopLeft="856.999969204268,188.714278218698">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-99.166660639975,90.785707501733"
+              Start="0,0"
+              End="-99.166660639975,83.285707501733">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,55.6498150372397" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,55.6498150372397"
+                    Point2="0,59.6498150372397"
+                    Point3="-4,59.6498150372397" />
+                  <mssgle:LineSegment
+                    End="-95.166660639975,59.6498150372397" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-95.166660639975,59.6498150372397"
+                    Point2="-99.166660639975,59.6498150372397"
+                    Point3="-99.166660639975,63.6498150372397" />
+                  <mssgle:LineSegment
+                    End="-99.166660639975,83.285707501733" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="716.083308415282,321.499985720431">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,41.57142430179"
+              Start="0,0"
+              End="0,34.07142430179">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,34.07142430179" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="718.249974519016,405.071410022221">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,35.999996015004"
+              Start="0,0"
+              End="0,28.499996015004">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,28.499996015004" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -4085,7 +4107,9 @@ WHERE [PRO_ID] = ?
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -4107,7 +4131,9 @@ WHERE [PRO_ID] = ?
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -4129,7 +4155,9 @@ WHERE [PRO_ID] = ?
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -4163,7 +4191,9 @@ WHERE [PRO_ID] = ?
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -4197,7 +4227,9 @@ WHERE [PRO_ID] = ?
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -4231,7 +4263,9 @@ WHERE [PRO_ID] = ?
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -4289,7 +4323,9 @@ WHERE [PRO_ID] = ?
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -4311,7 +4347,9 @@ WHERE [PRO_ID] = ?
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -4419,48 +4457,40 @@ WHERE [PRO_ID] = ?
     </Properties>
   </PipelineComponentMetadata>
   <TaskHost
-    design-time-name="Package\Update Data">
+    design-time-name="Package\Import Singde Data">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="126.4,41.6"
-          Id="Package\Update Data\Multicast"
-          TopLeft="394.333331810104,262.214277222449" />
+          Size="164,42"
+          Id="Package\Import Singde Data\OLE DB Source"
+          TopLeft="568.166657560402,105.857138777266" />
         <NodeLayout
-          Size="202.4,41.6"
-          Id="Package\Update Data\Update HIS MEDICINE"
-          TopLeft="353.333331810104,348.214277222449" />
+          Size="186,45"
+          Id="Package\Import Singde Data\OLE DB Destination"
+          TopLeft="561.66664434804,359.357124497697" />
         <NodeLayout
-          Size="182.4,41.6"
-          Id="Package\Update Data\Update PRO INVID"
-          TopLeft="581.333331810105,416.214277222449" />
+          Size="166,42"
+          Id="Package\Import Singde Data\Conditional Split"
+          TopLeft="568.333310749797,269.28570052799" />
         <NodeLayout
-          Size="164,41.6"
-          Id="Package\Update Data\OLE DB Source"
-          TopLeft="377.333331810104,192.214277222449" />
-        <NodeLayout
-          Size="200,41.6"
-          Id="Package\Update Data\Update PRO MASTER"
-          TopLeft="122.333333995607,349.928558761977" />
-        <NodeLayout
-          Size="166.4,41.6"
-          Id="Package\Update Data\Conditional Split"
-          TopLeft="587.333331810105,345.214277222449" />
+          Size="168,42"
+          Id="Package\Import Singde Data\Data Conversion"
+          TopLeft="569.166644050016,194.071418656379" />
         <EdgeLayout
-          Id="Package\Update Data.Paths[OLE DB Source Output]"
-          TopLeft="458.333331810104,234.214277222449">
+          Id="Package\Import Singde Data.Paths[OLE DB Source Output]"
+          TopLeft="651.666650805209,147.857138777266">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,28"
+              EndConnector="0,46.2142798791128"
               Start="0,0"
-              End="0,20.5">
+              End="0,38.7142798791128">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,20.5" />
+                    End="0,38.7142798791128" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -4470,124 +4500,69 @@ WHERE [PRO_ID] = ?
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Update Data.Paths[Multicast Output 3]"
-          TopLeft="486.833331810104,304.214277222449">
+          Id="Package\Import Singde Data.Paths[MED]"
+          TopLeft="652.999977548918,311.28570052799">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="183.500000000001,41"
+              EndConnector="0,48.071423969707"
               Start="0,0"
-              End="183.500000000001,33.5">
+              End="0,40.571423969707">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,10.2331606217617" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,10.2331606217617"
-                    Point2="0,14.2331606217617"
-                    Point3="4,14.2331606217617" />
-                  <mssgle:LineSegment
-                    End="179.500000000001,14.2331606217617" />
-                  <mssgle:CubicBezierSegment
-                    Point1="179.500000000001,14.2331606217617"
-                    Point2="183.500000000001,14.2331606217617"
-                    Point3="183.500000000001,18.2331606217617" />
-                  <mssgle:LineSegment
-                    End="183.500000000001,33.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Update Data.Paths[Multicast Output 2]"
-          TopLeft="456.033331810104,303.814277222449">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44.4"
-              Start="0,0"
-              End="0,36.9">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,36.9" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Update Data.Paths[Multicast Output 1]"
-          TopLeft="427.833331810104,304.214277222449">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-205.499997814497,45.714281539528"
-              Start="0,0"
-              End="-205.499997814497,38.214281539528">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,11.8697246795253" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,11.8697246795253"
-                    Point2="0,15.8697246795253"
-                    Point3="-4,15.8697246795253" />
-                  <mssgle:LineSegment
-                    End="-201.499997814497,15.8697246795253" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-201.499997814497,15.8697246795253"
-                    Point2="-205.499997814497,15.8697246795253"
-                    Point3="-205.499997814497,19.8697246795253" />
-                  <mssgle:LineSegment
-                    End="-205.499997814497,38.214281539528" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Update Data.Paths[Change]"
-          TopLeft="671.333331810105,387.214277222449">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,29"
-              Start="0,0"
-              End="0,21.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,21.5" />
+                    End="0,40.571423969707" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-17.3138671875,4.91845703125,34.627734375,11.6630859375"
+              BoundingBox="-10.5262109375,15.6504580786035,21.052421875,9.2705078125"
               RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Import Singde Data.Paths[Data Conversion Output]"
+          TopLeft="652.249977399907,236.071418656379">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,33.214281871611"
+              Start="0,0"
+              End="0,25.714281871611">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,25.714281871611" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\Update Data\OLE DB Source">
+    design-time-name="Package\Import Singde Data\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import Singde Data\OLE DB Destination">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

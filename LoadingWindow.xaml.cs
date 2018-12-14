@@ -254,6 +254,7 @@ namespace His_Pos
 
             backgroundWorker.DoWork += (s, o) =>
             {
+                ChangeLoadingMessage("取得杏德新訂單...");
                 StoreOrderDb.GetNewStoreOrderBySingde();
 
                 ChangeLoadingMessage("取得廠商資料...");
@@ -451,12 +452,15 @@ namespace His_Pos
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得員工資料...");
+                var employeeCollection = EmployeeDb.GetEmployeeData();
 
-                var collection = EmployeeDb.GetEmployeeData();
+                ChangeLoadingMessage("取得權限資料...");
+                var positionCollection = EmployeeDb.GetPositionData();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    employeeManage.EmployeeCollection = collection;
+                    employeeManage.EmployeeCollection = employeeCollection;
+                    employeeManage.PositionCollection = positionCollection;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>

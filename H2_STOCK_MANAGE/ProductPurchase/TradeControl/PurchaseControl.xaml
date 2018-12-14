@@ -118,10 +118,13 @@
                                 <Border Background="Red"  BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsControl, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                                     <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="管" Margin="2,0,2,0"/>
                                 </Border>
-                                <Border Background="Blue" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                <Border Background="DarkOrange" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                                     <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="常" Margin="2,0,2,0"/>
                                 </Border>
-                                <Label FontFamily="Segoe UI Semibold" Content="{Binding Stock.MinOrderAmount}" Foreground="Blue" VerticalAlignment="Center" Margin="-5,0,0,0" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                                <Label FontFamily="Segoe UI Semibold" Content="{Binding Stock.MinOrderAmount}" Foreground="DarkOrange" VerticalAlignment="Center" Margin="-5,0,0,0" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                                <Border Background="RoyalBlue" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding Frozen, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                    <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="冰" Margin="2,0,2,0"/>
+                                </Border>
                                 <Label FontFamily="Segoe UI Semibold" Content="{Binding Name}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
                             </StackPanel>
                         </DataTemplate>
@@ -258,8 +261,12 @@
                                 <Border Background="Red"  BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsControl, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                                     <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="管" Margin="2,0,2,0"/>
                                 </Border>
-                                <Border Background="Blue" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                <Border Background="DarkOrange" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                                     <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="常" Margin="2,0,2,0"/>
+                                </Border>
+                                <Label FontFamily="Segoe UI Semibold" Content="{Binding Stock.MinOrderAmount}" Foreground="DarkOrange" VerticalAlignment="Center" Margin="-5,0,0,0" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                                <Border Background="RoyalBlue" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding Frozen, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                    <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="冰" Margin="2,0,2,0"/>
                                 </Border>
                                 <Label FontFamily="Segoe UI Semibold" Content="{Binding Name}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
                             </StackPanel>
@@ -409,8 +416,12 @@
                                 <Border Background="Red"  BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsControl, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                                     <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="管" Margin="2,0,2,0"/>
                                 </Border>
-                                <Border Background="Blue" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                <Border Background="DarkOrange" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                                     <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="常" Margin="2,0,2,0"/>
+                                </Border>
+                                <Label FontFamily="Segoe UI Semibold" Content="{Binding Stock.MinOrderAmount}" Foreground="DarkOrange" VerticalAlignment="Center" Margin="-5,0,0,0" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                                <Border Background="RoyalBlue" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding Frozen, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                    <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="冰" Margin="2,0,2,0"/>
                                 </Border>
                                 <Label FontFamily="Segoe UI Semibold" Content="{Binding Name}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
                             </StackPanel>
@@ -547,8 +558,12 @@
                                 <Border Background="Red"  BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsControl, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                                     <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="管" Margin="2,0,2,0"/>
                                 </Border>
-                                <Border Background="Blue" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                <Border Background="DarkOrange" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
                                     <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="常" Margin="2,0,2,0"/>
+                                </Border>
+                                <Label FontFamily="Segoe UI Semibold" Content="{Binding Stock.MinOrderAmount}" Foreground="DarkOrange" VerticalAlignment="Center" Margin="-5,0,0,0" Visibility="{Binding IsCommon, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}"/>
+                                <Border Background="RoyalBlue" BorderThickness="1" CornerRadius="5" Margin="0,7,5,7" Visibility="{Binding Frozen, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                    <TextBlock FontFamily="Segoe UI Semibold" Foreground="White" Text="冰" Margin="2,0,2,0"/>
                                 </Border>
                                 <Label FontFamily="Segoe UI Semibold" Content="{Binding Name}" VerticalAlignment="Center" Margin="-5,0,0,0"/>
                             </StackPanel>

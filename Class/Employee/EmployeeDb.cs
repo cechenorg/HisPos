@@ -34,6 +34,26 @@ namespace His_Pos.Class.Employee
             }
             return empClockIns;
         }
+
+        internal static void SetEmployeePassword(string empId, string empNewPassword)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMP_ID", empId));
+            parameters.Add(new SqlParameter("PASSWORD", empNewPassword));
+            dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[SetEmployeePassword]", parameters);
+        }
+
+        internal static string GetEmployeePassword(string empId)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("EMP_ID", empId));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetEmployeePassword]", parameters);
+
+            return table.Rows[0]["EMPAUT_PASSWORD"].ToString();
+        }
+
         internal static DataTable SaveEmployeeData(Employee employee)
         {
             var dd = new DbConnection(Settings.Default.SQL_local);
@@ -59,6 +79,19 @@ namespace His_Pos.Class.Employee
             
            return dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[SaveEmployeeData]", parameters);
         }
+        
+        internal static Collection<string> GetPositionData()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var table = dd.ExecuteProc("[HIS_POS_DB].[EmployeeManageView].[GetPositionData]");
+            Collection<string> data = new Collection<string>();
+            foreach (DataRow row in table.Rows)
+            {
+                data.Add(row["AUTHGROUP_NAME"].ToString());
+            }
+            return data;
+        }
+
         internal static void DeleteEmployeeData(Employee employee)
         {
             var dd = new DbConnection(Settings.Default.SQL_local);
