@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Windows.Threading;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace His_Pos.Service
 {
@@ -87,17 +89,20 @@ namespace His_Pos.Service
             }
             catch (Exception ex)
             {
-                switch (ex.Message)
-                {
-                    case "建立連接至 SQL Server 時，發生網路相關或執行個體特定的錯誤。找不到或無法存取伺服器。確認執行個名稱是否正確，以及 SQL Server 是否設定為允許遠端連線。 (provider: TCP Provider, error: 0 - 等候操作已逾時。)":
-                        MessageWindow messageWindowConnectFail = new MessageWindow("網路異常 無法連線到資料庫", MessageType.ERROR);
-                        messageWindowConnectFail.ShowDialog();
-                        break;
-                    default:
-                        MessageWindow messageWindowSQLerror = new MessageWindow("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
-                        messageWindowSQLerror.ShowDialog();
-                        break;
-                }
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
+                    switch (ex.Message)
+                    {
+                        case "建立連接至 SQL Server 時，發生網路相關或執行個體特定的錯誤。找不到或無法存取伺服器。確認執行個名稱是否正確，以及 SQL Server 是否設定為允許遠端連線。 (provider: TCP Provider, error: 0 - 等候操作已逾時。)":
+                            MessageWindow messageWindowConnectFail = new MessageWindow("網路異常 無法連線到資料庫", MessageType.ERROR);
+                            messageWindowConnectFail.ShowDialog();
+                            break;
+                        default:
+                            MessageWindow messageWindowSQLerror = new MessageWindow("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
+                            messageWindowSQLerror.ShowDialog();
+                            break;
+                    }
+                });
+               
             }
             return table;
         }

@@ -121,7 +121,8 @@ namespace His_Pos
                     }
                     ChangeLoadingMessage("匯入資料庫...");
                     declareDb.ImportDeclareData(declareDataCollection, decId);
-                   // declareDb.GetNeedPredictImportChronicAndDo(decId);
+                    ChangeLoadingMessage("預約慢箋中...");
+                    //declareDb.GetNeedPredictImportChronicAndDo(decId);
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
                         MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS, true);
