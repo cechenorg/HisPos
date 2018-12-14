@@ -252,6 +252,7 @@ namespace His_Pos
 
             backgroundWorker.DoWork += (s, o) =>
             {
+                ChangeLoadingMessage("取得杏德新訂單...");
                 StoreOrderDb.GetNewStoreOrderBySingde();
 
                 ChangeLoadingMessage("取得廠商資料...");
