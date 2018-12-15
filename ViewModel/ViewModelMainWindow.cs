@@ -72,6 +72,17 @@ namespace His_Pos.ViewModel
                 _isConnectionOpened = value;
             }
         }
+
+        private bool _hisApiException;
+
+        public bool HisApiException
+        {
+            get => _hisApiException;
+            set
+            {
+                _hisApiException = value;
+            }
+        }
         private bool _isIcCardValid;
         public bool IsIcCardValid
         {

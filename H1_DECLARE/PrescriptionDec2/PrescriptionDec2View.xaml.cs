@@ -1421,6 +1421,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void SetCusHistoryDetail(CustomerHistoryMaster selectedItem)
         {
+            if (selectedItem is null) return;
             switch (selectedItem.Type)
             {
                 case SystemType.HIS:
@@ -1718,7 +1719,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     switch (cName)
                     {
                         case "DivisionCombo":
-                            if (!MainWindow.CurrentUser.Id.Equals((HisPerson.SelectedItem as MedicalPersonnel).Id))
+                            if (!MainWindow.CurrentUser.Id.Equals(((MedicalPersonnel) HisPerson.SelectedItem).Id))
                                 HisPerson.Focus();
                             else
                                 MedicalNumber.Focus();
@@ -2137,6 +2138,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             _isPrescribe = false;
             medBag = new MedBagReport();
             ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = false;
+            CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Clear();
+            CurrentCustomerHistoryMaster = new CustomerHistoryMaster();
+            CusHistoryMaster.ItemsSource = null;
+            CusHistoryDetailPos.ItemsSource = null;
+            CusHistoryDetailHis.ItemsSource = null;
         }
 
         private void ReloadCardReader()
@@ -2300,11 +2306,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             SetSubmmitButton();
         }
 
-        private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void ShowMedicineInformation_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (PrescriptionMedicines.SelectedIndex == -1 || CurrentPrescription.Medicines.Count == 0) return;
             if (!(CurrentPrescription.Medicines[PrescriptionMedicines.SelectedIndex] is DeclareMedicine med)) return;
             var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(med.Id));
+            m.Show();
+        }
+
+        private void HistoryDetail_ShowMedicineInformation_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (CusHistoryDetailHis.SelectedIndex == -1 || ((CustomerHistoryMaster) CusHistoryMaster.SelectedItem).HistoryCollection.Count ==0) return;
+            if (((CustomerHistoryMaster)CusHistoryMaster.SelectedItem).HistoryCollection[CusHistoryDetailHis.SelectedIndex] is null) return;
+            string medicineId = (((CustomerHistoryMaster) CusHistoryMaster.SelectedItem).HistoryCollection[
+                CusHistoryDetailHis.SelectedIndex] as CustomerHistoryHis)?.MedId;
+            var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(medicineId));
             m.Show();
         }
 

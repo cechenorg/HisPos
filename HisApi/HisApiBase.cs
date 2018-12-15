@@ -209,6 +209,13 @@ namespace His_Pos.HisApi
 
         public static void OpenCom()
         {
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException)
+                {
+                    MainWindow.Instance.SetCardReaderStatus("讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞");
+                    return;
+                }
+            });
             MainWindow.Instance.SetCardReaderStatus("開啟讀卡機連接...");
             MainWindow.Instance.HisApiErrorCode = csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
             var res = MainWindow.Instance.HisApiErrorCode;
@@ -218,12 +225,26 @@ namespace His_Pos.HisApi
 
         public static void CloseCom()
         {
-            if(csCloseCom() == 0)
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException)
+                {
+                    MainWindow.Instance.SetCardReaderStatus("讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞");
+                    return;
+                }
+            });
+            if (csCloseCom() == 0)
                 SetStatus(false,1);
         }
 
         public static void CheckCardStatus(int type)
         {
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException)
+                {
+                    MainWindow.Instance.SetCardReaderStatus("讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞");
+                    return;
+                }
+            });
             OpenCom();
             string status;
             switch (type)
@@ -303,6 +324,13 @@ namespace His_Pos.HisApi
 
         public static void VerifySamDc()
         {
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                if (((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException)
+                {
+                    MainWindow.Instance.SetCardReaderStatus("讀卡機異常，請重置讀卡機，若仍異常，請重開電源再重置一次，如持續異常，請檢查傳輸線或讀卡機設備是否正確連接或有損壞");
+                    return;
+                }
+            });
             bool status;
             MainWindow.Instance.SetSamDcStatus("與健保局連線認證中，請稍後...");
             OpenCom();
@@ -317,7 +345,9 @@ namespace His_Pos.HisApi
             }
             catch (Exception e)
             {
-                Application.Current.Dispatcher.Invoke((Action)delegate {
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    ((ViewModelMainWindow) MainWindow.Instance.DataContext).HisApiException = true;
                     MessageWindow m = new MessageWindow("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR, true);
                     m.ShowDialog();
                 });
@@ -338,6 +368,9 @@ namespace His_Pos.HisApi
 
         public static void ResetCardReader()
         {
+            Application.Current.Dispatcher.Invoke((Action)delegate {
+                ((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException = false;
+            });
             SetStatus(false,1);
             SetStatus(false, 2);
             SetStatus(false, 3);
