@@ -70,7 +70,7 @@
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Width="120" Header="姓名" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
+                    <DataGridTextColumn Width="120" Header="姓名" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -78,7 +78,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="100" Header="生日" Binding="{Binding Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BirthDayConverter}}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
+                    <DataGridTextColumn Width="100" Header="生日" Binding="{Binding Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BirthDayConverter}}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -86,7 +86,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="150" Header="聯絡電話" Binding="{Binding ContactInfo.Tel,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
+                    <DataGridTextColumn Width="150" Header="聯絡電話" Binding="{Binding ContactInfo.Tel,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -94,7 +94,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="150" Header="身分證號" Binding="{Binding IcNumber,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
+                    <DataGridTextColumn Width="150" Header="身分證號" Binding="{Binding IcNumber,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -102,7 +102,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="165" Header="編輯時間" Binding="{Binding LastEdit,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:MM/dd h:mm}'}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold">
+                    <DataGridTextColumn Width="165" Header="編輯時間" Binding="{Binding LastEdit,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:MM/dd h:mm}'}" FontFamily="Segoe UI Semibold" FontSize="14" FontWeight="Bold" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

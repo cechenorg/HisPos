@@ -1,5 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.SqlClient;
+using His_Pos.Class.Person;
 using His_Pos.Properties;
 using His_Pos.Service;
 
@@ -18,6 +22,16 @@ namespace His_Pos.Class
             }
             return HospitalsCollection;
         }
-        
+
+        internal static void UpdateCommonHospitalById(Hospital hospital)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("Id",hospital.Id),
+                new SqlParameter("Common", hospital.Common)
+            };
+            dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateCommonHospital]", parameters);
+        }
     }
 }

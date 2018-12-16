@@ -132,16 +132,6 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
             }
         
         }
-
-        private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is System.Windows.Controls.TextBox t)
-            {
-                t.SelectionStart = 0;
-                t.SelectionLength = t.Text.Length;
-            }
-        }
-
       
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {

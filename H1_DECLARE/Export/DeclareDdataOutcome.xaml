@@ -86,7 +86,7 @@
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="4" Margin="10">
                 <Label Content="就醫日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <xctk:MaskedTextBox Name="TreatmentDate" Width="147" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat">
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="CurrentPrescription.Treatment.TreatmentDate" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
@@ -100,7 +100,7 @@
             <StackPanel Orientation="Horizontal"  Grid.Row="2" Grid.Column="0" Margin="10">
                 <Label Content="調劑日期" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
                 <xctk:MaskedTextBox Name="AdjustDate" Width="147" Margin="5,0,0,0" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
-                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat">
+                                    Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite">
                     <xctk:MaskedTextBox.Text>
                         <Binding Path="CurrentPrescription.Treatment.AdjustDate" Mode="OneWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">

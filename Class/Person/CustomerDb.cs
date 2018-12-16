@@ -149,7 +149,7 @@ namespace His_Pos.Class.Person
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateCustomerLastEdit]", parameters);
         }
 
-        internal static void UpdateCustomerBasicDataBuCusId(Customer customer)
+        internal static void UpdateCustomerBasicDataByCusId(Customer customer)
         {
             var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>

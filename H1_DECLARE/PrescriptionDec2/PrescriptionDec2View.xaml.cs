@@ -729,7 +729,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m.ShowDialog();
             }
 
-            CustomerDb.UpdateCustomerBasicDataBuCusId(CurrentPrescription.Customer);
+            CustomerDb.UpdateCustomerBasicDataByCusId(CurrentPrescription.Customer);
 
             if (MainWindow.CurrentPharmacy.MedicalPersonnelCollection != null && MainWindow.CurrentPharmacy.MedicalPersonnelCollection.Count > 0)
             {
@@ -1829,28 +1829,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             DivisionCombo.Focus();
         }
 
-        private void CheckHospitalNameContainsDivision(string name)
-        {
-            var divisionMatch = 0;
-            var divisionId = string.Empty;
-            foreach (var d in Divisions)
-            {
-                var r = new Regex(d.Name);
-                if (!r.IsMatch(name)) continue;
-                divisionId = d.Id;
-                divisionMatch++;
-            }
-            if (divisionMatch == 0 && name.Contains("牙醫"))
-            {
-                CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = Divisions.SingleOrDefault(d => d.Id.Equals("40"));
-                return;
-            }
-            if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
-                return;
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division =
-                Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
-        }
-
         private void IsBuckle_Click(object sender, RoutedEventArgs e)
         {
             foreach (var t in CurrentPrescription.Medicines)
@@ -2213,6 +2191,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 {
                     var tmpCustomer = CurrentPrescription.Customer.DeepCloneViaJson();
                     var declareCopied = PrescriptionDB.GetDeclareDataById(((CustomerHistoryMaster)selectedItem).CustomerHistoryDetailId);
+                    if (declareCopied is null)
+                    {
+                        MessageWindow m = new MessageWindow("處方資料異常，複製失敗。",MessageType.ERROR,true);
+                        m.ShowDialog();
+                        return;
+                    }
                     CurrentPrescription = declareCopied.Prescription;
                     CurrentPrescription.Customer = tmpCustomer;
                     DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d=>d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
@@ -2327,7 +2311,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void ReleaseHospital_OnTextChanged(object sender, RoutedEventArgs e)
         {
             if(ReleaseHospital.Text.Length <= 10) return;
-            CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
         }
 
         private void SpecialCodeText_GotFocus(object sender, RoutedEventArgs e)
@@ -2357,6 +2341,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         PaymentCategories[PaymentCategoryCombo.SelectedIndex];
                 }
             }
+        }
+
+        private void CommonHospitalList_Click(object sender, RoutedEventArgs e)
+        {
+            CommonHospitalsWindow c = new CommonHospitalsWindow();
+            c.ShowDialog();
+            DivisionCombo.Focus();
         }
     }
 }

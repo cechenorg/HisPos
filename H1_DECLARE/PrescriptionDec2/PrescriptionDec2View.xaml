@@ -33,7 +33,8 @@
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter" />
         <hisPos:DateConverter x:Key="DateConverter" />
         <hisPos:DoubleConverter x:Key="DoubleConverter" />
-        <Image x:Key="PrescriptionHistory" Source="C:\HisPos\Images\medical-history.png"/>
+        <Image x:Key="PrescriptionHistory" Source="/Images/medical-history.png"/>
+        <Image x:Key="CommonHospital" Source="/Images/cross.png"/>
     </UserControl.Resources>
     <Viewbox Name="PrescriptionViewBox" Stretch="Fill">
         <Grid Name="PrescriptionGrid" Width="1365" Height="839">
@@ -89,7 +90,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="8" Orientation="Horizontal">
                     <Label VerticalAlignment="Center" Content="釋出院所" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <controls:AutoCompleteBox x:Name="ReleaseHospital" Width="450" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Style="{StaticResource AutoCompleteBoxStyle}"
+                    <controls:AutoCompleteBox x:Name="ReleaseHospital" Width="400" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" Style="{StaticResource AutoCompleteBoxStyle}"
                                               Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" FontSize="16" FontStretch="ExtraExpanded" 
                                               ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" MinimumPrefixLength="4" InputScope="AlphanumericHalfWidth"
                                               SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ValueMemberPath="FullName" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp"
@@ -103,6 +104,7 @@
                             </DataTemplate>
                         </controls:AutoCompleteBox.ItemTemplate>
                     </controls:AutoCompleteBox>
+                    <Button Name="CommonHospitalList" Content="{StaticResource CommonHospital}" Margin="10,0,10,0" Background="Transparent" BorderBrush="Transparent" Height="30" Width="30" Padding="0" Visibility="Visible" Click="CommonHospitalList_Click" />
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="就醫科別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
@@ -113,7 +115,8 @@
                 <StackPanel Grid.Row="0" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Width="auto" Content="調劑藥師" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox Name="HisPerson"  Margin="0,0,10,0" Width="170" FontSize="16" DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" IsTextSearchEnabled="True" IsEditable="False" ItemsSource="{Binding MedicalPersonnels}"
-                              SelectedItem="{Binding CurrentPrescription.Pharmacy.MedicalPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" PreviewKeyDown="Combo_PreviewKeyDown" SelectionChanged="HisPerson_SelectionChanged"/>
+                              SelectedItem="{Binding CurrentPrescription.Pharmacy.MedicalPersonnel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Center" PreviewKeyDown="Combo_PreviewKeyDown" FontFamily="Segoe UI Semibold"  
+                              SelectionChanged="HisPerson_SelectionChanged"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="4" Margin="8" Orientation="Horizontal" Grid.ColumnSpan="2">
                     <Label Content="就醫序號" Width="85" Foreground="{StaticResource ForeGround}"  FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
@@ -201,7 +204,7 @@
                 </StackPanel>
             </Grid>
             <DataGrid Name="PrescriptionMedicines" Grid.Row="2" Margin="10,0,10,10" AutoGenerateColumns="False" Background="{StaticResource GridBackGround}" 
-                      CanUserAddRows="True" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="False"
+                      CanUserAddRows="True" CanUserSortColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" EnableRowVirtualization="False"
                       GridLinesVisibility="Horizontal" ItemsSource="{Binding CurrentPrescription.Medicines,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">

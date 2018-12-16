@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using His_Pos.Class;
 using His_Pos.Class.Declare;
+using His_Pos.Class.Division;
 using His_Pos.Class.Product;
 using His_Pos.H1_DECLARE.PrescriptionDec2;
 using Microsoft.International.Formatters;
@@ -574,8 +575,25 @@ namespace His_Pos.Service
             }
             loadingWindow.Show();
         }
-
         #endregion
-
+        public static Division CheckHospitalNameContainsDivision(string name)
+        {
+            var divisionMatch = 0;
+            var divisionId = string.Empty;
+            foreach (var d in MainWindow.Divisions)
+            {
+                var r = new Regex(d.Name);
+                if (!r.IsMatch(name)) continue;
+                divisionId = d.Id;
+                divisionMatch++;
+            }
+            if (divisionMatch == 0 && name.Contains("牙醫"))
+            {
+                return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals("40")).DeepCloneViaJson();
+            }
+            if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
+                return new Division();
+            return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId)).DeepCloneViaJson();
+        }
     }
 }
