@@ -9,17 +9,21 @@
     <Grid Name="MainGrid">
         <StackPanel Orientation="Vertical" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal" Height="35" Background="CornflowerBlue">
-                <Label Name="TitleLabel" Width="200" Foreground="GhostWhite" FontSize="16" Content="請選擇藥袋列印模式" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                <Label Width="200" Foreground="GhostWhite" FontSize="16" Content="請選擇藥袋列印模式" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
             </StackPanel>
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="195" >
-                <StackPanel Orientation="Horizontal" Width="170" Height="55" Margin="10,20,10,10">
-                    <Image Source="C:\HisPos\Images\medicine.png" Width="45" Height="55" MouseDown="MultiMode_MouseDown"/>
-                    <Label Name="MultiButton" Width="125" Height="55" Content="多藥一袋" FontSize="20" Foreground="DimGray" Focusable="True" HorizontalAlignment="Right" Background="White" BorderBrush="DarkGray" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MouseDown="MultiMode_MouseDown"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Width="170" Height="55" Margin="90,20,90,10">
-                    <Image Source="C:\HisPos\Images\capsule.png" Width="45" Height="55" MouseDown="SingleMode_MouseDown" />
-                    <Label Name="SingleButton" Width="125" Height="55" Content="一藥一袋" FontSize="20" Foreground="DimGray" Focusable="True" HorizontalAlignment="Right" Background="White" BorderBrush="DarkGray" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" MouseDown="SingleMode_MouseDown"/>
-                </StackPanel>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Height="180" >
+                <Button Width="170" Height="55" Background="WhiteSmoke" BorderBrush="WhiteSmoke" Margin="10,20,10,10" Click="MultiMode_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/medicine.png" Height="35"/>
+                        <Label Width="100" Height="40" FontSize="18" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center">多藥一袋</Label>
+                    </StackPanel>
+                </Button>
+                <Button Width="170" Height="55" Background="WhiteSmoke" BorderBrush="WhiteSmoke" Margin="10,20,10,10" Click="SingleMode_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Images/capsule.png" Height="35"/>
+                        <Label Width="100" Height="40" FontSize="18" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center">一藥一袋</Label>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </StackPanel>
     </Grid>

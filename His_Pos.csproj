@@ -439,6 +439,9 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\ChronicSendToServerWindow.xaml.cs">
       <DependentUpon>ChronicSendToServerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionDec2\CommonHospitalsWindow.xaml.cs">
+      <DependentUpon>CommonHospitalsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\CooperativePrescriptSelectWindow.xaml.cs">
       <DependentUpon>CooperativePrescriptSelectWindow.xaml</DependentUpon>
     </Compile>
@@ -809,6 +812,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\ChronicSendToServerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\CommonHospitalsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1186,6 +1193,8 @@
     <Resource Include="Images\medicine.png" />
     <Resource Include="Images\medical-history.png" />
     <Resource Include="Images\medicineInfo.ico" />
+    <Resource Include="Images\cross.png" />
+    <Resource Include="Images\common.ico" />
     <Content Include="RDLC\HisReceipt.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

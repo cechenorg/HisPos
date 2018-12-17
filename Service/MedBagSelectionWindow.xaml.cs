@@ -24,13 +24,13 @@ namespace His_Pos.Service
             InitializeComponent();
         }
 
-        private void MultiMode_MouseDown(object sender, MouseButtonEventArgs e)
+        private void MultiMode_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
             Close();
         }
 
-        private void SingleMode_MouseDown(object sender, MouseButtonEventArgs e)
+        private void SingleMode_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
             Close();

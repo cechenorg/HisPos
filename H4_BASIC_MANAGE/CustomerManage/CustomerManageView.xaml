@@ -5,9 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.CustomerManage"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:hisPos="clr-namespace:His_Pos"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" GotFocus="UserControl_GotFocus"
              d:DesignHeight="839" d:DesignWidth="1365">
-    <Viewbox Stretch="Fill">
+    <UserControl.Resources>
+        <hisPos:DateConverter x:Key="DateConverter"/>
+    </UserControl.Resources>
+            <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -70,7 +75,6 @@
                         <Label Content="{Binding CustomerDetail.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="80" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <TextBox Text="{Binding CustomerDetail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0"/>
                         <TextBox Text="{Binding CustomerDetail.Qname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱" VerticalAlignment="Center" Foreground="DimGray" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,12,0,0" BorderThickness="0"/>
-                        
                     </StackPanel> 
                     <Grid Grid.Row="1">
                         <Grid.RowDefinitions>
@@ -88,7 +92,7 @@
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="8">
                             <Label  Content="性別" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <ComboBox Width="145" Text="{Binding CustomerDetail.GenderName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Text_TextChanged" 
+                            <ComboBox Width="140" Text="{Binding CustomerDetail.GenderName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectionChanged="Text_TextChanged" 
                                       FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}">
                                 <ComboBoxItem >男</ComboBoxItem>
                                 <ComboBoxItem >女</ComboBoxItem>
@@ -96,11 +100,21 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
                             <Label  Content="生日" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                            <DatePicker  Width="145" Text="{Binding CustomerDetail.Birthday,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="Text_TextChanged" Name="birth" SelectedDateFormat="Short" FontFamily="Segoe UI Semi" FontSize="18"  Margin="10,0,0,0"/>
+                            <xctk:MaskedTextBox Name="PatientBirthday" Width="135" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="生日" FontSize="18" FontFamily="Segoe UI Semibold" Style="{StaticResource MaterialDesignTextBox}" InsertKeyMode="Overwrite"
+                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" Margin="10,0,0,0">
+                                <xctk:MaskedTextBox.Text>
+                                    <Binding Path="CustomerDetail.Birthday" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                        <Binding.ValidationRules>
+                                            <hisPos:DateValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox.Text>
+                            </xctk:MaskedTextBox>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="0">
                             <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <TextBox Width="120" Text="{Binding CustomerDetail.IcNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,0,0,0"/>
+                            <TextBox Width="135" Text="{Binding CustomerDetail.IcNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18" HorizontalContentAlignment="Center" Margin="10,10,0,10"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="3" Margin="8">
                             <Label  Content="手機" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>

@@ -84,14 +84,6 @@ namespace His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport
         }
 
         #region ----- Date Control -----
-        private void Date_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-
-            if (textBox is null) return;
-
-            textBox.SelectAll();
-        }
 
         private void Date_OnPreviewKeyDown(object sender, KeyEventArgs e)
         {

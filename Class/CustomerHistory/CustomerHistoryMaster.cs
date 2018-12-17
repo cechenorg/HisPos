@@ -10,6 +10,10 @@ namespace His_Pos.Class.CustomerHistory
 {
     public class CustomerHistoryMaster : INotifyPropertyChanged
     {
+        public CustomerHistoryMaster()
+        {
+            CustomerHistoryMasterCollection = new ObservableCollection<CustomerHistoryMaster>();
+        }
         public CustomerHistoryMaster(SystemType type, DateTime date, string customerHistoryDetailId, string customerHistoryData)
         {
             Type = type;

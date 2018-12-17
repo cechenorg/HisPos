@@ -265,12 +265,6 @@ namespace His_Pos.PrescriptionInquire
                     loadingWindow.Show();
             }
 
-        } 
-        private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            if (sender is System.Windows.Controls.TextBox t) {
-                t.SelectionStart = 0;
-                t.SelectionLength = t.Text.Length;
-            }  
         }
 
         private void ButtonChronicSearch_Click(object sender, RoutedEventArgs e)
