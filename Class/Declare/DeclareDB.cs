@@ -61,8 +61,6 @@ namespace His_Pos.Class.Declare
             {
                 Value = new SqlXml(new XmlTextReader((string) errorStr, XmlNodeType.Document, null))
             });
-            //parameters.Add(new SqlParameter("HISDECMAS_GETCARD", declareData.Prescription.IsGetIcCard));
-            //parameters.Add(new SqlParameter("HISDECMAS_DECLARE", declareData.Prescription.Declare));
             var conn = new DbConnection(Settings.Default.SQL_local);
             var table =  conn.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[InsertDeclareData]", parameters);
             return table.Rows[0][0].ToString();//回傳DesMasId

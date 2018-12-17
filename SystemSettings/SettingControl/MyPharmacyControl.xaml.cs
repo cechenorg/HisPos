@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using His_Pos.Class;
 using His_Pos.Class.Pharmacy;
+using His_Pos.HisApi;
 
 namespace His_Pos.SystemSettings.SettingControl
 {
@@ -158,6 +159,11 @@ namespace His_Pos.SystemSettings.SettingControl
         private void MyPharmacyControl_OnGotFocus(object sender, RoutedEventArgs e)
         {
             IsFirst = false;
+        }
+
+        private void VerifyHpcPin_Click(object sender, RoutedEventArgs e)
+        {
+            HisApiBase.VerifyHpcPin();
         }
     }
 }

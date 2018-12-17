@@ -147,20 +147,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        private double _medicinePoint;
-
-        public double MedicinePoint
-        {
-            get => _medicinePoint;
-            set
-            {
-                _medicinePoint = value;
-                NotifyPropertyChanged(nameof(MedicinePoint));
-            }
-        }
-
-        private MedBagReport medBag = new MedBagReport();
-
         #endregion
 
         #region 調劑結帳相關變數
@@ -344,11 +330,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 return;
             }
 
-            CheckMedicalNumber();
-
             IsSend = false;
             ErrorMssageWindow err;
             CurrentPrescription.EList.Error = new List<Error>();
+            CurrentPrescription.Customer.IcCard.MedicalNumber = TempMedicalNumber;
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
 
             var medDays = 0;
@@ -405,11 +390,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 return;
             }
 
-            CheckMedicalNumber();
-
             IsSend = false;
             ErrorMssageWindow err;
             CurrentPrescription.EList.Error = new List<Error>();
+            CurrentPrescription.Customer.IcCard.MedicalNumber = TempMedicalNumber;
             CurrentPrescription.EList.Error = CurrentPrescription.CheckPrescriptionData();
             
             if (CurrentPrescription.Treatment.AdjustCase.Id.Equals("D") ||
@@ -491,21 +475,21 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             string medCopayName = string.Empty;
             string medPaySelf = string.Empty;
             SetEntryType( ref medEntryName, ref medServiceName, ref medCopayName,ref medPaySelf);
-            bool buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.ToString("yyyy/MM/dd") == DateTime.Now.ToString("yyyy/MM/dd"); //扣庫條件
-             var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
+            var buckleCondition = type == "Adjustment" && medEntryName == "調劑耗用" && CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Now.Date; //扣庫條件
+            var declareTrade = new DeclareTrade(MainWindow.CurrentUser.Id, SelfCost.ToString(), Deposit.ToString(), Charge.ToString(), Copayment.ToString(), Pay.ToString(), Change.ToString(), "現金", CurrentPrescription.Customer.Id);
             int caseType; 
             if (string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) &&
                 string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && string.IsNullOrEmpty(_currentDecMasId) &&
-                CurrentPrescription.Treatment.AdjustDate.ToString("yyyy/MM/dd") == DateTime.Now.ToString("yyyy/MM/dd"))
-                caseType = 1; //一般處方調劑
+                CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Now.Date)
+                caseType = 1;//一般處方調劑
             else if (!string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) &&
                      !string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) &&
                      !string.IsNullOrEmpty(_currentDecMasId))
-                caseType = 2; //帶出預約慢箋
+                caseType = 2;//帶出預約慢箋
             else if (!string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) &&
                      !string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) &&
                      string.IsNullOrEmpty(_currentDecMasId))
-                caseType = 3; //第一次慢箋
+                caseType = 3;//第一次慢箋
             else
                 caseType = -1; //Fail
 
@@ -606,7 +590,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case 3: //第一次慢箋
                     YesNoMessageWindow prescriptionAdjust;
                     var isAdjust = false;
-                    if (CurrentPrescription.Treatment.AdjustDate.ToString("yyyy/MM/dd") == DateTime.Today.ToString("yyyy/MM/dd")) {
+                    if (CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Today.Date) {
                          prescriptionAdjust = new YesNoMessageWindow("是否調劑處方?", "處方調劑確認");
                          isAdjust = (bool)prescriptionAdjust.ShowDialog();
                     }
@@ -750,7 +734,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var medBagPrint = new YesNoMessageWindow("是否列印藥袋", "列印確認");
             var print = (bool)medBagPrint.ShowDialog();
             if(print)
-                NewFunction.PrintMedBag(CurrentPrescription,_currentDeclareData,MedicinePoint,SelfCost,Pay,"登錄",Charge,Instance);
+                NewFunction.PrintMedBag(CurrentPrescription,_currentDeclareData,CurrentPrescription.MedicinePoint,SelfCost,Pay,"登錄",Charge,Instance);
 
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
@@ -1310,30 +1294,36 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 switch (medicine)
                 {
                     case DeclareMedicine declareMedicine:
-                    {
-                        if (!declareMedicine.PaySelf)
-                            medicinesHcCost += declareMedicine.TotalPrice;
-                        else
-                            medicinesSelfCost += declareMedicine.TotalPrice;
-                        purchaseCosts += declareMedicine.Cost * declareMedicine.Amount;
-                        break;
-                    }
+                        {
+                            if (!declareMedicine.PaySelf)
+                                CurrentPrescription.MedicinePoint += declareMedicine.TotalPrice;
+                            else
+                                medicinesSelfCost += declareMedicine.TotalPrice;
+                            purchaseCosts += declareMedicine.Cost * declareMedicine.Amount;
+                            break;
+                        }
                     case PrescriptionOTC otc:
                         medicinesSelfCost += otc.TotalPrice;
                         purchaseCosts += otc.Cost * otc.Amount;
                         break;
                 }
             }
-
             SelfCost = Convert.ToInt16(Math.Ceiling(medicinesSelfCost)); //自費金額
-            if (!NewFunction.CheckCopaymentFreeProject(CurrentPrescription.Treatment.Copayment.Id))
-                Copayment = CountCopaymentCost(medicinesHcCost); //部分負擔
-            MedProfit = (medicinesHcCost + medicinesSelfCost - purchaseCosts); //藥品毛利
-            MedicinePoint = medicinesHcCost;
-            if (CurrentPrescription.Medicines.Count <= 0) return;
-            if (CurrentPrescription.Treatment.AdjustCase.Id != "2") return;
-            var adjustBtnEnable = CurrentPrescription.Treatment.AdjustDate.Date.Equals(DateTime.Now.Date);
-           
+            if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.Copayment.Id))
+            {
+                if (!CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") && !CurrentPrescription.Treatment.AdjustCase.Id.Equals("D") &&
+                    !CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name.Equals("牙科"))
+                {
+                    CurrentPrescription.Treatment.Copayment = Copayments.SingleOrDefault(c => c.Id.Equals("I22")).DeepCloneViaJson();
+                }
+                else
+                {
+                    CurrentPrescription.Treatment.Copayment = CurrentPrescription.MedicinePoint > 100 ? Copayments.SingleOrDefault(c => c.Id.Equals("I21")) : Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
+                }
+                if (!NewFunction.CheckCopaymentFreeProject(CurrentPrescription.Treatment.Copayment.Id))
+                    CurrentPrescription.CopaymentPoint = CountCopaymentCost(CurrentPrescription.MedicinePoint); //部分負擔
+            }
+            MedProfit = (CurrentPrescription.MedicinePoint + medicinesSelfCost - purchaseCosts); //藥品毛利
         }
 
         private void CountCharge()
@@ -1476,15 +1466,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             switch (((AdjustCase)AdjustCaseCombo.SelectedItem).Id)
             {
-                case "1":
-                    CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
-                    break;
                 case "2":
-                    CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("I22"));
+                    CopaymentCombo.SelectedItem = Copayments.SingleOrDefault(c => c.Id.Equals("I22"));
                     ButtonDeclareRegister.IsEnabled = true;
                     break;
                 case "D":
-                    CopaymentCombo.SelectedItem = MainWindow.Copayments.SingleOrDefault(c => c.Id.Equals("009"));
+                    CopaymentCombo.SelectedItem = Copayments.SingleOrDefault(c => c.Id.Equals("009"));
+                    break;
+                default:
+                    CopaymentCombo.SelectedItem = CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name.Equals("牙科") ? Copayments.SingleOrDefault(c => c.Id.Equals("I22")) : Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
                     break;
             }
 
@@ -2114,7 +2104,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PaidText.Text = string.Empty;
             CustomerSelected = false;
             _isPrescribe = false;
-            medBag = new MedBagReport();
+            new MedBagReport();
             ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = false;
             CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Clear();
             CurrentCustomerHistoryMaster = new CustomerHistoryMaster();
@@ -2215,7 +2205,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (IsSendToServer is null || ButtonDeclareRegister is null || DeclareSubmit is null)
                 return;
             int caseType = 0;
-            bool isAdjustDayToday = CurrentPrescription.Treatment.AdjustDate.ToString("yyy/MM/dd") == DateTime.Today.ToString("yyy/MM/dd") ? true : false;
+            bool isAdjustDayToday = CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Today.Date;
             bool isNormalPres = string.IsNullOrEmpty(CurrentPrescription.ChronicTotal) && string.IsNullOrEmpty(CurrentPrescription.ChronicSequence);
             if ( string.IsNullOrEmpty(_currentDecMasId) && isAdjustDayToday && isNormalPres)
                 caseType = 1; //一般處方
@@ -2263,19 +2253,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     ButtonDeclareRegister.IsEnabled = true;
                     DeclareSubmit.IsEnabled = false;
                     break; 
-            }
-        }
-
-        private void CheckMedicalNumber()
-        {
-            if (!string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && int.Parse(CurrentPrescription.ChronicSequence) > 1)
-            {
-                CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + CurrentPrescription.ChronicSequence;
-                CurrentPrescription.OriginalMedicalNumber = TempMedicalNumber;
-            }
-            else
-            {
-                CurrentPrescription.Customer.IcCard.MedicalNumber = TempMedicalNumber;
             }
         }
 
