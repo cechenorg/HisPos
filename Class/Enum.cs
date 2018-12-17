@@ -57,7 +57,8 @@ namespace His_Pos.Class
         庫存現值查詢 = 21,
         進退貨報表查詢 = 22,
         合作診所藥品耗用 = 23,
-        部分負擔自費報表 = 24
+        部分負擔自費報表 = 24,
+        系統函式 = 25
     }
 
     public enum StoreOrderProductType

@@ -61,6 +61,24 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 系統函式 的當地語系化字串。
+        /// </summary>
+        internal static string AdminFunction {
+            get {
+                return ResourceManager.GetString("AdminFunction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 系統管理 的當地語系化字串。
+        /// </summary>
+        internal static string AdminManage {
+            get {
+                return ResourceManager.GetString("AdminManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 打卡及請假 的當地語系化字串。
         /// </summary>
         internal static string Attend {

@@ -32,6 +32,7 @@ using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
 using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 using JetBrains.Annotations;
 using System.Runtime.CompilerServices;
+using His_Pos.AdminManageTab.AdminFunction;
 
 namespace His_Pos.ViewModel
 {
@@ -213,6 +214,8 @@ namespace His_Pos.ViewModel
                     break;
                 case nameof(FeatureItem.合作診所藥品耗用):
                     break;
+                case nameof(FeatureItem.系統函式):
+                    break;
                 default:
                     return;
             }
@@ -229,6 +232,10 @@ namespace His_Pos.ViewModel
 
             switch (featureItem.ToString())
             {
+                //系統函式
+                case nameof(FeatureItem.系統函式):
+                    newTab = new  AdminFunction() { TabName = "系統函式", Icon = MainWindow.HisFeatures[0].Icon };
+                    break;
                 //每日作業
                 case nameof(FeatureItem.每日作業):
                     newTab = new Index() { TabName = "每日作業", Icon = @"..\Images\Home.png", IsPinned = true };

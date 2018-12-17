@@ -269,6 +269,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdminManageTab\AdminFunction\AdminFunction.cs" />
+    <Compile Include="AdminManageTab\AdminFunction\AdminFunctionView.xaml.cs">
+      <DependentUpon>AdminFunctionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Class\AdjustCase\AdjustCase.cs" />
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority\Authority.cs" />
@@ -783,6 +787,10 @@
     <Compile Include="ViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ViewModel\Win32.cs" />
+    <Page Include="AdminManageTab\AdminFunction\AdminFunctionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Confirm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
