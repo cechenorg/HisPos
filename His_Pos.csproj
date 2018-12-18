@@ -1210,6 +1210,7 @@
     <Resource Include="Images\medicineInfo.ico" />
     <Resource Include="Images\cross.png" />
     <Resource Include="Images\common.ico" />
+    <Resource Include="Images\vip.png" />
     <Content Include="RDLC\HisReceipt.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

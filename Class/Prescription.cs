@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -169,6 +170,30 @@ namespace His_Pos.Class
             }
         } //D43原處方就醫序號
 
+        private int _copaymentPoint;
+
+        public int CopaymentPoint
+        {
+            get => _copaymentPoint;
+            set
+            {
+                _copaymentPoint = value;
+                OnPropertyChanged(nameof(CopaymentPoint));
+            }
+        }//D17部分負擔點數
+
+        private double _medicinePoint;
+
+        public double MedicinePoint
+        {
+            get => _medicinePoint;
+            set
+            {
+                _medicinePoint = value;
+                OnPropertyChanged(nameof(MedicinePoint));
+            }
+        }//D33用藥明細點數
+
         public ErrorList EList = new ErrorList();
         private bool adjustCaseNull = false;
         public bool Declare { get; set; }
@@ -176,16 +201,29 @@ namespace His_Pos.Class
         public List<Error> CheckPrescriptionData()
         {
             _errorMessage = new List<Error>();
-            CheckPatientInfo();
             CheckReleaseInstitution();
-            CheckDivision();
-            CheckMedicalNumber();
             CheckTreatmentCase();
+            CheckPatientInfo();
+            CheckAdjustDateAndTreatmentDate();
+            CheckMedicalPersonnel();
+            CheckChronicTimes();
+            CheckMedicalNumber();
+            CheckCopayment();
+            CheckDivision();
             CheckDiseaseCodes();
             CheckPaymentCategory();
-            CheckCopayment();
-            CheckChronicTimes();
             return _errorMessage;
+        }
+
+        private void CheckMedicalPersonnel()
+        {
+            if (Pharmacy.MedicalPersonnel is null)
+                AddError("0", "請選擇調劑藥師");
+            else
+            {
+                if (string.IsNullOrEmpty(Pharmacy.MedicalPersonnel.IcNumber))
+                    AddError("0", "請選擇調劑藥師");
+            }
         }
 
         private void CheckPatientInfo()
@@ -193,7 +231,7 @@ namespace His_Pos.Class
             if(string.IsNullOrEmpty(Customer.Name))
                 AddError("0","病患姓名未填寫");
             //Customer.IcCard.CheckIcNumber(Customer.IcCard.IcNumber);
-            CheckBirthDay(Customer.Birthday);
+            CheckBirthDay();
         }
 
         /*
@@ -205,15 +243,22 @@ namespace His_Pos.Class
             if (string.IsNullOrEmpty(Customer.IcCard.MedicalNumber))
             {
                 AddError("0", "就醫序號未填寫");
-                return;
             }
-            if (CheckHomeCareAndSmokingCessation())
+            else if (Treatment.AdjustCase.Id.Equals("D"))
+            {
                 Customer.IcCard.MedicalNumber = "N";
-            if (!Customer.IcCard.MedicalNumber.Contains("IC") && Customer.IcCard.MedicalNumber != "N")
+            }
+            else if (Treatment.AdjustCase.Id.Equals("2"))
+            {
+                var tmpMedicalNumber = Customer.IcCard.MedicalNumber;
+                OriginalMedicalNumber = tmpMedicalNumber;
+                Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
+            }
+            else if(!Customer.IcCard.MedicalNumber.Contains("IC") && Customer.IcCard.MedicalNumber != "N")
             {
                 var medicalNumberReg = new Regex(@"\d+");
-                if (!medicalNumberReg.IsMatch(Customer.IcCard.MedicalNumber))
-                    AddError("0", "就醫序號輸入格式錯誤");
+                if (!medicalNumberReg.IsMatch(Customer.IcCard.MedicalNumber) || Customer.IcCard.MedicalNumber.Length != 4)
+                    AddError("0", "就醫序號輸入格式錯誤，須為4位數字，不足補0(如:0001)");
             }
         }
 
@@ -244,9 +289,12 @@ namespace His_Pos.Class
             }
 
             if (!Treatment.MedicalInfo.Hospital.Id.Equals("N")) return;
-
             if (CheckHomeCareAndSmokingCessation() == false)
                 AddError("0", "非藥事居家照護(調劑案件:D).協助辦理門診戒菸計畫(調劑案件:5)者，釋出院所不可為\"N\"");
+            else
+            {
+                Treatment.MedicalInfo.Hospital = MainWindow.Hospitals.SingleOrDefault(h=>h.Id.Equals("N")).DeepCloneViaJson();
+            }
         }
 
         /*
@@ -256,10 +304,8 @@ namespace His_Pos.Class
         private void CheckDivision()
         {
             if (!string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Division.Id)) return;
-
             if (CheckHomeCareAndSmokingCessation()) return;
             AddError("0", "未選擇就醫科別");
-
         }
 
         /*
@@ -269,7 +315,6 @@ namespace His_Pos.Class
         private void CheckTreatmentCase()
         {
             if (!string.IsNullOrEmpty(Treatment.MedicalInfo.TreatmentCase.Id)) return;
-
             if (!CheckHomeCareAndSmokingCessation())
                 AddError("0", "請選擇處方案件");
         }
@@ -308,10 +353,6 @@ namespace His_Pos.Class
             if (string.IsNullOrEmpty(Treatment.Copayment.Id))
                 AddError("0", "未選擇部分負擔");
 
-            if (!Treatment.Copayment.Id.Equals("903")) return;
-            
-            var newBornAge = DateTime.Now - Customer.IcCard.IcMarks.NewbornsData.Birthday;
-            CheckNewBornAge(newBornAge);
         }
 
         /*
@@ -333,15 +374,23 @@ namespace His_Pos.Class
             if (!Treatment.AdjustCase.Id.Equals("2")) return;
             if (string.IsNullOrEmpty(ChronicSequence) || string.IsNullOrEmpty(ChronicTotal))
             {
-                AddError("0", "未填寫領藥次數(調劑序號/可調劑次數)");
+                AddError("0", "未填寫領藥次數(可調劑次數 - 領藥次數)");
             }
         }
 
-        public void CheckBirthDay(DateTime customerBirthday)
+        private void CheckBirthDay()
         {
-            if (customerBirthday >= DateTime.Now)
+            if (DateTime.Compare(Customer.Birthday, DateTime.Now) > 0)
             {
                 AddError("0", "生日不可超過現在時間");
+            }
+        }
+
+        private void CheckAdjustDateAndTreatmentDate()
+        {
+            if (DateTime.Compare(Treatment.TreatmentDate, Treatment.AdjustDate) > 0)
+            {
+                AddError("0", "就醫日期不可大於調劑日期");
             }
         }
 

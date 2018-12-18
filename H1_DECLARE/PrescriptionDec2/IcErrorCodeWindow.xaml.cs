@@ -127,7 +127,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 IcErrorCodes.Add(new IcErrorCode("A030", "安全模組故障造成讀卡機無法使用"));
                 IcErrorCodes.Add(new IcErrorCode("B000", "卡片不良 (表面正常, 晶片異常)"));
                 IcErrorCodes.Add(new IcErrorCode("C000", "停電"));
-                IcErrorCodes.Add(new IcErrorCode("C001", "例外就醫者（首次加保 1 個月內、換補發卡 14 日內"));
+                IcErrorCodes.Add(new IcErrorCode("C001", "例外就醫者（首次加保 1 個月內、換補發卡 14 日內)"));
                 IcErrorCodes.Add(new IcErrorCode("C002", "20 歲以下兒少例外就醫"));
                 IcErrorCodes.Add(new IcErrorCode("C003", "懷孕婦女例外就醫"));
                 IcErrorCodes.Add(new IcErrorCode("D000", "醫療資訊系統(HIS)當機"));

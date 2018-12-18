@@ -17,22 +17,32 @@ namespace His_Pos.Class.Declare
     public class DeclareData 
     {
         public DeclareData() { }
+        //public DeclareData(Prescription prescription)
+        //{
+        //    Prescription = new Prescription();
+        //    Prescription = prescription;
+        //    D31SpecailMaterialPoint = 0;
+        //    D32DiagnosisPoint = 0;
+        //    D33DrugsPoint = 0;
+        //    SetDeclareDetail();
+        //    if (prescription.Treatment.AdjustCase.Id.Equals("0")) return;
+        //    SetCopaymentPoint();
+        //    var cusAge = DateTimeExtensions.CalculateAge(Prescription.Customer.Birthday);
+        //    var medFormCount = CountOralLiquidAgent();
+        //    var dayPay = CountDayPayAmount(cusAge, medFormCount);
+        //    CountDeclareDeatailPoint(dayPay);
+        //}
+
         public DeclareData(Prescription prescription)
         {
             Prescription = new Prescription();
             Prescription = prescription;
             D31SpecailMaterialPoint = 0;
             D32DiagnosisPoint = 0;
-            D33DrugsPoint = 0;
+            D33DrugsPoint = Convert.ToInt32(Math.Ceiling(Prescription.MedicinePoint));
             SetDeclareDetail();
-            if (prescription.Treatment.AdjustCase.Id.Equals("0")) return;
-            SetCopaymentPoint();
-            var cusAge = DateTimeExtensions.CalculateAge(Prescription.Customer.Birthday);
-            var medFormCount = CountOralLiquidAgent();
-            var dayPay = CountDayPayAmount(cusAge, medFormCount);
-            CountDeclareDeatailPoint(dayPay);
         }
-     
+
         public DeclareData(DataRow row)
         {
             DecMasId = row["HISDECMAS_ID"].ToString();
@@ -196,7 +206,6 @@ namespace His_Pos.Class.Declare
                         if (!declare.PaySelf)
                         {
                             var detail = new DeclareDetail(declare, count);
-                            CountDeclarePoint(detail);
                             DeclareDetails.Add(detail);
                             count++;
                         }

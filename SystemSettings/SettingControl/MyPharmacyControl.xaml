@@ -49,7 +49,8 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="1">
                 <TextBlock Text="V P N 設定" FontSize="28" FontFamily="Segoe UI Semibold" Foreground="Black" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,0,0,0"/>
-                <TextBox Text="{Binding VPN, Mode=TwoWay}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" Margin="20,0,0,8" Width="400" HorizontalContentAlignment="Center" TextChanged="Pharmacy_OnDataChanged"/>
+                <TextBox Text="{Binding VPN, Mode=TwoWay}" FontSize="25" FontFamily="Segoe UI Semi" Foreground="DimGray" Margin="20,0,0,8" Width="250" HorizontalContentAlignment="Center" TextChanged="Pharmacy_OnDataChanged"/>
+                <Button Content="醫事人員驗PIN" FontSize="16" FontFamily="Segoe UI Semibold" Background="RoyalBlue" Margin="20,10,0,10" BorderBrush="RoyalBlue" Click="VerifyHpcPin_Click"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
                 <Label Name="ChangedLabel" Content="未修改" Foreground="DimGray" FontSize="20" FontFamily="Segoe UI SemiBold" VerticalAlignment="Center" Margin="0,0,20,0"/>

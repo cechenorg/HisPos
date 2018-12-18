@@ -429,27 +429,43 @@ namespace His_Pos.HisApi
             return status;
         }
 
-        public static void SetStatus(int type,bool s)
+        public static void VerifyHpcPin()
         {
-            void Status()
+            MainWindow.Instance.SetCardReaderStatus("醫事人員卡驗證中...");
+            OpenCom();
+            if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && MainWindow.Instance.HisApiErrorCode != 0)
+                return;
+            try
             {
-                switch (type)
-                {
-                    case 1:
-                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened = s;
-                        break;
-                    case 2:
-                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsVerifySamDc = s;
-                        break;
-                    case 3:
-                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsHpcValid = s;
-                        break;
-                    case 4:
-                        ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = s;
-                        break;
-                }
+                MainWindow.Instance.HisApiErrorCode = hpcVerifyHPCPIN();
             }
-            MainWindow.Instance.Dispatcher.InvokeAsync(Status);
+            catch (Exception e)
+            {
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException = true;
+                    MessageWindow m = new MessageWindow("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR, true);
+                    m.ShowDialog();
+                });
+            }
+
+            if (MainWindow.Instance.HisApiErrorCode == 0)
+            {
+                MainWindow.Instance.SetHpcCardStatus("已認證");
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = true;
+                });
+            }
+            else
+            {
+                MainWindow.Instance.SetHpcCardStatus("認證失敗");
+                Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    ((ViewModelMainWindow)MainWindow.Instance.DataContext).IsHpcValid = false;
+                });
+            }
+            CloseCom();
         }
     }
 }
