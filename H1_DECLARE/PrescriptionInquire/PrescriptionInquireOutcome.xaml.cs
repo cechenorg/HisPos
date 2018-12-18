@@ -774,7 +774,7 @@ namespace His_Pos.PrescriptionInquire
                 var headerMessage = new Header { DataFormat = "1" };
                 var icRecord = new REC(headerMessage, mainMessage);
                 int sigCount = 0;
-                for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
+                for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
                 {
                     if (InquiredPrescription.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                         continue;
@@ -856,7 +856,7 @@ namespace His_Pos.PrescriptionInquire
                     var headerMessage = new Header { DataFormat = "2" };
                     var icRecord = new REC(headerMessage, mainMessage);
 
-                    for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
+                    for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
                     {
                         if (InquiredPrescription.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                             continue;

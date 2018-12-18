@@ -164,16 +164,23 @@ namespace His_Pos.Class.Person
                 customer.Birthday.Year > 1911
                     ? new SqlParameter("BIRTH",customer.Birthday)
                     : new SqlParameter("BIRTH", DBNull.Value),
-                !string.IsNullOrEmpty(customer.ContactInfo.Tel)
-                    ? new SqlParameter("TEL",customer.ContactInfo.Tel)
-                    : new SqlParameter("TEL", DBNull.Value),
                 !string.IsNullOrEmpty(customer.IcCard.IcNumber)
-                    ? new SqlParameter("IDNUM",customer.IcCard.IcNumber)
-                    : new SqlParameter("IDNUM", DBNull.Value),
+                    ? new SqlParameter("GENDER", customer.IcCard.IcNumber.Substring(1, 1).Equals("1"))
+                    : new SqlParameter("GENDER", DBNull.Value),
                 !string.IsNullOrEmpty(customer.IcCard.IcNumber)
-                    ? new SqlParameter("GEMDER", customer.IcCard.IcNumber.Substring(1, 1).Equals("1"))
-                    : new SqlParameter("GEMDER", DBNull.Value)
+                    ? new SqlParameter("IDNUM", customer.IcCard.IcNumber)
+                    : new SqlParameter("IDNUM", DBNull.Value)
             };
+            if (customer.ContactInfo is null)
+            {
+                parameters.Add(new SqlParameter("TEL", DBNull.Value));
+            }
+            else
+            {
+                parameters.Add(!string.IsNullOrEmpty(customer.ContactInfo.Tel)
+                        ? new SqlParameter("TEL", customer.ContactInfo.Tel)
+                        : new SqlParameter("TEL", DBNull.Value));
+            }
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateCustomerBasicData]", parameters);
         }
     }

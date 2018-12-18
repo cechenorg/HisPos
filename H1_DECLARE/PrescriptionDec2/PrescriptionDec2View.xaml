@@ -175,21 +175,21 @@
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="0" Margin="8" Orientation="Horizontal">
                     <Label Content="調劑案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <ComboBox x:Name="AdjustCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" ItemsSource="{Binding AdjustCases}"
-                              IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="False" SelectionChanged="AdjustCaseCombo_SelectionChanged"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
+                    <ComboBox x:Name="AdjustCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
+                              IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="True" ItemsSource="{Binding AdjustCases}"
+                              SelectedItem="{Binding CurrentPrescription.Treatment.AdjustCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" KeyDown="Combo_PreviewKeyDown" SelectionChanged="AdjustCaseCombo_SelectionChanged"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="1" Margin="8" Orientation="Horizontal">
                     <Label Content="處方案件" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
-                    <ComboBox x:Name="TreatmentCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
-                              FontFamily="Segoe UI Semibold" FontSize="16" IsEditable="False" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding TreatmentCases}" StaysOpenOnEdit="True"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" PreviewKeyDown="Combo_PreviewKeyDown"/>
+                    <ComboBox x:Name="TreatmentCaseCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
+                              IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="True" ItemsSource="{Binding TreatmentCases}"
+                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.TreatmentCase, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" KeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="2" Margin="8" Orientation="Horizontal">
                     <Label Content="部分負擔" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
                     <ComboBox x:Name="CopaymentCombo" Width="170" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
                               IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="True" ItemsSource="{Binding Copayments}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  PreviewKeyDown="Combo_PreviewKeyDown"/>
+                              SelectedItem="{Binding CurrentPrescription.Treatment.Copayment, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" KeyDown="Combo_PreviewKeyDown"/>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="3" Margin="8" Orientation="Horizontal">
                     <Label Content="給付類別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
@@ -506,8 +506,8 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
                         <Label Content="藥品點數 : " FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center"/>
-                        <Label Content="{Binding MedicinePoint,UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center"/>
-                        <Rectangle Width="50"/>
+                        <Label Content="{Binding CurrentPrescription.MedicinePoint,UpdateSourceTrigger=PropertyChanged}" Height="35" Width="100" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" VerticalAlignment="Center"/>
+                        <Image Width="30" Margin="100,10,10,10" Source="/Images/vip.png" Visibility="{Binding IsNotReceiveCopayment,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </StackPanel>
                     <StackPanel Grid.Row="1" Margin="8" Orientation="Horizontal">
                         <Label Width="60" Content="部分 $" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />

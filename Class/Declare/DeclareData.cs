@@ -37,6 +37,10 @@ namespace His_Pos.Class.Declare
         {
             Prescription = new Prescription();
             Prescription = prescription;
+            D31SpecailMaterialPoint = 0;
+            D32DiagnosisPoint = 0;
+            D33DrugsPoint = Convert.ToInt32(Math.Ceiling(Prescription.MedicinePoint));
+            SetDeclareDetail();
         }
 
         public DeclareData(DataRow row)
@@ -202,7 +206,6 @@ namespace His_Pos.Class.Declare
                         if (!declare.PaySelf)
                         {
                             var detail = new DeclareDetail(declare, count);
-                            CountDeclarePoint(detail);
                             DeclareDetails.Add(detail);
                             count++;
                         }

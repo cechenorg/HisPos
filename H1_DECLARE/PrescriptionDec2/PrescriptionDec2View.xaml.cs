@@ -119,7 +119,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private string _firstTimeDecMasId = string.Empty;
         private XmlDocument _clinicXml = new XmlDocument();
         private string _clinicDeclareId = string.Empty;
-        private bool _isReceiveCopayment = true;
+        private bool _isNotReceiveCopayment = true;
+
+        public bool IsNotReceiveCopayment
+        {
+            get => _isNotReceiveCopayment;
+            set
+            {
+                _isNotReceiveCopayment = value;
+                NotifyPropertyChanged(nameof(IsNotReceiveCopayment));
+            }
+        }
         private int _prescriptionCount;
 
         public int PrescriptionCount
@@ -184,7 +194,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             set
             {
                 _copayment = value;
-                CurrentPrescription.Treatment.Copayment.Point = _copayment;
                 CountCharge();
                 NotifyPropertyChanged(nameof(Copayment));
             }
@@ -281,6 +290,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             Deposit = 0;
             Pay = 0;
             Change = 0;
+            IsNotReceiveCopayment = false;
         }
 
         private void GetPrescriptionData()
@@ -451,7 +461,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case "3532016964":
                     medEntryName = "合作診所調劑耗用";
                     medServiceName = "合作診所藥服費";
-                    medCopayName = "合作診所部分負擔";
+                    medCopayName = IsNotReceiveCopayment ? "合作診所應付負擔" : "合作診所部分負擔";
                     medPaySelf = "合作診所自費";
                     break;
                 default:
@@ -790,9 +800,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             }
         }
 
-        public void 
-            CreatIcUploadData()
-            {
+        public void CreatIcUploadData(){
             try
             {
                 var medicalDatas = new List<MedicalData>();
@@ -801,7 +809,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 var headerMessage = new Header { DataFormat = "1" };
                 var icRecord = new REC(headerMessage, mainMessage);
                 int sigCount = 0;
-                for (var i = 0; i < _currentDeclareData.DeclareDetails.Count; i++)
+                for (var i = 0; i < CurrentPrescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
                 {
                     if (_currentDeclareData.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                         continue;
@@ -880,7 +888,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     var headerMessage = new Header { DataFormat = "2" };
                     var icRecord = new REC(headerMessage, mainMessage);
 
-                    for (var i = 0; i < CurrentPrescription.Medicines.Count; i++)
+                    for (var i = 0; i < CurrentPrescription.Medicines.Count(m=>(m is DeclareMedicine med) && !med.PaySelf); i++)
                     {
                         if (_currentDeclareData.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                             continue;
@@ -1296,7 +1304,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     case DeclareMedicine declareMedicine:
                         {
                             if (!declareMedicine.PaySelf)
-                                CurrentPrescription.MedicinePoint += declareMedicine.TotalPrice;
+                                medicinesHcCost += declareMedicine.TotalPrice;
                             else
                                 medicinesSelfCost += declareMedicine.TotalPrice;
                             purchaseCosts += declareMedicine.Cost * declareMedicine.Amount;
@@ -1308,20 +1316,33 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         break;
                 }
             }
+
+            CurrentPrescription.MedicinePoint = medicinesHcCost;
             SelfCost = Convert.ToInt16(Math.Ceiling(medicinesSelfCost)); //自費金額
             if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.Copayment.Id))
             {
-                if (!CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") && !CurrentPrescription.Treatment.AdjustCase.Id.Equals("D") &&
-                    !CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name.Equals("牙科"))
+                if (CurrentPrescription.Treatment.AdjustCase != null)
                 {
-                    CurrentPrescription.Treatment.Copayment = Copayments.SingleOrDefault(c => c.Id.Equals("I22")).DeepCloneViaJson();
+                    if (CurrentPrescription.Treatment.AdjustCase.Id.Equals("2") && CurrentPrescription.Treatment.AdjustCase.Id.Equals("D"))
+                        CurrentPrescription.Treatment.Copayment = Copayments.SingleOrDefault(c => c.Id.Equals("I22")).DeepCloneViaJson();
                 }
-                else
+
+                if (CurrentPrescription.Treatment.MedicalInfo.Hospital.Division != null)
                 {
-                    CurrentPrescription.Treatment.Copayment = CurrentPrescription.MedicinePoint > 100 ? Copayments.SingleOrDefault(c => c.Id.Equals("I21")) : Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
+                    if (CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name.Equals("牙科"))
+                        CurrentPrescription.Treatment.Copayment = Copayments.SingleOrDefault(c => c.Id.Equals("I22")).DeepCloneViaJson();
                 }
-                if (!NewFunction.CheckCopaymentFreeProject(CurrentPrescription.Treatment.Copayment.Id))
+
+                CurrentPrescription.Treatment.Copayment = CurrentPrescription.MedicinePoint >= 101 ? Copayments.SingleOrDefault(c => c.Id.Equals("I20")) : Copayments.SingleOrDefault(c => c.Id.Equals("I21"));
+
+                if (CurrentPrescription.Treatment.Copayment != null && !NewFunction.CheckCopaymentFreeProject(CurrentPrescription.Treatment.Copayment.Id))
+                {
+                    Copayment = CountCopaymentCost(CurrentPrescription.MedicinePoint); //部分負擔
                     CurrentPrescription.CopaymentPoint = CountCopaymentCost(CurrentPrescription.MedicinePoint); //部分負擔
+                }
+
+                if (IsNotReceiveCopayment)
+                    Copayment = 0;
             }
             MedProfit = (CurrentPrescription.MedicinePoint + medicinesSelfCost - purchaseCosts); //藥品毛利
         }
@@ -1346,11 +1367,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 return free;
             const int grades = 20;
             return Convert.ToInt16(Math.Floor(times) * grades);
-        }
-
-        private void MedTotalPrice_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            CountMedicinesCost();
         }
 
         private void NullTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -1472,6 +1488,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break;
                 case "D":
                     CopaymentCombo.SelectedItem = Copayments.SingleOrDefault(c => c.Id.Equals("009"));
+                    CurrentPrescription.Treatment.MedicalInfo.Hospital = Hospitals.SingleOrDefault(h => h.Id.Equals("N")).DeepCloneViaJson();
+                    CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = null;
+                    CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor = null;
+                    CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = null;
+                    CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = null;
                     break;
                 default:
                     CopaymentCombo.SelectedItem = CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Name.Equals("牙科") ? Copayments.SingleOrDefault(c => c.Id.Equals("I22")) : Copayments.SingleOrDefault(c => c.Id.Equals("I20"));
@@ -1507,7 +1528,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void SetValueByPrescription(CooperativeClinic cooperativeClinic)
         {
-            _isReceiveCopayment = cooperativeClinic.Remark.Substring(16, 1) == "Y" ? false : true;
+            IsNotReceiveCopayment = cooperativeClinic.Remark.Substring(16, 1).Equals("Y");
             _clinicDeclareId = cooperativeClinic.DeclareId;
             _clinicXml = cooperativeClinic.Xml;
             for (int i = 0; i < cooperativeClinic.Prescription.Medicines.Count; i++)
@@ -1619,6 +1640,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 if (textBox.Text.Contains(" "))
                     textBox.Text = string.Empty;
+                return;
+            }
+            if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) && CurrentPrescription.Treatment.AdjustCase.Id.Equals("D"))
+            {
+                textBox.Text = string.Empty;
+                MessageWindow m = new MessageWindow("調劑案件為慢性病連續處方箋調劑/藥事居家照護，本欄免填。", MessageType.WARNING, true);
+                m.ShowDialog();
+                CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = null;
+                CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = null;
                 return;
             }
 
@@ -1981,6 +2011,18 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is ComboBox c)) return;
             if (c.SelectedItem is null) return;
+            if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) && CurrentPrescription.Treatment.AdjustCase.Id.Equals("D"))
+            {
+                if (DivisionCombo.SelectedIndex == -1)
+                {
+                    CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = null;
+                    return;
+                }
+                MessageWindow m = new MessageWindow("調劑案件為藥事居家照護，本欄免填。", MessageType.WARNING, true);
+                m.ShowDialog();
+                DivisionCombo.SelectedIndex = -1;
+                return;
+            }
             if (((Division) c.SelectedItem).Name.Equals("牙科"))
             {
                 TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Name.Equals("牙醫其他專案"));
@@ -2062,7 +2104,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             _firstTimeDecMasId = string.Empty;
             _currentDecMasId = string.Empty;
             _clinicDeclareId = string.Empty;
-            _isReceiveCopayment = true;
+            IsNotReceiveCopayment = false;
             _isPrescribe = false;
             _clinicXml = new XmlDocument();
             CurrentPrescription = new Prescription();

@@ -170,18 +170,6 @@ namespace His_Pos.Class
             }
         } //D43原處方就醫序號
 
-        private int _declarePoint;
-
-        public int DeclarePoint
-        {
-            get => _declarePoint;
-            set
-            {
-                _declarePoint = value;
-                OnPropertyChanged(nameof(DeclarePoint));
-            }
-        }//D16申請點數
-
         private int _copaymentPoint;
 
         public int CopaymentPoint
@@ -204,19 +192,7 @@ namespace His_Pos.Class
                 _medicinePoint = value;
                 OnPropertyChanged(nameof(MedicinePoint));
             }
-        }//D17部分負擔點數
-
-        private int _totalPoint;
-
-        public int TotalPoint
-        {
-            get => _totalPoint;
-            set
-            {
-                _totalPoint = value;
-                OnPropertyChanged(nameof(TotalPoint));
-            }
-        }//D17部分負擔點數
+        }//D33用藥明細點數
 
         public ErrorList EList = new ErrorList();
         private bool adjustCaseNull = false;
@@ -229,6 +205,7 @@ namespace His_Pos.Class
             CheckTreatmentCase();
             CheckPatientInfo();
             CheckAdjustDateAndTreatmentDate();
+            CheckMedicalPersonnel();
             CheckChronicTimes();
             CheckMedicalNumber();
             CheckCopayment();
@@ -236,6 +213,17 @@ namespace His_Pos.Class
             CheckDiseaseCodes();
             CheckPaymentCategory();
             return _errorMessage;
+        }
+
+        private void CheckMedicalPersonnel()
+        {
+            if (Pharmacy.MedicalPersonnel is null)
+                AddError("0", "請選擇調劑藥師");
+            else
+            {
+                if (string.IsNullOrEmpty(Pharmacy.MedicalPersonnel.IcNumber))
+                    AddError("0", "請選擇調劑藥師");
+            }
         }
 
         private void CheckPatientInfo()
@@ -316,7 +304,6 @@ namespace His_Pos.Class
         private void CheckDivision()
         {
             if (!string.IsNullOrEmpty(Treatment.MedicalInfo.Hospital.Division.Id)) return;
-
             if (CheckHomeCareAndSmokingCessation()) return;
             AddError("0", "未選擇就醫科別");
         }
