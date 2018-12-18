@@ -119,6 +119,8 @@ namespace His_Pos
 
             HisFeatures.Add(new Feature(@"..\Images\Report.png", Properties.Resources.ReportSystem,
               new string[] { Properties.Resources.EntrySearch, Properties.Resources.PurchaseReturnReport,Properties.Resources.CooperativeAdjustReport,Properties.Resources.CooperativeEntry }));
+            HisFeatures.Add(new Feature(@"..\Images\Report.png", Properties.Resources.AdminManage,
+              new string[] { Properties.Resources.AdminFunction }));
         }
         
         private void InitializeMenu()

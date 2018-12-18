@@ -31,6 +31,7 @@
     xmlns:PurchaseReturnReport="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
     xmlns:cooperativeAdjustReport="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
     xmlns:CooperativeEntry="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
+    xmlns:AdminFunction="clr-namespace:His_Pos.AdminManageTab.AdminFunction"
     xmlns:local="clr-namespace:His_Pos"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
@@ -44,6 +45,9 @@
     mc:Ignorable="d"
     Closing="Window_Closing" Loaded="Window_Loaded">
     <Window.Resources>
+        <DataTemplate DataType="{x:Type AdminFunction:AdminFunction}">
+            <AdminFunction:AdminFunctionView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type prescriptionDec2:PrescriptionDec2}">
             <prescriptionDec2:PrescriptionDec2View />
         </DataTemplate>
@@ -241,6 +245,7 @@
                         <resource:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <resource:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                         <resource:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <resource:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>

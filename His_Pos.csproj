@@ -269,6 +269,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AdminManageTab\AdminFunction\AdminFunction.cs" />
+    <Compile Include="AdminManageTab\AdminFunction\AdminFunctionView.xaml.cs">
+      <DependentUpon>AdminFunctionView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Class\AdjustCase\AdjustCase.cs" />
     <Compile Include="Class\AdjustCase\AdjustCaseDb.cs" />
     <Compile Include="Class\Authority\Authority.cs" />
@@ -457,6 +461,9 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\GenderConverter.cs" />
     <Compile Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml.cs">
       <DependentUpon>IcErrorCodeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionDec2\MedHistoryWebWindow.xaml.cs">
+      <DependentUpon>MedHistoryWebWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml.cs">
       <DependentUpon>MedicineInfoWindow.xaml</DependentUpon>
@@ -783,6 +790,10 @@
     <Compile Include="ViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ViewModel\Win32.cs" />
+    <Page Include="AdminManageTab\AdminFunction\AdminFunctionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Confirm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -836,6 +847,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\MedHistoryWebWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

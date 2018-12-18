@@ -126,7 +126,11 @@ namespace His_Pos.Class
             parameters.Add(new SqlParameter("DECMAS_ID", DecMasId));
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateRegisterStatus]", parameters);
         }
-         
+        internal static void PredictXmlChronic() {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            dd.ExecuteProc("[HIS_POS_DB].[AdminFunction].[PredictXmlChronic]");
+        }
+        
     }
 }
  

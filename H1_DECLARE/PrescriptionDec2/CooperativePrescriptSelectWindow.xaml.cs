@@ -45,7 +45,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 NotifyPropertyChanged("CooperativeCollection");
             }
         }
-        private ObservableCollection<CustomerDeclare> customerDeclaresCollection;
+        private ObservableCollection<CustomerDeclare> customerDeclaresCollection = new ObservableCollection<CustomerDeclare>();
         public ObservableCollection<CustomerDeclare> CustomerDeclaresCollection
         {
             get
@@ -73,6 +73,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
         public class CustomerDeclare{
             public CustomerDeclare() { }
+            public CustomerDeclare(Prescription prescription) {
+                DeclareData declareData = new DeclareData(prescription);
+                DecMasId = string.Empty;
+                HospitalName = declareData.Prescription.Treatment.MedicalInfo.Hospital.Name;
+                DivName = declareData.Prescription.Treatment.MedicalInfo.Hospital.Division.Name;
+                AdjustDate = declareData.Prescription.Treatment.TreatmentDate.AddYears(-1911).ToString("yyy/MM/dd");
+                Point = declareData.D18TotalPoint.ToString();
+                Medicines = declareData.Prescription.Medicines;
+            }
             public CustomerDeclare(DataRow dataRow) {
                 DecMasId = dataRow["HISDECMAS_ID"].ToString();
                 HospitalName = dataRow["INS_NAME"].ToString();
@@ -174,9 +183,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void DataGridCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectitem = (sender as DataGrid).SelectedItem;
-            if (selectitem is null) return;
-            CustomerDeclaresCollection = DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IcNumber);
+            if (selectitem is null) return; 
+            CustomerDeclaresCollection = DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IcNumber); 
+            CustomerDeclaresCollection.Insert(0,(new CustomerDeclare(((CooperativeClinic)selectitem).Prescription)));
             MedicineInfo = null;
+            DataGridCooperativeClinic.SelectedIndex = 0;
         }
 
         private void UnPrescript_Checked(object sender, RoutedEventArgs e)

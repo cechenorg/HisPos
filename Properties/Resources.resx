@@ -279,4 +279,10 @@
   <data name="CooperativeEntry" xml:space="preserve">
     <value>部分負擔自費報表</value>
   </data>
+  <data name="AdminFunction" xml:space="preserve">
+    <value>系統函式</value>
+  </data>
+  <data name="AdminManage" xml:space="preserve">
+    <value>系統管理</value>
+  </data>
 </root>
