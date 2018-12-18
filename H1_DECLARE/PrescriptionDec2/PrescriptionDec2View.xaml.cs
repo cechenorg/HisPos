@@ -467,7 +467,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 case "3532016964":
                     medEntryName = "合作診所調劑耗用";
                     medServiceName = "合作診所藥服費";
-                    medCopayName = "合作診所部分負擔";
+                    medCopayName = _isReceiveCopayment ? "合作診所部分負擔" : "合作診所應付負擔";
                     medPaySelf = "合作診所自費";
                     break;
                 default:
@@ -537,8 +537,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             }
                         }
 
-                        ProductDb.InsertEntry(medEntryName, (medTotalPrice * -1).ToString(), "DecMasId",
-                            _firstTimeDecMasId);
+                        ProductDb.InsertEntry(medEntryName, (medTotalPrice * -1).ToString(), "DecMasId", _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
                         if(!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                             declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
