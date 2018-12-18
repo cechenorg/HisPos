@@ -32,30 +32,10 @@ namespace His_Pos.Resource
                 typeof(DecimalControl),
                 new PropertyMetadata(0.0));
 
-        public string BeforeDot
-        {
-            get
-            {
-                return Decimal.ToString("###0");
-            }
-        }
-
-        public string AfterDot
-        {
-            get
-            {
-                string tempDec = Decimal.ToString("##.00");
-
-                int dotIndex = tempDec.IndexOf('.') + 1;
-
-                return tempDec.Substring(dotIndex);
-            }
-        }
-
         public DecimalControl()
         {
             InitializeComponent();
-            DataContext = this;
+            DecimalStack.DataContext = this;
         }
     }
 }

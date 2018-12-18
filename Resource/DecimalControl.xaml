@@ -5,9 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.Resource"
              mc:Ignorable="d" >
-    <StackPanel Orientation="Horizontal">
-        <TextBlock Text="{Binding BeforeDot}"/>
-        <TextBlock Text="."/>
-        <TextBlock Text="{Binding AfterDot}" TextDecorations="Underline"/>
+    <StackPanel Name="DecimalStack" Orientation="Horizontal">
+        <TextBlock Text="{Binding Decimal, StringFormat={}{0:###0}}"/>
+        <TextBlock Text="{Binding Decimal, StringFormat={}{0:#,.00}}" TextDecorations="Underline"/>
     </StackPanel>
 </UserControl>
