@@ -481,6 +481,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void InsertPrescription(string type)
         {
+            //MedHistoryWebWindow medHistoryWebWindow = new MedHistoryWebWindow();
+            //medHistoryWebWindow.ShowDialog();
+
+
             MessageWindow m;
             CurrentPrescription.Customer.Id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
 

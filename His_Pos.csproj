@@ -462,6 +462,9 @@
     <Compile Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml.cs">
       <DependentUpon>IcErrorCodeWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="H1_DECLARE\PrescriptionDec2\MedHistoryWebWindow.xaml.cs">
+      <DependentUpon>MedHistoryWebWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml.cs">
       <DependentUpon>MedicineInfoWindow.xaml</DependentUpon>
     </Compile>
@@ -844,6 +847,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDec2\MedHistoryWebWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
