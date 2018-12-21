@@ -1732,6 +1732,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void Combo_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (HisPerson.SelectedItem is null) {
+                MessageWindow messageWindow = new MessageWindow("目前沒有藥師 請新增藥師",MessageType.WARNING);
+                messageWindow.ShowDialog();
+                return;
+            }
             switch (sender)
             {
                 case ComboBox _ when e.Key != Key.Enter:

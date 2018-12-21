@@ -1,5 +1,6 @@
 ﻿using His_Pos.Class.Employee;
 using His_Pos.Class.Person;
+using His_Pos.Class.Pharmacy;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -115,6 +116,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
                     break;
                 }
             }
+            MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -125,6 +127,7 @@ namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
             employee.Id = table.Rows[0][0].ToString();
             EmployeeCollection.Add(employee);
             DataGridEmployee.SelectedIndex = count;
+            MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
         }
 
         private void ButtonDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
