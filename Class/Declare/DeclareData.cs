@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -251,32 +252,25 @@ namespace His_Pos.Class.Declare
                 {
                     D1 = Prescription.Treatment.AdjustCase.Id,
                     D3 = c.IcNumber,
-                    D5 = t.PaymentCategory.Id,
                     D6 = DateTimeExtensions.ConvertToTaiwanCalender(c.Birthday, false),
-                    D7 = CheckXmlEmptyValue(ic.MedicalNumber.PadLeft(4,'0')),
                     D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id),
                     D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id),
-                    D13 = CheckXmlEmptyValue(m.Hospital.Division.Id),
-                    D14 = DateTimeExtensions.ConvertToTaiwanCalender(t.TreatmentDate, false),
-                    D15 = CheckXmlEmptyValue(t.Copayment.Id),
-                    D16 = D16DeclarePoint.ToString(),
-                    D17 = D17CopaymentPoint.ToString(),
-                    D18 = D18TotalPoint.ToString(),
+                    D15 = t.Copayment.Id,
+                    D16 = function.SetStrFormatInt(D16DeclarePoint, "{0:D8}"),
+                    D17 = function.SetStrFormatInt(D17CopaymentPoint, "{0:D4}"),
+                    D18 = function.SetStrFormatInt(D18TotalPoint, "{0:D8}"),
                     D20 = Strings.StrConv(c.Name,VbStrConv.Narrow),
-                    D21 = CheckXmlEmptyValue(m.Hospital.Id),
-                    D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
+                    D21 = m.Hospital.Id,
                     D23 = DateTimeExtensions.ConvertToTaiwanCalender(t.AdjustDate, false),
                     D24 = CheckXmlEmptyValue(m.Hospital.Id),
                     D25 = p.Pharmacy.MedicalPersonnel.IcNumber
                 },
                 Dbody = new Dbody
                 {
-                    D30 = t.MedicineDays,
+                    D30 = string.IsNullOrEmpty(t.MedicineDays)?"00": t.MedicineDays.PadLeft(2,'0'),
                     D31 = function.SetStrFormatInt(D31SpecailMaterialPoint,"{0:D7}"),
                     D32 = function.SetStrFormatInt(D32DiagnosisPoint,"{0:D8}"),
                     D33 = function.SetStrFormatInt(D33DrugsPoint,"{0:D8}"),
-                    D35 = CheckXmlEmptyValue(p.ChronicSequence),
-                    D36 = CheckXmlEmptyValue(p.ChronicTotal),
                     D37 = D37MedicalServiceCode,
                     D38 = D38MedicalServicePoint.ToString(),
                     D44 = t.Copayment.Id.Equals("903")?DateTimeExtensions.ConvertToTaiwanCalender(ic.IcMarks.NewbornsData.Birthday, false):string.Empty
@@ -287,14 +281,48 @@ namespace His_Pos.Class.Declare
                 DeclareXml.Dhead.D4 = D4DeclareMakeUp;
             }
 
-            if (!string.IsNullOrEmpty(t.AdjustCase.Id) && !t.AdjustCase.Id.StartsWith("D") && !t.AdjustCase.Id.StartsWith("5"))
+            if (!string.IsNullOrEmpty(t.AdjustCase.Id))
             {
-                if (string.IsNullOrEmpty(m.Hospital.Doctor.IcNumber))
+                if (t.AdjustCase.Id.Equals("D") || t.AdjustCase.Id.Equals("5"))
                 {
-                    m.Hospital.Doctor.IcNumber = m.Hospital.Id;
+                    switch (t.AdjustCase.Id)
+                    {
+                        case "D"://藥事居家照護
+                            DeclareXml.Dhead.D7 = "N";
+                            break;
+                        case "5"://戒菸門診
+                            DeclareXml.Dhead.D7 = CheckXmlEmptyValue(ic.MedicalNumber.PadLeft(4, '0'));
+                            DeclareXml.Dhead.D14 = DateTimeExtensions.ConvertToTaiwanCalender(t.TreatmentDate, false);
+                            break;
+                    }
                 }
-                DeclareXml.Dhead.D24 = m.Hospital.Doctor.IcNumber;
-                DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode is null? string.Empty: t.MedicalInfo.SpecialCode.Id;
+                else
+                {
+                    if (!t.AdjustCase.Id.Equals("2"))
+                    {
+                        DeclareXml.Dhead.D5 = t.PaymentCategory.Id;
+                        DeclareXml.Dhead.D7 = CheckXmlEmptyValue(ic.MedicalNumber.PadLeft(4, '0'));
+                    }
+                    else
+                    {
+                        DeclareXml.Dbody.D35 = p.ChronicSequence;
+                        DeclareXml.Dbody.D36 = p.ChronicTotal;
+                        if (int.Parse(p.ChronicSequence) >= 2)//慢性病連續處方第二次以後調劑
+                        {
+                            DeclareXml.Dhead.D7 = ic.MedicalNumber;
+                            DeclareXml.Dbody.D43 = p.OriginalMedicalNumber.PadLeft(4, '0');
+                        }
+                        else
+                        {
+                            DeclareXml.Dhead.D7 = CheckXmlEmptyValue(ic.MedicalNumber.PadLeft(4, '0'));
+                        }
+                    }
+                    DeclareXml.Dhead.D13 = CheckXmlEmptyValue(m.Hospital.Division.Id);
+                    DeclareXml.Dhead.D14 = DateTimeExtensions.ConvertToTaiwanCalender(t.TreatmentDate, false);
+                    DeclareXml.Dhead.D22 = m.TreatmentCase.Id;
+                    DeclareXml.Dhead.D24 = m.Hospital.Id;
+                    DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode is null ? string.Empty : t.MedicalInfo.SpecialCode.Id;
+                }
             }
 
             if (!string.IsNullOrEmpty(p.ChronicSequence))
@@ -318,21 +346,27 @@ namespace His_Pos.Class.Declare
                     P3 = function.SetStrFormat(detail.P3Dosage, "{0:0000.00}"),
                     P4 = detail.P4Usage,
                     P5 = detail.P5Position,
-                    P6 = detail.P6Percent.ToString(),
                     P7 = function.SetStrFormat(detail.P7Total, "{0:00000.0}"),
                     P8 = function.SetStrFormat(detail.P8Price, "{0:0000000.00}"),
                     P9 = function.SetStrFormatInt(detail.P9Point,"{0:D8}"),
                     P10 = function.SetStrFormatInt(declareCount, "{0:D3}"),
-                    P11 = detail.P11Days.ToString(),
-                    P12 = detail.P12StartDate,
-                    P13 = detail.P13EndDate,
+                    P11 = function.SetStrFormatInt(detail.P11Days, "{0:D2}")
                 };
                 if (pdata.P1.Equals("D") || pdata.P1.Equals("E") || pdata.P1.Equals("F"))
                 {
                     specialCount++;
                     pdata.P15 = specialCount.ToString();
                 }
+                if (pdata.P1.Equals("2") || pdata.P1.Equals("3") || pdata.P1.Equals("4"))
+                {
+                    pdata.P6 = detail.P6Percent.ToString(CultureInfo.InvariantCulture);
+                }
 
+                if (!string.IsNullOrEmpty(detail.P12StartDate))
+                {
+                    pdata.P12 = detail.P12StartDate;
+                    pdata.P13 = detail.P13EndDate;
+                }
                 DeclareXml.Dbody.Pdata.Add(pdata);
                 declareCount++;
             }
