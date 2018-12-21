@@ -665,22 +665,23 @@ namespace His_Pos.PrescriptionInquire
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            InquiredPrescription = PrescriptionDB.GetDeclareDataById(_decMasId);
+            Close();
+          //  InquiredPrescription = PrescriptionDB.GetDeclareDataById(_decMasId);
 
-          ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
-          Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
-          CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
-          PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
-          AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
-          TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+          //ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
+          //Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
+          //CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
+          //PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
+          //AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
+          //TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
              
-            DeclareDetails.Clear();
-            foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines)
-            {
-                DeclareMedicine declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
-                DeclareDetails.Add(declareDetailClone);
-            }
-            InitDataChanged();
+          //  DeclareDetails.Clear();
+          //  foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines)
+          //  {
+          //      DeclareMedicine declareDetailClone = (DeclareMedicine)newDeclareDetail.Clone();
+          //      DeclareDetails.Add(declareDetailClone);
+          //  }
+          //  InitDataChanged();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -774,7 +775,7 @@ namespace His_Pos.PrescriptionInquire
                 var headerMessage = new Header { DataFormat = "1" };
                 var icRecord = new REC(headerMessage, mainMessage);
                 int sigCount = 0;
-                for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
+                for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
                 {
                     if (InquiredPrescription.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                         continue;
@@ -856,7 +857,7 @@ namespace His_Pos.PrescriptionInquire
                     var headerMessage = new Header { DataFormat = "2" };
                     var icRecord = new REC(headerMessage, mainMessage);
 
-                    for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count; i++)
+                    for (var i = 0; i < InquiredPrescription.Prescription.Medicines.Count(m => (m is DeclareMedicine med) && !med.PaySelf); i++)
                     {
                         if (InquiredPrescription.DeclareDetails[i].P1MedicalOrder.Equals("9"))
                             continue;

@@ -3,45 +3,41 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        WindowStyle="None"
-        mc:Ignorable="d" Title="選擇異常代碼" Height="365" Width="450" WindowStartupLocation="CenterScreen">
+        WindowStyle="SingleBorderWindow"
+        mc:Ignorable="d" Title="選擇異常代碼" Height="420" Width="550" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <Style x:Key="HideHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="Visibility" Value="Collapsed" />
         </Style>
     </Window.Resources>
-     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-         <StackPanel Grid.Row="0">
-            <Label Background="#FF2D2D30" Height="25" Content="選擇異常代碼" Foreground="GhostWhite"/>
-        </StackPanel>
-        <StackPanel Orientation="Vertical" Margin="10,10,10,10" Grid.Row="1">
-            <Label Content="{Binding ErrorMessage}" Height="30" Margin="0,0,0,10"/>
-            <ListView x:Name="lv" SelectionMode="Single" ItemsSource="{Binding IcErrorCodes,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="220">
+    <Viewbox Stretch="Fill">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="430"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Vertical" Margin="10,10,10,10" Grid.Row="0" Width="550" Height="430">
+                <ListView x:Name="lv" SelectionMode="Single" ItemsSource="{Binding IcErrorCodes,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Height="365" Background="{StaticResource GridBackGround}">
                     <ListView.View>
-                    <GridView ColumnHeaderContainerStyle="{StaticResource HideHeaderStyle}">
-                        <GridView.Columns>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ListViewItem}}}" Checked="CheckBox_Checked" />
-                                    </DataTemplate>
+                        <GridView ColumnHeaderContainerStyle="{StaticResource HideHeaderStyle}">
+                            <GridView.Columns>
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsSelected,RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type ListViewItem}}}" Checked="CheckBox_Checked" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn>
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Label Content="{Binding Id,UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontFamily="Segoe UI Semibold"/>
+                                        </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                             <GridViewColumn>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Label Content="{Binding Id,UpdateSourceTrigger=PropertyChanged}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Label Content="{Binding Cause,UpdateSourceTrigger=PropertyChanged}"/>
+                                        <Label Content="{Binding Cause,UpdateSourceTrigger=PropertyChanged}" FontSize="16" FontFamily="Segoe UI Semibold"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -49,10 +45,11 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <StackPanel Orientation="Horizontal" Margin="10,10,10,0" Width="130" HorizontalAlignment="Right">
-                <Button Background="DarkGray" Content="取消" Click="Button_Click" BorderThickness="0"/>
-                <Button Background="IndianRed" Content="確定" Margin="10,0,0,0" Click="Ok_Click" BorderThickness="0"/>
+            <StackPanel Orientation="Horizontal" Margin="10,10,0,0" Width="140" Height="35" HorizontalAlignment="Right">
+                <Button Background="DarkGray" Content="取消" Click="Button_Click" BorderThickness="0" FontSize="16" FontFamily="Segoe UI Semibold"/>
+                <Button Background="IndianRed" Content="確定" Margin="10,0,0,0" Click="Ok_Click" BorderThickness="0" FontSize="16" FontFamily="Segoe UI Semibold"/>
             </StackPanel>
         </StackPanel>
     </Grid>
+        </Viewbox>
 </Window>
