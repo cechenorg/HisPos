@@ -46,7 +46,7 @@ namespace His_Pos.Class
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
             OriginalMedicalNumber = row["HISDECMAS_OLDNUMDER"].ToString();
             DataColumnCollection columns = row.Table.Columns;
-            if (columns.Contains("IS_GETCARD"))
+            if (columns.Contains("IS_GETCARD") && !string.IsNullOrEmpty(row["IS_GETCARD"].ToString()))
             {
                 IsGetIcCard = (bool)row["IS_GETCARD"];
             }
