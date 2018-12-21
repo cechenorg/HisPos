@@ -142,55 +142,10 @@ namespace His_Pos
 
         private void SyncNewProductDataFromSingde()
         {
-            Microsoft.SqlServer.Dts.Runtime.Application app = new Microsoft.SqlServer.Dts.Runtime.Application();
-            Microsoft.SqlServer.Dts.Runtime.Package package = null;
+            Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
+            Match match = reg.Match(Properties.Settings.Default.SQL_local);
 
-            try
-            {
-                Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
-                Match match = reg.Match(Properties.Settings.Default.SQL_local);
-
-                package = app.LoadPackage(Directory.GetCurrentDirectory() + @"\SSIS_Package\SyncProductDataFromSingdePackage.dtsx", null);
-                Variables myVars = package.Variables;
-                
-                myVars["LocalConn"].Value = $"Data Source={match.Groups[1].Value};Initial Catalog=HIS_POS_DB;Persist Security Info=True;User ID=singde;Password=city1234;";
-
-                DTSExecResult results = package.Execute(null, myVars, null, null, null);
-
-                if (results == DTSExecResult.Failure)
-                {
-                    string errorMessage = "";
-
-                    foreach (DtsError error in package.Errors)
-                    {
-                        errorMessage += error.ErrorCode.ToString() + error.Description.ToString() + "\n";
-                    }
-
-                    string filePath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + "\\packageError.txt";
-
-                    try
-                    {
-                        using (TextWriter fileWriter = new StreamWriter(filePath))
-                        {
-                            fileWriter.WriteLine(errorMessage);
-                        }
-                    }
-                    catch (Exception exception)
-                    {
-                        throw exception;
-                    }
-                }
-            }
-            catch (Exception exception)
-            {
-                MessageWindow messageWindow = new MessageWindow(exception.Message, MessageType.ERROR);
-                messageWindow.ShowDialog();
-            }
-            finally
-            {
-                package.Dispose();
-                package = null;
-            }
+            WebApi.SyncServerData(match.Groups[1].Value);
         }
 
         private void CheckDBVersion()
