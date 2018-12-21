@@ -314,7 +314,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void Submit_ButtonClick(object sender, RoutedEventArgs e)
         {
             MessageWindow m;
-            if (!CurrentPrescription.IsGetIcCard)
+            if (!IsMedicalNumberGet)
             {
                 _icErrorWindow =
                     new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
@@ -540,16 +540,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         ProductDb.InsertEntry(medEntryName, (medTotalPrice * -1).ToString(), "DecMasId",
                             _firstTimeDecMasId);
                         declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", _firstTimeDecMasId); //庫存扣庫
-                        if(!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
-                            declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
-                        else
-                        {
-                            declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
-                        }
+                      
                         declareDb.InsertDeclareTrade(_firstTimeDecMasId,declareTrade);//Insert Trade
                         var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
                         if(medorder.Count > 0 )
                             StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
+                    }
+                    if (!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
+                        declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
+                    else
+                    {
+                        declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, true, false, true); //處方登錄
                     }
                     declareDb.UpdateDeclareFile(_currentDeclareData);
                     break;
@@ -613,7 +614,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     if (isAdjust)
                     {
                         type = "Adjustment";
-                        if (!CurrentPrescription.IsGetIcCard)
+                        if (!IsMedicalNumberGet)
                         {
                             _icErrorWindow =
                                 new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
@@ -1560,7 +1561,12 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
             }
 
+            bool tmpGetCard = CurrentPrescription.IsGetIcCard;
             CurrentPrescription = cooperativeClinic.Prescription;
+            CurrentPrescription.IsGetIcCard = tmpGetCard;
+            string id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
+            CurrentPrescription.Customer.Id = id;
+            CurrentPrescription.Customer = CustomerDb.LoadCustomerData(CurrentPrescription.Customer)[0];
             if (!string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && int.Parse(CurrentPrescription.ChronicSequence) > 1)
             {
                 CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + CurrentPrescription.ChronicSequence;
@@ -2152,18 +2158,20 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             PaidText.Text = string.Empty;
             CustomerSelected = false;
             _isPrescribe = false;
-            new MedBagReport();
             ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = false;
             CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Clear();
             CurrentCustomerHistoryMaster = new CustomerHistoryMaster();
             CusHistoryMaster.ItemsSource = null;
             CusHistoryDetailPos.ItemsSource = null;
             CusHistoryDetailHis.ItemsSource = null;
+            TempMedicalNumber = string.Empty;
         }
 
         private void ReloadCardReader()
         {
-            HisApiBase.ResetCardReader();
+            LoadingWindow loading = new LoadingWindow();
+            loading.ResetCardReader(Instance);
+            loading.ShowDialog();
         }
 
         public void LoadPatentDataFromIcCard()
