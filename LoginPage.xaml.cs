@@ -143,7 +143,7 @@ namespace His_Pos
         private void SyncNewProductDataFromSingde()
         {
             Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
-            Match match = reg.Match(Properties.Settings.Default.SQL_local);
+            Match match = reg.Match(Properties.Settings.Default.SQL_global);
 
             WebApi.SyncServerData(match.Groups[1].Value);
         }

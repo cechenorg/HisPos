@@ -269,7 +269,7 @@ namespace His_Pos.Class.StoreOrder
                 parameters.Add(new SqlParameter("NOTE", row["sht_memo"].ToString()));
                 parameters.Add(new SqlParameter("ORDER_DATE", row["upload_date"]));
                 
-                string[] drugs = row["drug_list"].ToString().Split(new [] { "\r\n" }, StringSplitOptions.None);
+                string[] drugs = row["drug_list"].ToString().Split(new [] { "\r" }, StringSplitOptions.None);
 
                 DataTable details = new DataTable();
                 details.Columns.Add("PRO_ID", typeof(string));
