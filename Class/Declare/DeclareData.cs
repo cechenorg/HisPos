@@ -41,6 +41,10 @@ namespace His_Pos.Class.Declare
             D32DiagnosisPoint = 0;
             D33DrugsPoint = Convert.ToInt32(Math.Ceiling(Prescription.MedicinePoint));
             SetDeclareDetail();
+            if (prescription.Treatment.AdjustCase.Id.Equals("0")) return;
+            D17CopaymentPoint = prescription.CopaymentPoint;
+            SetMedicalServiceCode();//設定藥事服務費項目代碼
+            CountDeclareDeatailPoint();
         }
 
         public DeclareData(DataRow row)
@@ -87,20 +91,11 @@ namespace His_Pos.Class.Declare
         public int D38MedicalServicePoint { get; set; }//D38藥事服務費點數
         public Ddata DeclareXml { get; set; } = new Ddata();
         public string Id { get; set; }
-        
 
-        private void SetCopaymentPoint()
+        private void CountDeclareDeatailPoint()
         {
-            var copaymentId = Prescription.Treatment.Copayment.Id;
-            D17CopaymentPoint = NewFunction.CheckCopaymentFreeProject(copaymentId) ? 0 : Prescription.Treatment.Copayment.Point;
-        }
-
-        private void CountDeclareDeatailPoint(int dayPay)
-        {
-            SetMedicalServiceCode(dayPay);//判斷藥事服務費項目代碼
-            SetCopaymentPoint();//計算部分負擔點數
             D18TotalPoint = D31SpecailMaterialPoint + D32DiagnosisPoint + D33DrugsPoint + D38MedicalServicePoint;//計算總申報點數
-            D16DeclarePoint = D18TotalPoint - D17CopaymentPoint;//申請點數 = 總申報點數 - 部分負擔點數
+            D16DeclarePoint = D18TotalPoint - D17CopaymentPoint;//申請點數 = 總申報點數 - 部分負擔點數 
         }
 
         private int CountDayPayAmount(double cusAge, int medFormCount)
@@ -151,27 +146,24 @@ namespace His_Pos.Class.Declare
             }
         }
 
-        private void SetMedicalServiceCode(int dayPay)
+        private void SetMedicalServiceCode()
         {
             /*
              * 申報案件不為「01：西醫一般案件」，藥費申請皆以健保署每月公告核定藥價實報實銷，
              * 另，案件分類「01：一般案件」案件，經採交付調劑，需應改以「09:西醫其他專案」申報。
              */
+            var cusAge = DateTimeExtensions.CalculateAge(Prescription.Customer.Birthday);//病患年齡
+            var medFormCount = CountOralLiquidAgent();//口服液劑(原瓶包裝)數量
+            var dayPay = CountDayPayAmount(cusAge, medFormCount);//計算日劑藥費金額
             if (Prescription.Treatment.MedicalInfo.TreatmentCase.Id.Equals("01"))
                 Prescription.Treatment.MedicalInfo.TreatmentCase =
                     MainWindow.TreatmentCase.SingleOrDefault(t => t.Id.Equals("09"));
             var adjustCaseId = Prescription.Treatment.AdjustCase.Id;
-            var treatmentCaseId = Prescription.Treatment.MedicalInfo.TreatmentCase.Id;
-            const string westMedNormal = "01"; //原處方案件:西醫一般
-            const string westMedOther = "09"; //原處方案件:西醫一般
             var medicineDays = Convert.ToInt32(Prescription.Treatment.MedicineDays);
             const int daysLimit = 3; //日劑藥費天數限制
             const int normalDaysLimit = 7; //西醫一般案件天數限制
             switch (adjustCaseId)
             {
-                case "3" when treatmentCaseId == westMedNormal && medicineDays > daysLimit:
-                    //throw new ArgumentException(Resources.MedicineDaysOutOfRange, "original");
-                    break;
                 case "1" :
                 case "3":
                     if (medicineDays <= normalDaysLimit)
@@ -184,8 +176,6 @@ namespace His_Pos.Class.Declare
                     break;
                 case "2" :
                     SetChronicMedicalServiceCode();
-                    break;
-                default:
                     break;
             }
 
@@ -272,19 +262,19 @@ namespace His_Pos.Class.Declare
                     D16 = D16DeclarePoint.ToString(),
                     D17 = D17CopaymentPoint.ToString(),
                     D18 = D18TotalPoint.ToString(),
-                    D20 = Strings.StrConv(c.Name, VbStrConv.Narrow),
+                    D20 = Strings.StrConv(c.Name,VbStrConv.Narrow),
                     D21 = CheckXmlEmptyValue(m.Hospital.Id),
                     D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
                     D23 = DateTimeExtensions.ConvertToTaiwanCalender(t.AdjustDate, false),
-                    D24 = string.IsNullOrEmpty(m.Hospital.Doctor.IcNumber) ? m.Hospital.Id : m.Hospital.Doctor.IcNumber,
+                    D24 = CheckXmlEmptyValue(m.Hospital.Id),
                     D25 = p.Pharmacy.MedicalPersonnel.IcNumber
                 },
                 Dbody = new Dbody
                 {
                     D30 = t.MedicineDays,
-                    D31 = D31SpecailMaterialPoint.ToString(),
-                    D32 = D32DiagnosisPoint.ToString(),
-                    D33 = D33DrugsPoint.ToString(),
+                    D31 = function.SetStrFormatInt(D31SpecailMaterialPoint,"{0:D7}"),
+                    D32 = function.SetStrFormatInt(D32DiagnosisPoint,"{0:D8}"),
+                    D33 = function.SetStrFormatInt(D33DrugsPoint,"{0:D8}"),
                     D35 = CheckXmlEmptyValue(p.ChronicSequence),
                     D36 = CheckXmlEmptyValue(p.ChronicTotal),
                     D37 = D37MedicalServiceCode,
