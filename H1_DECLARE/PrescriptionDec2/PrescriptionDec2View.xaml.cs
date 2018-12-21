@@ -112,6 +112,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         #region 處方相關變數
 
+        private static bool _prescriptionCountWarning = true;
         public static string IndexViewDecMasId = string.Empty;
         private Prescription _currentPrescription = new Prescription();
         private DeclareData _currentDeclareData;
@@ -138,6 +139,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             set
             {
                 _prescriptionCount = value;
+                if (_prescriptionCount >= 80 && _prescriptionCountWarning)
+                {
+                    YesNoMessageWindow m = new YesNoMessageWindow("調劑處方已超過80件，是否繼續提醒?","調劑上限提醒");
+                    _prescriptionCountWarning = (bool)m.ShowDialog();
+                }
                 NotifyPropertyChanged(nameof(PrescriptionCount));
             }
         }
