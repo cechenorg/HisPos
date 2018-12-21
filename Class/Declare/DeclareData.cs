@@ -262,7 +262,7 @@ namespace His_Pos.Class.Declare
                     D16 = D16DeclarePoint.ToString(),
                     D17 = D17CopaymentPoint.ToString(),
                     D18 = D18TotalPoint.ToString(),
-                    D20 = Strings.StrConv(c.Name, VbStrConv.Narrow),
+                    D20 = Strings.StrConv(c.Name,VbStrConv.Narrow),
                     D21 = CheckXmlEmptyValue(m.Hospital.Id),
                     D22 = CheckXmlEmptyValue(m.TreatmentCase.Id),
                     D23 = DateTimeExtensions.ConvertToTaiwanCalender(t.AdjustDate, false),
@@ -272,9 +272,9 @@ namespace His_Pos.Class.Declare
                 Dbody = new Dbody
                 {
                     D30 = t.MedicineDays,
-                    D31 = D31SpecailMaterialPoint.ToString(),
-                    D32 = D32DiagnosisPoint.ToString(),
-                    D33 = D33DrugsPoint.ToString(),
+                    D31 = function.SetStrFormatInt(D31SpecailMaterialPoint,"{0:D7}"),
+                    D32 = function.SetStrFormatInt(D32DiagnosisPoint,"{0:D8}"),
+                    D33 = function.SetStrFormatInt(D33DrugsPoint,"{0:D8}"),
                     D35 = CheckXmlEmptyValue(p.ChronicSequence),
                     D36 = CheckXmlEmptyValue(p.ChronicTotal),
                     D37 = D37MedicalServiceCode,
