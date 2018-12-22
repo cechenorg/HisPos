@@ -253,8 +253,6 @@ namespace His_Pos.Class.Declare
                     D1 = Prescription.Treatment.AdjustCase.Id,
                     D3 = c.IcNumber,
                     D6 = DateTimeExtensions.ConvertToTaiwanCalender(c.Birthday, false),
-                    D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id),
-                    D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id),
                     D15 = t.Copayment.Id,
                     D16 = function.SetStrFormatInt(D16DeclarePoint, "{0:D8}"),
                     D17 = function.SetStrFormatInt(D17CopaymentPoint, "{0:D4}"),
@@ -262,7 +260,6 @@ namespace His_Pos.Class.Declare
                     D20 = Strings.StrConv(c.Name,VbStrConv.Narrow),
                     D21 = m.Hospital.Id,
                     D23 = DateTimeExtensions.ConvertToTaiwanCalender(t.AdjustDate, false),
-                    D24 = CheckXmlEmptyValue(m.Hospital.Id),
                     D25 = p.Pharmacy.MedicalPersonnel.IcNumber
                 },
                 Dbody = new Dbody
@@ -272,8 +269,7 @@ namespace His_Pos.Class.Declare
                     D32 = function.SetStrFormatInt(D32DiagnosisPoint,"{0:D8}"),
                     D33 = function.SetStrFormatInt(D33DrugsPoint,"{0:D8}"),
                     D37 = D37MedicalServiceCode,
-                    D38 = D38MedicalServicePoint.ToString(),
-                    D44 = t.Copayment.Id.Equals("903")?DateTimeExtensions.ConvertToTaiwanCalender(ic.IcMarks.NewbornsData.Birthday, false):string.Empty
+                    D38 = D38MedicalServicePoint.ToString()
                 }
             };
             if (!string.IsNullOrEmpty(D4DeclareMakeUp))
@@ -321,7 +317,24 @@ namespace His_Pos.Class.Declare
                     DeclareXml.Dhead.D14 = DateTimeExtensions.ConvertToTaiwanCalender(t.TreatmentDate, false);
                     DeclareXml.Dhead.D22 = m.TreatmentCase.Id;
                     DeclareXml.Dhead.D24 = m.Hospital.Id;
-                    DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode is null ? string.Empty : t.MedicalInfo.SpecialCode.Id;
+                }
+
+                if (!string.IsNullOrEmpty(m.MainDiseaseCode.Id))
+                {
+                    DeclareXml.Dhead.D8 = CheckXmlEmptyValue(m.MainDiseaseCode.Id);
+                    if (!string.IsNullOrEmpty(m.SecondDiseaseCode.Id))
+                        DeclareXml.Dhead.D9 = CheckXmlEmptyValue(m.SecondDiseaseCode.Id);
+                }
+
+                if (!string.IsNullOrEmpty(t.MedicalInfo.SpecialCode.Id))
+                {
+                    DeclareXml.Dbody.D26 = t.MedicalInfo.SpecialCode.Id;
+                }
+
+                if (t.Copayment.Id.Equals("903"))
+                {
+                    DeclareXml.Dbody.D44 =
+                        DateTimeExtensions.ConvertToTaiwanCalender(ic.IcMarks.NewbornsData.Birthday, false);
                 }
             }
 

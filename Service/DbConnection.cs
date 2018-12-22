@@ -36,7 +36,6 @@ namespace His_Pos.Service
             {
                 MySqlCommand cmd = new MySqlCommand(sqlString, _sqlMySqlConnection);
                 _sqlMySqlConnection.Open();
-                cmd.ExecuteNonQuery();
                 var sqlDapter = new MySqlDataAdapter(cmd);
                 sqlDapter.Fill(table);
                 _sqlMySqlConnection.Close();

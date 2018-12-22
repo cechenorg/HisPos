@@ -1108,5 +1108,28 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
+
+        public void ResetCardReader(PrescriptionDec2View instance)
+        {
+            instance.PrescriptionViewBox.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("讀卡機重置中...");
+                HisApiBase.ResetCardReader();
+                Dispatcher.Invoke((Action)(() =>
+                {
+
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    instance.PrescriptionViewBox.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
     }
 }

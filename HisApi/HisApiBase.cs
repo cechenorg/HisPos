@@ -375,7 +375,16 @@ namespace His_Pos.HisApi
             SetStatus(false, 2);
             SetStatus(false, 3);
             OpenCom();
-            if (!((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened && MainWindow.Instance.HisApiErrorCode != 0)
+            bool isPassed = false;
+            Application.Current.Dispatcher.Invoke((Action)delegate
+            {
+                if (!((ViewModelMainWindow) MainWindow.Instance.DataContext).IsConnectionOpened &&
+                    MainWindow.Instance.HisApiErrorCode != 0)
+                    isPassed = false;
+                else
+                    isPassed = true;
+            });
+            if (!isPassed)
                 return;
             csSoftwareReset(3);
             CloseCom();

@@ -60,23 +60,23 @@ namespace His_Pos.Class.Declare
                 {
                     case "1":
                         sequence[0]++;
-                        t.Dhead.D2 = sequence[0].ToString();
+                        t.Dhead.D2 = sequence[0].ToString().PadLeft(6,'0');
                         break;
                     case "2":
                         sequence[1]++;
-                        t.Dhead.D2 = sequence[1].ToString();
+                        t.Dhead.D2 = sequence[1].ToString().PadLeft(6, '0');
                         break;
                     case "3":
                         sequence[2]++;
-                        t.Dhead.D2 = sequence[2].ToString();
+                        t.Dhead.D2 = sequence[2].ToString().PadLeft(6, '0');
                         break;
                     case "5":
                         sequence[3]++;
-                        t.Dhead.D2 = sequence[3].ToString();
+                        t.Dhead.D2 = sequence[3].ToString().PadLeft(6, '0');
                         break;
                     case "D":
                         sequence[4]++;
-                        t.Dhead.D2 = sequence[4].ToString();
+                        t.Dhead.D2 = sequence[4].ToString().PadLeft(6, '0');
                         break;
                 }
             }
