@@ -120,13 +120,19 @@ namespace His_Pos
                 try
                 {
                     CheckDBVersion();
-                    SyncNewProductDataFromSingde();
+                    
                 }
                 catch (Exception ex)
                 {
                     MessageWindow messageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
                     messageWindow.ShowDialog();
                 }
+
+
+                DateTime syncDate = FunctionDb.GetLastSyncDate();
+
+                if(syncDate.Date != DateTime.Today)
+                    SyncNewProductDataFromSingde();
 
                 var loadingWindow = new LoadingWindow();
                 loadingWindow.Show();

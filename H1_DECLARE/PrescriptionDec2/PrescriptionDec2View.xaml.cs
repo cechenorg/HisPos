@@ -1560,11 +1560,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 declareMedicine.Name = DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id).Name;
                 if (declareMedicine is DeclareMedicine)
                 {
-                    ((DeclareMedicine) declareMedicine).HcPrice =
-                        ((DeclareMedicine) DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id))
-                        .HcPrice;
-                    ((DeclareMedicine) declareMedicine).Stock =
-                        ((DeclareMedicine) DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id)).Stock;
+                    var tempMed = ((DeclareMedicine)DeclareMedicines.SingleOrDefault(med => med.Id == declareMedicine.Id));
+                    ((DeclareMedicine) declareMedicine).HcPrice = tempMed.HcPrice;
+                    ((DeclareMedicine) declareMedicine).Stock = tempMed.Stock;
+                    if( !((DeclareMedicine)declareMedicine).PaySelf)
+                        ((DeclareMedicine)declareMedicine).TotalPrice = tempMed.HcPrice * ((DeclareMedicine)declareMedicine).Amount;
                 }
             }
 

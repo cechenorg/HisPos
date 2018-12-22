@@ -59,6 +59,15 @@ namespace His_Pos.Class
 
             dd.ExecuteProc("[HIS_POS_DB].[dbo].[UpdateSystemVersion]", parameters);
         }
+
+        internal static DateTime GetLastSyncDate()
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+
+            var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetSyncDate]");
+
+            return DateTime.Parse(table.Rows[0]["SINGDE_SYNCTIME"].ToString());
+        }
     }
   
 }
