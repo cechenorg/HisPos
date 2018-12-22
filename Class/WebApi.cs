@@ -73,7 +73,7 @@ namespace His_Pos.Class
         internal static void SyncServerData(string localIP)
         {
             Dictionary<string, string> keyValues;
-            keyValues = new Dictionary<string, string> {{ "localIP", localIP }};
+            keyValues = new Dictionary<string, string> {{ "ip", localIP },{"file", ""}};
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/SyncServerData", keyValues);
         }
