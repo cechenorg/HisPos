@@ -435,6 +435,8 @@ namespace His_Pos.ProductPurchase
 
                 if (!success)
                 {
+                    StoreOrderData.Type = OrderType.PROCESSING;
+
                     MessageWindow messageWindow = new MessageWindow("傳送訂單至杏德發生問題, 請稍後在嘗試", MessageType.ERROR);
                     messageWindow.ShowDialog();
 
