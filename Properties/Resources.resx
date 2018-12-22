@@ -190,10 +190,10 @@
     <value>2</value>
   </data>
   <data name="ProductPurchase" xml:space="preserve">
-    <value>處理單管理</value>
+    <value>進退貨管理</value>
   </data>
   <data name="ProductPurchaseRecord" xml:space="preserve">
-    <value>處理單紀錄</value>
+    <value>進退貨紀錄</value>
   </data>
   <data name="StockManage" xml:space="preserve">
     <value>商品管理</value>
