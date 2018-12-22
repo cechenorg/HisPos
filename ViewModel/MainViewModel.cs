@@ -159,7 +159,7 @@ namespace His_Pos.ViewModel
                 case nameof(FeatureItem.商品查詢):
                     break;
 
-                case nameof(FeatureItem.處理單管理):
+                case nameof(FeatureItem.進退貨管理):
                     //if (ProductPurchase.ProductPurchaseView.Instance.backgroundWorker.IsBusy)
                     //{
                     //    MessageWindow message = new MessageWindow("正在儲存", MessageType.ERROR);
@@ -167,7 +167,7 @@ namespace His_Pos.ViewModel
                     //}
                     break;
 
-                case nameof(FeatureItem.處理單紀錄):
+                case nameof(FeatureItem.進退貨紀錄):
                     break;
 
                 case nameof(FeatureItem.新增盤點):
@@ -266,11 +266,11 @@ namespace His_Pos.ViewModel
                     newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
-                case nameof(FeatureItem.處理單管理):
+                case nameof(FeatureItem.進退貨管理):
                     newTab = new ProductPurchase.ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
-                case nameof(FeatureItem.處理單紀錄):
+                case nameof(FeatureItem.進退貨紀錄):
                     newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
@@ -370,7 +370,7 @@ namespace His_Pos.ViewModel
                             }
                             break;
 
-                        case nameof(FeatureItem.處理單紀錄):
+                        case nameof(FeatureItem.進退貨紀錄):
                             if (ProductPurchaseRecord.ProductPurchaseRecordView.Instance is null) break;
 
                             if (ProductPurchaseRecord.ProductPurchaseRecordView.DataChanged)
