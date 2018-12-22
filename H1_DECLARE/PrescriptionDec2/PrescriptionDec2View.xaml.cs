@@ -710,6 +710,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             if (type.Equals("Adjustment"))
             {
+                var medBagPrint = new YesNoMessageWindow("是否列印藥袋", "列印確認");
+                var print = (bool)medBagPrint.ShowDialog();
+                if (print)
+                    NewFunction.PrintMedBag(CurrentPrescription, _currentDeclareData, CurrentPrescription.MedicinePoint, SelfCost, Pay, "登錄", Charge, Instance);
                 if (IsMedicalNumberGet)
                 {
                     var loading = new LoadingWindow();
@@ -741,20 +745,17 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 {
                     if (!medicalPerson.IcNumber.Equals(CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber)) continue;
                     medicalPerson.PrescriptionCount++;
+                    PrescriptionCount = medicalPerson.PrescriptionCount;
                     break;
                 }
             }
-
+            MedicalPersonnels = new ObservableCollection<MedicalPersonnel>(MainWindow.CurrentPharmacy.MedicalPersonnelCollection);
+            HisPerson.ItemsSource = MedicalPersonnels;
             if (!string.IsNullOrEmpty(_clinicDeclareId))
             {
                 declareDb.SaveCooperClinicDeclare(_clinicDeclareId, _clinicXml);
                 WebApi.UpdateXmlStatus(_clinicDeclareId);
             }
-
-            var medBagPrint = new YesNoMessageWindow("是否列印藥袋", "列印確認");
-            var print = (bool)medBagPrint.ShowDialog();
-            if(print)
-                NewFunction.PrintMedBag(CurrentPrescription,_currentDeclareData,CurrentPrescription.MedicinePoint,SelfCost,Pay,"登錄",Charge,Instance);
 
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
@@ -1572,8 +1573,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentPrescription = cooperativeClinic.Prescription;
             CurrentPrescription.IsGetIcCard = tmpGetCard;
             string id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
-            CurrentPrescription.Customer.Id = id;
-            CurrentPrescription.Customer = CustomerDb.LoadCustomerData(CurrentPrescription.Customer)[0];
+            CurrentPrescription.Customer = CustomerDb.GetCustomerDataById(id);
             if (!string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && int.Parse(CurrentPrescription.ChronicSequence) > 1)
             {
                 CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + CurrentPrescription.ChronicSequence;
@@ -1829,9 +1829,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                             break;
                         case "MedicalNumber":
                             TreatmentDate.Focus();
+                            TreatmentDate.SelectionStart = 0;
                             break;
                         case "TreatmentDate":
                             AdjustDate.Focus();
+                            AdjustDate.SelectionStart = 0;
                             break;
                         case "AdjustDate":
                             MainDiagnosis.Focus();
@@ -2171,7 +2173,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CustomerSelected = false;
             _isPrescribe = false;
             ((ViewModelMainWindow) MainWindow.Instance.DataContext).IsIcCardValid = false;
-            CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection.Clear();
+            CurrentCustomerHistoryMaster?.CustomerHistoryMasterCollection.Clear();
             CurrentCustomerHistoryMaster = new CustomerHistoryMaster();
             CusHistoryMaster.ItemsSource = null;
             CusHistoryDetailPos.ItemsSource = null;

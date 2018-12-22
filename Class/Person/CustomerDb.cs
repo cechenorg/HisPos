@@ -183,5 +183,16 @@ namespace His_Pos.Class.Person
             }
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateCustomerBasicData]", parameters);
         }
+
+        internal static Customer GetCustomerDataById(string id)
+        {
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("Id", id)
+            };
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetCustomerDataById]", parameters);
+            return new Customer(table.Rows[0], "fromDb");
+        }
     }
 }

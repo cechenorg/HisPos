@@ -22,6 +22,7 @@ namespace His_Pos.Service
         public MedBagSelectionWindow()
         {
             InitializeComponent();
+            MultiMode.Focus();
         }
 
         private void MultiMode_Click(object sender, RoutedEventArgs e)
@@ -34,6 +35,32 @@ namespace His_Pos.Service
         {
             DialogResult = true;
             Close();
+        }
+
+        private void MultiMode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down || e.Key == Key.Up)
+            {
+                SingleMode.Focus();
+            }
+            else if(e.Key == Key.Enter)
+            {
+                DialogResult = false;
+                Close();
+            }
+        }
+
+        private void SingleMode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Down || e.Key == Key.Up)
+            {
+                MultiMode.Focus();
+            }
+            else if (e.Key == Key.Enter)
+            {
+                DialogResult = true;
+                Close();
+            }
         }
     }
 }
