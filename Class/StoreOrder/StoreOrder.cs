@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using His_Pos.Interface;
 using His_Pos.Struct.Manufactory;
 
@@ -15,7 +17,10 @@ namespace His_Pos.Class.StoreOrder
         public StoreOrder(StoreOrderCategory category, User ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null, string note = "")
         {
             Type = OrderType.UNPROCESSING;
-            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
+            Application.Current.Dispatcher.Invoke((Action) (() =>
+            {
+                TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
+            }));
 
             Category = new Category(category);
 
@@ -108,13 +113,22 @@ namespace His_Pos.Class.StoreOrder
                 switch (type)
                 {
                     case OrderType.UNPROCESSING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
+                        Application.Current.Dispatcher.Invoke((Action) (() =>
+                        {
+                            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\OrangeDot.png", UriKind.Relative));
+                        }));
                         break;
                     case OrderType.PROCESSING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\BlueDot.png", UriKind.Relative));
+                        Application.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\BlueDot.png", UriKind.Relative));
+                        }));
                         break;
                     case OrderType.WAITING:
-                        TypeIcon = new BitmapImage(new Uri(@"..\..\Images\BlueRingDot.png", UriKind.Relative));
+                        Application.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            TypeIcon = new BitmapImage(new Uri(@"..\..\Images\BlueRingDot.png", UriKind.Relative));
+                        }));
                         break;
                 }
             }
