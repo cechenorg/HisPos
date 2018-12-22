@@ -1949,7 +1949,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void ChronicSequence_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new System.Text.RegularExpressions.Regex("[^0-9]+").IsMatch(e.Text);
+            e.Handled = new System.Text.RegularExpressions.Regex("[^0-9.]+").IsMatch(e.Text);
         }
 
         private void AdjustDate_TextChanged(object sender, TextChangedEventArgs e)

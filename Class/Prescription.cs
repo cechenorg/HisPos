@@ -211,7 +211,7 @@ namespace His_Pos.Class
             CheckCopayment();
             CheckDivision();
             CheckDiseaseCodes();
-            CheckPaymentCategory();
+            //CheckPaymentCategory();
             return _errorMessage;
         }
 
