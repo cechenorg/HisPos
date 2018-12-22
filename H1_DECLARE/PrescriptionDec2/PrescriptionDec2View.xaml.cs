@@ -700,7 +700,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     }
 
                     ChronicRegisterWindow chronicRegisterWindow = new ChronicRegisterWindow(_firstTimeDecMasId);
-                    chronicRegisterWindow.ShowDialog();
+                    
                     break;
                 case -1:
                     m = new MessageWindow("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR, true);
@@ -1573,7 +1573,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CurrentPrescription = cooperativeClinic.Prescription;
             CurrentPrescription.IsGetIcCard = tmpGetCard;
             string id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
-            CurrentPrescription.Customer = CustomerDb.GetCustomerDataById(id);
+            string medicalNum = CurrentPrescription.Customer.IcCard.MedicalNumber;
+            CurrentPrescription.Customer = CustomerDb.GetCustomerDataById(id);  
+            CurrentPrescription.Customer.IcCard.MedicalNumber = medicalNum;
             if (!string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && int.Parse(CurrentPrescription.ChronicSequence) > 1)
             {
                 CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + CurrentPrescription.ChronicSequence;

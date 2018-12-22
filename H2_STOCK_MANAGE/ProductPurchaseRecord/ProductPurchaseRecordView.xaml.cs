@@ -60,6 +60,7 @@ namespace His_Pos.ProductPurchaseRecord
         public void UpdateUi()
         {
             DataChanged = false;
+            CurrentDataGrid = PStoreOrderDetail;
             storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
             StoOrderOverview.ItemsSource = storeOrderCollection;
             StoOrderOverview.SelectedIndex = 0;

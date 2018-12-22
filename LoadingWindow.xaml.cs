@@ -263,8 +263,6 @@ namespace His_Pos
                 Collection<PurchaseProduct> tempProduct = ProductDb.GetItemDialogProduct();
 
                 ChangeLoadingMessage("取得進退貨資料...");
-
-                //待修改
                 Collection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
 
                 foreach (StoreOrder stoOrd in tempStoreOrderCollection)
@@ -292,10 +290,19 @@ namespace His_Pos
                     productPurchaseView.ManufactoryAutoCompleteCollection = tempManufactories;
 
                     productPurchaseView.SetControlProduct(tempProduct);
+                    
+                    productPurchaseView.StoreOrderCollection = new ObservableCollection<StoreOrder>(tempStoreOrderCollection.Where(so => so.Type != OrderType.SCRAP).ToList());
 
-                    var list = tempStoreOrderCollection.Where(so => so.Type != OrderType.SCRAP).ToList();
+                    var cancelOrderList = tempStoreOrderCollection.Where(so => so.Type == OrderType.SCRAP).Select(so => so.Id).ToList();
 
-                    productPurchaseView.StoreOrderCollection = new ObservableCollection<StoreOrder>(list);
+                    if (cancelOrderList.Count > 0)
+                    {
+                        string orders = cancelOrderList.Aggregate("", (i, j) => i + " " + j);
+                        
+                        MessageWindow messageWindow = new MessageWindow($"處理單{orders} 已被杏德取消!\r\n取消處理單可在訂退貨記錄查詢", MessageType.WARNING);
+                        messageWindow.ShowDialog();
+                    }
+
                 }));
             };
 
