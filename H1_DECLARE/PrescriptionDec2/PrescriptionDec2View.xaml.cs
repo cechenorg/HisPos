@@ -1299,7 +1299,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         public void NotifyPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         public void CountMedicinesCost()
@@ -1314,7 +1317,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     case DeclareMedicine declareMedicine:
                         {
                             if (!declareMedicine.PaySelf)
-                                medicinesHcCost += declareMedicine.TotalPrice;
+                                medicinesHcCost += declareMedicine.HcPrice * declareMedicine.Amount;
                             else
                                 medicinesSelfCost += declareMedicine.TotalPrice;
                             purchaseCosts += declareMedicine.Cost * declareMedicine.Amount;
@@ -1327,7 +1330,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 }
             }
 
-            CurrentPrescription.MedicinePoint = medicinesHcCost;
+            CurrentPrescription.MedicinePoint = Math.Round(medicinesHcCost, 2, MidpointRounding.AwayFromZero);
             SelfCost = Convert.ToInt16(Math.Ceiling(medicinesSelfCost)); //自費金額
             if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.Copayment.Id))
             {
@@ -1359,8 +1362,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
         private void CountCharge()
         {
-            Charge = Deposit + SelfCost + Copayment;
-            Change = Pay - Charge;
+            if (Charge != Deposit + SelfCost + Copayment)
+                Charge = Deposit + SelfCost + Copayment;
+            if(Change != Pay - Charge)
+                Change = Pay - Charge;
         }
 
         /*
@@ -1386,7 +1391,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 t.Text = "0";
                 t.SelectAll();
             }
-            CountMedicinesCost();
         }
 
         private void LoadCustomerDataButtonClick(object sender, RoutedEventArgs e)
@@ -2251,8 +2255,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         m.ShowDialog();
                         return;
                     }
+                    var isGetIcCard = CurrentPrescription.IsGetIcCard;
                     CurrentPrescription = declareCopied.Prescription;
+                    CurrentPrescription.IsGetIcCard = isGetIcCard;
                     CurrentPrescription.Customer = tmpCustomer;
+                    CurrentPrescription.Treatment.AdjustDate = DateTime.Today;
                     DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d=>d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
                     if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id))
                     {
