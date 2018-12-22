@@ -98,6 +98,16 @@ namespace His_Pos.PrescriptionInquire
                 NotifyPropertyChanged(nameof(PaymentCategoryCollection));
             }
         }
+        public ObservableCollection<MedicalPersonnel> medicalPersonnels;
+        public ObservableCollection<MedicalPersonnel> MedicalPersonnels
+        {
+            get => medicalPersonnels;
+            set
+            {
+                medicalPersonnels = value;
+                NotifyPropertyChanged("MedicalPersonnels");
+            }
+        }
         private ObservableCollection<Copayment> _copaymentCollection;
         public ObservableCollection<Copayment> CopaymentCollection
         {
@@ -252,6 +262,7 @@ namespace His_Pos.PrescriptionInquire
             TreatmentCaseCollection = PrescriptionInquireView.Instance.TreatmentCaseCollection;
             HospitalCollection = PrescriptionInquireView.Instance.HospitalCollection;
             DeclareMedicinesData =  PrescriptionInquireView.Instance.DeclareMedicinesData;
+            MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
             SetTreatmentData();
             InquiredPrescription.Prescription.Treatment.Copayment = CopaymentCollection.SingleOrDefault(c =>
                 c.Id.Equals(InquiredPrescription.Prescription.Treatment.Copayment.Id));
@@ -297,6 +308,8 @@ namespace His_Pos.PrescriptionInquire
             InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase =
                 TreatmentCaseCollection.SingleOrDefault(t =>
                     t.Id.Equals(InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.Id));
+             
+            HisPerson.SelectedItem = MedicalPersonnels.SingleOrDefault(m => m.Id.Equals(InquiredPrescription.Prescription.Pharmacy.MedicalPersonnel.Id));
         }
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)

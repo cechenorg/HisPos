@@ -118,8 +118,10 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="3" Margin="10">
                 <Label Content="調劑藥師" Width="auto" Foreground="#FF424040" FontSize="16" FontWeight="Bold" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Stretch"/>
-                <TextBox Width="auto" MinWidth="147" Height="30" FontSize="14" FontStretch="ExtraExpanded" FontWeight="Bold" BorderBrush="DimGray" BorderThickness="0,0,0,1" VerticalContentAlignment="Center"
-                         HorizontalContentAlignment="Center"  Text="{Binding InquiredPrescription.Prescription.Pharmacy.MedicalPersonnel.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="Text_TextChanged"/>
+                <ComboBox
+                        x:Name="HisPerson" Width="140" HorizontalContentAlignment="Center"  DisplayMemberPath="Name" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" ItemsSource="{Binding MedicalPersonnels,UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="Segoe UI Semibold"  FontSize="14" IsEditable="False" SelectedValuePath="Name" SelectionChanged="Text_TextChanged"  />
+ 
             </StackPanel>
 
             <StackPanel Orientation="Horizontal"  Grid.Row="1" Grid.Column="4" Margin="10">
