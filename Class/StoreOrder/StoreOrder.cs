@@ -37,6 +37,8 @@ namespace His_Pos.Class.StoreOrder
             Products = (products is null)? new ObservableCollection<AbstractClass.Product>() : products;
 
             Note = note;
+
+            IsValid = true;
         }
 
         public StoreOrder(DataRow row)
@@ -67,6 +69,8 @@ namespace His_Pos.Class.StoreOrder
             DeclareDataCount = Int32.Parse(row["DECLARECOUNT"].ToString());
 
             Note = row["STOORD_NOTE"].ToString();
+
+            IsValid = Boolean.Parse(row["STOORD_STATUS"].ToString());
         }
 
         private StoreOrder()
@@ -90,6 +94,9 @@ namespace His_Pos.Class.StoreOrder
         public int DeclareDataCount { get; set; }
 
         public bool IsDataChanged { get; set; } = false;
+
+        public bool IsDeleted => !IsValid;
+        public bool IsValid { get; set; }
 
         public BitmapImage typeIcon;
 

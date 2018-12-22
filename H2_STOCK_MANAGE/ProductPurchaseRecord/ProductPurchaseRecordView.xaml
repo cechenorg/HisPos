@@ -118,11 +118,12 @@
                                                     <TextBlock Text="{Binding Category.CategoryName}" Foreground="{Binding Category.CategoryColor}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
                                                 </Border>
                                             </StackPanel>
-                                            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                            <StackPanel Orientation="Horizontal" Grid.Row="1" Visibility="{Binding IsValid, Converter={StaticResource BooleanToVisibilityConverter} }">
                                                 <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="120" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                                 <Label Content="{Binding ProductCount, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
                                                 <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                             </StackPanel>
+                                            <Label Content="處理單已取消" Grid.Row="1" Margin="5,0,0,0" Foreground="IndianRed" FontFamily="Segoe UI Semibold" FontSize="16" VerticalAlignment="Center" Visibility="{Binding IsDeleted, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                                         </Grid>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
