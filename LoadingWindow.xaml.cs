@@ -264,36 +264,38 @@ namespace His_Pos
 
                 ChangeLoadingMessage("取得進退貨資料...");
 
+                //待修改
+                Collection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+
+                foreach (StoreOrder stoOrd in tempStoreOrderCollection)
+                {
+                    if (stoOrd.Type == OrderType.WAITING)
+                    {
+                        if (stoOrd.DeclareDataCount > 0)
+                        {
+                            stoOrd.Type = StoreOrderDb.GetDeclareOrderStatusFromSinde(stoOrd.Id);
+                        }
+                        else
+                        {
+                            stoOrd.Type = StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
+                        }
+
+                        if (stoOrd.Type == OrderType.PROCESSING)
+                            productPurchaseView.CheckSindeOrderDetail(stoOrd);
+                        else if (stoOrd.Type == OrderType.SCRAP)
+                            StoreOrderDb.DeleteOrder(stoOrd.Id);
+                    }
+                }
+
                 Dispatcher.Invoke((Action)(() =>
                 {
                     productPurchaseView.ManufactoryAutoCompleteCollection = tempManufactories;
 
                     productPurchaseView.SetControlProduct(tempProduct);
-                    
-                    //待修改
-                    ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
 
-                    foreach(StoreOrder stoOrd in tempStoreOrderCollection)
-                    {
-                        if(stoOrd.Type == OrderType.WAITING)
-                        {
-                            if (stoOrd.DeclareDataCount > 0)
-                            {
-                                stoOrd.Type = StoreOrderDb.GetDeclareOrderStatusFromSinde(stoOrd.Id);
-                            }
-                            else
-                            {
-                                stoOrd.Type = StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
-                            }
+                    var list = tempStoreOrderCollection.Where(so => so.Type != OrderType.SCRAP).ToList();
 
-                            if (stoOrd.Type == OrderType.PROCESSING)
-                                productPurchaseView.CheckSindeOrderDetail(stoOrd);
-                            else if (stoOrd.Type == OrderType.SCRAP)
-                                StoreOrderDb.DeleteOrder(stoOrd.Id);
-                        }
-                    }
-
-                    productPurchaseView.StoreOrderCollection = new ObservableCollection<StoreOrder>(tempStoreOrderCollection.Where(so => so.Type != OrderType.SCRAP).ToList());
+                    productPurchaseView.StoreOrderCollection = new ObservableCollection<StoreOrder>(list);
                 }));
             };
 
