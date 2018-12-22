@@ -62,9 +62,9 @@ namespace His_Pos.IndexView
                 proId = row["HISMED_ID"].ToString();
                 proName = row["PRO_NAME"].ToString();
                 Stock = row["PRO_INVENTORY"].ToString();
-                DemandAmount = row["TOTALAMOUNT"].ToString();
-                PurchaseAmount = Convert.ToInt32(row["NEEDAMOUNT"].ToString()) > 0 ? row["NEEDAMOUNT"].ToString()  : "0";
-                ReturnAmount = Convert.ToInt32(row["NEEDAMOUNT"].ToString()) < 0 ? (Convert.ToInt32(row["NEEDAMOUNT"].ToString()) * -1).ToString() : "0";
+                DemandAmount = row["NEEDAMOUNT"].ToString();
+                PurchaseAmount = Convert.ToInt32(row["ORDERAMOUNT"].ToString()) > 0 ? row["ORDERAMOUNT"].ToString()  : "0";
+                ReturnAmount = Convert.ToInt32(row["ORDERAMOUNT"].ToString()) < 0 ? (Convert.ToInt32(row["ORDERAMOUNT"].ToString()) * -1).ToString() : "0";
             }
 
             public string proId { get; set; }
