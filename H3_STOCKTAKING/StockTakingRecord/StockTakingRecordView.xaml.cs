@@ -18,6 +18,26 @@ namespace His_Pos.StockTakingRecord
     public partial class StockTakingRecordView : UserControl, INotifyPropertyChanged
     {
         public string selectEmpName;
+             private DateTime startDate = DateTime.Now.AddDays(-DateTime.Now.Day + 1);
+        public DateTime StartDate
+        {
+            get => startDate;
+            set
+            {
+                startDate = value;
+                NotifyPropertyChanged("StartDate");
+            }
+        }
+        private DateTime endDate = DateTime.Now;
+        public DateTime EndDate
+        {
+            get => endDate;
+            set
+            {
+                endDate = value;
+                NotifyPropertyChanged("EndDate");
+            }
+        }
      
         public StockTakingOrder stockTakingOrder;
         public StockTakingOrder StockTakingOrder
@@ -78,6 +98,7 @@ namespace His_Pos.StockTakingRecord
         private void StockTakingRecord_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             StockTakingOrder =  (StockTakingOrder)(sender as DataGrid).SelectedItem;
+            if (StockTakingOrder is null) return;
             TotalAmount.Content = StockTakingOrder.ChangedtakingCollection.Count + StockTakingOrder.UnchangedtakingCollection.Count;
             ChangedAmount.Content = StockTakingOrder.ChangedtakingCollection.Count;
             StockTakingOrder.EmpName.Clear();
@@ -95,13 +116,11 @@ namespace His_Pos.StockTakingRecord
         }
         private bool Filter(object item)
         {
-            int id = Convert.ToInt32(((StockTakingOrder)item).Id.Substring(0,8));
-           int sdate = start.SelectedDate.ToString() != "" ? Convert.ToInt32(((DateTime)start.SelectedDate).ToString("yyyyMMdd")) : 0;
-           int edate = end.SelectedDate.ToString() != "" ? Convert.ToInt32(((DateTime)end.SelectedDate).ToString("yyyyMMdd")) : 99999999;
+            int id = Convert.ToInt32(((StockTakingOrder)item).Id.Substring(1,8)); 
             if ((((StockTakingOrder)item).Id.Contains(PROCHE_ID.Text) || PROCHE_ID.Text == string.Empty)
               &&((((((StockTakingOrder)item).ChangedtakingCollection).Count(x => x.Id.Contains(PRO_ID.Text)) > 0) || ((((StockTakingOrder)item).UnchangedtakingCollection).Count(x => x.Id.Contains(PRO_ID.Text)) > 0) && PRO_ID.Text != string.Empty) || PRO_ID.Text ==string.Empty)
               &&((((((StockTakingOrder)item).ChangedtakingCollection).Count(x => x.Name.Contains(PRO_NAME.Text)) > 0) || ((((StockTakingOrder)item).UnchangedtakingCollection).Count(x => x.Name.Contains(PRO_NAME.Text)) > 0) && PRO_NAME.Text != string.Empty) || PRO_NAME.Text == string.Empty)
-              && ( id >= sdate && id <= edate)
+              && ( id >= Convert.ToInt32(StartDate.ToString("yyyyMMdd")) && id <= Convert.ToInt32(EndDate.ToString("yyyyMMdd")))
                ) return true;
             return false;
         }

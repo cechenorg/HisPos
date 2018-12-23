@@ -546,8 +546,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                       
                         declareDb.InsertDeclareTrade(_firstTimeDecMasId,declareTrade);//Insert Trade
                         var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
-                        if(medorder.Count > 0 )
+                        if (medorder.Count > 0) {
+                            bool isCheck = false;
+                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向調劑中心訂貨?", "負庫訂單確認");
+                            isCheck = (bool)medorderCheck.ShowDialog();
+                            if(isCheck)
                             StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
+                        }
+                           
                     }
                     if (!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
@@ -595,7 +601,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.UpdateDeclareFile(_currentDeclareData);
                         var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
                         if (medorder.Count > 0)
-                            StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
+                        {
+                            bool isCheck = false;
+                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向調劑中心訂貨?", "負庫訂單確認");
+                            isCheck = (bool)medorderCheck.ShowDialog();
+                            if (isCheck)
+                                StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
+                        }
                     }
                     if (!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         declareDb.InsertDeclareRegister(_firstTimeDecMasId, false, true, CurrentPrescription.IsGetIcCard, false, false, true); //押金
@@ -663,7 +675,13 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         declareDb.UpdateDeclareFile(_currentDeclareData);
                         var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
                         if (medorder.Count > 0)
-                            StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
+                        {
+                            bool isCheck = false;
+                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向調劑中心訂貨?", "負庫訂單確認");
+                            isCheck = (bool)medorderCheck.ShowDialog();
+                            if (isCheck)
+                                StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
+                        }
                     }
                     else
                     {

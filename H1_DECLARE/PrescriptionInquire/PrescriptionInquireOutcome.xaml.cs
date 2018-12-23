@@ -640,7 +640,7 @@ namespace His_Pos.PrescriptionInquire
                 _currentDeclareData.DecMasId = InquiredPrescription.DecMasId;
 
 
-                if (!_isPredictChronic)
+                if (!_isPredictChronic && OriginDeclareDetails.Count > 0 && DeclareDetails.Count > 0)
                 {
                     StockAdjustmentWindow stockAdjustmentWindow = new StockAdjustmentWindow(InquiredPrescription.DecMasId, OriginDeclareDetails, DeclareDetails);
                     stockAdjustmentWindow.ShowDialog();

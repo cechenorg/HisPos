@@ -57,7 +57,17 @@ namespace His_Pos.Class
             HttpMethod httpMethod = new HttpMethod();
             httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateXmlStatus", keyValues);
         }
-        
+        internal static void UpdateIsReadByDeclareId(string DeclareId)
+        {
+            Dictionary<string, string> keyValues;
+            keyValues = new Dictionary<string, string> {
+                    {"DeclareId",DeclareId },
+                     {"CusIdNum",string.Empty },
+                     {"DeclareXmlDocument",string.Empty }
+                };
+            HttpMethod httpMethod = new HttpMethod();
+            httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateIsReadByDeclareId", keyValues);
+        }
         internal static void SendToCooperClinic(CooperativeClinicJson cooperativeClinicJson)
         {
             string json = JsonConvert.SerializeObject(cooperativeClinicJson);

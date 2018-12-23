@@ -4,9 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.StockTakingRecord"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:hisPos="clr-namespace:His_Pos"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
+        <hisPos:DateConverter x:Key="DateConverter" />
         <local:ValueDifferentColorConverter x:Key="ValueDifferentColorConverter"/>
     </UserControl.Resources>
     <Viewbox Stretch="Fill">
@@ -23,10 +26,30 @@
                 <Label Content="盤點商品名稱" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
                 <TextBox  Name="PRO_NAME" Margin="0,0,10,0" Width="130" FontSize="16"/>
                 <Label Content="盤點日期" Foreground="{StaticResource ForeGround}" Margin="10,0,10,0" FontSize="18" FontFamily="Segoe UI Semibold"/>
-                <DatePicker  Width="100" Height="30" Name="start" SelectedDateFormat="Short"/>
+                <xctk:MaskedTextBox  Width="120" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat"  InsertKeyMode="Overwrite">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                            <Binding.ValidationRules>
+                                <hisPos:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
                 <Label Content="~" VerticalContentAlignment="Center" Margin="10,0,10,0"/>
-                <DatePicker Width="100" Height="30" Name="end" SelectedDateFormat="Short"/>
-                <Rectangle Width="105"/>
+                <xctk:MaskedTextBox  Width="120" Margin="5,0,0,0" HorizontalContentAlignment="Center"   FontSize="18" Style="{StaticResource MaterialDesignTextBox}"
+                         Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat"  InsertKeyMode="Overwrite">
+                    <xctk:MaskedTextBox.Text>
+                        <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                 ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                            <Binding.ValidationRules>
+                                <hisPos:DateValidationRule/>
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </xctk:MaskedTextBox.Text>
+                </xctk:MaskedTextBox>
+                <Rectangle Width="30"/>
                 <Button Name="ButtonSearch" Grid.Column="1" Grid.Row="0" Content="查詢" Background="RoyalBlue" Height="30" FontSize="18" FontWeight="Bold" Width="100" BorderThickness="0" Click="ButtonSearch_Click"/>
             </StackPanel>
             <Grid Grid.Row="1">

@@ -17,6 +17,7 @@ namespace His_Pos.Service
         public HttpMethod() { }
 
         public List<XmlDocument> Get(string url,Dictionary<string,string> parameterList) {
+            
             string paramString = "?";
             int count = 0;
             foreach (var par in parameterList)
@@ -51,11 +52,16 @@ namespace His_Pos.Service
                         MessageWindow messageWindow = new MessageWindow("Http Get 讀取\r\n" + url + "異常", MessageType.ERROR);
                         messageWindow.ShowDialog();
                         break;
+                    default:
+                        MessageWindow errormessageWindow = new MessageWindow(ex.Message,MessageType.ERROR);
+                        errormessageWindow.ShowDialog();
+                        break; 
                 } 
             } 
             return xmlDocuments;
         }
         public List<XmlDocument> Post(string url, Dictionary<string, string> parameterList) {
+            ServicePointManager.Expect100Continue = false;
             string paramString = string.Empty;
             int count = 0;
             foreach (var par in parameterList)
@@ -100,28 +106,15 @@ namespace His_Pos.Service
                         MessageWindow messageWindow = new MessageWindow("Http Post 讀取\r\n" + url + "異常", MessageType.ERROR);
                         messageWindow.ShowDialog();
                         break;
+                    default:
+                        MessageWindow errormessageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
+                        errormessageWindow.ShowDialog();
+                        break;
                 }
             }
             return xmlDocuments;
         }
-        public string PostJson(string url,string json) { 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Method = "POST";
-            string result = string.Empty;
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
-            { 
-                streamWriter.Write(json);
-                streamWriter.Flush();
-                streamWriter.Close();
-            } 
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
-            {
-                 result = streamReader.ReadToEnd();
-            }
-            return result;
-        }
+        
         
     }
 }
