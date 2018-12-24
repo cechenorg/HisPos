@@ -1913,6 +1913,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is AutoCompleteBox a)) return;
             a.Text = a.Text.TrimStart(' ');
+            if (e.Key != Key.Enter) return;
+            if (CurrentPrescription.Treatment.MedicalInfo.Hospital == null) return;
+            if (string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id)) return;
+            e.Handled = true;
+            DivisionCombo.Focus();
         }
 
         private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -2190,13 +2195,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             if (isMedicalPerson)
             {
-                HisPerson.SelectedItem =
-                    MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
-                        p.Id.Equals(MainWindow.CurrentUser.Id));
+                CurrentPrescription.Pharmacy.MedicalPersonnel = MedicalPersonnels.SingleOrDefault(p => p.Id.Equals(MainWindow.CurrentUser.Id));
             }
             else
             {
-                HisPerson.SelectedIndex = 0;
+                CurrentPrescription.Pharmacy.MedicalPersonnel = MedicalPersonnels[0];
             }
 
             CurrentPrescription.Treatment.Copayment = Copayments.SingleOrDefault(c => c.Name.Equals("加收部分負擔"));
@@ -2447,6 +2450,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (selectedHospital == null) return;
             selectedHospital.Common = true;
             HospitalDb.UpdateCommonHospitalById(selectedHospital.Id, true);
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
         }
 
         private void DivisionCombo_GotFocus(object sender, RoutedEventArgs e)
@@ -2458,7 +2462,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void ReleaseHospital_KeyDown(object sender, KeyEventArgs e)
         {
             if (ReleaseHospital.Text.Length <= 10) return;
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
+            //CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
         }
     }
 }
