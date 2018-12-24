@@ -521,8 +521,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     ProductDb.InsertCashFow(medPaySelf, declareTrade.PaySelf, "DecMasId", _firstTimeDecMasId);
                     if(!CurrentPrescription.IsGetIcCard && CurrentPrescription.IsDeposit)
                         ProductDb.InsertCashFow("押金", declareTrade.Deposit, "DecMasId", _firstTimeDecMasId);
-                    ProductDb.InsertCashFow(medServiceName, _currentDeclareData.D38MedicalServicePoint.ToString(),
-                        "DecMasId", _firstTimeDecMasId);
+                    ProductDb.InsertCashFow(medServiceName, _currentDeclareData.D38MedicalServicePoint.ToString(), "DecMasId", _firstTimeDecMasId);
                     if (buckleCondition)
                     {
                         var medTotalPrice = 0.00;
@@ -631,8 +630,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         type = "Adjustment";
                         if (!IsMedicalNumberGet)
                         {
-                            _icErrorWindow =
-                                new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
+                            _icErrorWindow = new IcErrorCodeWindow(false, Enum.GetName(typeof(ErrorCode), GetMedicalNumberErrorCode));
                             _icErrorWindow.ShowDialog();
                             if (_icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(_icErrorWindow.SelectedItem.Id))
                             {
@@ -2337,8 +2335,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     DeclareSubmit.IsEnabled = true; 
                     break;
                 case 2:
-                    IsSendToServer.IsEnabled = false;
-                    IsSendToServer.IsChecked = false;
+                    IsSendToServer.IsEnabled = true;
+                    IsSendToServer.IsChecked = false; 
                     ButtonDeclareRegister.IsEnabled = false;
                     DeclareSubmit.IsEnabled = true; 
                     break;
@@ -2349,8 +2347,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     DeclareSubmit.IsEnabled = false; 
                     break;
                 case 4:
-                    IsSendToServer.IsEnabled = false;
-                    IsSendToServer.IsChecked = false;
+                    IsSendToServer.IsEnabled = true;
+                    IsSendToServer.IsChecked = false; 
                     ButtonDeclareRegister.IsEnabled = true;
                     DeclareSubmit.IsEnabled = false; 
                     break;
@@ -2361,6 +2359,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     DeclareSubmit.IsEnabled = false;
                     break; 
             }
+
         }
 
         private void ButtonCooperativeClinic_Click(object sender, RoutedEventArgs e)
@@ -2432,6 +2431,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CommonHospitalsWindow c = new CommonHospitalsWindow();
             c.ShowDialog();
             DivisionCombo.Focus();
+        }
+
+        private void IsSendToServer_Checked(object sender, RoutedEventArgs e) {
+            if (CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Today.Date) {
+                MessageWindow messageWindow = new MessageWindow("新慢箋調劑日為今日時\r\n不可傳送藥健康\r\n調劑日自動幫您加一天",MessageType.WARNING);
+                messageWindow.ShowDialog();
+                CurrentPrescription.Treatment.AdjustDate = CurrentPrescription.Treatment.AdjustDate.AddDays(1);
+            }
+              
         }
     }
 }

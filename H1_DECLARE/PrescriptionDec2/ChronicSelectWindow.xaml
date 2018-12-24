@@ -17,7 +17,7 @@
         <StackPanel Orientation="Horizontal">
             <Label VerticalAlignment="Center" Content="預約慢箋列表"   Foreground="{StaticResource ForeGround}" FontSize="20" FontFamily="Segoe UI Semibold"/>
             <Rectangle Width="430"/>
-            <Button Name="ButtonNewPrescription" Background="RoyalBlue" BorderThickness="0" Click="ButtonNewPrescription_Click" Content="新處方單"  FontFamily="Segoe UI Semibold" FontSize="20" Margin="10,0,0,0"/>
+            <Button Name="ButtonNewPrescription" Background="RoyalBlue" BorderThickness="0" Click="ButtonNewPrescription_Click" Content="新處方單"  FontFamily="Segoe UI Semibold" FontSize="18" Margin="10,5,0,0"/>
         </StackPanel>
         
         <DataGrid
