@@ -188,7 +188,7 @@ namespace His_Pos
          */
         public DataTable GetDataFromProc(string procName, List<SqlParameter> param = null)
         {
-            var conn = new DbConnection(Settings.Default.SQL_local);
+            var conn = new DatabaseConnection(Settings.Default.SQL_local);
             return conn.ExecuteProc(procName, param);
         }
         public string HttpGetJson(string url) {

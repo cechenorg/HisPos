@@ -13,7 +13,7 @@ namespace His_Pos.Class
         {
             var collection = new ObservableCollection<Usage>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetUsagesData]");
 
@@ -23,7 +23,7 @@ namespace His_Pos.Class
 
         internal static void SaveUsage(Usage usage)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("HISFRE_ID", usage.Id));
             parameters.Add(new SqlParameter("HISFRE_NAME", usage.Name));

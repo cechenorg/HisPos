@@ -10,7 +10,7 @@ namespace His_Pos.Class.AdjustCase
         internal static ObservableCollection<AdjustCase> GetData()
         {
             ObservableCollection<AdjustCase> adjustCases = new ObservableCollection<AdjustCase>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var divisionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetAdjustCasesData]");
             foreach (DataRow adjustcase in divisionTable.Rows)
             {

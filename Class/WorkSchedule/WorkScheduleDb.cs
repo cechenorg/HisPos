@@ -15,7 +15,7 @@ namespace His_Pos.Class.WorkSchedule
         {
             ObservableCollection<WorkSchedule> collection = new ObservableCollection<WorkSchedule>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
 
             parameters.Add(new SqlParameter("YEAR", year));
@@ -34,7 +34,7 @@ namespace His_Pos.Class.WorkSchedule
         {
             ObservableCollection<UserIconData> collection = new ObservableCollection<UserIconData>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ClockInView].[GetTodayUserData]");
 
@@ -50,7 +50,7 @@ namespace His_Pos.Class.WorkSchedule
         {
             ObservableCollection<UserIconData> collection = new ObservableCollection<UserIconData>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[WorkScheduleManageView].[GetUserIconData]");
 
@@ -64,7 +64,7 @@ namespace His_Pos.Class.WorkSchedule
 
         internal static string UserClockIn(string id, string password, string inout)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
 
@@ -78,7 +78,7 @@ namespace His_Pos.Class.WorkSchedule
 
         internal static void InsertWorkSchedules(ObservableCollection<WorkSchedule> workSchedules, string year, string month)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             DataTable workSchedule = new DataTable();
             workSchedule.Columns.Add("EMP_ID", typeof(string));
@@ -105,7 +105,7 @@ namespace His_Pos.Class.WorkSchedule
 
         internal static void SaveCalendarRemark(DateTime thisDay, string importantMessage)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
 
@@ -119,7 +119,7 @@ namespace His_Pos.Class.WorkSchedule
         {
             Collection<WorkScheduleManageView.SpecialData> collection = new Collection<WorkScheduleManageView.SpecialData>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
 

@@ -12,7 +12,7 @@ namespace His_Pos.Class
     public static class FunctionDb
     {
         internal static bool CheckYearlyHoliday() {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
           var table =  dd.ExecuteProc("[HIS_POS_DB].[FunctionView].[CheckYearlyHoliday]");
             if (table.Rows[0][0].ToString() == "0")
                 return true;
@@ -21,7 +21,7 @@ namespace His_Pos.Class
         }
         internal static void UpdateLastYearlyHoliday(Holiday holiday)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DATE", holiday.date));
             parameters.Add(new SqlParameter("NAME", holiday.name));
@@ -43,7 +43,7 @@ namespace His_Pos.Class
 
         internal static string GetSystemVersionId()
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetSystemVersion]");
 
@@ -52,7 +52,7 @@ namespace His_Pos.Class
 
         internal static void UpdateSystemVersionId()
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("VER", Assembly.GetExecutingAssembly().GetName().Version.ToString()));
@@ -62,7 +62,7 @@ namespace His_Pos.Class
 
         internal static DateTime GetLastSyncDate()
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[GetSyncDate]");
 

@@ -15,7 +15,7 @@ namespace His_Pos.Class.Declare
         {
             ObservableCollection<PrescriptionOverview> prescriptionOverviews = new ObservableCollection<PrescriptionOverview>();
 
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SDATE", sDate));
             parameters.Add(new SqlParameter("EDATE", eDate));
@@ -37,7 +37,7 @@ namespace His_Pos.Class.Declare
         {
             ObservableCollection<PrescriptionOverview> prescriptionOverviews = new ObservableCollection<PrescriptionOverview>();
 
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SDATE", sDate));
             parameters.Add(new SqlParameter("EDATE", eDate));
@@ -58,7 +58,7 @@ namespace His_Pos.Class.Declare
 
         public static DeclareData GetDeclareDataById(string decMasId)
         {
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MASID", decMasId));
             DeclareData declareData = null;
@@ -70,7 +70,7 @@ namespace His_Pos.Class.Declare
         }
         public static ObservableCollection<DeclareDetail> GetDeclareDetailByMasId(string id) {
             ObservableCollection<DeclareDetail> declareDetails = new ObservableCollection<DeclareDetail>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MAS_ID", id));
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[GetDeclareDetailByMasId]", parameters);
@@ -83,7 +83,7 @@ namespace His_Pos.Class.Declare
         public static List<Ddata> GetPrescriptionXmlByDate(DateTime dateTime)
         {
             var ddatas = new List<Ddata>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter> {new SqlParameter("ADJUST_DATE", dateTime)};
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
             foreach (DataRow row in table.Rows)
@@ -99,7 +99,7 @@ namespace His_Pos.Class.Declare
         public static List<ErrorList> GetPrescriptionErrorLists(DateTime dateTime)
         {
             var errorList = new List<ErrorList>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter> { new SqlParameter("ADJUST_DATE", dateTime) };
             var table = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPrescriptionsOfMonth]", parameters);
             foreach (DataRow row in table.Rows)

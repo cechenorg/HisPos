@@ -9,7 +9,7 @@ namespace His_Pos.Class
     {
         internal static DeclareTrade GetDeclarTradeByMasId(string Id)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("MASID", Id));
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[GetDeclarTradeByMasId]", parameters);

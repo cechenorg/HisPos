@@ -13,7 +13,7 @@ namespace His_Pos.Class.Person
         {
             ObservableCollection<Person> collection = new ObservableCollection<Person>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetEmp]");
 
@@ -29,7 +29,7 @@ namespace His_Pos.Class.Person
         {
             User user = new User();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ID", id));

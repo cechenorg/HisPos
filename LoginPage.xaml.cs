@@ -105,7 +105,7 @@ namespace His_Pos
         {
             CheckSettingFiles();
 
-            DbConnection localConnection = new DbConnection(Properties.Settings.Default.SQL_local);
+            DatabaseConnection localConnection = new DatabaseConnection(Properties.Settings.Default.SQL_local);
             if (!localConnection.CheckConnection()) return false;
 
             return true;

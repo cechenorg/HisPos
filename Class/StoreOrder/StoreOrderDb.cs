@@ -24,7 +24,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<StoreOrder> StoreOrderOverviewCollection = new ObservableCollection<StoreOrder>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE", type.ToString()));
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrder]", parameters);
@@ -38,7 +38,7 @@ namespace His_Pos.Class.StoreOrder
         }
         internal static void DeleteOrder(string Id)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", Id));
             dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[DeleteOrder]", parameters);
@@ -46,7 +46,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static StoreOrder AddReturnOrderByPurchace(string orderId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("OLD_ORDER_ID", orderId));
@@ -58,7 +58,7 @@ namespace His_Pos.Class.StoreOrder
         }
 
         internal static void PurchaseAndReturn(StoreOrder storeOrder) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             foreach (var product in storeOrder.Products) {
                 parameters.Add(new SqlParameter("TYPE", storeOrder.Category.CategoryName.Substring(0, 1)));
@@ -73,7 +73,7 @@ namespace His_Pos.Class.StoreOrder
         {
             Collection<StoreOrderOverview> collection = new Collection<StoreOrderOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetStoreOrderOverview]");
 
@@ -89,7 +89,7 @@ namespace His_Pos.Class.StoreOrder
         {
             Collection<PurchaseReturnReportView.PurchaseReturnRecord> collection = new Collection<PurchaseReturnReportView.PurchaseReturnRecord>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SDATE", sDate));
@@ -106,7 +106,7 @@ namespace His_Pos.Class.StoreOrder
         }
 
         internal static void SaveOrderDetail(StoreOrder storeOrder) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", storeOrder.Id));
             parameters.Add(new SqlParameter("ORD_EMP", storeOrder.OrdEmp));
@@ -211,7 +211,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static string SaveOrderDeclareData(string declareId, ObservableCollection<ChronicSendToServerWindow.PrescriptionSendData> declareMedicines)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DEC_ID", declareId));
@@ -257,8 +257,8 @@ namespace His_Pos.Class.StoreOrder
 
         internal static void GetNewStoreOrderBySingde()
         {
-            var sindgdeConnection = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
-            var localConnection = new DbConnection(Settings.Default.SQL_local);
+            var sindgdeConnection = new DatabaseConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
+            var localConnection = new DatabaseConnection(Settings.Default.SQL_local);
 
             DataTable dataTable = sindgdeConnection.MySqlQueryBySqlString($"call GetNewStoreOrderBySingde('{MainWindow.CurrentPharmacy.Id}')");
 
@@ -316,7 +316,7 @@ namespace His_Pos.Class.StoreOrder
         {
             Collection<ReturnControl.BatchNumOverview> collection = new Collection<ReturnControl.BatchNumOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -336,7 +336,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<ProductPurchaseView.SindeOrderDetail> collection = new ObservableCollection<ProductPurchaseView.SindeOrderDetail>();
 
-            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
+            var dd = new DatabaseConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
             
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderDetail('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
             
@@ -349,7 +349,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static string GetNewOrderId(string OrdEmpId, string wareId, string manId, string orderType)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDEMP_ID", OrdEmpId));
@@ -366,7 +366,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", ordId));
@@ -392,7 +392,7 @@ namespace His_Pos.Class.StoreOrder
         {
             ObservableCollection<AbstractClass.Product> StoreOrderCollection = new ObservableCollection<AbstractClass.Product>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STOORD_ID", ordId));
@@ -444,7 +444,7 @@ namespace His_Pos.Class.StoreOrder
                 orderMedicines += "\r\n";
             }
             
-            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
+            var dd = new DatabaseConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
             
             var table = dd.MySqlNonQueryBySqlString($"call InsertNewOrder('{MainWindow.CurrentPharmacy.Id}','{storeOrderData.Id}', '{storeOrderData.Note}', '{orderMedicines}')");
 
@@ -459,7 +459,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static OrderType GetOrderStatusFromSinde(string orderId)
         {
-            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
+            var dd = new DatabaseConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
             
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetOrderStatus('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
 
@@ -586,14 +586,14 @@ namespace His_Pos.Class.StoreOrder
                 i++;
             }
             
-            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
+            var dd = new DatabaseConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
 
             dd.MySqlNonQueryBySqlString($"call AddDeclareOrderToPreDrug('{Rx_id}', '{storId}', '{declareData.Prescription.Customer.Name}','{Dtl_data}','{declareData.Prescription.Treatment.AdjustDate.AddYears(-1911).ToString("yyyMMdd")}')");
         }
         
         internal static OrderType GetDeclareOrderStatusFromSinde(string orderId)
         {
-            var dd = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
+            var dd = new DatabaseConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
 
             DataTable dataTable = dd.MySqlQueryBySqlString($"call GetDeclareOrderStatus('{orderId}', '{MainWindow.CurrentPharmacy.Id}')");
 
@@ -613,7 +613,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static void AddDailyOrder(StoreOrderCategory storeOrderCategory, List<IndexView.IndexView.ProductPurchaseList> declareMedicines)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ORDER_TYPE", (storeOrderCategory == StoreOrderCategory.PURCHASE)? "進" : "退"));
@@ -656,7 +656,7 @@ namespace His_Pos.Class.StoreOrder
 
         internal static void AddDeclareOrder(List<AbstractClass.Product> declareMedicines)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             string orderMedicines = "";
 
             var parameters = new List<SqlParameter>();
@@ -703,7 +703,7 @@ namespace His_Pos.Class.StoreOrder
 
             if (!table.Rows[0]["RESULT"].Equals("FAIL"))
             {
-                var singdeConn = new DbConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
+                var singdeConn = new DatabaseConnection(Settings.Default.SingdeServer, SqlConnectionType.NySql);
 
                 singdeConn.MySqlNonQueryBySqlString($"call InsertNewOrder('{MainWindow.CurrentPharmacy.Id}','{table.Rows[0]["RESULT"].ToString()}', '', '{orderMedicines}')");
             }

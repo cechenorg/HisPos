@@ -10,7 +10,7 @@ namespace His_Pos.Class.Division
         public static ObservableCollection<Division> GetData()
         {
             ObservableCollection<Division> divisions = new ObservableCollection<Division>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var divisionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetDivisionsData]");
             foreach (DataRow division in divisionTable.Rows)
             {

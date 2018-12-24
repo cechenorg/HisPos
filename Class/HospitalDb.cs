@@ -14,7 +14,7 @@ namespace His_Pos.Class
         internal static ObservableCollection<Hospital> GetData()
         {
             ObservableCollection<Hospital> HospitalsCollection = new ObservableCollection<Hospital>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var institutionTable = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetHospitalsData]");
             foreach (DataRow row in institutionTable.Rows)
             {
@@ -25,7 +25,7 @@ namespace His_Pos.Class
 
         internal static void UpdateCommonHospitalById(Hospital hospital)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>
             {
                 new SqlParameter("Id",hospital.Id),

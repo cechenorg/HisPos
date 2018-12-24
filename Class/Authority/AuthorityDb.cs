@@ -14,7 +14,7 @@ namespace His_Pos.Class.Authority
     {
         internal static void ChangeAuthLeaveStatus(bool status)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("STATUS", status));
@@ -26,7 +26,7 @@ namespace His_Pos.Class.Authority
         {
             Collection<AuthStatus> collection = new Collection<AuthStatus>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             
             var table = dd.ExecuteProc("[HIS_POS_DB].[AuthenticationManageView].[GetAuthStatus]");
 
@@ -42,7 +42,7 @@ namespace His_Pos.Class.Authority
         {
             Collection<AuthLeaveRecord> collection = new Collection<AuthLeaveRecord>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[AuthenticationManageView].[GetAuthLeaveRecord]");
 
@@ -56,7 +56,7 @@ namespace His_Pos.Class.Authority
 
         internal static void AuthLeaveConfirm(List<AuthLeaveRecord> confirmList)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             DataTable details = new DataTable();
             details.Columns.Add("EMP_ID", typeof(string));
@@ -72,7 +72,7 @@ namespace His_Pos.Class.Authority
             dd.ExecuteProc("[HIS_POS_DB].[AuthenticationManageView].[ConfirmLeaveRecord]", parameters);
         }
         internal static Collection<string> GetTabAuthByGroupId(string groupId) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>(); 
             parameters.Add(new SqlParameter("GroupId", groupId));
            DataTable table = dd.ExecuteProc("[HIS_POS_DB].[LoginView].[GetTabAuthByGroupId]", parameters);

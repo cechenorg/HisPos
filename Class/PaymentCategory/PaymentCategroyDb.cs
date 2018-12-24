@@ -11,7 +11,7 @@ namespace His_Pos.Class.PaymentCategory
         public static ObservableCollection<PaymentCategory> GetData()
         {
             var paymentCategoryCollection = new ObservableCollection<PaymentCategory>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var paymentCategories = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetPaymentCategoriesData]");
             foreach (DataRow paymentCategory in paymentCategories.Rows)
             {

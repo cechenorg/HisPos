@@ -142,13 +142,13 @@ namespace His_Pos.SystemSettings.SettingControl
             if(!CheckConnectionFormat(connectionTarget, showError))
                 return;
 
-            DbConnection connection;
+            DatabaseConnection connection;
             BackgroundWorker currentWorker;
 
             switch (connectionTarget)
             {
                 case ConnectionTarget.LOCAL:
-                    connection = new DbConnection(LocalConnection.ToString());
+                    connection = new DatabaseConnection(LocalConnection.ToString());
                     currentWorker = LocalConnectionWorker;
                     break;
                 default:

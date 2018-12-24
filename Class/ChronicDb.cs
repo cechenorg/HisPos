@@ -13,11 +13,11 @@ namespace His_Pos.Class
        
         internal static void DailyPredictChronic()
         { //檢查過領藥日的3-3 若整輪都沒領 則不預約 若有一次 則預約
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyPredictChronic]");
         }
         internal static ObservableCollection<Chronic> GetChronicDeclareById(string cusId) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             ObservableCollection<Chronic> chronics = new ObservableCollection<Chronic>();
             parameters.Add(new SqlParameter("CUS_ID", cusId));
@@ -28,7 +28,7 @@ namespace His_Pos.Class
             return chronics;
         }
         internal static bool CheckChronicExistById(string cusId) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             ObservableCollection<Chronic> chronics = new ObservableCollection<Chronic>();
             parameters.Add(new SqlParameter("CUS_ID", cusId));
@@ -39,7 +39,7 @@ namespace His_Pos.Class
                 return true;
         }
         internal static void UpdateChronicData(string decMasId) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             ObservableCollection<Chronic> chronics = new ObservableCollection<Chronic>();
             parameters.Add(new SqlParameter("DecMasId", decMasId));
@@ -47,14 +47,14 @@ namespace His_Pos.Class
         }
 
         internal static string GetResidualAmountById(string proId) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
             DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetResidualAmountById]", parameters);
             return dataTable.Rows[0][0].ToString();
         }
         internal static ObservableCollection<IndexView.IndexView.DailyTakeChronicList> DailyTakeChronic() {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyTakeChronic]");
             ObservableCollection<IndexView.IndexView.DailyTakeChronicList> collection = new ObservableCollection<IndexView.IndexView.DailyTakeChronicList>();
             foreach(DataRow row in dataTable.Rows)
@@ -65,7 +65,7 @@ namespace His_Pos.Class
         }
         internal static ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall> DailyChronicPhoneCall()
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             DataTable dataTable = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyChronicPhoneCall]");
             ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall> collection = new ObservableCollection<IndexView.IndexView.DailtChronicPhoneCall>();
             foreach (DataRow row in dataTable.Rows)
@@ -75,11 +75,11 @@ namespace His_Pos.Class
             return collection;
         }
         internal static void UpdateDailyChronic() {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
              dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateDailyChronic]");
         }
         internal static void UpdateChronicPhoneCall(string decMasId,string phoneCall) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>(); 
             parameters.Add(new SqlParameter("DecMasId", decMasId));
             parameters.Add(new SqlParameter("PHONECALL", phoneCall));
@@ -87,7 +87,7 @@ namespace His_Pos.Class
         }
         internal static void InsertChronicDetail(ObservableCollection<PrescriptionSendData> prescriptionSendDataCollection,string DecMasId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var chronicDetailTable = new DataTable();
 
             chronicDetailTable.Columns.Add("HISDECMAS_ID", typeof(string));
@@ -109,7 +109,7 @@ namespace His_Pos.Class
 
         internal static ObservableCollection<ChronicRegisterWindow.ChronicRegister> GetChronicGroupById(string DecMasId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local); 
+            var dd = new DatabaseConnection(Settings.Default.SQL_local); 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DECMAS_ID", DecMasId));
             DataTable table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetChronicGroupById]", parameters);
@@ -121,13 +121,13 @@ namespace His_Pos.Class
         }
         internal static void UpdateRegisterStatus(string DecMasId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DECMAS_ID", DecMasId));
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateRegisterStatus]", parameters);
         }
         internal static void PredictXmlChronic() {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             dd.ExecuteProc("[HIS_POS_DB].[AdminFunction].[PredictXmlChronic]");
         }
         

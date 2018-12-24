@@ -736,12 +736,13 @@
       <DependentUpon>MenuListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
-    <Compile Include="Service\DbConnection.cs" />
+    <Compile Include="Service\DatabaseConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="Service\HttpMethod.cs" />
     <Compile Include="Service\MedBagSelectionWindow.xaml.cs">
       <DependentUpon>MedBagSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\MySQLConnection.cs" />
     <Compile Include="Service\newFunction.cs" />
     <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecord.cs" />
     <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
@@ -754,6 +755,7 @@
     <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
       <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Service\SQLServerConnection.cs" />
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
     <Compile Include="Service\YesNoMessageWindow.xaml.cs">

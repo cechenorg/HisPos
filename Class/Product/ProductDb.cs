@@ -27,7 +27,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<ProductUnit> collection = new ObservableCollection<ProductUnit>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", ID));
@@ -44,7 +44,7 @@ namespace His_Pos.Class.Product
 
         internal static string AddNewType(string parent, string name, string engName)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             if(parent.Equals(""))
@@ -61,7 +61,7 @@ namespace His_Pos.Class.Product
 
         internal static void GetProductTypeManage(ObservableCollection<ProductTypeManageMaster> typeManageMasters, ObservableCollection<ProductTypeManageDetail> typeManageDetails)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetProductType]");
             
@@ -83,7 +83,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<AbstractClass.Product> collection = new ObservableCollection<AbstractClass.Product>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductTypeManage].[GetProducts]");
 
@@ -121,7 +121,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<InventoryDetailOverview> collection = new ObservableCollection<InventoryDetailOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -138,7 +138,7 @@ namespace His_Pos.Class.Product
 
         internal static MedicineDetail.InventoryMedicineDetail GetInventoryMedicineDetail(string proid)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proid));
@@ -150,7 +150,7 @@ namespace His_Pos.Class.Product
 
         internal static DataTable GetStockTakingProduct()
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             return dd.ExecuteProc("[HIS_POS_DB].[StockTaking].[GetStockTakingProduct]");
         }
 
@@ -158,7 +158,7 @@ namespace His_Pos.Class.Product
         {
             Collection<PurchaseProduct> collection = new Collection<PurchaseProduct>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var table = dd.ExecuteProc("[HIS_POS_DB].[ProductPurchaseView].[GetItemDialogProduct]");
 
@@ -172,7 +172,7 @@ namespace His_Pos.Class.Product
 
         internal static string GetTotalWorth()
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             
             var table = dd.ExecuteProc("[HIS_POS_DB].[InventoryManagementView].[InventoryTotalWorth]");
             
@@ -183,7 +183,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<OTCStockOverview> collection = new ObservableCollection<OTCStockOverview>();
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", productID));
@@ -200,7 +200,7 @@ namespace His_Pos.Class.Product
 
         internal static void GetProductTypeLineSeries(LineSeries yearSalesLineSeries, LineSeries lastYearSalesLineSeries, LineSeries monthSalesLineSeries, LineSeries lastMonthSalesLineSeries, string typeId)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PROTYP_ID", typeId));
@@ -254,7 +254,7 @@ namespace His_Pos.Class.Product
         {
             ObservableCollection<StockTakingOverview> collection = new ObservableCollection<StockTakingOverview>();
             
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -273,7 +273,7 @@ namespace His_Pos.Class.Product
         {
             AbstractClass.Product product;
 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", id));
@@ -295,7 +295,7 @@ namespace His_Pos.Class.Product
         internal static ListCollectionView GetProductType() {
             
             List<ProductType.ProductType> productTypes = new List<ProductType.ProductType>();
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetProductType]");
             productTypes.Add(new ProductType.ProductType());
             foreach (DataRow row in table.Rows)
@@ -309,7 +309,7 @@ namespace His_Pos.Class.Product
 
         internal static void UpdateProductType(string typeId, string newTypeName, string newEngName)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE_ID", typeId));
@@ -321,7 +321,7 @@ namespace His_Pos.Class.Product
 
         internal static void UpdateProductManufactory(string productId,string manId,int orderId) {
             
-        var dd = new DbConnection(Settings.Default.SQL_local);
+        var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
         var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", productId));
@@ -330,7 +330,7 @@ namespace His_Pos.Class.Product
             dd.ExecuteProc("[HIS_POS_DB].[SET].[UPDATEPROMAN]", parameters);
         }
         public static void SaveStockTaking(ObservableCollection<AbstractClass.Product> takingCollection) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             DataTable details = new DataTable();
             details.Columns.Add("PRO_ID", typeof(string));
@@ -356,7 +356,7 @@ namespace His_Pos.Class.Product
 
         internal static void UpdateInventoryProductUnit(string proId, ObservableCollection<ProductUnit> units)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
 
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -390,7 +390,7 @@ namespace His_Pos.Class.Product
 
         internal static void DeleteProductType(string id)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
 
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("TYPE_ID", id));
@@ -399,7 +399,7 @@ namespace His_Pos.Class.Product
         }
         internal static void ChangeProductType(string id,string newvalue)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", id)); 
               parameters.Add(new SqlParameter("NEW_VALUE", newvalue));
@@ -408,7 +408,7 @@ namespace His_Pos.Class.Product
         
         public static void UpdateOtcDataDetail(AbstractClass.Product product,string type)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             if (type == "InventoryMedicine") {
                 parameters.Add(new SqlParameter("PRO_ID", ((InventoryMedicine)product).Id));
@@ -441,7 +441,7 @@ namespace His_Pos.Class.Product
         internal static ObservableCollection<ProductGroup> GetProductGroup(string proId,string warId)
         {
             ObservableCollection<ProductGroup> productGroups = new ObservableCollection<ProductGroup>();
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
             parameters.Add(new SqlParameter("PROWAR_ID", warId)); 
@@ -453,7 +453,7 @@ namespace His_Pos.Class.Product
         }
         internal static void DemolitionProduct(string newProInvId,string proId,string proWarId,string demoAmount)
         { 
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("NEWPROINV_ID", newProInvId));
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -462,7 +462,7 @@ namespace His_Pos.Class.Product
             DataTable a = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[DemolitionProduct]", parameters);
         }
         internal static void MergeProduct(string soureProId,string targetProId) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("SourcePRO_ID", soureProId));
             parameters.Add(new SqlParameter("TargetPRO_ID", targetProId));
@@ -470,13 +470,13 @@ namespace His_Pos.Class.Product
         }
         internal static string GetMaxProInvId()
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[OtcDetail].[GetMaxProInvId]");
             return table.Rows[0][0].ToString();
         }
 
         internal static ObservableCollection<IndexView.IndexView.ProductPurchaseList> DailyPurchaseReturn() {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var table = dd.ExecuteProc("[HIS_POS_DB].[Index].[DailyPurchaseReturn]");
             ObservableCollection<IndexView.IndexView.ProductPurchaseList> collection = new ObservableCollection<IndexView.IndexView.ProductPurchaseList>();
             foreach (DataRow row in table.Rows) {
@@ -485,7 +485,7 @@ namespace His_Pos.Class.Product
             return collection;
         }
         internal static void InsertEntry(string entryName,string entryValue,string entrySource,string entrySourceId) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("ENTRY_NAME", entryName));
             parameters.Add(new SqlParameter("ENTRY_VALUE", entryValue));
@@ -495,7 +495,7 @@ namespace His_Pos.Class.Product
              
         }
         internal static void InsertCashFow(string cashflowName, string cashflowValue, string cashflowSource, string cashflowSourceId) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("CASHFLOW_NAME", cashflowName));
             parameters.Add(new SqlParameter("CASHFLOW_VALUE", cashflowValue));
@@ -505,7 +505,7 @@ namespace His_Pos.Class.Product
 
         } 
         internal static string GetBucklePrice(string proId,string buckleAmount) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
             parameters.Add(new SqlParameter("PROWAR_ID", "1"));
@@ -514,11 +514,11 @@ namespace His_Pos.Class.Product
             return table.Rows[0][0].ToString();
         }
         internal static void UpdateDailyStockValue() {
-            var dd = new DbConnection(Settings.Default.SQL_local); 
+            var dd = new DatabaseConnection(Settings.Default.SQL_local); 
               dd.ExecuteProc("[HIS_POS_DB].[Index].[UpdateDailyStockValue]"); 
         }
         internal static ObservableCollection<EntrySearchView.DailyStockValue> GetDailyStockValue(EntrySearchView.DailyStockValue totalStock,string startdate = null, string enddate = null) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var table = new DataTable();
             if (startdate == null)
                 table = dd.ExecuteProc("[HIS_POS_DB].[Index].[GetDailyStockValue]");
@@ -561,7 +561,7 @@ namespace His_Pos.Class.Product
             return collection;
         }
         internal static string GetAddStockValue (string DecmasId,string proId, string AddStockAmount) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DECMAS_ID", DecmasId));
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -570,7 +570,7 @@ namespace His_Pos.Class.Product
             return table.Rows[0][0].ToString();
         }
         internal static void BuckleInventory( string proId, string BuckleAmount,string statusName,string foreign) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
             parameters.Add(new SqlParameter("PROWAR_ID", '1'));
@@ -580,7 +580,7 @@ namespace His_Pos.Class.Product
             var table = dd.ExecuteProc("[HIS_POS_DB].[dbo].[BuckleInventory]", parameters);
         }
         internal static void RecoveryInventory(string decMasId,string proId, string RecoveryAmount) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("DECMAS_ID", decMasId));
             parameters.Add(new SqlParameter("PRO_ID", proId));
@@ -589,7 +589,7 @@ namespace His_Pos.Class.Product
             var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionInquireView].[RecoveryInventory]", parameters);
         }
         internal static void InsertMedicine(string proId,string proName) {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("PRO_ID", proId));
             parameters.Add(new SqlParameter("PRO_NAME", proName)); 
@@ -598,7 +598,7 @@ namespace His_Pos.Class.Product
 
         internal static ObservableCollection<CooperativeEntryView.CopaymentEntry> GetCopayMentValue(CooperativeEntryView.CopaymentEntry totalStock, string startdate = null, string enddate = null)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var table = new DataTable();
             if (startdate == null)
                 table = dd.ExecuteProc("[HIS_POS_DB].[CooperativeEntryView].[GetCopayMentValue]");
@@ -642,7 +642,7 @@ namespace His_Pos.Class.Product
         }
         internal static ObservableCollection<CooperativeAdjustReportView.CooperativeAdjustMed> GetCooperativeAdjustMed(DateTime sDate, DateTime eDate)
         {
-            var dd = new DbConnection(Settings.Default.SQL_local);
+            var dd = new DatabaseConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@SDATE", sDate));
             parameters.Add(new SqlParameter("@EDATE", eDate));

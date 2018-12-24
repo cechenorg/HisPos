@@ -10,7 +10,7 @@ namespace His_Pos.Class.SpecialCode
         public static ObservableCollection<SpecialCode> GetData()
         {
             ObservableCollection<SpecialCode> divisions = new ObservableCollection<SpecialCode>();
-            var dbConnection = new DbConnection(Settings.Default.SQL_local);
+            var dbConnection = new DatabaseConnection(Settings.Default.SQL_local);
             var specialCodes = dbConnection.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetSpecialTreatment]");
             foreach (DataRow specialCode in specialCodes.Rows)
             {
