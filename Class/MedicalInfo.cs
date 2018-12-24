@@ -95,7 +95,7 @@ namespace His_Pos.Class
             get => _hospital;
             set
             {
-                _hospital = value.DeepCloneViaJson();
+                _hospital = value;
                 OnPropertyChanged(nameof(Hospital));
             }
         } //d21 原處方服務機構代號 d24 診治醫師代號 d13 就醫科別
@@ -107,7 +107,7 @@ namespace His_Pos.Class
             get => _specialCode;
             set
             {
-                _specialCode = value.DeepCloneViaJson();
+                _specialCode = value;
                 OnPropertyChanged(nameof(SpecialCode));
             }
         } //d26 原處方服務機構之特定治療項目代號
@@ -119,7 +119,7 @@ namespace His_Pos.Class
             get => _mainDiseaseCode;
             set
             {
-                _mainDiseaseCode = value.DeepCloneViaJson();
+                _mainDiseaseCode = value;
                 OnPropertyChanged(nameof(MainDiseaseCode));
             }
         } //d8 國際疾病分類碼
@@ -131,7 +131,7 @@ namespace His_Pos.Class
             get => _secondDiseaseCode;
             set
             {
-                _secondDiseaseCode = value.DeepCloneViaJson();
+                _secondDiseaseCode = value;
                 OnPropertyChanged(nameof(SecondDiseaseCode));
             }
         } //d9 國際疾病分類碼

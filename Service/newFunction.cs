@@ -599,11 +599,11 @@ namespace His_Pos.Service
             }
             if (divisionMatch == 0 && name.Contains("牙醫"))
             {
-                return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals("40")).DeepCloneViaJson();
+                return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals("40"));
             }
             if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
                 return new Division();
-            return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId)).DeepCloneViaJson();
+            return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
         }
     }
 }

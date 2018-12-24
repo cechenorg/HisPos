@@ -23,13 +23,13 @@ namespace His_Pos.Class
             return HospitalsCollection;
         }
 
-        internal static void UpdateCommonHospitalById(Hospital hospital)
+        internal static void UpdateCommonHospitalById(string Id,bool isCommon)
         {
             var dd = new DbConnection(Settings.Default.SQL_local);
             var parameters = new List<SqlParameter>
             {
-                new SqlParameter("Id",hospital.Id),
-                new SqlParameter("Common", hospital.Common)
+                new SqlParameter("Id",Id),
+                new SqlParameter("Common", isCommon)
             };
             dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[UpdateCommonHospital]", parameters);
         }

@@ -53,7 +53,7 @@ namespace His_Pos.Class.Pharmacy
             get => _medicalPersonnel;
             set
             {
-                _medicalPersonnel = value.DeepCloneViaJson();
+                _medicalPersonnel = value;
                 NotifyPropertyChanged(nameof(MedicalPersonnel));
             }
         }
