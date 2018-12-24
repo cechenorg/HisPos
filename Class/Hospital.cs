@@ -37,7 +37,7 @@ namespace His_Pos.Class
                     break;
                 case DataSource.GetHospitalData:
                     Doctor = new MedicalPersonnel(dataRow,true);
-                    Division = new Division.Division(dataRow);
+                    Division = MainWindow.Divisions.SingleOrDefault(d=>d.Id.Equals(dataRow["HISDIV_ID"]));
                     break;
             }
         }

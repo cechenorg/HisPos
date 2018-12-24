@@ -695,7 +695,6 @@ namespace His_Pos
                             }
                         }
                     }
-                        
                     prescriptionDec2View.DataContext = prescriptionDec2View;
                     Close();
                 }));
