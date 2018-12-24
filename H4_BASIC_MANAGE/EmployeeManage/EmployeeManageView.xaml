@@ -7,7 +7,12 @@
              mc:Ignorable="d" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:hisPos="clr-namespace:His_Pos"
              d:DesignHeight="839" d:DesignWidth="1365" GotFocus="UserControl_GotFocus">
+    <UserControl.Resources>
+        <hisPos:DateConverter x:Key="DateConverter"/>
+    </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
@@ -108,7 +113,17 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Margin="8">
                             <Label  Content="生日" FontFamily="Segoe UI Semibold" FontSize="20"/>
-                            <DatePicker  Width="145" Text="{Binding Employee.Birth,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Name="birth" SelectedDateFormat="Short" SelectedDateChanged="Text_TextChanged" FontFamily="Segoe UI Semi" FontSize="18"  Margin="10,0,0,0"/>
+                            <xctk:MaskedTextBox Width="150" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
+                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" TextChanged="Text_TextChanged">
+                                <xctk:MaskedTextBox.Text>
+                                    <Binding Path="Employee.Birth" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                        <Binding.ValidationRules>
+                                            <hisPos:DateValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox.Text>
+                            </xctk:MaskedTextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="2" Margin="8">
                             <Label  Content="部門" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
@@ -120,7 +135,17 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="4" Margin="8">
                             <Label  Content="到職日" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
-                            <DatePicker  Width="125" Text="{Binding Employee.StartDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="Text_TextChanged" Name="StartDate" SelectedDateFormat="Short" FontFamily="Segoe UI Semi" FontSize="18" Margin="10,0,0,0"/>
+                            <xctk:MaskedTextBox Width="130" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
+                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" TextChanged="Text_TextChanged">
+                                <xctk:MaskedTextBox.Text>
+                                    <Binding Path="Employee.StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                        <Binding.ValidationRules>
+                                            <hisPos:DateValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox.Text>
+                            </xctk:MaskedTextBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Margin="8">
                             <Label  Content="身分證" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
