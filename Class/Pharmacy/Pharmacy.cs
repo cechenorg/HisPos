@@ -43,7 +43,7 @@ namespace His_Pos.Class.Pharmacy
         {
             MedicalPersonnel = new MedicalPersonnel();
             MedicalPersonnel = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
-                p.IcNumber.Equals(d.Dhead.D25)).DeepCloneViaJson();
+                p.IcNumber.Equals(d.Dhead.D25));
         }
 
         private MedicalPersonnel _medicalPersonnel;
