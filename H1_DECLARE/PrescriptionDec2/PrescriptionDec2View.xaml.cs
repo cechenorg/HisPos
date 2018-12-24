@@ -548,7 +548,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
                         if (medorder.Count > 0) {
                             bool isCheck = false;
-                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向調劑中心訂貨?", "負庫訂單確認");
+                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
                             isCheck = (bool)medorderCheck.ShowDialog();
                             if(isCheck)
                             StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
@@ -603,7 +603,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         if (medorder.Count > 0)
                         {
                             bool isCheck = false;
-                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向調劑中心訂貨?", "負庫訂單確認");
+                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
                             isCheck = (bool)medorderCheck.ShowDialog();
                             if (isCheck)
                                 StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
@@ -677,7 +677,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                         if (medorder.Count > 0)
                         {
                             bool isCheck = false;
-                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向調劑中心訂貨?", "負庫訂單確認");
+                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
                             isCheck = (bool)medorderCheck.ShowDialog();
                             if (isCheck)
                                 StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
@@ -1568,9 +1568,14 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 if (DeclareMedicines.Count(med => med.Id == cooperativeClinic.Prescription.Medicines[i].Id) == 0)
                 {
-                    ProductDb.InsertMedicine(cooperativeClinic.Prescription.Medicines[i].Id,
-                        cooperativeClinic.Prescription.Medicines[i].Name);
-                    DeclareMedicines.Add((PrescriptionOTC) cooperativeClinic.Prescription.Medicines[i]);
+                    var tempMedicine = MedicineDb.GetMedicinesDataByMedId(cooperativeClinic.Prescription.Medicines[i].Id);
+                    if (tempMedicine is null)  {
+                        ProductDb.InsertMedicine(cooperativeClinic.Prescription.Medicines[i].Id, cooperativeClinic.Prescription.Medicines[i].Name);
+                        DeclareMedicines.Add((PrescriptionOTC)cooperativeClinic.Prescription.Medicines[i]);
+                    }
+                    else {
+                        DeclareMedicines.Add(tempMedicine);
+                    }
                 }
             }
 
@@ -1644,16 +1649,16 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (decMasId is null) return;
             _currentDecMasId = decMasId;
             var prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
+            var tempDivision = prescription.Treatment.MedicalInfo.Hospital.Division.DeepCloneViaJson();
             CurrentPrescription = prescription;
-            DivisionCombo.SelectedItem =
-                Divisions.Single(d => d.Id.Equals(prescription.Treatment.MedicalInfo.Hospital.Division.Id));
-            TreatmentCaseCombo.SelectedItem =
-                TreatmentCases.SingleOrDefault(t => t.Id.Equals(prescription.Treatment.MedicalInfo.TreatmentCase.Id));
+            DivisionCombo.SelectedItem = Divisions.Single(d => d.Id == tempDivision.Id);
+            TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id == CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id);
             var diseaseCode = CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
+
             if (!string.IsNullOrEmpty(diseaseCode))
-                CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode =
-                    DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
+                CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
             diseaseCode = CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode.Id;
+
             if (!string.IsNullOrEmpty(diseaseCode))
                 CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode =
                     DiseaseCodeDb.GetDiseaseCodeById(diseaseCode)[0].ICD10;
