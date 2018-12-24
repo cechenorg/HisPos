@@ -1649,9 +1649,10 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (decMasId is null) return;
             _currentDecMasId = decMasId;
             var prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
-            var tempDivision = prescription.Treatment.MedicalInfo.Hospital.Division.DeepCloneViaJson();
+            var tempHospital = prescription.Treatment.MedicalInfo.Hospital.DeepCloneViaJson();
             CurrentPrescription = prescription;
-            DivisionCombo.SelectedItem = Divisions.Single(d => d.Id == tempDivision.Id);
+            CurrentPrescription.Treatment.MedicalInfo.Hospital = tempHospital;
+            DivisionCombo.SelectedItem = Divisions.Single(d => d.Id == CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id);
             TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id == CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id);
             var diseaseCode = CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
 
@@ -1671,7 +1672,15 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     break;
                 }
             }
-
+            if (!string.IsNullOrEmpty(CurrentPrescription.ChronicSequence) && int.Parse(CurrentPrescription.ChronicSequence) > 1)
+            {
+                CurrentPrescription.Customer.IcCard.MedicalNumber = "IC0" + CurrentPrescription.ChronicSequence;
+                TempMedicalNumber = CurrentPrescription.OriginalMedicalNumber;
+            }
+            else
+            {
+                TempMedicalNumber = CurrentPrescription.Customer.IcCard.MedicalNumber;
+            }
             CountMedicinesCost();
             SetSubmmitButton();
         }
