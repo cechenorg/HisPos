@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class.CustomerHistory;
@@ -160,6 +161,25 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 _currentPrescription = value;
                 NotifyPropertyChanged(nameof(CurrentPrescription));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.MedicalInfo));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.MedicalInfo.Hospital));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.TreatmentDate));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.AdjustDate));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Customer));
+                NotifyPropertyChanged(nameof(CurrentPrescription.ChronicSequence));
+                NotifyPropertyChanged(nameof(CurrentPrescription.ChronicTotal));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.AdjustCase));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.Copayment));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Treatment.PaymentCategory));
+                NotifyPropertyChanged(nameof(CurrentPrescription.MedicinePoint));
+                NotifyPropertyChanged(nameof(CurrentPrescription.CopaymentPoint));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Pharmacy.MedicalPersonnel));
+                NotifyPropertyChanged(nameof(CurrentPrescription.Pharmacy));
             }
         }
 
@@ -483,10 +503,8 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             //MedHistoryWebWindow medHistoryWebWindow = new MedHistoryWebWindow();
             //medHistoryWebWindow.ShowDialog();
-
-
             MessageWindow m;
-            CurrentPrescription.Customer.Id = CustomerDb.CheckCustomerExist(CurrentPrescription.Customer);
+            CurrentPrescription.Customer.Id = CurrentPrescription.Customer.Id;
 
             _currentDeclareData = new DeclareData(CurrentPrescription); 
             var declareDb = new DeclareDb();
@@ -728,6 +746,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 var medBagPrint = new YesNoMessageWindow("是否列印藥袋", "列印確認");
                 var print = (bool)medBagPrint.ShowDialog();
+                CustomerDb.UpdateCustomerBasicDataByCusId(CurrentPrescription.Customer);
                 if (print)
                     NewFunction.PrintMedBag(CurrentPrescription, _currentDeclareData, CurrentPrescription.MedicinePoint, SelfCost, Pay, "登錄", Charge, Instance);
                 if (IsMedicalNumberGet)
@@ -752,8 +771,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
-
-            CustomerDb.UpdateCustomerBasicDataByCusId(CurrentPrescription.Customer);
 
             if (MainWindow.CurrentPharmacy.MedicalPersonnelCollection != null && MainWindow.CurrentPharmacy.MedicalPersonnelCollection.Count > 0)
             {
@@ -1479,7 +1496,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var a = sender as AutoCompleteBox;
             if (Hospitals is null) Hospitals = HospitalDb.GetData();
             var tempCollection =
-                new ObservableCollection<Hospital>(Hospitals.Where(x => x.Id.Contains(ReleaseHospital.Text)).Take(50)
+                new ObservableCollection<Hospital>(Hospitals.Where(x => x.FullName.Contains(ReleaseHospital.Text)).Take(50)
                     .ToList());
             if (tempCollection.Count == 1)
             {
@@ -1649,9 +1666,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             var prescription = PrescriptionDB.GetDeclareDataById(decMasId).Prescription;
             var tempHospital = prescription.Treatment.MedicalInfo.Hospital.DeepCloneViaJson();
             CurrentPrescription = prescription;
-            CurrentPrescription.Treatment.MedicalInfo.Hospital = tempHospital;
-            DivisionCombo.SelectedItem = Divisions.Single(d => d.Id == CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id);
-            TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id == CurrentPrescription.Treatment.MedicalInfo.TreatmentCase.Id);
             var diseaseCode = CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
 
             if (!string.IsNullOrEmpty(diseaseCode))
@@ -1897,6 +1911,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             if (!(sender is AutoCompleteBox a)) return;
             a.Text = a.Text.TrimStart(' ');
+            if (e.Key != Key.Enter) return;
+            if (CurrentPrescription.Treatment.MedicalInfo.Hospital == null) return;
+            if (string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id)) return;
+            e.Handled = true;
+            DivisionCombo.Focus();
         }
 
         private void ReleaseHospital_DropDownClosed(object sender, RoutedPropertyChangedEventArgs<bool> e)
@@ -2048,10 +2067,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             switch (e.Key)
             {
-                case Key.Back when CustomerSelected:
-                    CustomerSelected = false;
-                    CurrentPrescription.Customer = new Customer();
-                    break;
                 case Key.Enter:
                     SearchCustomer();
                     break;
@@ -2178,13 +2193,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
 
             if (isMedicalPerson)
             {
-                HisPerson.SelectedItem =
-                    MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
-                        p.Id.Equals(MainWindow.CurrentUser.Id));
+                CurrentPrescription.Pharmacy.MedicalPersonnel = MedicalPersonnels.SingleOrDefault(p => p.Id.Equals(MainWindow.CurrentUser.Id));
             }
             else
             {
-                HisPerson.SelectedIndex = 0;
+                CurrentPrescription.Pharmacy.MedicalPersonnel = MedicalPersonnels[0];
             }
 
             CurrentPrescription.Treatment.Copayment = Copayments.SingleOrDefault(c => c.Name.Equals("加收部分負擔"));
@@ -2294,7 +2307,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     CurrentPrescription.IsGetIcCard = isGetIcCard;
                     CurrentPrescription.Customer = tmpCustomer;
                     CurrentPrescription.Treatment.AdjustDate = DateTime.Today;
-                    DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d=>d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
+                    //DivisionCombo.SelectedItem = Divisions.SingleOrDefault(d=>d.Id.Equals(CurrentPrescription.Treatment.MedicalInfo.Hospital.Division.Id));
                     if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id))
                     {
                         CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id)[0].ICD10;
@@ -2391,12 +2404,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             m.Show();
         }
 
-        private void ReleaseHospital_OnTextChanged(object sender, RoutedEventArgs e)
-        {
-            if(ReleaseHospital.Text.Length <= 10) return;
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
-        }
-
         private void SpecialCodeText_GotFocus(object sender, RoutedEventArgs e)
         {
             if (sender is TextBox t) t.CaretIndex = 0;
@@ -2440,6 +2447,30 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 CurrentPrescription.Treatment.AdjustDate = CurrentPrescription.Treatment.AdjustDate.AddDays(1);
             }
               
+        }
+
+        private void ReleaseHospital_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var a = sender as AutoCompleteBox;
+            if (a?.SelectedItem == null) return;
+            var selectedHospital =
+                MainWindow.Hospitals.SingleOrDefault(h => h.Id.Equals(((Hospital) a.SelectedItem).Id));
+            if (selectedHospital == null) return;
+            selectedHospital.Common = true;
+            HospitalDb.UpdateCommonHospitalById(selectedHospital.Id, true);
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
+        }
+
+        private void DivisionCombo_GotFocus(object sender, RoutedEventArgs e)
+        {
+            //AutomationPeer button1AP = UIElementAutomationPeer.CreatePeerForElement(DivisionCombo);
+            //(button1AP.GetPattern(PatternInterface.Invoke) as IInvokeProvider).Invoke();
+        }
+
+        private void ReleaseHospital_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (ReleaseHospital.Text.Length <= 10) return;
+            //CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
         }
     }
 }

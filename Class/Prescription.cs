@@ -250,9 +250,12 @@ namespace His_Pos.Class
             }
             else if (Treatment.AdjustCase.Id.Equals("2"))
             {
-                var tmpMedicalNumber = Customer.IcCard.MedicalNumber;
-                OriginalMedicalNumber = tmpMedicalNumber;
-                Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
+                if (int.Parse(ChronicSequence) > 1)
+                {
+                    var tmpMedicalNumber = Customer.IcCard.MedicalNumber;
+                    OriginalMedicalNumber = tmpMedicalNumber;
+                    Customer.IcCard.MedicalNumber = "IC0" + ChronicSequence;
+                }
             }
             else if(!Customer.IcCard.MedicalNumber.Contains("IC") && Customer.IcCard.MedicalNumber != "N")
             {

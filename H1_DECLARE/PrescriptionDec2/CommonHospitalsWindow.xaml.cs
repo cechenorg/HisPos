@@ -114,7 +114,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                     h.Common = true;
                 }
             }
-            HospitalDb.UpdateCommonHospitalById(SearchedHospital);
+            HospitalDb.UpdateCommonHospitalById(SearchedHospital.Id, SearchedHospital.Common);
         }
 
         private void DeleteCommon_Click(object sender, RoutedEventArgs e)
@@ -144,7 +144,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
                 break;
             }
             CommonHospitalsCollection.RemoveAt(deleteIndex);
-            HospitalDb.UpdateCommonHospitalById(SearchedHospital);
+            HospitalDb.UpdateCommonHospitalById(SearchedHospital.Id, SearchedHospital.Common);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -154,11 +154,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             {
                 SearchedHospital = HospitalCollection.SingleOrDefault(h => h.Id.Equals(t.Text)).DeepCloneViaJson();
                 return;
-            }
-            if (HospitalCollection.Count(h => h.Id.Equals(t.Text)) == 0 && t.Text.Length == 10)
-            {
-                m = new MessageWindow("查無對應醫療院所", MessageType.ERROR, true);
-                m.ShowDialog();
             }
             SearchedHospital = new Hospital();
         }
