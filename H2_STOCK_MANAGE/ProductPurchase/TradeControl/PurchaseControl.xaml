@@ -15,6 +15,7 @@
         <hisPos:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
         <local:HasDeclareDataToVisConverter x:Key="HasDeclareDataToVisConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <hisPos:DateConverter x:Key="DateConverter"/>
     </UserControl.Resources>
     <Grid Name="MainGrid" DataContext="{Binding StoreOrderData, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>

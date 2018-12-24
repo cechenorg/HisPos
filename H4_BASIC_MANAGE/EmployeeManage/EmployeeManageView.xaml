@@ -10,6 +10,9 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:hisPos="clr-namespace:His_Pos"
              d:DesignHeight="839" d:DesignWidth="1365" GotFocus="UserControl_GotFocus">
+    <UserControl.Resources>
+        <hisPos:DateConverter x:Key="DateConverter"/>
+    </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
