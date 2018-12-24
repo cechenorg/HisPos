@@ -55,7 +55,7 @@ namespace His_Pos.Class
                      {"DeclareXmlDocument",string.Empty }
                 };
             HttpMethod httpMethod = new HttpMethod();
-            httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateXmlStatus", keyValues);
+            httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateXmlStatus", keyValues);
         }
         internal static void UpdateIsReadByDeclareId(string DeclareId)
         {
@@ -66,7 +66,7 @@ namespace His_Pos.Class
                      {"DeclareXmlDocument",string.Empty }
                 };
             HttpMethod httpMethod = new HttpMethod();
-            httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateIsReadByDeclareId", keyValues);
+            httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/UpdateIsReadByDeclareId", keyValues);
         }
         internal static void SendToCooperClinic(CooperativeClinicJson cooperativeClinicJson)
         {
@@ -77,7 +77,7 @@ namespace His_Pos.Class
                      {"json",json }
                 };
             HttpMethod httpMethod = new HttpMethod();
-            httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/SendToCooperClinic", keyValues);
+            httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/SendToCooperClinic", keyValues);
         }
 
         internal static void SyncServerData(string localIP)
@@ -85,7 +85,7 @@ namespace His_Pos.Class
             Dictionary<string, string> keyValues;
             keyValues = new Dictionary<string, string> {{ "ip", localIP },{"file", ""}};
             HttpMethod httpMethod = new HttpMethod();
-            httpMethod.Post(@"http://kaokaodepon.singde.com.tw:59091/api/SyncServerData", keyValues);
+            httpMethod.NonQueryPost(@"http://kaokaodepon.singde.com.tw:59091/api/SyncServerData", keyValues);
         }
     }
 }

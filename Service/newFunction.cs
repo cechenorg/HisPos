@@ -368,7 +368,8 @@ namespace His_Pos.Service
 
         #region 藥袋.收據列印
 
-        public static void PrintMedBag(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint, int SelfCost,int Pay, string from, int Charge, PrescriptionDec2View decInstance = null, PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null) {
+        public static void PrintMedBag(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint, int SelfCost,int Pay, string from, int Charge, PrescriptionDec2View decInstance = null, 
+            PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null, CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = null) {
             var medBagResult = new MedBagSelectionWindow();
             var singleMode = (bool)medBagResult.ShowDialog();
             var receiptResult = new YesNoMessageWindow("是否列印收據", "列印收據");
@@ -388,7 +389,7 @@ namespace His_Pos.Service
                         medBagMedicines.Add(new MedBagMedicine(medicine, singleMode));
                         break;
                     case PrescriptionOTC otc:
-                        medBagMedicines.Add(new MedBagMedicine(otc, singleMode));
+                       // medBagMedicines.Add(new MedBagMedicine(otc, singleMode));
                         break;
                 }
             }
@@ -444,9 +445,12 @@ namespace His_Pos.Service
                     var loadingWindow = new LoadingWindow();
                     if (from.Equals("登錄"))
                         loadingWindow.PrintMedbag(rptViewer, decInstance, receiptPrint);
-                    else
+                    else if (inquireOutcome != null)
                     {
                         loadingWindow.PrintMedbagFromInquire(rptViewer, inquireOutcome, receiptPrint);
+                    }
+                    else if (cooperativePrescriptSelectWindow != null) {
+                        loadingWindow.PrintMedbagFromCooperativeSelect(rptViewer, cooperativePrescriptSelectWindow, receiptPrint);
                     }
                     loadingWindow.Show();
                 }
@@ -505,6 +509,8 @@ namespace His_Pos.Service
                 var loadingWindow = new LoadingWindow();
                 if (from.Equals("登錄"))
                     loadingWindow.PrintMedbag(rptViewer, decInstance, receiptPrint);
+                else if (from.Equals("合作"))
+                    loadingWindow.PrintMedbagFromCooperativeSelect(rptViewer, cooperativePrescriptSelectWindow, receiptPrint);
                 else
                 {
                     loadingWindow.PrintMedbagFromInquire(rptViewer, inquireOutcome, receiptPrint);
@@ -515,6 +521,8 @@ namespace His_Pos.Service
             {
                 if (from.Equals("登錄"))
                     PrintReceipt(CurrentPrescription, CurrentDeclareData, MedicinePoint, SelfCost,Pay, from, decInstance ,null);
+                else if (from.Equals("合作"))
+                    PrintReceipt(CurrentPrescription, CurrentDeclareData, MedicinePoint, SelfCost, Pay, from, null, null,cooperativePrescriptSelectWindow);
                 else
                 {
                     PrintReceipt(CurrentPrescription, CurrentDeclareData, MedicinePoint, SelfCost, Pay,from, null, inquireOutcome);
@@ -529,7 +537,7 @@ namespace His_Pos.Service
             //}
         }
 
-        public static void PrintReceipt(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint,int SelfCost ,int Pay,string from, PrescriptionDec2View decInstance = null, PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null) {
+        public static void PrintReceipt(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint,int SelfCost ,int Pay,string from, PrescriptionDec2View decInstance = null, PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null,CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = null) {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
@@ -541,7 +549,7 @@ namespace His_Pos.Service
                     .Hospital.Doctor.IcNumber)
                     ? CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor.Name
                     : string.Empty;
-            var cusGender = CurrentPrescription.Customer.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
+            var cusGender = CurrentPrescription.Customer.IcCard.IcNumber.Substring(1, 1).Equals("2") ? "女" : "男";
             var parameters = new List<ReportParameter>
             {
                 new ReportParameter("Pharmacy", MainWindow.CurrentPharmacy.Name),
@@ -569,6 +577,8 @@ namespace His_Pos.Service
 
             if(from.Equals("登錄"))
                 loadingWindow.PrintReceipt(rptViewer, decInstance);
+            else if(from.Equals("合作"))
+                loadingWindow.PrintCooperativeReceipt(rptViewer, cooperativePrescriptSelectWindow);
             else
             {
                 loadingWindow.PrintReceiptFromInquire(rptViewer, inquireOutcome);

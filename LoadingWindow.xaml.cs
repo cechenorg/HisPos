@@ -933,7 +933,29 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
+        public void PrintCooperativeReceipt(ReportViewer rptViewer, CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow) {
+            cooperativePrescriptSelectWindow.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("收據列印中...");
+                Export(rptViewer.LocalReport, 25.4, 9.3);
+                ReportPrint(Properties.Settings.Default.ReceiptPrinter);
+                Dispatcher.Invoke((Action)(() =>
+                {
 
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    cooperativePrescriptSelectWindow.IsEnabled = true;
+                    
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
         public void PrintMedbagFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire, bool printReceipt) {
             prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
             backgroundWorker.DoWork += (s, o) =>
@@ -956,7 +978,28 @@ namespace His_Pos
             };
             backgroundWorker.RunWorkerAsync();
         }
+        public void PrintMedbagFromCooperativeSelect(ReportViewer rptViewer, CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow, bool printReceipt) {
+            cooperativePrescriptSelectWindow.IsEnabled = false;
+            backgroundWorker.DoWork += (s, o) =>
+            {
+                ChangeLoadingMessage("藥袋列印中...");
+                Export(rptViewer.LocalReport, 22, 24);
+                ReportPrint(Properties.Settings.Default.MedBagPrinter);
+                Dispatcher.Invoke((Action)(() =>
+                {
 
+                }));
+            };
+            backgroundWorker.RunWorkerCompleted += (sender, args) =>
+            {
+                Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    cooperativePrescriptSelectWindow.IsEnabled = true;
+                    Close();
+                }));
+            };
+            backgroundWorker.RunWorkerAsync();
+        }
         public void PrintReceiptFromInquire(ReportViewer rptViewer, PrescriptionInquireOutcome prescriptionInquire) {
             prescriptionInquire.PrescriptionViewBox.IsEnabled = false;
             backgroundWorker.DoWork += (s, o) =>
