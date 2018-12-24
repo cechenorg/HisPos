@@ -1916,6 +1916,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (e.Key != Key.Enter) return;
             if (CurrentPrescription.Treatment.MedicalInfo.Hospital == null) return;
             if (string.IsNullOrEmpty(CurrentPrescription.Treatment.MedicalInfo.Hospital.Id)) return;
+            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
             e.Handled = true;
             DivisionCombo.Focus();
         }
@@ -2450,7 +2451,6 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (selectedHospital == null) return;
             selectedHospital.Common = true;
             HospitalDb.UpdateCommonHospitalById(selectedHospital.Id, true);
-            CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = NewFunction.CheckHospitalNameContainsDivision(CurrentPrescription.Treatment.MedicalInfo.Hospital.Name);
         }
 
         private void DivisionCombo_GotFocus(object sender, RoutedEventArgs e)
