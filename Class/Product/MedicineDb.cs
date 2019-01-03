@@ -37,7 +37,23 @@ namespace His_Pos.Class.Product
 
             return collection;
         }
+        internal static AbstractClass.Product GetMedicinesDataByMedId(string proId) {
+            AbstractClass.Product product = null;
 
+            var dd = new DbConnection(Settings.Default.SQL_local);
+            var parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("PRO_ID", proId));
+            var table = dd.ExecuteProc("[HIS_POS_DB].[PrescriptionDecView].[GetMedicinesDataByMedId]",parameters);
+
+            foreach (DataRow row in table.Rows)
+            {
+                if (string.IsNullOrEmpty(row["HISMED_FORM"].ToString()))
+                    product = new PrescriptionOTC(row);
+                else
+                    product = new DeclareMedicine(row, "Init");
+            }
+            return product;
+        }
         internal static ObservableCollection<AbstractClass.Product> GetDeclareMedicineByMasId(string decmasId)
         {
             ObservableCollection<AbstractClass.Product> collection = new ObservableCollection<AbstractClass.Product>();

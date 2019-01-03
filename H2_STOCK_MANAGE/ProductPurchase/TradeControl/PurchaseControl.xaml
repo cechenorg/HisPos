@@ -7,6 +7,7 @@
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:hisPos="clr-namespace:His_Pos"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d">
     <UserControl.Resources>
         <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
@@ -14,6 +15,7 @@
         <hisPos:DoubleToStringConverter x:Key="DoubleToStringConverter"/>
         <local:HasDeclareDataToVisConverter x:Key="HasDeclareDataToVisConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <hisPos:DateConverter x:Key="DateConverter"/>
     </UserControl.Resources>
     <Grid Name="MainGrid" DataContext="{Binding StoreOrderData, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
@@ -486,7 +488,18 @@
                 <DataGridTemplateColumn MinWidth="120" Header="效期" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBox x:Name="ValidDate" Width="120" FontSize="18" Text="{Binding ValidDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TextBoxDateConverter}}" GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp" FontFamily="Segoe UI Semi" HorizontalContentAlignment="Center" Margin="0,0,0,2" InputMethod.IsInputMethodEnabled="False" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown"/>
+                            <xctk:MaskedTextBox x:Name="ValidDate" Width="120" Height="34" HorizontalContentAlignment="Center" FontSize="18" Style="{StaticResource MaterialDesignTextBox}" InputMethod.IsInputMethodEnabled="False"
+                                                Foreground="{StaticResource ForeGround}" Mask="000/00/00" PromptChar=" " ValueDataType="xctk:DateTimeFormat" InsertKeyMode="Overwrite" FontFamily="Segoe UI Semibold" PreviewKeyDown="StoreOrderDetail_OnPreviewKeyDown"
+                                                GotFocus="TextBox_GotFocus" PreviewMouseLeftButtonDown="TextBox_MouseLeftButtonUp">
+                                <xctk:MaskedTextBox.Text>
+                                    <Binding Path="ValidDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
+                                             ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
+                                        <Binding.ValidationRules>
+                                            <hisPos:DateValidationRule/>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </xctk:MaskedTextBox.Text>
+                            </xctk:MaskedTextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

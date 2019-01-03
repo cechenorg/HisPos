@@ -22,7 +22,7 @@ namespace His_Pos.Class.Product
                 SideEffect = Strings.StrConv(m.SideEffect, VbStrConv.Narrow);
                 Indication = Strings.StrConv(m.Indication, VbStrConv.Narrow);
                 MedicineDays = m.Days + "天";
-                string usagePrint = "【" + GetPositionPrintName(m.Position) + "】" + m.Usage.PrintName + "用量:" + m.Dosage + "(  )"; ;
+                var usagePrint = "【" + GetPositionPrintName(m.Position) + "】" + GetUsagePrintName(m.Usage) + "用量:" + m.Dosage + "(  )"; ;
                 Usage = usagePrint;
                 Form = m.MedicalCategory.Form;
                 Total = m.Amount.ToString();
@@ -43,7 +43,7 @@ namespace His_Pos.Class.Product
                 {
                     Total += "個";
                 }
-                string usagePrint = "【" + GetPositionPrintName(m.Position) + "】" + m.Usage.PrintName + "每次" + m.Dosage + "(  )";
+                var usagePrint = "【" + GetPositionPrintName(m.Position) + "】" + GetUsagePrintName(m.Usage) + "每次" + m.Dosage + "(  )";
                 Usage = usagePrint;
             }
         }
@@ -91,6 +91,31 @@ namespace His_Pos.Class.Product
         private string GetPositionPrintName(string mPosition)
         {
             return MainWindow.Positions.SingleOrDefault(p => p.Id.Replace(" ","").Equals(mPosition.Replace(" ", "")))?.Name;
+        }
+
+        private string GetUsagePrintName(Usage usage)
+        {
+            if (!usage.PrintName.Contains("(0)")) return usage.PrintName;
+            if (MainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name)) != null)
+            {
+                var match = MainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name))?.Reg.Match(usage.Name);
+                var print = string.Empty;
+                var tempPrint = usage.PrintName;
+                var currentIndex = 0;
+                for (var i = 1; i < match.Groups.Count; i++)
+                {
+                    var rightParenthesisIndex = tempPrint.IndexOf(")");
+                    var replace = "(" + (i - 1) + ")";
+                    print += usage.PrintName.Substring(currentIndex, rightParenthesisIndex + 1).Replace(replace, match.Groups[i].Value);
+                    currentIndex+= rightParenthesisIndex+1;
+                    tempPrint = usage.PrintName.Substring(currentIndex, (usage.PrintName.Length- currentIndex));
+                }
+                return print + tempPrint;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
 }

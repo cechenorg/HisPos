@@ -94,7 +94,7 @@
                                               Background="Transparent" BorderBrush="DimGray" BorderThickness="0,0,0,1" FontFamily="Segoe UI Semibold" FontSize="16" FontStretch="ExtraExpanded"
                                               ItemContainerStyle="{StaticResource AutoCompleteBoxItemContainerStyle}" MinimumPrefixLength="4" InputScope="AlphanumericHalfWidth"
                                               SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ValueMemberPath="FullName" PreviewMouseLeftButtonUp="SelectionStart_MouseLeftButtonUp"
-                                              Populating="ReleaseHospital_Populating" PreviewKeyDown="ReleaseHospital_PreviewKeyDown" DropDownClosed="ReleaseHospital_DropDownClosed" TextChanged="ReleaseHospital_OnTextChanged">
+                                              Populating="ReleaseHospital_Populating" PreviewKeyDown="ReleaseHospital_PreviewKeyDown" DropDownClosed="ReleaseHospital_DropDownClosed"  SelectionChanged="ReleaseHospital_SelectionChanged" KeyDown="ReleaseHospital_KeyDown" >
                         <controls:AutoCompleteBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -108,9 +108,9 @@
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2" Margin="8" Orientation="Horizontal" Width="255" Height="34">
                     <Label Content="就醫科別" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" Width="85" Height="34"/>
-                    <ComboBox x:Name="DivisionCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth" 
+                    <ComboBox x:Name="DivisionCombo" Width="170" Height="34" HorizontalContentAlignment="Center" DisplayMemberPath="FullName" IsTextSearchEnabled="True" InputScope="AlphanumericHalfWidth"
                               IsEditable="False" FontFamily="Segoe UI Semibold" FontSize="16"  ItemContainerStyle="{StaticResource ComboItemContainerStyle}" StaysOpenOnEdit="True" ItemsSource="{Binding Divisions}"
-                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" KeyDown="Combo_PreviewKeyDown" SelectionChanged="DivisionCombo_SelectionChanged"/>
+                              SelectedItem="{Binding CurrentPrescription.Treatment.MedicalInfo.Hospital.Division, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" KeyDown="Combo_PreviewKeyDown" SelectionChanged="DivisionCombo_SelectionChanged" GotFocus="DivisionCombo_GotFocus"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="3" Margin="8" Orientation="Horizontal" Width="255" Height="34">
                     <Label Width="85" Height="34" Content="調劑藥師" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" />
@@ -534,8 +534,8 @@
                         <Label Width="90" Height="35" HorizontalContentAlignment="Center" Content="{Binding Change, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="18" Foreground="{StaticResource ForeGround}" InputScope="Number"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Grid.Row="4"  Width="345" Height="35">
-                        <CheckBox Name="IsSendToServer" Width="133" Height="35" Background="RoyalBlue" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="22" Foreground="{StaticResource ForeGround}"/>
-                        <Button Width="180" Height="35" Name="ButtonDeclareRegister" IsEnabled="False" Margin="20,0,0,0" Background="RoyalBlue" BorderThickness="0" Click="ButtonDeclareRegister_Click"  Content="處方登錄" FontFamily="Segoe UI Semibold" FontSize="16"/>
+                        <CheckBox Name="IsSendToServer" Width="133" Height="35" Background="RoyalBlue" IsEnabled="False" Content="傳送藥健康"  HorizontalContentAlignment="Left" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20" Foreground="{StaticResource ForeGround}" Checked="IsSendToServer_Checked" Margin="10,0,0,0"/>
+                        <Button Width="180" Height="35" Name="ButtonDeclareRegister" IsEnabled="False" Margin="10,0,0,0" Background="RoyalBlue" BorderThickness="0" Click="ButtonDeclareRegister_Click"  Content="處方登錄" FontFamily="Segoe UI Semibold" FontSize="16"/>
                     </StackPanel>
                     <StackPanel Grid.Row="5" Margin="8,5,8,5" Orientation="Horizontal" Width="345" Height="35">
                         <Button Width="125" Height="30" Background="DimGray" BorderThickness="0" Content="清除" FontFamily="Segoe UI Semibold" FontSize="16" Click="Button_Click" />

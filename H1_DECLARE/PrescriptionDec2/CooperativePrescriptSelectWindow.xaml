@@ -42,8 +42,9 @@
                     </Binding>
                 </xctk:MaskedTextBox.Text>
             </xctk:MaskedTextBox>
-            <Rectangle Width="490"/>
-            <Button Name="ButtonSearch" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" Click="ButtonSearch_Click"/>
+            <Rectangle Width="380"/>
+            <Button Name="ButtonPrint" Content="列印藥袋" Width="100" Background="OrangeRed" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" Click="ButtonPrint_Click"/>
+            <Button Name="ButtonSearch" Margin="10,0,0,0" Content="查詢" Width="100" Background="RoyalBlue" BorderThickness="0" FontFamily="Segoe UI Semibold" FontSize="16" Click="ButtonSearch_Click"/>
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -57,8 +58,8 @@
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0"  Margin="10"  Background="{StaticResource GridBackGround}">
                     <TextBox Name="Condition" Width="170" Height="30" Margin="10,0,0,0" FontSize="18" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" TextChanged="UnPrescript_Checked" materialDesign:HintAssist.Hint="請輸入身分證"/>
-                    <CheckBox Name="CheckBoxUnPrescript" BorderBrush="DimGray" Content="未調劑" IsChecked="{Binding UnPrescript,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="0,0,0,0" Background="RoyalBlue" Checked="UnPrescript_Checked"  Unchecked="UnPrescript_Checked"/>
-                    <CheckBox Name="CheckBoxPrescript" BorderBrush="DimGray" Content="已調劑" IsChecked="{Binding Prescript,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0" Background="RoyalBlue" Checked="UnPrescript_Checked"  Unchecked="UnPrescript_Checked"/>
+                    <CheckBox Name="CheckBoxUnPrescript" BorderBrush="DimGray" Content="未讀" IsChecked="{Binding UnPrescript,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="0,0,0,0" Background="RoyalBlue" Checked="UnPrescript_Checked"  Unchecked="UnPrescript_Checked"/>
+                    <CheckBox Name="CheckBoxPrescript" BorderBrush="DimGray" Content="已讀" IsChecked="{Binding Prescript,UpdateSourceTrigger=PropertyChanged}" FontSize="20" FontFamily="Segoe UI Semibold" Foreground="DimGray" VerticalAlignment="Center" Padding="0" Margin="10,0,0,0" Background="RoyalBlue" Checked="UnPrescript_Checked"  Unchecked="UnPrescript_Checked"/>
                 </StackPanel>
                 <DataGrid Name="DataGridCustomer" Grid.Row="1" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden"  Margin="10,0,0,0"  Background="{StaticResource GridDarkerBackGround}"
                         SelectionChanged="DataGridCustomer_SelectionChanged"  ItemsSource="{Binding CooperativeCollection,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False">
