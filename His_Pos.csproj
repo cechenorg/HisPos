@@ -1290,6 +1290,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
+    <Folder Include="NewClass\" />
     <Folder Include="packages\" />
     <Folder Include="StockTaking\" />
   </ItemGroup>
