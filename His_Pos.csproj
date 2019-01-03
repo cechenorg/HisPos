@@ -300,6 +300,9 @@
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
+    <Compile Include="NewClass\AdjustCase.cs" />
+    <Compile Include="NewClass\Copayment.cs" />
+    <Compile Include="NewClass\DiseaseCodeContrast.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCodeDb.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
@@ -689,6 +692,19 @@
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
     <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
+    <Compile Include="NewClass\Customer.cs" />
+    <Compile Include="NewClass\CustomerHistory\CustomerHistoryBase.cs" />
+    <Compile Include="NewClass\CustomerHistory\PrescribeHistory.cs" />
+    <Compile Include="NewClass\CustomerHistory\PrescriptionHistory.cs" />
+    <Compile Include="NewClass\DiseaseCode.cs" />
+    <Compile Include="NewClass\Division.cs" />
+    <Compile Include="NewClass\Employee.cs" />
+    <Compile Include="NewClass\Institution.cs" />
+    <Compile Include="NewClass\MedicalPersonnel.cs" />
+    <Compile Include="NewClass\PaymentCategory.cs" />
+    <Compile Include="NewClass\Prescription.cs" />
+    <Compile Include="NewClass\PrescriptionCase.cs" />
+    <Compile Include="NewClass\SpecialTreat.cs" />
     <Compile Include="PrintDocuments\StockTakingDocument.xaml.cs">
       <DependentUpon>StockTakingDocument.xaml</DependentUpon>
     </Compile>
@@ -1224,6 +1240,7 @@
     <Content Include="RDLC\MedBagReportSingle.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="ClassDiagram1.cd" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -1290,7 +1307,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
-    <Folder Include="NewClass\" />
     <Folder Include="packages\" />
     <Folder Include="StockTaking\" />
   </ItemGroup>
