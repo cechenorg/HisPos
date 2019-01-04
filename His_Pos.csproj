@@ -699,6 +699,7 @@
     <Compile Include="NewClass\DiseaseCode.cs" />
     <Compile Include="NewClass\Division.cs" />
     <Compile Include="NewClass\Employee.cs" />
+    <Compile Include="NewClass\IcCard.cs" />
     <Compile Include="NewClass\Institution.cs" />
     <Compile Include="NewClass\MedicalPersonnel.cs" />
     <Compile Include="NewClass\PaymentCategory.cs" />
