@@ -3,7 +3,7 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
-namespace His_Pos.NewClass
+namespace His_Pos.NewClass.Prescription.Treatment
 {
     public class DiseaseCodeContrast:INotifyPropertyChanged
     {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace His_Pos.NewClass
+namespace His_Pos.NewClass.Prescription.Treatment
 {
     public class MedicalPersonnel:INotifyPropertyChanged
     {

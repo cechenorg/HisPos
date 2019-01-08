@@ -300,9 +300,14 @@
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
-    <Compile Include="NewClass\AdjustCase.cs" />
-    <Compile Include="NewClass\Copayment.cs" />
-    <Compile Include="NewClass\DiseaseCodeContrast.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclare.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
+      <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\AdjustCase.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Copayment.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\DiseaseCodeContrast.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCodeDb.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
@@ -696,16 +701,17 @@
     <Compile Include="NewClass\CustomerHistory\CustomerHistoryBase.cs" />
     <Compile Include="NewClass\CustomerHistory\PrescribeHistory.cs" />
     <Compile Include="NewClass\CustomerHistory\PrescriptionHistory.cs" />
-    <Compile Include="NewClass\DiseaseCode.cs" />
-    <Compile Include="NewClass\Division.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\DiseaseCode.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Division.cs" />
     <Compile Include="NewClass\Employee.cs" />
-    <Compile Include="NewClass\IcCard.cs" />
-    <Compile Include="NewClass\Institution.cs" />
-    <Compile Include="NewClass\MedicalPersonnel.cs" />
-    <Compile Include="NewClass\PaymentCategory.cs" />
-    <Compile Include="NewClass\Prescription.cs" />
-    <Compile Include="NewClass\PrescriptionCase.cs" />
-    <Compile Include="NewClass\SpecialTreat.cs" />
+    <Compile Include="NewClass\Prescription\IcCard.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\MedicalPersonnel.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\PaymentCategory.cs" />
+    <Compile Include="NewClass\Prescription\Prescription.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\PrescriptionCase.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\SpecialTreat.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Treatment.cs" />
     <Compile Include="PrintDocuments\StockTakingDocument.xaml.cs">
       <DependentUpon>StockTakingDocument.xaml</DependentUpon>
     </Compile>
@@ -880,6 +886,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

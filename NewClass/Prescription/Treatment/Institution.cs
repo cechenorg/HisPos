@@ -1,8 +1,6 @@
-﻿using System;
-using System.Data;
-using His_Pos.Service;
+﻿using System.Data;
 
-namespace His_Pos.NewClass
+namespace His_Pos.NewClass.Prescription.Treatment
 {
     public class Institution
     {

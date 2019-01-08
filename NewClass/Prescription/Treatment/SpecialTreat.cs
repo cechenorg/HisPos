@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace His_Pos.NewClass
+namespace His_Pos.NewClass.Prescription.Treatment
 {
-    public class DiseaseCode : INotifyPropertyChanged
+    public class SpecialTreat:INotifyPropertyChanged
     {
-        public DiseaseCode() { }
+        public SpecialTreat() { }
+        public SpecialTreat(DataRow r)
+        {
+            Id = r["SPECIAL_ID"].ToString();
+            Name = r["SPECIAL_NAME"].ToString();
+        }
+
         private string id;
         public string Id
         {
@@ -23,7 +24,9 @@ namespace His_Pos.NewClass
                 OnPropertyChanged(nameof(Id));
             }
         }
+
         private string name;
+
         public string Name
         {
             get => name;
