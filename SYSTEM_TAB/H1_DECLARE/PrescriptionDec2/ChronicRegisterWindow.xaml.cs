@@ -63,7 +63,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 this.ShowDialog();
         }
         private void InitData(string DecMasId) {
-            ChronicRegisterCollection = ChronicDb.GetChronicGroupById(DecMasId);
+            ChronicRegisterCollection = null;/// ChronicDb.GetChronicGroupById(DecMasId);
         }
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
@@ -74,7 +74,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             foreach (ChronicRegister chronicRegister in ChronicRegisterCollection) {
                 if (chronicRegister.IsRegister)
-                    ChronicDb.UpdateRegisterStatus(chronicRegister.DecMasid);
+                    ;/// ChronicDb.UpdateRegisterStatus(chronicRegister.DecMasid);
             }
             Close();
         }

@@ -13,7 +13,7 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
         }
 
         private void ButtonPredictChronic_Click(object sender, RoutedEventArgs e) {
-            ChronicDb.PredictXmlChronic();
+           /// ChronicDb.PredictXmlChronic();
             MessageWindow messageWindow = new MessageWindow("預約慢箋完成!",MessageType.SUCCESS);
             messageWindow.ShowDialog();
         }

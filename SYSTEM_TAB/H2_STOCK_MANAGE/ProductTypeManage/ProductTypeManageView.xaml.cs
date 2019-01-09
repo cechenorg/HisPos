@@ -158,7 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             TypeManageMasters.Clear();
             TypeManageDetails.Clear();
 
-            ProductDb.GetProductTypeManage(TypeManageMasters, TypeManageDetails);
+            ///ProductDb.GetProductTypeManage(TypeManageMasters, TypeManageDetails);
         }
 
         private void TypeMaster_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -204,7 +204,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             MonthSalesLineSeries = new LineSeries() { Title = "本月", Stroke = Brushes.RoyalBlue };
             LastMonthSalesLineSeries = new LineSeries() { Title = "上個月", Stroke = Brushes.Red };
 
-            ProductDb.GetProductTypeLineSeries(YearSalesLineSeries, LastYearSalesLineSeries, MonthSalesLineSeries, LastMonthSalesLineSeries, typeId);
+            ///ProductDb.GetProductTypeLineSeries(YearSalesLineSeries, LastYearSalesLineSeries, MonthSalesLineSeries, LastMonthSalesLineSeries, typeId);
 
             UpdateLineChartUi();
            
@@ -278,7 +278,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
         private void ShowProductDetail(object sender, MouseButtonEventArgs e)
         {
-            Product newProduct = ProductDb.GetProductById(((Product) ProductsGrid.SelectedItem).Id);
+            Product newProduct = new Product();/// ProductDb.GetProductById(((Product) ProductsGrid.SelectedItem).Id);
 
             if (ProductDetail.Instance is null)
             {
@@ -311,14 +311,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                 ((ProductTypeManageMaster)TypeMaster.SelectedItem).Name = BigType.Text;
                 ((ProductTypeManageMaster)TypeMaster.SelectedItem).EngName = BigTypeEngName.Text;
                 
-                ProductDb.UpdateProductType(((ProductTypeManageMaster)TypeMaster.SelectedItem).Id, BigType.Text, BigTypeEngName.Text);
+                ///ProductDb.UpdateProductType(((ProductTypeManageMaster)TypeMaster.SelectedItem).Id, BigType.Text, BigTypeEngName.Text);
 
                 if (TypeDetail.Items.Count != 0)
                 {
                     ((ProductTypeManageDetail)TypeDetail.SelectedItem).Name = SmallType.Text;
                     ((ProductTypeManageDetail)TypeDetail.SelectedItem).EngName = SmallTypeEngName.Text;
 
-                    ProductDb.UpdateProductType(((ProductTypeManageDetail)TypeDetail.SelectedItem).Id, SmallType.Text, SmallTypeEngName.Text);
+                    ///ProductDb.UpdateProductType(((ProductTypeManageDetail)TypeDetail.SelectedItem).Id, SmallType.Text, SmallTypeEngName.Text);
                 }
                 
                 MessageWindow messageWindow = new MessageWindow("修改成功!", MessageType.SUCCESS, true);
@@ -363,12 +363,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             {
                 if(deleteTypeWindow.DeleteType is ProductTypeManageMaster)
                 {
-                    ProductDb.DeleteProductType(((ProductTypeManageMaster)deleteTypeWindow.DeleteType).Id);
+                    ///ProductDb.DeleteProductType(((ProductTypeManageMaster)deleteTypeWindow.DeleteType).Id);
                     TypeManageMasters.Remove((ProductTypeManageMaster)deleteTypeWindow.DeleteType);
                     
                     for( int x = 0; x < TypeDetail.Items.Count; x++ )
                     {
-                        ProductDb.DeleteProductType((TypeDetail.Items[x] as ProductTypeManageDetail).Id);
+                        ///ProductDb.DeleteProductType((TypeDetail.Items[x] as ProductTypeManageDetail).Id);
                         TypeManageDetails.Remove(TypeDetail.Items[x] as ProductTypeManageDetail);
                     }
 
@@ -378,7 +378,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                 else
                 {
                     ((ProductTypeManageMaster)TypeMaster.SelectedItem).TypeCount--;
-                    ProductDb.DeleteProductType(((ProductTypeManageDetail)deleteTypeWindow.DeleteType).Id);
+                    ///ProductDb.DeleteProductType(((ProductTypeManageDetail)deleteTypeWindow.DeleteType).Id);
                     TypeManageDetails.Remove((ProductTypeManageDetail)deleteTypeWindow.DeleteType);
                     UpdateDetailUi();
                 }

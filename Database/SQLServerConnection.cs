@@ -5,14 +5,12 @@ using System.Data.SqlClient;
 using System.Globalization;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
-using His_Pos.Properties;
 
 namespace His_Pos.Database
 {
     public class SQLServerConnection : DatabaseConnection
     {
-        private SqlConnection connection = new SqlConnection(Settings.Default.SQL_local);
-        public SQLServerConnection() {}
+        private SqlConnection connection = new SqlConnection(Properties.Settings.Default.SQL_local);
 
         public bool CheckConnection()
         {
@@ -34,6 +32,24 @@ namespace His_Pos.Database
             return false;
         }
 
+
+        public void OpenConnection()
+        {
+            try
+            {
+                connection.Open();
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
+            }
+        }
+
+        public void CloseConnection()
+        {
+            connection.Close();
+        }
+
         public DataTable ExecuteProc(string procName, List<SqlParameter> parameterList = null)
         {
             var table = new DataTable();
@@ -52,6 +68,13 @@ namespace His_Pos.Database
                 table.Locale = CultureInfo.InvariantCulture;
                 sqlDapter.Fill(table);
             }
+            catch (SqlException sqlException)
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
+                });
+            }
             catch (Exception ex)
             {
                 string parameValues = string.Empty;
@@ -63,15 +86,13 @@ namespace His_Pos.Database
                 LogError(procName, parameValues, ex.Message);
 
                 System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate {
-                    MessageWindow messageWindowSQLerror = new MessageWindow("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
-                    messageWindowSQLerror.ShowDialog();
+                    MessageWindow.ShowMessage("預存程序 " + procName + "執行失敗\r\n原因:" + ex.Message, MessageType.ERROR);
                 });
             }
             return table;
         }
-
-
-        public void LogError(string procName, string parameters, string error)
+        
+        private void LogError(string procName, string parameters, string error)
         {
             var parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("NAME", procName));
@@ -80,22 +101,5 @@ namespace His_Pos.Database
             ExecuteProc("[HIS_POS_DB].[LOG].[InsertProcLog]", parameterList);
         }
 
-        public void OpenConnection()
-        {
-            try
-            {
-                connection.Open();
-            }
-            catch (Exception e)
-            {
-                MessageWindow messageWindowConnectFail = new MessageWindow("網路異常 無法連線到資料庫", MessageType.ERROR);
-                messageWindowConnectFail.ShowDialog();
-            }
-        }
-
-        public void CloseConnection()
-        {
-            connection.Close();
-        }
     }
 }

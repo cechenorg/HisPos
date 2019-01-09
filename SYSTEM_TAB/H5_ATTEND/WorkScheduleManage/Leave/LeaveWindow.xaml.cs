@@ -24,7 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
             InitializeComponent();
             DataContext = this;
 
-            LeaveTypes = LeaveDb.GetLeaveType();
+            ///LeaveTypes = LeaveDb.GetLeaveType();
             UserIconDatas = users;
             UserName.SelectedIndex = 0;
         }
@@ -56,14 +56,14 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
                 endDateTime = endDateTime.AddHours(((DateTime)EndTime.SelectedTime).Hour);
                 endDateTime = endDateTime.AddMinutes(((DateTime)EndTime.SelectedTime).Minute);
 
-                CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, startDateTime, endDateTime, Note.Text);
+               /// CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, startDateTime, endDateTime, Note.Text);
             }
             else
             {
                 if (EndDate.Text.Equals(""))
                     EndDate.SelectedDate = StartDate.SelectedDate;
 
-                CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, (DateTime)StartDate.SelectedDate, (DateTime)EndDate.SelectedDate, Note.Text);
+                ///CompleteResult = LeaveDb.AddNewLeave((UserName.SelectedItem as UserIconData).Id, (DayOffType.SelectedItem as Class.Leave.Leave).Id, (DateTime)StartDate.SelectedDate, (DateTime)EndDate.SelectedDate, Note.Text);
             }
             
             LeaveComplete = true;

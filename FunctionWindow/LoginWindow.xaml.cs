@@ -101,15 +101,15 @@ namespace His_Pos.FunctionWindow
         {
             CheckSettingFiles();
 
-            DatabaseConnection localConnection = new DatabaseConnection(Properties.Settings.Default.SQL_local);
-            if (!localConnection.CheckConnection()) return false;
+            ///DatabaseConnection localConnection = new DatabaseConnection(Properties.Settings.Default.SQL_local);
+            ///if (!localConnection.CheckConnection()) return false;
 
             return true;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            User user = PersonDb.CheckUserPassword(UserName.Text, Password.Password);
+            User user = new User();/// PersonDb.CheckUserPassword(UserName.Text, Password.Password);
 
             if (!user.Id.Equals(""))
             {
@@ -125,7 +125,7 @@ namespace His_Pos.FunctionWindow
                 }
 
 
-                DateTime syncDate = FunctionDb.GetLastSyncDate();
+                DateTime syncDate = new DateTime();/// FunctionDb.GetLastSyncDate();
 
                 if(syncDate.Date != DateTime.Today)
                     SyncNewProductDataFromSingde();
@@ -152,7 +152,7 @@ namespace His_Pos.FunctionWindow
 
         private void CheckDBVersion()
         {
-            string versionId = FunctionDb.GetSystemVersionId();
+            string versionId = "";/// FunctionDb.GetSystemVersionId();
             if (!versionId.Equals(Assembly.GetExecutingAssembly().GetName().Version.ToString()))
             {
                 Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
@@ -167,7 +167,7 @@ namespace His_Pos.FunctionWindow
                 process.Start();
                 process.WaitForExit();
 
-                FunctionDb.UpdateSystemVersionId();
+                ///FunctionDb.UpdateSystemVersionId();
             }
         }
 

@@ -66,13 +66,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
             MergingData();
             DataContext = this;
             SetOtcTypeUi();
-            WareHouseCollection = WareHouseDb.GetWareHouseData();
+          ///  WareHouseCollection = WareHouseDb.GetWareHouseData();
             
             WareHouse.SelectedItem = WareHouseCollection[0];
             
         }
         public void SetOtcTypeUi() {
-            ProductTypeCollection = ProductDb.GetProductType();
+           /// ProductTypeCollection = ProductDb.GetProductType();
             OtcType.ItemsSource = ProductTypeCollection;
             OtcType.SelectedValue = "無";
         }

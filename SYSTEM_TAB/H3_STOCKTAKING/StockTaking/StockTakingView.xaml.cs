@@ -88,7 +88,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             Instance = this;
             DataContext = this;
             DataChanged = false;
-            var userAutoCompleteCollection = PersonDb.GetUserCollection();
+            var userAutoCompleteCollection = "";/// PersonDb.GetUserCollection();
             TakingEmp.ItemsSource = userAutoCompleteCollection;
             TakingEmp.ItemFilter = UserFilter;
             InitProduct();
@@ -105,7 +105,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 
         public void SetOtcTypeUi()
         {
-            _productTypeCollection = ProductDb.GetProductType();
+            _productTypeCollection = null;///ProductDb.GetProductType();
             OtcType.ItemsSource = _productTypeCollection;
             OtcType.SelectedValue = "無";
         }
@@ -213,7 +213,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 
             if (ResultChanged == 0)
             {
-                ProductDb.SaveStockTaking(_takingCollection);
+                ///ProductDb.SaveStockTaking(_takingCollection);
 
                 _takingCollection.Clear();
 
@@ -283,7 +283,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
         }
         private void Complete_Click(object sender, RoutedEventArgs e)
         {
-            ProductDb.SaveStockTaking(_takingCollection);
+            ///ProductDb.SaveStockTaking(_takingCollection);
             _takingCollection.Clear();
             CheckItems.Items.Filter = null;
             if (EntrySearchView.Instance != null)

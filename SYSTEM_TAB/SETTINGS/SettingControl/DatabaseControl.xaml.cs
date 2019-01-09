@@ -149,7 +149,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
             switch (connectionTarget)
             {
                 case ConnectionTarget.LOCAL:
-                    connection = new DatabaseConnection(LocalConnection.ToString());
+                    connection = null;/// new DatabaseConnection(LocalConnection.ToString());
                     currentWorker = LocalConnectionWorker;
                     break;
                 default:
@@ -166,7 +166,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
             
             currentWorker.DoWork += (s, o) =>
             {
-                connectionState = connection.CheckConnection();
+                connectionState = true;/// connection.CheckConnection();
             };
 
             currentWorker.RunWorkerCompleted += (s, o) =>

@@ -118,15 +118,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             {
                 if (stockAdjust.Adjustmethod == "扣庫") {
 
-                    totalPrice -=  double.Parse(ProductDb.GetBucklePrice(stockAdjust.ProId, (Convert.ToInt32(stockAdjust.AdjustAmount) - Convert.ToInt32(stockAdjust.OriginAmount)).ToString()));
-                    ProductDb.BuckleInventory(stockAdjust.ProId, (Convert.ToInt32(stockAdjust.AdjustAmount) - Convert.ToInt32(stockAdjust.OriginAmount)).ToString(),"處方修改調整",DecMasId);
+                    totalPrice -= 0;/// double.Parse(ProductDb.GetBucklePrice(stockAdjust.ProId, (Convert.ToInt32(stockAdjust.AdjustAmount) - Convert.ToInt32(stockAdjust.OriginAmount)).ToString()));
+                    ///ProductDb.BuckleInventory(stockAdjust.ProId, (Convert.ToInt32(stockAdjust.AdjustAmount) - Convert.ToInt32(stockAdjust.OriginAmount)).ToString(),"處方修改調整",DecMasId);
                 }
                 if (stockAdjust.Adjustmethod == "補回庫存") {
-                    totalPrice += double.Parse(ProductDb.GetAddStockValue(DecMasId, stockAdjust.ProId, (Convert.ToInt32(stockAdjust.OriginAmount) - Convert.ToInt32(stockAdjust.AdjustAmount)).ToString()));
-                    ProductDb.RecoveryInventory( DecMasId, stockAdjust.ProId, (Convert.ToInt32(stockAdjust.OriginAmount) - Convert.ToInt32(stockAdjust.AdjustAmount)).ToString());
+                    totalPrice += 0;/// double.Parse(ProductDb.GetAddStockValue(DecMasId, stockAdjust.ProId, (Convert.ToInt32(stockAdjust.OriginAmount) - Convert.ToInt32(stockAdjust.AdjustAmount)).ToString()));
+                    ///ProductDb.RecoveryInventory( DecMasId, stockAdjust.ProId, (Convert.ToInt32(stockAdjust.OriginAmount) - Convert.ToInt32(stockAdjust.AdjustAmount)).ToString());
                 }
             }
-            ProductDb.InsertEntry("處方修改調整", totalPrice.ToString(), "DecMasId", DecMasId);
+            ///ProductDb.InsertEntry("處方修改調整", totalPrice.ToString(), "DecMasId", DecMasId);
 
             PrescriptionInquireOutcome.IsAdjust = true;
             this.Close();

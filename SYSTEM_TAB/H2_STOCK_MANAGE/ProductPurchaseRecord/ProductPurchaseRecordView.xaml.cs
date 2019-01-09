@@ -61,22 +61,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
         {
             DataChanged = false;
             CurrentDataGrid = PStoreOrderDetail;
-            storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
+            ///storeOrderCollection = StoreOrderDb.GetStoreOrderOverview(Class.OrderType.DONE);
             StoOrderOverview.ItemsSource = storeOrderCollection;
             StoOrderOverview.SelectedIndex = 0;
         }
         private void InitManufactory()
         {
-            //foreach (DataRow row in MainWindow.ManufactoryTable.Rows)
-            //{
-            //    ManufactoryAutoCompleteCollection.Add(new Manufactory(row));
-            //}
+         
             Manufactory.ItemsSource = ManufactoryAutoCompleteCollection;
             Manufactory.ItemFilter = ManufactoryFilter;
         }
         private void InitUser()
         {
-            UserAutoCompleteCollection = PersonDb.GetUserCollection();
+            ///UserAutoCompleteCollection = PersonDb.GetUserCollection();
             OrdEmp.ItemsSource = UserAutoCompleteCollection;
             OrdEmp.ItemFilter = UserFilter;
             ReceiveEmp.ItemsSource = UserAutoCompleteCollection;
@@ -168,14 +165,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord
             switch (storeOrder.Category.CategoryName)
             {
                 case "進貨":
-                    storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+                    ///storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
                     CurrentDataGrid = PStoreOrderDetail;
 
                     DetailGrid.RowDefinitions[3].Height = new GridLength(1, GridUnitType.Star);
                     DetailGrid.RowDefinitions[4].Height = new GridLength(0);
                     break;
                 case "退貨":
-                    storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
+                    ///storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
                     CurrentDataGrid = RStoreOrderDetail;
 
                     DetailGrid.RowDefinitions[3].Height = new GridLength(0);

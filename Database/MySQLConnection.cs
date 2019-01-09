@@ -8,63 +8,42 @@ namespace His_Pos.Database
 {
     public class MySQLConnection: DatabaseConnection
     {
-        private MySqlConnection _sqlMySqlConnection;
+        private MySqlConnection connection = new MySqlConnection(Properties.Settings.Default.SingdeServer);
 
         public void OpenConnection()
         {
-            throw new NotImplementedException();
+            try
+            {
+                connection.Open();
+            }
+            catch (Exception e)
+            {
+                MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
+            }
         }
 
         public void CloseConnection()
         {
-            throw new NotImplementedException();
+            connection.Close();
         }
 
-        public void LogError(string procName, string parameters, string error)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public DataTable MySqlNonQueryBySqlString(string sqlString)
+        public DataTable ExecuteProc(string sqlString)
         {
             var table = new DataTable();
             try
             {
-                MySqlCommand cmd = new MySqlCommand(sqlString, _sqlMySqlConnection);
+                MySqlCommand cmd = new MySqlCommand(sqlString, connection);
                 var sqlDapter = new MySqlDataAdapter(cmd);
                 sqlDapter.Fill(table);
             }
             catch (Exception ex)
             {
-                switch (ex.Message)
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
                 {
-                    case "建立連接至 SQL Server 時，發生網路相關或執行個體特定的錯誤。找不到或無法存取伺服器。確認執行個名稱是否正確，以及 SQL Server 是否設定為允許遠端連線。 (provider: TCP Provider, error: 0 - 等候操作已逾時。)":
-                        MessageWindow messageWindowConnectFail = new MessageWindow("網路異常 無法連線到資料庫", MessageType.ERROR);
-                        messageWindowConnectFail.ShowDialog();
-                        break;
-                    default:
-                        MessageWindow messageWindowSQLerror = new MessageWindow("語法失敗\r\n" + sqlString, MessageType.ERROR);
-                        messageWindowSQLerror.ShowDialog();
-                        break;
-                }
+                    MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
+                });
             }
 
-            return table;
-        }
-        public DataTable MySqlQueryBySqlString(string sqlString)
-        {
-            var table = new DataTable();
-            try
-            {
-                MySqlCommand cmd = new MySqlCommand(sqlString, _sqlMySqlConnection);
-                var sqlDapter = new MySqlDataAdapter(cmd);
-                sqlDapter.Fill(table);
-            }
-            catch (Exception ex)
-            {
-                throw new InvalidOperationException(ex.Message);
-            }
             return table;
         }
     }

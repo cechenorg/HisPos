@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             InitializeComponent();
             DiseaseCollection = new ObservableCollection<DiseaseCode9To10>();
             Source = name;
-            List<DiseaseCode9To10> distinctList = DiseaseCodeDb.GetDiseaseCodeById(id).DistinctBy(d => d.ICD10.Id).DistinctBy(d=>d.ICD9.Id).ToList();
+            List<DiseaseCode9To10> distinctList = null;/// DiseaseCodeDb.GetDiseaseCodeById(id).DistinctBy(d => d.ICD10.Id).DistinctBy(d=>d.ICD9.Id).ToList();
             foreach (var d in distinctList)
             {
                 DiseaseCollection.Add(d);

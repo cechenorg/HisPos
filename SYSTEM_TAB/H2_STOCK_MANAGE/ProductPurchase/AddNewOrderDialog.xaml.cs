@@ -45,7 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             InitializeComponent();
             DataContext = this;
 
-            WareHouseCollection = WareHouseDb.GetWareHouseData();
+            ///WareHouseCollection = WareHouseDb.GetWareHouseData();
 
             purchaseTypeControl = new PurchaseTypeControl(manufactoryAutoCompleteCollection, WareHouseCollection);
             returnTypeControl = new ReturnTypeControl(manufactoryAutoCompleteCollection, WareHouseCollection);

@@ -108,7 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void InitPrincipal()
         {
-            PrincipalCollection = ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
+            PrincipalCollection = null;/// ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
 
             if (StoreOrderData.Principal.Id == "")
                 PrincipalCombo.SelectedIndex = 0;
@@ -200,7 +200,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl
         }
         private void CheckAndAddProductByBatchOverview(TextBox textBox, PurchaseProduct selectedItem, bool isFirst = true)
         {
-            Collection<BatchNumOverview> batchNumOverviews = StoreOrderDb.GetBatchNumOverview(selectedItem.Id, StoreOrderData.Warehouse.Id);
+            Collection<BatchNumOverview> batchNumOverviews = null;/// StoreOrderDb.GetBatchNumOverview(selectedItem.Id, StoreOrderData.Warehouse.Id);
 
             if (batchNumOverviews.Count > 1)
             {

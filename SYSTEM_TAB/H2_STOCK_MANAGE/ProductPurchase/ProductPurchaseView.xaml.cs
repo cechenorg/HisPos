@@ -159,8 +159,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
         public void CheckSindeOrderDetail(StoreOrder storeOrder)
         {
-            Collection<SindeOrderDetail> orderDetails = StoreOrderDb.GetOrderDetailFromSinde(storeOrder.Id);
-            storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+            Collection<SindeOrderDetail> orderDetails = null;/// StoreOrderDb.GetOrderDetailFromSinde(storeOrder.Id);
+            ///storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
 
             ObservableCollection<Product> tempProducts = new ObservableCollection<Product>();
 
@@ -222,10 +222,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             switch (storeOrder.Category.CategoryName)
             {
                 case "進貨":
-                    storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
+                    ///storeOrder.Products = StoreOrderDb.GetOrderPurchaseDetailById(storeOrder.Id);
                     break;
                 case "退貨":
-                    storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
+                    ///storeOrder.Products = StoreOrderDb.GetOrderReturnDetailById(storeOrder.Id);
                     break;
             }
             
@@ -305,9 +305,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
         {
             if (!CheckNoEmptyData()) return;
 
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認完成處理單?\n(資料內容將不能修改)", MessageType.ONLYMESSAGE);
-            confirmWindow.ShowDialog();
-            if (!confirmWindow.Confirm) return;
+            ///ConfirmWindow confirmWindow = new ConfirmWindow("是否確認完成處理單?\n(資料內容將不能修改)", MessageType.ONLYMESSAGE);
+            ///confirmWindow.ShowDialog();
+            ///if (!confirmWindow.Confirm) return;
 
             StoreOrderData.Type = OrderType.DONE;
             StoreOrderData.RecEmp = MainWindow.CurrentUser.Name;
@@ -317,12 +317,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
             if (StoreOrderData.Category.CategoryName.Equals("進貨") && StoreOrderData.CheckIfOrderNotComplete())
             {
-                confirmWindow = new ConfirmWindow("最後收貨數量少於預訂量, 是否需要將不足部分保留成新訂單?", MessageType.WARNING);
-                confirmWindow.ShowDialog();
+                ///confirmWindow = new ConfirmWindow("最後收貨數量少於預訂量, 是否需要將不足部分保留成新訂單?", MessageType.WARNING);
+                ///confirmWindow.ShowDialog();
 
                 storeOrderCollection.Remove(StoreOrderData);
 
-                if (confirmWindow.Confirm)
+                if (true)///confirmWindow.Confirm)
                 {
                     StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser,
                         StoreOrderData.Warehouse, StoreOrderData.Manufactory, null,
@@ -421,9 +421,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
             if (!CheckNoEmptyData()) return;
 
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認轉成處理單?\n(部分資訊將不能修改)", MessageType.ONLYMESSAGE);
-            confirmWindow.ShowDialog();
-            if (!confirmWindow.Confirm) return;
+            ///ConfirmWindow confirmWindow = new ConfirmWindow("是否確認轉成處理單?\n(部分資訊將不能修改)", MessageType.ONLYMESSAGE);
+            ///confirmWindow.ShowDialog();
+            ///if (!confirmWindow.Confirm) return;
 
             if (StoreOrderData.Manufactory.Id == "0")
                 StoreOrderData.Type = OrderType.WAITING;
@@ -432,7 +432,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
             if (StoreOrderData.Type == OrderType.WAITING)
             {
-                bool success = StoreOrderDb.SendOrderToSinde(StoreOrderData);
+                bool success = true;/// StoreOrderDb.SendOrderToSinde(StoreOrderData);
 
                 if (!success)
                 {
@@ -474,12 +474,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
         {
             if (StoreOrderData == null) return;
 
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確定將處理單作廢?", MessageType.WARNING);
-            confirmWindow.ShowDialog();
+           ///ConfirmWindow confirmWindow = new ConfirmWindow("是否確定將處理單作廢?", MessageType.WARNING);
+            ///confirmWindow.ShowDialog();
 
-            if (!confirmWindow.Confirm) return;
+            if (true)///!confirmWindow.Confirm)
+                return;
 
-            StoreOrderDb.DeleteOrder(StoreOrderData.Id);
+            ///StoreOrderDb.DeleteOrder(StoreOrderData.Id);
             StoreOrderCollection.Remove(StoreOrderData);
 
             if (StoOrderOverview.Items.Count == 0)
@@ -499,7 +500,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
             backgroundWorker.DoWork += (s, o) =>
             {
-                StoreOrderDb.SaveOrderDetail(saveOrder);
+                ///StoreOrderDb.SaveOrderDetail(saveOrder);
             };
 
             backgroundWorker.RunWorkerCompleted += (s, args) =>

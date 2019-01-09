@@ -114,7 +114,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
         }
         private LineSeries GetSalesLineSeries()
         {
-            ChartValues<double> chartValues = OTCDb.GetOtcSalesByID(InventoryOtc.Id);
+            ChartValues<double> chartValues = null;///OTCDb.GetOtcSalesByID(InventoryOtc.Id);
 
             return new LineSeries
             {
@@ -153,38 +153,33 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
             OTCNotes.Document.Blocks.Clear();
             OTCNotes.AppendText(InventoryOtc.Note.Trim());
 
-            CusOrderOverviewCollection = OTCDb.GetOtcCusOrderOverviewByID(InventoryOtc.Id);
+            CusOrderOverviewCollection = null;/// OTCDb.GetOtcCusOrderOverviewByID(InventoryOtc.Id);
             OtcCusOrder.ItemsSource = CusOrderOverviewCollection;
 
-            StoreOrderOverviewCollection = OTCDb.GetOtcStoOrderByID(InventoryOtc.Id);
+            StoreOrderOverviewCollection = null;/// OTCDb.GetOtcStoOrderByID(InventoryOtc.Id);
             OtcStoOrder.ItemsSource = StoreOrderOverviewCollection;
 
-            OTCStockOverviewCollection = ProductDb.GetProductStockOverviewById(InventoryOtc.Id);
+            OTCStockOverviewCollection = null;/// ProductDb.GetProductStockOverviewById(InventoryOtc.Id);
             OtcStock.ItemsSource = OTCStockOverviewCollection;
             UpdateStockOverviewInfo();
 
-            OTCUnitCollection = ProductDb.GetProductUnitById(InventoryOtc.Id);
-            
-            OTCManufactoryCollection = ManufactoryDb.GetManufactoryCollection(InventoryOtc.Id);
+            OTCUnitCollection = null;/// ProductDb.GetProductUnitById(InventoryOtc.Id);
+
+            OTCManufactoryCollection = null;/// ManufactoryDb.GetManufactoryCollection(InventoryOtc.Id);
             OtcManufactory.ItemsSource = OTCManufactoryCollection;
 
-            ProductTypeCollection = ProductDb.GetProductType();
+            ProductTypeCollection = null;/// ProductDb.GetProductType();
             OtcType.ItemsSource = ProductTypeCollection;
             if(OtcType.Items.Contains(InventoryOtc.ProductType.Name))
                  OtcType.SelectedValue = InventoryOtc.ProductType.Name;
 
-            StockTakingOverviewCollection = ProductDb.GetProductStockTakingDate(InventoryOtc.Id);
+            StockTakingOverviewCollection = null;/// ProductDb.GetProductStockTakingDate(InventoryOtc.Id);
             if (StockTakingOverviewCollection.Count != 0)
                 LastCheckTime.Content = StockTakingOverviewCollection[0].StockTakingDate;
 
-            WareStcokCollection = WareHouseDb.GetWareStockById(InventoryOtc.Id);
-            ProductGroupCollection = ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
-          //  if (ProductGroupCollection.Count == 1)
-          //      ButtonDemolition.IsEnabled = false;
-          //  else
-          //      ButtonDemolition.IsEnabled = true;
-
-
+            WareStcokCollection = null;///WareHouseDb.GetWareStockById(InventoryOtc.Id);
+            ProductGroupCollection = null;///ProductDb.GetProductGroup(InventoryOtc.Id, InventoryOtc.WareHouseId);
+             
             UpdateChart();
             InitVariables();
             SetUnitValue();
@@ -311,16 +306,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
             InventoryOtc.Stock.SafeAmount = OtcSafeAmount.Text;
             InventoryOtc.Note = new TextRange(OTCNotes.Document.ContentStart, OTCNotes.Document.ContentEnd).Text;
             InventoryOtc.Status = OtcStatus.Text =="啟用" ? true : false;
-            ProductDb.UpdateOtcDataDetail(InventoryOtc, "InventoryOtc");
+            ///ProductDb.UpdateOtcDataDetail(InventoryOtc, "InventoryOtc");
 
             foreach (var manufactoryChanged in OTCManufactoryChangedCollection)
             {
-                ManufactoryDb.UpdateProductManufactory(InventoryOtc.Id, manufactoryChanged);
+                ///ManufactoryDb.UpdateProductManufactory(InventoryOtc.Id, manufactoryChanged);
             }
             foreach (string index in OTCUnitChangdedCollection)
             {
                 ProductUnit prounit = new ProductUnit("s");
-                ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
+                ///ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
             MessageWindow messageWindow = new MessageWindow("商品修改成功!", MessageType.SUCCESS, true);
             messageWindow.ShowDialog();

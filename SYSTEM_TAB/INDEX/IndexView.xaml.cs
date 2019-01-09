@@ -150,7 +150,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         {
             InitializeComponent();
            // Date.Content = DateTime.Today.ToString("yyyy/MM/dd");
-            ChronicDb.DailyPredictChronic();
+            ///ChronicDb.DailyPredictChronic();
             InitData();
             DataContext = this;
             Instance = this;
@@ -161,9 +161,9 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             {
                 IsGetMed = false;
                 IsNoGetMed = false;
-                ProductListCollection = ProductDb.DailyPurchaseReturn();
-                DailyTakeChronicListCollection = ChronicDb.DailyTakeChronic();
-                DailtChronicPhoneCallCollection = ChronicDb.DailyChronicPhoneCall();
+               ///ProductListCollection = ProductDb.DailyPurchaseReturn();
+               ///DailyTakeChronicListCollection = ChronicDb.DailyTakeChronic();
+               ///DailtChronicPhoneCallCollection = ChronicDb.DailyChronicPhoneCall();
             }
             catch (Exception ex)
             {
@@ -174,11 +174,11 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         }
 
         private void TransferToStoord_Click(object sender, RoutedEventArgs e) {
-            if(ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList().Count != 0)
-                StoreOrderDb.AddDailyOrder(StoreOrderCategory.PURCHASE, ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList());
-            if(ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList().Count != 0)
-                StoreOrderDb.AddDailyOrder(StoreOrderCategory.RETURN, ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList());
-            ChronicDb.UpdateDailyChronic();
+            if (ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList().Count != 0)
+                ;/// StoreOrderDb.AddDailyOrder(StoreOrderCategory.PURCHASE, ProductListCollection.Where(pro => pro.PurchaseAmount != "0").ToList());
+            if (ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList().Count != 0)
+                ;/// StoreOrderDb.AddDailyOrder(StoreOrderCategory.RETURN, ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList());
+            ///ChronicDb.UpdateDailyChronic();
             MessageWindow messageWindow = new MessageWindow("已轉出進退貨單",MessageType.SUCCESS, true);
             messageWindow.ShowDialog(); 
             MainWindow.Instance.AddNewTab("處理單管理");
@@ -196,7 +196,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (ChironicPhoneCall.SelectedItem is null) return;
             DailtChronicPhoneCall a =  (DailtChronicPhoneCall)ChironicPhoneCall.SelectedItem;
-            ChronicDb.UpdateChronicPhoneCall(a.DecMasId,a.Status);
+            ///ChronicDb.UpdateChronicPhoneCall(a.DecMasId,a.Status);
         }
 
         private void PhoneCall_Checked(object sender, RoutedEventArgs e) {

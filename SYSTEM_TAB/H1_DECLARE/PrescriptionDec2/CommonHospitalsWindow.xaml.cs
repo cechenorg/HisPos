@@ -103,7 +103,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     h.Common = true;
                 }
             }
-            HospitalDb.UpdateCommonHospitalById(SearchedHospital.Id, SearchedHospital.Common);
+           /// HospitalDb.UpdateCommonHospitalById(SearchedHospital.Id, SearchedHospital.Common);
         }
 
         private void DeleteCommon_Click(object sender, RoutedEventArgs e)
@@ -133,7 +133,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 break;
             }
             CommonHospitalsCollection.RemoveAt(deleteIndex);
-            HospitalDb.UpdateCommonHospitalById(SearchedHospital.Id, SearchedHospital.Common);
+            ///HospitalDb.UpdateCommonHospitalById(SearchedHospital.Id, SearchedHospital.Common);
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)

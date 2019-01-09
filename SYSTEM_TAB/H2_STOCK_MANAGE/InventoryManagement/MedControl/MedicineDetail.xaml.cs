@@ -171,11 +171,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
         #region ----- Init Data -----
         private void InitMedicineDatas()
         {
-            ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
-            MedicineDetails = ProductDb.GetInventoryMedicineDetail(InventoryMedicine.Id);
-            InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
-            ProductUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
-            Flags = MedicineDb.GetMedicineSyncFlag(InventoryMedicine.Id);
+           /// ProductGroupCollection = ProductDb.GetProductGroup(InventoryMedicine.Id, InventoryMedicine.WareHouseId);
+           /// MedicineDetails = ProductDb.GetInventoryMedicineDetail(InventoryMedicine.Id);
+           /// InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
+           /// ProductUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
+           /// Flags = MedicineDb.GetMedicineSyncFlag(InventoryMedicine.Id);
 
             CalculateStock();
 
@@ -359,7 +359,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
 
             if (!ConfirmStockTaking()) return;
 
-            string stockValue = StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
+            string stockValue = "";/// StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
             MessageWindow messageWindow = new MessageWindow("單品盤點成功!", MessageType.SUCCESS);
             messageWindow.ShowDialog();
             
@@ -369,17 +369,17 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
             InventoryMedicine.StockValue = stockValue;
             inventoryMedicineBackup.StockValue = stockValue;
 
-            InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
+            ///InventoryDetailOverviews = ProductDb.GetInventoryDetailOverviews(InventoryMedicine.Id);
             CalculateStock();
             TextBoxTakingValue.Text = string.Empty;
         }
 
         private bool ConfirmStockTaking()
         {
-            ConfirmWindow confirmWindow = new ConfirmWindow("是否確認盤點?", MessageType.ONLYMESSAGE);
-            confirmWindow.ShowDialog();
+            ///ConfirmWindow confirmWindow = new ConfirmWindow("是否確認盤點?", MessageType.ONLYMESSAGE);
+            ///confirmWindow.ShowDialog();
 
-            return confirmWindow.Confirm;
+            return true;/// confirmWindow.Confirm;
         }
 
         private bool IsStockTakingValid()
@@ -404,8 +404,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
             InventoryMedicine.Warnings = new TextRange(WarningBox.Document.ContentStart, WarningBox.Document.ContentEnd).Text.Replace("\r\n", "");
             InventoryMedicine.Note = new TextRange(NoteBox.Document.ContentStart, NoteBox.Document.ContentEnd).Text.Replace("\r\n", "");
 
-            MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
-            ProductDb.UpdateInventoryProductUnit(InventoryMedicine.Id, ProductUnitCollection);
+            ///MedicineDb.UpdateInventoryMedicineData(InventoryMedicine);
+            ///ProductDb.UpdateInventoryProductUnit(InventoryMedicine.Id, ProductUnitCollection);
 
             UpdateNewDataToCurrentMed();
 
@@ -443,7 +443,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
             NoteBox.Document.Blocks.Clear();
 
             InventoryMedicine = ((ICloneable)inventoryMedicineBackup).Clone() as InventoryMedicine;
-            ProductUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
+            ///ProductUnitCollection = ProductDb.GetProductUnitById(InventoryMedicine.Id);
 
             SideEffectBox.AppendText(InventoryMedicine.SideEffect);
             IndicationBox.AppendText(InventoryMedicine.Indication);
@@ -495,8 +495,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
         private void DataSync_OnClick(object sender, RoutedEventArgs e)
         {
             if (sender is null) return;
-            
-            InventoryMedicine = MedicineDb.ResetMedicineSyncFlag(InventoryMedicine.Id);
+
+            InventoryMedicine = null;/// MedicineDb.ResetMedicineSyncFlag(InventoryMedicine.Id);
             UpdateNewDataToCurrentMed();
 
             SideEffectBox.Document.Blocks.Clear();

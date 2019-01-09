@@ -50,7 +50,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
             foreach (var item in changeItems) {
-                LocationDb.UpdateLocationDetail(item.id,item.newvalue);
+                ///LocationDb.UpdateLocationDetail(item.id,item.newvalue);
             }
             MessageWindow messageWindow = new MessageWindow("更新成功!",MessageType.SUCCESS, true);
             messageWindow.ShowDialog();

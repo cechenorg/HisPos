@@ -53,7 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage
         public MedFrequencyManageView()
         {
             InitializeComponent();
-            UsageCollection = UsageDb.GetData();
+           /// UsageCollection = UsageDb.GetData();
             DataContext = this;
             DataGridMedFrequency.SelectedIndex = 0;
         }
@@ -109,8 +109,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
-        {
-            UsageDb.SaveUsage(UsageDetail);
+        { 
+           /// UsageDb.SaveUsage(UsageDetail);
             UsageCollection[DataGridMedFrequency.SelectedIndex] = UsageDetail;
             DataGridMedFrequency.SelectedItem = UsageDetail;
             InitDataChanged();

@@ -94,11 +94,11 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
             Instance = this;
         }
         public void InitData(string startDate = null,string endDate = null) {
-            ProductDb.UpdateDailyStockValue();
-            if(startDate == null)
-                DailyStockValueCollection = ProductDb.GetDailyStockValue(TotalDailyStock);
+            /// ProductDb.UpdateDailyStockValue();
+            if (startDate == null)
+                ;/// DailyStockValueCollection = ProductDb.GetDailyStockValue(TotalDailyStock);
             else
-                DailyStockValueCollection = ProductDb.GetDailyStockValue(TotalDailyStock, startDate, endDate);
+                ;/// DailyStockValueCollection = ProductDb.GetDailyStockValue(TotalDailyStock, startDate, endDate);
             LabelstartDate.Content = StartDate.AddYears(-1911).ToString("yyy/MM/dd");
             LabelendDate.Content = EndDate.AddYears(-1911).ToString("yyy/MM/dd");
         }

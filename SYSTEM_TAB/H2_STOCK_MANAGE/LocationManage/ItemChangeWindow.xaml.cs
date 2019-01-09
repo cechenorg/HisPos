@@ -82,15 +82,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             DataContext = this;
             switch (view) {
                 case "Location":
-                    ComboBoxSourceBig.ItemsSource = LocationDb.ObservableGetLocationData();
-                    ComboBoxSourceSmall.ItemsSource = LocationDb.ObservableGetLocationDetail();
-                    ComboBoxTargetBig.ItemsSource = LocationDb.ObservableGetLocationData();
-                    ComboBoxTargetSmall.ItemsSource = LocationDb.ObservableGetLocationDetail();
-                    foreach (DataRow row in LocationDb.GetProductLocation().Rows)
-                    {
-                        LocationSourceDatas.Add(new LocationbData(row));
-                        LocationTargetDatas.Add(new LocationbData(row));
-                    }
+                   ///ComboBoxSourceBig.ItemsSource = LocationDb.ObservableGetLocationData();
+                   ///ComboBoxSourceSmall.ItemsSource = LocationDb.ObservableGetLocationDetail();
+                   ///ComboBoxTargetBig.ItemsSource = LocationDb.ObservableGetLocationData();
+                   ///ComboBoxTargetSmall.ItemsSource = LocationDb.ObservableGetLocationDetail();
+                   ///foreach (DataRow row in LocationDb.GetProductLocation().Rows)
+                   ///{
+                   ///    LocationSourceDatas.Add(new LocationbData(row));
+                   ///    LocationTargetDatas.Add(new LocationbData(row));
+                   ///}
                     DataGridTarget.Items.Filter = ProductLocationTargetFilter;
                     DataGridSource.Items.Filter = ProductLocationSourceFilter;
                     break;

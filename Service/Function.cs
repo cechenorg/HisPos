@@ -188,8 +188,9 @@ namespace His_Pos.Service
          */
         public DataTable GetDataFromProc(string procName, List<SqlParameter> param = null)
         {
-            var conn = new DatabaseConnection(Settings.Default.SQL_local);
-            return conn.ExecuteProc(procName, param);
+            return null;
+           ///var conn = new DatabaseConnection(Settings.Default.SQL_local);
+           ///return conn.ExecuteProc(procName, param);
         }
         public string HttpGetJson(string url) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -228,7 +229,7 @@ namespace His_Pos.Service
                 foreach (Holiday day in holidayCollection) {
                     if (day.name == "軍人節") continue;
                     if (day.isHoliday == "是")
-                        FunctionDb.UpdateLastYearlyHoliday(day);
+                        ;/// FunctionDb.UpdateLastYearlyHoliday(day);
                 }
             }
         }

@@ -55,7 +55,7 @@ namespace His_Pos.Class.Declare
             D16DeclarePoint = Convert.ToInt32(row["HISDECMAS_POINT"].ToString());
             D17CopaymentPoint = Convert.ToInt32(row["HISDECMAS_COPAYMENTPOINT"].ToString());
             D18TotalPoint = Convert.ToInt32(row["HISDECMAS_TOTALPOINT"].ToString());
-            DeclareDetails = PrescriptionDB.GetDeclareDetailByMasId(row["HISDECMAS_ID"].ToString());
+            DeclareDetails = null;/// PrescriptionDB.GetDeclareDetailByMasId(row["HISDECMAS_ID"].ToString());
         }
         public DeclareData(XmlNode xml) { //匯入處方申報檔用
             Prescription = new Prescription(xml);

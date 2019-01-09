@@ -5,7 +5,6 @@
     xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:IndexView="clr-namespace:His_Pos.IndexView"
     xmlns:local="clr-namespace:His_Pos"
     xmlns:AdminFunction="clr-namespace:His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction"
     xmlns:prescriptionDec2="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2"

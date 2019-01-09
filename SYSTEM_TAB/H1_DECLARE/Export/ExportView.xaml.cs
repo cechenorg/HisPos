@@ -286,7 +286,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             var declaredPharmacy = new Pharmacy();
             var tmpTdata = SelectedFile.FileContent.Tdata;
             declaredPharmacy.Ddata = SortDdata();
-            declaredPharmacy.Ddata = declareDb.SortDdataByCaseId(declaredPharmacy);
+            ///declaredPharmacy.Ddata = declareDb.SortDdataByCaseId(declaredPharmacy);
             var tdata = new Tdata
             {
                 T1 = "30",
@@ -295,9 +295,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
                 T4 = "2",
                 T5 = "1",
                 T6 = (DateTime.Now.Year - 1911) + DateTime.Now.Month.ToString().PadLeft(2, '0'),
-                T7 = declareDb.CountPrescriptionByCase(declaredPharmacy.Ddata, 1).ToString(),
+                ///T7 = declareDb.CountPrescriptionByCase(declaredPharmacy.Ddata, 1).ToString(),
                 T8 = declaredPharmacy.Ddata.Where(d => !d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dhead.D16)).ToString(),
-                T9 = declareDb.CountPrescriptionByCase(declaredPharmacy.Ddata, 2).ToString(),
+                ///T9 = declareDb.CountPrescriptionByCase(declaredPharmacy.Ddata, 2).ToString(),
                 T10 = declaredPharmacy.Ddata.Where(d => d.Dhead.D1.Equals("2")).Sum(d => int.Parse(d.Dhead.D16)).ToString(),
                 T11 = declaredPharmacy.Ddata.Count.ToString()
             };

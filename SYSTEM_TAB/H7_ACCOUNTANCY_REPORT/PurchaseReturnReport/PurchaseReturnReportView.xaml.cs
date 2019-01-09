@@ -104,7 +104,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport
 
             if (!CheckDateTimeValid()) return;
 
-            PurchaseReturnRecordCollection = StoreOrderDb.GetPurchaseReturnRecord(SDateTime, EDateTime);
+            ///PurchaseReturnRecordCollection = StoreOrderDb.GetPurchaseReturnRecord(SDateTime, EDateTime);
 
             UpdateUi();
         }

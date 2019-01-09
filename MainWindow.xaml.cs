@@ -27,13 +27,16 @@ using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.TreatmentCase;
+using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using JetBrains.Annotations;
+using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
+using Microsoft.VisualBasic.ApplicationServices;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
@@ -45,6 +48,9 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+        public static SQLServerConnection ServerConnection = new SQLServerConnection();
+        public static MySQLConnection SingdeConnection = new MySQLConnection();
+
         public static List<Feature> HisFeatures = new List<Feature>();
         public static User CurrentUser;
 
@@ -145,7 +151,7 @@ namespace His_Pos
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
 
-            Collection<string> tabAuth = AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
+            Collection<string> tabAuth = null;/// AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)
@@ -225,10 +231,10 @@ namespace His_Pos
             var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
             var upload = (bool)dailyUploadConfirm.ShowDialog();
             if(upload)
-                d.StartDailyUpload();
-            ProductDb.UpdateDailyStockValue();
-            DeclareDb declareDb = new DeclareDb();
-            declareDb.SendUnSendCooperClinicDeclare();
+               /// d.StartDailyUpload();
+            ///ProductDb.UpdateDailyStockValue();
+            ///DeclareDb declareDb = new DeclareDb();
+           /// declareDb.SendUnSendCooperClinicDeclare();
             if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
                 HisApiBase.CloseCom();
             Environment.Exit(0);

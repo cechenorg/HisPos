@@ -74,7 +74,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn
         {
             InitializeComponent();
             DataContext = this;
-            EmpClockIns = EmployeeDb.GetEmpClockIn();
+            ///EmpClockIns = EmployeeDb.GetEmpClockIn();
             StratClock();
             InitTodayUser();
             InitEmployee();
@@ -82,7 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn
 
         private void InitTodayUser()
         {
-            UserIconDatas = WorkScheduleDb.GetTodayUsers();
+            UserIconDatas = null;/// WorkScheduleDb.GetTodayUsers();
 
             foreach (var userIconData in UserIconDatas)
             {
@@ -93,7 +93,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn
             }
         }
         private void InitEmployee() {
-            Employees = EmployeeDb.GetEmployeeData();
+            Employees = null; /// EmployeeDb.GetEmployeeData();
 
             var EmptyEmp = new Employee() { Name = "" };
 
@@ -136,24 +136,12 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn
 
             string inout = InOutStack.Children.OfType<RadioButton>().Single(r => (bool) r.IsChecked).Tag.ToString();
             
-            switch (WorkScheduleDb.UserClockIn(UserId.Text, UserPassword.Password, inout)) {
+            switch (""){///WorkScheduleDb.UserClockIn(UserId.Text, UserPassword.Password, inout)) {
                 case "上班打卡成功":
                     MessageWindow messageWindow = new MessageWindow("上班打卡成功!", MessageType.SUCCESS, true);
                     messageWindow.ShowDialog();
                     ClearUi();
-                    break;
-                //case "您已經打過上班卡":
-                //    messageWindow = new MessageWindow("您已經打過上班卡", MessageType.ERROR);
-                //    messageWindow.ShowDialog();
-                //    UserId.Text = string.Empty;
-                //    UserPassword.Password = string.Empty;
-                //    break;
-                //case "您已經下班 無法打卡上班 已通知主管":
-                //    messageWindow = new MessageWindow("您已經下班 無法打卡上班 已通知主管", MessageType.ERROR);
-                //    messageWindow.ShowDialog();
-                //    UserId.Text = string.Empty;
-                //    UserPassword.Password = string.Empty;
-                //    break;
+                    break; 
                 case "下班打卡成功":
                     messageWindow = new MessageWindow("下班打卡成功!", MessageType.SUCCESS, true);
                     messageWindow.ShowDialog();
@@ -167,7 +155,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn
                     UserPassword.Focus();
                     return;
             }
-            EmpClockIns = EmployeeDb.GetEmpClockIn();
+            ///EmpClockIns = EmployeeDb.GetEmpClockIn();
 
 
         }

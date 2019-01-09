@@ -24,7 +24,7 @@ namespace His_Pos.Class.StoreOrder
 
             Category = new Category(category);
 
-            Id = StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id, manufactory.Id, Category.CategoryName.Substring(0,1));
+            Id = "";/// StoreOrderDb.GetNewOrderId(ordEmp.Id, wareHouse.Id, manufactory.Id, Category.CategoryName.Substring(0,1));
             OrdEmp = ordEmp.Name;
             TotalPrice = "0";
             RecEmp = "";

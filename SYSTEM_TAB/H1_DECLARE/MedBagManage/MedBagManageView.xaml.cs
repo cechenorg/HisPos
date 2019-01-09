@@ -297,7 +297,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
                 return;
             SelectedMedBag.Mode = SelectedMode;
             SelectedMedBag.SetLocationCollection(MedBagCanvas.Children);
-            MedBagDb.SaveMedBagData(SelectedMedBag);
+           /// MedBagDb.SaveMedBagData(SelectedMedBag);
         }
 
         private void MedBagSaveButtonClick(object sender, RoutedEventArgs e)
@@ -331,7 +331,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
                 MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("確認刪除藥袋 " + SelectedMedBag.Name, "刪除確認", MessageBoxButton.YesNo);
                 if (messageBoxResult == MessageBoxResult.Yes)
                 {
-                    MedBagDb.DeleteMedBagData(SelectedMedBag);
+                   /// MedBagDb.DeleteMedBagData(SelectedMedBag);
                     var i = MedBags.SelectedIndex;
                     if (i > 0)
                         MedBags.SelectedItem = MedBagCollection[i - 1];

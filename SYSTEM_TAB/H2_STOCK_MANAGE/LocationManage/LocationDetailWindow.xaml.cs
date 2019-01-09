@@ -50,7 +50,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
             LocationDetail = location;
             LocationName.Text = LocationDetail.name;
-            DataTable table = LocationDb.GetLocationDetail(location.id);
+            DataTable table = new DataTable();/// LocationDb.GetLocationDetail(location.id);
             foreach (DataRow row in table.Rows) {
                 LocationDetail.locationDetailCollection.Add(new LocationDetail(row));
             }
@@ -130,7 +130,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 
            // if (parent.ColumnDefinitions.Count == 11) (sender as Button).IsEnabled = false;
             LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + name, parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 1).ToString(), "N");
-            LocationDb.DeleteLocationDetail(newlocationDetail);
+            ///LocationDb.DeleteLocationDetail(newlocationDetail);
             if (parent.ColumnDefinitions.Count - 2 == 0) {
                 LocationDetails.RowDefinitions.RemoveAt(0);
                 LocationDetails.Children.Remove(parent);
@@ -180,7 +180,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 }
             }
             LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), parent.Tag.ToString(), (parent.ColumnDefinitions.Count - 2).ToString(), "N");
-            LocationDb.UpdateLocationDetail(newlocationDetail);
+            ///LocationDb.UpdateLocationDetail(newlocationDetail);
         }
         public void newLabelPropertyMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -235,7 +235,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             if (LocationDetails.RowDefinitions.Count == 12) ButtonAddRow.IsEnabled = false;
             if (name == null) {
                 LocationDetail newlocationDetail = new LocationDetail(LocationDetail.id, LocationDetail.name + "-" + newLabel.Content.ToString(), newGrid.Tag.ToString(), (newGrid.ColumnDefinitions.Count - 2).ToString(), "N");
-                LocationDb.UpdateLocationDetail(newlocationDetail);
+                ///LocationDb.UpdateLocationDetail(newlocationDetail);
             }
             CheckColumnRule();
             return newGrid;
@@ -290,7 +290,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 string reply = IsCheck();
                 if (reply == "")
                 {
-                    LocationDb.UpdateLocationName(LocationDetail.id, LocationName.Text);
+                   /// LocationDb.UpdateLocationName(LocationDetail.id, LocationName.Text);
                     LocationManageView.Instance.InitLocation();
                     Close();
                 }

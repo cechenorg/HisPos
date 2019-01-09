@@ -35,7 +35,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             InitializeComponent();
             DataContext = this;
 
-            PurchaseDeclareDataOverviews = DeclareDb.GetPurchaseDeclareDataOverviews(storeOrderId);
+           /// PurchaseDeclareDataOverviews = DeclareDb.GetPurchaseDeclareDataOverviews(storeOrderId);
         }
     }
 }

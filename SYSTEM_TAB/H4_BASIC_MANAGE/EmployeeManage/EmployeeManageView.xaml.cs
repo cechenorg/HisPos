@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -111,29 +112,29 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
                 if (EmployeeCollection[i].Id == Employee.Id) {
                     EmployeeCollection[i] = Employee;
                     EmployeeCollection[i].Description = new TextRange(richtextbox.Document.ContentStart, richtextbox.Document.ContentEnd).Text;
-                    EmployeeDb.SaveEmployeeData(Employee);
+                    ///EmployeeDb.SaveEmployeeData(Employee);
                     InitDataChanged();
                     break;
                 }
             }
-            MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
+            ///MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
         }
 
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int count = EmployeeCollection.Count;
             Employee employee = new Employee();
-           var table = EmployeeDb.SaveEmployeeData(employee);
+            var table = new DataTable(); /// EmployeeDb.SaveEmployeeData(employee);
             employee.Id = table.Rows[0][0].ToString();
             EmployeeCollection.Add(employee);
             DataGridEmployee.SelectedIndex = count;
-            MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
+            ///MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
         }
 
         private void ButtonDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (DataGridEmployee.SelectedItem == null) return;
-            EmployeeDb.DeleteEmployeeData((Employee)DataGridEmployee.SelectedItem);
+            ///EmployeeDb.DeleteEmployeeData((Employee)DataGridEmployee.SelectedItem);
             EmployeeCollection.Remove((Employee)DataGridEmployee.SelectedItem);
             DataGridEmployee.SelectedIndex = EmployeeCollection.Count-1;
         }

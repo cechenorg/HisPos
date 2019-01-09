@@ -116,7 +116,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e) {
             CustomerDetail.Description = new TextRange(richtextboxDesc.Document.ContentStart, richtextboxDesc.Document.ContentEnd).Text;
 
-            CustomerDb.UpdateCustomerById(CustomerDetail);
+            ///CustomerDb.UpdateCustomerById(CustomerDetail);
             MessageWindow messageWindow = new MessageWindow("修改完成!", Class.MessageType.SUCCESS);
             messageWindow.ShowDialog();
             for (int i = 0; i < CustomerCollection.Count; i++){

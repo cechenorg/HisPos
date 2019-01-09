@@ -116,16 +116,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         {
             InitializeComponent();
             DataContext = this;
-            ProductDb.GetProductTypeManage(TypeManageSourceMasters, TypeManageSourceDetails);
+            ///ProductDb.GetProductTypeManage(TypeManageSourceMasters, TypeManageSourceDetails);
             ComboBoxSourceBig.ItemsSource = TypeManageSourceMasters;
             ComboBoxSourceSmall.ItemsSource = TypeManageSourceDetails;
-            ProductDb.GetProductTypeManage(TypeManageTargetMasters, TypeManageTargetDetails);
+            ///ProductDb.GetProductTypeManage(TypeManageTargetMasters, TypeManageTargetDetails);
             ComboBoxTargetBig.ItemsSource = TypeManageTargetMasters;
             ComboBoxTargetSmall.ItemsSource = TypeManageTargetDetails;
-            foreach (DataRow row in LocationDb.GetProductLocation().Rows)
+            foreach (var row in "")///LocationDb.GetProductLocation().Rows)
             {
-                TypeDataSourceDatas.Add(new TypeData(row));
-                TypeDataTargetDatas.Add(new TypeData(row));
+                ///TypeDataSourceDatas.Add(new TypeData(row));
+                ///TypeDataTargetDatas.Add(new TypeData(row));
             }
             DataGridTarget.Items.Filter = ProductTypeTargetFilter;
             DataGridSource.Items.Filter = ProductTypeSourceFilter;
