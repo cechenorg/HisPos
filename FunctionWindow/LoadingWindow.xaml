@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen" Title="LoadingWindow" Height="100" Width="200" WindowStyle="None">
     <Grid>
-        <Image gif:ImageBehavior.AnimatedSource="Images/loading.gif" Height="40" Width="40" Margin="0,-30,0,0"/>
+        <Image gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Height="40" Width="40" Margin="0,-30,0,0"/>
         <Label Name="LoadingMessage" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,30,0,0"/>
     </Grid>
 </Window>
