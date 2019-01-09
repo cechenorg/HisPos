@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDeclare
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 {
     /// <summary>
     /// PrescriptionDeclareView.xaml 的互動邏輯

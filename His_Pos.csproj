@@ -300,10 +300,10 @@
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclare.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
-      <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
+      <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclare.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Copayment.cs" />
@@ -468,11 +468,11 @@
       <DependentUpon>MedicineInfoWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
-      <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml.cs">
       <DependentUpon>ChronicRegisterWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
+      <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml.cs">
       <DependentUpon>StockAdjustmentWindow.xaml</DependentUpon>
@@ -843,15 +843,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1268,7 +1268,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
     <Folder Include="Images\General\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
