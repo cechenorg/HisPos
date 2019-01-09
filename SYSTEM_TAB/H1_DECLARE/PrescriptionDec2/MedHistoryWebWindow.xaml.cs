@@ -28,7 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
             //加入ProcMessage事件，處理傳回字串
             sh.ProcMessage = (s) =>
             {
-                MessageWindow messageWindow = new MessageWindow(s, Class.MessageType.SUCCESS);
+                MessageWindow.ShowMessage(s, Class.MessageType.SUCCESS);
                 messageWindow.ShowDialog();
             };
             //執行Script，取得熱門新聞，注意: 必須要在網頁載入完成後才可呼叫

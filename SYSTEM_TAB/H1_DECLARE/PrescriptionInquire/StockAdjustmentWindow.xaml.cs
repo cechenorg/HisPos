@@ -108,7 +108,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
         {
             foreach (StockAdjust stockAdjust in StockAdjustCollection) {
                 if (stockAdjust.AdjustReason == string.Empty || stockAdjust.Adjustmethod == string.Empty) {
-                    MessageWindow messageWindow = new MessageWindow("調整原因與調整方法皆不可為空!",MessageType.ERROR);
+                    MessageWindow.ShowMessage("調整原因與調整方法皆不可為空!",MessageType.ERROR);
                     messageWindow.ShowDialog();
                     return;
                 }

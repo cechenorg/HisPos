@@ -21,7 +21,7 @@ namespace His_Pos.FunctionWindow
                 Close();
             else
             {
-                MessageWindow messageWindow = new MessageWindow("連線失敗 請確認資料是否正確", MessageType.ERROR);
+                MessageWindow.ShowMessage("連線失敗 請確認資料是否正確", MessageType.ERROR);
                 messageWindow.ShowDialog();
             }
         }

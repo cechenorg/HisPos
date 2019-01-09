@@ -117,7 +117,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
             CustomerDetail.Description = new TextRange(richtextboxDesc.Document.ContentStart, richtextboxDesc.Document.ContentEnd).Text;
 
             ///CustomerDb.UpdateCustomerById(CustomerDetail);
-            MessageWindow messageWindow = new MessageWindow("修改完成!", Class.MessageType.SUCCESS);
+            MessageWindow.ShowMessage("修改完成!", Class.MessageType.SUCCESS);
             messageWindow.ShowDialog();
             for (int i = 0; i < CustomerCollection.Count; i++){
                 if (CustomerCollection[i].Id == CustomerDetail.Id) {

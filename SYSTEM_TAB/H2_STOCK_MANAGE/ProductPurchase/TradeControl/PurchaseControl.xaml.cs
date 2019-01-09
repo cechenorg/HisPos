@@ -291,7 +291,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
                                 if (StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
                                 {
-                                    MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING, true);
+                                    MessageWindow.ShowMessage("處理單內已經有此品項!", MessageType.WARNING, true);
                                     messageWindow.ShowDialog();
                                     textBox.Text = "";
                                     textBox.Focus();
@@ -489,7 +489,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
             if (!((IProductPurchase) product).BatchNumber.Equals(""))
             {
-                MessageWindow messageWindow = new MessageWindow("此商品有批號無法合批!", MessageType.ERROR, true);
+                MessageWindow.ShowMessage("此商品有批號無法合批!", MessageType.ERROR, true);
                 messageWindow.ShowDialog();
 
                 return;
@@ -529,7 +529,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl
             {
                 if(StoreOrderData.Products.Count(p => p.Id.Equals(newItemDialog.SelectedItem.Id)) > 0)
                 {
-                    MessageWindow messageWindow = new MessageWindow("處理單內已經有此品項!", MessageType.WARNING);
+                    MessageWindow.ShowMessage("處理單內已經有此品項!", MessageType.WARNING);
                     messageWindow.ShowDialog();
                     return;
                 }

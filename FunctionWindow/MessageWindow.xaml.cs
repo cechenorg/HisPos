@@ -32,7 +32,7 @@ namespace His_Pos.FunctionWindow
 
         public static void ShowMessage(string message, MessageType type)
         {
-            MessageWindow messageWindow = new MessageWindow(message, type);
+            MessageWindow.ShowMessage(message, type);
             messageWindow.ShowDialog();
         }
 

@@ -136,7 +136,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
         {
             if (!IsVPNValid())
             {
-                MessageWindow messageWindow = new MessageWindow("VPN 格式錯誤!", MessageType.ERROR);
+                MessageWindow.ShowMessage("VPN 格式錯誤!", MessageType.ERROR);
                 messageWindow.ShowDialog();
 
                 return;

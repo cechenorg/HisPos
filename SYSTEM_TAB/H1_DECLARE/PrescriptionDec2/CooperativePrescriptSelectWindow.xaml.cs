@@ -163,7 +163,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
             if (StartDate.Date <= EndDate.Date.AddDays(-3)) {
-               /// MessageWindow messageWindow = new MessageWindow("日期區間只能為三天內^^",MessageType.ERROR);
+               /// MessageWindow.ShowMessage("日期區間只能為三天內^^",MessageType.ERROR);
                /// messageWindow.ShowDialog();
                 return;
             }

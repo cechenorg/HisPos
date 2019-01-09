@@ -173,7 +173,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             DeclareData declareData = new DeclareData();/// PrescriptionDB.GetDeclareDataById(selectedItem.Decmas_Id);
             if (declareData is null)
             {
-                MessageWindow messageWindow = new MessageWindow("查無處方 請聯絡資訊人員", MessageType.ERROR);
+                MessageWindow.ShowMessage("查無處方 請聯絡資訊人員", MessageType.ERROR);
                 messageWindow.ShowDialog(); 
                 return;
             }

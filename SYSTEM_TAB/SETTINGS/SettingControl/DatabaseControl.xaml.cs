@@ -200,7 +200,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 
             if (showError)
             {
-                MessageWindow messageWindow = new MessageWindow("IP 格式錯誤!", MessageType.ERROR);
+                MessageWindow.ShowMessage("IP 格式錯誤!", MessageType.ERROR);
                 messageWindow.ShowDialog();
             }
 

@@ -321,7 +321,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                     ///ProductDb.UpdateProductType(((ProductTypeManageDetail)TypeDetail.SelectedItem).Id, SmallType.Text, SmallTypeEngName.Text);
                 }
                 
-                MessageWindow messageWindow = new MessageWindow("修改成功!", MessageType.SUCCESS, true);
+                MessageWindow.ShowMessage("修改成功!", MessageType.SUCCESS, true);
                 messageWindow.ShowDialog();
 
                 InitTypeDataChanged();
@@ -345,7 +345,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                 return true;
             else
             {
-                MessageWindow messageWindow = new MessageWindow(error, MessageType.ERROR, true);
+                MessageWindow.ShowMessage(error, MessageType.ERROR, true);
                 messageWindow.ShowDialog();
 
                 return false;
@@ -396,7 +396,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                     {
                         if (detail.ItemCount != 0)
                         {
-                            MessageWindow messageWindow = new MessageWindow((deleteType as ProductTypeManageMaster).Name + "以下類別之商品數須為0!", MessageType.ERROR, true);
+                            MessageWindow.ShowMessage((deleteType as ProductTypeManageMaster).Name + "以下類別之商品數須為0!", MessageType.ERROR, true);
                             messageWindow.ShowDialog();
                             return false;
                         }
@@ -406,7 +406,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                 {
                     if ((deleteType as ProductTypeManageDetail).ItemCount != 0)
                     {
-                        MessageWindow messageWindow = new MessageWindow((deleteType as ProductTypeManageDetail).Name + "之商品數須為0!", MessageType.ERROR, true);
+                        MessageWindow.ShowMessage((deleteType as ProductTypeManageDetail).Name + "之商品數須為0!", MessageType.ERROR, true);
                         messageWindow.ShowDialog();
                         return false;
                     }

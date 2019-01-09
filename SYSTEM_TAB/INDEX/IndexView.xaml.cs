@@ -179,7 +179,7 @@ namespace His_Pos.SYSTEM_TAB.INDEX
             if (ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList().Count != 0)
                 ;/// StoreOrderDb.AddDailyOrder(StoreOrderCategory.RETURN, ProductListCollection.Where(pro => pro.ReturnAmount != "0").ToList());
             ///ChronicDb.UpdateDailyChronic();
-            MessageWindow messageWindow = new MessageWindow("已轉出進退貨單",MessageType.SUCCESS, true);
+            MessageWindow.ShowMessage("已轉出進退貨單",MessageType.SUCCESS, true);
             messageWindow.ShowDialog(); 
             MainWindow.Instance.AddNewTab("處理單管理");
             if(ProductPurchaseView.Instance != null)

@@ -290,7 +290,7 @@ namespace His_Pos.FunctionWindow
                     {
                         string orders = cancelOrderList.Aggregate("", (i, j) => i + " " + j);
                         
-                        MessageWindow messageWindow = new MessageWindow($"處理單{orders} 已被杏德取消!\r\n取消處理單可在訂退貨記錄查詢", MessageType.WARNING);
+                        MessageWindow.ShowMessage($"處理單{orders} 已被杏德取消!\r\n取消處理單可在訂退貨記錄查詢", MessageType.WARNING);
                         messageWindow.ShowDialog();
                     }
 
