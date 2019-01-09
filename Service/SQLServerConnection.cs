@@ -14,10 +14,10 @@ namespace His_Pos.Service
 {
     public class SQLServerConnection : DatabaseConnection
     {
-        private static SqlConnection connection = new SqlConnection(Settings.Default.SQL_local);
+        private SqlConnection connection = new SqlConnection(Settings.Default.SQL_local);
         public SQLServerConnection() {}
 
-        public static bool CheckConnection()
+        public bool CheckConnection()
         {
             try
             {
@@ -83,7 +83,7 @@ namespace His_Pos.Service
             ExecuteProc("[HIS_POS_DB].[LOG].[InsertProcLog]", parameterList);
         }
 
-        public static void OpenConnection()
+        public void OpenConnection()
         {
             try
             {
@@ -96,7 +96,7 @@ namespace His_Pos.Service
             }
         }
 
-        public static void CloseConnection()
+        public void CloseConnection()
         {
             connection.Close();
         }

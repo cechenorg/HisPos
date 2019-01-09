@@ -23,7 +23,7 @@ namespace His_Pos.Service
             throw new NotImplementedException();
         }
 
-        public void LogError()
+        public void LogError(string procName, string parameters, string error)
         {
             throw new NotImplementedException();
         }
