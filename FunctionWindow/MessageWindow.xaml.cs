@@ -11,12 +11,7 @@ namespace His_Pos.FunctionWindow
     /// </summary>
     public partial class MessageWindow : Window
     {
-        public MessageWindow()
-        {
-            InitializeComponent();
-        }
-
-        public MessageWindow(string message, MessageType type,bool buttonFocus = false)
+        private MessageWindow(string message, MessageType type)
         {
             InitializeComponent();
             switch (type) {
@@ -31,8 +26,14 @@ namespace His_Pos.FunctionWindow
                     break;
             }
             Message.Text = message;
-            if(buttonFocus)
-                OkButton.Focus();
+
+            OkButton.Focus();
+        }
+
+        public static void ShowMessage(string message, MessageType type)
+        {
+            MessageWindow messageWindow = new MessageWindow(message, type);
+            messageWindow.ShowDialog();
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

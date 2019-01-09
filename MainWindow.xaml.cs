@@ -27,13 +27,16 @@ using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.TreatmentCase;
+using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using JetBrains.Annotations;
+using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
+using Microsoft.VisualBasic.ApplicationServices;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
@@ -45,6 +48,9 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+        public static SQLServerConnection ServerConnection = new SQLServerConnection();
+        public static MySQLConnection SingdeConnection = new MySQLConnection();
+
         public static List<Feature> HisFeatures = new List<Feature>();
         public static User CurrentUser;
 

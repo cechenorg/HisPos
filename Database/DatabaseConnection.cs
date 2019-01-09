@@ -4,6 +4,5 @@
     {
         void OpenConnection();
         void CloseConnection();
-        void LogError(string procName, string parameters, string error);
     }
 }
