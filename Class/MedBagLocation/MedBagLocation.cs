@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Controls;
-using His_Pos.H1_DECLARE.MedBagManage;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
 
 namespace His_Pos.Class.MedBagLocation
 {

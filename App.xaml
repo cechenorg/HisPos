@@ -2,7 +2,9 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" d1p1:Ignorable="d" StartupUri="LoginPage.xaml">
+	xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:chromeTabViewModel="clr-namespace:His_Pos.ChromeTabViewModel"
+	d1p1:Ignorable="d" StartupUri="LoginPage.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,10 +14,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml"/>
                 <ResourceDictionary>
-                    <vm:ViewModelLocator xmlns:vm="clr-namespace:His_Pos.ViewModel" x:Key="Locator" d:IsDataSource="True" />
+                    <chromeTabViewModel:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
                 </ResourceDictionary>
                 <ResourceDictionary>
-                    <vm:ProductDetailViewModelLocator xmlns:vm="clr-namespace:His_Pos.ViewModel" x:Key="ProductDetailViewModelLocator" d:IsDataSource="True" />
+                    <chromeTabViewModel:ProductDetailViewModelLocator x:Key="ProductDetailViewModelLocator" d:IsDataSource="True" />
                 </ResourceDictionary>
                 <ResourceDictionary>
                     <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
