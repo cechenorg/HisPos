@@ -6,9 +6,10 @@
         x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl.MedicineDetail"
         xmlns:local="His_Pos.InventoryManagement"
     xmlns:hisPos="clr-namespace:His_Pos"
-    xmlns:service="clr-namespace:His_Pos.Service"
     xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
     xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+    xmlns:medControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl"
+    xmlns:service="clr-namespace:His_Pos.Service"
     mc:Ignorable="d" Height="900" Width="1600" Background="Transparent" GotFocus="MedicineDetail_OnGotFocus">
     <UserControl.Resources>
         <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
@@ -106,7 +107,7 @@
                     </StackPanel>
                 </Grid>
                 <DataGrid Name="UnitDataGrid" Grid.Row="1" Grid.Column="1" Margin="0,10,10,10" AutoGenerateColumns="False" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                          Background="{StaticResource GridBackGround}" ItemsSource="{Binding ProductUnitCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}"
+                          Background="{StaticResource GridBackGround}" ItemsSource="{Binding ProductUnitCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=medControl:MedicineDetail}}"
                           CanUserAddRows="True" HorizontalScrollBarVisibility="Disabled">
                     <DataGrid.Resources>
                         <Style TargetType="{x:Type ScrollBar}">
@@ -211,7 +212,7 @@
                     </StackPanel>
                 </Grid>
                 <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,10,0" Background="{StaticResource GridBackGround}">
-                    <Button Width="120" Content="同步資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" IsEnabled="{Binding Flags.IsAllDataSync, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}" Click="DataSync_OnClick"/>
+                    <Button Width="120" Content="同步資料" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="RoyalBlue" IsEnabled="{Binding Flags.IsAllDataSync, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=medControl:MedicineDetail}}" Click="DataSync_OnClick"/>
                     <Rectangle Width="90"/>
                     <Label Name="ChangedLabel" Content="未修改" HorizontalContentAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI Semibold" FontSize="20"/>
                     <Button Width="120" Content="取消" Name="CancelBtn" FontFamily="Segoe UI Semibold" FontSize="16" Margin="10,0,0,0" BorderThickness="0" Background="Gray" IsEnabled="False" Click="CancelBtn_OnClick"/>
@@ -225,7 +226,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,10,10" DataContext="{Binding MedicineDetails, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}">
+                <Grid Grid.Row="0" Grid.Column="0" Background="{StaticResource GridBackGround}" Margin="0,0,10,10" DataContext="{Binding MedicineDetails, RelativeSource={RelativeSource AncestorType=medControl:MedicineDetail}}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"/>
                         <RowDefinition Height="50"/>
@@ -292,7 +293,7 @@
                 <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,10,0" Background="{StaticResource GridBackGround}">
                     <Label Content="群組成員" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" Margin="0,7,0,0"/>
                 </StackPanel>
-                <DataGrid ItemsSource="{Binding ProductGroupCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}"
+                <DataGrid ItemsSource="{Binding ProductGroupCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=medControl:MedicineDetail}}"
                           AutoGenerateColumns="False" Grid.Row="2" Grid.Column="0" Margin="0,0,10,0" CellStyle="{StaticResource DataGridCellStyle}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
                           Background="{StaticResource GridBackGround}" HeadersVisibility="None">
                     <DataGrid.Resources>
@@ -375,9 +376,9 @@
                     <CheckBox Content="調劑" Name="TreatmentCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True" Click="InventoryFilter_OnClick"/>
                     <Image Source="../../Images/OrangeDot.png" Width="20" Margin="5,0,0,0"/>
                     <CheckBox Content="盤點" Name="StockTakingCheckBox" FontFamily="Segoe UI Semibold" FontSize="20" VerticalContentAlignment="Center" Margin="30,0,0,0" IsChecked="True" Click="InventoryFilter_OnClick"/>
-                    <Image Source="../../Images/GreenDot.png" Width="20" Margin="5,0,0,0"/>
+                    <Image Source="\Images\GreenDot.png" Width="20" Margin="5,0,0,0"/>
                 </StackPanel>
-                <DataGrid Name="InventoryDetailOverviewDataGrid" Grid.Row="4" AutoGenerateColumns="False" ItemsSource="{Binding InventoryDetailOverviews, RelativeSource={RelativeSource AncestorType=inventoryManagement:MedicineDetail}}"
+                <DataGrid Name="InventoryDetailOverviewDataGrid" Grid.Row="4" AutoGenerateColumns="False" ItemsSource="{Binding InventoryDetailOverviews, RelativeSource={RelativeSource AncestorType=medControl:MedicineDetail}}"
                           CanUserAddRows="False" HorizontalScrollBarVisibility="Disabled" CellStyle="{StaticResource DataGridCellStyle}" Background="{StaticResource GridDarkerBackGround}"
                           ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}">
                     <DataGrid.Resources>

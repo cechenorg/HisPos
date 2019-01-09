@@ -40,7 +40,8 @@ using Microsoft.VisualBasic.ApplicationServices;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
- 
+using Position = His_Pos.Class.Position.Position;
+
 namespace His_Pos
 {
     /// <summary>
@@ -52,7 +53,7 @@ namespace His_Pos
         public static MySQLConnection SingdeConnection = new MySQLConnection();
 
         public static List<Feature> HisFeatures = new List<Feature>();
-        public static User CurrentUser;
+        public static Class.Person.User CurrentUser;
 
 
         public static MainWindow Instance;
@@ -90,7 +91,7 @@ namespace His_Pos
         public static ObservableCollection<SpecialCode> SpecialCode { get; set; }
         public static ObservableCollection<Usage> Usages { get; set; }
         public static ObservableCollection<Position> Positions { get; set; }
-        public MainWindow(User userLogin)
+        public MainWindow(Class.Person.User userLogin)
         {
             FeatureFactory();
             InitializeComponent();
