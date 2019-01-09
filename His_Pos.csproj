@@ -269,8 +269,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AdminManageTab\AdminFunction\AdminFunction.cs" />
-    <Compile Include="AdminManageTab\AdminFunction\AdminFunctionView.xaml.cs">
+    <Compile Include="A1_ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
+    <Compile Include="A1_ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
       <DependentUpon>AdminFunctionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Class\AdjustCase\AdjustCase.cs" />
@@ -415,16 +415,10 @@
     <Compile Include="Class\WorkSchedule\UserIconData.cs" />
     <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
     <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
-    <Compile Include="Confirm.xaml.cs">
-      <DependentUpon>Confirm.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ConfirmWindow.xaml.cs">
       <DependentUpon>ConfirmWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters.cs" />
-    <Compile Include="DockingWindow.xaml.cs">
-      <DependentUpon>DockingWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="H1_DECLARE\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
     </Compile>
@@ -628,8 +622,8 @@
     <Compile Include="IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IndexView\Index.cs" />
-    <Compile Include="IndexView\IndexView.xaml.cs">
+    <Compile Include="H0_INDEX\Index.cs" />
+    <Compile Include="H0_INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
     </Compile>
     <Compile Include="InitConnectionWindow.xaml.cs">
@@ -678,7 +672,6 @@
     <Compile Include="MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquire.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml.cs">
       <DependentUpon>PrescriptionInquireOutcome.xaml</DependentUpon>
@@ -689,9 +682,6 @@
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
     <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
-    <Compile Include="PrintDocuments\StockTakingDocument.xaml.cs">
-      <DependentUpon>StockTakingDocument.xaml</DependentUpon>
-    </Compile>
     <Compile Include="H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecord.cs" />
     <Compile Include="H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
       <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
@@ -729,20 +719,20 @@
     </Compile>
     <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
-    <Compile Include="Resource\DecimalControl.xaml.cs">
+    <Compile Include="GeneralCustomControl\DecimalControl.xaml.cs">
       <DependentUpon>DecimalControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Resource\MenuListItem.xaml.cs">
+    <Compile Include="GeneralCustomControl\MenuListItem.xaml.cs">
       <DependentUpon>MenuListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
-    <Compile Include="Service\DatabaseConnection.cs" />
+    <Compile Include="Database\DatabaseConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="Service\HttpMethod.cs" />
     <Compile Include="Service\MedBagSelectionWindow.xaml.cs">
       <DependentUpon>MedBagSelectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Service\MySQLConnection.cs" />
+    <Compile Include="Database\MySQLConnection.cs" />
     <Compile Include="Service\newFunction.cs" />
     <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecord.cs" />
     <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
@@ -755,7 +745,7 @@
     <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
       <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Service\SQLServerConnection.cs" />
+    <Compile Include="Database\SQLServerConnection.cs" />
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
     <Compile Include="Service\YesNoMessageWindow.xaml.cs">
@@ -770,41 +760,33 @@
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
-    <Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">
+    <Compile Include="S0_SETTINGS\SettingControl\DatabaseControl.xaml.cs">
       <DependentUpon>DatabaseControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemSettings\SettingControl\MyPharmacyControl.xaml.cs">
+    <Compile Include="S0_SETTINGS\SettingControl\MyPharmacyControl.xaml.cs">
       <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemSettings\SettingControl\PrinterControl.xaml.cs">
+    <Compile Include="S0_SETTINGS\SettingControl\PrinterControl.xaml.cs">
       <DependentUpon>PrinterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemSettings\SettingWindow.xaml.cs">
+    <Compile Include="S0_SETTINGS\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\IViewModelMainWindow.cs" />
-    <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ProductDetailViewModel.cs" />
-    <Compile Include="ViewModel\ProductDetailViewModelLocator.cs" />
-    <Compile Include="ViewModel\TabBase.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="ViewModel\ViewModelMainWindow.cs" />
-    <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />
-    <Compile Include="ViewModel\Win32.cs" />
-    <Page Include="AdminManageTab\AdminFunction\AdminFunctionView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Confirm.xaml">
+    <Compile Include="ChromeTabViewModel\IViewModelMainWindow.cs" />
+    <Compile Include="ChromeTabViewModel\IViewModelProdcutDetailWindow.cs" />
+    <Compile Include="ChromeTabViewModel\MainViewModel.cs" />
+    <Compile Include="ChromeTabViewModel\ProductDetailViewModel.cs" />
+    <Compile Include="ChromeTabViewModel\ProductDetailViewModelLocator.cs" />
+    <Compile Include="ChromeTabViewModel\TabBase.cs" />
+    <Compile Include="ChromeTabViewModel\ViewModelLocator.cs" />
+    <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
+    <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
+    <Compile Include="ChromeTabViewModel\Win32.cs" />
+    <Page Include="A1_ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfirmWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="DockingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1068,7 +1050,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="IndexView\IndexView.xaml">
+    <Page Include="H0_INDEX\IndexView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1118,10 +1100,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PrintDocuments\StockTakingDocument.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1154,11 +1132,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resource\DecimalControl.xaml">
+    <Page Include="GeneralCustomControl\DecimalControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resource\MenuListItem.xaml">
+    <Page Include="GeneralCustomControl\MenuListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1170,19 +1148,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SystemSettings\SettingControl\DatabaseControl.xaml">
+    <Page Include="S0_SETTINGS\SettingControl\DatabaseControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SystemSettings\SettingControl\MyPharmacyControl.xaml">
+    <Page Include="S0_SETTINGS\SettingControl\MyPharmacyControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SystemSettings\SettingControl\PrinterControl.xaml">
+    <Page Include="S0_SETTINGS\SettingControl\PrinterControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SystemSettings\SettingWindow.xaml">
+    <Page Include="S0_SETTINGS\SettingWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1277,13 +1255,6 @@
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="SQLPackage\ServerDb.dacpac">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="SQLPackage\sqlpackage.exe.config" />
-    <Content Include="SSIS_Package\SyncProductDataFromSingdePackage.dtsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -1293,7 +1264,6 @@
   <ItemGroup>
     <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
     <Folder Include="packages\" />
-    <Folder Include="StockTaking\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -1410,20 +1380,6 @@
     <Resource Include="Images\Report.png" />
     <Content Include="csHis.dll" />
     <Content Include="Reader.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Components.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Contracts.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Schema.Sql.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Schema.Tasks.Sql.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Schema.Utilities.Sql.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Utilities.dll" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.ConnectionInfo.dll" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.Dac.dll" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.Dac.Extensions.dll" />
-    <Resource Include="SQLPackage\Microsoft.SqlServer.Dac.Extensions.xml" />
-    <Resource Include="SQLPackage\Microsoft.SqlServer.Dac.xml" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.SqlClrProvider.dll" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.TransactSql.ScriptDom.dll" />
-    <Content Include="SQLPackage\sqlpackage.exe" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

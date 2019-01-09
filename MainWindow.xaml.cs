@@ -45,6 +45,12 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+        public static List<Feature> HisFeatures = new List<Feature>();
+        public static User CurrentUser;
+
+
+        public static MainWindow Instance;
+
         private static int hisApiErrorCode;
         public int HisApiErrorCode
         {
@@ -88,9 +94,6 @@ namespace His_Pos
             InitializeMenu();
             InitialUserBlock();
             StratClock();
-            _openWindows = new List<DockingWindow>();
-            CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
-            CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
         }
         
