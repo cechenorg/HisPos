@@ -94,7 +94,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 
         private void InitPrincipal()
         {
-            PrincipalCollection = ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
+            ///PrincipalCollection = ManufactoryDb.GetPrincipal(StoreOrderData.Manufactory.Id);
 
             if (StoreOrderData.Principal.Id == "")
                 PrincipalCombo.SelectedIndex = 0;

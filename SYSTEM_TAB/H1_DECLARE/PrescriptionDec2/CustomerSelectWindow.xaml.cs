@@ -53,7 +53,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         public CustomerSelectWindow(string condition,int option)
         {
             InitializeComponent();
-            CustomerCollection = CustomerDb.GetData();
+            ///CustomerCollection = CustomerDb.GetData();
             DataContext = this;
             Condition.Text = condition;
             SelectedCustomer = new Customer();
@@ -179,8 +179,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private void SetSelectedCustomer()
         {
             PrescriptionDec2View.Instance.CurrentPrescription.Customer = SelectedCustomer.DeepCloneViaJson();
-            CustomerDb.UpdateCustomerLastEdit(SelectedCustomer);
-            PrescriptionDec2View.Instance.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(PrescriptionDec2View.Instance.CurrentPrescription.Customer.Id);
+            ///CustomerDb.UpdateCustomerLastEdit(SelectedCustomer);
+            ///PrescriptionDec2View.Instance.CurrentCustomerHistoryMaster = CustomerHistoryDb.GetDataByCUS_ID(PrescriptionDec2View.Instance.CurrentPrescription.Customer.Id);
             PrescriptionDec2View.Instance.CusHistoryMaster.ItemsSource = PrescriptionDec2View.Instance.CurrentCustomerHistoryMaster.CustomerHistoryMasterCollection;
             PrescriptionDec2View.Instance.CusHistoryMaster.SelectedIndex = 0;
             PrescriptionDec2View.Instance.CustomerSelected = true;

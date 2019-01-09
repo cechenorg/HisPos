@@ -38,7 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 
         private void InitManufactory()
         {
-            ManageManufactories = ManufactoryDb.GetManageManufactory();
+            ///ManageManufactories = ManufactoryDb.GetManageManufactory();
             ManageManufactoryDataGrid.SelectedIndex = 0;
         }
 
@@ -87,7 +87,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
             bool isChanged = IsChangedLbl.Content.Equals("已修改");
 
             if (((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews is null)
-                ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews = ManufactoryDb.GetManufactoryPayOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
+                ;/// ((sender as DataGrid).SelectedItem as ManufactoryPrincipal).ManufactoryPayOverviews = ManufactoryDb.GetManufactoryPayOverview(((sender as DataGrid).SelectedItem as ManufactoryPrincipal).Id);
 
             PrincipalDetail.DataContext = (sender as DataGrid).SelectedItem;
 
@@ -154,7 +154,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 
         private void AddManufactory_Click(object sender, MouseButtonEventArgs e)
         {
-            ManageManufactory newManageManufactory = ManufactoryDb.AddNewManageManufactory();
+            ManageManufactory newManageManufactory = null;/// ManufactoryDb.AddNewManageManufactory();
             
             ManageManufactories.Add(newManageManufactory);
 
@@ -172,14 +172,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 
             ManageManufactoryDataGrid.SelectedIndex = index;
 
-            ManufactoryDb.UpdateManageManufactory(CurrentManufactory);
+           /// ManufactoryDb.UpdateManageManufactory(CurrentManufactory);
         }
 
         private void DeleteManufactory_Click(object sender, MouseButtonEventArgs e)
         {
             ManageManufactory manufactory = ManageManufactoryDataGrid.SelectedItem as ManageManufactory;
 
-            ManufactoryDb.DeleteManageManufactory(manufactory.Id);
+            /// ManufactoryDb.DeleteManageManufactory(manufactory.Id);
 
             ManageManufactories.Remove(manufactory);
 

@@ -81,7 +81,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 DivName = dataRow["HISDIV_NAME"].ToString();
                 AdjustDate = Convert.ToDateTime(dataRow["HISDECMAS_TREATDATE"].ToString()).AddYears(-1911).ToString("yyy/MM/dd");
                 Point = dataRow["HISDECMAS_TOTALPOINT"].ToString();
-                Medicines = MedicineDb.GetDeclareMedicineByMasId(DecMasId);
+                Medicines = null;/// MedicineDb.GetDeclareMedicineByMasId(DecMasId);
             }  
             public string DecMasId { get; set; }
             public string HospitalName { get; set; }
@@ -163,8 +163,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
             if (StartDate.Date <= EndDate.Date.AddDays(-3)) {
-                MessageWindow messageWindow = new MessageWindow("日期區間只能為三天內^^",MessageType.ERROR);
-                messageWindow.ShowDialog();
+               /// MessageWindow messageWindow = new MessageWindow("日期區間只能為三天內^^",MessageType.ERROR);
+               /// messageWindow.ShowDialog();
                 return;
             }
             CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
@@ -185,7 +185,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             if (selectitem is null) return;
             WebApi.UpdateIsReadByDeclareId(((CooperativeClinic)selectitem).DeclareId);
             ((CooperativeClinic)selectitem).IsRead = "已讀";
-            CustomerDeclaresCollection = DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IcNumber); 
+            CustomerDeclaresCollection = null;///DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IcNumber); 
             CustomerDeclaresCollection.Insert(0,(new CustomerDeclare(((CooperativeClinic)selectitem).Prescription)));
             MedicineInfo = null;
             DataGridCooperativeClinic.SelectedIndex = 0;

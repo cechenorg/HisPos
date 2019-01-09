@@ -41,7 +41,7 @@ namespace His_Pos.Class
             Customer = new Customer(row,"fromXml");
             Pharmacy = new Pharmacy.Pharmacy(row);
             Treatment = new Treatment(row);
-            Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
+            Medicines = null;/// MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
             ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
             OriginalMedicalNumber = row["HISDECMAS_OLDNUMDER"].ToString();

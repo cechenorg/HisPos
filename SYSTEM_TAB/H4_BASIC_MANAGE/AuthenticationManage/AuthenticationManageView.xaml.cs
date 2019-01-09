@@ -73,12 +73,12 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
 
         public void InitAuthRecord()
         {
-            AuthLeaveRecords = AuthorityDb.GetLeaveRecord();
+            ///AuthLeaveRecords = AuthorityDb.GetLeaveRecord();
         }
 
         private void InitAuthStatus()
         {
-            AuthStatuses = AuthorityDb.GetAuthStatus();
+            ///AuthStatuses = AuthorityDb.GetAuthStatus();
 
             AuthStatus leaveStatus = AuthStatuses.Single(a => a.Name.Equals("Leave"));
             LeaveToggle.IsChecked = leaveStatus.Status;
@@ -93,7 +93,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
             
             SetLeaveUi((bool)toggleButton.IsChecked);
 
-            AuthorityDb.ChangeAuthLeaveStatus((bool)toggleButton.IsChecked);
+            ///AuthorityDb.ChangeAuthLeaveStatus((bool)toggleButton.IsChecked);
         }
 
         private void SetLeaveUi(bool status)
@@ -129,7 +129,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
 
         private void LeaveConfirm_OnClick(object sender, RoutedEventArgs e)
         {
-            AuthorityDb.AuthLeaveConfirm(AuthLeaveRecords.Where(al => al.IsSelected).ToList());
+            ///AuthorityDb.AuthLeaveConfirm(AuthLeaveRecords.Where(al => al.IsSelected).ToList());
 
             MessageWindow messageWindow = new MessageWindow("審核成功!", MessageType.SUCCESS, true);
             messageWindow.ShowDialog();

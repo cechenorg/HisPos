@@ -46,7 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         {
             foreach (var item in changeItems)
             {
-            ProductDb.ChangeProductType(item.id, item.newvalue);
+            ///ProductDb.ChangeProductType(item.id, item.newvalue);
             }
             MessageWindow messageWindow = new MessageWindow("更新成功!", MessageType.SUCCESS, true);
             messageWindow.ShowDialog();

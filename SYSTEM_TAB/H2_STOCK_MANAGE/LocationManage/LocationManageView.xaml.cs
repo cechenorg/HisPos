@@ -65,7 +65,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 LocationControl locationControl = (LocationControl)contentControl.Content;
                 locationCollection.Add(new Location(locationControl.id, locationControl.Name, Canvas.GetLeft(contentControl), Canvas.GetTop(contentControl), contentControl.Width, contentControl.Height));
             }
-            LocationDb.SaveLocationData(locationCollection);
+            ///LocationDb.SaveLocationData(locationCollection);
         }
         public void InitLocation()
         {
@@ -112,15 +112,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 if ((LocationControl)contentcontrol.Content == selectItem)
                      deleteControl = contentcontrol;
             }
-            if (LocationDb.CheckProductExist(selectItem.id.ToString()))
-            {
-                LocationCanvus.Children.Remove(deleteControl);
-                LocationDb.DeleteLocation(selectItem.id.ToString());
-            }
-            else {
-                MessageWindow messageWindow = new MessageWindow("此櫃位尚有商品，無法刪除",MessageType.ERROR, true);
-                messageWindow.ShowDialog();
-            }
+           ///if (LocationDb.CheckProductExist(selectItem.id.ToString()))
+           ///{
+           ///    LocationCanvus.Children.Remove(deleteControl);
+           ///    LocationDb.DeleteLocation(selectItem.id.ToString());
+           ///}
+           ///else {
+           ///    MessageWindow messageWindow = new MessageWindow("此櫃位尚有商品，無法刪除",MessageType.ERROR, true);
+           ///    messageWindow.ShowDialog();
+           ///}
            
         }
 

@@ -57,7 +57,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
             DataContext = this;
         }
         private void InitData() {
-            ChronicCollection = ChronicDb.GetChronicDeclareById(CusId); 
+           /// ChronicCollection = ChronicDb.GetChronicDeclareById(CusId); 
             CooperativeClinicCollection = WebApi.GetXmlByMedicalNum(MainWindow.CurrentPharmacy.Id, CusIcNum);
         }
 

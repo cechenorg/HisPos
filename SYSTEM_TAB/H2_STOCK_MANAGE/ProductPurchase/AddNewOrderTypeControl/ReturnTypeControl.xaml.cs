@@ -31,7 +31,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeCont
             ManufactoryAutoCompleteCollection = manufactoryAutoCompleteCollection;
             WareHouseComboCollection = wareHouseComboCollection;
 
-            StoreOrderOverviewCollection = StoreOrderDb.GetStoreOrderOverview();
+           /// StoreOrderOverviewCollection = StoreOrderDb.GetStoreOrderOverview();
 
             WareHouseCombo.SelectedIndex = 0;
         }

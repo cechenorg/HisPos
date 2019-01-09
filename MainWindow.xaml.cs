@@ -145,7 +145,7 @@ namespace His_Pos
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
 
-            Collection<string> tabAuth = AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
+            Collection<string> tabAuth = null;/// AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)
@@ -225,10 +225,10 @@ namespace His_Pos
             var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
             var upload = (bool)dailyUploadConfirm.ShowDialog();
             if(upload)
-                d.StartDailyUpload();
-            ProductDb.UpdateDailyStockValue();
-            DeclareDb declareDb = new DeclareDb();
-            declareDb.SendUnSendCooperClinicDeclare();
+               /// d.StartDailyUpload();
+            ///ProductDb.UpdateDailyStockValue();
+            ///DeclareDb declareDb = new DeclareDb();
+           /// declareDb.SendUnSendCooperClinicDeclare();
             if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
                 HisApiBase.CloseCom();
             Environment.Exit(0);

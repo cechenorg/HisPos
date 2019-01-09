@@ -187,7 +187,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             _isFirst = true;
             DataContext = this;
             _isPredictChronic = isPredictChronic;
-            DeclareTrade = DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
+            DeclareTrade = new DeclareTrade("", "", "", "", "", "", "", "", "");/// DeclareTradeDb.GetDeclarTradeByMasId(inquired.DecMasId);
             _decMasId = inquired.DecMasId;
             InquiredPrescription = inquired;
             
@@ -291,9 +291,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 
             if (!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id))
             {
-                InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id)[0].ICD10;
-                if(!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
-                    InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id)[0].ICD10;
+                ///InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(InquiredPrescription.Prescription.Treatment.MedicalInfo.MainDiseaseCode.Id)[0].ICD10;
+                if (!string.IsNullOrEmpty(InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id))
+                    ;/// InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(InquiredPrescription.Prescription.Treatment.MedicalInfo.SecondDiseaseCode.Id)[0].ICD10;
             }
             InquiredPrescription.Prescription.Treatment.AdjustCase = AdjustCaseCollection.SingleOrDefault(a =>
                 a.Id.Equals(InquiredPrescription.Prescription.Treatment.AdjustCase.Id));
@@ -643,7 +643,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 }
                 if (IsAdjust || _isPredictChronic) { 
                     var declareDb = new DeclareDb();
-                      declareDb.UpdateDeclareData(_currentDeclareData);
+                      ///declareDb.UpdateDeclareData(_currentDeclareData);
                     m = new MessageWindow("處方修改成功", MessageType.SUCCESS, true);
                     m.ShowDialog();
                     InitDataChanged();
@@ -716,8 +716,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                     CreatIcUploadData();
                 else
                     CreatIcErrorUploadData(SelectedErrorCode);
-                ProductDb.InsertCashFow("補卡退還押金", (int.Parse(DeclareTrade.Deposit)*-1).ToString(), "DecMasId", InquiredPrescription.DecMasId);
-                DeclareDb.UpdateDeclareRegisterMakeUp(InquiredPrescription.DecMasId);
+                ///ProductDb.InsertCashFow("補卡退還押金", (int.Parse(DeclareTrade.Deposit)*-1).ToString(), "DecMasId", InquiredPrescription.DecMasId);
+                ///DeclareDb.UpdateDeclareRegisterMakeUp(InquiredPrescription.DecMasId);
                 var m = new MessageWindow("補卡作業已完成", MessageType.SUCCESS, true);
                 m.ShowDialog();
             }
@@ -839,7 +839,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 icRecord.MainMessage.MedicalMessageList = medicalDatas;
                 icRecord.SerializeDailyUploadObject();
                 var d = new DeclareDb();
-                d.InsertDailyUpload(icRecord.SerializeDailyUploadObject());
+               ///d.InsertDailyUpload(icRecord.SerializeDailyUploadObject());
             }
             catch (Exception ex)
             {
@@ -906,7 +906,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                     icRecord.MainMessage.MedicalMessageList = medicalDatas;
                     icRecord.SerializeObject();
                     var d = new DeclareDb();
-                    d.InsertDailyUpload(icRecord.SerializeObject());
+                    ///d.InsertDailyUpload(icRecord.SerializeObject());
                 }
                 catch (Exception ex)
                 {
@@ -953,7 +953,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                         var tmpMedicalNumber = InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber.DeepCloneViaJson();
                         InquiredPrescription.Prescription.Customer = new Customer(CusBasicData);
                         InquiredPrescription.Prescription.Customer.IcCard.MedicalNumber = tmpMedicalNumber;
-                        CustomerDb.LoadCustomerData(InquiredPrescription.Prescription.Customer);
+                        ///CustomerDb.LoadCustomerData(InquiredPrescription.Prescription.Customer);
                     }
                     HisApiBase.CloseCom();
                 }
@@ -1054,10 +1054,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 return;
             }
 
-            if (DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).DistinctBy(d => d.ICD10.Id).DistinctBy(d => d.ICD9.Id)
-                    .ToList().Count == 1)
+            if (true)///DiseaseCodeDb.GetDiseaseCodeById(textBox.Text).DistinctBy(d => d.ICD10.Id).DistinctBy(d => d.ICD9.Id).ToList().Count == 1)
             {
-                var selectedDiseaseCode = DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
+                var selectedDiseaseCode = new DiseaseCode();/// DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
                 if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
                 {
                     var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
@@ -1106,8 +1105,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
         {
             if (PrescriptionMedicines.SelectedIndex == -1 || InquiredPrescription.Prescription.Medicines.Count == 0) return;
             if (!(InquiredPrescription.Prescription.Medicines[PrescriptionMedicines.SelectedIndex] is DeclareMedicine med)) return;
-            var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(med.Id));
-            m.Show();
+            ///var m = new MedicineInfoWindow(MedicineDb.GetMedicalInfoById(med.Id));
+            ///m.Show();
         }
     }
 }

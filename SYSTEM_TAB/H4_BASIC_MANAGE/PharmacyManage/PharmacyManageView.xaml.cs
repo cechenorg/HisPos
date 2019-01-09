@@ -38,7 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage
 
         private void InitPharmacy()
         {
-            ManagePharmacies = PharmacyDb.GetManagePharmacy();
+            ManagePharmacies = null;/// PharmacyDb.GetManagePharmacy();
             ManagePharmacyDataGrid.SelectedIndex = 0;
         }
 
@@ -100,7 +100,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage
 
         private void AddManufactory_Click(object sender, MouseButtonEventArgs e)
         {
-            ManagePharmacy newManagePharmacy = PharmacyDb.AddNewManagePharmacy();
+            ManagePharmacy newManagePharmacy = null;/// PharmacyDb.AddNewManagePharmacy();
 
             ManagePharmacies.Add(newManagePharmacy);
 
@@ -118,14 +118,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage
 
             ManagePharmacyDataGrid.SelectedIndex = index;
 
-            PharmacyDb.UpdateManagePharmacy(CurrentPharmacy);
+            ///PharmacyDb.UpdateManagePharmacy(CurrentPharmacy);
         }
 
         private void DeleteManufactory_Click(object sender, MouseButtonEventArgs e)
         {
             ManagePharmacy pharmacy = ManagePharmacyDataGrid.SelectedItem as ManagePharmacy;
 
-            ManufactoryDb.DeleteManageManufactory(pharmacy.Id);
+            ///ManufactoryDb.DeleteManageManufactory(pharmacy.Id);
 
             ManagePharmacies.Remove(pharmacy);
 

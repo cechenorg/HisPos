@@ -103,7 +103,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
                 ComboBoxProduct.Text = ((InventoryMedicine)Inventory).ChiName;
             }
                
-            WareHouseInventoryCollection = WareHouseDb.GetWareHouseInventoryById(Inventory.Id);
+           ///WareHouseInventoryCollection = WareHouseDb.GetWareHouseInventoryById(Inventory.Id);
         }
 
         private void TextAmount_TextChanged(object sender, TextChangedEventArgs e)
@@ -118,12 +118,12 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
                 messageWindows.ShowDialog();
                 return;
             }
-            string newInvId = ProductDb.GetMaxProInvId();
+            string newInvId = "";/// ProductDb.GetMaxProInvId();
             string proId =  ProductGroups.Single(pro => pro.id == ((ProductGroup)ComboBoxProduct.SelectedItem).id).id;
             foreach (WareHouseInventory wareHouseInventory in WareHouseInventoryCollection)
             {
                 if (wareHouseInventory.DemolitionAmount == "0") continue;
-                ProductDb.DemolitionProduct(newInvId,proId, wareHouseInventory.warId,wareHouseInventory.DemolitionAmount);
+                ///ProductDb.DemolitionProduct(newInvId,proId, wareHouseInventory.warId,wareHouseInventory.DemolitionAmount);
             }
             MessageWindow messageWindow = new MessageWindow("拆庫成功",MessageType.SUCCESS, true);
             messageWindow.ShowDialog();

@@ -92,8 +92,8 @@ namespace His_Pos.FunctionWindow
                     PreserveWhitespace = true
                 };
                 doc.Load(filename);
-                int maxDecMasId = declareDb.GetMaxDecMasId();
-                string decId = declareDb.CheckXmlFileExist(doc);
+                int maxDecMasId = 0;///declareDb.GetMaxDecMasId();
+                string decId = "";///declareDb.CheckXmlFileExist(doc);
                 if (decId != string.Empty)
                 {
                     ChangeLoadingMessage("申報檔匯入...");
@@ -116,7 +116,7 @@ namespace His_Pos.FunctionWindow
                         currentDecCount++;
                     }
                     ChangeLoadingMessage("匯入資料庫...");
-                    declareDb.ImportDeclareData(declareDataCollection, decId);
+                    /// declareDb.ImportDeclareData(declareDataCollection, decId);
                     ChangeLoadingMessage("預約慢箋中..."); 
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
@@ -153,47 +153,42 @@ namespace His_Pos.FunctionWindow
             MainWindow mainWindow = new MainWindow(userLogin);
             backgroundWorker.DoWork += (s, o) =>
             {
-                //ChangeLoadingMessage("取得藥品資料...");
-                //MainWindow.MedicineDataTable = MedicineDb.GetMedicineData();
-                //MainWindow.View = new DataView(MainWindow.MedicineDataTable) { Sort = "PRO_ID" };
 
-                //ChangeLoadingMessage("取得商品資料...");
-                //MainWindow.OtcDataTable = OTCDb.GetOtcData();
-                if (FunctionDb.CheckYearlyHoliday())
-                {
-                    ChangeLoadingMessage("更新假日資料...");
-                    Function function = new Function();
-                    function.GetLastYearlyHoliday();
-                }
+                ///if (FunctionDb.CheckYearlyHoliday())
+                ///{
+                ///    ChangeLoadingMessage("更新假日資料...");
+                ///    Function function = new Function();
+                ///    function.GetLastYearlyHoliday();
+                ///}
                 ChangeLoadingMessage("取得醫療院所...");
-                var tmpHospitals = HospitalDb.GetData();
+                ///var tmpHospitals = HospitalDb.GetData();
                 ChangeLoadingMessage("取得科別資料...");
-                var tmpDivisions = DivisionDb.GetData();
+                ///var tmpDivisions = DivisionDb.GetData();
                 ChangeLoadingMessage("取得調劑案件資料...");
-                var tmpAdjustCases = AdjustCaseDb.GetData();
+                ///var tmpAdjustCases = AdjustCaseDb.GetData();
                 ChangeLoadingMessage("取得給付類別資料...");
-                var tmpPaymentCategroies = PaymentCategroyDb.GetData();
+                ///var tmpPaymentCategroies = PaymentCategroyDb.GetData();
                 ChangeLoadingMessage("取得部分負擔資料...");
-                var tmpCopayments = CopaymentDb.GetData();
+                ///var tmpCopayments = CopaymentDb.GetData();
                 ChangeLoadingMessage("取得處方案件資料...");
-                var tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
+                ///var tmpTreatmentCaseDb = TreatmentCaseDb.GetData();
                 ChangeLoadingMessage("取得特定治療代碼資料...");
-                var tmpSpecialCodes = SpecialCodeDb.GetData();
+                ///var tmpSpecialCodes = SpecialCodeDb.GetData();
                 ChangeLoadingMessage("取得藥品用法資料...");
-                var tmpUsages = UsageDb.GetData();
+                ///var tmpUsages = UsageDb.GetData();
                 ChangeLoadingMessage("取得途徑/作用部位資料...");
-                var tmpPositions = PositionDb.GetData();
+                ///var tmpPositions = PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    MainWindow.Hospitals = tmpHospitals;
-                    MainWindow.Divisions = tmpDivisions;
-                    MainWindow.AdjustCases = tmpAdjustCases;
-                    MainWindow.PaymentCategory = tmpPaymentCategroies;
-                    MainWindow.Copayments = tmpCopayments;
-                    MainWindow.TreatmentCase = tmpTreatmentCaseDb;
-                    MainWindow.SpecialCode = tmpSpecialCodes;
-                    MainWindow.Usages = tmpUsages;
-                    MainWindow.Positions = tmpPositions;
+                    ///MainWindow.Hospitals = tmpHospitals;
+                    ///MainWindow.Divisions = tmpDivisions;
+                    ///MainWindow.AdjustCases = tmpAdjustCases;
+                    ///MainWindow.PaymentCategory = tmpPaymentCategroies;
+                    ///MainWindow.Copayments = tmpCopayments;
+                    ///MainWindow.TreatmentCase = tmpTreatmentCaseDb;
+                    ///MainWindow.SpecialCode = tmpSpecialCodes;
+                    ///MainWindow.Usages = tmpUsages;
+                    ///MainWindow.Positions = tmpPositions;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -213,12 +208,12 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("新增新處理單...");
-                ManufactoryDb.AddNewOrderBasicSafe(type, wareHouse, manufactory);
-                
+                ///ManufactoryDb.AddNewOrderBasicSafe(type, wareHouse, manufactory);
+
                 ChangeLoadingMessage("取得進退貨資料...");
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    ObservableCollection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+                    ObservableCollection<StoreOrder> tempStoreOrderCollection = null;///StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
 
                     foreach (StoreOrder stoOrd in tempStoreOrderCollection)
                     {
@@ -250,16 +245,16 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得杏德新訂單...");
-                StoreOrderDb.GetNewStoreOrderBySingde();
+                ///StoreOrderDb.GetNewStoreOrderBySingde();
 
                 ChangeLoadingMessage("取得廠商資料...");
-                ObservableCollection<Manufactory> tempManufactories = ManufactoryDb.GetManufactoryData();
+                ObservableCollection<Manufactory> tempManufactories = null;///ManufactoryDb.GetManufactoryData();
 
                 ChangeLoadingMessage("取得商品資料...");
-                Collection<PurchaseProduct> tempProduct = ProductDb.GetItemDialogProduct();
+                Collection<PurchaseProduct> tempProduct = null;/// ProductDb.GetItemDialogProduct();
 
                 ChangeLoadingMessage("取得進退貨資料...");
-                Collection<StoreOrder> tempStoreOrderCollection = StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
+                Collection<StoreOrder> tempStoreOrderCollection = null;/// StoreOrderDb.GetStoreOrderOverview(OrderType.ALL);
 
                 foreach (StoreOrder stoOrd in tempStoreOrderCollection)
                 {
@@ -267,17 +262,17 @@ namespace His_Pos.FunctionWindow
                     {
                         if (stoOrd.DeclareDataCount > 0)
                         {
-                            stoOrd.Type = StoreOrderDb.GetDeclareOrderStatusFromSinde(stoOrd.Id);
+                            ///stoOrd.Type = StoreOrderDb.GetDeclareOrderStatusFromSinde(stoOrd.Id);
                         }
                         else
                         {
-                            stoOrd.Type = StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
+                            ///stoOrd.Type = StoreOrderDb.GetOrderStatusFromSinde(stoOrd.Id);
                         }
 
                         if (stoOrd.Type == OrderType.PROCESSING)
                             productPurchaseView.CheckSindeOrderDetail(stoOrd);
-                        else if (stoOrd.Type == OrderType.SCRAP)
-                            StoreOrderDb.DeleteOrder(stoOrd.Id);
+                        else if (stoOrd.Type == OrderType.SCRAP) ;
+                            ///StoreOrderDb.DeleteOrder(stoOrd.Id);
                     }
                 }
 
@@ -323,7 +318,7 @@ namespace His_Pos.FunctionWindow
             {
                 ChangeLoadingMessage("處理類別資料...");
 
-                ObservableCollection<Product> newProducts = ProductDb.GetProductTypeManageProducts();
+                ObservableCollection<Product> newProducts = null;///ProductDb.GetProductTypeManageProducts();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -352,11 +347,11 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("讀取商品資料...");
-                string totalWorth = ProductDb.GetTotalWorth();
+                string totalWorth = null;/// ProductDb.GetTotalWorth();
                 double stockValue = 0;
-                inventoryManagementView.InventoryMedicines = MedicineDb.GetInventoryMedicines();
-                inventoryManagementView.InventoryOtcs = OTCDb.GetInventoryOtcs();
-                inventoryManagementView.ProductCollection = ProductDb.GetItemDialogProduct();
+                inventoryManagementView.InventoryMedicines = null;/// MedicineDb.GetInventoryMedicines();
+                inventoryManagementView.InventoryOtcs = null;/// OTCDb.GetInventoryOtcs();
+                inventoryManagementView.ProductCollection = null;/// ProductDb.GetItemDialogProduct();
                 ChangeLoadingMessage("載入商品資料...");
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -407,7 +402,7 @@ namespace His_Pos.FunctionWindow
             {
                 ChangeLoadingMessage("取得櫃位資料...");
 
-                var location = LocationDb.GetLocationData();
+                var location = new DataTable();/// LocationDb.GetLocationData();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -434,11 +429,11 @@ namespace His_Pos.FunctionWindow
             {
                 ChangeLoadingMessage("取得客戶資料...");
 
-                var collection = CustomerDb.GetCustomerData();
+                var collection = "";/// CustomerDb.GetCustomerData();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    customerManage.CustomerCollection = collection;
+                    customerManage.CustomerCollection = null;///collection;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -456,15 +451,15 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得員工資料...");
-                var employeeCollection = EmployeeDb.GetEmployeeData();
+                var employeeCollection = new Collection<Object>();/// EmployeeDb.GetEmployeeData();
 
                 ChangeLoadingMessage("取得權限資料...");
-                var positionCollection = EmployeeDb.GetPositionData();
+                var positionCollection = new Collection<Object>();/// EmployeeDb.GetPositionData();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    employeeManage.EmployeeCollection = employeeCollection;
-                    employeeManage.PositionCollection = positionCollection;
+                    ///employeeManage.EmployeeCollection = employeeCollection;
+                   /// employeeManage.PositionCollection = positionCollection;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -484,7 +479,7 @@ namespace His_Pos.FunctionWindow
             {
                 ChangeLoadingMessage("取得盤點紀錄資料...");
 
-                var Products = StockTakingOrderDb.GetStockTakingRecord();
+                var Products = new DataTable();/// StockTakingOrderDb.GetStockTakingRecord();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
@@ -552,7 +547,7 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("載入基本資料中...");
-                prescriptionInquireView.DeclareMedicinesData = MedicineDb.GetDeclareMedicine();
+                prescriptionInquireView.DeclareMedicinesData = new ObservableCollection<Product>();///MedicineDb.GetDeclareMedicine();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     prescriptionInquireView.HospitalCollection = MainWindow.Hospitals;
@@ -576,10 +571,10 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得藥袋資料...");
-                var tmpMedBags = MedBagDb.ObservableGetMedBagData();
+                var tmpMedBags = "";/// MedBagDb.ObservableGetMedBagData();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    medBagManageView.MedBagCollection = tmpMedBags;
+                    medBagManageView.MedBagCollection = null; /// tmpMedBags;
                     medBagManageView.MedBags.ItemsSource = medBagManageView.MedBagCollection;
                 }));
             };
@@ -601,8 +596,8 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("申報資料處理中...");
-                exportView.DeclareFiles = DeclareFileDb.GetDeclareFilesData();
-                var tmpDeclareMedicine = MedicineDb.GetDeclareFileMedicineData();
+                exportView.DeclareFiles = null;/// DeclareFileDb.GetDeclareFilesData();
+                var tmpDeclareMedicine = "";// MedicineDb.GetDeclareFileMedicineData();
                 exportView.HospitalCollection = MainWindow.Hospitals;
                 exportView.DivisionCollection = MainWindow.Divisions;
                 exportView.AdjustCaseCollection = MainWindow.AdjustCases;
@@ -611,7 +606,7 @@ namespace His_Pos.FunctionWindow
                 exportView.CopaymentCollection = MainWindow.Copayments;
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    exportView.DeclareMedicinesData = tmpDeclareMedicine;
+                    exportView.DeclareMedicinesData = null;//tmpDeclareMedicine;
                     exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                     exportView.ReleasePalace.ItemsSource = MainWindow.Hospitals;
                     exportView.AdjustCaseCombo.ItemsSource = MainWindow.AdjustCases;
@@ -636,7 +631,7 @@ namespace His_Pos.FunctionWindow
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得處方資料...");
-                prescriptionDec2View.DeclareMedicines = MedicineDb.GetDeclareMedicine();
+                prescriptionDec2View.DeclareMedicines = null;///MedicineDb.GetDeclareMedicine();
                 prescriptionDec2View.Hospitals = MainWindow.Hospitals;
                 prescriptionDec2View.Divisions = MainWindow.Divisions;
                 prescriptionDec2View.TreatmentCases = MainWindow.TreatmentCase;
@@ -646,7 +641,7 @@ namespace His_Pos.FunctionWindow
                 prescriptionDec2View.SpecialCodes = MainWindow.SpecialCode;
                 prescriptionDec2View.Usages = MainWindow.Usages;
                 prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
-                prescriptionDec2View.Positions = PositionDb.GetData();
+                prescriptionDec2View.Positions = null;/// PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
                     prescriptionDec2View.ReleaseHospital.ItemsSource = prescriptionDec2View.Hospitals;
@@ -712,7 +707,7 @@ namespace His_Pos.FunctionWindow
             {
                 ChangeLoadingMessage("處理商品資料...");
 
-                var Products = ProductDb.GetStockTakingProduct();
+                var Products = new DataTable();/// ProductDb.GetStockTakingProduct();
 
                 Dispatcher.Invoke((Action)(() =>
                 {

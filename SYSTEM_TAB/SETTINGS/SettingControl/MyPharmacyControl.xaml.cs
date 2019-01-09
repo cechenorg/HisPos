@@ -72,7 +72,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
         {
             InitializeComponent();
 
-            myPharmacy = PharmacyDb.GetMyPharmacy();
+            ///myPharmacy = PharmacyDb.GetMyPharmacy();
             DataContext = this;
         }
 
@@ -122,7 +122,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 
         public void ResetPharmacy()
         {
-            myPharmacy = PharmacyDb.GetMyPharmacy();
+           ///myPharmacy = PharmacyDb.GetMyPharmacy();
 
             ClearDataChangedStatus();
         }
@@ -142,7 +142,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
                 return;
             }
 
-            PharmacyDb.SetMyPharmacy(myPharmacy);
+            ///PharmacyDb.SetMyPharmacy(myPharmacy);
 
             ClearDataChangedStatus();
         }

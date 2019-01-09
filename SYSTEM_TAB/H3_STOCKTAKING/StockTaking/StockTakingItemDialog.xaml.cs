@@ -47,7 +47,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             ProductsCollection = products;
             productsTakingCollection = takingCollection;
             SearchResult.Items.Filter = SearchFilter;
-            UserAutoCompleteCollection = PersonDb.GetUserCollection();
+            ///UserAutoCompleteCollection = PersonDb.GetUserCollection();
             TakingEmp.ItemsSource = UserAutoCompleteCollection;
             TakingEmp.ItemFilter = UserFilter;
         }

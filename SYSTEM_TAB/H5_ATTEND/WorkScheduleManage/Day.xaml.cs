@@ -384,7 +384,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 
             ImportantMessage = editMessageWindow.Message;
 
-            WorkScheduleDb.SaveCalendarRemark(ThisDay, ImportantMessage);
+            ///WorkScheduleDb.SaveCalendarRemark(ThisDay, ImportantMessage);
         }
 
         private void ShowRemark(object sender, MouseEventArgs e)

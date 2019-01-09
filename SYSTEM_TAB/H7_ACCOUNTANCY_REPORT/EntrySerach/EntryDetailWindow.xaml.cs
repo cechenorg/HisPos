@@ -30,7 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach {
  
 
                 DataContext = this;
-                EntryDetailCollection = EntryDb.GetEntryDetailByDate(date);
+                ///EntryDetailCollection = EntryDb.GetEntryDetailByDate(date);
             
         }
 

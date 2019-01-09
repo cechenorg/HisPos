@@ -82,7 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 
             allUserIconPreview.IsSelected = true;
 
-            UserIconDatas = WorkScheduleDb.GetUserIconDatas();
+           /// UserIconDatas = WorkScheduleDb.GetUserIconDatas();
 
             foreach (var userIconData in UserIconDatas)
             {
@@ -137,7 +137,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 
         private void InitWorkSchedule()
         {
-            WorkSchedules = WorkScheduleDb.GetWorkSchedules(selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
+            ///WorkSchedules = WorkScheduleDb.GetWorkSchedules(selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
 
             if (WorkSchedules.Count == 0) return;
 
@@ -182,14 +182,14 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
             int endDayCount = 6 - Int16.Parse(TheMonthEnd.DayOfWeek.ToString("d"));
             int wcount = 0;
 
-            Collection<SpecialData> specialDates = WorkScheduleDb.GetSpecialData(selectDateTime.Year, selectDateTime.Month);
+            ///Collection<SpecialData> specialDates = WorkScheduleDb.GetSpecialData(selectDateTime.Year, selectDateTime.Month);
             
             while (TheMonthStart != TheMonthEnd.AddDays(1))
             {
                 string today = TheMonthStart.DayOfWeek.ToString("d");
                 if (today == "0") wcount++;
 
-                SpecialData specialData = specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
+                SpecialData specialData = null;/// specialDates.SingleOrDefault(s => s.Day.Equals(TheMonthStart.Day.ToString()));
 
                 Day day = new Day(TheMonthStart, specialData);
 
@@ -210,7 +210,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 
         private void InitLeave()
         {
-            Collection<LeaveRecord> leaveRecords = LeaveDb.GetLeaveRecord(selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
+            Collection<LeaveRecord> leaveRecords = null;/// LeaveDb.GetLeaveRecord(selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
 
             if (leaveRecords.Count == 0) return;
 
@@ -360,7 +360,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         {
             UpdateWorkSchedules();
 
-            WorkScheduleDb.InsertWorkSchedules(WorkSchedules, selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
+            ///WorkScheduleDb.InsertWorkSchedules(WorkSchedules, selectDateTime.Year.ToString(), selectDateTime.Month.ToString());
 
             UpdateEndEditUi();
         }

@@ -94,9 +94,9 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry
         }
         private void InitData(string startDate = null, string endDate = null) {
             if (startDate == null)
-                CooperativeClinicEntryCollection = ProductDb.GetCopayMentValue(TotalCopaymentEntry);
+                ;/// CooperativeClinicEntryCollection = ProductDb.GetCopayMentValue(TotalCopaymentEntry);
             else
-                CooperativeClinicEntryCollection = ProductDb.GetCopayMentValue(TotalCopaymentEntry, startDate, endDate); 
+                ;/// CooperativeClinicEntryCollection = ProductDb.GetCopayMentValue(TotalCopaymentEntry, startDate, endDate); 
             LabelstartDate.Content = StartDate.AddYears(-1911).ToString("yyy/MM/dd");
             LabelendDate.Content = EndDate.AddYears(-1911).ToString("yyy/MM/dd");
         }

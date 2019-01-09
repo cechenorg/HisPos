@@ -40,9 +40,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
         private void AddReturnByOrder(string OrderId)
         {
-            StoreOrder newStoreOrder = StoreOrderDb.AddReturnOrderByPurchace(OrderId);
-
-            StoreOrderCollection.Insert(0, newStoreOrder);
+            ///StoreOrder newStoreOrder = new StoreOrder();/// StoreOrderDb.AddReturnOrderByPurchace(OrderId);
+            ///
+            ///StoreOrderCollection.Insert(0, newStoreOrder);
             StoOrderOverview.SelectedIndex = 0;
         }
 

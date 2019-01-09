@@ -20,7 +20,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
             public PrescriptionSendData(Product declareMedicine) {
                 MedId = declareMedicine.Id;
                 MedName = declareMedicine.Name;
-                Stock = ChronicDb.GetResidualAmountById(MedId); 
+                Stock = "";/// ChronicDb.GetResidualAmountById(MedId); 
                 TreatAmount =  declareMedicine is DeclareMedicine ? ((DeclareMedicine)declareMedicine).Amount.ToString() : ((PrescriptionOTC)declareMedicine).Amount.ToString();
                 SendAmount = declareMedicine is DeclareMedicine ? TreatAmount : "0";
             }
@@ -105,7 +105,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
             }
             PrescriptionDec2View.Instance.IsSend = true;
             PrescriptionDec2View.Instance.PrescriptionSendData = Prescription;
-            ChronicDb.InsertChronicDetail(Prescription,DecMasId);
+            ///ChronicDb.InsertChronicDetail(Prescription,DecMasId);
             Close();
         }
       

@@ -70,7 +70,7 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport
         }
 
         public void InitData() {
-            CooperativeAdjustMedCollection = ProductDb.GetCooperativeAdjustMed(SDateTime,EDateTime);
+           /// CooperativeAdjustMedCollection = ProductDb.GetCooperativeAdjustMed(SDateTime,EDateTime);
         }
 
         #region ----- Date Control -----
@@ -99,12 +99,12 @@ namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-            CooperativeAdjustMedCollection = ProductDb.GetCooperativeAdjustMed(SDateTime, EDateTime);
+           /// CooperativeAdjustMedCollection = ProductDb.GetCooperativeAdjustMed(SDateTime, EDateTime);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            CooperativeAdjustMedCollection = ProductDb.GetCooperativeAdjustMed(DateTime.Now.AddDays(-DateTime.Now.Day + 1), DateTime.Now);
+           /// CooperativeAdjustMedCollection = ProductDb.GetCooperativeAdjustMed(DateTime.Now.AddDays(-DateTime.Now.Day + 1), DateTime.Now);
         }
     }
 }

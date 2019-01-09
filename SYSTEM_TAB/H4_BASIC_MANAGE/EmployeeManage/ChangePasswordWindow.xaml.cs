@@ -24,14 +24,14 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         {
             InitializeComponent();
             EmpId = id;
-            EmpOldPassword = EmployeeDb.GetEmployeePassword(EmpId);
+           /// EmpOldPassword = EmployeeDb.GetEmployeePassword(EmpId);
         }
 
         private void ConfirmChangePassword_OnClick(object sender, RoutedEventArgs e)
         {
             if(!CheckPasswordValid()) return;
 
-            EmployeeDb.SetEmployeePassword(EmpId, EmpNewPassword);
+            ///EmployeeDb.SetEmployeePassword(EmpId, EmpNewPassword);
 
             MessageWindow messageWindow = new MessageWindow("更新密碼成功!", MessageType.SUCCESS);
             messageWindow.ShowDialog();

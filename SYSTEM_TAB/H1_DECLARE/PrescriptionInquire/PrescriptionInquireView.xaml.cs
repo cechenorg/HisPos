@@ -170,7 +170,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
         private void ShowInquireOutcome(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = (PrescriptionOverview)(sender as DataGridRow).Item;
-            DeclareData declareData = PrescriptionDB.GetDeclareDataById(selectedItem.Decmas_Id);
+            DeclareData declareData = new DeclareData();/// PrescriptionDB.GetDeclareDataById(selectedItem.Decmas_Id);
             if (declareData is null)
             {
                 MessageWindow messageWindow = new MessageWindow("查無處方 請聯絡資訊人員", MessageType.ERROR);
@@ -192,7 +192,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 
         private void LoadAdjustCases()
         {
-            AdjustCaseCombo.ItemsSource = AdjustCaseDb.GetData();
+           /// AdjustCaseCombo.ItemsSource = AdjustCaseDb.GetData();
         }
         
         private void SearchButtonClick(object sender, RoutedEventArgs e)
@@ -206,7 +206,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             string insName = "";
             if (ReleasePalace.Text != String.Empty)
                 insName = ReleasePalace.Text.Split(' ')[1];
-            PrescriptionOverview = PrescriptionDB.GetPrescriptionOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
+           /// PrescriptionOverview = PrescriptionDB.GetPrescriptionOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
             if(DataPrescription.Items.Count > 0)
                  DataPrescription.ScrollIntoView(DataPrescription.Items[DataPrescription.Items.Count - 1]);
 
@@ -279,7 +279,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             string insName = "";
             if (ReleasePalace.Text != String.Empty)
                 insName = ReleasePalace.Text.Split(' ')[1];
-            PrescriptionOverview = PrescriptionDB.GetChronicOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
+            ///PrescriptionOverview = PrescriptionDB.GetChronicOverviewBySearchCondition(StartDate, EndDate, PatientName.Text, adjustId, HisPerson.Text, insName);
             if (DataPrescription.Items.Count > 0)
                 DataPrescription.ScrollIntoView(DataPrescription.Items[DataPrescription.Items.Count - 1]);
 
