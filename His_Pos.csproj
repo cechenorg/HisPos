@@ -689,6 +689,7 @@
     <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
     <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
+    <Compile Include="NewClass\CooperativePrescription.cs" />
     <Compile Include="PrintDocuments\StockTakingDocument.xaml.cs">
       <DependentUpon>StockTakingDocument.xaml</DependentUpon>
     </Compile>
@@ -1290,7 +1291,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
-    <Folder Include="NewClass\" />
     <Folder Include="packages\" />
     <Folder Include="StockTaking\" />
   </ItemGroup>
