@@ -285,4 +285,10 @@
   <data name="AdminManage" xml:space="preserve">
     <value>系統管理</value>
   </data>
+  <data name="Female" xml:space="preserve">
+    <value>女</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>男</value>
+  </data>
 </root>
