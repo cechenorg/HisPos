@@ -300,6 +300,14 @@
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclare.cs" />
+    <Compile Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
+      <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\AdjustCase.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Copayment.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\DiseaseCodeContrast.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCodeDb.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
@@ -843,6 +851,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1197,6 +1209,7 @@
     <Content Include="RDLC\MedBagReportSingle.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="ClassDiagram1.cd" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -1255,6 +1268,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
     <Folder Include="Images\General\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
