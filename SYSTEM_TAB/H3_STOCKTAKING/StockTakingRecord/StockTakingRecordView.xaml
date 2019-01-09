@@ -1,16 +1,17 @@
-﻿<UserControl x:Class="His_Pos.StockTakingRecord.StockTakingRecordView"
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord.StockTakingRecordView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.StockTakingRecord"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:hisPos="clr-namespace:His_Pos"
+             xmlns:service="clr-namespace:His_Pos.Service"
+             xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
-        <hisPos:DateConverter x:Key="DateConverter" />
-        <local:ValueDifferentColorConverter x:Key="ValueDifferentColorConverter"/>
+        <service:DateConverter x:Key="DateConverter" />
+        <stockTakingRecord:ValueDifferentColorConverter x:Key="ValueDifferentColorConverter"/>
     </UserControl.Resources>
     <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
@@ -32,7 +33,7 @@
                         <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
                             <Binding.ValidationRules>
-                                <hisPos:DateValidationRule/>
+                                <service:DateValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
                     </xctk:MaskedTextBox.Text>
@@ -44,7 +45,7 @@
                         <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
                             <Binding.ValidationRules>
-                                <hisPos:DateValidationRule/>
+                                <service:DateValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
                     </xctk:MaskedTextBox.Text>

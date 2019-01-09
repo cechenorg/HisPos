@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace His_Pos.H1_DECLARE.MedBagManage
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
 {
     /// <summary>
     /// RdlLocationControl.xaml 的互動邏輯

@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace His_Pos.ViewModel
+namespace His_Pos.ChromeTabViewModel
 {
     public abstract class TabBase : ViewModelBase
     {

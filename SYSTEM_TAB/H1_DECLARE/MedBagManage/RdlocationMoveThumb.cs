@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace His_Pos.H1_DECLARE.MedBagManage
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
 {
     public class RdlLocationMoveThumb : Thumb
     {

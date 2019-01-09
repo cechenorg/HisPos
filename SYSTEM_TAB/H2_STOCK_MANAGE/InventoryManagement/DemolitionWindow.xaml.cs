@@ -1,15 +1,16 @@
-﻿using His_Pos.Class;
-using His_Pos.Class.Product;
-using His_Pos.Interface;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using His_Pos.Class;
+using His_Pos.Class.Product;
+using His_Pos.FunctionWindow;
+using His_Pos.Interface;
 
-namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
 {
     /// <summary>
     /// DemolitionWindow.xaml 的互動邏輯

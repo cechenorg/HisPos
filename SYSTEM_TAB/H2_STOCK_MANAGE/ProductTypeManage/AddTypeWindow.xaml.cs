@@ -1,8 +1,9 @@
-﻿using His_Pos.Class.ProductType;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
+using His_Pos.Class.ProductType;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
     /// <summary>
     /// AddTypeWindow.xaml 的互動邏輯

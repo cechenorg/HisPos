@@ -1,6 +1,6 @@
-﻿using His_Pos.ViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.IndexView
+namespace His_Pos.SYSTEM_TAB.INDEX
 {
     class Index : TabBase
     {

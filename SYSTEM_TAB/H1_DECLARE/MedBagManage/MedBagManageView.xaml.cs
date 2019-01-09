@@ -11,16 +11,16 @@ using System.Xml.Serialization;
 using His_Pos.Class;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.MedBagLocation;
+using His_Pos.FunctionWindow;
 using His_Pos.Service;
 using JetBrains.Annotations;
 using Button = System.Windows.Controls.Button;
 using CheckBox = System.Windows.Controls.CheckBox;
 using DataGrid = System.Windows.Controls.DataGrid;
-using HorizontalAlignment = System.Windows.HorizontalAlignment;
 using RadioButton = System.Windows.Controls.RadioButton;
 using Visibility = System.Windows.Visibility;
 
-namespace His_Pos.H1_DECLARE.MedBagManage
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
 {
     /// <summary>
     ///     MedBagManageView.xaml 的互動邏輯

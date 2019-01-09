@@ -1,15 +1,15 @@
-﻿using His_Pos.Class.Product;
-using His_Pos.Interface;
-using His_Pos.InventoryManagement;
-using His_Pos.ProductPurchase;
-using His_Pos.Struct.Product;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using His_Pos.Class.Product;
+using His_Pos.FunctionWindow;
+using His_Pos.Interface;
+using His_Pos.Struct.Product;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 
-namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
 {
     /// <summary>
     /// MergeStockWindow.xaml 的互動邏輯

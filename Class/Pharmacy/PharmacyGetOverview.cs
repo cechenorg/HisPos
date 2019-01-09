@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace His_Pos.Class.Manufactory
+namespace His_Pos.Class.Pharmacy
 {
     public class PharmacyGetOverview
     {

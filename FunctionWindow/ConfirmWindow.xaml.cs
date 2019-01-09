@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace His_Pos.Service
+namespace His_Pos.FunctionWindow
 {
     /// <summary>
     /// YesNoMessageWindow.xaml 的互動邏輯

@@ -2,9 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
+using His_Pos.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
 
-namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 {
     /// <summary>
     /// BatchNumberDialog.xaml 的互動邏輯

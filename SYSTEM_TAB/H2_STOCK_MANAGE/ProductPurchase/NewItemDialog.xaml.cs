@@ -1,12 +1,13 @@
-﻿using His_Pos.Class;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.Struct.Product;
 
-namespace His_Pos.ProductPurchase
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 {
     /// <summary>
     /// NewItemDialog.xaml 的互動邏輯

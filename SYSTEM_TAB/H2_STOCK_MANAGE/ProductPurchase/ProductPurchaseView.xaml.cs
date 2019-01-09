@@ -12,13 +12,14 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
-using His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
+using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using His_Pos.InventoryManagement;
-using His_Pos.ProductPurchaseRecord;
 using His_Pos.Struct.Product;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
 
-namespace His_Pos.ProductPurchase
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 {
     /// <summary>
     /// ProductPurchaseView.xaml 的互動邏輯

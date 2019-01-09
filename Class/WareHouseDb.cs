@@ -1,6 +1,4 @@
-﻿using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
-using His_Pos.InventoryManagement;
-using His_Pos.Properties;
+﻿using His_Pos.Properties;
 using His_Pos.Service;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

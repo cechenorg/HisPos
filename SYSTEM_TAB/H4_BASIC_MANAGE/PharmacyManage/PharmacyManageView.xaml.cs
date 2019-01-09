@@ -1,5 +1,4 @@
-﻿using His_Pos.Class.Pharmacy;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,8 +6,9 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class.Manufactory;
+using His_Pos.Class.Pharmacy;
 
-namespace His_Pos.H4_BASIC_MANAGE.PharmacyManage
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage
 {
     /// <summary>
     /// PharmacyManageView.xaml 的互動邏輯

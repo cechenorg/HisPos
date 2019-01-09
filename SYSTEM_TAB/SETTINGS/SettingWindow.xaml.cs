@@ -9,9 +9,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
-using His_Pos.SystemSettings.SettingControl;
+using His_Pos.SYSTEM_TAB.SETTINGS.SettingControl;
 
-namespace His_Pos.SystemSettings
+namespace His_Pos.SYSTEM_TAB.SETTINGS
 {
     /// <summary>
     /// SettingWindow.xaml 的互動邏輯

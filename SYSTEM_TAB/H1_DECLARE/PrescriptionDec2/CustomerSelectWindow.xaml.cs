@@ -10,14 +10,11 @@ using System.Windows.Data;
 using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.Class.CustomerHistory;
-using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.Person;
-using His_Pos.HisApi;
 using His_Pos.Service;
-using His_Pos.Struct.IcData;
 using JetBrains.Annotations;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 {
     /// <summary>
     /// CustomerSelectWindow.xaml 的互動邏輯

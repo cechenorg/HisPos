@@ -1,9 +1,8 @@
-﻿<UserControl x:Class="His_Pos.H5_ATTEND.WorkScheduleManage.WorkScheduleManageView"
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.WorkScheduleManageView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
     <Grid>
         <Grid.RowDefinitions>

@@ -4,9 +4,10 @@ using System.Windows.Controls;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.StoreOrder;
+using His_Pos.FunctionWindow;
 using His_Pos.Struct.StoreOrder;
 
-namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
 {
     /// <summary>
     /// ReturnTypeControl.xaml 的互動邏輯

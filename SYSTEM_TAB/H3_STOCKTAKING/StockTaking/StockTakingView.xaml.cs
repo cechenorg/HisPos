@@ -13,12 +13,12 @@ using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
-using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
+using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using His_Pos.StockTaking;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
 using Microsoft.Reporting.WinForms;
 
-namespace His_Pos.H3_STOCKTAKING.StockTaking
+namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 {
     /// <summary>
     /// StockTakingView.xaml 的互動邏輯

@@ -1,6 +1,6 @@
-﻿using His_Pos.ViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage
 {
     class MedFrequencyManage: TabBase
     {

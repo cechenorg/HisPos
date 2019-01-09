@@ -1,40 +1,39 @@
-﻿using System.Collections.Generic;
-using ChromeTabs;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
+using ChromeTabs;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
-using System.Windows;
-using System.Windows.Controls;
-using His_Pos.H5_ATTEND.ClockIn;
-using His_Pos.InventoryManagement;
-using His_Pos.LocationManage;
-using His_Pos.H4_BASIC_MANAGE.PharmacyManage;
-using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
-using His_Pos.H1_DECLARE.MedBagManage;
-using His_Pos.H5_ATTEND.WorkScheduleManage;
-using His_Pos.H4_BASIC_MANAGE.MedFrequencyManage;
-using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
-using His_Pos.H4_BASIC_MANAGE.CustomerManage;
-using His_Pos.H6_DECLAREFILE.Export;
-using His_Pos.IndexView;
-using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
-using His_Pos.H3_STOCKTAKING.StockTaking;
-using His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
-using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
-using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
-using JetBrains.Annotations;
-using System.Runtime.CompilerServices;
-using His_Pos.AdminManageTab.AdminFunction;
+using His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.Export;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
+using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking;
+using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage;
+using His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn;
+using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach;
+using His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport;
+using His_Pos.SYSTEM_TAB.INDEX;
 
-namespace His_Pos.ViewModel
+namespace His_Pos.ChromeTabViewModel
 {
     public class MainViewModel : ViewModelBase
     {
@@ -247,7 +246,7 @@ namespace His_Pos.ViewModel
                     break;
 
                 case nameof(FeatureItem.處方查詢):
-                    newTab = new PrescriptionInquire.PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new PrescriptionInquire() { TabName = MainWindow.HisFeatures[0].Functions[1], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.藥品頻率管理):
@@ -263,37 +262,37 @@ namespace His_Pos.ViewModel
                     break;
                 //商品管理
                 case nameof(FeatureItem.商品查詢):
-                    newTab = new InventoryManagement.InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = new InventoryManagement() { TabName = MainWindow.HisFeatures[1].Functions[0], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
                 case nameof(FeatureItem.進退貨管理):
-                    newTab = new ProductPurchase.ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = new ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):
-                    newTab = new ProductPurchaseRecord.ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = new ProductPurchaseRecord() { TabName = MainWindow.HisFeatures[1].Functions[2], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
                 case nameof(FeatureItem.商品類別管理):
-                    newTab = new ProductTypeManage.ProductTypeManage() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new ProductTypeManage() { TabName = MainWindow.HisFeatures[1].Functions[3], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.櫃位管理):
-                    newTab = new LocationManage.LocationManage() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new LocationManage() { TabName = MainWindow.HisFeatures[1].Functions[4], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
                 //盤點
                 case nameof(FeatureItem.新增盤點):
-                    newTab = new StockTaking.StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
+                    newTab = new StockTaking() { TabName = MainWindow.HisFeatures[2].Functions[0], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 case nameof(FeatureItem.庫存盤點紀錄):
-                    newTab = new StockTakingRecord.StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
+                    newTab = new StockTakingRecord() { TabName = MainWindow.HisFeatures[2].Functions[1], Icon = MainWindow.HisFeatures[2].Icon };
                     break;
 
                 //基本資料管理
                 case nameof(FeatureItem.供應商管理):
-                    newTab = new ManufactoryManage.ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
+                    newTab = new ManufactoryManage() { TabName = MainWindow.HisFeatures[3].Functions[0], Icon = MainWindow.HisFeatures[3].Icon };
                     break;
 
                 case nameof(FeatureItem.藥局管理):
@@ -361,22 +360,22 @@ namespace His_Pos.ViewModel
                             }
                             break;
                         case nameof(FeatureItem.商品查詢):
-                            if (InventoryManagement.InventoryManagementView.Instance is null) break;
+                            if (InventoryManagementView.Instance is null) break;
 
-                            if (InventoryManagement.InventoryManagementView.DataChanged)
+                            if (InventoryManagementView.DataChanged)
                             {
-                                InventoryManagement.InventoryManagementView.Instance.MergingData();
-                                InventoryManagement.InventoryManagementView.Instance.SearchData();
+                                InventoryManagementView.Instance.MergingData();
+                                InventoryManagementView.Instance.SearchData();
                             }
                             break;
 
                         case nameof(FeatureItem.進退貨紀錄):
-                            if (ProductPurchaseRecord.ProductPurchaseRecordView.Instance is null) break;
+                            if (ProductPurchaseRecordView.Instance is null) break;
 
-                            if (ProductPurchaseRecord.ProductPurchaseRecordView.DataChanged)
-                                ProductPurchaseRecord.ProductPurchaseRecordView.Instance.UpdateUi();
+                            if (ProductPurchaseRecordView.DataChanged)
+                                ProductPurchaseRecordView.Instance.UpdateUi();
 
-                            ProductPurchaseRecord.ProductPurchaseRecordView.Instance.PassValueSearchData();
+                            ProductPurchaseRecordView.Instance.PassValueSearchData();
                             break;
 
                         case nameof(FeatureItem.新增盤點):

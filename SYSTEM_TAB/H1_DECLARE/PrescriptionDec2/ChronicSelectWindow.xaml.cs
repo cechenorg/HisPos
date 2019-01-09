@@ -1,17 +1,14 @@
-﻿using His_Pos.Class;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Linq;
-using His_Pos.Service;
-using His_Pos.Class.Division;
-using System.Runtime.InteropServices;
-using System;
 using System.Windows.Interop;
+using His_Pos.Class;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
     /// <summary>
     /// ChronicSelectWindow.xaml 的互動邏輯
     /// </summary> 

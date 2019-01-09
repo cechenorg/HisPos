@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using His_Pos.Class;
 
-namespace His_Pos
+namespace His_Pos.FunctionWindow
 {
     /// <summary>
     /// InitConnectionWindow.xaml 的互動邏輯

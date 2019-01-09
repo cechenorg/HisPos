@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using His_Pos.Class;
 
-namespace His_Pos
+namespace His_Pos.FunctionWindow
 {
     /// <summary>
     /// MessageWindow.xaml 的互動邏輯

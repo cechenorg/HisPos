@@ -7,9 +7,10 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using His_Pos.Class;
 using His_Pos.Class.Pharmacy;
+using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 
-namespace His_Pos.SystemSettings.SettingControl
+namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 {
     /// <summary>
     /// MyPharmacyControl.xaml 的互動邏輯

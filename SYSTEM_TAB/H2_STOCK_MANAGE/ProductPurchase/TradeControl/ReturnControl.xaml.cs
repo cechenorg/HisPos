@@ -12,13 +12,13 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StoreOrder;
+using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using His_Pos.ProductPurchase;
 using His_Pos.Service;
 using His_Pos.Struct.Manufactory;
 using His_Pos.Struct.Product;
 
-namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.TradeControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.TradeControl
 {
     /// <summary>
     /// ReturnControl.xaml 的互動邏輯

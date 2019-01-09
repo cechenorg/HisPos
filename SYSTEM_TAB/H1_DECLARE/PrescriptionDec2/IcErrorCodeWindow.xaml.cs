@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using His_Pos.Service;
 using JetBrains.Annotations;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 {
     /// <summary>
     /// IcErrorCodeWindow.xaml 的互動邏輯

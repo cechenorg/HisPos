@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using MySql.Data.MySqlClient;
 
-namespace His_Pos.Service
+namespace His_Pos.Database
 {
     public class MySQLConnection: DatabaseConnection
     {

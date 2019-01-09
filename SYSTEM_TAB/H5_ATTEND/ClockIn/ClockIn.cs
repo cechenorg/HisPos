@@ -1,6 +1,6 @@
-﻿using His_Pos.ViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.H5_ATTEND.ClockIn
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn
 {
     class ClockIn : TabBase
     {

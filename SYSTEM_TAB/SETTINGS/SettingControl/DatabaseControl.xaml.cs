@@ -7,9 +7,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class;
-using His_Pos.Service;
+using His_Pos.Database;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.SystemSettings.SettingControl
+namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 {
     /// <summary>
     /// DatabaseControl.xaml 的互動邏輯

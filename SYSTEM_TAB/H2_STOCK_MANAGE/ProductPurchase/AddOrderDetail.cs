@@ -2,8 +2,9 @@
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.StoreOrder;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.ProductPurchase
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 {
     public partial class ProductPurchaseView : UserControl
     {

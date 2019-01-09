@@ -1,14 +1,15 @@
-﻿using His_Pos.AbstractClass;
-using His_Pos.Class;
-using His_Pos.Class.Person;
-using His_Pos.Interface;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using His_Pos.AbstractClass;
+using His_Pos.Class;
+using His_Pos.Class.Person;
+using His_Pos.FunctionWindow;
+using His_Pos.Interface;
 
-namespace His_Pos.StockTaking
+namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 {
     /// <summary>
     /// StockTakingItemDialog.xaml 的互動邏輯

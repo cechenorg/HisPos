@@ -1,6 +1,6 @@
-﻿using His_Pos.ViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 {
     public class PrescriptionDec2 : TabBase
     {

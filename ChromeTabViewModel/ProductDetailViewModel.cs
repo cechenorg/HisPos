@@ -1,15 +1,17 @@
-﻿using ChromeTabs;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using ChromeTabs;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.Class;
-using His_Pos.InventoryManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl;
 
-namespace His_Pos.ViewModel
+namespace His_Pos.ChromeTabViewModel
 {
     public class ProductDetailViewModel : ViewModelBase
     {

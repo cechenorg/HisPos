@@ -1,6 +1,6 @@
-﻿using His_Pos.ViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.H1_DECLARE.MedBagManage
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
 {
     internal class MedBagManage : TabBase
     {

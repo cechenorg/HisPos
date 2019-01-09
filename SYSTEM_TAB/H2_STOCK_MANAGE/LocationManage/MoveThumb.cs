@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace His_Pos.H4_BASIC_MANAGE.LocationManage
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
     public class MoveThumb : Thumb
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace His_Pos.PrescriptionInquire
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 {
     class SimpleCommand : ICommand
     {

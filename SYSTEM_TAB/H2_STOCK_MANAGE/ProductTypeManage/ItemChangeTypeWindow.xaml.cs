@@ -1,15 +1,17 @@
-﻿using His_Pos.Class;
-using His_Pos.Class.Product;
-using His_Pos.Class.ProductType;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using His_Pos.Class;
+using His_Pos.Class.Location;
+using His_Pos.Class.Product;
+using His_Pos.Class.ProductType;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
     /// <summary>
     /// ItemChangeTypeWindow.xaml 的互動邏輯

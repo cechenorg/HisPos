@@ -2,7 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Data;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 {
     public class GenderConverter : ResourceDictionary,IValueConverter
     {

@@ -1,6 +1,6 @@
-﻿using His_Pos.ViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.H6_DECLAREFILE.Export
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
 {
     internal class Export : TabBase
     {

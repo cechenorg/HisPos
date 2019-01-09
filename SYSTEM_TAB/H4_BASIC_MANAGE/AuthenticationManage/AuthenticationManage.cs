@@ -1,6 +1,6 @@
-﻿using His_Pos.ViewModel;
+﻿using His_Pos.ChromeTabViewModel;
 
-namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
 {
     class AuthenticationManage : TabBase
     {

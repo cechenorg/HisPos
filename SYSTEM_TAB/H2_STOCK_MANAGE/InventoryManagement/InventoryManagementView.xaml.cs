@@ -1,19 +1,19 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using His_Pos.AbstractClass;
-using His_Pos.Class.Product;
 using His_Pos.Class;
-using System;
-using System.Data;
+using His_Pos.Class.Product;
+using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using System.ComponentModel;
-using System.Windows.Data;
-using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.Struct.Product;
 
-namespace His_Pos.InventoryManagement
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
 {
     /// <summary>
     /// InventoryManagementView.xaml 的互動邏輯

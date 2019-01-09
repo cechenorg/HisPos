@@ -1,5 +1,4 @@
-﻿using His_Pos.Class.Manufactory;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -7,8 +6,9 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.Class.Manufactory;
 
-namespace His_Pos.ManufactoryManage
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage
 {
     /// <summary>
     /// ManufactoryManageView.xaml 的互動邏輯

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media.Imaging;
 
-namespace His_Pos
+namespace His_Pos.GeneralCustomControl
 {
     /// <summary>
     /// IconLabel.xaml 的互動邏輯

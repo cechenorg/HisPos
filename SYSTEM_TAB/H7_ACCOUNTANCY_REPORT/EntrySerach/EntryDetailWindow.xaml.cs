@@ -1,9 +1,9 @@
-﻿using His_Pos.Class.Entry;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using His_Pos.Class.Entry;
 
-namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach {
+namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach {
     /// <summary>
     /// EntryDetailWindow.xaml 的互動邏輯
     /// </summary>

@@ -1,9 +1,8 @@
-﻿<Window x:Class="His_Pos.H2_STOCK_MANAGE.InventoryManagement.AddNewProductWindow"
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.AddNewProductWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.H2_STOCK_MANAGE.InventoryManagement"
         mc:Ignorable="d"
         Title="AddNewProductWindow" Height="450" Width="800">
     <Grid>

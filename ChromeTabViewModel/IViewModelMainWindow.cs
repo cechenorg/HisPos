@@ -1,4 +1,4 @@
-﻿namespace His_Pos.ViewModel
+﻿namespace His_Pos.ChromeTabViewModel
 {
     public interface IViewModelMainWindow
     {

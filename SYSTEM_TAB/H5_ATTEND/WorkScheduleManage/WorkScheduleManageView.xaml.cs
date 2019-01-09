@@ -10,10 +10,11 @@ using System.Windows.Media;
 using His_Pos.Class;
 using His_Pos.Class.Leave;
 using His_Pos.Class.WorkSchedule;
-using His_Pos.H4_BASIC_MANAGE.AuthenticationManage;
-using His_Pos.H5_ATTEND.WorkScheduleManage.Leave;
+using His_Pos.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage;
+using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave;
 
-namespace His_Pos.H5_ATTEND.WorkScheduleManage
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
     /// <summary>
     /// WorkScheduleManageView.xaml 的互動邏輯

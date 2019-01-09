@@ -15,12 +15,13 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
+using His_Pos.FunctionWindow;
+using His_Pos.Service;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace His_Pos.PrescriptionInquire
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 {
     public partial class PrescriptionInquireView : UserControl, INotifyPropertyChanged
     {

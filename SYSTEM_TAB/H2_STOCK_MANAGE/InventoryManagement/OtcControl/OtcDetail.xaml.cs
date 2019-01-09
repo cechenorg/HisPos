@@ -14,13 +14,13 @@ using His_Pos.Class;
 using His_Pos.Class.Manufactory;
 using His_Pos.Class.Product;
 using His_Pos.Class.StockTakingOrder;
-using His_Pos.H2_STOCK_MANAGE.InventoryManagement;
-using His_Pos.ProductPurchaseRecord;
-using His_Pos.StockTaking;
+using His_Pos.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
+using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking;
 using LiveCharts;
 using LiveCharts.Wpf;
 
-namespace His_Pos.InventoryManagement
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
 {
     /// <summary>
     /// OtcDetail.xaml 的互動邏輯

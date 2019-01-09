@@ -16,13 +16,14 @@ using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.Person;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
+using His_Pos.FunctionWindow;
 using His_Pos.RDLC;
+using His_Pos.Service;
 using JetBrains.Annotations;
 
-namespace His_Pos.H6_DECLAREFILE.Export
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
 {
     /// <summary>
     /// ExportView.xaml 的互動邏輯

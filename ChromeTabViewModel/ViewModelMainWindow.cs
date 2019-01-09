@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Data;
 
-namespace His_Pos.ViewModel
+namespace His_Pos.ChromeTabViewModel
 {
     public class ViewModelMainWindow : MainViewModel, IViewModelMainWindow
     {

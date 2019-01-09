@@ -1,9 +1,4 @@
-﻿using His_Pos.Class;
-using His_Pos.Class.Product;
-using His_Pos.Class.StoreOrder;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
-using His_Pos.ProductPurchase;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -11,8 +6,14 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using His_Pos.Class;
+using His_Pos.Class.Product;
+using His_Pos.Class.StoreOrder;
+using His_Pos.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 
-namespace His_Pos.IndexView
+namespace His_Pos.SYSTEM_TAB.INDEX
 {
     /// <summary>
     /// IndexView.xaml 的互動邏輯

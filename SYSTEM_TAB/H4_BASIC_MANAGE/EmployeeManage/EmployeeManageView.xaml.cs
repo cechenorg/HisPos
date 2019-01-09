@@ -1,7 +1,4 @@
-﻿using His_Pos.Class.Employee;
-using His_Pos.Class.Person;
-using His_Pos.Class.Pharmacy;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -10,8 +7,11 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.Class.Employee;
+using His_Pos.Class.Pharmacy;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
 
     /// <summary>

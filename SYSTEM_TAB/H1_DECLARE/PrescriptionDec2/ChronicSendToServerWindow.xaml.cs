@@ -1,15 +1,16 @@
-﻿using His_Pos.AbstractClass;
-using His_Pos.Class;
-using His_Pos.Class.Product;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using His_Pos.AbstractClass;
+using His_Pos.Class;
+using His_Pos.Class.Product;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2 {
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
     /// <summary>
     /// ChronicSendToServerWindow.xaml 的互動邏輯
     /// </summary>

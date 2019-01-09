@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class.Product;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
-using His_Pos.H6_DECLAREFILE.Export;
-using His_Pos.Service;
 
-namespace His_Pos
+namespace His_Pos.Service
 {
     public class TextBoxDateConverter : IValueConverter
     {

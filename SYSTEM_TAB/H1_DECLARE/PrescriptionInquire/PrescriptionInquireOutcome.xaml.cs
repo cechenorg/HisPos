@@ -17,20 +17,16 @@ using His_Pos.Class.DiseaseCode;
 using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
-using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
-using His_Pos.H1_DECLARE.PrescriptionInquire;
+using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
-using His_Pos.ViewModel;
-using MaterialDesignThemes.Wpf;
-using MoreLinq;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
 
-namespace His_Pos.PrescriptionInquire
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 {
     /// <summary>
     /// PrescriptionInquireOutcome.xaml 的互動邏輯

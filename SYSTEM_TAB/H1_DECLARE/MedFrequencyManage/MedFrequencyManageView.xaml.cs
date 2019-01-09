@@ -1,13 +1,13 @@
-﻿using His_Pos.Class;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using His_Pos.Class;
 
-namespace His_Pos.H4_BASIC_MANAGE.MedFrequencyManage
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage
 {
     /// <summary>
     /// MedFrequencyManageView.xaml 的互動邏輯

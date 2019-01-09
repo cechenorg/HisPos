@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace His_Pos.H4_BASIC_MANAGE.EmployeeManage
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
     /// <summary>
     /// LeaveTotalControl.xaml 的互動邏輯

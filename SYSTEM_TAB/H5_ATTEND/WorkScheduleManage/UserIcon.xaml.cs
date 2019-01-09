@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using His_Pos.Class.WorkSchedule;
 
-namespace His_Pos.H5_ATTEND.WorkScheduleManage
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
     /// <summary>
     /// UserIcon.xaml 的互動邏輯

@@ -1,9 +1,8 @@
-﻿<Window x:Class="His_Pos.H5_ATTEND.WorkScheduleManage.Leave.LeaveWindow"
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave.LeaveWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage.Leave"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="請假申請" Height="300" Width="500" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" >

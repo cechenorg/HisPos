@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace His_Pos.H5_ATTEND.WorkScheduleManage
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
     /// <summary>
     /// DayRemark.xaml 的互動邏輯

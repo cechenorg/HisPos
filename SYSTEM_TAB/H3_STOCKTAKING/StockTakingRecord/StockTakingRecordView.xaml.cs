@@ -1,6 +1,4 @@
-﻿using His_Pos.Class.Product;
-using His_Pos.Class.StockTakingOrder;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
@@ -9,8 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using His_Pos.Class.StockTakingOrder;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.StockTakingRecord
+namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord
 {
     /// <summary>
     /// StockTakingRecordView.xaml 的互動邏輯

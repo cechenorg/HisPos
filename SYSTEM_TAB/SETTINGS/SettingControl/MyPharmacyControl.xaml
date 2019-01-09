@@ -1,9 +1,8 @@
-﻿<UserControl x:Class="His_Pos.SystemSettings.SettingControl.MyPharmacyControl"
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.SETTINGS.SettingControl.MyPharmacyControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.SystemSettings.SettingControl"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="620" GotFocus="MyPharmacyControl_OnGotFocus">
     <Grid Background="LightGray" DataContext="{Binding myPharmacy, UpdateSourceTrigger=PropertyChanged}">

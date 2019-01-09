@@ -12,8 +12,9 @@ using System.Windows.Threading;
 using His_Pos.Class;
 using His_Pos.Class.Employee;
 using His_Pos.Class.WorkSchedule;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.H5_ATTEND.ClockIn
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn
 {
     /// <summary>
     /// ClockInView.xaml 的互動邏輯

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -8,11 +6,9 @@ using System.Windows;
 using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.Class.Person;
-using His_Pos.Service;
-using Microsoft.SqlServer.Dts.Runtime;
-using Application = System.Windows.Application;
+using His_Pos.Database;
 
-namespace His_Pos
+namespace His_Pos.FunctionWindow
 {
     /// <summary>
     /// LoginPage.xaml 的互動邏輯

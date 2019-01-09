@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace His_Pos.H4_BASIC_MANAGE.LocationManage
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
     /// <summary>
     /// LocationControl.xaml 的互動邏輯

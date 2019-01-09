@@ -1,38 +1,38 @@
 ﻿<Window
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:authenticationManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.AuthenticationManage"
     xmlns:chromeTabs="clr-namespace:ChromeTabs;assembly=ChromeTabs"
-    xmlns:clockIn="clr-namespace:His_Pos.H5_ATTEND.ClockIn"
     xmlns:converters="clr-namespace:ChromeTabs.Converters;assembly=ChromeTabs"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:employeeManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.EmployeeManage"
-    xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
-    xmlns:locationManage="clr-namespace:His_Pos.LocationManage"
-    xmlns:manufactoryManage="clr-namespace:His_Pos.ManufactoryManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:medBagManage="clr-namespace:His_Pos.H1_DECLARE.MedBagManage"
-    xmlns:medFrequencyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.MedFrequencyManage"
-    xmlns:pharmacyManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.PharmacyManage"
-    xmlns:prescriptionDec2="clr-namespace:His_Pos.H1_DECLARE.PrescriptionDec2"
-    xmlns:prescriptionInquire="clr-namespace:His_Pos.PrescriptionInquire"
-    xmlns:productPurchase="clr-namespace:His_Pos.ProductPurchase"
-    xmlns:productPurchaseRecord="clr-namespace:His_Pos.ProductPurchaseRecord"
-    xmlns:productTypeManage="clr-namespace:His_Pos.ProductTypeManage"
-    xmlns:resource="clr-namespace:His_Pos.Resource"
-    xmlns:stockTaking="clr-namespace:His_Pos.StockTaking"
-    xmlns:stockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
-    xmlns:CustomerManage="clr-namespace:His_Pos.H4_BASIC_MANAGE.CustomerManage"
-    xmlns:workScheduleManage="clr-namespace:His_Pos.H5_ATTEND.WorkScheduleManage"
     xmlns:IndexView="clr-namespace:His_Pos.IndexView"
-    xmlns:declarefile="clr-namespace:His_Pos.H6_DECLAREFILE.Export"
-    xmlns:stockTaking1="clr-namespace:His_Pos.H3_STOCKTAKING.StockTaking"
-    xmlns:entrySearch="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach"
-    xmlns:PurchaseReturnReport="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
-    xmlns:cooperativeAdjustReport="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
-    xmlns:CooperativeEntry="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
-    xmlns:AdminFunction="clr-namespace:His_Pos.AdminManageTab.AdminFunction"
     xmlns:local="clr-namespace:His_Pos"
+    xmlns:AdminFunction="clr-namespace:His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction"
+    xmlns:prescriptionDec2="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2"
+    xmlns:prescriptionInquire="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire"
+    xmlns:inventoryManagement="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement"
+    xmlns:productPurchase="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase"
+    xmlns:productPurchaseRecord="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord"
+    xmlns:stockTaking="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking"
+    xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
+    xmlns:productTypeManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage"
+    xmlns:locationManage="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage"
+    xmlns:manufactoryManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.ManufactoryManage"
+    xmlns:pharmacyManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.PharmacyManage"
+    xmlns:employeeManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage"
+    xmlns:CustomerManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage"
+    xmlns:medFrequencyManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage"
+    xmlns:workScheduleManage="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage"
+    xmlns:clockIn="clr-namespace:His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn"
+    xmlns:authenticationManage="clr-namespace:His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage"
+    xmlns:medBagManage="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage"
+    xmlns:index="clr-namespace:His_Pos.SYSTEM_TAB.INDEX"
+    xmlns:declarefile="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.Export"
+    xmlns:entrySearch="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach"
+    xmlns:PurchaseReturnReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.PurchaseReturnReport"
+    xmlns:cooperativeAdjustReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
+    xmlns:CooperativeEntry="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
+    xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -64,7 +64,7 @@
             <productPurchaseRecord:ProductPurchaseRecordView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTaking:StockTaking}">
-            <stockTaking1:StockTakingView />
+            <stockTaking:StockTakingView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type stockTakingRecord:StockTakingRecord}">
             <stockTakingRecord:StockTakingRecordView />
@@ -102,8 +102,8 @@
         <DataTemplate DataType="{x:Type medBagManage:MedBagManage}">
             <medBagManage:MedBagManageView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type IndexView:Index}">
-            <IndexView:IndexView/>
+        <DataTemplate DataType="{x:Type index:Index}">
+            <index:IndexView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type declarefile:Export}">
             <declarefile:ExportView/>
@@ -239,13 +239,13 @@
                         </Style>
                     </ScrollViewer.Resources>
                     <StackPanel Orientation="Vertical" Height="Auto">
-                        <resource:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <resource:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <resource:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <resource:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <resource:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <resource:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
-                        <resource:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature1" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature2" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature3" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature4" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature5" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature6" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
+                        <generalCustomControl:MenuListItem x:Name="HisFeature7" MouseDown="FeatureMouseDown" Visibility="Collapsed"/>
                     </StackPanel>
                 </ScrollViewer>
             </StackPanel>

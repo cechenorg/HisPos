@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
-namespace His_Pos.ViewModel
+namespace His_Pos.ChromeTabViewModel
 {
     public class ProductDetailViewModelLocator
     {

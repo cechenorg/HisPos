@@ -6,8 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using His_Pos.Class;
 using His_Pos.Class.Manufactory;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeControl
 {
     /// <summary>
     /// PurchaseTypeControl.xaml 的互動邏輯

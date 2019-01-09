@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -9,11 +8,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using His_Pos.Class.DiseaseCode;
-using His_Pos.Class.Person;
 using JetBrains.Annotations;
-using MoreLinq;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 {
     /// <summary>
     /// DiseaseCodeSelectDialog.xaml 的互動邏輯

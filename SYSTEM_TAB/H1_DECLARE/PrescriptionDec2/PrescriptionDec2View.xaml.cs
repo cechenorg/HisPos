@@ -1,38 +1,38 @@
-﻿using His_Pos.Class;
-using His_Pos.Class.AdjustCase;
-using His_Pos.Class.Copayment;
-using His_Pos.Class.Division;
-using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.Product;
-using His_Pos.Class.TreatmentCase;
-using His_Pos.Interface;
-using His_Pos.Service;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Xml;
+using His_Pos.AbstractClass;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.Class.AdjustCase;
+using His_Pos.Class.Copayment;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
-using His_Pos.HisApi;
-using Visibility = System.Windows.Visibility;
-using System.Windows.Forms;
-using System.Windows.Media;
-using His_Pos.AbstractClass;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.DiseaseCode;
+using His_Pos.Class.Division;
+using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Position;
-using His_Pos.Class.ReportClass;
+using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.StoreOrder;
+using His_Pos.Class.TreatmentCase;
+using His_Pos.FunctionWindow;
+using His_Pos.HisApi;
+using His_Pos.Interface;
+using His_Pos.Service;
 using His_Pos.Struct.IcData;
-using MoreLinq;
+using Visibility = System.Windows.Visibility;
 using Application = System.Windows.Application;
 using CheckBox = System.Windows.Controls.CheckBox;
 using ComboBox = System.Windows.Controls.ComboBox;
@@ -44,12 +44,8 @@ using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using RadioButton = System.Windows.Controls.RadioButton;
 using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
-using His_Pos.H1_DECLARE.PrescriptionInquire;
-using System.Xml;
-using His_Pos.ViewModel;
-using MaterialDesignThemes.Wpf;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 {
     /// <summary>
     ///     PrescriptionDec2View.xaml 的互動邏輯
@@ -778,7 +774,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             CustomerSelected = false;
             _firstTimeDecMasId = string.Empty;
             ClearPrescription();
-            IndexView.IndexView.Instance.InitData();
+            INDEX.IndexView.Instance.InitData();
         }
 
         #region 每日上傳.讀寫卡相關函數

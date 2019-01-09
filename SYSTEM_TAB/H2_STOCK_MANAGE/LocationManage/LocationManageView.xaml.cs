@@ -1,14 +1,15 @@
-﻿using His_Pos.Class;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using His_Pos.H4_BASIC_MANAGE.LocationManage;
+using His_Pos.Class;
+using His_Pos.Class.Location;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.LocationManage
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
     /// <summary>
     /// LocationManageView.xaml 的互動邏輯

@@ -7,50 +7,46 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.IO;
-using His_Pos.Class;
-using His_Pos.Class.Person;
-using His_Pos.Class.Product;
-using His_Pos.Class.Manufactory;
-using His_Pos.Class.StoreOrder;
-using His_Pos.InventoryManagement;
-using His_Pos.ProductPurchase;
-using His_Pos.AbstractClass;
 using System.Linq;
-using System.Management.Instrumentation;
 using System.Text;
-using System.Threading;
+using System.Xml;
+using His_Pos.AbstractClass;
+using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
+using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
-using His_Pos.Interface;
-using His_Pos.StockTakingRecord;
-using His_Pos.Class.StockTakingOrder;
-using His_Pos.ProductTypeManage;
-using His_Pos.H4_BASIC_MANAGE.EmployeeManage;
 using His_Pos.Class.Employee;
+using His_Pos.Class.Location;
+using His_Pos.Class.Manufactory;
 using His_Pos.Class.MedBag;
 using His_Pos.Class.PaymentCategory;
-using His_Pos.Class.TreatmentCase;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
-using His_Pos.H1_DECLARE.MedBagManage;
-using His_Pos.Struct.Product;
-using His_Pos.PrescriptionInquire;
-using System.Xml;
-using His_Pos.Class.Declare;
-using His_Pos.Class.CustomerHistory;
-using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Class.Person;
 using His_Pos.Class.Position;
+using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
-using His_Pos.H4_BASIC_MANAGE.CustomerManage;
-using His_Pos.H6_DECLAREFILE.Export;
+using His_Pos.Class.StockTakingOrder;
+using His_Pos.Class.StoreOrder;
+using His_Pos.Class.TreatmentCase;
 using His_Pos.HisApi;
+using His_Pos.Interface;
 using His_Pos.Service;
-using His_Pos.Struct.IcData;
-using MaterialDesignThemes.Wpf;
+using His_Pos.Struct.Product;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.Export;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
+using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage;
+using His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage;
 using Microsoft.Reporting.WinForms;
-using StockTakingView = His_Pos.H3_STOCKTAKING.StockTaking.StockTakingView;
+using StockTakingView = His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking.StockTakingView;
 
-namespace His_Pos
+namespace His_Pos.FunctionWindow
 {
     /// <summary>
     /// LoadingWindow.xaml 的互動邏輯
@@ -212,7 +208,7 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void AddNewOrders(ProductPurchase.ProductPurchaseView productPurchaseView, StoreOrderProductType type,WareHouse wareHouse, Manufactory manufactory = null)
+        public void AddNewOrders(ProductPurchaseView productPurchaseView, StoreOrderProductType type,WareHouse wareHouse, Manufactory manufactory = null)
         {
             backgroundWorker.DoWork += (s, o) =>
             {
@@ -405,7 +401,7 @@ namespace His_Pos
             backgroundWorker.RunWorkerAsync();
         }
 
-        public void GetLocation(LocationManage.LocationManageView locationManageView)
+        public void GetLocation(LocationManageView locationManageView)
         {
             backgroundWorker.DoWork += (s, o) =>
             {

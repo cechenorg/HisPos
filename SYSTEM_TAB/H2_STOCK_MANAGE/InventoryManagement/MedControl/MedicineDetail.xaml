@@ -3,15 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        x:Class="His_Pos.InventoryManagement.MedicineDetail"
+        x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl.MedicineDetail"
         xmlns:local="His_Pos.InventoryManagement"
-        xmlns:inventoryManagement="clr-namespace:His_Pos.InventoryManagement"
-        xmlns:stockTakingRecord="clr-namespace:His_Pos.StockTakingRecord"
-        xmlns:hisPos="clr-namespace:His_Pos"
-        xmlns:resource="clr-namespace:His_Pos.Resource"
-        mc:Ignorable="d" Height="900" Width="1600" Background="Transparent" GotFocus="MedicineDetail_OnGotFocus">
+    xmlns:hisPos="clr-namespace:His_Pos"
+    xmlns:service="clr-namespace:His_Pos.Service"
+    xmlns:stockTakingRecord="clr-namespace:His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord"
+    xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+    mc:Ignorable="d" Height="900" Width="1600" Background="Transparent" GotFocus="MedicineDetail_OnGotFocus">
     <UserControl.Resources>
-        <hisPos:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
+        <service:LastRowIsEnableConverter x:Key="LastRowIsEnableConverter"/>
         <stockTakingRecord:ValueDifferentColorConverter x:Key="ValueDifferentColorConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
@@ -236,7 +236,7 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
                         <Label Content="健保價" Foreground="Black" FontSize="35" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                        <resource:DecimalControl Decimal="{Binding NHIPrice}" VerticalAlignment="Center" Width="120" FontSize="35" Foreground="Black" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+                        <generalCustomControl:DecimalControl Decimal="{Binding NHIPrice}" VerticalAlignment="Center" Width="120" FontSize="35" Foreground="Black" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
                         <Button Content="歷史健保價" BorderThickness="0"  FontSize="20" FontFamily="Segoe UI Semi" Height="40" Background="DimGray" Margin="140,0,0,0" Click="OpenMedHisPrice_OnClick"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Horizontal" Background="{StaticResource Shadow}">
@@ -246,11 +246,11 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2" Orientation="Horizontal" Background="{StaticResource Shadow}">
                         <Label Content="散裝價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                        <resource:DecimalControl Decimal="{Binding SindePrice}" Foreground="{StaticResource ForeGround}" Width="90" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <generalCustomControl:DecimalControl Decimal="{Binding SindePrice}" Foreground="{StaticResource ForeGround}" Width="90" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
                         <Label Content="包裝量" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
                         <Label Content="{Binding PackageAmount}" Foreground="{StaticResource ForeGround}" Width="80" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
                         <Label Content="包裝價" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                        <resource:DecimalControl Decimal="{Binding SingdePackagePrice}" Foreground="{StaticResource ForeGround}" Width="90" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        <generalCustomControl:DecimalControl Decimal="{Binding SingdePackagePrice}" Foreground="{StaticResource ForeGround}" Width="90" FontSize="20" FontFamily="Segoe UI Semi" VerticalAlignment="Center" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Grid.Row="3" Orientation="Horizontal">
                         <Label Content="劑型" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>

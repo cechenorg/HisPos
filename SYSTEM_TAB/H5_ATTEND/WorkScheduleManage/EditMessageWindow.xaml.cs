@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace His_Pos.H5_ATTEND.WorkScheduleManage
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
     /// <summary>
     /// EditMessageWindow.xaml 的互動邏輯

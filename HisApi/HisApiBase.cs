@@ -2,10 +2,11 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Threading;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Person;
+using His_Pos.FunctionWindow;
 using His_Pos.Struct.IcData;
-using His_Pos.ViewModel;
 
 namespace His_Pos.HisApi
 {

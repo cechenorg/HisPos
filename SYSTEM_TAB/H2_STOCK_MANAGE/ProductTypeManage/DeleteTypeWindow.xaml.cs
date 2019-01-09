@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using His_Pos.Class.ProductType;
 
-namespace His_Pos.H4_BASIC_MANAGE.ProductTypeManage
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
     /// <summary>
     /// DeleteTypeWindow.xaml 的互動邏輯

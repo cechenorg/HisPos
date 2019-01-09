@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace His_Pos.Resource
+namespace His_Pos.GeneralCustomControl
 {
     /// <summary>
     /// MenuListItem.xaml 的互動邏輯

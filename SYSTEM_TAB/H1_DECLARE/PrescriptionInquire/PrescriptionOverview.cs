@@ -3,7 +3,7 @@ using System.Data;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 
-namespace His_Pos.PrescriptionInquire
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 {
     public class PrescriptionOverview
     {

@@ -1,6 +1,4 @@
-﻿using His_Pos.Class.Product;
-using His_Pos.Service;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -10,8 +8,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using His_Pos.Class.Product;
+using His_Pos.Service;
 
-namespace His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach
+namespace His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.EntrySerach
 {
     /// <summary>
     /// EntrySearchView.xaml 的互動邏輯

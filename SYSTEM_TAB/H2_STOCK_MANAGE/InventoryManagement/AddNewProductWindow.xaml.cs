@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace His_Pos.H2_STOCK_MANAGE.InventoryManagement
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
 {
     /// <summary>
     /// AddNewProductWindow.xaml 的互動邏輯

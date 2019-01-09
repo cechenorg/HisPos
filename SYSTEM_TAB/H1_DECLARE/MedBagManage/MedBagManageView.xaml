@@ -1,11 +1,11 @@
 ﻿<UserControl
-    x:Class="His_Pos.H1_DECLARE.MedBagManage.MedBagManageView"
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage.MedBagManageView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:His_Pos.H1_DECLARE.MedBagManage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage"
     d:DesignHeight="839"
     d:DesignWidth="1365"
     mc:Ignorable="d">

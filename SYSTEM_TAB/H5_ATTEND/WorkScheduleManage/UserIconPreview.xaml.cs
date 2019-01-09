@@ -1,13 +1,13 @@
-﻿using His_Pos.Class.WorkSchedule;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using His_Pos.Class.WorkSchedule;
 
-namespace His_Pos.H5_ATTEND.WorkScheduleManage
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
     /// <summary>
     /// UserIconPreview.xaml 的互動邏輯

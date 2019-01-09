@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using His_Pos.Class.StockTakingOrder;
 
-namespace His_Pos.StockTaking
+namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
 {
     /// <summary>
     /// StockTakingHistory.xaml 的互動邏輯

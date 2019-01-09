@@ -11,11 +11,10 @@
   You can also use Blend to do all this with the tool's support.
 */
 
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
-namespace His_Pos.ViewModel
+namespace His_Pos.ChromeTabViewModel
 {
     /// <summary>
     /// This class contains static references to all the view models in the

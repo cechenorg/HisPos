@@ -12,11 +12,7 @@ using His_Pos.Class.ProductType;
 using His_Pos.Struct.Product;
 using LiveCharts;
 using LiveCharts.Wpf;
-using His_Pos.H7_ACCOUNTANCY_REPORT.EntrySerach;
-using His_Pos.InventoryManagement;
-using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeEntry;
 using System.Linq;
-using His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport;
 
 namespace His_Pos.Class.Product
 {

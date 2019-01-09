@@ -1,10 +1,12 @@
-﻿using His_Pos.Class;
-using His_Pos.H4_BASIC_MANAGE.ProductTypeManage;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using His_Pos.Class;
+using His_Pos.Class.Location;
+using His_Pos.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
 
-namespace His_Pos.H4_BASIC_MANAGE.LocationManage
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
 {
     /// <summary>
     /// ChangeResultWindow.xaml 的互動邏輯

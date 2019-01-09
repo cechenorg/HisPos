@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace His_Pos.SystemSettings.SettingControl
+namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
 {
     /// <summary>
     /// PrinterControl.xaml 的互動邏輯

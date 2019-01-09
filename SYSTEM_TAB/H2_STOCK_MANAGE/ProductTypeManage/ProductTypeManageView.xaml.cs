@@ -9,13 +9,13 @@ using His_Pos.AbstractClass;
 using His_Pos.Class;
 using His_Pos.Class.Product;
 using His_Pos.Class.ProductType;
-using His_Pos.H4_BASIC_MANAGE.ProductTypeManage;
+using His_Pos.FunctionWindow;
 using His_Pos.Interface;
-using His_Pos.InventoryManagement;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using LiveCharts;
 using LiveCharts.Wpf;
 
-namespace His_Pos.ProductTypeManage
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 {
     /// <summary>
     /// ProductTypeManageView.xaml 的互動邏輯

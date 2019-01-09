@@ -1,15 +1,15 @@
-﻿<UserControl x:Class="His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport.CooperativeAdjustReportView"
+﻿<UserControl x:Class="His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport.CooperativeAdjustReportView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:His_Pos.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:hisPos="clr-namespace:His_Pos"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:service="clr-namespace:His_Pos.Service"
              mc:Ignorable="d" 
              d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
-        <hisPos:DateConverter x:Key="DateConverter"/>
+        <service:DateConverter x:Key="DateConverter"/>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -29,7 +29,7 @@
                     <Binding Path="SDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
                         <Binding.ValidationRules>
-                            <hisPos:DateValidationRule/>
+                            <service:DateValidationRule/>
                         </Binding.ValidationRules>
                     </Binding>
                 </xctk:MaskedTextBox.Text>
@@ -42,7 +42,7 @@
                     <Binding Path="EDateTime" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                              ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
                         <Binding.ValidationRules>
-                            <hisPos:DateValidationRule/>
+                            <service:DateValidationRule/>
                         </Binding.ValidationRules>
                     </Binding>
                 </xctk:MaskedTextBox.Text>

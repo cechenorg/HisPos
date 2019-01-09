@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace His_Pos.H1_DECLARE.PrescriptionDec2
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 {
     /// <summary>
     /// ErrorMssageWindow.xaml 的互動邏輯

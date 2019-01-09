@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.Class.WorkSchedule;
 
-namespace His_Pos.H5_ATTEND.WorkScheduleManage
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
 {
     /// <summary>
     /// Day.xaml 的互動邏輯

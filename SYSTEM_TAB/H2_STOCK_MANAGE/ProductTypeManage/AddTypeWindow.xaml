@@ -1,9 +1,8 @@
-﻿<Window x:Class="His_Pos.H4_BASIC_MANAGE.ProductTypeManage.AddTypeWindow"
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage.AddTypeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:His_Pos.H4_BASIC_MANAGE.ProductTypeManage"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="新增類別" MinHeight="250" Height="250" MaxHeight="250" MinWidth="400" Width="400" MaxWidth="400" WindowStartupLocation="CenterScreen">

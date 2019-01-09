@@ -5,8 +5,9 @@ using System.Windows.Controls;
 using His_Pos.Class;
 using His_Pos.Class.Leave;
 using His_Pos.Class.WorkSchedule;
+using His_Pos.FunctionWindow;
 
-namespace His_Pos.H5_ATTEND.WorkScheduleManage.Leave
+namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
 {
     /// <summary>
     /// LeaveWindow.xaml 的互動邏輯

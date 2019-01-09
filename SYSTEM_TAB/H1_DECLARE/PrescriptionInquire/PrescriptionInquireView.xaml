@@ -3,18 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:His_Pos.PrescriptionInquire"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-    x:Class="His_Pos.PrescriptionInquire.PrescriptionInquireView"
+    x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire.PrescriptionInquireView"
     xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
     xmlns:abstractClass="clr-namespace:His_Pos.AbstractClass"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:hisPos="clr-namespace:His_Pos"
+    xmlns:service="clr-namespace:His_Pos.Service"
     dialog:DialogParticipation.Register="{Binding}"
     mc:Ignorable="d" d:DesignHeight="839" d:DesignWidth="1365">
     <UserControl.Resources>
-        <hisPos:DateConverter x:Key="DateConverter" />
+        <service:DateConverter x:Key="DateConverter" />
     </UserControl.Resources>
     <Viewbox Name="InquireViewBox" Stretch="Fill" Width="1363">
         <Grid Width="1418" Height="839">
@@ -32,7 +32,7 @@
                         <Binding Path="StartDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
                             <Binding.ValidationRules>
-                                <hisPos:DateValidationRule/>
+                                <service:DateValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
                     </xctk:MaskedTextBox.Text>
@@ -44,7 +44,7 @@
                         <Binding Path="EndDate" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged" 
                                  ValidatesOnDataErrors="True" NotifyOnValidationError="True" Converter="{StaticResource DateConverter}">
                             <Binding.ValidationRules>
-                                <hisPos:DateValidationRule/>
+                                <service:DateValidationRule/>
                             </Binding.ValidationRules>
                         </Binding>
                     </xctk:MaskedTextBox.Text>

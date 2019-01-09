@@ -3,7 +3,7 @@ using System.Data;
 using System.Windows;
 using His_Pos.Class.Declare;
 
-namespace His_Pos.H2_STOCK_MANAGE.ProductPurchase
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 {
     /// <summary>
     /// DeclareDataDetailOverview.xaml 的互動邏輯

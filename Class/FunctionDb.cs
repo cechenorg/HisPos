@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Reflection;
-using static His_Pos.Function;
+using static His_Pos.Service.Function;
 
 namespace His_Pos.Class
 {

@@ -1,10 +1,9 @@
-﻿using His_Pos.Class.StockTakingOrder;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 
-namespace His_Pos.Class.Product
+namespace His_Pos.Class.StockTakingOrder
 {
     public class StockTakingOrder : INotifyPropertyChanged
     {

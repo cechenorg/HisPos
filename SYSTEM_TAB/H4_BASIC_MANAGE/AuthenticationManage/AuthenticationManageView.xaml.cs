@@ -1,6 +1,4 @@
-﻿using His_Pos.Class.Authority;
-using His_Pos.Class.Leave;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -9,9 +7,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using His_Pos.Class;
-using His_Pos.H5_ATTEND.WorkScheduleManage;
+using His_Pos.Class.Authority;
+using His_Pos.Class.Leave;
+using His_Pos.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage;
 
-namespace His_Pos.H4_BASIC_MANAGE.AuthenticationManage
+namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.AuthenticationManage
 {
     /// <summary>
     /// AuthenticationManageView.xaml 的互動邏輯
