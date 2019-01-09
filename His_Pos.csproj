@@ -855,7 +855,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml">
     <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
