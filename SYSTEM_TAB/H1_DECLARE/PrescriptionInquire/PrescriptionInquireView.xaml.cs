@@ -174,7 +174,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             if (declareData is null)
             {
                 MessageWindow.ShowMessage("查無處方 請聯絡資訊人員", MessageType.ERROR);
-                messageWindow.ShowDialog(); 
+                 
                 return;
             }
             PrescriptionInquireOutcome prescriptionInquireOutcome = new PrescriptionInquireOutcome(declareData, selectedItem.IsPredictChronic);

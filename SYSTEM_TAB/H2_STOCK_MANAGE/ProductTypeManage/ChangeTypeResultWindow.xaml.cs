@@ -49,7 +49,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             ///ProductDb.ChangeProductType(item.id, item.newvalue);
             }
             MessageWindow.ShowMessage("更新成功!", MessageType.SUCCESS, true);
-            messageWindow.ShowDialog();
+            
             Close();
         }
     }

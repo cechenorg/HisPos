@@ -121,7 +121,7 @@ namespace His_Pos.FunctionWindow
                 catch (Exception ex)
                 {
                     MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                    messageWindow.ShowDialog();
+                    
                 }
 
 

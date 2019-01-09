@@ -72,14 +72,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase.AddNewOrderTypeCont
             if (taget == 5 && SelectedManufactory is null)
             {
                 MessageWindow.ShowMessage("請輸入廠商名稱", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return AddOrderType.ERROR;
             }
 
             if (WareHouseCombo.SelectedItem is null)
             {
                 MessageWindow.ShowMessage("請輸入庫存名稱", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return AddOrderType.ERROR;
             }
 

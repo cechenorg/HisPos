@@ -118,7 +118,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
             ///CustomerDb.UpdateCustomerById(CustomerDetail);
             MessageWindow.ShowMessage("修改完成!", Class.MessageType.SUCCESS);
-            messageWindow.ShowDialog();
+            
             for (int i = 0; i < CustomerCollection.Count; i++){
                 if (CustomerCollection[i].Id == CustomerDetail.Id) {
                     CustomerCollection[i] = NewFunction.DeepCloneViaJson(CustomerDetail);

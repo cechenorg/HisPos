@@ -146,18 +146,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
         {
             if (DataGridSource.SelectedItem is null) {
                 MessageWindow.ShowMessage("請選擇項目",MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             if (ComboBoxSourceSmall.SelectedItem is null && ComboBoxSourceBig.SelectedItem.ToString() != "尚未有櫃位產品") {
                 MessageWindow.ShowMessage("請選擇來源", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             if (ComboBoxTargetSmall.SelectedItem is null && ComboBoxTargetBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
                 MessageWindow.ShowMessage("請選擇目的", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             var item = (DataGridSource.SelectedItem as LocationbData);
@@ -184,19 +184,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             if (DataGridTarget.SelectedItem is null)
             {
                 MessageWindow.ShowMessage("請選擇項目", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             if (ComboBoxTargetSmall.SelectedItem is null && ComboBoxTargetBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
                 MessageWindow.ShowMessage("請選擇來源", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             if (ComboBoxSourceSmall.SelectedItem is null && ComboBoxSourceBig.SelectedItem.ToString() != "尚未有櫃位產品")
             {
                 MessageWindow.ShowMessage("請選擇目的", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             var item = (DataGridTarget.SelectedItem as LocationbData);

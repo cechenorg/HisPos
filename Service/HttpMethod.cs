@@ -51,11 +51,11 @@ namespace His_Pos.Service
                 switch (ex.Message) {
                     case "遠端伺服器傳回一個錯誤: (500) 內部伺服器錯誤。":
                         MessageWindow.ShowMessage("Http Get 讀取\r\n" + url + "異常", MessageType.ERROR);
-                        messageWindow.ShowDialog();
+                        
                         break;
                     default:
                         MessageWindow errormessageWindow = new MessageWindow(ex.Message,MessageType.ERROR);
-                        errormessageWindow.ShowDialog();
+                        error
                         break; 
                 } 
             } 
@@ -105,11 +105,11 @@ namespace His_Pos.Service
                 {
                     case "遠端伺服器傳回一個錯誤: (500) 內部伺服器錯誤。":
                         MessageWindow.ShowMessage("Http Post 讀取\r\n" + url + "異常", MessageType.ERROR);
-                        messageWindow.ShowDialog();
+                        
                         break;
                     default:
                         MessageWindow errormessageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
-                        errormessageWindow.ShowDialog();
+                        error
                         break;
                 }
             }
@@ -152,11 +152,11 @@ namespace His_Pos.Service
                 {
                     case "遠端伺服器傳回一個錯誤: (500) 內部伺服器錯誤。":
                         MessageWindow.ShowMessage("Http Post 讀取\r\n" + url + "異常", MessageType.ERROR);
-                        messageWindow.ShowDialog();
+                        
                         break;
                     default:
                         MessageWindow errormessageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
-                        errormessageWindow.ShowDialog();
+                        error
                         break;
                 }
             } 

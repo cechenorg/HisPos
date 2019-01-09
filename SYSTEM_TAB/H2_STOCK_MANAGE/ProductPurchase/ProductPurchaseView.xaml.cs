@@ -383,7 +383,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             }
 
             MessageWindow.ShowMessage("處理單已完成, 可前往處方單紀錄查詢!", MessageType.SUCCESS, true);
-            messageWindow.ShowDialog();
+            
 
             InventoryManagementView.DataChanged = true;
             ProductPurchaseRecordView.DataChanged = true;
@@ -439,7 +439,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
                     StoreOrderData.Type = OrderType.PROCESSING;
 
                     MessageWindow.ShowMessage("傳送訂單至杏德發生問題, 請稍後在嘗試", MessageType.ERROR);
-                    messageWindow.ShowDialog();
+                    
 
                     return;
                 }
@@ -564,7 +564,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             if (errorMessage != String.Empty)
             {
                 MessageWindow.ShowMessage(errorMessage, MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return false;
             }
             return true;

@@ -164,7 +164,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             if (StartDate.Date <= EndDate.Date.AddDays(-3)) {
                /// MessageWindow.ShowMessage("日期區間只能為三天內^^",MessageType.ERROR);
-               /// messageWindow.ShowDialog();
+               /// 
                 return;
             }
             CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id

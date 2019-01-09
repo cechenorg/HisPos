@@ -207,7 +207,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             if (!CheckTakingResult(_takingCollection))
             {
                 var messageWindow = new MessageWindow("尚有品項未填寫盤點數量!", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
 

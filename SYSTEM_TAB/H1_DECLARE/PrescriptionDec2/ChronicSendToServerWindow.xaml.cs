@@ -93,14 +93,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
                 
                 if (Convert.ToInt32(prescriptionSendData.SendAmount) > Convert.ToInt32(prescriptionSendData.TreatAmount)) {
                     MessageWindow.ShowMessage("傳輸量不可大於調劑量", MessageType.ERROR, true);
-                    messageWindow.ShowDialog();
+                    
                     return;
                 } 
             }
             if (checkAllZero)
             {
                 MessageWindow.ShowMessage("傳輸量不可為0", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             PrescriptionDec2View.Instance.IsSend = true;

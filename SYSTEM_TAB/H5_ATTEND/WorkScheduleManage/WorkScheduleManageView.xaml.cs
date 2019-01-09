@@ -319,7 +319,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
             else
             {
                 MessageWindow.ShowMessage("日期已過 無法排班!", Class.MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
             }
         }
 
@@ -409,7 +409,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
             if (leaveWindow.LeaveComplete)
             {
                 MessageWindow.ShowMessage(leaveWindow.CompleteResult, (leaveWindow.CompleteResult.Contains("無法新增"))? MessageType.ERROR:MessageType.SUCCESS, true);
-                messageWindow.ShowDialog();
+                
 
                 AuthenticationManageView.DataChanged = true;
                 InitCalendar();

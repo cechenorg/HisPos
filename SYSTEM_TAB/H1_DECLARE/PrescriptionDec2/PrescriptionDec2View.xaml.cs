@@ -375,7 +375,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 if (string.IsNullOrEmpty(((IProductDeclare) declare).Days))
                 {
                     var messageWindow = new MessageWindow(declare.Id + "的給藥日份不可為空", MessageType.ERROR, true);
-                    messageWindow.ShowDialog();
+                    
                     return;
                 }
 
@@ -442,7 +442,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     if (string.IsNullOrEmpty(((IProductDeclare)declare).Days))
                     {
                         var messageWindow = new MessageWindow(declare.Id + "的給藥日份不可為空", MessageType.ERROR, true);
-                        messageWindow.ShowDialog();
+                        
                         return;
                     }
 
@@ -1781,7 +1781,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             if (HisPerson.SelectedItem is null) {
                 MessageWindow.ShowMessage("目前沒有藥師 請新增藥師",MessageType.WARNING);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             switch (sender)
@@ -2321,7 +2321,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 
             if (!string.IsNullOrEmpty(_currentDecMasId) && isAdjustDayToday && isNormalPres) {
                 MessageWindow.ShowMessage("不可將預約慢箋改為一般箋\r\n請取消後重新登錄處方",MessageType.ERROR);
-                messageWindow.ShowDialog();
+                
             }
             switch (caseType) {
                 case 1:
@@ -2426,7 +2426,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private void IsSendToServer_Checked(object sender, RoutedEventArgs e) {
             if (CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Today.Date) {
                 MessageWindow.ShowMessage("新慢箋調劑日為今日時\r\n不可傳送藥健康\r\n調劑日自動幫您加一天",MessageType.WARNING);
-                messageWindow.ShowDialog();
+                
                 CurrentPrescription.Treatment.AdjustDate = CurrentPrescription.Treatment.AdjustDate.AddDays(1);
             }
               

@@ -361,7 +361,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
 
             string stockValue = "";/// StockTakingOrderDb.StockCheckById(InventoryMedicine.Id, TextBoxTakingValue.Text);
             MessageWindow.ShowMessage("單品盤點成功!", MessageType.SUCCESS);
-            messageWindow.ShowDialog();
+            
             
             InventoryMedicine.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
             inventoryMedicineBackup.Stock.Inventory = Double.Parse(TextBoxTakingValue.Text);
@@ -387,7 +387,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
             if (TextBoxTakingValue.Text.Equals(""))
             {
                 MessageWindow.ShowMessage("請輸入數量!", MessageType.WARNING, true);
-                messageWindow.ShowDialog();
+                
 
                 return false;
             }
@@ -412,7 +412,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
             InitMedicineDataChanged();
 
             MessageWindow.ShowMessage("更新成功!", MessageType.SUCCESS);
-            messageWindow.ShowDialog();
+            
         }
 
         private void UpdateNewDataToCurrentMed()
@@ -514,7 +514,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
             Flags = new SyncFlag(true);
 
             MessageWindow.ShowMessage("資料已同步!", MessageType.SUCCESS);
-            messageWindow.ShowDialog();
+            
         }
     }
 }

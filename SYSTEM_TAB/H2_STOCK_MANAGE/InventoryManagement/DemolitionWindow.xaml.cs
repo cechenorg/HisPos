@@ -126,7 +126,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
                 ///ProductDb.DemolitionProduct(newInvId,proId, wareHouseInventory.warId,wareHouseInventory.DemolitionAmount);
             }
             MessageWindow.ShowMessage("拆庫成功",MessageType.SUCCESS, true);
-            messageWindow.ShowDialog();
+            
             Close();
         }
       

@@ -201,7 +201,7 @@ namespace His_Pos.SYSTEM_TAB.SETTINGS.SettingControl
             if (showError)
             {
                 MessageWindow.ShowMessage("IP 格式錯誤!", MessageType.ERROR);
-                messageWindow.ShowDialog();
+                
             }
 
             return false;

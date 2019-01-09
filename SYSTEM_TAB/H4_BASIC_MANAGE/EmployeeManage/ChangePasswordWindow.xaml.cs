@@ -34,7 +34,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             ///EmployeeDb.SetEmployeePassword(EmpId, EmpNewPassword);
 
             MessageWindow.ShowMessage("更新密碼成功!", MessageType.SUCCESS);
-            messageWindow.ShowDialog();
+            
 
             Close();
         }
@@ -44,21 +44,21 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             if (!EmpOldPassword.Equals(OldPassword.Password))
             {
                 MessageWindow.ShowMessage("舊密碼錯誤!", MessageType.ERROR);
-                messageWindow.ShowDialog();
+                
                 return false;
             }
 
             if (!NewPassword.Password.Equals(ConfirmNewPassword.Password))
             {
                 MessageWindow.ShowMessage("新密碼與確認密碼不同!", MessageType.ERROR);
-                messageWindow.ShowDialog();
+                
                 return false;
             }
 
             if (NewPassword.Password.Length > 10 || NewPassword.Password.Length < 1)
             {
                 MessageWindow.ShowMessage("新密碼長度需介於 1 ~ 10 之間!", MessageType.ERROR);
-                messageWindow.ShowDialog();
+                
                 return false;
             }
 
@@ -68,7 +68,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             if (!match.Value.Equals(NewPassword.Password))
             {
                 MessageWindow.ShowMessage("新密碼中不能有符號!", MessageType.ERROR);
-                messageWindow.ShowDialog();
+                
                 return false;
             }
 

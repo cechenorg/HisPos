@@ -29,7 +29,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
             sh.ProcMessage = (s) =>
             {
                 MessageWindow.ShowMessage(s, Class.MessageType.SUCCESS);
-                messageWindow.ShowDialog();
+                
             };
             //執行Script，取得熱門新聞，注意: 必須要在網頁載入完成後才可呼叫
             Web.InvokeScript("eval", @"

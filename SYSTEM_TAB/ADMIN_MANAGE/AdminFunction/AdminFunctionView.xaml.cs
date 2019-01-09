@@ -15,7 +15,7 @@ namespace His_Pos.SYSTEM_TAB.ADMIN_MANAGE.AdminFunction {
         private void ButtonPredictChronic_Click(object sender, RoutedEventArgs e) {
            /// ChronicDb.PredictXmlChronic();
             MessageWindow.ShowMessage("預約慢箋完成!",MessageType.SUCCESS);
-            messageWindow.ShowDialog();
+            
         }
     }
 }

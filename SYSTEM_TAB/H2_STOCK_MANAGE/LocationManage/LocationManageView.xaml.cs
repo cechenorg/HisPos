@@ -119,7 +119,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
            ///}
            ///else {
            ///    MessageWindow.ShowMessage("此櫃位尚有商品，無法刪除",MessageType.ERROR, true);
-           ///    messageWindow.ShowDialog();
+           ///    
            ///}
            
         }

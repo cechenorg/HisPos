@@ -67,7 +67,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             if (SearchResult.SelectedItem is null)
             {
                 MessageWindow.ShowMessage("請選擇一個項目!", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
             SelectedItem = (SearchResult.SelectedItem as Product);

@@ -33,7 +33,7 @@ namespace His_Pos.FunctionWindow
         public static void ShowMessage(string message, MessageType type)
         {
             MessageWindow.ShowMessage(message, type);
-            messageWindow.ShowDialog();
+            
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

@@ -22,7 +22,7 @@ namespace His_Pos.FunctionWindow
             else
             {
                 MessageWindow.ShowMessage("連線失敗 請確認資料是否正確", MessageType.ERROR);
-                messageWindow.ShowDialog();
+                
             }
         }
     }

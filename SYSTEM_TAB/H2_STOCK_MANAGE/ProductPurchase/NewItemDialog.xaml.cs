@@ -45,7 +45,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
                 if (SearchResult.Items.Count == 0)
                 {
                     MessageWindow.ShowMessage("查無商品!", MessageType.ERROR, true);
-                    messageWindow.ShowDialog();
+                    
                     ConfirmButtonClicked = true;
                     Close();
                 }
@@ -79,7 +79,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             if(SearchResult.Items.Count == 0)
             {
                 MessageWindow.ShowMessage("查無商品!", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 Close();
             }
             else if (SearchResult.Items.Count == 1)
@@ -150,7 +150,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
             if (SearchResult.SelectedItem is null)
             {
                 MessageWindow.ShowMessage("請選擇一個項目!", MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
                 return;
             }
 

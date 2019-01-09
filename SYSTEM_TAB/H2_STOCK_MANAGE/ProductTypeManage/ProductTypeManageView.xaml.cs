@@ -322,7 +322,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                 }
                 
                 MessageWindow.ShowMessage("修改成功!", MessageType.SUCCESS, true);
-                messageWindow.ShowDialog();
+                
 
                 InitTypeDataChanged();
             }
@@ -346,7 +346,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
             else
             {
                 MessageWindow.ShowMessage(error, MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
 
                 return false;
             }
@@ -397,7 +397,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                         if (detail.ItemCount != 0)
                         {
                             MessageWindow.ShowMessage((deleteType as ProductTypeManageMaster).Name + "以下類別之商品數須為0!", MessageType.ERROR, true);
-                            messageWindow.ShowDialog();
+                            
                             return false;
                         }
                     }
@@ -407,7 +407,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
                     if ((deleteType as ProductTypeManageDetail).ItemCount != 0)
                     {
                         MessageWindow.ShowMessage((deleteType as ProductTypeManageDetail).Name + "之商品數須為0!", MessageType.ERROR, true);
-                        messageWindow.ShowDialog();
+                        
                         return false;
                     }
                 }

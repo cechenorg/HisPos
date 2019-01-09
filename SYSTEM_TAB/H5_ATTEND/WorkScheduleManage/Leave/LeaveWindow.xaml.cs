@@ -41,7 +41,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.Leave
             if (!errors.Equals(""))
             {
                 MessageWindow.ShowMessage(errors, MessageType.ERROR, true);
-                messageWindow.ShowDialog();
+                
 
                 return;
             }
