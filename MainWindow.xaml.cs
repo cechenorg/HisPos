@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ChromeTabs;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Authority;
@@ -26,12 +27,11 @@ using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.TreatmentCase;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.FunctionWindow;
+using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
-using His_Pos.Resource;
 using His_Pos.Service;
-using His_Pos.SystemSettings;
-using His_Pos.ViewModel;
+using His_Pos.SYSTEM_TAB.SETTINGS;
 using JetBrains.Annotations;
 using MaterialDesignThemes.Wpf;
 using Label = System.Windows.Controls.Label;
@@ -45,6 +45,12 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+        public static List<Feature> HisFeatures = new List<Feature>();
+        public static User CurrentUser;
+
+
+        public static MainWindow Instance;
+
         private static int hisApiErrorCode;
         public int HisApiErrorCode
         {
@@ -88,9 +94,6 @@ namespace His_Pos
             InitializeMenu();
             InitialUserBlock();
             StratClock();
-            _openWindows = new List<DockingWindow>();
-            CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
-            CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
         }
         

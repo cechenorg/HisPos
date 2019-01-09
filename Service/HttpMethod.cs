@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.Service
 {

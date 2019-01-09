@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Data;
 
-namespace His_Pos.Class
+namespace His_Pos.Class.Location
 {
     public class Location
     {
