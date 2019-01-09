@@ -271,8 +271,8 @@ namespace His_Pos.HisApi
             catch (Exception e)
             {
                 Application.Current.Dispatcher.Invoke((Action)delegate {
-                    MessageWindow m = new MessageWindow("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR);
+                    
                 });
             }
             switch (type)
@@ -349,8 +349,8 @@ namespace His_Pos.HisApi
                 Application.Current.Dispatcher.Invoke((Action)delegate
                 {
                     ((ViewModelMainWindow) MainWindow.Instance.DataContext).HisApiException = true;
-                    MessageWindow m = new MessageWindow("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR);
+                    
                 });
             }
             if (MainWindow.Instance.HisApiErrorCode == 0)
@@ -454,8 +454,8 @@ namespace His_Pos.HisApi
                 Application.Current.Dispatcher.Invoke((Action)delegate
                 {
                     ((ViewModelMainWindow)MainWindow.Instance.DataContext).HisApiException = true;
-                    MessageWindow m = new MessageWindow("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("讀卡機控制軟體異常，請檢查讀卡機設備", MessageType.ERROR);
+                    
                 });
             }
 

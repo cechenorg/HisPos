@@ -380,7 +380,7 @@ namespace His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage
         private void ChangeMessage_Click(object sender, RoutedEventArgs e)
         {
             EditMessageWindow editMessageWindow = new EditMessageWindow(ImportantMessage);
-            edit
+            editMessageWindow.ShowDialog();
 
             ImportantMessage = editMessageWindow.Message;
 

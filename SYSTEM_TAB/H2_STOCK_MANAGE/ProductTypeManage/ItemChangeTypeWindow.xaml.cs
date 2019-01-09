@@ -187,19 +187,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         {
             if (DataGridSource.SelectedItem is null)
             {
-                MessageWindow.ShowMessage("請選擇項目", MessageType.ERROR, true);
+                MessageWindow.ShowMessage("請選擇項目", MessageType.ERROR);
                 
                 return;
             }
             if (ComboBoxSourceSmall.SelectedItem is null)
             {
-                MessageWindow.ShowMessage("請選擇來源", MessageType.ERROR, true);
+                MessageWindow.ShowMessage("請選擇來源", MessageType.ERROR);
                 
                 return;
             }
             if (ComboBoxTargetSmall.SelectedItem is null)
             {
-                MessageWindow.ShowMessage("請選擇目的", MessageType.ERROR, true);
+                MessageWindow.ShowMessage("請選擇目的", MessageType.ERROR);
                 
                 return;
             }
@@ -221,19 +221,19 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
         {
             if (DataGridTarget.SelectedItem is null)
             {
-                MessageWindow.ShowMessage("請選擇項目", MessageType.ERROR, true);
+                MessageWindow.ShowMessage("請選擇項目", MessageType.ERROR);
                 
                 return;
             }
             if (ComboBoxTargetSmall.SelectedItem is null)
             {
-                MessageWindow.ShowMessage("請選擇來源", MessageType.ERROR, true);
+                MessageWindow.ShowMessage("請選擇來源", MessageType.ERROR);
                 
                 return;
             }
             if (ComboBoxSourceSmall.SelectedItem is null)
             {
-                MessageWindow.ShowMessage("請選擇目的", MessageType.ERROR, true);
+                MessageWindow.ShowMessage("請選擇目的", MessageType.ERROR);
                 
                 return;
             }

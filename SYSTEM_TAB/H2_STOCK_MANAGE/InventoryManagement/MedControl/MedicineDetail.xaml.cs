@@ -386,7 +386,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.MedControl
         {
             if (TextBoxTakingValue.Text.Equals(""))
             {
-                MessageWindow.ShowMessage("請輸入數量!", MessageType.WARNING, true);
+                MessageWindow.ShowMessage("請輸入數量!", MessageType.WARNING);
                 
 
                 return false;

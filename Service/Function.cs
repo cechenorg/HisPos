@@ -263,8 +263,8 @@ namespace His_Pos.Service
             }
             catch (Exception ex)
             {
-                var m = new MessageWindow("DailyUpload()", MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
+                
                 return;
             }
         }

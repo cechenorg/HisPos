@@ -52,7 +52,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
             foreach (var item in changeItems) {
                 ///LocationDb.UpdateLocationDetail(item.id,item.newvalue);
             }
-            MessageWindow.ShowMessage("更新成功!",MessageType.SUCCESS, true);
+            MessageWindow.ShowMessage("更新成功!",MessageType.SUCCESS);
             
             Close();
         }

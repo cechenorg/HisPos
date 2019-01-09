@@ -89,8 +89,8 @@ namespace His_Pos
         public static ObservableCollection<Copayment> Copayments { get; set; }
         public static ObservableCollection<SpecialCode> SpecialCode { get; set; }
         public static ObservableCollection<Usage> Usages { get; set; }
-        public static ObservableCollection<Position> Positions { get; set; }
-        public MainWindow(User userLogin)
+        public static ObservableCollection<Class.Position.Position> Positions { get; set; }
+        public MainWindow(Class.Person.User userLogin)
         {
             FeatureFactory();
             InitializeComponent();
@@ -229,8 +229,8 @@ namespace His_Pos
         {
             var d = new DeclareDb();
             var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
-            var upload = (bool)dailyUploadConfirm.ShowDialog();
-            if(upload)
+            var upload = (bool) dailyUploadConfirm.ShowDialog();
+            if (upload)
                /// d.StartDailyUpload();
             ///ProductDb.UpdateDailyStockValue();
             ///DeclareDb declareDb = new DeclareDb();

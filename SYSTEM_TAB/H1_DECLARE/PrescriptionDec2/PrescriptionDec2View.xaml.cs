@@ -139,7 +139,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 if (_prescriptionCount >= 80 && _prescriptionCountWarning)
                 {
                     YesNoMessageWindow m = new YesNoMessageWindow("調劑處方已超過80件，是否繼續提醒?","調劑上限提醒");
-                    _prescriptionCountWarning = (bool)m.ShowDialog();
+                    _prescriptionCountWarning = (bool) m.ShowDialog();
                 }
                 NotifyPropertyChanged(nameof(PrescriptionCount));
             }
@@ -350,15 +350,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             }
             if (TreatmentDate.Text.Contains(" "))
             {
-                m = new MessageWindow("就醫日期錯誤", MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("就醫日期錯誤", MessageType.ERROR);
+                
                 return;
             }
 
             if (AdjustDate.Text.Contains(" "))
             {
-                m = new MessageWindow("調劑日期錯誤", MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("調劑日期錯誤", MessageType.ERROR);
+                
                 return;
             }
 
@@ -374,7 +374,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 if (!(med is DeclareMedicine declare)) continue;
                 if (string.IsNullOrEmpty(((IProductDeclare) declare).Days))
                 {
-                    var messageWindow = new MessageWindow(declare.Id + "的給藥日份不可為空", MessageType.ERROR, true);
+                    MessageWindow.ShowMessage(declare.Id + "的給藥日份不可為空", MessageType.ERROR);
                     
                     return;
                 }
@@ -410,15 +410,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             if (TreatmentDate.Text.Contains(" "))
             {
-                var m = new MessageWindow("就醫日期錯誤", MessageType.ERROR, true);
-                m.Show();
+                MessageWindow.ShowMessage("就醫日期錯誤", MessageType.ERROR);
+                
                 return;
             }
 
             if (AdjustDate.Text.Contains(" "))
             {
-                var m = new MessageWindow("調劑日期錯誤", MessageType.ERROR, true);
-                m.Show();
+                MessageWindow.ShowMessage("調劑日期錯誤", MessageType.ERROR);
                 return;
             }
 
@@ -441,8 +440,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     if (!(med is DeclareMedicine declare)) continue;
                     if (string.IsNullOrEmpty(((IProductDeclare)declare).Days))
                     {
-                        var messageWindow = new MessageWindow(declare.Id + "的給藥日份不可為空", MessageType.ERROR, true);
-                        
+                        MessageWindow.ShowMessage(declare.Id + "的給藥日份不可為空", MessageType.ERROR);
                         return;
                     }
 
@@ -726,8 +724,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     
                     break;
                 case -1:
-                    m = new MessageWindow("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("處方登錄失敗 請確認調劑日期是否正確", MessageType.ERROR);
+                    
                     return;
             }
 
@@ -743,22 +741,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     var loading = new LoadingWindow();
                     loading.LoginIcData(Instance);
                     loading.ShowDialog();
-                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+                    
                 }
                 else
                 {
                     var loading = new LoadingWindow();
                     loading.LoginIcData(Instance, SelectedErrorCode);
                     loading.ShowDialog();
-                    m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+                    
                 }
             }
             else
             {
-                m = new MessageWindow("處方登錄成功", MessageType.SUCCESS, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("處方登錄成功", MessageType.SUCCESS);
+                
             }
 
             if (MainWindow.CurrentPharmacy.MedicalPersonnelCollection != null && MainWindow.CurrentPharmacy.MedicalPersonnelCollection.Count > 0)
@@ -828,8 +826,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             }
             catch (Exception ex)
             {
-                var m = new MessageWindow("LogInIcData()", MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("LogInIcData()", MessageType.ERROR);
             }
         }
 
@@ -900,8 +897,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             {
                 Action creatIcUploadDataDelegate = delegate ()
                 {
-                    var m = new MessageWindow("產生健保資料:"+ex.Message, MessageType.ERROR, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("產生健保資料:"+ex.Message, MessageType.ERROR);
+                    
                 };
                 Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
             }
@@ -965,8 +962,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 }
                 catch (Exception ex)
                 {
-                    var m = new MessageWindow(ex.Message, MessageType.ERROR, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                    
                 }
             };
             Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
@@ -1696,8 +1693,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             if (!string.IsNullOrEmpty(CurrentPrescription.Treatment.AdjustCase.Id) && CurrentPrescription.Treatment.AdjustCase.Id.Equals("D"))
             {
                 textBox.Text = string.Empty;
-                MessageWindow m = new MessageWindow("調劑案件為慢性病連續處方箋調劑/藥事居家照護，本欄免填。", MessageType.WARNING, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("調劑案件為慢性病連續處方箋調劑/藥事居家照護，本欄免填。", MessageType.WARNING);
+                
                 CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = null;
                 CurrentPrescription.Treatment.MedicalInfo.SecondDiseaseCode = null;
                 return;
@@ -1725,8 +1722,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 
             if (textBox.Text.Length < 3)
             {
-                var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("請輸入完整疾病代碼", MessageType.WARNING);
+                
                 return;
             }
 
@@ -1735,11 +1732,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 var selectedDiseaseCode = new DiseaseCode();/// DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
                 if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
                 {
-                    var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
-                    {
-                        Owner = Application.Current.MainWindow
-                    };
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("查無疾病代碼", MessageType.WARNING);
+                    
                     return;
                 }
 
@@ -1750,11 +1744,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 {
                     if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
                     {
-                        var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
-                        {
-                            Owner = Application.Current.MainWindow
-                        };
-                        m.ShowDialog();
+                        MessageWindow.ShowMessage("查無疾病代碼", MessageType.WARNING);
+                        
                         return;
                     }
 
@@ -1837,8 +1828,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                             if (string.IsNullOrEmpty(ChronicTotal.Text) &&
                                 !int.TryParse(ChronicSequence.Text, out _))
                             {
-                                var m = new MessageWindow("總領藥次數有值，需填寫領藥次數", MessageType.WARNING, true);
-                                m.ShowDialog();
+                                MessageWindow.ShowMessage("總領藥次數有值，需填寫領藥次數", MessageType.WARNING);
+                                
                                 ChronicTotal.Focus();
                             }
                             else
@@ -1968,8 +1959,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             ///ProductDb.InsertEntry("配藥收入", totalCost.ToString(), "DecMasId", decMasId);
             ///ProductDb.InsertEntry("調劑耗用", "-" + totalCost, "DecMasId", decMasId);
             ///declareDb.InsertInventoryDb(_currentDeclareData, "處方登錄", decMasId); //庫存扣庫
-            var m = new MessageWindow("調劑登錄成功", MessageType.SUCCESS, true);
-            m.ShowDialog();
+            MessageWindow.ShowMessage("調劑登錄成功", MessageType.SUCCESS);
+            
             ClearPrescription();
         }
 
@@ -2075,8 +2066,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = null;
                     return;
                 }
-                MessageWindow m = new MessageWindow("調劑案件為藥事居家照護，本欄免填。", MessageType.WARNING, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("調劑案件為藥事居家照護，本欄免填。", MessageType.WARNING);
+                
                 DivisionCombo.SelectedIndex = -1;
                 return;
             }
@@ -2282,8 +2273,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     var declareCopied = new DeclareData(); ///PrescriptionDB.GetDeclareDataById(((CustomerHistoryMaster)selectedItem).CustomerHistoryDetailId);
                     if (declareCopied is null)
                     {
-                        MessageWindow m = new MessageWindow("處方資料異常，複製失敗。",MessageType.ERROR,true);
-                        m.ShowDialog();
+                        MessageWindow.ShowMessage("處方資料異常，複製失敗。",MessageType.ERROR);
+                        
                         return;
                     }
                     var isGetIcCard = CurrentPrescription.IsGetIcCard;
@@ -2401,8 +2392,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     CurrentPrescription.Treatment.PaymentCategory = new PaymentCategory();
                     return;
                 }
-                MessageWindow m = new MessageWindow("調劑案件為慢性病連續處方箋調劑/藥事居家照護，本欄免填。",MessageType.WARNING,true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("調劑案件為慢性病連續處方箋調劑/藥事居家照護，本欄免填。",MessageType.WARNING);
+                
                 CurrentPrescription.Treatment.PaymentCategory = new PaymentCategory();
                 PaymentCategoryCombo.SelectedIndex = -1;
             }

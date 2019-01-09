@@ -382,7 +382,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
                     ClearOrderDetailData();
             }
 
-            MessageWindow.ShowMessage("處理單已完成, 可前往處方單紀錄查詢!", MessageType.SUCCESS, true);
+            MessageWindow.ShowMessage("處理單已完成, 可前往處方單紀錄查詢!", MessageType.SUCCESS);
             
 
             InventoryManagementView.DataChanged = true;
@@ -563,7 +563,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
             if (errorMessage != String.Empty)
             {
-                MessageWindow.ShowMessage(errorMessage, MessageType.ERROR, true);
+                MessageWindow.ShowMessage(errorMessage, MessageType.ERROR);
                 
                 return false;
             }

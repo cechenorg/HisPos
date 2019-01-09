@@ -311,8 +311,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
             loadingWindow.Show();
             
             SaveMedBagData();
-            var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS,false);
-            m.Show();
+            MessageWindow.ShowMessage("藥袋儲存成功", MessageType.SUCCESS);
         }
 
         //新增/刪除藥袋
@@ -385,10 +384,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage
 
         private bool CheckMedBagCollectionEmpty()
         {
-            var m = new MessageWindow("未新增藥袋", MessageType.WARNING, true);
             if (MedBagCollection.Count == 0)
             {
-                m.Show();
+                MessageWindow.ShowMessage("未新增藥袋", MessageType.WARNING);
                 return true;
             }
             return false;
