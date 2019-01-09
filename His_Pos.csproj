@@ -415,7 +415,7 @@
     <Compile Include="Class\WorkSchedule\UserIconData.cs" />
     <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
     <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
-    <Compile Include="Converters.cs" />
+    <Compile Include="Service\Converters.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
     </Compile>
@@ -678,7 +678,7 @@
     </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
-    <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
+    <Compile Include="Service\MoreLinq\MoreEnumerable.DistinctBy.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecord.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
       <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
@@ -1255,6 +1255,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\General\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
   </ItemGroup>
@@ -1371,8 +1372,8 @@
     <Resource Include="Images\OpenRecord.png" />
     <Resource Include="Images\OpenRecord2Detail.png" />
     <Resource Include="Images\Report.png" />
-    <Content Include="csHis.dll" />
-    <Content Include="Reader.dll" />
+    <Content Include="DLLs\csHis.dll" />
+    <Content Include="DLLs\Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
