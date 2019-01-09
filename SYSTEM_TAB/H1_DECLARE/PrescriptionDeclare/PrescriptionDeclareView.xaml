@@ -214,10 +214,7 @@
                             <DataTrigger Binding="{Binding IsControl}" Value="False">
                                 <Setter Property="Background" Value="Transparent" />
                             </DataTrigger>
-                        </Style.Triggers>
-                        <EventSetter Event="MouseEnter"/>
-                        <EventSetter Event="MouseLeave"/>
-                        <EventSetter Event="MouseDoubleClick" />
+                        </Style.Triggers> 
                         <Setter Property="ContextMenu" Value="{DynamicResource MedcineContextMenu }"/>
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="BorderBrush" Value="Transparent" />
@@ -385,8 +382,7 @@
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="FontSize" Value="14" />
-                                <Setter Property="Height" Value="35" />
-                                <EventSetter Event="MouseDoubleClick" />
+                                <Setter Property="Height" Value="35" /> 
                             </Style>
                         </DataGrid.RowStyle>
                         <DataGrid.Columns>
@@ -449,8 +445,7 @@
                                     <Trigger Property="DataGridRow.IsSelected" Value="True">
                                         <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
                                     </Trigger>
-                                </Style.Triggers>
-                                <EventSetter Event="MouseDoubleClick"/>
+                                </Style.Triggers> 
                                 <Setter Property="Background" Value="Transparent" />
                                 <Setter Property="BorderBrush" Value="Transparent" />
                                 <Setter Property="FontSize" Value="16" />
