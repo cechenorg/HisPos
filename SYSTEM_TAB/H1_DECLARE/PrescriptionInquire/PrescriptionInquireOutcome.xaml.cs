@@ -644,8 +644,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 if (IsAdjust || _isPredictChronic) { 
                     var declareDb = new DeclareDb();
                       ///declareDb.UpdateDeclareData(_currentDeclareData);
-                    m = new MessageWindow("處方修改成功", MessageType.SUCCESS, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("處方修改成功", MessageType.SUCCESS);
+                    
                     InitDataChanged();
                     PrescriptionOverview prescriptionOverview = new PrescriptionOverview(InquiredPrescription);
                     PrescriptionInquireView.Instance.UpdateDataFromOutcome(prescriptionOverview);
@@ -659,8 +659,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 {
                     errorMessage += error.Content + "\n";
                 }
-                m = new MessageWindow(errorMessage, MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage(errorMessage, MessageType.ERROR);
+                
             }
             IsAdjust = false;
         }
@@ -718,8 +718,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                     CreatIcErrorUploadData(SelectedErrorCode);
                 ///ProductDb.InsertCashFow("補卡退還押金", (int.Parse(DeclareTrade.Deposit)*-1).ToString(), "DecMasId", InquiredPrescription.DecMasId);
                 ///DeclareDb.UpdateDeclareRegisterMakeUp(InquiredPrescription.DecMasId);
-                var m = new MessageWindow("補卡作業已完成", MessageType.SUCCESS, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("補卡作業已完成", MessageType.SUCCESS);
+                
             }
         }
 
@@ -766,8 +766,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             }
             catch (Exception ex)
             {
-                var m = new MessageWindow("LogInIcData()", MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("LogInIcData()", MessageType.ERROR);
             }
         }
 
@@ -845,8 +844,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             {
                 Action creatIcUploadDataDelegate = delegate ()
                 {
-                    var m = new MessageWindow(ex.Message, MessageType.ERROR, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                    
                 };
                 Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
             }
@@ -910,8 +909,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 }
                 catch (Exception ex)
                 {
-                    var m = new MessageWindow(ex.Message, MessageType.ERROR, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
+                    
                 }
             };
             Instance.Dispatcher.BeginInvoke(creatIcUploadDataDelegate);
@@ -1049,8 +1048,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 
             if (textBox.Text.Length < 3)
             {
-                var m = new MessageWindow("請輸入完整疾病代碼", MessageType.WARNING, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("請輸入完整疾病代碼", MessageType.WARNING);
+                
                 return;
             }
 
@@ -1059,11 +1058,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 var selectedDiseaseCode = new DiseaseCode();/// DiseaseCodeDb.GetDiseaseCodeById(textBox.Text)[0].ICD10;
                 if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
                 {
-                    var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
-                    {
-                        Owner = Application.Current.MainWindow
-                    };
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("查無疾病代碼", MessageType.WARNING);
+                    
                     return;
                 }
 
@@ -1074,11 +1070,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 {
                     if (selectedDiseaseCode.Id.Equals("查無疾病代碼") && !textBox.Text.Contains(" "))
                     {
-                        var m = new MessageWindow("查無疾病代碼", MessageType.WARNING, true)
-                        {
-                            Owner = Application.Current.MainWindow
-                        };
-                        m.ShowDialog();
+                        MessageWindow.ShowMessage("查無疾病代碼", MessageType.WARNING);
+                        
                         return;
                     }
 

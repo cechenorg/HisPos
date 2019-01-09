@@ -289,7 +289,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
             }
             if (!check) {
                 var errors = _errorList.Aggregate(string.Empty, (current, error) => current + (error + "\n"));
-                MessageWindow.ShowMessage(errors, MessageType.ERROR, true);
+                MessageWindow.ShowMessage(errors, MessageType.ERROR);
                 
             }
             return check;
@@ -317,7 +317,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement.OtcControl
                 ProductUnit prounit = new ProductUnit("s");
                 ///ProductDb.UpdateOtcUnit(prounit, InventoryOtc.Id);
             }
-            MessageWindow.ShowMessage("商品修改成功!", MessageType.SUCCESS, true);
+            MessageWindow.ShowMessage("商品修改成功!", MessageType.SUCCESS);
             
             InitVariables();
         }

@@ -114,7 +114,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 if (label is Label) {
                     if (((Label)label).Foreground == Brushes.Yellow) {
                         deactivate = false;
-                        MessageWindow.ShowMessage("此櫃位尚有商品 不可刪除",MessageType.ERROR,true);
+                        MessageWindow.ShowMessage("此櫃位尚有商品 不可刪除",MessageType.ERROR);
                         
                         deactivate = true;
                         CheckColumnRule();
@@ -296,7 +296,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage
                 }
                 else
                 {
-                    MessageWindow.ShowMessage(reply, MessageType.ERROR, true);
+                    MessageWindow.ShowMessage(reply, MessageType.ERROR);
                     
                 }
             }

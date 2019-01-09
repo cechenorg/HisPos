@@ -230,8 +230,8 @@ namespace His_Pos
         {
             var d = new DeclareDb();
             var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
-            var upload = (bool)dailyUploadConfirm.ShowDialog();
-            if(upload)
+            var upload = (bool) dailyUploadConfirm.ShowDialog();
+            if (upload)
                /// d.StartDailyUpload();
             ///ProductDb.UpdateDailyStockValue();
             ///DeclareDb declareDb = new DeclareDb();

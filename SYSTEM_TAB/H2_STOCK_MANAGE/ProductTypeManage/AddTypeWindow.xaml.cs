@@ -82,7 +82,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage
 
             if( error.Length != 0 )
             {
-                MessageWindow.ShowMessage(error, Class.MessageType.ERROR, true);
+                MessageWindow.ShowMessage(error, Class.MessageType.ERROR);
                 
                 return false;
             }

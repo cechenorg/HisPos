@@ -120,15 +120,13 @@ namespace His_Pos.FunctionWindow
                     ChangeLoadingMessage("預約慢箋中..."); 
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MessageWindow mainWindow = new MessageWindow("申報檔匯入成功!", MessageType.SUCCESS, true);
-                        mainWindow.ShowDialog();
+                        MessageWindow.ShowMessage("申報檔匯入成功!", MessageType.SUCCESS);
                     }));
                 }
                 else {
                     Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MessageWindow mainWindow = new MessageWindow("申報檔已存在!", MessageType.ERROR, true);
-                        mainWindow.ShowDialog();
+                        MessageWindow.ShowMessage("申報檔已存在!", MessageType.ERROR);
                     }));
                 }
                
@@ -783,8 +781,8 @@ namespace His_Pos.FunctionWindow
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     medBagManageView.MedBagManageViewBox.IsEnabled = true;
-                    var m = new MessageWindow("藥袋儲存成功", MessageType.SUCCESS, true);
-                    m.ShowDialog();
+                    MessageWindow.ShowMessage("藥袋儲存成功", MessageType.SUCCESS);
+                    
                     Close();
                 }));
             };
@@ -1066,9 +1064,7 @@ namespace His_Pos.FunctionWindow
             }
             catch (Exception ex)
             {
-                var m = new MessageWindow("Export()", MessageType.ERROR, true);
-                m.ShowDialog();
-                return;
+                MessageWindow.ShowMessage("Export()", MessageType.ERROR);
             }
         }
 
@@ -1077,8 +1073,8 @@ namespace His_Pos.FunctionWindow
             MessageWindow m;
             if (m_streams == null || m_streams.Count == 0)
             {
-                m = new MessageWindow("ReportPrint()_1", MessageType.ERROR,true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("ReportPrint()_1", MessageType.ERROR);
+                
                 return;
             }
             try
@@ -1091,9 +1087,7 @@ namespace His_Pos.FunctionWindow
             }
             catch (Exception ex)
             {
-                m = new MessageWindow("ReportPrint()_2", MessageType.ERROR, true);
-                m.ShowDialog();
-                return;
+                MessageWindow.ShowMessage("ReportPrint()_2", MessageType.ERROR);
             }
         }
 
@@ -1123,9 +1117,7 @@ namespace His_Pos.FunctionWindow
             }
             catch (Exception ex)
             {
-                var m = new MessageWindow("printDoc_PrintPage()", MessageType.ERROR, true);
-                m.ShowDialog();
-                return;
+                MessageWindow.ShowMessage("printDoc_PrintPage()", MessageType.ERROR);
             }
         }
 

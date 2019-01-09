@@ -91,8 +91,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             foreach (var c in CommonHospitalsCollection)
             {
                 if (!c.Id.Equals(SearchedHospital.Id)) continue;
-                m = new MessageWindow("無法新增，該常用醫療院所已存在", MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("無法新增，該常用醫療院所已存在", MessageType.ERROR);
+                
                 return;
             }
             CommonHospitalsCollection.Add(SearchedHospital);
@@ -122,8 +122,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             }
             if (!find)
             {
-                m = new MessageWindow("無法刪除，查無對應常用醫療院所", MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("無法刪除，查無對應常用醫療院所", MessageType.ERROR);
+                
                 return;
             }
             foreach (var h in MainWindow.Hospitals)

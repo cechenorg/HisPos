@@ -54,8 +54,7 @@ namespace His_Pos.Service
                         
                         break;
                     default:
-                        MessageWindow errormessageWindow = new MessageWindow(ex.Message,MessageType.ERROR);
-                        error
+                        MessageWindow.ShowMessage(ex.Message,MessageType.ERROR);
                         break; 
                 } 
             } 
@@ -108,8 +107,7 @@ namespace His_Pos.Service
                         
                         break;
                     default:
-                        MessageWindow errormessageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
-                        error
+                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                         break;
                 }
             }
@@ -155,8 +153,7 @@ namespace His_Pos.Service
                         
                         break;
                     default:
-                        MessageWindow errormessageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
-                        error
+                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                         break;
                 }
             } 

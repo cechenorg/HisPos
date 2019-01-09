@@ -114,8 +114,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
         private void ButtonSubnmmit_Click(object sender, RoutedEventArgs e)
         {
             if (WareHouseInventoryCollection.Count(war => Convert.ToInt32(war.AfterDemolitionAmount) < 0) > 0) {
-                MessageWindow messageWindows = new MessageWindow("拆庫後剩餘量不可為負!", MessageType.ERROR,true);
-                messageWindows.ShowDialog();
+                MessageWindow.ShowMessage("拆庫後剩餘量不可為負!", MessageType.ERROR);
                 return;
             }
             string newInvId = "";/// ProductDb.GetMaxProInvId();
@@ -125,7 +124,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement
                 if (wareHouseInventory.DemolitionAmount == "0") continue;
                 ///ProductDb.DemolitionProduct(newInvId,proId, wareHouseInventory.warId,wareHouseInventory.DemolitionAmount);
             }
-            MessageWindow.ShowMessage("拆庫成功",MessageType.SUCCESS, true);
+            MessageWindow.ShowMessage("拆庫成功",MessageType.SUCCESS);
             
             Close();
         }
