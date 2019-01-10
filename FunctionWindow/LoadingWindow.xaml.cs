@@ -29,6 +29,7 @@ using His_Pos.Class.StoreOrder;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.HisApi;
 using His_Pos.Interface;
+using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Prescription.Position;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -452,19 +453,21 @@ namespace His_Pos.FunctionWindow
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void GetEmployeeData(EmployeeManageView employeeManage)
+        public void InitEmployeeManageView(EmployeeManageView employeeManage)
         {
+            Show();
             backgroundWorker.DoWork += (s, o) =>
             {
                 ChangeLoadingMessage("取得員工資料...");
-                var employeeCollection = new Collection<Object>();/// EmployeeDb.GetEmployeeData();
+                Employees employeeCollection = new Employees();
+                employeeCollection.Init(); 
 
                 ChangeLoadingMessage("取得權限資料...");
-                var positionCollection = new Collection<Object>();/// EmployeeDb.GetPositionData();
+                var positionCollection = new Collection<Object>(); ///EmployeeDb.GetPositionData();
 
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    ///employeeManage.EmployeeCollection = employeeCollection;
+                  employeeManage.EmployeeCollection = employeeCollection;
                    /// employeeManage.PositionCollection = positionCollection;
                 }));
             };

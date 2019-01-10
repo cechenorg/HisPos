@@ -27,10 +27,12 @@ namespace His_Pos.Service
                 count++;
                 if (count < parameterList.Count)
                     paramString += "&";
-            } 
-            HttpWebRequest request = HttpWebRequest.Create(url + paramString) as HttpWebRequest;
+            }
+            var geturl = url + paramString;
+            HttpWebRequest request = HttpWebRequest.Create(geturl) as HttpWebRequest;
             request.Method = "GET";
             request.ContentType = "application/x-www-form-urlencoded"; 
+
             List<XmlDocument> xmlDocuments = new List<XmlDocument>();
             try
             {

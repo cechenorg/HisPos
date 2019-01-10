@@ -15,16 +15,17 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
     {
         #region ----- Define Variables -----
 
-        private string EmpId { get; }
+        private int EmpId { get; }
         private string EmpOldPassword { get; }
         private string EmpNewPassword { get; set; }
         #endregion
 
-        public ChangePasswordWindow(string id)
+        public ChangePasswordWindow(int id)
         {
             InitializeComponent();
             EmpId = id;
-           /// EmpOldPassword = EmployeeDb.GetEmployeePassword(EmpId);
+            /// EmpOldPassword = EmployeeDb.GetEmployeePassword(EmpId);
+            ShowDialog();
         }
 
         private void ConfirmChangePassword_OnClick(object sender, RoutedEventArgs e)

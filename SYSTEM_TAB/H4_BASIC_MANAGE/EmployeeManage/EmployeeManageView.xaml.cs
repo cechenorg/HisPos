@@ -8,8 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using His_Pos.Class.Employee;
-using His_Pos.Class.Pharmacy;
+using His_Pos.NewClass.Person; 
 using His_Pos.FunctionWindow;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
@@ -26,12 +25,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public Collection<string> positionCollection;
         public Collection<string> PositionCollection
         {
-            get
-            {
+            get {
                 return positionCollection;
             }
-            set
-            {
+            set {
                 positionCollection = value;
                 NotifyPropertyChanged("PositionCollection");
             }
@@ -41,18 +38,16 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         public Employee employee;
         public Employee Employee
         {
-            get
-            {
+            get {
                 return employee;
             }
-            set
-            {
+            set {
                 employee = value;
                 NotifyPropertyChanged("Employee");
             }
         }
-        public ObservableCollection<Employee> employeeCollection = new ObservableCollection<Employee>();
-        public ObservableCollection<Employee> EmployeeCollection
+        public Employees employeeCollection;
+        public Employees EmployeeCollection
         {
             get
             {
@@ -83,26 +78,24 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private void GetEmployeeData() {
             LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.GetEmployeeData(this);
-            loadingWindow.Topmost = true;
-            loadingWindow.Show();
+            loadingWindow.InitEmployeeManageView(this); 
         }
 
         private void DataGridEmployee_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if ((sender as DataGrid).SelectedItem == null) return;
-            Employee = (Employee)((Employee)(sender as DataGrid).SelectedItem).Clone();
+          /// Employee = (Employee)((Employee)(sender as DataGrid).SelectedItem).Clone();
             richtextbox.Document.Blocks.Clear();
-            richtextbox.AppendText(Employee.Description);
+            richtextbox.AppendText("");/// Employee.Description);
             InitDataChanged();
         }
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
             Employee newemployee = EmployeeCollection.Where(emp => emp.Id == Employee.Id).ToList()[0];
-            Employee = (Employee)newemployee.Clone();
+           /// Employee = (Employee)newemployee.Clone();
             richtextbox.Document.Blocks.Clear();
-            richtextbox.AppendText(Employee.Description);
+            ///richtextbox.AppendText(Employee.Description);
             InitDataChanged();
         }
 
@@ -111,8 +104,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
             for (int i = 0; i < EmployeeCollection.Count; i++) {
                 if (EmployeeCollection[i].Id == Employee.Id) {
                     EmployeeCollection[i] = Employee;
-                    EmployeeCollection[i].Description = new TextRange(richtextbox.Document.ContentStart, richtextbox.Document.ContentEnd).Text;
-                    ///EmployeeDb.SaveEmployeeData(Employee);
+                    ///EmployeeCollection[i].Description = new TextRange(richtextbox.Document.ContentStart, richtextbox.Document.ContentEnd).Text;
+                    Employee.Save();
                     InitDataChanged();
                     break;
                 }
@@ -123,10 +116,10 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             int count = EmployeeCollection.Count;
-            Employee employee = new Employee();
-            var table = new DataTable(); /// EmployeeDb.SaveEmployeeData(employee);
-            employee.Id = table.Rows[0][0].ToString();
-            EmployeeCollection.Add(employee);
+            Employee newEmployee = new Employee();
+            newEmployee.Save();
+           /// employee.Id = table.Rows[0][0].ToString();
+            EmployeeCollection.Add(newEmployee);
             DataGridEmployee.SelectedIndex = count;
             ///MainWindow.CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
         }
@@ -134,7 +127,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         private void ButtonDelete_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (DataGridEmployee.SelectedItem == null) return;
-            ///EmployeeDb.DeleteEmployeeData((Employee)DataGridEmployee.SelectedItem);
+            Employee.Delete();  
             EmployeeCollection.Remove((Employee)DataGridEmployee.SelectedItem);
             DataGridEmployee.SelectedIndex = EmployeeCollection.Count-1;
         }
@@ -170,7 +163,7 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 
         private void EmpId_TextChanged(object sender, TextChangedEventArgs e) {
             DataGridEmployee.Items.Filter = ((o) => {
-                if (((Employee)o).Name.Contains(EmpId.Text) || ((Employee)o).Id.Contains(EmpId.Text) || ((Employee)o).NickName.Contains(EmpId.Text))
+                if (((Employee)o).Name.Contains(EmpId.Text) || ((Employee)o).Id.ToString().Contains(EmpId.Text) || ((Employee)o).Name.Contains(EmpId.Text))
                     return true;
                 else
                     return false;
@@ -180,7 +173,6 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
         private void ChangePassword_OnClick(object sender, RoutedEventArgs e)
         {
             ChangePasswordWindow changePasswordWindow = new ChangePasswordWindow(Employee.Id);
-            changePasswordWindow.ShowDialog();
         }
     }
 }

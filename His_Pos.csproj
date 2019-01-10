@@ -277,6 +277,8 @@
     <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescriptionHistory.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
     <Compile Include="NewClass\Person\Employee.cs" />
+    <Compile Include="NewClass\Person\EmployeeDb.cs" />
+    <Compile Include="NewClass\Person\Employees.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\Position\Positions.cs" />

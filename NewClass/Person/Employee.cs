@@ -78,6 +78,17 @@ namespace His_Pos.NewClass.Person
                 OnPropertyChanged(nameof(IsEnable));
             }
         }
+        #region Function
+        public void Save()
+        {
+            ///存檔後更新自己
+        }
+        public void Delete()
+        {
+            
+        }
+        #endregion
+
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -86,6 +97,6 @@ namespace His_Pos.NewClass.Person
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
+        #endregion 
     }
 }
