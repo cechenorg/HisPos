@@ -185,7 +185,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             if (selectitem is null) return;
             WebApi.UpdateIsReadByDeclareId(((CooperativeClinic)selectitem).DeclareId);
             ((CooperativeClinic)selectitem).IsRead = "已讀";
-            CustomerDeclaresCollection = null;///DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IcNumber); 
+            CustomerDeclaresCollection = null;///DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IdNumber); 
             CustomerDeclaresCollection.Insert(0,(new CustomerDeclare(((CooperativeClinic)selectitem).Prescription)));
             MedicineInfo = null;
             DataGridCooperativeClinic.SelectedIndex = 0;

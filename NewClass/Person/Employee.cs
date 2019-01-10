@@ -6,45 +6,76 @@ using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person
 {
-    public class Employee:INotifyPropertyChanged
+    public class Employee:Person,INotifyPropertyChanged
     {
         public Employee(){}
-        public Employee(DataRow r)
+        public Employee(DataRow r):base(r)
         {
-            Id = (int) r["EMP_ID"];
-            Name = r["EMP_NAME"].ToString();
-            IcNumber = r["EMP_ICNUMBER"]?.ToString();
-            Birthday = (DateTime?)r["EMP_BIRTHDAY"];
+            NickName = r[""]?.ToString();
+            WorkPositionId = (int)r[""];
+            StartDate = (DateTime?)r[""];
+            LeaveDate = (DateTime?)r[""];
+            PurchaseLimit = (int)r[""];
+            IsEnable = (bool)r[""];
         }
-        public int Id { get; }
-        private string name;//姓名
-        public string Name
+        private string nickName;//暱稱
+        public string NickName
         {
-            get =>name;
+            get => nickName;
             set
             {
-                name = value;
-                OnPropertyChanged(nameof(Name));
+                nickName = value;
+                OnPropertyChanged(nameof(NickName));
             }
         }
-        private string icNumber;//姓名
-        public string IcNumber
+        private int workPositionId;//職位ID
+        public int WorkPositionId
         {
-            get => icNumber;
+            get => workPositionId;
             set
             {
-                icNumber = value;
-                OnPropertyChanged(nameof(IcNumber));
+                workPositionId = value;
+                OnPropertyChanged(nameof(WorkPositionId));
             }
         }
-        private DateTime? birthday;//姓名
-        public DateTime? Birthday
+        private DateTime? startDate;//到職日
+        public DateTime? StartDate
         {
-            get => birthday;
+            get => startDate;
             set
             {
-                birthday = value;
-                OnPropertyChanged(nameof(Birthday));
+                startDate = value;
+                OnPropertyChanged(nameof(StartDate));
+            }
+        }
+        private DateTime? leaveDate;//離職日
+        public DateTime? LeaveDate
+        {
+            get => leaveDate;
+            set
+            {
+                leaveDate = value;
+                OnPropertyChanged(nameof(LeaveDate));
+            }
+        }
+        private int purchaseLimit;//員購上限
+        public int PurchaseLimit
+        {
+            get => purchaseLimit;
+            set
+            {
+                purchaseLimit = value;
+                OnPropertyChanged(nameof(PurchaseLimit));
+            }
+        }
+        private bool isEnable;//備註
+        public bool IsEnable
+        {
+            get => isEnable;
+            set
+            {
+                isEnable = value;
+                OnPropertyChanged(nameof(IsEnable));
             }
         }
         #region PropertyChanged

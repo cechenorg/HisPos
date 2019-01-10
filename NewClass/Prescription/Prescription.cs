@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using His_Pos.NewClass.Person;
+using His_Pos.NewClass.Person.Customer;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription

@@ -230,7 +230,7 @@ namespace His_Pos.Class
         {
             if(string.IsNullOrEmpty(Customer.Name))
                 AddError("0","病患姓名未填寫");
-            //Customer.IcCard.CheckIcNumber(Customer.IcCard.IcNumber);
+            //Customer.IcCard.CheckIcNumber(Customer.IcCard.IdNumber);
             CheckBirthDay();
         }
 

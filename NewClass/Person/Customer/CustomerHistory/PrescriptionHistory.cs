@@ -1,4 +1,4 @@
-﻿namespace His_Pos.NewClass.Person.CustomerHistory
+﻿namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
     public class PrescriptionHistory:CustomerHistoryBase
     {

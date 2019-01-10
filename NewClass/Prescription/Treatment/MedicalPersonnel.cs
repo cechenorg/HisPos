@@ -12,10 +12,10 @@ namespace His_Pos.NewClass.Prescription.Treatment
         public MedicalPersonnel(Employee e)
         {
             Name = e.Name;
-            IcNumber = e.IcNumber;
+            IdNumber = e.IdNumber;
         }
         public string Name { get; }
-        public string IcNumber { get; }
+        public string IdNumber { get; }
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 

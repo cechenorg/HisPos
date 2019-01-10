@@ -67,7 +67,7 @@ namespace His_Pos.Class
             set
             {
                 _icNumber = value;
-                NotifyPropertyChanged("IcNumber");
+                NotifyPropertyChanged("IdNumber");
             }
         }//身分證字號
         public string CardNo { get; set; }

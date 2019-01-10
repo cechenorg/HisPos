@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using His_Pos.Class;
 using JetBrains.Annotations;
 
-namespace His_Pos.NewClass.Person.CustomerHistory
+namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
     public class CustomerHistoryBase:INotifyPropertyChanged
     {
