@@ -14,16 +14,12 @@ using System.Xml;
 using His_Pos.AbstractClass;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.CustomerHistory;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.DiseaseCode;
-using His_Pos.Class.Division;
-using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
-using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.StoreOrder;
@@ -31,17 +27,29 @@ using His_Pos.Class.TreatmentCase;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
+using His_Pos.NewClass.Prescription.Position;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
+using AdjustCase = His_Pos.Class.AdjustCase.AdjustCase;
 using Visibility = System.Windows.Visibility;
 using Application = System.Windows.Application;
 using CheckBox = System.Windows.Controls.CheckBox;
 using ComboBox = System.Windows.Controls.ComboBox;
 using ContextMenu = System.Windows.Controls.ContextMenu;
 using DataGrid = System.Windows.Controls.DataGrid;
+using Division = His_Pos.Class.Division.Division;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using MenuItem = System.Windows.Controls.MenuItem;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using PaymentCategory = His_Pos.Class.PaymentCategory.PaymentCategory;
 using RadioButton = System.Windows.Controls.RadioButton;
 using TextBox = System.Windows.Controls.TextBox;
 using UserControl = System.Windows.Controls.UserControl;
@@ -277,16 +285,16 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         #region ItemsSourceCollection
 
         private ObservableCollection<object> _medicines;
-        public ObservableCollection<Hospital> Hospitals { get; set; }
-        public ObservableCollection<Division> Divisions { get; set; }
-        public ObservableCollection<TreatmentCase> TreatmentCases { get; set; }
-        public ObservableCollection<PaymentCategory> PaymentCategories { get; set; }
-        public ObservableCollection<Copayment> Copayments { get; set; }
-        public ObservableCollection<AdjustCase> AdjustCases { get; set; }
+        public Institutions Hospitals { get; set; }
+        public Divisions Divisions { get; set; }
+        public PrescriptionCases PrescriptionCases { get; set; }
+        public PaymentCategories PaymentCategories { get; set; }
+        public Copayments Copayments { get; set; }
+        public AdjustCases AdjustCases { get; set; }
         public ObservableCollection<MedicalPersonnel> MedicalPersonnels { get; set; }
-        public ObservableCollection<Usage> Usages { get; set; }
+        public Usages Usages { get; set; }
         public ObservableCollection<Product> DeclareMedicines { get; set; }
-        public ObservableCollection<SpecialCode> SpecialCodes { get; set; }
+        public SpecialTreats SpecialCodes { get; set; }
         public ObservableCollection<Position> Positions { get; set; }
 
         #endregion
@@ -318,7 +326,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private void GetPrescriptionData()
         {
             DeclareMedicines = new ObservableCollection<Product>();
-            TreatmentCases = new ObservableCollection<TreatmentCase>();
+            PrescriptionCases = new PrescriptionCases();
             CurrentPrescription.Pharmacy = MainWindow.CurrentPharmacy.DeepCloneViaJson();
             var loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(Instance);
@@ -1481,9 +1489,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             var a = sender as AutoCompleteBox;
             if (Hospitals is null) ;/// Hospitals = HospitalDb.GetData();
-            var tempCollection =
-                new ObservableCollection<Hospital>(Hospitals.Where(x => x.FullName.Contains(ReleaseHospital.Text)).Take(50)
-                    .ToList());
+            var tempCollection = new Institutions(true);
             if (tempCollection.Count == 1)
             {
                 if (a != null) a.SelectedItem = tempCollection[0];
@@ -1522,7 +1528,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     break;
                 case "D":
                     CopaymentCombo.SelectedItem = Copayments.SingleOrDefault(c => c.Id.Equals("009"));
-                    CurrentPrescription.Treatment.MedicalInfo.Hospital = Hospitals.SingleOrDefault(h => h.Id.Equals("N")).DeepCloneViaJson();
+                    ///CurrentPrescription.Treatment.MedicalInfo.Hospital = Hospitals.SingleOrDefault(h => h.Id.Equals("N")).DeepCloneViaJson();
                     CurrentPrescription.Treatment.MedicalInfo.Hospital.Division = null;
                     CurrentPrescription.Treatment.MedicalInfo.Hospital.Doctor = null;
                     CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode = null;
@@ -1551,11 +1557,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             if (string.IsNullOrEmpty(t.Text))
             {
                 AdjustCaseCombo.SelectedIndex = 0;
-                TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
+                TreatmentCaseCombo.SelectedItem = PrescriptionCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
                 return;
             } 
             AdjustCaseCombo.SelectedItem = AdjustCases.SingleOrDefault(a => a.Name.Contains("慢性病連續處方調劑"));
-            TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(c => c.Name.Equals("慢性病"));
+            TreatmentCaseCombo.SelectedItem = PrescriptionCases.SingleOrDefault(c => c.Name.Equals("慢性病"));
           
             SetSubmmitButton();
         }
@@ -1620,8 +1626,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 AdjustCases.SingleOrDefault(t => t.Id == CurrentPrescription.Treatment.AdjustCase.Id);
 
             CurrentPrescription.Treatment.MedicalInfo.TreatmentCase =
-                TreatmentCases.SingleOrDefault(t => t.Id.Equals(tempTreatmentId));
-            TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Id.Equals(tempTreatmentId));
+                PrescriptionCases.SingleOrDefault(t => t.Id.Equals(tempTreatmentId));
+            TreatmentCaseCombo.SelectedItem = PrescriptionCases.SingleOrDefault(t => t.Id.Equals(tempTreatmentId));
 
             var diseaseCode = CurrentPrescription.Treatment.MedicalInfo.MainDiseaseCode.Id;
             if (!string.IsNullOrEmpty(diseaseCode))
@@ -2073,12 +2079,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             }
             if (((Division) c.SelectedItem).Name.Equals("牙科"))
             {
-                TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Name.Equals("牙醫其他專案"));
+                TreatmentCaseCombo.SelectedItem = PrescriptionCases.SingleOrDefault(t => t.Name.Equals("牙醫其他專案"));
                 CopaymentCombo.SelectedItem = Copayments.SingleOrDefault(p => p.Name.Equals("其他免收"));
             }
             else
             {
-                TreatmentCaseCombo.SelectedItem = TreatmentCases.SingleOrDefault(t => t.Name.Equals("一般案件"));
+                TreatmentCaseCombo.SelectedItem = PrescriptionCases.SingleOrDefault(t => t.Name.Equals("一般案件"));
                 CopaymentCombo.SelectedItem = Copayments.SingleOrDefault(p => p.Name.Equals("加收部分負擔"));
             }
         }
@@ -2180,9 +2186,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 PaymentCategories.SingleOrDefault(p => p.Name.Equals("普通疾病"));
             CurrentPrescription.Treatment.AdjustCase = AdjustCases.SingleOrDefault(a => a.Name.Equals("一般處方調劑"));
             CurrentPrescription.Treatment.MedicalInfo.TreatmentCase =
-                TreatmentCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
-            CurrentPrescription.Treatment.MedicalInfo.SpecialCode = new SpecialCode();
-            CurrentPrescription.ChronicSequence = string.Empty;
+                PrescriptionCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
+            CurrentPrescription.Treatment.MedicalInfo.SpecialCode = new SpecialTreat();
             CurrentPrescription.ChronicTotal = string.Empty;
             CurrentPrescription.Medicines.Clear();
             CopaymentText.Text = string.Empty;
@@ -2389,12 +2394,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             {
                 if (PaymentCategoryCombo.SelectedIndex == -1)
                 {
-                    CurrentPrescription.Treatment.PaymentCategory = new PaymentCategory();
+                    CurrentPrescription.Treatment.PaymentCategory = new NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory();
                     return;
                 }
                 MessageWindow.ShowMessage("調劑案件為慢性病連續處方箋調劑/藥事居家照護，本欄免填。",MessageType.WARNING);
                 
-                CurrentPrescription.Treatment.PaymentCategory = new PaymentCategory();
+                CurrentPrescription.Treatment.PaymentCategory = new NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory();
                 PaymentCategoryCombo.SelectedIndex = -1;
             }
             else
@@ -2428,7 +2433,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             var a = sender as AutoCompleteBox;
             if (a?.SelectedItem == null) return;
             var selectedHospital =
-                MainWindow.Hospitals.SingleOrDefault(h => h.Id.Equals(((Hospital) a.SelectedItem).Id));
+                MainWindow.Institutions.SingleOrDefault(h => h.Id.Equals(((Hospital) a.SelectedItem).Id));
             if (selectedHospital == null) return;
             selectedHospital.Common = true;
            /// HospitalDb.UpdateCommonHospitalById(selectedHospital.Id, true);

@@ -1,11 +1,17 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using His_Pos.NewClass.Person;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription
 {
-    public class Prescription:INotifyPropertyChanged
+    public class Prescription : INotifyPropertyChanged
     {
         public Prescription() { }
 

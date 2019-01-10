@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using His_Pos.NewClass.Person;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment

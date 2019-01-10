@@ -20,6 +20,9 @@ using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.FunctionWindow;
 using His_Pos.Interface;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using JetBrains.Annotations;
 using Prescription = His_Pos.Class.Prescription;
@@ -35,9 +38,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
         public static DeclareDdataOutcome Instance;
         public ObservableCollection<Hospital> Hospitals { get; set; }
         public ObservableCollection<Division> Divisions { get; set; }
-        public ObservableCollection<TreatmentCase> TreatmentCases { get; set; }
+        public PrescriptionCases TreatmentCases { get; set; }
         public ObservableCollection<PaymentCategory> PaymentCategories { get; set; }
-        public ObservableCollection<Copayment> Copayments { get; set; }
+        public Copayments Copayments { get; set; }
         public ObservableCollection<AdjustCase> AdjustCases { get; set; }
         public ObservableCollection<MedicalPersonnel> MedicalPersonnels { get; set; }
 

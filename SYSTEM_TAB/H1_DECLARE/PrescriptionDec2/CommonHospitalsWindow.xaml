@@ -8,18 +8,11 @@
         Title="常用醫療院所" Icon="/Images/common.ico"  Height="480" Width="720" WindowStartupLocation="CenterScreen">
     <Viewbox Stretch="Fill">
         <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="400" />
+            <Grid.RowDefinitions>
+                <RowDefinition Height="450" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row ="0" Margin="10,0,10,0" Width="700" Height="50" Orientation="Horizontal">
-            <TextBox Width="150" Height="35" FontSize="18" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="醫事機構代碼" TextChanged="TextBox_TextChanged" VerticalContentAlignment="Bottom"/>
-            <Label Content="名稱 :" Width="55" Height="35" FontSize="17" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderBrush="DimGray" VerticalContentAlignment="Bottom"/>
-            <Label Content="{Binding SearchedHospital.Name}" Width="295" Height="35" FontSize="17" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" VerticalContentAlignment="Bottom"/>
-            <Button Content="刪除" Background="IndianRed" Width="80" Height="30" FontSize="16" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0" Click="DeleteCommon_Click"/>
-            <Button Content="新增" Background="RoyalBlue" Width="80" Height="30" FontSize="16" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0" Click="AddCommon_Click" />
-        </StackPanel>
-        <DataGrid Name="HospitalGrid" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding CommonHospitalsCollection,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="10,10,10,10"
+        <StackPanel Grid.Row ="0" Margin="10,0,10,0" Width="700" Height="50" Orientation="Horizontal"/>
+            <DataGrid Name="HospitalGrid" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding CommonHospitalsCollection,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="10,10,10,10"
                   ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" Background="{StaticResource GridBackGround}">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">

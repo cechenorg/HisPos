@@ -23,7 +23,6 @@ using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Pharmacy;
-using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.TreatmentCase;
@@ -31,6 +30,15 @@ using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
+using His_Pos.NewClass.Prescription.Position;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using JetBrains.Annotations;
@@ -40,7 +48,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
-using Position = His_Pos.Class.Position.Position;
+using Position = His_Pos.NewClass.Prescription.Position.Position;
 
 namespace His_Pos
 {
@@ -54,7 +62,6 @@ namespace His_Pos
 
         public static List<Feature> HisFeatures = new List<Feature>();
         public static Class.Person.User CurrentUser;
-
 
         public static MainWindow Instance;
 
@@ -71,26 +78,15 @@ namespace His_Pos
 
         public static Pharmacy CurrentPharmacy;
         public static bool ItemSourcesSet { get; set; }
-        public static ObservableCollection<Hospital> Hospitals { get; set; }
-        public static ObservableCollection<Division> Divisions { get; set; }
-        private static ObservableCollection<AdjustCase> _adjustCases;
-        public static ObservableCollection<AdjustCase> AdjustCases
-        {
-            get => _adjustCases;
-            set
-            {
-                if (ItemSourcesSet)
-                    return;
-                _adjustCases = value;
-            }
-        }
-        
-        public static ObservableCollection<PaymentCategory> PaymentCategory { get; set; }
-        public static ObservableCollection<TreatmentCase> TreatmentCase { get;set; }
-        public static ObservableCollection<Copayment> Copayments { get; set; }
-        public static ObservableCollection<SpecialCode> SpecialCode { get; set; }
-        public static ObservableCollection<Usage> Usages { get; set; }
-        public static ObservableCollection<Position> Positions { get; set; }
+        public static Institutions Institutions { get; set; }
+        public static Divisions Divisions { get; set; }
+        public static AdjustCases AdjustCases { get; set; }
+        public static PaymentCategories PaymentCategories { get; set; }
+        public static PrescriptionCases PrescriptionCases { get;set; }
+        public static Copayments Copayments { get; set; }
+        public static SpecialTreats SpecialCode { get; set; }
+        public static Usages Usages { get; set; }
+        public static Positions Positions { get; set; }
         public MainWindow(Class.Person.User userLogin)
         {
             FeatureFactory();

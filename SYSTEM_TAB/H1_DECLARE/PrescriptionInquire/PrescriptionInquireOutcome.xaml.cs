@@ -9,12 +9,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
-using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Declare.IcDataUpload;
 using His_Pos.Class.DiseaseCode;
-using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
@@ -22,9 +20,18 @@ using His_Pos.Class.TreatmentCase;
 using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.Interface;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
+using AdjustCase = His_Pos.Class.AdjustCase.AdjustCase;
+using Division = His_Pos.Class.Division.Division;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 {
@@ -64,8 +71,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 NotifyPropertyChanged(nameof(TempMedicalNumber));
             }
         }
-        private ObservableCollection<TreatmentCase> _treatmentCaseCollection;
-        public ObservableCollection<TreatmentCase> TreatmentCaseCollection
+        private PrescriptionCases _treatmentCaseCollection;
+        public PrescriptionCases TreatmentCaseCollection
         {
             get => _treatmentCaseCollection;
             set
@@ -74,8 +81,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 NotifyPropertyChanged(nameof(TreatmentCaseCollection));
             }
         }
-        private ObservableCollection<AdjustCase> _adjustCaseCollection;
-        public ObservableCollection<AdjustCase> AdjustCaseCollection
+        private AdjustCases _adjustCaseCollection;
+        public AdjustCases AdjustCaseCollection
         {
             get => _adjustCaseCollection;
             set
@@ -84,8 +91,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 NotifyPropertyChanged(nameof(AdjustCaseCollection));
             }
         }
-        private ObservableCollection<PaymentCategory> _paymentCategoryCollection;
-        public ObservableCollection<PaymentCategory> PaymentCategoryCollection
+        private PaymentCategories _paymentCategoryCollection;
+        public PaymentCategories PaymentCategoryCollection
         {
             get => _paymentCategoryCollection;
             set
@@ -104,8 +111,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 NotifyPropertyChanged("MedicalPersonnels");
             }
         }
-        private ObservableCollection<Copayment> _copaymentCollection;
-        public ObservableCollection<Copayment> CopaymentCollection
+        private Copayments _copaymentCollection;
+        public Copayments CopaymentCollection
         {
             get => _copaymentCollection;
             set
@@ -114,8 +121,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 NotifyPropertyChanged(nameof(CopaymentCollection));
             }
         }
-        private ObservableCollection<Division> _divisionCollection;
-        public ObservableCollection<Division> DivisionCollection
+        private Divisions _divisionCollection;
+        public Divisions DivisionCollection
         {
             get => _divisionCollection;
             set
@@ -124,8 +131,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 NotifyPropertyChanged(nameof(DivisionCollection));
             }
         }
-        private ObservableCollection<Hospital> _hospitalCollection;
-        public ObservableCollection<Hospital> HospitalCollection
+        private Institutions _hospitalCollection;
+        public Institutions HospitalCollection
         {
             get => _hospitalCollection;
             set
@@ -275,9 +282,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             var tmpDivision = DivisionCollection.SingleOrDefault(d => d.Id.Equals(InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.Id));
             if (tmpHospital != null)
             {
+                /*
                 tmpHospital.Division = tmpDivision;
                 tmpHospital.Doctor = doctor;
-                InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital = tmpHospital;
+                InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital = tmpHospital;*/
             }
             Division.SelectedItem = tmpDivision;
             var tmpCopayment = CopaymentCollection.SingleOrDefault(c =>
@@ -285,7 +293,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 
             if (tmpCopayment != null)
             {
-                tmpCopayment.Point = InquiredPrescription.Prescription.Treatment.Copayment.Point;
+                ///tmpCopayment.Point = InquiredPrescription.Prescription.Treatment.Copayment.Point;
                 InquiredPrescription.Prescription.Treatment.Copayment = tmpCopayment;
             }
 
@@ -310,7 +318,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
         {
-            var tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
+            var tempCollection = new Institutions(true);
             ReleasePalace.ItemsSource = tempCollection;
             ReleasePalace.PopulateComplete();
         }
@@ -680,9 +688,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
           //ReleasePalace.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.FullName;
           //Division.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.Hospital.Division.FullName;
           //CopaymentCode.Text = InquiredPrescription.Prescription.Treatment.Copayment.FullName;
-          //PaymentCategory.Text = InquiredPrescription.Prescription.Treatment.PaymentCategory.FullName;
+          //PaymentCategories.Text = InquiredPrescription.Prescription.Treatment.PaymentCategories.FullName;
           //AdjustCase.Text = InquiredPrescription.Prescription.Treatment.AdjustCase.FullName;
-          //TreatmentCase.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.TreatmentCase.FullName;
+          //PrescriptionCases.Text = InquiredPrescription.Prescription.Treatment.MedicalInfo.PrescriptionCases.FullName;
              
           //  DeclareDetails.Clear();
           //  foreach (DeclareMedicine newDeclareDetail in InquiredPrescription.Prescription.Medicines)

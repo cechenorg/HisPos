@@ -125,11 +125,9 @@ namespace His_Pos.Class.Declare
         private void CheckDayPay(int dayPay)
         {
             D33DrugsPoint = dayPay * Convert.ToInt32(Prescription.Treatment.MedicineDays);
-            AdjustCase.AdjustCase tmpAdjustCase = Prescription.Treatment.AdjustCase.ShallowCopy();
-            tmpAdjustCase.Id = "3";
-            Prescription.Treatment.AdjustCase = tmpAdjustCase;//將調劑案件轉換為日劑藥費
+            Prescription.Treatment.AdjustCase = MainWindow.AdjustCases.Single(a=>a.Id.Equals("3"));//將調劑案件轉換為日劑藥費
             Prescription.Treatment.MedicalInfo.TreatmentCase =
-                MainWindow.TreatmentCase.SingleOrDefault(t => t.Id.Equals("01")).DeepCloneViaJson();
+                MainWindow.PrescriptionCases.SingleOrDefault(t => t.Id.Equals("01")).DeepCloneViaJson();
             switch (dayPay)
             {
                 case 22:
@@ -158,7 +156,7 @@ namespace His_Pos.Class.Declare
             var dayPay = CountDayPayAmount(cusAge, medFormCount);//計算日劑藥費金額
             if (Prescription.Treatment.MedicalInfo.TreatmentCase.Id.Equals("01"))
                 Prescription.Treatment.MedicalInfo.TreatmentCase =
-                    MainWindow.TreatmentCase.SingleOrDefault(t => t.Id.Equals("09"));
+                    MainWindow.PrescriptionCases.SingleOrDefault(t => t.Id.Equals("09"));
             var adjustCaseId = Prescription.Treatment.AdjustCase.Id;
             var medicineDays = Convert.ToInt32(Prescription.Treatment.MedicineDays);
             const int daysLimit = 3; //日劑藥費天數限制

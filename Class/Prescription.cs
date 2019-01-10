@@ -296,7 +296,7 @@ namespace His_Pos.Class
                 AddError("0", "非藥事居家照護(調劑案件:D).協助辦理門診戒菸計畫(調劑案件:5)者，釋出院所不可為\"N\"");
             else
             {
-                Treatment.MedicalInfo.Hospital = MainWindow.Hospitals.SingleOrDefault(h=>h.Id.Equals("N")).DeepCloneViaJson();
+                ///Treatment.MedicalInfo.Hospital = MainWindow.Institutions.SingleOrDefault(h=>h.Id.Equals("N")).DeepCloneViaJson();
             }
         }
 

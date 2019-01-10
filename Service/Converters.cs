@@ -195,13 +195,13 @@ namespace His_Pos.Service
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string divisionName = "";
-            foreach (var d in MainWindow.Hospitals)
+            string institutionName = "";
+            foreach (var d in MainWindow.Institutions)
             {
                 if (d.Id.Equals(value))
-                    divisionName = d.Name;
+                    institutionName = d.Name;
             }
-            return divisionName;
+            return institutionName;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

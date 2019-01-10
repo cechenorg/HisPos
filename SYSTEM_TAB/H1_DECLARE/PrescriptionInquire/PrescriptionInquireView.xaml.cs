@@ -17,6 +17,12 @@ using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.Service;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using UserControl = System.Windows.Controls.UserControl;
@@ -45,12 +51,12 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        public ObservableCollection<TreatmentCase> TreatmentCaseCollection { get; set; }
-        public ObservableCollection<AdjustCase> AdjustCaseCollection { get; set; }
-        public ObservableCollection<PaymentCategory> PaymentCategoryCollection { get; set; }
-        public ObservableCollection<Copayment> CopaymentCollection { get; set; }
-        public ObservableCollection<Division> DivisionCollection { get; set; }
-        public ObservableCollection<Hospital> HospitalCollection { get; set; }
+        public PrescriptionCases TreatmentCaseCollection { get; set; }
+        public AdjustCases AdjustCaseCollection { get; set; }
+        public PaymentCategories PaymentCategoryCollection { get; set; }
+        public Copayments CopaymentCollection { get; set; }
+        public Divisions DivisionCollection { get; set; }
+        public Institutions HospitalCollection { get; set; }
         public ObservableCollection<Product> DeclareMedicinesData { get; set; }
         public static PrescriptionInquireView Instance;
         private Function f = new Function();
@@ -234,7 +240,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
         }
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
         {
-            ObservableCollection<Hospital> tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
+            Institutions tempCollection = new Institutions(true);
             ReleasePalace.ItemsSource = tempCollection;
             ReleasePalace.PopulateComplete();
         }

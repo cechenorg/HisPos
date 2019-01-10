@@ -588,7 +588,7 @@ namespace His_Pos.Service
             loadingWindow.Show();
         }
         #endregion
-        public static Division CheckHospitalNameContainsDivision(string name)
+        public static NewClass.Prescription.Treatment.Division.Division CheckHospitalNameContainsDivision(string name)
         {
             var divisionMatch = 0;
             var divisionId = string.Empty;
@@ -604,7 +604,7 @@ namespace His_Pos.Service
                 return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals("40"));
             }
             if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
-                return new Division();
+                return new NewClass.Prescription.Treatment.Division.Division();
             return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
         }
     }

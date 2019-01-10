@@ -13,8 +13,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
 
         }
 
-        private Institution institution;//釋出院所 D21
-        public Institution Institution
+        private Institution.Institution institution;//釋出院所 D21
+        public Institution.Institution Institution
         {
             get => institution;
             set
@@ -24,8 +24,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private Division division;//就醫科別 D13
-        public Division Division
+        private Division.Division division;//就醫科別 D13
+        public Division.Division Division
         {
             get => division;
             set
@@ -79,8 +79,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private DiseaseCode mainDisease;//主診斷代碼(國際疾病分類碼1) D8
-        public DiseaseCode MainDisease
+        private DiseaseCode.DiseaseCode mainDisease;//主診斷代碼(國際疾病分類碼1) D8
+        public DiseaseCode.DiseaseCode MainDisease
         {
             get => mainDisease;
             set
@@ -90,8 +90,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private DiseaseCode subDisease;//副診斷代碼(國際疾病分類碼2) D9
-        public DiseaseCode SubDisease
+        private DiseaseCode.DiseaseCode subDisease;//副診斷代碼(國際疾病分類碼2) D9
+        public DiseaseCode.DiseaseCode SubDisease
         {
             get => subDisease;
             set
@@ -123,8 +123,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }//連續處方箋調劑序號 D35
 
-        private AdjustCase adjustCase;//調劑案件 D1
-        public AdjustCase AdjustCase
+        private AdjustCase.AdjustCase adjustCase;//調劑案件 D1
+        public AdjustCase.AdjustCase AdjustCase
         {
             get => adjustCase;
             set
@@ -134,8 +134,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private PrescriptionCase prescriptionCase;//原處方服務機構之案件分類  D22
-        public PrescriptionCase PrescriptionCase
+        private PrescriptionCase.PrescriptionCase prescriptionCase;//原處方服務機構之案件分類  D22
+        public PrescriptionCase.PrescriptionCase PrescriptionCase
         {
             get => prescriptionCase;
             set
@@ -145,8 +145,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private Copayment copayment;//部分負擔代碼  D15
-        public Copayment Copayment
+        private Copayment.Copayment copayment;//部分負擔代碼  D15
+        public Copayment.Copayment Copayment
         {
             get => copayment;
             set
@@ -156,8 +156,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private PaymentCategory paymentCategory;//給付類別 D5
-        public PaymentCategory PaymentCategory
+        private PaymentCategory.PaymentCategory paymentCategory;//給付類別 D5
+        public PaymentCategory.PaymentCategory PaymentCategory
         {
             get => paymentCategory;
             set
@@ -178,8 +178,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private SpecialTreat specialTreat;//特定治療代碼 D26
-        public SpecialTreat SpecialTreat
+        private SpecialTreat.SpecialTreat specialTreat;//特定治療代碼 D26
+        public SpecialTreat.SpecialTreat SpecialTreat
         {
             get => specialTreat;
             set

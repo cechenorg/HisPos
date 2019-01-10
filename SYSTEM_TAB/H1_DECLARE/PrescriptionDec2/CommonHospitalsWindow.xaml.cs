@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.Service;
 using JetBrains.Annotations;
 
@@ -18,44 +19,42 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
     public partial class CommonHospitalsWindow : Window,INotifyPropertyChanged
     {
         MessageWindow m;
-        public ObservableCollection<Hospital> HospitalCollection { get; set; }
-        private ObservableCollection<Hospital> _commonHospitalsCollection;
-        public ObservableCollection<Hospital> CommonHospitalsCollection
+        private Institutions _commonInstitutions;
+        public Institutions CommonInstitutions
         {
-            get => _commonHospitalsCollection;
+            get => _commonInstitutions;
             set
             {
-                _commonHospitalsCollection = value;
-                OnPropertyChanged(nameof(CommonHospitalsCollection));
+                _commonInstitutions = value;
+                OnPropertyChanged(nameof(CommonInstitutions));
             }
         }
-        private Hospital _searchedHospital;
-        public Hospital SearchedHospital
+        private Institution _searchedInstitution;
+        public Institution SearchedInstitution
         {
-            get => _searchedHospital;
+            get => _searchedInstitution;
             set
             {
-                _searchedHospital = value;
-                OnPropertyChanged(nameof(SearchedHospital));
+                _searchedInstitution = value;
+                OnPropertyChanged(nameof(SearchedInstitution));
             }
         }
 
         public CommonHospitalsWindow()
         {
             InitializeComponent();
-            SearchedHospital = new Hospital();
-            HospitalCollection = new ObservableCollection<Hospital>(MainWindow.Hospitals);
-            CommonHospitalsCollection = new ObservableCollection<Hospital>(MainWindow.Hospitals.Where(h=>h.Common));
+            SearchedInstitution = new Institution();
+            CommonInstitutions = Institutions.GetCommon();
             DataContext = this;
         }
 
         private void Hospital_Select_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (HospitalGrid.SelectedIndex < 0 || HospitalGrid.SelectedItem is null) return;
-            var tmpHospital = CommonHospitalsCollection[HospitalGrid.SelectedIndex].DeepCloneViaJson();
+            var tmpHospital = CommonInstitutions[HospitalGrid.SelectedIndex].DeepCloneViaJson();
+            /*
             tmpHospital.Division = NewFunction.CheckHospitalNameContainsDivision(tmpHospital.Name);
-            PrescriptionDec2View.Instance.CurrentPrescription.Treatment.MedicalInfo.Hospital =
-                tmpHospital;
+            PrescriptionDec2View.Instance.CurrentPrescription.Treatment.MedicalInfo.Hospital = tmpHospital;
             if (string.IsNullOrEmpty(tmpHospital.Division.Id))
             {
                 PrescriptionDec2View.Instance.DivisionCombo.SelectedIndex = -1;
@@ -74,7 +73,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     i++;
                 }
                 Close();
-            }
+            }*/
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -83,68 +82,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void AddCommon_Click(object sender, RoutedEventArgs e)
-        {
-            SearchedHospital.Common = true;
-            foreach (var c in CommonHospitalsCollection)
-            {
-                if (!c.Id.Equals(SearchedHospital.Id)) continue;
-                MessageWindow.ShowMessage("無法新增，該常用醫療院所已存在", MessageType.ERROR);
-                
-                return;
-            }
-            CommonHospitalsCollection.Add(SearchedHospital);
-            foreach (var h in MainWindow.Hospitals)
-            {
-                if (h.Id.Equals(SearchedHospital.Id))
-                {
-                    h.Common = true;
-                }
-            }
-           /// HospitalDb.UpdateCommonHospitalById(SearchedHospital.Id, SearchedHospital.Common);
-        }
-
-        private void DeleteCommon_Click(object sender, RoutedEventArgs e)
-        {
-            SearchedHospital.Common = false;
-            var find = false;
-            var deleteIndex = 0;
-            foreach (var c in CommonHospitalsCollection)
-            {
-                if (c.Id.Equals(SearchedHospital.Id))
-                {
-                    find = true;
-                    break;
-                }
-                deleteIndex++;
-            }
-            if (!find)
-            {
-                MessageWindow.ShowMessage("無法刪除，查無對應常用醫療院所", MessageType.ERROR);
-                
-                return;
-            }
-            foreach (var h in MainWindow.Hospitals)
-            {
-                if (!h.Id.Equals(SearchedHospital.Id)) continue;
-                h.Common = false;
-                break;
-            }
-            CommonHospitalsCollection.RemoveAt(deleteIndex);
-            ///HospitalDb.UpdateCommonHospitalById(SearchedHospital.Id, SearchedHospital.Common);
-        }
-
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!(sender is TextBox t)) return;
-            if (HospitalCollection.Count(h => h.Id.Contains(t.Text)) == 1)
-            {
-                SearchedHospital = HospitalCollection.SingleOrDefault(h => h.Id.Equals(t.Text)).DeepCloneViaJson();
-                return;
-            }
-            SearchedHospital = new Hospital();
         }
     }
 }

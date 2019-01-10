@@ -2,6 +2,7 @@
 using System.Data;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
+using His_Pos.NewClass.Prescription.Treatment.Division;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 {
@@ -9,7 +10,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
     {
         public PrescriptionOverview(DataRow row) {
             Decmas_Id = row["HISDECMAS_ID"].ToString();
-            Division = new Division(row);
+            Division = new NewClass.Prescription.Treatment.Division.Division(row);
             PatientName = row["CUS_NAME"].ToString();
             HospitalName = row["INS_NAME"].ToString();
             MedicalPersonnelName = row["EMP_NAME"].ToString();
@@ -38,7 +39,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
 
         public string PatientName { get; set; }
         public string HospitalName { get; set; }
-        public Division Division { get; set; }
+        public NewClass.Prescription.Treatment.Division.Division Division { get; set; }
         public string MedicalPersonnelName { get; set; }
         public string AdjustDate { get; set; }
         public string ChronicStatus { get; set; }

@@ -11,17 +11,23 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using His_Pos.Class;
-using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
-using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Product;
 using His_Pos.Class.TreatmentCase;
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.RDLC;
 using His_Pos.Service;
 using JetBrains.Annotations;
+using AdjustCase = His_Pos.Class.AdjustCase.AdjustCase;
+using PaymentCategory = His_Pos.Class.PaymentCategory.PaymentCategory;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
 {
@@ -43,9 +49,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             }
         }
 
-        private ObservableCollection<Hospital> _hospitalCollection;
+        private Institutions _hospitalCollection;
 
-        public ObservableCollection<Hospital> HospitalCollection
+        public Institutions HospitalCollection
         {
             get => _hospitalCollection;
             set
@@ -55,9 +61,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             }
         }
 
-        private ObservableCollection<Division> _divisionCollection;
+        private Divisions _divisionCollection;
 
-        public ObservableCollection<Division> DivisionCollection
+        public Divisions DivisionCollection
         {
             get => _divisionCollection;
             set
@@ -67,9 +73,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             }
         }
 
-        private ObservableCollection<AdjustCase> _adjustCaseCollection;
+        private AdjustCases _adjustCaseCollection;
 
-        public ObservableCollection<AdjustCase> AdjustCaseCollection
+        public AdjustCases AdjustCaseCollection
         {
             get => _adjustCaseCollection;
             set
@@ -139,9 +145,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             }
         }
 
-        private ObservableCollection<Copayment> copaymentCollection;
+        private Copayments copaymentCollection;
 
-        public ObservableCollection<Copayment> CopaymentCollection
+        public Copayments CopaymentCollection
         {
             get => copaymentCollection;
             set
@@ -150,8 +156,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
                 OnPropertyChanged(nameof(CopaymentCollection));
             }
         }
-        private ObservableCollection<PaymentCategory> paymentCategoryCollection;
-        public ObservableCollection<PaymentCategory> PaymentCategoryCollection
+        private PaymentCategories paymentCategoryCollection;
+        public PaymentCategories PaymentCategoryCollection
         {
             get => paymentCategoryCollection;
             set
@@ -160,9 +166,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
                 OnPropertyChanged(nameof(PaymentCategoryCollection));
             }
         }
-        private ObservableCollection<TreatmentCase> treatmentCaseCollection;
+        private PrescriptionCases treatmentCaseCollection;
 
-        public ObservableCollection<TreatmentCase> TreatmentCaseCollection
+        public PrescriptionCases TreatmentCaseCollection
         {
             get => treatmentCaseCollection;
             set
@@ -248,7 +254,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
 
         private void ReleasePalace_Populating(object sender, PopulatingEventArgs e)
         {
-            ObservableCollection<Hospital> tempCollection = new ObservableCollection<Hospital>(HospitalCollection.Where(x => x.Id.Contains(ReleasePalace.Text)).Take(50).ToList());
+            Institutions tempCollection = new Institutions(true);
             ReleasePalace.ItemsSource = tempCollection;
             ReleasePalace.PopulateComplete();
         }
