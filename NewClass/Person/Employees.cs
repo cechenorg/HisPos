@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using His_Pos.Class.Employee;
 
 namespace His_Pos.NewClass.Person
 { 

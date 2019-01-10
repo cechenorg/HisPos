@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Media; 
 using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Person;
+using His_Pos.NewClass.Person.Customer;
 using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage

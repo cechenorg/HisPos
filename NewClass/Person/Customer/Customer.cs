@@ -58,6 +58,14 @@ namespace His_Pos.NewClass.Person.Customer
                 OnPropertyChanged(nameof(History));
             }
         }
+        #region Function
+        public void Save()
+        {
+        }
+        public void Delete()
+        {
+        }
+        #endregion
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -9,8 +9,16 @@ using static His_Pos.SYSTEM_TAB.H5_ATTEND.ClockIn.ClockInView;
 
 namespace His_Pos.Class.Employee
 {
-   public class EmployeeDb
+    public static class EmployeeDb
     {
-        
+        public static DataTable GetData()
+        {
+            var table = new DataTable();
+            return table;
+        }
+        public static void DeleteEmployee()
+        {
+
+        }
     }
 }
