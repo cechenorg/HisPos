@@ -5,9 +5,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
-using His_Pos.Class.Person;
+using System.Windows.Media; 
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person;
 using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
@@ -26,8 +26,8 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-        public ObservableCollection<Customer> customerCollection = new ObservableCollection<Customer>();
-        public ObservableCollection<Customer> CustomerCollection
+        public Customers customerCollection;
+        public Customers CustomerCollection
         {
             get
             {
@@ -39,17 +39,17 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
                 NotifyPropertyChanged("CustomerCollection");
             }
         }
-        public Customer customerDetail { get; set; }
-        public Customer CustomerDetail
+        public Customer customer { get; set; }
+        public Customer Customer
         {
             get
             {
-                return customerDetail;
+                return customer;
             }
             set
             {
-                customerDetail = value;
-                NotifyPropertyChanged("CustomerDetail");
+                customer = value;
+                NotifyPropertyChanged("Customer");
                 NotifyPropertyChanged("CustomerCollection");
             }
         }
@@ -71,9 +71,9 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
         {
             
             if ((sender as DataGrid).SelectedItem == null) return;
-            CustomerDetail = NewFunction.DeepCloneViaJson ((Customer)(sender as DataGrid).SelectedItem);
+            Customer = NewFunction.DeepCloneViaJson ((Customer)(sender as DataGrid).SelectedItem);
             richtextboxDesc.Document.Blocks.Clear();
-            richtextboxDesc.AppendText(CustomerDetail.Description);
+            richtextboxDesc.AppendText(Customer.Note);
             InitDataChanged();
         }
         private void DataChanged()
@@ -106,33 +106,33 @@ namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.CustomerManage
 
         private void ButtonCancel_Click(object sender, RoutedEventArgs e)
         {
-            Customer newcustomer = CustomerCollection.Where(customer => customer.Id == CustomerDetail.Id).ToList()[0];
-            CustomerDetail = NewFunction.DeepCloneViaJson(newcustomer);
+            Customer newcustomer = CustomerCollection.Where(customer => customer.Id == Customer.Id).ToList()[0];
+            Customer = NewFunction.DeepCloneViaJson(newcustomer);
             richtextboxDesc.Document.Blocks.Clear();
-            richtextboxDesc.AppendText(CustomerDetail.Description);
+            richtextboxDesc.AppendText(Customer.Note);
             InitDataChanged();
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e) {
-            CustomerDetail.Description = new TextRange(richtextboxDesc.Document.ContentStart, richtextboxDesc.Document.ContentEnd).Text;
-
-            ///CustomerDb.UpdateCustomerById(CustomerDetail);
+            Customer.Note = new TextRange(richtextboxDesc.Document.ContentStart, richtextboxDesc.Document.ContentEnd).Text;
+        
+            Customer.Save();
             MessageWindow.ShowMessage("修改完成!", Class.MessageType.SUCCESS);
             
             for (int i = 0; i < CustomerCollection.Count; i++){
-                if (CustomerCollection[i].Id == CustomerDetail.Id) {
-                    CustomerCollection[i] = NewFunction.DeepCloneViaJson(CustomerDetail);
+                if (CustomerCollection[i].Id == Customer.Id) {
+                    CustomerCollection[i] = NewFunction.DeepCloneViaJson(Customer);
                 }
             } 
             richtextboxDesc.Document.Blocks.Clear();
-            richtextboxDesc.AppendText(CustomerDetail.Description); 
+            richtextboxDesc.AppendText(Customer.Note); 
             InitDataChanged();
         }
 
         private void EmpId_TextChanged(object sender, TextChangedEventArgs e)
         {
             DataGridCustomer.Items.Filter= ((o) => {
-                if (((Customer)o).Id.Contains(EmpId.Text) || ((Customer)o).Name.Contains(EmpId.Text))
+                if (((Customer)o).Id.ToString().Contains(EmpId.Text) || ((Customer)o).Name.Contains(EmpId.Text))
                     return true;
                 else
                     return false;
