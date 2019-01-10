@@ -41,7 +41,7 @@ namespace His_Pos.Class
             Customer = new Customer(row,"fromXml");
             Pharmacy = new Pharmacy.Pharmacy(row);
             Treatment = new Treatment(row);
-            Medicines = MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
+            Medicines = null;/// MedicineDb.GetDeclareMedicineByMasId(row["HISDECMAS_ID"].ToString());
             ChronicSequence = row["HISDECMAS_CONTINUOUSNUM"].ToString();
             ChronicTotal = row["HISDECMAS_CONTINUOUSTOTAL"].ToString();
             OriginalMedicalNumber = row["HISDECMAS_OLDNUMDER"].ToString();
@@ -296,7 +296,7 @@ namespace His_Pos.Class
                 AddError("0", "非藥事居家照護(調劑案件:D).協助辦理門診戒菸計畫(調劑案件:5)者，釋出院所不可為\"N\"");
             else
             {
-                Treatment.MedicalInfo.Hospital = MainWindow.Hospitals.SingleOrDefault(h=>h.Id.Equals("N")).DeepCloneViaJson();
+                ///Treatment.MedicalInfo.Hospital = MainWindow.Institutions.SingleOrDefault(h=>h.Id.Equals("N")).DeepCloneViaJson();
             }
         }
 

@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ChromeTabs;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Authority;
@@ -22,22 +23,33 @@ using His_Pos.Class.Division;
 using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Pharmacy;
-using His_Pos.Class.Position;
 using His_Pos.Class.Product;
 using His_Pos.Class.SpecialCode;
 using His_Pos.Class.TreatmentCase;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.Database;
+using His_Pos.FunctionWindow;
+using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
-using His_Pos.Resource;
+using His_Pos.NewClass.Prescription.Position;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Usage;
 using His_Pos.Service;
-using His_Pos.SystemSettings;
-using His_Pos.ViewModel;
+using His_Pos.SYSTEM_TAB.SETTINGS;
 using JetBrains.Annotations;
+using MahApps.Metro.Controls;
 using MaterialDesignThemes.Wpf;
+using Microsoft.VisualBasic.ApplicationServices;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
 using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
- 
+using Position = His_Pos.NewClass.Prescription.Position.Position;
+
 namespace His_Pos
 {
     /// <summary>
@@ -45,6 +57,14 @@ namespace His_Pos
     /// </summary>
     public partial class MainWindow
     {
+        public static SQLServerConnection ServerConnection = new SQLServerConnection();
+        public static MySQLConnection SingdeConnection = new MySQLConnection();
+
+        public static List<Feature> HisFeatures = new List<Feature>();
+        public static Class.Person.User CurrentUser;
+
+        public static MainWindow Instance;
+
         private static int hisApiErrorCode;
         public int HisApiErrorCode
         {
@@ -58,27 +78,16 @@ namespace His_Pos
 
         public static Pharmacy CurrentPharmacy;
         public static bool ItemSourcesSet { get; set; }
-        public static ObservableCollection<Hospital> Hospitals { get; set; }
-        public static ObservableCollection<Division> Divisions { get; set; }
-        private static ObservableCollection<AdjustCase> _adjustCases;
-        public static ObservableCollection<AdjustCase> AdjustCases
-        {
-            get => _adjustCases;
-            set
-            {
-                if (ItemSourcesSet)
-                    return;
-                _adjustCases = value;
-            }
-        }
-        
-        public static ObservableCollection<PaymentCategory> PaymentCategory { get; set; }
-        public static ObservableCollection<TreatmentCase> TreatmentCase { get;set; }
-        public static ObservableCollection<Copayment> Copayments { get; set; }
-        public static ObservableCollection<SpecialCode> SpecialCode { get; set; }
-        public static ObservableCollection<Usage> Usages { get; set; }
-        public static ObservableCollection<Position> Positions { get; set; }
-        public MainWindow(User userLogin)
+        public static Institutions Institutions { get; set; }
+        public static Divisions Divisions { get; set; }
+        public static AdjustCases AdjustCases { get; set; }
+        public static PaymentCategories PaymentCategories { get; set; }
+        public static PrescriptionCases PrescriptionCases { get;set; }
+        public static Copayments Copayments { get; set; }
+        public static SpecialTreats SpecialCode { get; set; }
+        public static Usages Usages { get; set; }
+        public static Positions Positions { get; set; }
+        public MainWindow(Class.Person.User userLogin)
         {
             FeatureFactory();
             InitializeComponent();
@@ -88,9 +97,6 @@ namespace His_Pos
             InitializeMenu();
             InitialUserBlock();
             StratClock();
-            _openWindows = new List<DockingWindow>();
-            CurrentPharmacy = PharmacyDb.GetCurrentPharmacy();
-            CurrentPharmacy.MedicalPersonnelCollection = PharmacyDb.GetPharmacyMedicalPersonData();
             AddNewTab("每日作業");
         }
         
@@ -142,7 +148,7 @@ namespace His_Pos
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
 
-            Collection<string> tabAuth = AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
+            Collection<string> tabAuth = null;/// AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)
@@ -220,12 +226,12 @@ namespace His_Pos
         {
             var d = new DeclareDb();
             var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
-            var upload = (bool)dailyUploadConfirm.ShowDialog();
-            if(upload)
-                d.StartDailyUpload();
-            ProductDb.UpdateDailyStockValue();
-            DeclareDb declareDb = new DeclareDb();
-            declareDb.SendUnSendCooperClinicDeclare();
+            var upload = (bool) dailyUploadConfirm.ShowDialog();
+            if (upload)
+               /// d.StartDailyUpload();
+            ///ProductDb.UpdateDailyStockValue();
+            ///DeclareDb declareDb = new DeclareDb();
+           /// declareDb.SendUnSendCooperClinicDeclare();
             if (((ViewModelMainWindow)MainWindow.Instance.DataContext).IsConnectionOpened)
                 HisApiBase.CloseCom();
             Environment.Exit(0);

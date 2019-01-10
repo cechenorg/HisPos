@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Security.Principal;
 using System.Windows;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos
 {
@@ -16,7 +17,7 @@ namespace His_Pos
             base.OnStartup(e);
 
             CheckAdministrator();
-            StartupUri = new Uri("LoginPage.xaml", UriKind.RelativeOrAbsolute);
+            StartupUri = new Uri("FunctionWindow/LoginWindow.xaml", UriKind.RelativeOrAbsolute);
         }
         private void CheckAdministrator()
         { 
@@ -35,7 +36,7 @@ namespace His_Pos
                 }
                 catch (Exception ex)
                 {
-                    MessageWindow messageWindow = new MessageWindow(ex.Message,Class.MessageType.ERROR);
+                    MessageWindow.ShowMessage(ex.Message,Class.MessageType.ERROR);
                 }
                 Environment.Exit(0);
             }

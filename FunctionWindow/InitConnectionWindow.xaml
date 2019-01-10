@@ -1,0 +1,20 @@
+﻿<Window x:Class="His_Pos.FunctionWindow.InitConnectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:His_Pos"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:settingControl="clr-namespace:His_Pos.SYSTEM_TAB.SETTINGS.SettingControl"
+        mc:Ignorable="d"
+        Title="初始化連線" Height="240" Width="620" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="160"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <settingControl:DatabaseControl x:Name="DatabaseControl" Grid.Row="0"/>
+        <Button Content="確認" FontSize="18" FontFamily="Segoe UI Semi" Background="RoyalBlue" BorderThickness="0" Grid.Row="1" Width="200" Click="Confirm_OnClick"/>
+    </Grid>
+
+</Window>

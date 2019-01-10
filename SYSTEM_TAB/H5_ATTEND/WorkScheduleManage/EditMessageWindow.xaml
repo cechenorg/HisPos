@@ -1,0 +1,13 @@
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H5_ATTEND.WorkScheduleManage.EditMessageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="EditMessageWindow" Height="60" Width="530" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    <StackPanel Orientation="Horizontal">
+        <TextBox Name="MessageTb" Margin="10,5,10,5" Width="400" materialDesign:HintAssist.Hint="備註" FontSize="25" FontFamily="Segoe UI Semi"/>
+        <Button Content="確定" Width="100" Background="RoyalBlue" BorderBrush="Transparent" FontFamily="Segoe UI Semibold" Click="Button_Click" VerticalAlignment="Center"/>
+    </StackPanel>
+</Window>

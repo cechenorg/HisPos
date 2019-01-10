@@ -1,4 +1,6 @@
-﻿namespace His_Pos.Struct.IcData
+﻿using His_Pos.Service;
+
+namespace His_Pos.Struct.IcData
 {
     public struct BasicData
     {

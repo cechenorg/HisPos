@@ -14,27 +14,27 @@ namespace His_Pos.Class
         public Treatment(DataRow row)
         {
             MedicalInfo = new MedicalInfo(row);
-            Copayment = new Copayment.Copayment(row);
-            AdjustCase = new AdjustCase.AdjustCase(row);
+            Copayment = new NewClass.Prescription.Treatment.Copayment.Copayment(row);
+            AdjustCase = new NewClass.Prescription.Treatment.AdjustCase.AdjustCase(row);
             MedicineDays = "0";
             TreatmentDate =  Convert.ToDateTime(Convert.ToInt32(row["HISDECMAS_PRESCRIPTIONDATE"].ToString().Substring(0, 4)) + row["HISDECMAS_PRESCRIPTIONDATE"].ToString().Substring(4, 6));
             TreatmentDate.ToShortDateString();
             AdjustDate = Convert.ToDateTime(Convert.ToInt32(row["HISDECMAS_TREATDATE"].ToString().Substring(0, 4)) + row["HISDECMAS_TREATDATE"].ToString().Substring(4, 6));
             AdjustDate.ToShortDateString();
-            PaymentCategory = new PaymentCategory.PaymentCategory(row);
+            PaymentCategory = new NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory(row);
         }
 
         public Treatment()
         {
             MedicalInfo = new MedicalInfo();
-            Copayment = new Copayment.Copayment();
-            AdjustCase = new AdjustCase.AdjustCase();
+            Copayment = new NewClass.Prescription.Treatment.Copayment.Copayment();
+            AdjustCase = new NewClass.Prescription.Treatment.AdjustCase.AdjustCase();
             MedicineDays = "0";
             TreatmentDate = DateTime.Today;
             AdjustDate = DateTime.Today;
         }
 
-        public Treatment(MedicalInfo medicalInfo, PaymentCategory.PaymentCategory paymentCategory, Copayment.Copayment copayment, AdjustCase.AdjustCase adjustCase, DateTime treatmentDate, DateTime adjustDate, string medicineDays, string medicalPersonId)
+        public Treatment(MedicalInfo medicalInfo, NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory paymentCategory, NewClass.Prescription.Treatment.Copayment.Copayment copayment, NewClass.Prescription.Treatment.AdjustCase.AdjustCase adjustCase, DateTime treatmentDate, DateTime adjustDate, string medicineDays, string medicalPersonId)
         {
             MedicalInfo = medicalInfo;
             PaymentCategory = paymentCategory;
@@ -46,9 +46,9 @@ namespace His_Pos.Class
         }
         public Treatment(XmlNode xml) {
             MedicalInfo = new MedicalInfo(xml);
-            PaymentCategory = new PaymentCategory.PaymentCategory(xml);
-            Copayment = new Copayment.Copayment(xml);
-            AdjustCase = new AdjustCase.AdjustCase(xml);
+            PaymentCategory = new NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory();
+            Copayment = new NewClass.Prescription.Treatment.Copayment.Copayment();
+            AdjustCase = new NewClass.Prescription.Treatment.AdjustCase.AdjustCase();
             AdjustDate = xml.SelectSingleNode("d23") == null ? new DateTime() : DateTime.ParseExact(xml.SelectSingleNode("d23").InnerText, "yyyMMdd", CultureInfo.InvariantCulture).AddYears(1911);
             TreatmentDate = xml.SelectSingleNode("d14") == null ? new DateTime() : DateTime.ParseExact(xml.SelectSingleNode("d14").InnerText, "yyyMMdd", CultureInfo.InvariantCulture).AddYears(1911);
             MedicineDays = xml.SelectSingleNode("d30") == null ? null : xml.SelectSingleNode("d30").InnerText;
@@ -56,20 +56,19 @@ namespace His_Pos.Class
         public Treatment(XmlDocument xml)
         {
             MedicalInfo = new MedicalInfo(xml);
-            PaymentCategory = new PaymentCategory.PaymentCategory(xml);
-            AdjustCase = new AdjustCase.AdjustCase();
-            AdjustCase.Id = "1";
+            PaymentCategory = new NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory();
+            AdjustCase = MainWindow.AdjustCases.Single(a=>a.Id.Equals("1"));
             string treatDate = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["start_at"].Value == "" ? xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case").Attributes["date"].Value : xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/continous_prescription").Attributes["start_at"].Value;
             TreatmentDate = Convert.ToDateTime(treatDate.Substring(0, 3) + "-" + treatDate.Substring(3, 2) + "-" + treatDate.Substring(5, 2)).AddYears(1911);
             TreatChineseDate = treatDate.Substring(0, 3) + "/" + treatDate.Substring(3, 2) + "/" + treatDate.Substring(5, 2);
             AdjustDate = DateTime.Now;
             MedicineDays = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/orders").Attributes["days"].Value;
-            Copayment = new Copayment.Copayment(xml);
+            Copayment = new NewClass.Prescription.Treatment.Copayment.Copayment();
         }
         public Treatment(DeclareFileDdata d)
         {
             MedicalInfo = new MedicalInfo(d);
-            PaymentCategory = MainWindow.PaymentCategory.SingleOrDefault(p=>p.Id.Equals(d.Dhead.D5))?.DeepCloneViaJson();
+            PaymentCategory = MainWindow.PaymentCategories.SingleOrDefault(p=>p.Id.Equals(d.Dhead.D5))?.DeepCloneViaJson();
             Copayment = MainWindow.Copayments.SingleOrDefault(c=>c.Id.Equals(d.Dhead.D15))?.DeepCloneViaJson();
             AdjustCase = MainWindow.AdjustCases.SingleOrDefault(a=>a.Id.Equals(d.Dhead.D1))?.DeepCloneViaJson();
             MedicineDays = !string.IsNullOrEmpty(d.Dbody.D30) ? d.Dbody.D30 : string.Empty;
@@ -95,8 +94,8 @@ namespace His_Pos.Class
             }
         }
 
-        private PaymentCategory.PaymentCategory _paymentCategory;
-        public PaymentCategory.PaymentCategory PaymentCategory
+        private NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory _paymentCategory;
+        public NewClass.Prescription.Treatment.PaymentCategory.PaymentCategory PaymentCategory
         {
             get => _paymentCategory;
             set
@@ -106,9 +105,9 @@ namespace His_Pos.Class
             }
         } //d5 給付類別
 
-        private Copayment.Copayment _copayment;
+        private NewClass.Prescription.Treatment.Copayment.Copayment _copayment;
 
-        public Copayment.Copayment Copayment
+        public NewClass.Prescription.Treatment.Copayment.Copayment Copayment
         {
             get => _copayment;
             set
@@ -118,9 +117,9 @@ namespace His_Pos.Class
             }
         } //d15 部分負擔代碼
 
-        private AdjustCase.AdjustCase _adjustCase;
+        private NewClass.Prescription.Treatment.AdjustCase.AdjustCase _adjustCase;
 
-        public AdjustCase.AdjustCase AdjustCase
+        public NewClass.Prescription.Treatment.AdjustCase.AdjustCase AdjustCase
         {
             get => _adjustCase;
             set

@@ -9,6 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using His_Pos.FunctionWindow;
 
 namespace His_Pos.Service
 {
@@ -51,12 +52,11 @@ namespace His_Pos.Service
             catch (Exception ex) {
                 switch (ex.Message) {
                     case "遠端伺服器傳回一個錯誤: (500) 內部伺服器錯誤。":
-                        MessageWindow messageWindow = new MessageWindow("Http Get 讀取\r\n" + url + "異常", MessageType.ERROR);
-                        messageWindow.ShowDialog();
+                        MessageWindow.ShowMessage("Http Get 讀取\r\n" + url + "異常", MessageType.ERROR);
+                        
                         break;
                     default:
-                        MessageWindow errormessageWindow = new MessageWindow(ex.Message,MessageType.ERROR);
-                        errormessageWindow.ShowDialog();
+                        MessageWindow.ShowMessage(ex.Message,MessageType.ERROR);
                         break; 
                 } 
             } 
@@ -105,12 +105,11 @@ namespace His_Pos.Service
                 switch (ex.Message)
                 {
                     case "遠端伺服器傳回一個錯誤: (500) 內部伺服器錯誤。":
-                        MessageWindow messageWindow = new MessageWindow("Http Post 讀取\r\n" + url + "異常", MessageType.ERROR);
-                        messageWindow.ShowDialog();
+                        MessageWindow.ShowMessage("Http Post 讀取\r\n" + url + "異常", MessageType.ERROR);
+                        
                         break;
                     default:
-                        MessageWindow errormessageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
-                        errormessageWindow.ShowDialog();
+                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                         break;
                 }
             }
@@ -152,12 +151,11 @@ namespace His_Pos.Service
                 switch (ex.Message)
                 {
                     case "遠端伺服器傳回一個錯誤: (500) 內部伺服器錯誤。":
-                        MessageWindow messageWindow = new MessageWindow("Http Post 讀取\r\n" + url + "異常", MessageType.ERROR);
-                        messageWindow.ShowDialog();
+                        MessageWindow.ShowMessage("Http Post 讀取\r\n" + url + "異常", MessageType.ERROR);
+                        
                         break;
                     default:
-                        MessageWindow errormessageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
-                        errormessageWindow.ShowDialog();
+                        MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
                         break;
                 }
             } 

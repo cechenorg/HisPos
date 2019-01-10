@@ -4,15 +4,12 @@ namespace His_Pos.Class
 {
     public abstract class Selection : INotifyPropertyChanged
     {
-        private string id;
-        private string name;
-
         protected Selection()
         {
             Id = "";
             Name = "";
         }
-
+        private string id;
         public string Id
         {
             get => id;
@@ -23,7 +20,7 @@ namespace His_Pos.Class
                 NotifyPropertyChanged("Id");
             }
         }
-
+        private string name;
         public string Name
         {
             get { return name; }

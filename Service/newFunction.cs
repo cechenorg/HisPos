@@ -12,7 +12,9 @@ using His_Pos.Class;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
 using His_Pos.Class.Product;
-using His_Pos.H1_DECLARE.PrescriptionDec2;
+using His_Pos.FunctionWindow;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using Microsoft.International.Formatters;
 using Microsoft.Reporting.WinForms;
 using Newtonsoft.Json;
@@ -369,7 +371,7 @@ namespace His_Pos.Service
         #region 藥袋.收據列印
 
         public static void PrintMedBag(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint, int SelfCost,int Pay, string from, int Charge, PrescriptionDec2View decInstance = null, 
-            PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null, CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = null) {
+            PrescriptionInquireOutcome inquireOutcome = null, CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = null) {
             var medBagResult = new MedBagSelectionWindow();
             var singleMode = (bool)medBagResult.ShowDialog();
             var receiptResult = new YesNoMessageWindow("是否列印收據", "列印收據");
@@ -537,7 +539,7 @@ namespace His_Pos.Service
             //}
         }
 
-        public static void PrintReceipt(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint,int SelfCost ,int Pay,string from, PrescriptionDec2View decInstance = null, PrescriptionInquire.PrescriptionInquireOutcome inquireOutcome = null,CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = null) {
+        public static void PrintReceipt(Prescription CurrentPrescription, DeclareData CurrentDeclareData, double MedicinePoint,int SelfCost ,int Pay,string from, PrescriptionDec2View decInstance = null, PrescriptionInquireOutcome inquireOutcome = null,CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = null) {
             var rptViewer = new ReportViewer();
             rptViewer.LocalReport.DataSources.Clear();
             rptViewer.LocalReport.ReportPath = @"RDLC\HisReceipt.rdlc";
@@ -586,7 +588,7 @@ namespace His_Pos.Service
             loadingWindow.Show();
         }
         #endregion
-        public static Division CheckHospitalNameContainsDivision(string name)
+        public static NewClass.Prescription.Treatment.Division.Division CheckHospitalNameContainsDivision(string name)
         {
             var divisionMatch = 0;
             var divisionId = string.Empty;
@@ -602,7 +604,7 @@ namespace His_Pos.Service
                 return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals("40"));
             }
             if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
-                return new Division();
+                return new NewClass.Prescription.Treatment.Division.Division();
             return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
         }
     }

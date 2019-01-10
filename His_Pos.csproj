@@ -28,8 +28,8 @@
     <InstallUrl>http://singde.com.tw/ClickOnce/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.4.6.%2a</ApplicationVersion>
+    <ApplicationRevision>6</ApplicationRevision>
+    <ApplicationVersion>1.4.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -269,8 +269,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AdminManageTab\AdminFunction\AdminFunction.cs" />
-    <Compile Include="AdminManageTab\AdminFunction\AdminFunctionView.xaml.cs">
+    <Compile Include="NewClass\CooperativeInstitution\CooperativePrescription.cs" />
+    <Compile Include="NewClass\Person\Customer.cs" />
+    <Compile Include="NewClass\Person\CustomerHistory\CustomerHistoryBase.cs" />
+    <Compile Include="NewClass\Person\CustomerHistory\PrescribeHistory.cs" />
+    <Compile Include="NewClass\Person\CustomerHistory\PrescriptionHistory.cs" />
+    <Compile Include="NewClass\Person\Employee.cs" />
+    <Compile Include="NewClass\Prescription\IcCard.cs" />
+    <Compile Include="NewClass\Prescription\Position\Positions.cs" />
+    <Compile Include="NewClass\Prescription\Prescription.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCaseDb.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCases.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Copayment\CopaymentDb.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayments.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\DiseaseCode\DiseaseCode.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Division\Division.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Division\DivisionDb.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Division\Divisions.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\Institution.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\InstitutionDb.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\Institutions.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\MedicalPersonnel.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategories.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategory.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategoryDb.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\PrescriptionCase\PrescriptionCase.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\PrescriptionCase\PrescriptionCaseDb.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\PrescriptionCase\PrescriptionCases.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreat.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreatDb.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreats.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Treatment.cs" />
+    <Compile Include="NewClass\Prescription\Usage\Usages.cs" />
+    <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
+    <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
       <DependentUpon>AdminFunctionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Class\AdjustCase\AdjustCase.cs" />
@@ -300,6 +332,14 @@
     <Compile Include="Class\Declare\IcDataUpload\IcDataUploadDb.cs" />
     <Compile Include="Class\Declare\PrescriptionDB.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCode9To10.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
+      <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclare.cs" />
+    <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCase.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayment.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\DiseaseCode\DiseaseCodeContrast.cs" />
     <Compile Include="Class\DiseaseCode\DiseaseCodeDb.cs" />
     <Compile Include="Class\Employee\Employee.cs" />
     <Compile Include="Class\Employee\EmployeeDb.cs" />
@@ -354,8 +394,8 @@
     <Compile Include="Class\Person\PersonDb.cs" />
     <Compile Include="Class\Pharmacy\Pharmacy.cs" />
     <Compile Include="Class\Pharmacy\PharmacyPrincipal.cs" />
-    <Compile Include="Class\Position\Position.cs" />
-    <Compile Include="Class\Position\PositionDb.cs" />
+    <Compile Include="NewClass\Prescription\Position\Position.cs" />
+    <Compile Include="NewClass\Prescription\Position\PositionDb.cs" />
     <Compile Include="Class\PredictChronic.cs" />
     <Compile Include="Class\Pregnant.cs" />
     <Compile Include="Class\Prescription.cs" />
@@ -406,8 +446,8 @@
     <Compile Include="Class\Leave\Leave.cs" />
     <Compile Include="Class\Medicate.cs" />
     <Compile Include="Class\Product\OTC.cs" />
-    <Compile Include="Class\Usage.cs" />
-    <Compile Include="Class\UsageDb.cs" />
+    <Compile Include="NewClass\Prescription\Usage\Usage.cs" />
+    <Compile Include="NewClass\Prescription\Usage\UsageDb.cs" />
     <Compile Include="Class\Vaccination.cs" />
     <Compile Include="Class\WareHouse.cs" />
     <Compile Include="Class\WareHouseDb.cs" />
@@ -415,224 +455,215 @@
     <Compile Include="Class\WorkSchedule\UserIconData.cs" />
     <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
     <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
-    <Compile Include="Confirm.xaml.cs">
-      <DependentUpon>Confirm.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ConfirmWindow.xaml.cs">
-      <DependentUpon>ConfirmWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Converters.cs" />
-    <Compile Include="DockingWindow.xaml.cs">
-      <DependentUpon>DockingWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="H1_DECLARE\AddMedicineWindow.xaml.cs">
+    <Compile Include="Service\Converters.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\AddMedicineWindow.xaml.cs">
       <DependentUpon>AddMedicineWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\MedBagManage\MedBagManage.cs" />
-    <Compile Include="H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManage.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml.cs">
       <DependentUpon>MedBagManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml.cs">
       <DependentUpon>RdlLocationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
-    <Compile Include="H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDec2\ChronicSelectWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlocationMoveThumb.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationResizeThumb.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ChronicSelectWindow.xaml.cs">
       <DependentUpon>ChronicSelectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\ChronicSendToServerWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ChronicSendToServerWindow.xaml.cs">
       <DependentUpon>ChronicSendToServerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\CommonHospitalsWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\CommonHospitalsWindow.xaml.cs">
       <DependentUpon>CommonHospitalsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\CooperativePrescriptSelectWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\CooperativePrescriptSelectWindow.xaml.cs">
       <DependentUpon>CooperativePrescriptSelectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\CustomerSelectWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\CustomerSelectWindow.xaml.cs">
       <DependentUpon>CustomerSelectWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\DiseaseCodeSelectDialog.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\DiseaseCodeSelectDialog.xaml.cs">
       <DependentUpon>DiseaseCodeSelectDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml.cs">
       <DependentUpon>ErrorMssageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\GenderConverter.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\GenderConverter.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml.cs">
       <DependentUpon>IcErrorCodeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\MedHistoryWebWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\MedHistoryWebWindow.xaml.cs">
       <DependentUpon>MedHistoryWebWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml.cs">
       <DependentUpon>MedicineInfoWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
-      <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml.cs">
       <DependentUpon>ChronicRegisterWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml.cs">
+      <DependentUpon>PrescriptionDeclareView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml.cs">
       <DependentUpon>StockAdjustmentWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml.cs">
       <DependentUpon>AddNewProductWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml.cs">
       <DependentUpon>DemolitionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineHistoryPriceWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineHistoryPriceWindow.xaml.cs">
       <DependentUpon>MedicineHistoryPriceWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
       <DependentUpon>MergeStockWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
       <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml.cs">
       <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\BatchNumberDialog.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\BatchNumberDialog.xaml.cs">
       <DependentUpon>BatchNumberDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml.cs">
       <DependentUpon>DeclareDataDetailOverview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml.cs">
       <DependentUpon>PurchaseControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml.cs">
       <DependentUpon>ReturnControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingView.xaml.cs">
       <DependentUpon>StockTakingView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManage.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml.cs">
       <DependentUpon>AuthenticationManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\CustomerManage\CustomerManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\CustomerManage\CustomerManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManage.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageView.xaml.cs">
       <DependentUpon>CustomerManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManage.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml.cs">
       <DependentUpon>EmployeeManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\EmployeeManage\LeaveTotalControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\LeaveTotalControl.xaml.cs">
       <DependentUpon>LeaveTotalControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\ChangeResultWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ChangeResultWindow.xaml.cs">
       <DependentUpon>ChangeResultWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\ItemChangeWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ItemChangeWindow.xaml.cs">
       <DependentUpon>ItemChangeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\LocationControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationControl.xaml.cs">
       <DependentUpon>LocationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\LocationDetailWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationDetailWindow.xaml.cs">
       <DependentUpon>LocationDetailWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\MoveThumb.cs" />
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\MoveThumb.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml.cs">
       <DependentUpon>NewLocationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\ResizeThumb.cs" />
-    <Compile Include="H1_DECLARE\MedFrequencyManage\MedFrequencyManage.cs" />
-    <Compile Include="H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ResizeThumb.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManage.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml.cs">
       <DependentUpon>MedFrequencyManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManage.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml.cs">
       <DependentUpon>PharmacyManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\AddTypeWindow.xaml.cs">
       <DependentUpon>AddTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml.cs">
       <DependentUpon>ChangeTypeResultWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml.cs">
       <DependentUpon>DeleteTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml.cs">
       <DependentUpon>ItemChangeTypeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\ClockIn\ClockInUserIcon.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInUserIcon.xaml.cs">
       <DependentUpon>ClockInUserIcon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\WorkScheduleManage\Day.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\Day.xaml.cs">
       <DependentUpon>Day.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\WorkScheduleManage\DayRemark.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\DayRemark.xaml.cs">
       <DependentUpon>DayRemark.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\WorkScheduleManage\EditMessageWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\EditMessageWindow.xaml.cs">
       <DependentUpon>EditMessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\WorkScheduleManage\Leave\LeaveWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\Leave\LeaveWindow.xaml.cs">
       <DependentUpon>LeaveWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\WorkScheduleManage\UserIcon.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\UserIcon.xaml.cs">
       <DependentUpon>UserIcon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\WorkScheduleManage\UserIconPreview.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\UserIconPreview.xaml.cs">
       <DependentUpon>UserIconPreview.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\WorkScheduleManage\WorkScheduleManage.cs" />
-    <Compile Include="H5_ATTEND\WorkScheduleManage\WorkScheduleManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\WorkScheduleManage.cs" />
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\WorkScheduleManageView.xaml.cs">
       <DependentUpon>WorkScheduleManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H5_ATTEND\ClockIn\ClockIn.cs" />
-    <Compile Include="H5_ATTEND\ClockIn\ClockInView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockIn.cs" />
+    <Compile Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInView.xaml.cs">
       <DependentUpon>ClockInView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\Export\DeclareDdataOutcome.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\DeclareDdataOutcome.xaml.cs">
       <DependentUpon>DeclareDdataOutcome.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\Export\ExportView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml.cs">
       <DependentUpon>ExportView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\Export\Export.cs" />
-    <Compile Include="H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReport.cs" />
-    <Compile Include="H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\Export\Export.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReport.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml.cs">
       <DependentUpon>CooperativeAdjustReportView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntry.cs" />
-    <Compile Include="H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntry.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml.cs">
       <DependentUpon>CooperativeEntryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml.cs">
       <DependentUpon>EntryDetailWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearch.cs" />
-    <Compile Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearch.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml.cs">
       <DependentUpon>EntrySearchView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl.xaml.cs">
       <DependentUpon>ManReportControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReport.cs" />
-    <Compile Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReport.cs" />
+    <Compile Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml.cs">
       <DependentUpon>PurchaseReturnReportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="HisApi\HisApiFunction.cs" />
-    <Compile Include="IconLabel.xaml.cs">
+    <Compile Include="GeneralCustomControl\IconLabel.xaml.cs">
       <DependentUpon>IconLabel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IndexView\Index.cs" />
-    <Compile Include="IndexView\IndexView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\INDEX\Index.cs" />
+    <Compile Include="SYSTEM_TAB\INDEX\IndexView.xaml.cs">
       <DependentUpon>IndexView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InitConnectionWindow.xaml.cs">
+    <Compile Include="FunctionWindow\InitConnectionWindow.xaml.cs">
       <DependentUpon>InitConnectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interface\IDeletable.cs" />
@@ -646,70 +677,65 @@
     <Compile Include="Interface\ISelection.cs" />
     <Compile Include="Interface\IStockTakingRecord.cs" />
     <Compile Include="Interface\ITrade.cs" />
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\InventoryManagement.cs" />
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\InventoryManagement.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml.cs">
       <DependentUpon>InventoryManagementView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetail.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetail.xaml.cs">
       <DependentUpon>MedicineDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetailView.cs" />
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetail.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetailView.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetail.xaml.cs">
       <DependentUpon>OtcDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetailView.cs" />
-    <Compile Include="H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetailView.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml.cs">
       <DependentUpon>ProductDetail.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoadingWindow.xaml.cs">
+    <Compile Include="FunctionWindow\LoadingWindow.xaml.cs">
       <DependentUpon>LoadingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\LocationManage.cs" />
-    <Compile Include="H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManage.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml.cs">
       <DependentUpon>LocationManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoginPage.xaml.cs">
-      <DependentUpon>LoginPage.xaml</DependentUpon>
+    <Compile Include="FunctionWindow\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManage.cs" />
-    <Compile Include="H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManage.cs" />
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageView.xaml.cs">
       <DependentUpon>ManufactoryManageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MessageWindow.xaml.cs">
+    <Compile Include="FunctionWindow\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquire.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquire.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml.cs">
       <DependentUpon>PrescriptionInquireOutcome.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquireView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquireView.xaml.cs">
       <DependentUpon>PrescriptionInquireView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
-    <Compile Include="H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
-    <Compile Include="MoreLinq\MoreEnumerable.DistinctBy.cs" />
-    <Compile Include="NewClass\CooperativePrescription.cs" />
-    <Compile Include="PrintDocuments\StockTakingDocument.xaml.cs">
-      <DependentUpon>StockTakingDocument.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecord.cs" />
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionOverview.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\SimpleCommand.cs" />
+    <Compile Include="Service\MoreLinq\MoreEnumerable.DistinctBy.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecord.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml.cs">
       <DependentUpon>ProductPurchaseRecordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderDialog.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddNewOrderDialog.xaml.cs">
       <DependentUpon>AddNewOrderDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\AddOrderDetail.cs" />
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\NewItemDialog.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddOrderDetail.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\NewItemDialog.xaml.cs">
       <DependentUpon>NewItemDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\ProductPurchase.cs" />
-    <Compile Include="H2_STOCK_MANAGE\ProductPurchase\ProductPurchaseView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\ProductPurchase.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\ProductPurchaseView.xaml.cs">
       <DependentUpon>ProductPurchaseView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManage.cs" />
-    <Compile Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManage.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml.cs">
       <DependentUpon>ProductTypeManageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="RDLC\MedBagMedicineDataSet.Designer.cs">
@@ -730,35 +756,37 @@
     </Compile>
     <Compile Include="RDLC\ReportService.cs" />
     <Compile Include="RDLC\XmlReport.cs" />
-    <Compile Include="Resource\DecimalControl.xaml.cs">
+    <Compile Include="GeneralCustomControl\DecimalControl.xaml.cs">
       <DependentUpon>DecimalControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Resource\MenuListItem.xaml.cs">
+    <Compile Include="GeneralCustomControl\MenuListItem.xaml.cs">
       <DependentUpon>MenuListItem.xaml</DependentUpon>
     </Compile>
     <Compile Include="Service\DateTimeExtensions.cs" />
-    <Compile Include="Service\DbConnection.cs" />
+    <Compile Include="Database\DatabaseConnection.cs" />
     <Compile Include="Service\Function.cs" />
     <Compile Include="Service\HttpMethod.cs" />
     <Compile Include="Service\MedBagSelectionWindow.xaml.cs">
       <DependentUpon>MedBagSelectionWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Database\MySQLConnection.cs" />
     <Compile Include="Service\newFunction.cs" />
-    <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecord.cs" />
-    <Compile Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingRecord\StockTakingRecord.cs" />
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml.cs">
       <DependentUpon>StockTakingRecordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H3_STOCKTAKING\StockTaking\StockTaking.cs" />
-    <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTaking.cs" />
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml.cs">
       <DependentUpon>StockTakingHistory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml.cs">
       <DependentUpon>StockTakingItemDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Database\SQLServerConnection.cs" />
     <Compile Include="Service\UsagesFunction.cs" />
     <Compile Include="Service\XmlService.cs" />
-    <Compile Include="Service\YesNoMessageWindow.xaml.cs">
-      <DependentUpon>YesNoMessageWindow.xaml</DependentUpon>
+    <Compile Include="FunctionWindow\ConfirmWindow.xaml.cs">
+      <DependentUpon>ConfirmWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="Struct\IcData\BasicData.cs" />
@@ -769,321 +797,313 @@
     <Compile Include="Class\Product\InventoryDetailOverview.cs" />
     <Compile Include="Struct\Product\PurchaseProduct.cs" />
     <Compile Include="Struct\StoreOrder\StoreOrderOverview.cs" />
-    <Compile Include="SystemSettings\SettingControl\DatabaseControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\DatabaseControl.xaml.cs">
       <DependentUpon>DatabaseControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemSettings\SettingControl\MyPharmacyControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl.xaml.cs">
       <DependentUpon>MyPharmacyControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemSettings\SettingControl\PrinterControl.xaml.cs">
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl.xaml.cs">
       <DependentUpon>PrinterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemSettings\SettingWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\SETTINGS\SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\IViewModelMainWindow.cs" />
-    <Compile Include="ViewModel\IViewModelProdcutDetailWindow.cs" />
-    <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\ProductDetailViewModel.cs" />
-    <Compile Include="ViewModel\ProductDetailViewModelLocator.cs" />
-    <Compile Include="ViewModel\TabBase.cs" />
-    <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="ViewModel\ViewModelMainWindow.cs" />
-    <Compile Include="ViewModel\ViewModelProductDetailWindow.cs" />
-    <Compile Include="ViewModel\Win32.cs" />
-    <Page Include="AdminManageTab\AdminFunction\AdminFunctionView.xaml">
+    <Compile Include="ChromeTabViewModel\IViewModelMainWindow.cs" />
+    <Compile Include="ChromeTabViewModel\IViewModelProdcutDetailWindow.cs" />
+    <Compile Include="ChromeTabViewModel\MainViewModel.cs" />
+    <Compile Include="ChromeTabViewModel\ProductDetailViewModel.cs" />
+    <Compile Include="ChromeTabViewModel\ProductDetailViewModelLocator.cs" />
+    <Compile Include="ChromeTabViewModel\TabBase.cs" />
+    <Compile Include="ChromeTabViewModel\ViewModelLocator.cs" />
+    <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
+    <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
+    <Compile Include="ChromeTabViewModel\Win32.cs" />
+    <Page Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Confirm.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\AddMedicineWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfirmWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\MedBagManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DockingWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\AddMedicineWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ChronicSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\MedBagManage\MedBagManageView.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ChronicSendToServerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\MedBagManage\RdlLocationControl.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\CommonHospitalsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\ChronicSelectWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\CooperativePrescriptSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\ChronicSendToServerWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\CustomerSelectWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\CommonHospitalsWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\DiseaseCodeSelectDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\CooperativePrescriptSelectWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\CustomerSelectWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\DiseaseCodeSelectDialog.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\MedHistoryWebWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\ErrorMssageWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\IcErrorCodeWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\MedHistoryWebWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\MedicineInfoWindow.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionDec2\ChronicRegisterWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\StockAdjustmentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\AddNewProductWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\DemolitionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineHistoryPriceWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineHistoryPriceWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\ReturnTypeControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\BatchNumberDialog.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\BatchNumberDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\DeclareDataDetailOverview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\ReturnControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H3_STOCKTAKING\StockTaking\StockTakingView.xaml">
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml">
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\AuthenticationManage\AuthenticationManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\CustomerManage\CustomerManageView.xaml">
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml">
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml">
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\EmployeeManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\EmployeeManage\LeaveTotalControl.xaml">
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\LeaveTotalControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\LocationManage\ChangeResultWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ChangeResultWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\LocationManage\ItemChangeWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\ItemChangeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\LocationManage\LocationControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\LocationManage\LocationDetailWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\NewLocationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\MedFrequencyManage\MedFrequencyManageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml">
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\PharmacyManage\PharmacyManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\AddTypeWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\AddTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ChangeTypeResultWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\DeleteTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ItemChangeTypeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H5_ATTEND\ClockIn\ClockInUserIcon.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInUserIcon.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="H5_ATTEND\WorkScheduleManage\Day.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\Day.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H5_ATTEND\WorkScheduleManage\DayRemark.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\DayRemark.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H5_ATTEND\WorkScheduleManage\EditMessageWindow.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\EditMessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H5_ATTEND\WorkScheduleManage\Leave\LeaveWindow.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\Leave\LeaveWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H5_ATTEND\WorkScheduleManage\UserIcon.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\UserIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H5_ATTEND\WorkScheduleManage\UserIconPreview.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\UserIconPreview.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="H5_ATTEND\WorkScheduleManage\WorkScheduleManageView.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\WorkScheduleManage\WorkScheduleManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H5_ATTEND\ClockIn\ClockInView.xaml">
+    <Page Include="SYSTEM_TAB\H5_ATTEND\ClockIn\ClockInView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\Export\DeclareDdataOutcome.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\Export\DeclareDdataOutcome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\Export\ExportView.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\Export\ExportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml">
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeAdjustReport\CooperativeAdjustReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml">
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\CooperativeEntry\CooperativeEntryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml">
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntryDetailWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml">
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\EntrySerach\EntrySearchView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl.xaml">
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\ManReportControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml">
+    <Page Include="SYSTEM_TAB\H7_ACCOUNTANCY_REPORT\PurchaseReturnReport\PurchaseReturnReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="IconLabel.xaml">
+    <Page Include="GeneralCustomControl\IconLabel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\InventoryManagementView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetail.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MedControl\MedicineDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetail.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\OtcControl\OtcDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\ProductDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="IndexView\IndexView.xaml">
+    <Page Include="SYSTEM_TAB\INDEX\IndexView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="InitConnectionWindow.xaml">
+    <Page Include="FunctionWindow\InitConnectionWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="LoadingWindow.xaml">
+    <Page Include="FunctionWindow\LoadingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\LocationManage\LocationManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoginPage.xaml">
+    <Page Include="FunctionWindow\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1101,63 +1121,59 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageView.xaml">
+    <Page Include="SYSTEM_TAB\H4_BASIC_MANAGE\ManufactoryManage\ManufactoryManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MessageWindow.xaml">
+    <Page Include="FunctionWindow\MessageWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquireOutcome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H1_DECLARE\PrescriptionInquire\PrescriptionInquireView.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionInquire\PrescriptionInquireView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PrintDocuments\StockTakingDocument.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchaseRecord\ProductPurchaseRecordView.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddNewOrderDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\AddNewOrderDialog.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\NewItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\NewItemDialog.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\ProductPurchaseView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductPurchase\ProductPurchaseView.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H2_STOCK_MANAGE\ProductTypeManage\ProductTypeManageView.xaml">
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H3_STOCKTAKING\StockTakingRecord\StockTakingRecordView.xaml">
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H3_STOCKTAKING\StockTaking\StockTakingHistory.xaml">
+    <Page Include="SYSTEM_TAB\H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="H3_STOCKTAKING\StockTaking\StockTakingItemDialog.xaml">
+    <Page Include="GeneralCustomControl\DecimalControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Resource\DecimalControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Resource\MenuListItem.xaml">
+    <Page Include="GeneralCustomControl\MenuListItem.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1165,23 +1181,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Service\YesNoMessageWindow.xaml">
+    <Page Include="FunctionWindow\ConfirmWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SystemSettings\SettingControl\DatabaseControl.xaml">
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\DatabaseControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SystemSettings\SettingControl\MyPharmacyControl.xaml">
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\MyPharmacyControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SystemSettings\SettingControl\PrinterControl.xaml">
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingControl\PrinterControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SystemSettings\SettingWindow.xaml">
+    <Page Include="SYSTEM_TAB\SETTINGS\SettingWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -1225,6 +1241,7 @@
     <Content Include="RDLC\MedBagReportSingle.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="ClassDiagram1.cd" />
     <None Include="His_Pos_TemporaryKey.pfx" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -1276,13 +1293,6 @@
       <DependentUpon>InventoryDataSet.xsd</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Content Include="SQLPackage\ServerDb.dacpac">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <None Include="SQLPackage\sqlpackage.exe.config" />
-    <Content Include="SSIS_Package\SyncProductDataFromSingdePackage.dtsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -1290,9 +1300,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
+    <Folder Include="Class\Position\" />
+    <Folder Include="Images\General\" />
     <Folder Include="packages\" />
-    <Folder Include="StockTaking\" />
+    <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
@@ -1407,22 +1418,8 @@
     <Resource Include="Images\OpenRecord.png" />
     <Resource Include="Images\OpenRecord2Detail.png" />
     <Resource Include="Images\Report.png" />
-    <Content Include="csHis.dll" />
-    <Content Include="Reader.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Components.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Contracts.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Schema.Sql.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Schema.Tasks.Sql.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Schema.Utilities.Sql.dll" />
-    <Content Include="SQLPackage\Microsoft.Data.Tools.Utilities.dll" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.ConnectionInfo.dll" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.Dac.dll" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.Dac.Extensions.dll" />
-    <Resource Include="SQLPackage\Microsoft.SqlServer.Dac.Extensions.xml" />
-    <Resource Include="SQLPackage\Microsoft.SqlServer.Dac.xml" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.SqlClrProvider.dll" />
-    <Content Include="SQLPackage\Microsoft.SqlServer.TransactSql.ScriptDom.dll" />
-    <Content Include="SQLPackage\sqlpackage.exe" />
+    <Content Include="DLLs\csHis.dll" />
+    <Content Include="DLLs\Reader.dll" />
     <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="SqlServerTypes\x64\msvcr120.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1440,282 +1437,282 @@
   <ItemGroup>
     <PublishFile Include="Microsoft.VisualStudio.CoreUtility">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Data.Framework">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.DataDesign.Common">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.DataDesign.DataSetDesigner">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.DataDesign.Interfaces">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Debugger.Interop.Internal">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>False</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>False</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Diagnostics.Assert">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Diagnostics.PerformanceProvider">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Editor">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.ExtensibilityHosting">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.ImageCatalog">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Imaging">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Language.Intellisense">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Package.LanguageService.14.0">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Shell.14.0">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Shell.Design">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Text.Data">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Text.Logic">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Text.UI">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Text.UI.Wpf">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Threading">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Utilities">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.Validation">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VisualStudio.WizardFramework">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VSDesigner">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Microsoft.VSDesigner.ExceptionAssistant.SmartTag">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
     <PublishFile Include="Reader.dll">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>File</FileType>
     </PublishFile>
     <PublishFile Include="System.Collections.Immutable">
       <Visible>False</Visible>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
       <Group>
       </Group>
       <TargetPath>
       </TargetPath>
-      <PublishState>Include</PublishState>
-      <IncludeHash>True</IncludeHash>
       <FileType>Assembly</FileType>
     </PublishFile>
   </ItemGroup>

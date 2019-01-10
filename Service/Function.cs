@@ -12,18 +12,18 @@ using System.Net;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Declare.IcDataUpload;
+using His_Pos.Database;
+using His_Pos.FunctionWindow;
 using His_Pos.HisApi;
 using His_Pos.Properties;
-using His_Pos.Service;
+using NChinese.Phonetic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NChinese.Phonetic;
-using His_Pos.Class.Person;
-using His_Pos.ViewModel;
 
-namespace His_Pos
+namespace His_Pos.Service
 {
 
     public class Function 
@@ -188,8 +188,9 @@ namespace His_Pos
          */
         public DataTable GetDataFromProc(string procName, List<SqlParameter> param = null)
         {
-            var conn = new DbConnection(Settings.Default.SQL_local);
-            return conn.ExecuteProc(procName, param);
+            return null;
+           ///var conn = new DatabaseConnection(Settings.Default.SQL_local);
+           ///return conn.ExecuteProc(procName, param);
         }
         public string HttpGetJson(string url) {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -228,7 +229,7 @@ namespace His_Pos
                 foreach (Holiday day in holidayCollection) {
                     if (day.name == "軍人節") continue;
                     if (day.isHoliday == "是")
-                        FunctionDb.UpdateLastYearlyHoliday(day);
+                        ;/// FunctionDb.UpdateLastYearlyHoliday(day);
                 }
             }
         }
@@ -262,8 +263,8 @@ namespace His_Pos
             }
             catch (Exception ex)
             {
-                var m = new MessageWindow("DailyUpload()", MessageType.ERROR, true);
-                m.ShowDialog();
+                MessageWindow.ShowMessage("DailyUpload()", MessageType.ERROR);
+                
                 return;
             }
         }

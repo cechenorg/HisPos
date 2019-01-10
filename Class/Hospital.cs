@@ -15,7 +15,7 @@ namespace His_Pos.Class
             Id = "";
             Name = "";
             Doctor = new MedicalPersonnel();
-            Division = new Division.Division();
+            Division = new NewClass.Prescription.Treatment.Division.Division();
             Common = false;
         }
 
@@ -28,12 +28,12 @@ namespace His_Pos.Class
                 Common = Convert.ToBoolean(dataRow["INS_IS_COMMON"]);
             else
             {
-                Common = MainWindow.Hospitals.SingleOrDefault(h => h.Id.Equals(Id)).Common;
+                Common = MainWindow.Institutions.SingleOrDefault(h => h.Id.Equals(Id)).Common;
             }
             switch (source) {
                 case DataSource.InitHospitalData:
                     Doctor = new MedicalPersonnel();
-                    Division = new Division.Division();
+                    Division = new NewClass.Prescription.Treatment.Division.Division();
                     break;
                 case DataSource.GetHospitalData:
                     Doctor = new MedicalPersonnel(dataRow,true);
@@ -45,14 +45,14 @@ namespace His_Pos.Class
             Doctor = new MedicalPersonnel();
             Id = xml.SelectSingleNode("d21") == null ? null : xml.SelectSingleNode("d21").InnerText;
             Doctor.IcNumber = xml.SelectSingleNode("d24") == null ? null : xml.SelectSingleNode("d24").InnerText;
-            Division = new Division.Division(xml);
+            ///Division = new NewClass.Prescription.Treatment.Division.Division(xml);
         }
         public Hospital(XmlDocument xml)
         {
             Doctor = new MedicalPersonnel();
             Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["doctor_id"].Value;
-            Name = MainWindow.Hospitals.SingleOrDefault(hos => hos.Id == Id).Name;
-            FullName = MainWindow.Hospitals.SingleOrDefault(hos => hos.Id == Id).FullName;
+            Name = MainWindow.Institutions.SingleOrDefault(hos => hos.Id == Id).Name;
+            FullName = MainWindow.Institutions.SingleOrDefault(hos => hos.Id == Id).FullName;
             Doctor.IcNumber = Id;
             Division = MainWindow.Divisions.SingleOrDefault(div => div.Id == xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["subject"].Value);
         }
@@ -74,9 +74,9 @@ namespace His_Pos.Class
             }
         }
 
-        private Division.Division _division;
+        private NewClass.Prescription.Treatment.Division.Division _division;
 
-        public Division.Division Division
+        public NewClass.Prescription.Treatment.Division.Division Division
         {
             get => _division;
             set

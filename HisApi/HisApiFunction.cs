@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using His_Pos.Service;
 
 namespace His_Pos.HisApi
 {

@@ -250,6 +250,15 @@ namespace His_Pos.Properties {
         }
         
         /// <summary>
+        ///   查詢類似 女 的當地語系化字串。
+        /// </summary>
+        internal static string Female {
+            get {
+                return ResourceManager.GetString("Female", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 處方作業 的當地語系化字串。
         /// </summary>
         internal static string hisPrescription {
@@ -318,6 +327,15 @@ namespace His_Pos.Properties {
         internal static string LocationManage {
             get {
                 return ResourceManager.GetString("LocationManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查詢類似 男 的當地語系化字串。
+        /// </summary>
+        internal static string Male {
+            get {
+                return ResourceManager.GetString("Male", resourceCulture);
             }
         }
         
