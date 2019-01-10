@@ -105,10 +105,10 @@ namespace His_Pos.Class.Product
                 else
                 {
                     Dosage = string.IsNullOrEmpty(dataRow["HISDECDET_AMOUNT"].ToString())? 0 : double.Parse(dataRow["HISDECDET_AMOUNT"].ToString());
-                    if(MainWindow.Usages.SingleOrDefault(usg => usg.Id == dataRow["HISFEQ_ID"].ToString()) is null)
-                        UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Name == dataRow["HISFEQ_ID"].ToString()).Name;
-                    else
-                        UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Id == dataRow["HISFEQ_ID"].ToString()).Name ;
+                    if (!string.IsNullOrEmpty(dataRow["HISFEQ_ID"].ToString()))
+                    {
+                        UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Id.Equals(dataRow["HISFEQ_ID"].ToString())).Name;
+                    }
                     Days = string.IsNullOrEmpty(dataRow["HISDECDET_DRUGDAY"].ToString())? string.Empty : dataRow["HISDECDET_DRUGDAY"].ToString();
                     Position = string.IsNullOrEmpty(dataRow["HISWAY_ID"].ToString())? string.Empty : dataRow["HISWAY_ID"].ToString();
                     Amount = string.IsNullOrEmpty(dataRow["HISDECDET_QTY"].ToString())? 0 : Convert.ToDouble(dataRow["HISDECDET_QTY"].ToString());
@@ -251,9 +251,13 @@ namespace His_Pos.Class.Product
                 if (value != null)
                 {
                     _usageName = value;
-                    Usage = MainWindow.Usages.SingleOrDefault(u => u.Name.Replace(" ", "").Equals(_usageName.ToString().Replace(" ", "")));
-                    if ((Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
-                        CalculateAmount();
+                    Usage = MainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(_usageName.ToString().Replace(" ", ""))).DeepCloneViaJson();
+                    if (Usage != null)
+                    {
+                        Usage.Name = _usageName;
+                        if ((Id.EndsWith("00") || Id.EndsWith("G0")) && !string.IsNullOrEmpty(UsageName) && int.TryParse(Days, out _))
+                            CalculateAmount();
+                    }
                     NotifyPropertyChanged(nameof(UsageName));
                 }
             }

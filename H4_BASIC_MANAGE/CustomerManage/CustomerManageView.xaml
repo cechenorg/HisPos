@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <hisPos:DateConverter x:Key="DateConverter"/>
     </UserControl.Resources>
-            <Viewbox Stretch="Fill">
+    <Viewbox Stretch="Fill">
         <Grid Width="1365" Height="839">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
@@ -52,7 +52,7 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="50">
                                             <Label Content="{Binding Name,UpdateSourceTrigger=PropertyChanged}" Width="120" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center" Margin="10,0,0,0"/>
-                                            <Label Content="{Binding BirthdayStr,UpdateSourceTrigger=PropertyChanged}" Width="200" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="17" VerticalAlignment="Center"/>
+                                            <Label Content="{Binding BirthdayStr,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateConverter}}" Width="200" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="17" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -72,8 +72,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <Label Content="{Binding CustomerDetail.Id,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="80" VerticalAlignment="Center" HorizontalContentAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-                        <TextBox Text="{Binding CustomerDetail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0" BorderThickness="0"/>
+                        <TextBox Text="{Binding CustomerDetail.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="姓名" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" BorderThickness="0"/>
                         <TextBox Text="{Binding CustomerDetail.Qname,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" materialDesign:HintAssist.Hint="簡稱" VerticalAlignment="Center" Foreground="DimGray" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,12,0,0" BorderThickness="0"/>
                     </StackPanel> 
                     <Grid Grid.Row="1">

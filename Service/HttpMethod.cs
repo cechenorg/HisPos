@@ -116,7 +116,52 @@ namespace His_Pos.Service
             }
             return xmlDocuments;
         }
-        
-        
+        public void NonQueryPost(string url, Dictionary<string, string> parameterList) {
+            ServicePointManager.Expect100Continue = false;
+            string paramString = string.Empty;
+            int count = 0;
+            foreach (var par in parameterList)
+            {
+                paramString += par.Key + "=" + par.Value;
+                count++;
+                if (count < parameterList.Count)
+                    paramString += "&";
+            }
+            HttpWebRequest request = HttpWebRequest.Create(url) as HttpWebRequest;
+            request.Method = "POST";    // 方法
+            request.KeepAlive = true; //是否保持連線
+            request.ContentType = "application/x-www-form-urlencoded";
+
+            byte[] bs = Encoding.ASCII.GetBytes(paramString);
+
+            using (Stream reqStream = request.GetRequestStream())
+            {
+                reqStream.Write(bs, 0, bs.Length);
+            }
+            string requeststring = string.Empty;
+            List<XmlDocument> xmlDocuments = new List<XmlDocument>();
+            try
+            {
+                using (WebResponse response = request.GetResponse())
+                {
+                   
+                }
+            }
+            catch (Exception ex)
+            {
+                switch (ex.Message)
+                {
+                    case "遠端伺服器傳回一個錯誤: (500) 內部伺服器錯誤。":
+                        MessageWindow messageWindow = new MessageWindow("Http Post 讀取\r\n" + url + "異常", MessageType.ERROR);
+                        messageWindow.ShowDialog();
+                        break;
+                    default:
+                        MessageWindow errormessageWindow = new MessageWindow(ex.Message, MessageType.ERROR);
+                        errormessageWindow.ShowDialog();
+                        break;
+                }
+            } 
+        }
+
     }
 }

@@ -2,6 +2,7 @@
 using His_Pos.Class;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Product;
+using His_Pos.Service;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,7 +28,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
     public partial class CooperativePrescriptSelectWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
+        public static CooperativePrescriptSelectWindow Instance;
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -161,6 +162,7 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             InitializeComponent();
             DataContext = this;
+            Instance = this;
             InitData();
         }
         private void InitData() {
@@ -168,6 +170,11 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         }
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
+            if (StartDate.Date <= EndDate.Date.AddDays(-3)) {
+                MessageWindow messageWindow = new MessageWindow("日期區間只能為三天內^^",MessageType.ERROR);
+                messageWindow.ShowDialog();
+                return;
+            }
             CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
         }
 
@@ -183,7 +190,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         private void DataGridCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectitem = (sender as DataGrid).SelectedItem;
-            if (selectitem is null) return; 
+            if (selectitem is null) return;
+            WebApi.UpdateIsReadByDeclareId(((CooperativeClinic)selectitem).DeclareId);
+            ((CooperativeClinic)selectitem).IsRead = "已讀";
             CustomerDeclaresCollection = DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IcNumber); 
             CustomerDeclaresCollection.Insert(0,(new CustomerDeclare(((CooperativeClinic)selectitem).Prescription)));
             MedicineInfo = null;
@@ -194,9 +203,9 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
         {
             DataGridCustomer.Items.Filter = ((o) => {
                 var temp = (CooperativeClinic)o;
-                if (temp.DeclareStatus == "未調劑" && UnPrescript && (temp.Prescription.Customer.IcCard.IcNumber.Contains(Condition.Text) || string.IsNullOrEmpty(Condition.Text)))
+                if (temp.IsRead == "未讀" && UnPrescript && (temp.Prescription.Customer.IcCard.IcNumber.Contains(Condition.Text) || string.IsNullOrEmpty(Condition.Text)))
                     return true;
-                else if (temp.DeclareStatus == "已調劑" && Prescript && (temp.Prescription.Customer.IcCard.IcNumber.Contains(Condition.Text) || string.IsNullOrEmpty(Condition.Text)))
+                else if (temp.IsRead == "已讀" && Prescript && (temp.Prescription.Customer.IcCard.IcNumber.Contains(Condition.Text) || string.IsNullOrEmpty(Condition.Text)))
                     return true;
                 else
                     return false;
@@ -216,6 +225,33 @@ namespace His_Pos.H1_DECLARE.PrescriptionDec2
             if (selectedItem is null) return;
             PrescriptionDec2View.Instance.SetValueByPrescription(((CooperativeClinic)selectedItem)); 
             Close();
+        }
+
+        private void ButtonPrint_Click(object sender, RoutedEventArgs e) {
+            if (DataGridCustomer.SelectedItem is null) return;
+            CooperativeClinic selectItem = DataGridCustomer.SelectedItem as CooperativeClinic; 
+            DeclareData declareData = new DeclareData(selectItem.Prescription);
+            double medPoint = 0;
+            int selfCost = 0;
+            foreach (Product product in selectItem.Prescription.Medicines) {
+                if(product is DeclareMedicine)
+                {
+                    var tempMed = ((DeclareMedicine)PrescriptionDec2View.Instance.DeclareMedicines.SingleOrDefault(med => med.Id == product.Id));
+                    ((DeclareMedicine)product).Ingredient = tempMed.Ingredient;
+                    ((DeclareMedicine)product).Indication = tempMed.Indication;
+                    ((DeclareMedicine)product).SideEffect = tempMed.SideEffect;
+                    if (!((DeclareMedicine)product).PaySelf)
+                    { 
+                        medPoint += tempMed.HcPrice * ((DeclareMedicine)product).Amount;
+                    }
+                    else {
+                        selfCost += Convert.ToInt32(((DeclareMedicine)product).TotalPrice);
+                    }
+
+                }
+            }
+            
+            NewFunction.PrintMedBag(selectItem.Prescription, declareData, medPoint, selfCost, selfCost, "合作", selfCost, null,null, Instance); 
         }
     }
 }
