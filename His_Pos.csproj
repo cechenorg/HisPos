@@ -269,6 +269,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="NewClass\Product\Product.cs" />
+    <Compile Include="NewClass\Product\Products.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnMedicine.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnOTC.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnProduct.cs" />
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />
@@ -1309,7 +1314,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\General\" />
-    <Folder Include="NewClass\Product\" />
     <Folder Include="packages\" />
     <Folder Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\TradeControl\PurchaseGrid\" />
   </ItemGroup>
