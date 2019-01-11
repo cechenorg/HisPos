@@ -32,8 +32,8 @@ namespace His_Pos.FunctionWindow
 
         public static void ShowMessage(string message, MessageType type)
         {
-            MessageWindow.ShowMessage(message, type);
-            
+            MessageWindow messageWindow = new MessageWindow(message, type);
+            messageWindow.ShowDialog();
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)

@@ -3,9 +3,8 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
-using System.Windows.Input;
-using His_Pos.Class;
-using His_Pos.Class.Person;
+using System.Windows.Input; 
+using His_Pos.NewClass.Person;
 using His_Pos.Database;
 
 namespace His_Pos.FunctionWindow
@@ -22,15 +21,53 @@ namespace His_Pos.FunctionWindow
             Width = Height * 0.77;
             UserName.Focus();
 
-            if (!IsConnectionDataValid())
-            {
+            if (!IsConnectionDataValid()) {
                 InitConnectionWindow initConnectionWindow = new InitConnectionWindow();
-                initConnectionWindow.ShowDialog();
-            }
+            } 
+        }
+         
+        private bool IsConnectionDataValid()
+        {
+            CheckSettingFiles(); 
+            SQLServerConnection localConnection = new SQLServerConnection(); 
+            return localConnection.CheckConnection();
         }
 
-        private static void CheckSettingFiles()
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
+            Login();
+        } 
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void Password_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Login();
+        }
+
+        private void UserName_OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Password.Focus();
+        }
+        private void Login() {
+            Employee user = new Employee();
+            user.Login(UserName.Text, Password.Password);
+            if (!string.IsNullOrEmpty(user.Id.ToString()))
+            {
+                MainWindow mainWindow = new MainWindow(user); 
+                Close();
+            }
+            else
+            {
+                ErrorStack.Visibility = Visibility.Visible;
+                Password.Password = string.Empty;
+            }
+        }
+        private static void CheckSettingFiles() {
             string folderPath = "C:\\Program Files\\HISPOS";
 
             bool folderExist = Directory.Exists(folderPath);
@@ -74,7 +111,7 @@ namespace His_Pos.FunctionWindow
                     Regex connReg = new Regex(@"[LG] Data Source=([0-9.]*),([0-9]*);Persist Security Info=True;User ID=([a-zA-Z0-9]*);Password=([a-zA-Z0-9]*)");
                     Regex printReg = new Regex(@"[MR][cp]* (.*)");
                     Match match;
-                    
+
                     match = connReg.Match(fileReader.ReadLine());
                     Properties.Settings.Default.SQL_local =
                         $"Data Source={match.Groups[1].Value},{match.Groups[2].Value};Persist Security Info=True;User ID={match.Groups[3].Value};Password={match.Groups[4].Value}";
@@ -95,97 +132,6 @@ namespace His_Pos.FunctionWindow
                     Properties.Settings.Default.Save();
                 }
             }
-        }
-
-        private bool IsConnectionDataValid()
-        {
-            CheckSettingFiles();
-
-            ///DatabaseConnection localConnection = new DatabaseConnection(Properties.Settings.Default.SQL_local);
-            ///if (!localConnection.CheckConnection()) return false;
-
-            return true;
-        }
-
-        private void Login_Click(object sender, RoutedEventArgs e)
-        {
-            User user = new User();/// PersonDb.CheckUserPassword(UserName.Text, Password.Password);
-
-            if (!user.Id.Equals(""))
-            {
-                try
-                {
-                    CheckDBVersion();
-                    
-                }
-                catch (Exception ex)
-                {
-                    MessageWindow.ShowMessage(ex.Message, MessageType.ERROR);
-                    
-                }
-
-
-                DateTime syncDate = new DateTime();/// FunctionDb.GetLastSyncDate();
-
-                if(syncDate.Date != DateTime.Today)
-                    SyncNewProductDataFromSingde();
-
-                var loadingWindow = new LoadingWindow();
-                loadingWindow.Show();
-                loadingWindow.GetNecessaryData(user);
-                Close();
-            }
-            else
-            {
-                ErrorStack.Visibility = Visibility.Visible;
-                Password.Password = "";
-            }
-        }
-
-        private void SyncNewProductDataFromSingde()
-        {
-            Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
-            Match match = reg.Match(Properties.Settings.Default.SQL_global);
-
-            WebApi.SyncServerData(match.Groups[1].Value);
-        }
-
-        private void CheckDBVersion()
-        {
-            string versionId = "";/// FunctionDb.GetSystemVersionId();
-            if (!versionId.Equals(Assembly.GetExecutingAssembly().GetName().Version.ToString()))
-            {
-                Regex reg = new Regex(@"Data Source=([0-9.]*,[0-9]*);Persist Security Info=True;User ID=[a-zA-Z0-9]*;Password=[a-zA-Z0-9]*");
-                Match match = reg.Match(Properties.Settings.Default.SQL_local);
-                
-                System.Diagnostics.Process process = new System.Diagnostics.Process();
-                System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
-                startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
-                startInfo.FileName = "SQLPackage\\sqlpackage.exe";
-                startInfo.Arguments = $@"/a:Publish /sf:""SQLPackage\\ServerDb.dacpac"" /tsn:{match.Groups[1].Value} /tu:singde /tp:city1234 /tdn:HIS_POS_DB /p:""IncludeCompositeObjects=True"" /p:""BlockOnPossibleDataLoss=False"" /p:""DropObjectsNotInSource=True"" /p:""DoNotDropObjectTypes=Permissions;Logins;Users""";
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
-
-                ///FunctionDb.UpdateSystemVersionId();
-            }
-        }
-
-        private void Exit_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void Password_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                Login_Click(sender, e);
-        }
-
-        private void UserName_OnKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                Password.Focus();
         }
     }
 }

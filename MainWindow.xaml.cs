@@ -12,11 +12,11 @@ using System.Windows.Threading;
 using ChromeTabs;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
-using His_Pos.Class.Declare;
 using His_Pos.Database;
 using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
+using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Prescription.Position;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
@@ -42,7 +42,7 @@ namespace His_Pos
         public static MySQLConnection SingdeConnection = new MySQLConnection();
 
         public static List<Feature> HisFeatures = new List<Feature>();
-        public static Class.Person.User CurrentUser;
+        public static Employee CurrentUser;
 
         public static MainWindow Instance;
 
@@ -68,12 +68,14 @@ namespace His_Pos
         public static SpecialTreats SpecialCode { get; set; }
         public static Usages Usages { get; set; }
         public static Positions Positions { get; set; }
-        public MainWindow(Class.Person.User userLogin)
+        public MainWindow(Employee user)
         {
             FeatureFactory();
             InitializeComponent();
+            LoadingWindow loadingWindow = new LoadingWindow();
+            loadingWindow.GetNecessaryData(user);
             WindowState = WindowState.Maximized;
-            CurrentUser = userLogin;
+            CurrentUser = user;
             Instance = this;
             InitializeMenu();
             InitialUserBlock();
@@ -129,7 +131,7 @@ namespace His_Pos
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
 
-            Collection<string> tabAuth = null;/// AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
+            Collection<string> tabAuth = CurrentUser.GetTabAuth();/// AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)
@@ -205,7 +207,7 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var d = new DeclareDb();
+            ///var d = new DeclareDb();
             var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
             var upload = (bool) dailyUploadConfirm.ShowDialog();
             if (upload)

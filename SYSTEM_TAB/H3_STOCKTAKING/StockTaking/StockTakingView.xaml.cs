@@ -325,7 +325,7 @@ namespace His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking
             foreach (var product in _takingCollection)
             {
                 if (((IStockTaking)product).EmpId.Equals(""))
-                    ((IStockTaking)product).EmpId = (TakingEmp.Text.Equals("")) ? MainWindow.CurrentUser.Id : TakingEmp.Text;
+                    ((IStockTaking)product).EmpId = (TakingEmp.Text.Equals("")) ? MainWindow.CurrentUser.Id.ToString() : TakingEmp.Text;
             }
         }
 
