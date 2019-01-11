@@ -324,8 +324,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase
 
                 if (true)///confirmWindow.Confirm)
                 {
-                    StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser,
-                        StoreOrderData.Warehouse, StoreOrderData.Manufactory, null,
+                    StoreOrder storeOrder = new StoreOrder(StoreOrderCategory.PURCHASE, MainWindow.CurrentUser,StoreOrderData.Warehouse, StoreOrderData.Manufactory, null,
                         "訂單 " + StoreOrderData.Id + " 缺貨 待補貨");
                     storeOrder.Type = OrderType.PROCESSING;
 

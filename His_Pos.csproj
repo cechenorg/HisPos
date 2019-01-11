@@ -294,6 +294,7 @@
     <Compile Include="NewClass\Prescription\Treatment\Institution\Institution.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\InstitutionDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\Institutions.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\Pharmacy.cs" />
     <Compile Include="NewClass\Prescription\Treatment\MedicalPersonnel.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategories.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategory.cs" />
@@ -1228,7 +1229,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Class\Person\User.cs" />
     <Compile Include="HisApi\HisApiBase.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

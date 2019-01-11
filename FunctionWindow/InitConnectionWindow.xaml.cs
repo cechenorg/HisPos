@@ -11,6 +11,7 @@ namespace His_Pos.FunctionWindow
         public InitConnectionWindow()
         {
             InitializeComponent();
+            ShowDialog();
         }
 
         private void Confirm_OnClick(object sender, RoutedEventArgs e)

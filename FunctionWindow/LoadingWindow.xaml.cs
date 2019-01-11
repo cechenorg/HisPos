@@ -12,21 +12,12 @@ using System.Text;
 using System.Xml;
 using His_Pos.AbstractClass;
 using His_Pos.Class;
-using His_Pos.Class.AdjustCase;
-using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
-using His_Pos.Class.Division;
-using His_Pos.Class.Employee;
-using His_Pos.Class.Location;
 using His_Pos.Class.Manufactory;
-using His_Pos.Class.MedBag;
-using His_Pos.Class.PaymentCategory;
 using His_Pos.Class.Person;
 using His_Pos.Class.Product;
-using His_Pos.Class.SpecialCode;
 using His_Pos.Class.StockTakingOrder;
 using His_Pos.Class.StoreOrder;
-using His_Pos.Class.TreatmentCase;
 using His_Pos.HisApi;
 using His_Pos.Interface;
 using His_Pos.NewClass.Person;
@@ -67,6 +58,7 @@ namespace His_Pos.FunctionWindow
         public LoadingWindow()
         {
             InitializeComponent();
+            Show();
         }
 
         //public LoadingWindow(string message)
@@ -155,9 +147,9 @@ namespace His_Pos.FunctionWindow
             };
             backgroundWorker.RunWorkerAsync();
         }
-        public void GetNecessaryData(User userLogin)
+        public void GetNecessaryData(Employee userLogin)
         {
-            MainWindow mainWindow = new MainWindow(userLogin);
+           
             backgroundWorker.DoWork += (s, o) =>
             {
 
@@ -202,7 +194,6 @@ namespace His_Pos.FunctionWindow
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    mainWindow.Show();
                     MainWindow.ItemSourcesSet = true;
                     Close();
                 }));
@@ -685,7 +676,7 @@ namespace His_Pos.FunctionWindow
                     prescriptionDec2View.CurrentPrescription.Treatment.AdjustCase = prescriptionDec2View.AdjustCases.SingleOrDefault(a => a.Name.Equals("一般處方調劑"));
                     prescriptionDec2View.CurrentPrescription.Treatment.MedicalInfo.TreatmentCase = prescriptionDec2View.PrescriptionCases.SingleOrDefault(c => c.Name.Equals("一般案件"));
                     
-                    if (MainWindow.CurrentUser.Authority.AuthorityValue.Equals("3"))
+                    if (MainWindow.CurrentUser.AuthorityValue.Equals("3"))
                     {
                         for (int i = 0; i < prescriptionDec2View.MedicalPersonnels.Count; i++)
                         {
