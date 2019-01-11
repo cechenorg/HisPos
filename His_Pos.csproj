@@ -305,6 +305,18 @@
     <Compile Include="NewClass\Prescription\Treatment\SpecialTreat\SpecialTreats.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Treatment.cs" />
     <Compile Include="NewClass\Prescription\Usage\Usages.cs" />
+    <Compile Include="NewClass\Product\Product.cs" />
+    <Compile Include="NewClass\Product\Products.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnMedicine.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnOTC.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnProduct.cs" />
+    <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
+    <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
+    <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />
+    <Compile Include="NewClass\StoreOrder\ReturnOrder.cs" />
+    <Compile Include="NewClass\StoreOrder\StoreOrder.cs" />
+    <Compile Include="NewClass\StoreOrder\StoreOrderDB.cs" />
+    <Compile Include="NewClass\StoreOrder\StoreOrders.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunction.cs" />
     <Compile Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml.cs">
       <DependentUpon>AdminFunctionView.xaml</DependentUpon>
@@ -525,6 +537,23 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml.cs">
       <DependentUpon>MergeStockWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\AddNewOrderWindow.xaml.cs">
+      <DependentUpon>AddNewOrderWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\AddNewOrderWindowViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\PurchaseTypeControl.xaml.cs">
+      <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\PurchaseTypeControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControl.xaml.cs">
+      <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturn.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnView.xaml.cs">
+      <DependentUpon>ProductPurchaseReturnView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
       <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
     </Compile>
@@ -908,6 +937,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\InventoryManagement\MergeStockWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\AddNewOrderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\PurchaseTypeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
