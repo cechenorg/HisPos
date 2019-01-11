@@ -47,8 +47,8 @@ namespace His_Pos.FunctionWindow
             Employee user = Employee.Login(Account, (sender as PasswordBox).Password);
             if (!string.IsNullOrEmpty(user.Id.ToString()))
             {
-                MainWindow mainWindow = new MainWindow(user);
-                mainWindow.Show();
+                LoadingWindow loadingWindow = new LoadingWindow();
+                loadingWindow.GetNecessaryData(user);
 
                 Messenger.Default.Send<NotificationMessage>(
                     new NotificationMessage(this, "CloseLogin")

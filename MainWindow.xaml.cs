@@ -71,9 +71,10 @@ namespace His_Pos
         public MainWindow(Employee user)
         {
             FeatureFactory();
-            InitializeComponent(); 
+            InitializeComponent();
             WindowState = WindowState.Maximized;
             CurrentUser = user;
+            CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             Instance = this;
             InitializeMenu();
             InitialUserBlock();
@@ -130,7 +131,7 @@ namespace His_Pos
             if (features == null || itemsName == null)
                 throw new ArgumentNullException(nameof(itemsName));
 
-            Collection<string> tabAuth = CurrentUser.GetTabAuth();/// AuthorityDb.GetTabAuthByGroupId(CurrentUser.Authority.AuthorityValue);
+            Collection<string> tabAuth = CurrentUser.GetTabAuth();
             foreach (var t in itemsName)
             {
                 if (tabAuth.Count(tab => tab == t) != 0)

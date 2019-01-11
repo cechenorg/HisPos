@@ -297,6 +297,7 @@
     <Compile Include="NewClass\Prescription\Treatment\Institution\InstitutionDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\Institutions.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\Pharmacy.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\PharmacyDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\MedicalPersonnel.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategories.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategory.cs" />
