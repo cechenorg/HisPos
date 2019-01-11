@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Database;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
@@ -46,8 +47,10 @@ namespace His_Pos.FunctionWindow
             Employee user = Employee.Login(Account, (sender as PasswordBox).Password);
             if (!string.IsNullOrEmpty(user.Id.ToString()))
             {
-                MainWindow mainWindow = new MainWindow(user);
-                mainWindow.Show();
+                LoadingWindow loadingWindow = new LoadingWindow();
+                loadingWindow.GetNecessaryData(user);
+
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseLogin"));
             }
             else
             {

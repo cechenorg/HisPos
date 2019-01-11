@@ -19,6 +19,7 @@ namespace His_Pos.NewClass.Person.Employee
             LeaveDate = string.IsNullOrEmpty(r["Emp_LeaveDate"].ToString()) ? null :(DateTime?)r["Emp_LeaveDate"];
             PurchaseLimit = Convert.ToInt32(r["Emp_PurchaseLimit"]);
             IsEnable = (bool)r["Emp_IsEnable"];
+            AuthorityValue = Convert.ToInt32(r["Aut_LevelID"].ToString());
         }
         private string password;//密碼
         public string Password
@@ -102,11 +103,19 @@ namespace His_Pos.NewClass.Person.Employee
             
         }
         public static Employee Login(string Account,string Password) {
+            MainWindow.ServerConnection.OpenConnection();
             DataTable table = EmployeeDb.EmployeeLogin(Account, Password);
+            MainWindow.ServerConnection.CloseConnection();
             return table.Rows.Count == 0 ? null : new Employee(table.Rows[0]);
         }
         public Collection<string> GetTabAuth() {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable table = EmployeeDb.GetTabAuth(AuthorityValue);
+            MainWindow.ServerConnection.CloseConnection(); 
             Collection<string> tabAuths = new Collection<string>();
+            foreach (DataRow row in table.Rows) {
+                tabAuths.Add(row["Aut_TabName"].ToString());
+            }
             return tabAuths;
         }
         
