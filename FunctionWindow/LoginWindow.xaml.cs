@@ -25,10 +25,7 @@ namespace His_Pos.FunctionWindow
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification == "CloseLogin")
-                {
-                    if (notificationMessage.Sender == DataContext)
-                        Close();
-                }
+                    Close();
             });
         }
          

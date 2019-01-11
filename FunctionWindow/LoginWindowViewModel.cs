@@ -50,9 +50,7 @@ namespace His_Pos.FunctionWindow
                 LoadingWindow loadingWindow = new LoadingWindow();
                 loadingWindow.GetNecessaryData(user);
 
-                Messenger.Default.Send<NotificationMessage>(
-                    new NotificationMessage(this, "CloseLogin")
-                );
+                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseLogin"));
             }
             else
             {
