@@ -19,7 +19,6 @@ namespace His_Pos.FunctionWindow
     {
         #region ----- Define Command -----
         public RelayCommand<object> LoginCommand { get; set; }
-        public RelayCommand LeaveCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -48,16 +47,12 @@ namespace His_Pos.FunctionWindow
             if (!string.IsNullOrEmpty(user.Id.ToString()))
             {
                 MainWindow mainWindow = new MainWindow(user);
+                mainWindow.Show();
             }
             else
             {
                 IsAccountWrong = true;
             }
-        }
-
-        private void LeaveAction()
-        {
-
         }
         #endregion
 
