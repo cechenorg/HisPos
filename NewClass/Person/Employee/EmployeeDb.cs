@@ -1,6 +1,12 @@
-﻿using System.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace His_Pos.NewClass.Person.Employee
+namespace His_Pos.NewClass.Person
 { 
     public static class EmployeeDb
     {
@@ -12,5 +18,14 @@ namespace His_Pos.NewClass.Person.Employee
         public static void DeleteEmployee() {
 
         }
+        public static DataTable EmployeeLogin(string account,string password) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("Account", account));
+            parameterList.Add(new SqlParameter("Password", password));
+            MainWindow.ServerConnection.OpenConnection();
+            var table = MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[EmployeeLogin]",parameterList); 
+            MainWindow.ServerConnection.CloseConnection();
+            return table;
+        } 
     }
 }

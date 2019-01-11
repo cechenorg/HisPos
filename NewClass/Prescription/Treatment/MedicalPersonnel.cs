@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
         public MedicalPersonnel(Employee e)
         {
             Name = e.Name;
-            IdNumber = e.IdNumber;
+            IdNumber = e.IDNumber;
         }
         public string Name { get; }
         public string IdNumber { get; }
