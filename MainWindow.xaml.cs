@@ -29,7 +29,6 @@ using His_Pos.NewClass.Usage;
 using His_Pos.SYSTEM_TAB.SETTINGS;
 using Label = System.Windows.Controls.Label;
 using MenuItem = System.Windows.Controls.MenuItem;
-using Pharmacy = His_Pos.Class.Pharmacy.Pharmacy;
 
 namespace His_Pos
 {
@@ -71,9 +70,7 @@ namespace His_Pos
         public MainWindow(Employee user)
         {
             FeatureFactory();
-            InitializeComponent();
-            LoadingWindow loadingWindow = new LoadingWindow();
-            loadingWindow.GetNecessaryData(user);
+            InitializeComponent(); 
             WindowState = WindowState.Maximized;
             CurrentUser = user;
             Instance = this;
@@ -81,6 +78,7 @@ namespace His_Pos
             InitialUserBlock();
             StratClock();
             AddNewTab("每日作業");
+            
         }
         
         private void InitialUserBlock()

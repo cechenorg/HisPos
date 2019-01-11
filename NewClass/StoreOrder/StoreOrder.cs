@@ -20,8 +20,8 @@ namespace His_Pos.NewClass.StoreOrder
         public OrderTypeEnum OrderType { get; set; }
         public OrderStatusEnum OrderStatus { get; set; }
         public string ID { get; set; }
-        //public Manufactory OrderManufactory { get; set; }
-        //public WareHouse OrderWarehouse { get; set; }
+        public Manufactory.Manufactory OrderManufactory { get; set; }
+        public WareHouse.WareHouse OrderWarehouse { get; set; }
         public string OrderEmployeeName { get; set; }
         public string Note { get; set; }
         public Products OrderProducts { get; set; }
@@ -53,10 +53,24 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
+        #region ----- Check Function -----
         public bool CheckOrder()
         {
-            return true;
+            return false;
         }
+        public virtual bool CheckUnProcessingOrder()
+        {
+            return false;
+        }
+        public virtual bool CheckNormalProcessingOrder()
+        {
+            return false;
+        }
+        public virtual bool CheckSingdeProcessingOrder()
+        {
+            return false;
+        }
+        #endregion
 
         public void DeleteOrder()
         {

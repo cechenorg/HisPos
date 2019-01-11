@@ -1,52 +1,76 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input; 
-using His_Pos.NewClass.Person;
+using System.Windows.Controls;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using His_Pos.Database;
+using His_Pos.NewClass.Person;
 
 namespace His_Pos.FunctionWindow
 {
-    /// <summary>
-    /// LoginPage.xaml 的互動邏輯
-    /// </summary>
-    public partial class LoginPage
+    public class LoginWindowViewModel : ViewModelBase
     {
-        public LoginPage()
-        {
-            InitializeComponent();
-            Height = SystemParameters.PrimaryScreenHeight * 0.85;
-            Width = Height * 0.77;
-            UserName.Focus();
+        #region ----- Define Command -----
+        public RelayCommand<object> LoginCommand { get; set; }
+        public RelayCommand LeaveCommand { get; set; }
+        #endregion
+
+        #region ----- Define Variables -----
+        public string Account { get; set; }
+        private bool isAccountValid = false;
+        public bool IsAccountWrong {
+            get { return isAccountValid; }
+            set { Set(() => IsAccountWrong, ref isAccountValid, value); }
         }
-         
-        private void Exit_Click(object sender, RoutedEventArgs e)
+        #endregion
+
+        public LoginWindowViewModel()
         {
-            Close();
+            LoginCommand = new RelayCommand<object>(LoginAction);
+
+            if (!IsConnectionDataValid())
+            {
+                InitConnectionWindow initConnectionWindow = new InitConnectionWindow();
+            }
         }
 
-        private void UserName_OnKeyUp(object sender, KeyEventArgs e)
+        #region ----- Define Actions -----
+        private void LoginAction(object sender)
         {
-            if (e.Key == Key.Enter)
-                Password.Focus();
-        }
-        private void Login() {
             Employee user = new Employee();
-            user.Login(UserName.Text, Password.Password);
+            user.Login(Account, (sender as PasswordBox).Password);
             if (!string.IsNullOrEmpty(user.Id.ToString()))
             {
-                MainWindow mainWindow = new MainWindow(user); 
-                Close();
+                MainWindow mainWindow = new MainWindow(user);
             }
             else
             {
-                ErrorStack.Visibility = Visibility.Visible;
-                Password.Password = string.Empty;
+                IsAccountWrong = true;
             }
         }
-        private static void CheckSettingFiles() {
+
+        private void LeaveAction()
+        {
+
+        }
+        #endregion
+
+        #region ----- Define Functions -----
+        private bool IsConnectionDataValid()
+        {
+            CheckSettingFiles();
+            SQLServerConnection localConnection = new SQLServerConnection();
+            return localConnection.CheckConnection();
+        }
+
+        private static void CheckSettingFiles()
+        {
             string folderPath = "C:\\Program Files\\HISPOS";
 
             bool folderExist = Directory.Exists(folderPath);
@@ -111,6 +135,7 @@ namespace His_Pos.FunctionWindow
                     Properties.Settings.Default.Save();
                 }
             }
+            #endregion
         }
     }
 }

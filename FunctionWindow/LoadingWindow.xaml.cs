@@ -150,7 +150,7 @@ namespace His_Pos.FunctionWindow
         }
         public void GetNecessaryData(Employee userLogin)
         {
-           
+            MainWindow mainWindow = new MainWindow(userLogin);
             backgroundWorker.DoWork += (s, o) =>
             {
 
@@ -195,6 +195,7 @@ namespace His_Pos.FunctionWindow
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
+                    mainWindow.Show();
                     MainWindow.ItemSourcesSet = true;
                     Close();
                 }));
@@ -641,7 +642,7 @@ namespace His_Pos.FunctionWindow
                 prescriptionDec2View.AdjustCases = MainWindow.AdjustCases;
                 prescriptionDec2View.SpecialCodes = MainWindow.SpecialCode;
                 prescriptionDec2View.Usages = MainWindow.Usages;
-                prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+               /// prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                 prescriptionDec2View.Positions = null;/// PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>
                 {
