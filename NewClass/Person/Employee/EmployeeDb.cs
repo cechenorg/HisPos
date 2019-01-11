@@ -24,6 +24,12 @@ namespace His_Pos.NewClass.Person
             parameterList.Add(new SqlParameter("Password", password));
             var table = MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[EmployeeLogin]",parameterList);  
             return table;
-        } 
+        }
+        public static DataTable GetTabAuth(int AuthValue) {
+            List<SqlParameter> parameterList = new List<SqlParameter>();
+            parameterList.Add(new SqlParameter("AuthValue", AuthValue)); 
+            var table = MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[TabAuth]", parameterList);
+            return table;
+        }
     }
 }

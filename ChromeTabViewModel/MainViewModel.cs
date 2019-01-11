@@ -12,6 +12,7 @@ using His_Pos.SYSTEM_TAB.H1_DECLARE.Export;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedBagManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.MedFrequencyManage;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
+using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
@@ -242,7 +243,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 //處方管理
                 case nameof(FeatureItem.處方登錄):
-                    newTab = new PrescriptionDec2() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new PrescriptionDeclare() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.處方查詢):
