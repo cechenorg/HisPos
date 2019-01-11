@@ -265,7 +265,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             TreatmentCaseCollection = PrescriptionInquireView.Instance.TreatmentCaseCollection;
             HospitalCollection = PrescriptionInquireView.Instance.HospitalCollection;
             DeclareMedicinesData =  PrescriptionInquireView.Instance.DeclareMedicinesData;
-            MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
+           /// MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
             SetTreatmentData();
             InquiredPrescription.Prescription.Treatment.Copayment = CopaymentCollection.SingleOrDefault(c =>
                 c.Id.Equals(InquiredPrescription.Prescription.Treatment.Copayment.Id));

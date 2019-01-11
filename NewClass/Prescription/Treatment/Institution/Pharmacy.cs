@@ -28,7 +28,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
 
         #region Function
         public Pharmacy GetCurrentPharmacy() {
-
+            return null;
         }
         #endregion
     }

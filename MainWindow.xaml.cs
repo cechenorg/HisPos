@@ -17,6 +17,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.GeneralCustomControl;
 using His_Pos.HisApi;
 using His_Pos.NewClass.Person;
+using His_Pos.NewClass.Person.Employee;
 using His_Pos.NewClass.Prescription.Position;
 using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;

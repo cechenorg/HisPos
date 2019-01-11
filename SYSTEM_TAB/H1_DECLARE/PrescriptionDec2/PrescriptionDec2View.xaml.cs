@@ -327,7 +327,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             DeclareMedicines = new ObservableCollection<Product>();
             PrescriptionCases = new PrescriptionCases();
-            CurrentPrescription.Pharmacy = MainWindow.CurrentPharmacy.DeepCloneViaJson();
+            ///CurrentPrescription.Pharmacy = MainWindow.CurrentPharmacy.DeepCloneViaJson();
             var loadingWindow = new LoadingWindow();
             loadingWindow.GetMedicinesData(Instance);
             loadingWindow.Show();
@@ -771,13 +771,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             {
                 foreach (var medicalPerson in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
                 {
-                    if (!medicalPerson.IcNumber.Equals(CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber)) continue;
-                    medicalPerson.PrescriptionCount++;
-                    PrescriptionCount = medicalPerson.PrescriptionCount;
+                    if (!medicalPerson.IdNumber.Equals(CurrentPrescription.Pharmacy.MedicalPersonnel.IcNumber)) continue;
+                    ///medicalPerson.PrescriptionCount++;
+                  ///  PrescriptionCount = medicalPerson.PrescriptionCount;
                     break;
                 }
             }
-            MedicalPersonnels = new ObservableCollection<MedicalPersonnel>(MainWindow.CurrentPharmacy.MedicalPersonnelCollection);
+            ///MedicalPersonnels = new ObservableCollection<MedicalPersonnel>(MainWindow.CurrentPharmacy.MedicalPersonnelCollection);
             HisPerson.ItemsSource = MedicalPersonnels;
             if (!string.IsNullOrEmpty(_clinicDeclareId))
             {
@@ -1935,9 +1935,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private void HisPerson_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var c = sender as ComboBox;
-            PrescriptionCount = MainWindow.CurrentPharmacy.MedicalPersonnelCollection
-                .SingleOrDefault(p => p.IcNumber.Equals((c.SelectedItem as MedicalPersonnel).IcNumber))
-                .PrescriptionCount;
+          ///  PrescriptionCount = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p => p.IdNumber.Equals((c.SelectedItem as MedicalPersonnel).IcNumber)).PrescriptionCount;
         }
 
         private void NotDeclareSubmit_OnClickSubmit_ButtonClick(object sender, RoutedEventArgs e)
@@ -2167,7 +2165,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             var isMedicalPerson = false;
             foreach (var m in MainWindow.CurrentPharmacy.MedicalPersonnelCollection)
             {
-                if (!m.Id.Equals(MainWindow.CurrentUser.Id)) continue;
+                ///if (!m.Id.Equals(MainWindow.CurrentUser.Id)) continue;
                 isMedicalPerson = true;
                 break;
             }

@@ -14,7 +14,7 @@ namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
-        public StoreOrder(StoreOrderCategory category, NewClass.Person.Employee ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null, string note = "")
+        public StoreOrder(StoreOrderCategory category, NewClass.Person.Employee.Employee ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null, string note = "")
         {
             Type = OrderType.UNPROCESSING;
             Application.Current.Dispatcher.Invoke((Action) (() =>

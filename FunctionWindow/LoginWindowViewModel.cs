@@ -11,6 +11,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.Database;
 using His_Pos.NewClass.Person;
+using His_Pos.NewClass.Person.Employee;
 
 namespace His_Pos.FunctionWindow
 {
@@ -43,8 +44,7 @@ namespace His_Pos.FunctionWindow
         #region ----- Define Actions -----
         private void LoginAction(object sender)
         {
-            Employee user = new Employee();
-            user.Login(Account, (sender as PasswordBox).Password);
+            Employee user = Employee.Login(Account, (sender as PasswordBox).Password);
             if (!string.IsNullOrEmpty(user.Id.ToString()))
             {
                 MainWindow mainWindow = new MainWindow(user);

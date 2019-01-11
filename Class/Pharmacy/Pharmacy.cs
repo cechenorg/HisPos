@@ -42,8 +42,8 @@ namespace His_Pos.Class.Pharmacy
         public Pharmacy(DeclareFileDdata d)
         {
             MedicalPersonnel = new MedicalPersonnel();
-            MedicalPersonnel = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
-                p.IcNumber.Equals(d.Dhead.D25));
+          ///  MedicalPersonnel = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p =>
+          ///      p.IdNumber.Equals(d.Dhead.D25));
         }
 
         private MedicalPersonnel _medicalPersonnel;
