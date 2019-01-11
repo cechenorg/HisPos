@@ -269,6 +269,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GeneralCustomControl\DateTextBox.xaml.cs">
+      <DependentUpon>DateTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescription.cs" />
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
@@ -276,8 +279,9 @@
     <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescribeHistory.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescriptionHistory.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
-    <Compile Include="NewClass\Person\Employee.cs" />
-    <Compile Include="NewClass\Person\Employees.cs" />
+    <Compile Include="NewClass\Person\Employee\Employee.cs" />
+    <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
+    <Compile Include="NewClass\Person\Employee\Employees.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
     <Compile Include="NewClass\Prescription\Position\Positions.cs" />
@@ -823,6 +827,10 @@
     <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ChromeTabViewModel\Win32.cs" />
+    <Page Include="GeneralCustomControl\DateTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

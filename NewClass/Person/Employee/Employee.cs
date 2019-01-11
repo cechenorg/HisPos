@@ -4,7 +4,7 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 
-namespace His_Pos.NewClass.Person
+namespace His_Pos.NewClass.Person.Employee
 {
     public class Employee:Person,INotifyPropertyChanged
     {

@@ -16,5 +16,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
         public string Name { get; }//院所名稱
         public string FullName { get; }
         public bool Common { get; set; }
+        public bool IsCooperative { get; set; }
     }
 }
