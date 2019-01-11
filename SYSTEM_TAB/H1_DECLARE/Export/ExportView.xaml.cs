@@ -289,7 +289,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
         private void CreateDeclareFileClick(object sender, RoutedEventArgs e)
         {
             var declareDb = new DeclareDb();
-            var declaredPharmacy = new Pharmacy();
+            var declaredPharmacy = new Class.Declare.Pharmacy();
             var tmpTdata = SelectedFile.FileContent.Tdata;
             declaredPharmacy.Ddata = SortDdata();
             ///declaredPharmacy.Ddata = declareDb.SortDdataByCaseId(declaredPharmacy);

@@ -1,20 +1,20 @@
-﻿using His_Pos.Class.Person;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using His_Pos.Interface;
+using System.Windows.Threading; 
 using His_Pos.Struct.Manufactory;
+using His_Pos.NewClass.Person;
+using His_Pos.Interface;
 
 namespace His_Pos.Class.StoreOrder
 {
     public class StoreOrder : INotifyPropertyChanged, ICloneable
     {
-        public StoreOrder(StoreOrderCategory category, User ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null, string note = "")
+        public StoreOrder(StoreOrderCategory category, NewClass.Person.Employee ordEmp, WareHouse wareHouse, Manufactory.Manufactory manufactory, ObservableCollection<AbstractClass.Product> products = null, string note = "")
         {
             Type = OrderType.UNPROCESSING;
             Application.Current.Dispatcher.Invoke((Action) (() =>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
@@ -11,6 +12,7 @@ namespace His_Pos.NewClass.Person.Employee
         public Employee(){}
         public Employee(DataRow r):base(r)
         {
+            Password = r[""]?.ToString();
             NickName = r[""]?.ToString();
             WorkPositionId = (int)r[""];
             StartDate = (DateTime?)r[""];
@@ -18,6 +20,17 @@ namespace His_Pos.NewClass.Person.Employee
             PurchaseLimit = (int)r[""];
             IsEnable = (bool)r[""];
         }
+        private string password;//密碼
+        public string Password
+        {
+            get => password;
+            set
+            {
+                password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+
         private string nickName;//暱稱
         public string NickName
         {
@@ -78,6 +91,7 @@ namespace His_Pos.NewClass.Person.Employee
                 OnPropertyChanged(nameof(IsEnable));
             }
         }
+        public int AuthorityValue { get; set; }
         #region Function
         public void Save()
         {
@@ -87,6 +101,14 @@ namespace His_Pos.NewClass.Person.Employee
         {
             
         }
+        public bool Login(string Account,string Password) {
+            return true;
+        }
+        public Collection<string> GetTabAuth() {
+            Collection<string> tabAuths = new Collection<string>();
+            return tabAuths;
+        }
+        
         #endregion
 
         #region PropertyChanged
