@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.NewClass.Person; 
 using His_Pos.FunctionWindow;
+using His_Pos.NewClass.Person.Employee;
 
 namespace His_Pos.SYSTEM_TAB.H4_BASIC_MANAGE.EmployeeManage
 {
