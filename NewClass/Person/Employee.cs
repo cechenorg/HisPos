@@ -12,13 +12,13 @@ namespace His_Pos.NewClass.Person
         public Employee(){}
         public Employee(DataRow r):base(r)
         {
-            Password = r[""]?.ToString();
-            NickName = r[""]?.ToString();
-            WorkPositionId = (int)r[""];
-            StartDate = (DateTime?)r[""];
-            LeaveDate = (DateTime?)r[""];
-            PurchaseLimit = (int)r[""];
-            IsEnable = (bool)r[""];
+            Password = r["Aut_Password"]?.ToString();
+            NickName = r["Emp_NickName"]?.ToString();
+            WorkPositionId = (int)r["Emp_WorkPositionID"];
+            StartDate = (DateTime?)r["Emp_StartDate"];
+            LeaveDate = string.IsNullOrEmpty(r["Emp_LeaveDate"].ToString()) ? null :(DateTime?)r["Emp_LeaveDate"];
+            PurchaseLimit = Convert.ToInt32(r["Emp_PurchaseLimit"]);
+            IsEnable = (bool)r["Emp_IsEnable"];
         }
         private string password;//密碼
         public string Password
@@ -101,8 +101,9 @@ namespace His_Pos.NewClass.Person
         {
             
         }
-        public bool Login(string Account,string Password) {
-            return true;
+        public static Employee Login(string Account,string Password) {
+            DataTable table = EmployeeDb.EmployeeLogin(Account, Password);
+            return table.Rows.Count == 0 ? null : new Employee(table.Rows[0]);
         }
         public Collection<string> GetTabAuth() {
             Collection<string> tabAuths = new Collection<string>();

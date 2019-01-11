@@ -54,11 +54,11 @@ namespace His_Pos.FunctionWindow
                 Password.Focus();
         }
         private void Login() {
-            Employee user = new Employee();
-            user.Login(UserName.Text, Password.Password);
-            if (!string.IsNullOrEmpty(user.Id.ToString()))
+            Employee user = Employee.Login(UserName.Text, Password.Password);
+            if (user != null)
             {
-                MainWindow mainWindow = new MainWindow(user); 
+                LoadingWindow loadingWindow = new LoadingWindow();
+                loadingWindow.GetNecessaryData(user);
                 Close();
             }
             else

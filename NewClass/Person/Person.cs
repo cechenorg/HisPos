@@ -16,17 +16,17 @@ namespace His_Pos.NewClass.Person
 
         public Person(DataRow r)
         {
-            Id = (int)r[""];
-            Name = r[""]?.ToString();
-            IdNumber = r[""]?.ToString();
-            CheckGender(r);
-            Birthday = (DateTime?)r[""];
-            Tel = r[""]?.ToString();
-            CellPhone = r[""]?.ToString();
-            Address = r[""]?.ToString();
-            Email = r[""]?.ToString();
-            Line = r[""]?.ToString();
-            Note = r[""]?.ToString();
+            Id = (int)r["Person_Id"];
+            Name = r["Person_Name"]?.ToString();
+            IDNumber = r["Person_IDNumber"]?.ToString();
+            Gender = r["Person_Gender"]?.ToString();
+            Birthday = (DateTime?)r["Person_BirthDay"];
+            Tel = r["Person_Telephone"]?.ToString();
+            CellPhone = r["Person_Cellphone"]?.ToString();
+            Address = r["Person_Address"]?.ToString();
+            Email = r["Person_Email"]?.ToString();
+            Line = r["Person_LINE"]?.ToString();
+            Note = r["Person_Note"]?.ToString();
         }
 
         private int id;
@@ -60,13 +60,13 @@ namespace His_Pos.NewClass.Person
             }
         }
         private string idNumber;//身分證字號
-        public string IdNumber
+        public string IDNumber
         {
             get => idNumber;
             set
             {
                 idNumber = value;
-                OnPropertyChanged(nameof(IdNumber));
+                OnPropertyChanged(nameof(IDNumber));
             }
         }
         private DateTime? birthday;//生日
@@ -139,14 +139,7 @@ namespace His_Pos.NewClass.Person
                 OnPropertyChanged(nameof(Note));
             }
         }
-        private void CheckGender(DataRow r)
-        {
-            if (!string.IsNullOrEmpty(r[""].ToString()))
-                Gender = r[""].ToString();
-            if (string.IsNullOrEmpty(IdNumber))
-                Gender = Properties.Resources.Male;
-            Gender = IdNumber[1].Equals('1') ? Properties.Resources.Male : Properties.Resources.Female;
-        }
+        
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -24,6 +24,12 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         public string VpnIp { get; set; }
         public bool NewReader { get; set; }
         public MedicalPersonnel medicalPersonnel { get; set; }
-        public Collection<MedicalPersonnel> MedicalPersonnelCollection { get; set; } 
+        public Collection<MedicalPersonnel> MedicalPersonnelCollection { get; set; }
+
+        #region Function
+        public Pharmacy GetCurrentPharmacy() {
+
+        }
+        #endregion
     }
 }

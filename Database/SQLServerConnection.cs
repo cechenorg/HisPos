@@ -37,7 +37,8 @@ namespace His_Pos.Database
         {
             try
             {
-                connection.Open();
+                if(connection.State == ConnectionState.Closed)
+                    connection.Open();
             }
             catch (Exception e)
             {
@@ -47,6 +48,7 @@ namespace His_Pos.Database
 
         public void CloseConnection()
         {
+            if( connection.State != ConnectionState.Executing && connection.State != ConnectionState.Fetching && connection.State == ConnectionState.Open)
             connection.Close();
         }
 

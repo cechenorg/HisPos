@@ -277,6 +277,7 @@
     <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescriptionHistory.cs" />
     <Compile Include="NewClass\Person\Customer\Customers.cs" />
     <Compile Include="NewClass\Person\Employee.cs" />
+    <Compile Include="NewClass\Person\EmployeeDb.cs" />
     <Compile Include="NewClass\Person\Employees.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
@@ -294,6 +295,7 @@
     <Compile Include="NewClass\Prescription\Treatment\Institution\InstitutionDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\Institutions.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Institution\Pharmacy.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\Institution\PharmacyDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\MedicalPersonnel.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategories.cs" />
     <Compile Include="NewClass\Prescription\Treatment\PaymentCategory\PaymentCategory.cs" />
