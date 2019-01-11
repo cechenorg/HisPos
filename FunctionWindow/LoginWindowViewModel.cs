@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.Database;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
@@ -48,6 +49,10 @@ namespace His_Pos.FunctionWindow
             {
                 MainWindow mainWindow = new MainWindow(user);
                 mainWindow.Show();
+
+                Messenger.Default.Send<NotificationMessage>(
+                    new NotificationMessage(this, "CloseLogin")
+                );
             }
             else
             {
