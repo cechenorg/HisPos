@@ -71,9 +71,10 @@ namespace His_Pos
         public MainWindow(Employee user)
         {
             FeatureFactory();
-            InitializeComponent(); 
+            InitializeComponent();
             WindowState = WindowState.Maximized;
             CurrentUser = user;
+            CurrentPharmacy = Pharmacy.GetCurrentPharmacy();
             Instance = this;
             InitializeMenu();
             InitialUserBlock();
