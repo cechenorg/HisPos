@@ -54,7 +54,7 @@
                 <TextBox Width="120" Margin="5,10,0,10" materialDesign:HintAssist.Hint="聯絡人電話" FontFamily="Segoe UI Semi" FontSize="18"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="210,0,0,0" Visibility="{Binding DeclareDataCount, Converter={StaticResource HasDeclareDataToVisConverter}}" MouseLeftButtonDown="ShowDeclareDataOverview">
-                <Image Width="35" Source="../../../Images/User_48px.png"/>
+                <Image Width="35" Source="\Images\User_48px.png"/>
                 <Label Content="{Binding DeclareDataCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>

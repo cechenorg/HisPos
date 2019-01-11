@@ -218,7 +218,8 @@ namespace His_Pos.HisApi
                 }
             });
             MainWindow.Instance.SetCardReaderStatus("開啟讀卡機連接...");
-            MainWindow.Instance.HisApiErrorCode = csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            ///MainWindow.Instance.HisApiErrorCode = csOpenCom(MainWindow.CurrentPharmacy.ReaderCom);
+            MainWindow.Instance.HisApiErrorCode = csOpenCom(0);
             var res = MainWindow.Instance.HisApiErrorCode;
             SetStatus(res == 0,1);
             MainWindow.Instance.SetCardReaderStatus(res == 0 ? "讀卡機連接開啟成功" : "讀卡機連接開啟失敗");
