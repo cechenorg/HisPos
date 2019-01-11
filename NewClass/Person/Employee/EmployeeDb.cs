@@ -22,9 +22,7 @@ namespace His_Pos.NewClass.Person
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Account", account));
             parameterList.Add(new SqlParameter("Password", password));
-            MainWindow.ServerConnection.OpenConnection();
-            var table = MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[EmployeeLogin]",parameterList); 
-            MainWindow.ServerConnection.CloseConnection();
+            var table = MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[EmployeeLogin]",parameterList);  
             return table;
         } 
     }
