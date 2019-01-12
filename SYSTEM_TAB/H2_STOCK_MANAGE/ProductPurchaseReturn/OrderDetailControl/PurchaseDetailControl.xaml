@@ -6,25 +6,26 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:purchaseDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl"
+             xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
-        <local:DetailControlViewModel/>
+        <productPurchaseReturn:ProductPurchaseReturnViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <DataTemplate x:Key="PurchaseNormalUnProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+        <DataTemplate x:Key="PurchaseNormalUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <purchaseDataGridControl:PurchaseNormalUnProcessingControl/>
         </DataTemplate>
-        <DataTemplate x:Key="PurchaseSingdeUnProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+        <DataTemplate x:Key="PurchaseSingdeUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <purchaseDataGridControl:PurchaseSingdeUnProcessingControl/>
         </DataTemplate>
-        <DataTemplate x:Key="PurchaseWaitingControl" DataType="{x:Type local:DetailControlViewModel}">
+        <DataTemplate x:Key="PurchaseWaitingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <purchaseDataGridControl:PurchaseWaitingControl/>
         </DataTemplate>
-        <DataTemplate x:Key="PurchaseNormalProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+        <DataTemplate x:Key="PurchaseNormalProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <purchaseDataGridControl:PurchaseNormalProcessingControl/>
         </DataTemplate>
-        <DataTemplate x:Key="PurchaseSingdeProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+        <DataTemplate x:Key="PurchaseSingdeProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <purchaseDataGridControl:PurchaseSingdeProcessingControl/>
         </DataTemplate>
     </UserControl.Resources>

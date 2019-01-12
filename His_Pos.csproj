@@ -567,7 +567,6 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseNormalProcessingControl.xaml.cs">
       <DependentUpon>PurchaseNormalProcessingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseDataGridControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseSingdeProcessingControl.xaml.cs">
       <DependentUpon>PurchaseSingdeProcessingControl.xaml</DependentUpon>
     </Compile>
@@ -583,8 +582,6 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDetailControl.xaml.cs">
       <DependentUpon>PurchaseDetailControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\DetailControlViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnDataGridControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnProcessingControl.xaml.cs">
       <DependentUpon>ReturnProcessingControl.xaml</DependentUpon>
     </Compile>
