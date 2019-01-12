@@ -24,5 +24,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             InitializeComponent();
             this.DataContext = new CooperativeSelectionViewModel();
         }
+
+
     }
 }

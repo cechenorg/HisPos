@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Employee;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
-    public class MedicalPersonnel:INotifyPropertyChanged
+    public class MedicalPersonnel : ObservableObject
     {
         public MedicalPersonnel(){}
 
@@ -15,16 +16,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             Name = e.Name;
             IdNumber = e.IDNumber;
         }
-        public string Name { get; }
-        public string IdNumber { get; }
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
+        public string Name { get; set; }
+        public string IdNumber { get; set; }
     }
 }

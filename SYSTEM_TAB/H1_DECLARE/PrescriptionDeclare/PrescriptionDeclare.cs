@@ -12,10 +12,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
     {
         public PrescriptionDeclare()
         {
-            Messenger.Default.Register<Prescription>(this, "SelectedPrescription", prescription =>
-            {
-                CurrentPrescription = prescription;
-            });
         }
 
         public override TabBase getTab()
@@ -43,18 +39,19 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             get
             {
                 if (showCooperativeSelectionWindow == null)
-                    showCooperativeSelectionWindow = new RelayCommand(() => ExcuteShowSenderWindow());
+                    showCooperativeSelectionWindow = new RelayCommand(() => ExcuteShowCooperativeWindow());
                 return showCooperativeSelectionWindow;
 
             }
             set { showCooperativeSelectionWindow = value; }
         }
 
-        private void ExcuteShowSenderWindow()
+        private void ExcuteShowCooperativeWindow()
         {
-            CooperativeSelectionWindow sender = new CooperativeSelectionWindow();
-            sender.ShowDialog();
-
+            var cooperativeSelectionWindow = new CooperativeSelectionWindow();
+            cooperativeSelectionWindow.ShowDialog();
+            if(((CooperativeSelectionViewModel)cooperativeSelectionWindow.DataContext).SelectedPrescription != null)
+                CurrentPrescription = ((CooperativeSelectionViewModel) cooperativeSelectionWindow.DataContext).SelectedPrescription;
         }
         #endregion 
     }

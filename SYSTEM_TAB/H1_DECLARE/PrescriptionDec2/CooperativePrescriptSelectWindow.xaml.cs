@@ -28,10 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private ObservableCollection<CooperativeClinic> cooperativeCollection;
         public ObservableCollection<CooperativeClinic> CooperativeCollection
         {
-            get
-            {
-                return cooperativeCollection;
-            }
+            get => cooperativeCollection;
             set
             {
                 cooperativeCollection = value;
@@ -41,10 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private ObservableCollection<CustomerDeclare> customerDeclaresCollection = new ObservableCollection<CustomerDeclare>();
         public ObservableCollection<CustomerDeclare> CustomerDeclaresCollection
         {
-            get
-            {
-                return customerDeclaresCollection;
-            }
+            get => customerDeclaresCollection;
             set
             {
                 customerDeclaresCollection = value;
@@ -54,10 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private ObservableCollection<Product> medicineInfo;
         public ObservableCollection<Product> MedicineInfo
         {
-            get
-            {
-                return medicineInfo;
-            }
+            get => medicineInfo;
             set
             {
                 medicineInfo = value;

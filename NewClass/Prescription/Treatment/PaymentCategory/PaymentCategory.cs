@@ -1,8 +1,9 @@
 ﻿using System.Data;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Prescription.Treatment.PaymentCategory
 {
-    public class PaymentCategory
+    public class PaymentCategory : ObservableObject
     {
         public PaymentCategory() { }
 

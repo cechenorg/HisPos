@@ -55,7 +55,7 @@ namespace His_Pos.Class.Declare
             P7Total = otc.Amount;
             P8Price = otc.Price;
             P3Dosage = otc.Dosage;
-            P4Usage = otc.Usage?.Id;
+            P4Usage = otc.Usage?.Name;
             P5Position = string.IsNullOrEmpty(otc.Position)? otc.Position:string.Empty;
             P11Days = string.IsNullOrEmpty(otc.Days) ? 0 : int.Parse(otc.Days);
             P9Point = 0;
@@ -174,7 +174,7 @@ namespace His_Pos.Class.Declare
             P7Total = medicine.Amount;//p7 總量
             P8Price = paySelf ? medicine.Price : medicine.HcPrice;//p8 單價
             P3Dosage = medicine.MedicalCategory.Dosage;//p3
-            P4Usage = medicine.Usage.Id;//p4
+            P4Usage = medicine.Usage.Name;//p4
             P5Position = medicine.Position;//p5
             P11Days = string.IsNullOrEmpty(medicine.Days) ? 0 : int.Parse(medicine.Days); //p11
         }

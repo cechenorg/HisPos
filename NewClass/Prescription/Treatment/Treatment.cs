@@ -8,6 +8,19 @@ namespace His_Pos.NewClass.Prescription.Treatment
 {
     public class Treatment : INotifyPropertyChanged
     {
+        public Treatment()
+        {
+            Institution = new Institution.Institution();
+            Division = new Division.Division();
+            Pharmacist = new MedicalPersonnel();
+            MainDisease = new DiseaseCode.DiseaseCode();
+            SubDisease = new DiseaseCode.DiseaseCode();
+            AdjustCase = new AdjustCase.AdjustCase();
+            PrescriptionCase = new PrescriptionCase.PrescriptionCase();
+            PaymentCategory = new PaymentCategory.PaymentCategory();
+            SpecialTreat = new SpecialTreat.SpecialTreat();
+            Copayment = new Copayment.Copayment();
+        }
         public Treatment(DataRow r)
         {
 

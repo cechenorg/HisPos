@@ -6,15 +6,21 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription
 {
-    public class Prescription : INotifyPropertyChanged
+    public class Prescription : ObservableObject
     {
-        public Prescription() { }
+        public Prescription()
+        {
+            Patient = new Customer();
+            Card = new IcCard();
+            Treatment = new Treatment.Treatment();
+        }
 
         public Prescription(DataRow r)
         {
@@ -28,7 +34,6 @@ namespace His_Pos.NewClass.Prescription
             set
             {
                 patient = value;
-                OnPropertyChanged(nameof(Patient));
             }
         }
         public IcCard Card { get; set; }
@@ -39,7 +44,6 @@ namespace His_Pos.NewClass.Prescription
             set
             {
                 treatment = value;
-                OnPropertyChanged(nameof(Treatment));
             }
         }
         public PrescriptionSource Source { get; set; }
@@ -48,15 +52,6 @@ namespace His_Pos.NewClass.Prescription
         public string Remark { get; }//傳送藥健康單號
         public bool IsSendToSingde { get; set; }//是否傳送藥健康
         public bool IsAdjust { get; set; }//是否調劑.扣庫
-
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
+        public bool IsRead { get; set; }//是否已讀
     }
 }

@@ -10,6 +10,11 @@ namespace His_Pos.NewClass.Product
 {
     public class Product : ObservableObject
     {
+        public Product()
+        {
+
+        }
+
         public Product(DataRow dataRow)
         {
 

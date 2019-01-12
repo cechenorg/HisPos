@@ -1,8 +1,9 @@
 ﻿using System.Data;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Copayment
 {
-    public class Copayment
+    public class Copayment : ObservableObject
     {
         public Copayment() { }
         public Copayment(DataRow r)

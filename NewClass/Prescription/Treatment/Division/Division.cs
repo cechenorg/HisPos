@@ -1,8 +1,9 @@
 ﻿using System.Data;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Division
 {
-    public class Division
+    public class Division : ObservableObject
     {
         public Division() {}
 
@@ -12,8 +13,8 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
             Name = r[""].ToString();
             FullName = r[""].ToString();
         }
-        public string Id { get; }
-        public string Name { get; }
-        public string FullName { get; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string FullName { get; set; }
     }
 }

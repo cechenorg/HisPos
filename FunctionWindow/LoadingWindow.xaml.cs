@@ -30,6 +30,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using His_Pos.Struct.Product;

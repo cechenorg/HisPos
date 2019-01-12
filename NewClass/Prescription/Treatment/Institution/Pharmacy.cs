@@ -5,9 +5,11 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution {
-    public class Pharmacy {
+    public class Pharmacy : ObservableObject
+    {
         public Pharmacy() {
         }
 

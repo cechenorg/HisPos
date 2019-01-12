@@ -1,8 +1,9 @@
 ﻿using System.Data;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Prescription.Treatment.PrescriptionCase
 {
-    public class PrescriptionCase
+    public class PrescriptionCase : ObservableObject
     {
         public PrescriptionCase() { }
         public PrescriptionCase(DataRow r)
