@@ -6,7 +6,10 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:DetailControlViewModel/>
+    </UserControl.DataContext>
     <Grid>
-            
+            <Label Content="HIIIII"></Label>
     </Grid>
 </UserControl>

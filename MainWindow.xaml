@@ -32,6 +32,7 @@
     xmlns:cooperativeAdjustReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
     xmlns:CooperativeEntry="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
     xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
+    xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -56,8 +57,8 @@
         <DataTemplate DataType="{x:Type inventoryManagement:InventoryManagement}">
             <inventoryManagement:InventoryManagementView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type productPurchase:ProductPurchase}">
-            <productPurchase:ProductPurchaseView />
+        <DataTemplate DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <productPurchaseReturn:ProductPurchaseReturnView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type productPurchaseRecord:ProductPurchaseRecord}">
             <productPurchaseRecord:ProductPurchaseRecordView />
