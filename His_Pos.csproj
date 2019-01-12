@@ -561,6 +561,9 @@
       <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\NoDataDetailControl.xaml.cs">
+      <DependentUpon>NoDataDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseNormalProcessingControl.xaml.cs">
       <DependentUpon>PurchaseNormalProcessingControl.xaml</DependentUpon>
     </Compile>
@@ -994,6 +997,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\NoDataDetailControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

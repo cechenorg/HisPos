@@ -17,6 +17,9 @@
         <DataTemplate x:Key="ReturnOrderDetail" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
             <orderDetailControl:ReturnDetailControl/>
         </DataTemplate>
+        <DataTemplate x:Key="NoDataDetailControl" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
+            <orderDetailControl:NoDataDetailControl/>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
         <Grid.ColumnDefinitions>
@@ -97,10 +100,13 @@
         <ContentControl Grid.Column="1" Margin="0,10,10,10">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderDetail}" />
+                    <Setter Property="ContentTemplate" Value="{StaticResource NoDataDetailControl}" />
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="RETURN">
                             <Setter Property="ContentTemplate" Value="{StaticResource ReturnOrderDetail}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderType}" Value="PURCHASE">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderDetail}" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>

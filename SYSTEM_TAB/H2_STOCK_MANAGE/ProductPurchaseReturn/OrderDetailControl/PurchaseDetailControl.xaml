@@ -4,12 +4,72 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:purchaseDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
         <local:DetailControlViewModel/>
     </UserControl.DataContext>
+    <UserControl.Resources>
+        <DataTemplate x:Key="PurchaseNormalProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+            <purchaseDataGridControl:PurchaseNormalProcessingControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="PurchaseSingdeProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+            <purchaseDataGridControl:PurchaseSingdeProcessingControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="PurchaseUnProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+            <purchaseDataGridControl:PurchaseUnProcessingControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="PurchaseWaitingControl" DataType="{x:Type local:DetailControlViewModel}">
+            <purchaseDataGridControl:PurchaseWaitingControl/>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
-            <Label Content="HIIIII"></Label>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
+            <Label Name="ID" Content="{Binding Id}" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <Label Content="庫別 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontFamily="Segoe UI Semibold" Margin="20,0,0,0" Visibility="Collapsed"/>
+            <Label Content="{Binding Path=Warehouse.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="130" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi" Visibility="Collapsed"/>
+            <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding Path=Manufactory.Name}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+            <Label Content="{Binding Path=Manufactory.Telphone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
+            <TextBlock Text="{Binding Path=Category.CategoryName}" Foreground="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold" FontSize="22" VerticalAlignment="Center" Margin="25,0,0,0"/>
+            <Label Content="採購人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <Label Name="PurchaseEmp" Content="{Binding OrdEmp}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Margin="210,0,0,0" Visibility="{Binding DeclareDataCount, Converter={StaticResource HasDeclareDataToVisConverter}}">
+                <Image Width="35" Source="\Images\User_48px.png"/>
+                <Label Content="{Binding DeclareDataCount}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semibold" FontSize="20" VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
+            <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBox Width="980" Text="{Binding Note}" Margin="10,0,0,5" FontFamily="Segoe UI Semi" FontSize="18"/>
+        </StackPanel>
+        <ContentControl Grid.Row="3">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderStatus}" Value="WAITING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseWaitingControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderStatus}" Value="NORMAL_PROCESSING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderStatus}" Value="SINGDE_PROCESSING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeProcessingControl}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
     </Grid>
 </UserControl>

@@ -13,7 +13,7 @@ namespace His_Pos.NewClass.StoreOrder
     {
         public StoreOrder()
         {
-            OrderType = OrderTypeEnum.PURCHASE;
+            OrderType = OrderTypeEnum.NODATA;
         }
         public StoreOrder(DataRow row)
         {

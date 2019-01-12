@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <local:PurchaseDataGridControlViewModel/>
+    </UserControl.DataContext>
     <Grid>
             
     </Grid>
