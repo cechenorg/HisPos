@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl
 {
-    class PurchaseUnProcessingControlViewModel
+    class PurchaseDataGridControlViewModel
     {
     }
 }
