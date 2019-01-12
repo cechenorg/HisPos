@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
              xmlns:orderDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="839" d:DesignWidth="1365">
+             mc:Ignorable="d">
     <UserControl.DataContext>
         <local:ProductPurchaseReturnViewModel/>
     </UserControl.DataContext>
@@ -19,7 +18,7 @@
             <orderDetailControl:ReturnDetailControl/>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid Width="1365" Height="839">
+    <Grid Width="1365" Height="870">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="280"/>
             <ColumnDefinition/>
@@ -95,7 +94,7 @@
                 <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0"/>
             </StackPanel>
         </Grid>
-        <ContentControl Grid.Column="1" Margin="0,10,10,10"  Content="{Binding}">
+        <ContentControl Grid.Column="1" Margin="0,10,10,10">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
                     <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderDetail}" />
