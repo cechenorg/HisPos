@@ -12,17 +12,20 @@
         <local:DetailControlViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <DataTemplate x:Key="PurchaseNormalUnProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+            <purchaseDataGridControl:PurchaseNormalUnProcessingControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="PurchaseSingdeUnProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
+            <purchaseDataGridControl:PurchaseSingdeUnProcessingControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="PurchaseWaitingControl" DataType="{x:Type local:DetailControlViewModel}">
+            <purchaseDataGridControl:PurchaseWaitingControl/>
+        </DataTemplate>
         <DataTemplate x:Key="PurchaseNormalProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
             <purchaseDataGridControl:PurchaseNormalProcessingControl/>
         </DataTemplate>
         <DataTemplate x:Key="PurchaseSingdeProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
             <purchaseDataGridControl:PurchaseSingdeProcessingControl/>
-        </DataTemplate>
-        <DataTemplate x:Key="PurchaseUnProcessingControl" DataType="{x:Type local:DetailControlViewModel}">
-            <purchaseDataGridControl:PurchaseUnProcessingControl/>
-        </DataTemplate>
-        <DataTemplate x:Key="PurchaseWaitingControl" DataType="{x:Type local:DetailControlViewModel}">
-            <purchaseDataGridControl:PurchaseWaitingControl/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
@@ -56,8 +59,11 @@
         <ContentControl Grid.Row="3">
             <ContentControl.Style>
                 <Style TargetType="{x:Type ContentControl}">
-                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalProcessingControl}" />
+                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseNormalUnProcessingControl}" />
                     <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderStatus}" Value="SINGDE_UNPROCESSING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource PurchaseSingdeUnProcessingControl}" />
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderStatus}" Value="WAITING">
                             <Setter Property="ContentTemplate" Value="{StaticResource PurchaseWaitingControl}" />
                         </DataTrigger>
