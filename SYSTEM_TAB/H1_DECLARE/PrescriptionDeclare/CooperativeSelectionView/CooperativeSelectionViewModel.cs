@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
+using His_Pos.Service;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionView
 {
@@ -18,7 +15,8 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
     {
         #region Property
         private CollectionViewSource cooPreCollectionViewSource;
-        public CollectionViewSource CooPreCollectionViewSource
+
+        private CollectionViewSource CooPreCollectionViewSource
         {
             get => cooPreCollectionViewSource;
             set { cooPreCollectionViewSource = value; RaisePropertyChanged(() => CooPreCollectionViewSource); }
@@ -32,7 +30,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         }
 
         private Prescriptions cooperativePrescriptions;
-        public Prescriptions CooperativePrescriptions
+        private Prescriptions CooperativePrescriptions
         {
             get => cooperativePrescriptions;
             set { cooperativePrescriptions = value; RaisePropertyChanged(() => CooperativePrescriptions); }
@@ -42,7 +40,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         public CooperativeViewHistories CustomerHistories
         {
             get => customerHistories;
-            set { customerHistories = value; RaisePropertyChanged(() => CustomerHistories); }
+            private set { customerHistories = value; RaisePropertyChanged(() => CustomerHistories); }
         }
 
         private CooperativeViewHistory selectedHistory;
@@ -80,84 +78,55 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             set { idNumber = value; RaisePropertyChanged(() => IDNumber); }
         }
 
-        private bool isRead;
-        public bool IsRead
+        private bool? isRead;
+        public bool? IsRead
         {
             get => isRead;
             set { isRead = value; RaisePropertyChanged(() => IsRead); }
         }
 
-        private bool isNotRead;
-        public bool IsNotRead
+        private bool? isNotRead;
+        public bool? IsNotRead
         {
             get => isNotRead;
             set { isNotRead = value; RaisePropertyChanged(() => IsNotRead); }
         }
         #endregion
+
         #region Command
-        private RelayCommand startDateChangedCommand;
-        public RelayCommand StartDateChangedCommand
+        private void ExecuteWindowLoaded()
         {
-            get =>
-                startDateChangedCommand ??
-                (startDateChangedCommand = new RelayCommand(ExcuteStartDateChangedCommand));
-            set => startDateChangedCommand = value;
+            IsNotRead = true;
+            IsRead = false;
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today;
         }
 
-        private RelayCommand endDateChagnedCommand;
-        public RelayCommand EndDateChangedCommand
+        private RelayCommand startDateChanged;
+        public RelayCommand StartDateChanged
         {
             get =>
-                endDateChagnedCommand ??
-                (endDateChagnedCommand = new RelayCommand(ExcuteEndDateChangedCommand));
-            set => endDateChagnedCommand = value;
+                startDateChanged ??
+                (startDateChanged = new RelayCommand(ExecuteStartDateChanged));
+            set => startDateChanged = value;
         }
-
-        private RelayCommand idNumberChangedCommand;
-        public RelayCommand IDNumberChangedCommand
+        private void ExecuteStartDateChanged()
         {
-            get =>
-                idNumberChangedCommand ??
-                (idNumberChangedCommand = new RelayCommand(ExcuteIDNumberChangedCommand));
-            set => idNumberChangedCommand = value;
-        }
-
-        private RelayCommand isReadCheckedCommand;
-        public RelayCommand IsReadCheckedCommand
-        {
-            get =>
-                isReadCheckedCommand ??
-                (isReadCheckedCommand = new RelayCommand(ExcuteIsReadChekedCommand));
-            set => isReadCheckedCommand = value;
-        }
-
-        private RelayCommand<Window> prescriptionSelectedCommand;
-        public RelayCommand<Window> PrescriptionSelectedCommand
-        {
-            get =>
-                prescriptionSelectedCommand ??
-                (prescriptionSelectedCommand = new RelayCommand<Window>(ExcutePrescriptionSelectedCommand));
-            set => prescriptionSelectedCommand = value;
-        }
-
-        private RelayCommand selectionChangedCommand;
-        public RelayCommand SelectionChangedCommand
-        {
-            get =>
-                selectionChangedCommand ??
-                (selectionChangedCommand = new RelayCommand(ExcuteSelectionChangedCommand));
-            set => selectionChangedCommand = value;
-        }
-
-        private void ExcuteStartDateChangedCommand()
-        {
-            if(StartDate is null)
+            if (StartDate is null)
                 CooPreCollectionViewSource.Filter -= FilterByStartDate;
             else
                 CooPreCollectionViewSource.Filter += FilterByStartDate;
         }
 
-        private void ExcuteEndDateChangedCommand()
+        private RelayCommand endDateChagned;
+        public RelayCommand EndDateChanged
+        {
+            get =>
+                endDateChagned ??
+                (endDateChagned = new RelayCommand(ExecuteEndDateChanged));
+            set => endDateChagned = value;
+        }
+        private void ExecuteEndDateChanged()
         {
             if (EndDate is null)
                 CooPreCollectionViewSource.Filter -= FilterByEndDate;
@@ -165,7 +134,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
                 CooPreCollectionViewSource.Filter += FilterByEndDate;
         }
 
-        private void ExcuteIDNumberChangedCommand()
+        private RelayCommand idNumberChanged;
+        public RelayCommand IDNumberChanged
+        {
+            get =>
+                idNumberChanged ??
+                (idNumberChanged = new RelayCommand(ExecuteIDNumberChanged));
+            set => idNumberChanged = value;
+        }
+        private void ExecuteIDNumberChanged()
         {
             if (string.IsNullOrEmpty(IDNumber))
                 CooPreCollectionViewSource.Filter -= FilterByIDNumber;
@@ -173,50 +150,97 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
                 CooPreCollectionViewSource.Filter += FilterByIDNumber;
         }
 
-        private void ExcuteIsReadChekedCommand()
+        private RelayCommand isReadChecked;
+        public RelayCommand IsReadChecked
+        {
+            get =>
+                isReadChecked ??
+                (isReadChecked = new RelayCommand(ExecuteIsReadChecked));
+            set => isReadChecked = value;
+        }
+        private void ExecuteIsReadChecked()
         {
             CooPreCollectionViewSource.Filter += FilterByIsRead;
         }
-        private void ExcuteSelectionChangedCommand()
+
+        private RelayCommand selectionChanged;
+        public RelayCommand SelectionChanged
         {
-            if(SelectedPrescription != null)
-            CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.Id);
+            get =>
+                selectionChanged ??
+                (selectionChanged = new RelayCommand(ExecuteSelectionChanged));
+            set => selectionChanged = value;
         }
-        private void ExcutePrescriptionSelectedCommand(Window window)
+        private void ExecuteSelectionChanged()
+        {
+            if (SelectedPrescription != null)
+                CustomerHistories = new CooperativeViewHistories(SelectedPrescription.Patient.Id);
+        }
+
+        private RelayCommand printMedBag;
+        public RelayCommand PrintMedBag
+        {
+            get =>
+                printMedBag ??
+                (printMedBag = new RelayCommand(ExecutePrintMedBag));
+            set => printMedBag = value;
+        }
+        private void ExecutePrintMedBag()
+        {
+            SelectedPrescription.PrintMedBag();
+        }
+
+        private RelayCommand<Window> prescriptionSelected;
+        public RelayCommand<Window> PrescriptionSelected
+        {
+            get =>
+                prescriptionSelected ??
+                (prescriptionSelected = new RelayCommand<Window>(ExecutePrescriptionSelected));
+            set => prescriptionSelected = value;
+        }
+        private void ExecutePrescriptionSelected(Window window)
         {
             window?.Close();
         }
-
-        
         #endregion
+
         public CooperativeSelectionViewModel()
         {
-            PrescriptionSelectedCommand = new RelayCommand<Window>(ExcutePrescriptionSelectedCommand);
+            PrescriptionSelected = new RelayCommand<Window>(ExecutePrescriptionSelected);
             CooperativePrescriptions = new Prescriptions();
             CooperativePrescriptions.GetCooperativePrescriptions();
             CooPreCollectionViewSource = new CollectionViewSource { Source = CooperativePrescriptions };
             CooPreCollectionView = CooPreCollectionViewSource.View;
             IsNotRead = true;
             IsRead = false;
+            StartDate = DateTime.Today;
+            EndDate = DateTime.Today;
+            CooPreCollectionViewSource.Filter += FilterByStartDate;
+            CooPreCollectionViewSource.Filter += FilterByEndDate;
+            CooPreCollectionViewSource.Filter += FilterByIsRead;
         }
 
+        #region Filter
         private void FilterByStartDate(object sender, FilterEventArgs e)
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) > 0)
+            else if (StartDate is null)
+                e.Accepted = true;
+            else if (DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) >= 0)
                 e.Accepted = true;
             else
             {
                 e.Accepted = false;
             }
         }
-
         private void FilterByEndDate(object sender, FilterEventArgs e)
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (DateTime.Compare(src.Treatment.TreatDate, (DateTime)EndDate) < 0)
+            else if (EndDate is null)
+                e.Accepted = true;
+            else if (DateTime.Compare(src.Treatment.TreatDate, (DateTime)EndDate) <= 0)
                 e.Accepted = true;
             else
             {
@@ -238,18 +262,30 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (src.IsRead && IsRead)
+            else if (IsRead != null && (src.IsRead && (bool)IsRead))
             {
-                e.Accepted = true;
+                if(StartDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) < 0)
+                    e.Accepted = false;
+                else if (EndDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)EndDate) > 0)
+                    e.Accepted = false;
+                else
+                    e.Accepted = true;
             }
-            else if (!src.IsRead && IsNotRead)
+            else if (IsNotRead != null && (!src.IsRead && (bool)IsNotRead))
             {
-                e.Accepted = true;
+                if (StartDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) < 0)
+                    e.Accepted = false;
+                else if (EndDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)EndDate) > 0)
+                    e.Accepted = false;
+                else
+                    e.Accepted = true;
             }
             else
             {
                 e.Accepted = false;
             }
         }
+        #endregion
+
     }
 }
