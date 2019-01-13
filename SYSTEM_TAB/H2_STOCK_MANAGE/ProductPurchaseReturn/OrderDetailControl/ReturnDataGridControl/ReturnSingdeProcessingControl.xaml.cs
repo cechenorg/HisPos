@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl
 {
     /// <summary>
-    /// ReturnProcessingControl.xaml 的互動邏輯
+    /// ReturnSingdeProcessingControl.xaml 的互動邏輯
     /// </summary>
-    public partial class ReturnProcessingControl : UserControl
+    public partial class ReturnSingdeProcessingControl : UserControl
     {
-        public ReturnProcessingControl()
+        public ReturnSingdeProcessingControl()
         {
             InitializeComponent();
         }
