@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
+using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using JetBrains.Annotations;
 
@@ -14,7 +15,8 @@ namespace His_Pos.NewClass.Person.Customer
         public Customer(DataRow r) : base(r)
         { 
             ContactNote = r["Cus_UrgentNote"]?.ToString();
-        } 
+        }
+         
         private string contactNote;//連絡備註
         public string ContactNote
         {

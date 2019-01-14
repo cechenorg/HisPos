@@ -12,7 +12,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
     {
         public static DataTable GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[AdjustCase]");
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[AdjustCase]");
         }
     }
 }

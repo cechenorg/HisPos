@@ -12,7 +12,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Copayment
     {
         public static DataTable GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[Copayment]");
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[Copayment]");
         }
     }
 }

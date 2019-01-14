@@ -120,8 +120,9 @@ namespace His_Pos.NewClass.CooperativeInstitution {
     public class Diseases
     {
         [XmlElement(ElementName = "item")]
-        public Disease Disease { get; set; }
+        public List<Disease> Disease { get; set; }
     }
+
     [XmlRoot(ElementName = "item")]
     public class Disease
     {

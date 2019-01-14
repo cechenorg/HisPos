@@ -32,6 +32,18 @@ namespace His_Pos.NewClass.Prescription
             Source = PrescriptionSource.Cooperative;
             SourceId = c.CooperativePrescriptionId;
             Remark = c.DeclareXmlDocument.Prescription.Customer.Remark;
+            Treatment = new Treatment.Treatment(c);
+
+            Patient = new Customer();
+            Patient.IDNumber = c.DeclareXmlDocument.Prescription.Customer.IdNumber;
+            Patient.Name = c.DeclareXmlDocument.Prescription.Customer.Name;
+            Patient.Birthday = Convert.ToDateTime(c.DeclareXmlDocument.Prescription.Customer.Birth);
+            Patient.Tel = c.DeclareXmlDocument.Prescription.Customer.Phone;
+            Patient.CheckCustomer(Patient);
+            Card = new IcCard(); 
+            IsSendToSingde = false;
+            IsAdjust = false;
+            IsRead = c.IsRead == "Y" ? true : false;
         }
         public int Id { get; }
         public Customer Patient { get; set; }//病患

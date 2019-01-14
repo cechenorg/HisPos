@@ -57,7 +57,7 @@ namespace His_Pos.Database
             var table = new DataTable();
             try
             {
-                var myCommand = new SqlCommand(procName, connection);
+                var myCommand = new SqlCommand(Properties.Settings.Default.SystemSerialNumber + "." +  procName, connection);
                 myCommand.CommandType = CommandType.StoredProcedure;
 
                 if (parameterList != null)

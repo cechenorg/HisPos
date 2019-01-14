@@ -11,7 +11,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
     {
         public static DataTable GetData()
         { 
-            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[Division]");
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[Division]");
         }
     }
 }
