@@ -57,7 +57,7 @@ namespace His_Pos.Database
             var table = new DataTable();
             try
             {
-                var myCommand = new SqlCommand(Properties.Settings.Default.SystemSerialNumber + "." +  procName, connection);
+                var myCommand = new SqlCommand("[" + Properties.Settings.Default.SystemSerialNumber + "]." +  procName, connection);
                 myCommand.CommandType = CommandType.StoredProcedure;
 
                 if (parameterList != null)
@@ -74,7 +74,7 @@ namespace His_Pos.Database
             {
                 System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
                 {
-                    MessageWindow.ShowMessage("網路異常 無法連線到資料庫", MessageType.ERROR);
+                    MessageWindow.ShowMessage(procName + sqlException.Message, MessageType.ERROR);
                 });
             }
             catch (Exception ex)

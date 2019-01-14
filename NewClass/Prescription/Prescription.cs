@@ -31,15 +31,17 @@ namespace His_Pos.NewClass.Prescription
         public Prescription(CooperativePrescription c) { 
             Source = PrescriptionSource.Cooperative;
             SourceId = c.CooperativePrescriptionId;
-            Remark = c.DeclareXmlDocument.Prescription.Customer.Remark;
+            Remark = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Remark;
             Treatment = new Treatment.Treatment(c);
 
             Patient = new Customer();
-            Patient.IDNumber = c.DeclareXmlDocument.Prescription.Customer.IdNumber;
-            Patient.Name = c.DeclareXmlDocument.Prescription.Customer.Name;
-            Patient.Birthday = Convert.ToDateTime(c.DeclareXmlDocument.Prescription.Customer.Birth);
-            Patient.Tel = c.DeclareXmlDocument.Prescription.Customer.Phone;
-            Patient.CheckCustomer(Patient);
+            Patient.IDNumber = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.IdNumber;
+            Patient.Name = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Name;
+            string birthyear = (Convert.ToInt32(c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Birth.Substring(0, 3)) + 1911).ToString();
+            string birthmonth = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Birth.Substring(3, 2);
+            string birthday = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Birth.Substring(5, 2);
+            Patient.Birthday = Convert.ToDateTime(birthyear + "/" + birthmonth + "/" + birthday);
+            Patient.Tel = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Phone;
             Card = new IcCard(); 
             IsSendToSingde = false;
             IsAdjust = false;

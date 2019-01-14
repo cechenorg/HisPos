@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.Prescription;
 using JetBrains.Annotations;
 
@@ -27,7 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         public PrescriptionDeclareView()
         {
             InitializeComponent();
-            DataContext = new PrescriptionDeclare();
+            DataContext = new PrescriptionDeclare(); 
         }
     }
 }

@@ -1,15 +1,15 @@
-﻿<Window x:Class="His_Pos.FunctionWindow.YesNoMessageWindow"
+﻿<Window x:Class="His_Pos.FunctionWindow.ConfirmWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
-        Width="350" Height="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+        Width="350" Height="230" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Closing="Window_Closing">
     <Grid Name="MainGrid">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" Height="35" Background="IndianRed">
-                <Label Name="TitleLabel" Width="200" Foreground="GhostWhite" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
+                <Label Content="{Binding Title}" Width="200" Foreground="GhostWhite" FontSize="16" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="150">
                 <Image Name="Icon" Source="..\Images\QuestionMark.png" Height="50" Width="50" Margin="30,0,20,0"/>
@@ -18,8 +18,8 @@
                 </ScrollViewer>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button Name="NoButton" Margin="140,10,10,10" Width="90" Height="35" Content="否" Click="NoButton_OnClick_ButtonClick" Foreground="DimGray" Focusable="True" HorizontalAlignment="Right" Background="White" BorderBrush="DimGray" FontFamily="Segoe UI Semibold"/>
-                <Button Name="YesButton" Margin="10" Width="90" Height="35" Content="是"  Click="Yes_ButtonClick" Focusable="True" HorizontalAlignment="Right" Background="IndianRed" BorderBrush="IndianRed" FontFamily="Segoe UI Semibold"/>
+                <Button Margin="140,10,10,10" Width="90" Height="35" Content="否"  Foreground="DimGray" Focusable="True" HorizontalAlignment="Right" Background="White" BorderBrush="DimGray" FontFamily="Segoe UI Semibold" Command="{Binding NoCommand}"/>
+                <Button Margin="10" Width="90" Height="35" Content="是" Focusable="True" HorizontalAlignment="Right" Background="IndianRed" BorderBrush="IndianRed" FontFamily="Segoe UI Semibold" Command="{Binding YesCommand}"/>
             </StackPanel>
         </StackPanel>
     </Grid>

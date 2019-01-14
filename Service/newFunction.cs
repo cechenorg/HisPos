@@ -374,7 +374,7 @@ namespace His_Pos.Service
             PrescriptionInquireOutcome inquireOutcome = null, CooperativePrescriptSelectWindow cooperativePrescriptSelectWindow = null) {
             var medBagResult = new MedBagSelectionWindow();
             var singleMode = (bool)medBagResult.ShowDialog();
-            var receiptResult = new YesNoMessageWindow("是否列印收據", "列印收據");
+            var receiptResult = new ConfirmWindow("是否列印收據", "列印收據");
             var receiptPrint = false;
             if (Charge > 0)
             {

@@ -33,10 +33,10 @@ namespace His_Pos.NewClass.Prescription.Treatment
             for (int i = 0; i < 1; i++){
                 switch (i) {
                     case 0:
-                        MainDisease = MainDisease.GetDataByCodeId(c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code);
+                            MainDisease.Id = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code;
                         break;
                     case 1:
-                        SubDisease = SubDisease.GetDataByCodeId(c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code);
+                            SubDisease.Id = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code;
                         break;
                 }
             } 

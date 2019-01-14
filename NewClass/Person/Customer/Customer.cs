@@ -53,9 +53,9 @@ namespace His_Pos.NewClass.Person.Customer
             MainWindow.ServerConnection.CloseConnection();
             return customer;
         }
-        public Customer CheckCustomer(Customer customer) {
+        public Customer Check() {
             MainWindow.ServerConnection.OpenConnection();
-            DataTable table = CustomerDb.CheckCustomer(customer);
+            DataTable table = CustomerDb.CheckCustomer(this);
             Customer newcustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
             MainWindow.ServerConnection.CloseConnection();
             return newcustomer;

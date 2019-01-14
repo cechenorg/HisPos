@@ -200,6 +200,9 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         }
         private void ExecutePrescriptionSelected(Window window)
         {
+            SelectedPrescription.Patient = SelectedPrescription.Patient.Check(); 
+            SelectedPrescription.Treatment.MainDisease = SelectedPrescription.Treatment.MainDisease.GetDataByCodeId();
+            SelectedPrescription.Treatment.SubDisease = SelectedPrescription.Treatment.SubDisease.GetDataByCodeId();
             window?.Close();
         }
         #endregion
