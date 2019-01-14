@@ -91,7 +91,11 @@
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Orientation="Horizontal" Grid.Row="3" Background="{StaticResource GridBackGround}">
-                <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0"/>
+                <Image Source="/Images/Plus.png" Width="35" Margin="10,0,0,0">
+                    <Image.InputBindings>
+                        <MouseBinding Command="{Binding AddOrderCommand}" MouseAction="LeftClick"/>
+                    </Image.InputBindings>
+                </Image>
                 <Rectangle Width="185"/>
                 <Image gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Collapsed"/>
                 <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0"/>

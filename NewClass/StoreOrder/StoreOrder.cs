@@ -11,10 +11,6 @@ namespace His_Pos.NewClass.StoreOrder
 {
     public class StoreOrder: ObservableObject
     {
-        public StoreOrder()
-        {
-            OrderType = OrderTypeEnum.NODATA;
-        }
         public StoreOrder(DataRow row)
         {
 

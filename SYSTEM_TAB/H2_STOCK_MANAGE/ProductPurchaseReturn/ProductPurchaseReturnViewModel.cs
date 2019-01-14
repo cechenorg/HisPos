@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using His_Pos.ChromeTabViewModel;
+using His_Pos.Class;
+using His_Pos.FunctionWindow;
 using His_Pos.NewClass.StoreOrder;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 
 namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 {
@@ -32,8 +35,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         public ProductPurchaseReturnViewModel()
         {
-            CurrentStoreOrder = new StoreOrder();
-
             AddOrderCommand = new RelayCommand(AddOrderAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
@@ -42,15 +43,27 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #region ----- Define Actions -----
         private void AddOrderAction()
         {
+            AddNewOrderWindow.AddNewOrderWindow addNewOrderWindow = new AddNewOrderWindow.AddNewOrderWindow();
+            addNewOrderWindow.ShowDialog();
 
+            AddNewOrderWindowViewModel viewModel = addNewOrderWindow.DataContext as AddNewOrderWindowViewModel;
+
+            if (viewModel.NewStoreOrder != null)
+                StoreOrderCollection.Insert(0, viewModel.NewStoreOrder);
         }
         private void DeleteOrderAction()
         {
+            MainWindow.ServerConnection.OpenConnection();
+            bool isSuccess = StoreOrderDB.RemoveStoreOrderByID(CurrentStoreOrder.ID);
+            MainWindow.ServerConnection.CloseConnection();
 
+            if(isSuccess)
+                StoreOrderCollection.Remove(CurrentStoreOrder);
         }
         private void ToNextStatusAction()
         {
-
+            if(CurrentStoreOrder.CheckOrder())
+                CurrentStoreOrder.MoveToNextStatus();
         }
         #endregion
 

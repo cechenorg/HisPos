@@ -11,7 +11,9 @@ namespace His_Pos.NewClass.Manufactory
     {
         public Manufactory(DataRow dataRow)
         {
-
+            ID = dataRow["Man_ID"].ToString();
+            Name = dataRow["Man_NickName"].ToString();
+            Telephone = dataRow["Man_Telephone"].ToString();
         }
 
         #region ----- Define Variables -----
