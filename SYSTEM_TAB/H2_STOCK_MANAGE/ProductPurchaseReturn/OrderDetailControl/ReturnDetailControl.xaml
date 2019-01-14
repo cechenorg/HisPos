@@ -6,10 +6,8 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
              xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              xmlns:returnDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl"
+             DataContext="{Binding Source={StaticResource ProductPurchaseReturnLocator}, Path=ProductPurchaseReturn}"
              mc:Ignorable="d" >
-    <UserControl.DataContext>
-        <productPurchaseReturn:ProductPurchaseReturnViewModel/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="ReturnNormalProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
             <returnDataGridControl:ReturnNormalProcessingControl/>
@@ -24,7 +22,7 @@
             <returnDataGridControl:ReturnWaitingControl/>
         </DataTemplate>
     </UserControl.Resources>
-    <Grid DataContext="{Binding CurrentStoreOrder}">
+    <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="50"/>

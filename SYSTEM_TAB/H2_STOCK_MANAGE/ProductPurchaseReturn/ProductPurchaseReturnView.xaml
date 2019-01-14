@@ -6,10 +6,8 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
              xmlns:orderDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
+             DataContext="{Binding Source={StaticResource ProductPurchaseReturnLocator}, Path=ProductPurchaseReturn}"
              mc:Ignorable="d">
-    <UserControl.DataContext>
-        <local:ProductPurchaseReturnViewModel/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseOrderDetail" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
             <orderDetailControl:PurchaseDetailControl/>
@@ -19,6 +17,25 @@
         </DataTemplate>
         <DataTemplate x:Key="NoDataDetailControl" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
             <orderDetailControl:NoDataDetailControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="PurchaseOrderIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
+            <Border BorderBrush="Green" BorderThickness="1" CornerRadius="6" Margin="15,8,1,5">
+                <TextBlock Text="進貨" Foreground="Green" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ReturnOrderIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
+            <Border BorderBrush="Red" BorderThickness="1" CornerRadius="6" Margin="15,8,1,5">
+                <TextBlock Text="退貨" Foreground="Red" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="UnProcessIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
+            <Image Source="/Images/OrangeDot.png" Width="20" Margin="10,0,5,0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="ProcessIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
+            <Image Source="/Images/OrangeDot.png" Width="20" Margin="10,0,5,0"/>
+        </DataTemplate>
+        <DataTemplate x:Key="WaitingIcon" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
+            <Image Source="/Images/OrangeDot.png" Width="20" Margin="10,0,5,0"/>
         </DataTemplate>
     </UserControl.Resources>
     <Grid Width="1365" Height="870">
@@ -45,20 +62,25 @@
                 <Image Source="/Images/BlueDot.png" Width="15"/>
             </StackPanel>
             <DataGrid Grid.Row="2" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
-                          ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
-                           ItemsSource="{Binding StoreOrderCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
+                      ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridSelected}"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="270">
                         <DataGridTemplateColumn.CellStyle>
                             <Style TargetType="DataGridCell">
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#FF424040"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="{StaticResource GridSelected}"/>
-                                    </Trigger>
-                                </Style.Triggers>
                             </Style>
                         </DataGridTemplateColumn.CellStyle>
                         <DataGridTemplateColumn.CellTemplate>
@@ -72,15 +94,44 @@
                                         <ColumnDefinition Width="40"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding TypeIcon, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="20" Margin="10,0,5,0" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"/>
+                                    <ContentControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                                        <ContentControl.Style>
+                                            <Style TargetType="{x:Type ContentControl}">
+                                                <Setter Property="ContentTemplate" Value="{StaticResource UnProcessIcon}" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding OrderStatus}" Value="SINGDE_UNPROCESSING">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource UnProcessIcon}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding OrderStatus}" Value="NORMAL_PROCESSING">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource ProcessIcon}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding OrderStatus}" Value="SINGDE_PROCESSING">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource ProcessIcon}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding OrderStatus}" Value="WAITING">
+                                                        <Setter Property="ContentTemplate" Value="{StaticResource WaitingIcon}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ContentControl.Style>
+                                    </ContentControl>
                                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="0">
-                                        <Label Content="{Binding Id}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
-                                        <Border BorderBrush="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="1" CornerRadius="6" Margin="15,8,1,5">
-                                            <TextBlock Text="{Binding Path=Category.CategoryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="{Binding Path=Category.CategoryColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semi" FontSize="15" VerticalAlignment="Center" Margin="5,0,5,0"/>
-                                        </Border>
+                                        <Label Content="{Binding ID}" Width="160" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="23"/>
+                                        <ContentControl>
+                                            <ContentControl.Style>
+                                                <Style TargetType="{x:Type ContentControl}">
+                                                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseOrderIcon}" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding OrderType}" Value="RETURN">
+                                                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnOrderIcon}" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ContentControl.Style>
+                                        </ContentControl>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
-                                        <Label Content="{Binding Manufactory.Name}" Foreground="{StaticResource ForeGround}" Width="110" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
+                                        <Label Content="{Binding OrderManufactory.Name}" Foreground="{StaticResource ForeGround}" Width="110" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                         <Label Content="{Binding ProductCount, UpdateSourceTrigger=PropertyChanged}" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" Width="50" FontSize="14" VerticalAlignment="Center" HorizontalContentAlignment="Right" Margin="10,0,0,0"/>
                                         <Label Content="個品項" Foreground="{StaticResource ForeGround}" FontFamily="Segoe UI Semi" FontSize="14" VerticalAlignment="Center"/>
                                     </StackPanel>
@@ -98,7 +149,11 @@
                 </Image>
                 <Rectangle Width="185"/>
                 <Image gif:ImageBehavior.AnimatedSource="/Images/loading.gif" Width="35" Visibility="Collapsed"/>
-                <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0"/>
+                <Image Source="/Images/reload.png" Width="25" Margin="5,0,0,0">
+                    <Image.InputBindings>
+                        <MouseBinding Command="{Binding ReloadCommand}" MouseAction="LeftClick"/>
+                    </Image.InputBindings>
+                </Image>
             </StackPanel>
         </Grid>
         <ContentControl Grid.Column="1" Margin="0,10,10,10">

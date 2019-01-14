@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
 
         #region ----- Define Variables -----
         private OrderTypeEnum orderType = OrderTypeEnum.PURCHASE;
+        private Manufactory purchaseOrderManufactory;
+        private Manufactory returnOrderManufactory;
 
         public StoreOrder NewStoreOrder { get; set; }
         public OrderTypeEnum OrderType
@@ -28,7 +31,16 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
             get { return orderType; }
             set { Set(() => OrderType, ref orderType, value); }
         }
-        public Manufactory OrderManufactory { get; set; }
+        public Manufactory PurchaseOrderManufactory
+        {
+            get { return purchaseOrderManufactory; }
+            set { Set(() => PurchaseOrderManufactory, ref purchaseOrderManufactory, value); }
+        }
+        public Manufactory ReturnOrderManufactory
+        {
+            get { return returnOrderManufactory; }
+            set { Set(() => ReturnOrderManufactory, ref returnOrderManufactory, value); }
+        }
         public Manufactories ManufactoryCollection { get; set; }
         public StoreOrders DonePurchaseOrders { get; set; }
         #endregion
@@ -53,7 +65,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         }
         private void ConfirmAddAction()
         {
-            NewStoreOrder = StoreOrderDB.AddNewStoreOrder(OrderType, OrderManufactory, MainWindow.CurrentUser.Id);
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(OrderType, (OrderType == OrderTypeEnum.PURCHASE)? PurchaseOrderManufactory : ReturnOrderManufactory, MainWindow.CurrentUser.Id);
+            MainWindow.ServerConnection.CloseConnection();
+
+            NewStoreOrder = new StoreOrder(dataTable.Rows[0]);
             Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseAddNewOrderWindow"));
         }
         #endregion
@@ -63,8 +79,11 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         {
             MainWindow.ServerConnection.OpenConnection();
             ManufactoryCollection = new Manufactories(ManufactoryDB.GetAllManufactories());
-            //DonePurchaseOrders = StoreOrderDB.GetDonePurchaseOrdersInOneWeek();
+            //DonePurchaseOrders = new StoreOrders(StoreOrderDB.GetDonePurchaseOrdersInOneWeek());
             MainWindow.ServerConnection.CloseConnection();
+
+            PurchaseOrderManufactory = ManufactoryCollection[0];
+            ReturnOrderManufactory = ManufactoryCollection[0];
         }
         #endregion
     }

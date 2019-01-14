@@ -15,8 +15,8 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
             <Label Content="選擇廠商:" Foreground="Black" Margin="10,0,0,0" Style="{StaticResource BoldLabelHeader25}"/>
-            <ComboBox Name="ManufactoryCombo" Width="200" Margin="10,0,0,0" DisplayMemberPath="Name" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"
-                      ItemsSource="{Binding ManufactoryCollection}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}"/>
+            <ComboBox Width="200" Margin="10,0,0,0" DisplayMemberPath="Name" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" ItemsSource="{Binding ManufactoryCollection}"
+                      ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding PurchaseOrderManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
         
     </Grid>

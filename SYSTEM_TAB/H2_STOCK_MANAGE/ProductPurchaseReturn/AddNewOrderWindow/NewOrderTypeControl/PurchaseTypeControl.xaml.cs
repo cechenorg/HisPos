@@ -23,8 +23,6 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWi
         public PurchaseTypeControl()
         {
             InitializeComponent();
-
-            ManufactoryCombo.SelectedIndex = 0;
         }
     }
 }

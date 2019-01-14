@@ -4,6 +4,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:chromeTabViewModel="clr-namespace:His_Pos.ChromeTabViewModel"
+	xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
 	d1p1:Ignorable="d" StartupUri="LoginPage.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -18,6 +19,9 @@
                 </ResourceDictionary>
                 <ResourceDictionary>
                     <chromeTabViewModel:ProductDetailViewModelLocator x:Key="ProductDetailViewModelLocator" d:IsDataSource="True" />
+                </ResourceDictionary>
+                <ResourceDictionary>
+                    <productPurchaseReturn:ProductPurchaseReturnLocator x:Key="ProductPurchaseReturnLocator" d:IsDataSource="True" />
                 </ResourceDictionary>
                 <ResourceDictionary>
                     <Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">

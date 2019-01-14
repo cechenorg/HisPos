@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         #region ----- Define Command -----
         public RelayCommand AddOrderCommand { get; set; }
+        public RelayCommand ReloadCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
         public RelayCommand AddProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
@@ -29,8 +31,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #endregion
 
         #region ----- Define Variables -----
+        private StoreOrder currentStoreOrder;
+
         public StoreOrders StoreOrderCollection { get; set; }
-        public StoreOrder CurrentStoreOrder { get; set; }
+        public StoreOrder CurrentStoreOrder
+        {
+            get { return currentStoreOrder; }
+            set { Set(() => CurrentStoreOrder, ref currentStoreOrder, value); }
+        }
         #endregion
 
         public ProductPurchaseReturnViewModel()
@@ -38,6 +46,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddOrderCommand = new RelayCommand(AddOrderAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
+
+            InitVariables();
         }
 
         #region ----- Define Actions -----
@@ -49,15 +59,20 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddNewOrderWindowViewModel viewModel = addNewOrderWindow.DataContext as AddNewOrderWindowViewModel;
 
             if (viewModel.NewStoreOrder != null)
+            {
                 StoreOrderCollection.Insert(0, viewModel.NewStoreOrder);
+                CurrentStoreOrder = StoreOrderCollection[0];
+            }
         }
         private void DeleteOrderAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            bool isSuccess = StoreOrderDB.RemoveStoreOrderByID(CurrentStoreOrder.ID);
+            DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(CurrentStoreOrder.ID);
             MainWindow.ServerConnection.CloseConnection();
 
-            if(isSuccess)
+            bool isSuccess = Boolean.Parse(dataTable.Rows[0][""].ToString());
+
+            if (isSuccess)
                 StoreOrderCollection.Remove(CurrentStoreOrder);
         }
         private void ToNextStatusAction()
@@ -68,7 +83,15 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         #endregion
 
         #region ----- Define Functions -----
+        private void InitVariables()
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            StoreOrderCollection = new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
+            MainWindow.ServerConnection.CloseConnection();
 
+            if (StoreOrderCollection.Count > 0)
+                CurrentStoreOrder = StoreOrderCollection[0];
+        }
         #endregion
     }
 }

@@ -4,23 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
+             xmlns:addNewOrderWindow="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow"
              mc:Ignorable="d" Height="300">
+    <UserControl.DataContext>
+        <addNewOrderWindow:AddNewOrderWindowViewModel/>
+    </UserControl.DataContext>
     <Grid Background="{StaticResource GridDarkerBackGround}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="0"/>
             <RowDefinition Height="50"/>
             <RowDefinition Height="50"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label Content="選擇倉庫:" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
-            <ComboBox Name="WareHouseCombo" Width="340" DisplayMemberPath="Name" HorizontalContentAlignment="Center" Margin="10,0,0,0" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontSize="20" FontFamily="Segoe UI Semi" ItemsSource="{Binding WareHouseComboCollection}"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="15,0,0,0">
+            <RadioButton GroupName="ReturnRadio" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
+            <ComboBox Name="ManufactoryCombo" Width="200" Margin="10,0,0,0" DisplayMemberPath="Name" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center"
+                      ItemsSource="{Binding ManufactoryCollection}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding ReturnOrderManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="15,0,0,0">
-            <RadioButton Name="TargetManufactory" GroupName="ReturnRadio" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
-        </StackPanel>
-        <RadioButton Name="TargetOrder" GroupName="ReturnRadio" Grid.Row="2" Content=" 依訂單" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="15,0,0,0"/>
-        <DataGrid Name="OrderOverviewDataGrid" Grid.Row="3" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False"
+        <RadioButton  GroupName="ReturnRadio" Grid.Row="1" Content=" 依訂單" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="15,0,0,0"/>
+        <DataGrid Grid.Row="2" Background="{StaticResource Shadow}" Margin="10,0,10,10" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}" CanUserAddRows="False"
                   ItemsSource="{Binding StoreOrderOverviewCollection}" AutoGenerateColumns="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
