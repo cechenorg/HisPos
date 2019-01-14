@@ -33,7 +33,7 @@
                 <Style TargetType="ContentControl">
                     <Setter Property="ContentTemplate" Value="{StaticResource PurchaseTypeControl}"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding NewStoreOrder.OrderType}" Value="RETURN">
+                        <DataTrigger Binding="{Binding OrderType}" Value="RETURN">
                             <Setter Property="ContentTemplate" Value="{StaticResource ReturnTypeControl}"/>
                         </DataTrigger>
                     </Style.Triggers>
