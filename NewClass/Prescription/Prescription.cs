@@ -11,6 +11,7 @@ using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
 using JetBrains.Annotations;
+using Customer = His_Pos.NewClass.Person.Customer.Customer;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -29,8 +30,8 @@ namespace His_Pos.NewClass.Prescription
         }
         public Prescription(CooperativePrescription c) { 
             Source = PrescriptionSource.Cooperative;
-            SourceId = c.declareXml.CooperativePrescriptionId;
-            Remark = c.declareXml.DeclareXmlDocument.Prescription.Customer.Remark;
+            SourceId = c.CooperativePrescriptionId;
+            Remark = c.DeclareXmlDocument.Prescription.Customer.Remark;
         }
         public int Id { get; }
         public Customer Patient { get; set; }//病患

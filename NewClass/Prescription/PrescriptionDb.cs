@@ -50,7 +50,7 @@ namespace His_Pos.NewClass.Prescription
             {
                 using (TextReader sr = new StringReader(xmlDocument.InnerXml))
                 {
-                    CooperativePrescription response = (CooperativePrescription)ser.Deserialize( sr);
+                    CooperativePrescription response = XmlService.Deserialize<CooperativePrescription>(sr.ReadToEnd());
                     prescriptions.Add(new Prescription(response));
                 } 
             }
