@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Data;
+using His_Pos.NewClass;
 using His_Pos.NewClass.Usage;
 
 namespace His_Pos.NewClass.Prescription.Usage

@@ -14,9 +14,9 @@ namespace His_Pos.NewClass.Prescription
         {
         }
 
-        public void GetCooperativePrescriptions()
+        public void GetCooperativePrescriptions(string pharmcyMedicalNum, DateTime sDate, DateTime eDate)
         {
-            Prescriptions prescriptions = PrescriptionDb.GetCooperaPrescriptionsData();
+            Prescriptions prescriptions = PrescriptionDb.GetCooperaPrescriptionsDataByDate(pharmcyMedicalNum, sDate, eDate);
             //foreach (var p in prescriptions)
             //{
             //    Add(p);

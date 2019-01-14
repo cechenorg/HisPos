@@ -58,7 +58,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2 {
         }
         private void InitData() {
            /// ChronicCollection = ChronicDb.GetChronicDeclareById(CusId); 
-            CooperativeClinicCollection = WebApi.GetXmlByMedicalNum(MainWindow.CurrentPharmacy.Id, CusIcNum);
+           /// CooperativeClinicCollection = WebApi.GetXmlByMedicalNum(MainWindow.CurrentPharmacy.Id, CusIcNum);
         }
 
         private void DataGridRow_MouseDoubleClick(object sender, MouseButtonEventArgs e) {

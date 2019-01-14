@@ -11,9 +11,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
         public SpecialTreat() { }
         public SpecialTreat(DataRow r)
         {
-            Id = r[""].ToString();
-            Name = r[""].ToString();
-            FullName = r[""].ToString();
+            Id = r["SpeTre_ID"].ToString();
+            Name = r["SpeTre_Name"].ToString();
+            FullName = r["SpeTre_FullName"].ToString();
         }
         public string Id { get; set; }
         public string Name { get; set; }

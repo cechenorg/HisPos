@@ -12,7 +12,7 @@ namespace His_Pos.NewClass.Prescription.Position
     {
         public Positions()
         {
-
+            Init();
         }
 
         private void Init()

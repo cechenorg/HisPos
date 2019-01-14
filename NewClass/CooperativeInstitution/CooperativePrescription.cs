@@ -2,9 +2,13 @@
 using System.Xml.Serialization;
 
 namespace His_Pos.NewClass.CooperativeInstitution {
-    
+    [XmlRoot("DeclareXml")]
+    public class CooperativePrescription
+    { 
+        public DeclareXml declareXml { get; set; }
         [XmlRoot(ElementName = "person")]
-        public class Customer {
+        public class Customer  
+        {
             [XmlElement(ElementName = "addr")]
             public string Address { get; set; }
             [XmlElement(ElementName = "remark")]
@@ -37,16 +41,18 @@ namespace His_Pos.NewClass.CooperativeInstitution {
             public string Blood { get; set; }
             [XmlAttribute(AttributeName = "blood_rh")]
             public string Blood_rh { get; set; }
-        }
+        } 
 
         [XmlRoot(ElementName = "profile")]
-        public class CustomerProfile {
+        public class CustomerProfile
+        {
             [XmlElement(ElementName = "person")]
             public Customer Customer { get; set; }
         }
 
         [XmlRoot(ElementName = "insurance")]
-        public class Insurance {
+        public class Insurance
+        {
             [XmlAttribute(AttributeName = "insurance_type")]
             public string Insurance_type { get; set; }
             [XmlAttribute(AttributeName = "serial_code")]
@@ -64,7 +70,8 @@ namespace His_Pos.NewClass.CooperativeInstitution {
         }
 
         [XmlRoot(ElementName = "item")]
-        public class Medicine {
+        public class Medicine
+        {
             [XmlAttribute(AttributeName = "code")]
             public string MedicineId { get; set; }
             [XmlAttribute(AttributeName = "type")]
@@ -98,21 +105,24 @@ namespace His_Pos.NewClass.CooperativeInstitution {
         }
 
         [XmlRoot(ElementName = "diseases")]
-        public class Diseases {
+        public class Diseases
+        {
             [XmlElement(ElementName = "item")]
             public Disease Disease { get; set; }
         }
         [XmlRoot(ElementName = "item")]
-        public class Disease {
-             [XmlElement(ElementName = "code")]
-             public string Code { get; set; }
-             [XmlElement(ElementName = "type")]
-             public string Type { get; set; }
-             [XmlElement(ElementName = "desc")]
-             public string Description { get; set; }
+        public class Disease
+        {
+            [XmlElement(ElementName = "code")]
+            public string Code { get; set; }
+            [XmlElement(ElementName = "type")]
+            public string Type { get; set; }
+            [XmlElement(ElementName = "desc")]
+            public string Description { get; set; }
         }
         [XmlRoot(ElementName = "study")]
-        public class Study {
+        public class Study
+        {
             [XmlElement(ElementName = "diseases")]
             public Diseases Diseases { get; set; }
             [XmlElement(ElementName = "treatments")]
@@ -128,7 +138,8 @@ namespace His_Pos.NewClass.CooperativeInstitution {
         }
 
         [XmlRoot(ElementName = "continous_prescription")]
-        public class Continous_prescription {
+        public class Continous_prescription
+        {
             [XmlAttribute(AttributeName = "start_at")]
             public string TreamentDate { get; set; }
             [XmlAttribute(AttributeName = "count")]
@@ -140,7 +151,8 @@ namespace His_Pos.NewClass.CooperativeInstitution {
         }
 
         [XmlRoot(ElementName = "orders")]
-        public class MedicineOrder {
+        public class MedicineOrder
+        {
             [XmlElement(ElementName = "item")]
             public List<Medicine> Medicines { get; set; }
             [XmlAttribute(AttributeName = "days")]
@@ -152,7 +164,8 @@ namespace His_Pos.NewClass.CooperativeInstitution {
         }
 
         [XmlRoot(ElementName = "case")]
-        public class Prescription {
+        public class Prescription
+        {
             [XmlElement(ElementName = "profile")]
             public Customer Customer { get; set; }
             [XmlElement(ElementName = "insurance")]
@@ -180,24 +193,31 @@ namespace His_Pos.NewClass.CooperativeInstitution {
         }
 
         [XmlRoot(ElementName = "DeclareXmlDocument")]
-        public class DeclareXmlDocument {
+        public class DeclareXmlDocument
+        {
             [XmlElement(ElementName = "case")]
             public Prescription Prescription { get; set; }
         }
 
         [XmlRoot(ElementName = "DeclareXml")]
-        public class DeclareXml {
+        public class DeclareXml
+        {
             [XmlElement(ElementName = "DeclareId")]
             public string CooperativePrescriptionId { get; set; }
+            [XmlElement(ElementName = "IsRead")]
+            public string IsRead { get; set; }
+            [XmlElement(ElementName = "Status")]
+            public string Status { get; set; }
+            [XmlElement(ElementName = "InsertDate")]
+            public string InsertDate { get; set; }
             [XmlElement(ElementName = "CusIdNum")]
             public string CusIdNum { get; set; }
+           
             [XmlElement(ElementName = "DeclareXmlDocument")]
             public DeclareXmlDocument DeclareXmlDocument { get; set; }
-            [XmlAttribute(AttributeName = "xsd", Namespace = "http://www.w3.org/2000/xmlns/")]
-            public string Xsd { get; set; }
-            [XmlAttribute(AttributeName = "xsi", Namespace = "http://www.w3.org/2000/xmlns/")]
-            public string Xsi { get; set; }
+            
         }
 
-    
+    }
+
 }

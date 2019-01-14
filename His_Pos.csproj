@@ -271,6 +271,7 @@
     </ApplicationDefinition>
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescription.cs" />
+    <Compile Include="NewClass\CooperativeInstitution\CooperativePrescriptions.cs" />
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
@@ -482,7 +483,7 @@
     <Compile Include="Class\Vaccination.cs" />
     <Compile Include="Class\WareHouse.cs" />
     <Compile Include="Class\WareHouseDb.cs" />
-    <Compile Include="Class\WebApi.cs" />
+    <Compile Include="NewClass\WebApi.cs" />
     <Compile Include="Class\WorkSchedule\UserIconData.cs" />
     <Compile Include="Class\WorkSchedule\WorkSchedule.cs" />
     <Compile Include="Class\WorkSchedule\WorkScheduleDb.cs" />
