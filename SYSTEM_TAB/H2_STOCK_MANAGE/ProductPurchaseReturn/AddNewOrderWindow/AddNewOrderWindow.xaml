@@ -4,9 +4,42 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow"
+        xmlns:newOrderTypeControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
         mc:Ignorable="d"
-        Title="AddNewOrderWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="AddNewOrderWindow" Width="500" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight">
+    <Window.DataContext>
+        <local:AddNewOrderWindowViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate x:Key="PurchaseTypeControl" DataType="{x:Type local:AddNewOrderWindowViewModel}">
+            <newOrderTypeControl:PurchaseTypeControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="ReturnTypeControl" DataType="{x:Type local:AddNewOrderWindowViewModel}">
+            <newOrderTypeControl:ReturnTypeControl/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid Width="500">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <RadioButton Tag="P" Content="進貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" IsChecked="True" />
+            <RadioButton Tag="R" Content="退貨" FontSize="20" FontFamily="Segoe UI Semibold" VerticalContentAlignment="Center" Margin="50,0,0,0" />
+        </StackPanel>
+        <ContentControl Grid.Row="1">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="ContentTemplate" Value="{StaticResource PurchaseTypeControl}"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding NewStoreOrder.OrderType}" Value="RETURN">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnTypeControl}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+        <Button Content="確認" Grid.Row="2" Width="200" Background="RoyalBlue" BorderBrush="Transparent" FontSize="18" FontFamily="Segoe UI Semibold"/>
     </Grid>
 </Window>

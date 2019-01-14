@@ -28,6 +28,7 @@ namespace His_Pos.NewClass.StoreOrder
         public WareHouse.WareHouse OrderWarehouse { get; set; }
         public string OrderEmployeeName { get; set; }
         public string Note { get; set; }
+        public string PatientName { get; set; }
         public Products OrderProducts { get; set; }
         public int TotalPrice { get; set; }
         #endregion

@@ -4,9 +4,47 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             mc:Ignorable="d" >
+    <Grid Background="{StaticResource GridDarkerBackGround}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Content="選擇倉庫:" Foreground="Black" FontSize="25" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            <ComboBox Name="WareHouseCombo" Width="335" Margin="10,0,0,0" DisplayMemberPath="Name" HorizontalContentAlignment="Center" ItemsSource="{Binding WareHouseComboCollection}" ItemContainerStyle="{StaticResource ComboItemContainerStyle}" FontSize="20" FontFamily="Segoe UI Semi"/>
+        </StackPanel>
+        <Label Content="選擇廠商:" Foreground="Black" FontSize="25" Grid.Row="1" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        <Grid Name="TargetGrid" Grid.Row="2" Margin="50,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <RadioButton Tag="2" GroupName="target" Grid.Row="0" Grid.Column="0" Content=" 所有廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
+            <RadioButton Tag="5" GroupName="target" Grid.Row="1" Grid.Column="0" Content=" 特定廠商" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
             
+        </Grid>
+        <Label Content="選擇新增條件:" Foreground="Black" FontSize="25" Grid.Row="3" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" Margin="10,0,0,0"/>
+        <Grid Name="ConditionGrid" Grid.Row="4" Margin="50,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <RadioButton Name="Con1"  Tag="1" GroupName="condition" Grid.Row="0" Grid.Column="0" Content=" 無" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsEnabled="False"/>
+            <RadioButton Name="Con2" Tag="2" GroupName="condition" Grid.Row="0" Grid.Column="1" Content=" 低於安全量" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" IsChecked="True"/>
+            <RadioButton Name="Con3" Tag="3" GroupName="condition" Grid.Row="1" Grid.Column="0" Content=" 全補至基準量" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5"/>
+            <RadioButton Name="Con4" Tag="4" GroupName="condition" Grid.Row="1" Grid.Column="1" Content=" 近期銷量較高" FontSize="20" FontFamily="Segoe UI Semi" VerticalContentAlignment="Center" Margin="0,5,0,5" Visibility="Collapsed"/>
+        </Grid>
     </Grid>
 </UserControl>

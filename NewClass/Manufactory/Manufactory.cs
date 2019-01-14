@@ -17,6 +17,7 @@ namespace His_Pos.NewClass.Manufactory
         #region ----- Define Variables -----
         public string ID { get; set; }
         public string Name { get; set; }
+        public string Telephone { get; set; }
         #endregion
     }
 }

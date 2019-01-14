@@ -15,7 +15,7 @@
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <DataGrid Grid.Row="0" Background="{StaticResource GridDarkestBackGround}" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" CellStyle="{StaticResource DataGridCellStyle}"
-                          AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False">
+                  ItemsSource="{Binding CurrentStoreOrder.OrderProducts}" AutoGenerateColumns="False" GridLinesVisibility="Horizontal" FrozenColumnCount="2" CanUserSortColumns="False" CanUserAddRows="False">
             <DataGrid.Resources>
                 <Style TargetType="{x:Type ScrollBar}">
                     <Setter Property="SnapsToDevicePixels" Value="True"/>
@@ -49,7 +49,7 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="商品代碼" Width="120" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding Id}">
+                <DataGridTextColumn Header="商品代碼" Width="120" FontFamily="Segoe UI Semi" IsReadOnly="True" Binding="{Binding ID}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="HorizontalAlignment"  Value="Center"/>
@@ -148,13 +148,12 @@
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
             <Label Content="總計 $" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
-            <Label Content="{Binding TotalPrice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="{Binding CurrentStoreOrder.TotalPrice, UpdateSourceTrigger=PropertyChanged}" Width="100" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="共" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
-            <Label Content="{Binding Path=Products.Count}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
+            <Label Content="{Binding CurrentStoreOrder.OrderProducts.Count}" HorizontalContentAlignment="Center" Width="80" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
             <Label Content="品項" VerticalAlignment="Center" Foreground="Black" FontSize="20" FontWeight="Bold" FontFamily="Segoe UI Semibold"/>
-            <Rectangle Width="430"/>
-            <Button Name="DeleteOrder2" Width="120" Content="作廢" FontFamily="Segoe UI Semibold" FontSize="16" Margin="0,0,10,0" BorderThickness="0" Background="DimGray"/>
-            <Button Name="Confirm" Width="150" Content="確認收貨" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue"/>
+            <Rectangle Width="550"/>
+            <Button Width="150" Content="確認收貨" FontFamily="Segoe UI Semibold" FontSize="16" BorderThickness="0" Background="RoyalBlue" Command="{Binding ToNextStatusCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>
