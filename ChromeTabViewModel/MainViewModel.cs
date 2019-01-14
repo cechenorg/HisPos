@@ -243,7 +243,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 //處方管理
                 case nameof(FeatureItem.處方登錄):
-                    newTab = new PrescriptionDeclare() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new PrescriptionDeclareViewModel() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.處方查詢):

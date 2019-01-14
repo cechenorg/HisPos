@@ -276,6 +276,7 @@
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
+    <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistories.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CustomerHistoryBase.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescribeHistory.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\PrescriptionHistory.cs" />
@@ -371,7 +372,7 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionWindow.xaml.cs">
       <DependentUpon>CustomerSelectionWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclare.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclareViewModel.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCase.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayment.cs" />

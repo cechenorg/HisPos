@@ -48,7 +48,7 @@
         <DataTemplate DataType="{x:Type AdminFunction:AdminFunction}">
             <AdminFunction:AdminFunctionView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type prescriptionDeclare:PrescriptionDeclare}">
+        <DataTemplate DataType="{x:Type prescriptionDeclare:PrescriptionDeclareViewModel}">
             <prescriptionDeclare:PrescriptionDeclareView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type prescriptionInquire:PrescriptionInquire}">

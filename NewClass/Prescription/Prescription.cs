@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Product;
 using JetBrains.Annotations;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 
@@ -45,7 +46,7 @@ namespace His_Pos.NewClass.Prescription
         public bool IsSendToSingde { get; set; }//是否傳送藥健康
         public bool IsAdjust { get; set; }//是否調劑.扣庫
         public bool IsRead { get; set; }//是否已讀
-
+        public Products Medicines { get; set; }
         public void PrintMedBag()
         {
 

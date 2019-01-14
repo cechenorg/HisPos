@@ -7,13 +7,17 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
+        xmlns:service="clr-namespace:His_Pos.Service"
         mc:Ignorable="d"
         FontFamily="Segoe UI Semibold"
-        Title="顧客選擇"
-        d:DesignHeight="475" d:DesignWidth="680">
-    <Window.DataContext>
-        <local:CustomerSelectionViewModel/>
-    </Window.DataContext>
+        Title="顧客選擇" WindowStartupLocation="CenterScreen"
+        Name="CustomSelectWindow"
+        d:DesignHeight="475" d:DesignWidth="680" 
+        Width="680" Height="475" >
+    <Window.Resources>
+        <service:EnumBooleanConverter x:Key="EnumBooleanConverter"/>
+        <service:DateConverter x:Key="BirthDayConverter"/>
+    </Window.Resources>
     <Viewbox Stretch="Fill">
         <Grid Height="475">
             <Grid.RowDefinitions>
@@ -35,7 +39,14 @@
                 <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
                 <RadioButton Content="電話" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
             </StackPanel>
-            <DataGrid Name="CusGrid" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding CustomersCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" >
+            <DataGrid Name="CusGrid" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding CustomersCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction 
+                            Command="{Binding CustomerSelected}"
+                            CommandParameter="{Binding ElementName=CustomSelectWindow}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type ScrollBar}">
                         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -94,7 +105,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Width="150" Header="聯絡電話" Binding="{Binding ContactInfo.Tel,UpdateSourceTrigger=PropertyChanged}"  FontSize="14" IsReadOnly="True">
+                    <DataGridTextColumn Width="150" Header="聯絡電話" Binding="{Binding Tel,UpdateSourceTrigger=PropertyChanged}"  FontSize="14" IsReadOnly="True">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="HorizontalAlignment" Value="Center" />

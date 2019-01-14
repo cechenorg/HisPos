@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow
 {
@@ -22,6 +23,15 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         public CustomerSelectionWindow()
         {
             InitializeComponent();
+            this.DataContext = new CustomerSelectionViewModel("",1);
+            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
+        }
+
+        public CustomerSelectionWindow(string condition,int option)
+        {
+            InitializeComponent();
+            this.DataContext = new CustomerSelectionViewModel(condition,option);
+            this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
     }
 }

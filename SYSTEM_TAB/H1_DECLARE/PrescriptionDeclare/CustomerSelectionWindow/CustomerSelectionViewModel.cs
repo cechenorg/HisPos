@@ -8,7 +8,10 @@ using System.Windows;
 using System.Windows.Data;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Person.Customer.CustomerHistory;
+using Customer = His_Pos.NewClass.Person.Customer.Customer;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow
 {
@@ -20,42 +23,63 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
         public string SelectedRadioButton
         {
             get => selectedRadioButton;
-            set { selectedRadioButton = value; RaisePropertyChanged(() => SelectedRadioButton); }
+            set
+            {
+                Set(() => SelectedRadioButton, ref selectedRadioButton, value);
+            }
         }
 
         private string searching;
         public string Searching
         {
             get => searching;
-            set { searching = value; RaisePropertyChanged(() => Searching); }
+            set
+            {
+                Set(() => Searching, ref searching, value);
+            }
         }
 
         private CollectionViewSource customersCollectionViewSource;
         private CollectionViewSource CustomersCollectionViewSource
         {
             get => customersCollectionViewSource;
-            set { customersCollectionViewSource = value; RaisePropertyChanged(() => CustomersCollectionViewSource); }
+            set
+            {
+                Set(() => CustomersCollectionViewSource, ref customersCollectionViewSource, value);
+            }
         }
 
         private ICollectionView customersCollectionView;
         public ICollectionView CustomersCollectionView
         {
             get => customersCollectionView;
-            set { customersCollectionView = value; RaisePropertyChanged(() => CustomersCollectionView); }
+            set
+            {
+                Set(() => CustomersCollectionView, ref customersCollectionView, value);
+                var c = customersCollectionView.Cast<Customer>().ToList();
+                if (c.Count == 1)
+                    SelectedCustomer = c[0];
+            }
         }
 
         private Customers customers;
         private Customers Customers
         {
             get => customers;
-            set { customers = value; RaisePropertyChanged(() => Customers); }
+            set
+            {
+                Set(() => Customers, ref customers, value);
+            }
         }
 
         private Customer selectedCustomer;
         public Customer SelectedCustomer
         {
             get => selectedCustomer;
-            set { selectedCustomer = value; RaisePropertyChanged(() => SelectedCustomer); }
+            private set
+            {
+                Set(() => SelectedCustomer, ref selectedCustomer, value);
+            }
         }
         #endregion
 
@@ -76,12 +100,61 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
                 CustomersCollectionViewSource.Filter += FilterBySearchingText;
         }
 
+        private RelayCommand<Window> customerSelected;
+        public RelayCommand<Window> CustomerSelected
+        {
+            get =>
+                customerSelected ??
+                (customerSelected = new RelayCommand<Window>(ExecuteCustomerSelected));
+            set => customerSelected = value;
+        }
+
+        private void ExecuteCustomerSelected(Window window)
+        {
+            SelectedCustomer.Histories = new CustomerHistories(SelectedCustomer.Id);
+            window?.Close();
+        }
 
         #endregion
 
-        public CustomerSelectionViewModel()
+        public CustomerSelectionViewModel(string condition, int option)
         {
+            Customers = new Customers();
+            Customers.Init();
+            CustomersCollectionViewSource = new CollectionViewSource { Source = Customers };
+            CustomersCollectionView = CustomersCollectionViewSource.View;
+            Searching = condition;
+            InitializeFilter(option);
+        }
 
+        private void InitializeFilter(int option)
+        {
+            if (string.IsNullOrEmpty(Searching))
+            {
+                SelectedRadioButton = "Option1";
+            }
+            else
+            {
+                switch (option)
+                {
+                    case 1:
+                        SelectedRadioButton = "Option1";
+                        break;
+                    case 2:
+                        SelectedRadioButton = "Option2";
+                        break;
+                    case 3:
+                        SelectedRadioButton = "Option3";
+                        break;
+                    case 4:
+                        SelectedRadioButton = "Option4";
+                        break;
+                    default:
+                        SelectedRadioButton = "Option1";
+                        break;
+                }
+            }
+            CustomersCollectionViewSource.Filter += FilterBySearchingText;
         }
 
         private void FilterBySearchingText(object sender, FilterEventArgs e)
@@ -98,17 +171,18 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
                         e.Accepted = FilterByBirthDay(src);
                         break;
                     case "Option2":
-                        //itemSourceList.Filter += FilterByName;
+                        e.Accepted = FilterByName(src);
                         break;
                     case "Option3":
-                        //itemSourceList.Filter += FilterByIcNumber;
+                        e.Accepted = FilterByIDNumber(src);
                         break;
                     case "Option4":
-                        //itemSourceList.Filter += FilterByTel;
+                        e.Accepted = FilterByTel(src);
                         break;
                 }
             }
         }
+
         private bool FilterByBirthDay(Customer c)
         {
             DateTime birth;
@@ -123,6 +197,21 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWin
                 default:
                     return false;
             }
+        }
+
+        private bool FilterByName(Customer c)
+        {
+            return c.Name.Contains(Searching);
+        }
+
+        private bool FilterByIDNumber(Customer c)
+        {
+            return c.IDNumber.Contains(Searching);
+        }
+
+        private bool FilterByTel(Customer c)
+        {
+            return c.Tel.Contains(Searching);
         }
     }
 }

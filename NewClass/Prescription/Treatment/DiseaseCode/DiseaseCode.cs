@@ -10,5 +10,6 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
         public DiseaseCode() { }
         public string Id { get; set; }
         public string Name { get; set; }
+        public string FullName { get; set; }
     }
 }
