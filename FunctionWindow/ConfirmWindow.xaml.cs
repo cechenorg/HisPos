@@ -11,8 +11,7 @@ namespace His_Pos.FunctionWindow
         public ConfirmWindow(string message,string title)
         {
             InitializeComponent();
-            DataContext = new ConfirmWindowViewModel(message,title);
-            YesButton.Focus();
+            DataContext = new ConfirmWindowViewModel(message,title); 
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 switch (notificationMessage.Notification) {
