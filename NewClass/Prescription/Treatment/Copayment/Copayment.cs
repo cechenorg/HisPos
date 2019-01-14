@@ -8,9 +8,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Copayment
         public Copayment() { }
         public Copayment(DataRow r)
         {
-            Id = r["Cop_ID"].ToString();
-            Name = r["Cop_Name"].ToString(); 
-            FullName = r["Cop_FullName"].ToString();
+            Id = r.Field<string>("Cop_ID");
+            Name = r.Field<string>("Cop_Name");
+            FullName = r.Field<string>("Cop_FullName");
         }
         public string Id { get; }
         public string Name { get; }

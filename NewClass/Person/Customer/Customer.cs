@@ -14,8 +14,8 @@ namespace His_Pos.NewClass.Person.Customer
         public Customer() {}
 
         public Customer(DataRow r) : base(r)
-        { 
-            ContactNote = r["Cus_UrgentNote"]?.ToString();
+        {
+            ContactNote = r.Field<string>("Cus_UrgentNote");
         } 
         public string ContactNote { get; set; }//連絡備註
         public DateTime? LastEdit { get; set; }//最後編輯時間
@@ -31,16 +31,16 @@ namespace His_Pos.NewClass.Person.Customer
         {
             MainWindow.ServerConnection.OpenConnection();
             DataTable table = CustomerDb.GetCustomerByCusId(cusId);
-            Customer customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            var customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
             MainWindow.ServerConnection.CloseConnection();
             return customer;
         }
         public Customer Check() {
             MainWindow.ServerConnection.OpenConnection();
             DataTable table = CustomerDb.CheckCustomer(this);
-            Customer newcustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            var result = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
             MainWindow.ServerConnection.CloseConnection();
-            return newcustomer;
+            return result;
         }
         #endregion
     }

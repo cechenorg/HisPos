@@ -9,9 +9,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.PaymentCategory
 
         public PaymentCategory(DataRow r)
         {
-            Id = r["PayCat_ID"].ToString();
-            Name = r["PayCat_Name"].ToString();
-            FullName = r["PayCat_FullName"].ToString();
+            Id = r.Field<string>("PayCat_ID");
+            Name = r.Field<string>("PayCat_Name");
+            FullName = r.Field<string>("PayCat_FullName");
         }
         public string Id { get; }
         public string Name { get; }

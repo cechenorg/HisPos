@@ -14,13 +14,13 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
         }
 
         public Pharmacy(DataRow r) {
-            Id = r["CurPha_ID"].ToString();
-            Name = r["CurPha_Name"].ToString(); 
-            Address = r["CurPha_Address"].ToString();
-            Tel = r["CurPha_Telephone"].ToString();
-            ReaderCom = Convert.ToInt32(r["CurPha_ReaderCom"].ToString());
-            VpnIp = r["CurPha_VPN"].ToString();
-            NewReader = Convert.ToBoolean(r["CurPha_ReaderIsNew"].ToString()); 
+            Id = r.Field<string>("CurPha_ID");
+            Name = r.Field<string>("CurPha_Name");
+            Address = r.Field<string>("CurPha_Address");
+            Tel = r.Field<string>("CurPha_Telephone");
+            ReaderCom = r.Field<byte>("CurPha_ReaderCom");
+            VpnIp = r.Field<string>("CurPha_VPN");
+            NewReader = r.Field<bool>("CurPha_ReaderIsNew");
         }
 
         public string Id { get; set; }
