@@ -2,14 +2,12 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
-using His_Pos.Service;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionView
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionWindow
 {
     public class CooperativeSelectionViewModel : ViewModelBase
     {
@@ -94,13 +92,6 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         #endregion
 
         #region Command
-        private void ExecuteWindowLoaded()
-        {
-            IsNotRead = true;
-            IsRead = false;
-            StartDate = DateTime.Today;
-            EndDate = DateTime.Today;
-        }
 
         private RelayCommand startDateChanged;
         public RelayCommand StartDateChanged

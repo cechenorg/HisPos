@@ -1,0 +1,125 @@
+﻿<Window x:Class="His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow.CustomerSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:command="http://www.galasoft.ch/mvvmlight"
+        mc:Ignorable="d"
+        FontFamily="Segoe UI Semibold"
+        Title="顧客選擇"
+        d:DesignHeight="475" d:DesignWidth="680">
+    <Window.DataContext>
+        <local:CustomerSelectionViewModel/>
+    </Window.DataContext>
+    <Viewbox Stretch="Fill">
+        <Grid Height="475">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="8.5*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.Row="0">
+                <TextBox Name="Condition" Width="170"  Margin="10" FontSize="18"  HorizontalContentAlignment="Center" materialDesign:HintAssist.Hint="請輸入查詢字串" Text="{Binding Searching,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <command:EventToCommand
+                                Command="{Binding SearchingTextChanged}"
+                                CommandParameter="{Binding Text, ElementName=Condition}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+                <RadioButton Content="生日" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option1}"/>
+                <RadioButton Content="姓名" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option2}"/>
+                <RadioButton Content="身分證" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option3}"/>
+                <RadioButton Content="電話" VerticalAlignment="Center" FontSize="20"  VerticalContentAlignment="Center" Margin="10,0,0,0" GroupName="Group1" IsChecked="{Binding Path=SelectedRadioButton, Mode=TwoWay, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=Option4}"/>
+            </StackPanel>
+            <DataGrid Name="CusGrid" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding CustomersCollectionView,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" >
+                <DataGrid.Resources>
+                    <Style TargetType="{x:Type ScrollBar}">
+                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                        <Setter Property="OverridesDefaultStyle" Value="true" />
+                        <Setter Property="Width" Value="100" />
+                        <Style.Triggers>
+                            <Trigger Property="Orientation" Value="Horizontal">
+                                <Setter Property="Width" Value="Auto" />
+                                <Setter Property="Height" Value="15" />
+                                <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
+                            </Trigger>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="Width" Value="15" />
+                                <Setter Property="Height" Value="Auto" />
+                                <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="FontSize" Value="18" />
+                        <Setter Property="Margin" Value="5,10,5,10" />
+                        <Setter Property="Height" Value="25" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+                <DataGrid.RowStyle>
+                    <Style TargetType="{x:Type DataGridRow}">
+                        <Style.Triggers>
+                            <Trigger Property="DataGridRow.IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridDarkerBackGround}" />
+                            </Trigger>
+                        </Style.Triggers>
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="BorderBrush" Value="Transparent" />
+                        <Setter Property="FontSize" Value="16" />
+                        <Setter Property="Height" Value="40" />
+                    </Style>
+                </DataGrid.RowStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="120" Header="姓名" Binding="{Binding Name,UpdateSourceTrigger=PropertyChanged}"  FontSize="14" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="100" Header="生日" Binding="{Binding Birthday,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BirthDayConverter}}"  FontSize="14" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="150" Header="聯絡電話" Binding="{Binding ContactInfo.Tel,UpdateSourceTrigger=PropertyChanged}"  FontSize="14" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="150" Header="身分證號" Binding="{Binding IDNumber,UpdateSourceTrigger=PropertyChanged}"  FontSize="14" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="165" Header="編輯時間" Binding="{Binding LastEdit,UpdateSourceTrigger=PropertyChanged,StringFormat='{}{0:MM/dd h:mm}'}" FontSize="14" IsReadOnly="True">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Viewbox>
+</Window>

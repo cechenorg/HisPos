@@ -360,12 +360,16 @@
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDec2\PrescriptionDec2View.xaml.cs">
       <DependentUpon>PrescriptionDec2View.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionView\CooperativeSelectionViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionView\CooperativeSelectionWindow.xaml.cs">
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionWindow\CooperativeSelectionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml.cs">
       <DependentUpon>CooperativeSelectionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistory.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistories.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionWindow.xaml.cs">
+      <DependentUpon>CustomerSelectionWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\PrescriptionDeclare.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionSource.cs" />
     <Compile Include="NewClass\Prescription\Treatment\AdjustCase\AdjustCase.cs" />
@@ -961,7 +965,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionView\CooperativeSelectionWindow.xaml">
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CooperativeSelectionWindow\CooperativeSelectionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H1_DECLARE\PrescriptionDeclare\CustomerSelectionWindow\CustomerSelectionWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
