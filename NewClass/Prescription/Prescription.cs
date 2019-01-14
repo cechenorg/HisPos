@@ -7,9 +7,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
 using JetBrains.Annotations;
+using Customer = His_Pos.NewClass.Person.Customer.Customer;
 
 namespace His_Pos.NewClass.Prescription
 {
@@ -26,6 +28,11 @@ namespace His_Pos.NewClass.Prescription
         {
             Id = (int)r[""];
         }
+        public Prescription(CooperativePrescription c) { 
+            Source = PrescriptionSource.Cooperative;
+            SourceId = c.CooperativePrescriptionId;
+            Remark = c.DeclareXmlDocument.Prescription.Customer.Remark;
+        }
         public int Id { get; }
         public Customer Patient { get; set; }//病患
         public IcCard Card { get; set; }
@@ -34,7 +41,7 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionSource Source { get; set; }
         public string SourceId { get; }//合作診所.慢箋Id
         public string OrderNumber { get; set; }//傳送藥健康單號
-        public string Remark { get; }//傳送藥健康單號
+        public string Remark { get; }//回傳合作診所單號
         public bool IsSendToSingde { get; set; }//是否傳送藥健康
         public bool IsAdjust { get; set; }//是否調劑.扣庫
         public bool IsRead { get; set; }//是否已讀

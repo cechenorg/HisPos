@@ -16,9 +16,9 @@ namespace His_Pos.NewClass.Prescription.Position
 
         public Position(DataRow row)
         {
-            Id = row[""].ToString();
-            Name = row[""].ToString();
-            FullName = row[""].ToString();
+            Id = row["Pos_ID"].ToString();
+            Name = row["Pos_Name"].ToString();
+            FullName = row["Pos_FullName"].ToString();
         }
         public string Id { get; set; }
         public string Name { get; set; }

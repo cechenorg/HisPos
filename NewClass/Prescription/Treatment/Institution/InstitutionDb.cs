@@ -6,8 +6,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
     {
         public static DataTable GetData()
         {
-            var table = new DataTable();
-            return table;
+            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[Institution]");
         }
 
         public static DataTable GetCommonInstitutions()

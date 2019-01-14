@@ -19,7 +19,7 @@ namespace His_Pos.Class.Declare
         {
             PrescriptionDdatas = new ObservableCollection<DeclareFileDdata>();
             if (!string.IsNullOrEmpty(row["HISDEC_XML"].ToString()))
-                FileContent = XmlService.Deserialize<Pharmacy>(row["HISDEC_XML"].ToString()); ;
+                FileContent = XmlService.Deserialize<Pharmacy>(row["HISDEC_XML"].ToString());
             if (!string.IsNullOrEmpty(row["HISDEC_ID"].ToString()))
                 Id = row["HISDEC_ID"].ToString();
             if (!string.IsNullOrEmpty(row["HISDEC_SENTDATE"].ToString()))

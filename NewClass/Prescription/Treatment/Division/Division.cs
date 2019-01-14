@@ -9,9 +9,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.Division
 
         public Division(DataRow r)
         {
-            Id = r[""].ToString();
-            Name = r[""].ToString();
-            FullName = r[""].ToString();
+            Id = r["Div_ID"].ToString();
+            Name = r["Div_Name"].ToString();
+            FullName = r["Div_FullName"].ToString();
         }
         public string Id { get; set; }
         public string Name { get; set; }

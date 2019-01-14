@@ -45,7 +45,7 @@ namespace His_Pos.FunctionWindow
         private void LoginAction(object sender)
         {
             Employee user = Employee.Login(Account, (sender as PasswordBox).Password);
-            if (!string.IsNullOrEmpty(user.Id.ToString()))
+            if (user != null)
             {
                 LoadingWindow loadingWindow = new LoadingWindow();
                 loadingWindow.GetNecessaryData(user);

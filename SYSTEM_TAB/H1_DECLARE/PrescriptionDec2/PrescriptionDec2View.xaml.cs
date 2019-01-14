@@ -783,7 +783,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             if (!string.IsNullOrEmpty(_clinicDeclareId))
             {
                 ///declareDb.SaveCooperClinicDeclare(_clinicDeclareId, _clinicXml);
-                WebApi.UpdateXmlStatus(_clinicDeclareId);
+               /// WebApi.UpdateXmlStatus(_clinicDeclareId);
             }
 
             CustomerSelected = false;

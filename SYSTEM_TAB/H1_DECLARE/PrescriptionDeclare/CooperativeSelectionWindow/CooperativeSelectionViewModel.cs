@@ -55,14 +55,14 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             set { selectedPrescription = value; RaisePropertyChanged(() => SelectedPrescription); }
         }
 
-        private DateTime? startDate;
-        public DateTime? StartDate
+        private DateTime? startDate = DateTime.Today;
+        public DateTime? StartDate 
         {
             get => startDate;
             set { startDate = value; RaisePropertyChanged(() => StartDate); }
         }
 
-        private DateTime? endDate;
+        private DateTime? endDate = DateTime.Today;
         public DateTime? EndDate
         {
             get => endDate;
@@ -199,7 +199,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         {
             PrescriptionSelected = new RelayCommand<Window>(ExecutePrescriptionSelected);
             CooperativePrescriptions = new Prescriptions();
-            CooperativePrescriptions.GetCooperativePrescriptions();
+            CooperativePrescriptions.GetCooperativePrescriptions( MainWindow.CurrentPharmacy.Id, (DateTime)StartDate, (DateTime)EndDate);
             CooPreCollectionViewSource = new CollectionViewSource { Source = CooperativePrescriptions };
             CooPreCollectionView = CooPreCollectionViewSource.View;
             IsNotRead = true;

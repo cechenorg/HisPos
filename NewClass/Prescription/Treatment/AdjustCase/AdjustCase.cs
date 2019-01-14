@@ -9,9 +9,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
 
         public AdjustCase(DataRow r)
         {
-            Id = r[""].ToString();
-            Name = r[""].ToString();
-            FullName = r[""].ToString();
+            Id = r["Adj_ID"].ToString();
+            Name = r["Adj_Name"].ToString();
+            FullName = r["Adj_FullName"].ToString();
         }
         public string Id { get; }
         public string Name { get; }
