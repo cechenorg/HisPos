@@ -269,6 +269,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FunctionWindow\ConfirmWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescription.cs" />
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescriptions.cs" />
@@ -295,6 +296,7 @@
     <Compile Include="NewClass\Prescription\Treatment\Copayment\CopaymentDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Copayment\Copayments.cs" />
     <Compile Include="NewClass\Prescription\Treatment\DiseaseCode\DiseaseCode.cs" />
+    <Compile Include="NewClass\Prescription\Treatment\DiseaseCode\DiseaseCodeDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Division\Division.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Division\DivisionDb.cs" />
     <Compile Include="NewClass\Prescription\Treatment\Division\Divisions.cs" />

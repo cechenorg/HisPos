@@ -11,7 +11,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.PaymentCategory
     {
         public static DataTable GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[PaymentCategory]");
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PaymentCategory]");
         }
     }
 }

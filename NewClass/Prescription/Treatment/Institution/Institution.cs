@@ -1,12 +1,14 @@
 ﻿using System.Data;
+using System.Linq;
 using GalaSoft.MvvmLight;
+using His_Pos.NewClass.CooperativeInstitution;
 
 namespace His_Pos.NewClass.Prescription.Treatment.Institution
 {
     public class Institution : ObservableObject
     {
         public Institution(){}
-
+         
         public Institution(DataRow r)
         {
             Id = r["Ins_ID"].ToString();

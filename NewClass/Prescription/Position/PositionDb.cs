@@ -6,7 +6,7 @@ namespace His_Pos.NewClass.Prescription.Position
     {
         public static DataTable GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[Position]");
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[Position]");
         }
     }
 }

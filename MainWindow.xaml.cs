@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using ChromeTabs;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Database;
@@ -208,8 +209,9 @@ namespace His_Pos
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Messenger.Default.Unregister<NotificationMessage>(this);
             ///var d = new DeclareDb();
-            var dailyUploadConfirm = new YesNoMessageWindow("是否執行每日健保上傳","每日上傳確認");
+            var dailyUploadConfirm = new ConfirmWindow("是否執行每日健保上傳","每日上傳確認");
             var upload = (bool) dailyUploadConfirm.ShowDialog();
             if (upload)
                /// d.StartDailyUpload();

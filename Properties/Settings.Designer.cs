@@ -94,5 +94,17 @@ namespace His_Pos.Properties {
                 return ((string)(this["SingdeServer"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("HISPOS_Develop")]
+        public string SystemSerialNumber {
+            get {
+                return ((string)(this["SystemSerialNumber"]));
+            }
+            set {
+                this["SystemSerialNumber"] = value;
+            }
+        }
     }
 }

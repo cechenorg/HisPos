@@ -9,7 +9,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution {
     
     public static class PharmacyDb {
         public static DataTable GetCurrentPharmacy() { 
-            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[CurrentPharmacy]"); ;
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[CurrentPharmacy]"); ;
         }
 
         

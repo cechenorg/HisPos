@@ -17,9 +17,9 @@
         <service:NullableDateConverter x:Key="NullableDateConverter" />
         <service:DateConverter x:Key="DateConverter" />
     </Window.Resources>
-    <Window.DataContext>
-        <cooperativeSelectionWindow:CooperativeSelectionViewModel/>
-    </Window.DataContext>
+    <!--<Window.DataContext>
+        <local:CooperativeSelectionViewModel/>
+    </Window.DataContext>-->
     <Viewbox Stretch="Fill">
         <Grid>
             <Grid.RowDefinitions>

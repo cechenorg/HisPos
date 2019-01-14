@@ -147,7 +147,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 _prescriptionCount = value;
                 if (_prescriptionCount >= 80 && _prescriptionCountWarning)
                 {
-                    YesNoMessageWindow m = new YesNoMessageWindow("調劑處方已超過80件，是否繼續提醒?","調劑上限提醒");
+                    ConfirmWindow m = new ConfirmWindow("調劑處方已超過80件，是否繼續提醒?","調劑上限提醒");
                     _prescriptionCountWarning = (bool) m.ShowDialog();
                 }
                 NotifyPropertyChanged(nameof(PrescriptionCount));
@@ -346,7 +346,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 _icErrorWindow.ShowDialog();
                 if (_icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(_icErrorWindow.SelectedItem.Id))
                 {
-                    var y = new YesNoMessageWindow("尚未選擇異常代碼，是否自費押金", "是否押金");
+                    var y = new ConfirmWindow("尚未選擇異常代碼，是否自費押金", "是否押金");
                     CurrentPrescription.IsDeposit = (bool)y.ShowDialog();
                     if(!CurrentPrescription.IsDeposit)
                         return;
@@ -566,7 +566,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                         var medorder = CurrentPrescription.Medicines.Where(med => ((IProductDeclare)med).Amount > ((IProductDeclare)med).Stock.Inventory).ToList();
                         if (medorder.Count > 0) {
                             bool isCheck = false;
-                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
+                            ConfirmWindow medorderCheck = new ConfirmWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
                             isCheck = (bool)medorderCheck.ShowDialog();
                             if (isCheck)
                                 ;/// StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
@@ -618,7 +618,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                         if (medorder.Count > 0)
                         {
                             bool isCheck = false;
-                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
+                            ConfirmWindow medorderCheck = new ConfirmWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
                             isCheck = (bool)medorderCheck.ShowDialog();
                             if (isCheck)
                                 ;/// StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
@@ -635,10 +635,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                     ///ChronicDb.UpdateChronicData(_currentDecMasId); //重算預約慢箋  
                     break;
                 case 3: //第一次慢箋
-                    YesNoMessageWindow prescriptionAdjust;
+                    ConfirmWindow prescriptionAdjust;
                     var isAdjust = false;
                     if (CurrentPrescription.Treatment.AdjustDate.Date == DateTime.Today.Date) {
-                         prescriptionAdjust = new YesNoMessageWindow("是否調劑處方?", "處方調劑確認");
+                         prescriptionAdjust = new ConfirmWindow("是否調劑處方?", "處方調劑確認");
                          isAdjust = (bool)prescriptionAdjust.ShowDialog();
                     }
                     if (isAdjust)
@@ -650,7 +650,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                             _icErrorWindow.ShowDialog();
                             if (_icErrorWindow.SelectedItem is null || string.IsNullOrEmpty(_icErrorWindow.SelectedItem.Id))
                             {
-                                var y = new YesNoMessageWindow("尚未選擇異常代碼，是否自費押金", "是否押金");
+                                var y = new ConfirmWindow("尚未選擇異常代碼，是否自費押金", "是否押金");
                                 CurrentPrescription.IsDeposit = (bool)y.ShowDialog();
                                 if (!CurrentPrescription.IsDeposit)
                                     return;
@@ -690,7 +690,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                         if (medorder.Count > 0)
                         {
                             bool isCheck = false;
-                            YesNoMessageWindow medorderCheck = new YesNoMessageWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
+                            ConfirmWindow medorderCheck = new ConfirmWindow("發現負庫存是否直接向\r\n調劑中心訂貨?", "負庫訂單確認");
                             isCheck = (bool)medorderCheck.ShowDialog();
                             if (isCheck)
                                 ;/// StoreOrderDb.AddDeclareOrder(medorder); //缺藥直接訂貨
@@ -740,7 +740,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
 
             if (type.Equals("Adjustment"))
             {
-                var medBagPrint = new YesNoMessageWindow("是否列印藥袋", "列印確認");
+                var medBagPrint = new ConfirmWindow("是否列印藥袋", "列印確認");
                 var print = (bool)medBagPrint.ShowDialog();
                 ///CustomerDb.UpdateCustomerBasicDataByCusId(CurrentPrescription.Customer);
                 if (print)

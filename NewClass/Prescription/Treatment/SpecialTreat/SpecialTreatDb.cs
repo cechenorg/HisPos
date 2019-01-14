@@ -11,7 +11,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.SpecialTreat
     {
         public static DataTable GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[SpecialTreatment]");
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[SpecialTreatment]");
         }
     }
 }

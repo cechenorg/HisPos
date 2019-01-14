@@ -6,7 +6,7 @@ namespace His_Pos.NewClass.Usage
     {
         public static DataTable GetData()
         {
-            return MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[Usage]");
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[Usage]");
         }
     }
 }
