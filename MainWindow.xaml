@@ -33,6 +33,7 @@
     xmlns:CooperativeEntry="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
     xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
     xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
+    xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -48,8 +49,8 @@
         <DataTemplate DataType="{x:Type AdminFunction:AdminFunction}">
             <AdminFunction:AdminFunctionView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type prescriptionDec2:PrescriptionDec2}">
-            <prescriptionDec2:PrescriptionDec2View />
+        <DataTemplate DataType="{x:Type prescriptionDeclare:PrescriptionDeclare}">
+            <prescriptionDeclare:PrescriptionDeclareView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type prescriptionInquire:PrescriptionInquire}">
             <prescriptionInquire:PrescriptionInquireView />

@@ -22,13 +22,13 @@ namespace His_Pos.NewClass.Person
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Account", account));
             parameterList.Add(new SqlParameter("Password", password));
-            var table = MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[EmployeeLogin]",parameterList);  
+            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[EmployeeLogin]",parameterList);  
             return table;
         }
         public static DataTable GetTabAuth(int AuthValue) {
             List<SqlParameter> parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("AuthValue", AuthValue)); 
-            var table = MainWindow.ServerConnection.ExecuteProc("[HISPOS_Develop].[Get].[TabAuth]", parameterList);
+            var table = MainWindow.ServerConnection.ExecuteProc("[Get].[TabAuth]", parameterList);
             return table;
         }
     }

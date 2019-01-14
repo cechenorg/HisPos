@@ -35,6 +35,7 @@ using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
 using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
@@ -782,7 +783,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             if (!string.IsNullOrEmpty(_clinicDeclareId))
             {
                 ///declareDb.SaveCooperClinicDeclare(_clinicDeclareId, _clinicXml);
-                WebApi.UpdateXmlStatus(_clinicDeclareId);
+               /// WebApi.UpdateXmlStatus(_clinicDeclareId);
             }
 
             CustomerSelected = false;
@@ -1935,7 +1936,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private void HisPerson_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var c = sender as ComboBox;
-          ///  PrescriptionCount = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p => p.IdNumber.Equals((c.SelectedItem as MedicalPersonnel).IcNumber)).PrescriptionCount;
+          ///  PrescriptionCount = MainWindow.CurrentPharmacy.MedicalPersonnelCollection.SingleOrDefault(p => p.IdNumber.Equals((c.SelectedItem as MedicalPersonnel).IDNumber)).PrescriptionCount;
         }
 
         private void NotDeclareSubmit_OnClickSubmit_ButtonClick(object sender, RoutedEventArgs e)

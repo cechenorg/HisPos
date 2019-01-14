@@ -1,31 +1,20 @@
-﻿using System.ComponentModel;
-using System.Data;
-using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
+﻿using System.Data;
+using GalaSoft.MvvmLight;
 
 namespace His_Pos.NewClass.Prescription.Treatment.AdjustCase
 {
-    public class AdjustCase:INotifyPropertyChanged
+    public class AdjustCase:ObservableObject
     {
         public AdjustCase() { }
 
         public AdjustCase(DataRow r)
         {
-            Id = r[""].ToString();
-            Name = r[""].ToString();
-            FullName = r[""].ToString();
+            Id = r["Adj_ID"].ToString();
+            Name = r["Adj_Name"].ToString();
+            FullName = r["Adj_FullName"].ToString();
         }
         public string Id { get; }
         public string Name { get; }
         public string FullName { get; }
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
+using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using JetBrains.Annotations;
 
@@ -12,31 +13,10 @@ namespace His_Pos.NewClass.Person.Customer
         public Customer() {}
 
         public Customer(DataRow r) : base(r)
-        {
-            EmergencyContact = r[""]?.ToString();
-            EmergencyTel = r[""]?.ToString();
-            ContactNote = r[""]?.ToString();
+        { 
+            ContactNote = r["Cus_UrgentNote"]?.ToString();
         }
-        private string emergencyContact;//緊急連絡人
-        public string EmergencyContact
-        {
-            get => emergencyContact;
-            set
-            {
-                emergencyContact = value;
-                OnPropertyChanged(nameof(EmergencyContact));
-            }
-        }
-        private string emergencyTel;//緊急連絡電話
-        public string EmergencyTel
-        {
-            get => emergencyTel;
-            set
-            {
-                emergencyTel = value;
-                OnPropertyChanged(nameof(EmergencyTel));
-            }
-        }
+         
         private string contactNote;//連絡備註
         public string ContactNote
         {
@@ -64,6 +44,21 @@ namespace His_Pos.NewClass.Person.Customer
         }
         public void Delete()
         {
+        }
+        public Customer GetCustomerByCusId(int cusId)
+        {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable table = CustomerDb.GetCustomerByCusId(cusId);
+            Customer customer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            MainWindow.ServerConnection.CloseConnection();
+            return customer;
+        }
+        public Customer CheckCustomer(Customer customer) {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable table = CustomerDb.CheckCustomer(customer);
+            Customer newcustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
+            MainWindow.ServerConnection.CloseConnection();
+            return newcustomer;
         }
         #endregion
         #region PropertyChanged

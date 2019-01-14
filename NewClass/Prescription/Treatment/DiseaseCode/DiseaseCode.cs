@@ -1,40 +1,26 @@
 ﻿using System.ComponentModel;
+using System.Data;
 using System.Runtime.CompilerServices;
+using GalaSoft.MvvmLight;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
 {
-    public class DiseaseCode : INotifyPropertyChanged
+    public class DiseaseCode : ObservableObject
     {
         public DiseaseCode() { }
-        private string id;
-        public string Id
-        {
-            get => id;
-            set
-            {
-                id = value;
-                OnPropertyChanged(nameof(Id));
-            }
+        public DiseaseCode(DataRow r) {
+            Id = r["DisCode_ID"].ToString();
+            Name = r["DisCode_ChiName"].ToString();
         }
-        private string name;
-        public string Name
-        {
-            get => name;
-            set
-            {
-                name = value;
-                OnPropertyChanged(nameof(Name));
-            }
-        }
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
+        public string Id { get; set; }
+        public string Name { get; set; }
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        public DiseaseCode GetDataByCodeId(string code) {
+            MainWindow.ServerConnection.OpenConnection();
+            DataTable table = DiseaseCodeDb.GetDataByCodeId(code);
+            MainWindow.ServerConnection.CloseConnection();
+            return table.Rows.Count == 0 ? null : new DiseaseCode(table.Rows[0]);
         }
-        #endregion
     }
 }

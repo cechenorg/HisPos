@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using His_Pos.NewClass;
+using His_Pos.NewClass.Usage;
 
-namespace His_Pos.NewClass.Usage
+namespace His_Pos.NewClass.Prescription.Usage
 {
-    public class Usages:Collection<Usage>
+    public class Usages:Collection<NewClass.Usage.Usage>
     {
         public Usages()
         {
@@ -19,7 +16,7 @@ namespace His_Pos.NewClass.Usage
             var table = UsageDb.GetData();
             foreach (DataRow row in table.Rows)
             {
-                Add(new Usage(row));
+                Add(new NewClass.Usage.Usage(row));
             }
         }
     }

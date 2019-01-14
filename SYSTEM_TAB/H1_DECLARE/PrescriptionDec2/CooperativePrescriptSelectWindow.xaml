@@ -12,7 +12,8 @@
     <Window.Resources>
         <service:DateConverter x:Key="DateConverter" />
     </Window.Resources>
-    <Grid>
+    <Viewbox>
+        <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition  />
@@ -208,4 +209,5 @@
             </Grid>
         </Grid>
     </Grid>
+        </Viewbox>
 </Window>

@@ -104,6 +104,30 @@ namespace His_Pos.Service
         }
     }
 
+    public class NullableDateConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null || string.IsNullOrEmpty(value.ToString()))
+                return string.Empty;
+            var result = value.ConvertTo<DateTime>().Year > 1911
+                ? DateTimeExtensions.ConvertToTaiwanCalender(value.ConvertTo<DateTime>(), true)
+                : string.Empty;
+            return result;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            DateTime? result = null;
+            if (value == null || value.ToString().Contains(" ") || value.ToString().Length != 9) return result;
+            var year = int.Parse(value.ToString().Substring(0, 3)) + 1911;
+            var month = int.Parse(value.ToString().Substring(4, 2));
+            var date = int.Parse(value.ToString().Substring(7, 2));
+            result = new DateTime(year, month, date);
+            return result;
+        }
+    }
+
     public class DoubleToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

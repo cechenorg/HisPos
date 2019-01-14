@@ -11,8 +11,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.PrescriptionCase
     {
         public static DataTable GetData()
         {
-            var table = new DataTable();
-            return table;
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[PrescriptionCase]");
         }
     }
 }

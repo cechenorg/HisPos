@@ -1,13 +1,53 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Data;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using His_Pos.NewClass.CooperativeInstitution;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Prescription.Treatment
 {
     public class Treatment : INotifyPropertyChanged
     {
+        public Treatment()
+        {
+            Institution = new Institution.Institution();
+            Division = new Division.Division();
+            Pharmacist = new MedicalPersonnel();
+            MainDisease = new DiseaseCode.DiseaseCode();
+            SubDisease = new DiseaseCode.DiseaseCode();
+            AdjustCase = new AdjustCase.AdjustCase();
+            PrescriptionCase = new PrescriptionCase.PrescriptionCase();
+            PaymentCategory = new PaymentCategory.PaymentCategory();
+            SpecialTreat = new SpecialTreat.SpecialTreat();
+            Copayment = new Copayment.Copayment();
+        }
+        public Treatment(CooperativePrescription c) {
+             
+            Institution = MainWindow.Institutions.Count(ins => ins.Id == c.DeclareXmlDocument.Prescription.From) == 0 ? new Institution.Institution() : MainWindow.Institutions.Single(ins => ins.Id == c.DeclareXmlDocument.Prescription.From);
+            Division = MainWindow.Divisions.Count(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject) == 0 ? new Division.Division() : MainWindow.Divisions.Single(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject);
+            int diseaseCount = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease.Count;
+            MainDisease = new DiseaseCode.DiseaseCode();
+            SubDisease = new DiseaseCode.DiseaseCode();
+            for (int i = 0; i < 1; i++){
+                switch (i) {
+                    case 0:
+                        MainDisease = MainDisease.GetDataByCodeId(c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code);
+                        break;
+                    case 1:
+                        SubDisease = SubDisease.GetDataByCodeId(c.DeclareXmlDocument.Prescription.Study.Diseases.Disease[i].Code);
+                        break;
+                }
+            } 
+            PrescriptionCase = MainWindow.PrescriptionCases.Count(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase) == 0 ? new PrescriptionCase.PrescriptionCase() : MainWindow.PrescriptionCases.Single(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase);
+            Copayment = MainWindow.Copayments.Count(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode) == 0 ? new Copayment.Copayment() : MainWindow.Copayments.Single(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode);
+            AdjustCase = new AdjustCase.AdjustCase();
+            PaymentCategory = new PaymentCategory.PaymentCategory();
+            SpecialTreat = new SpecialTreat.SpecialTreat();
+            Pharmacist = new MedicalPersonnel(); 
+        }
+
         public Treatment(DataRow r)
         {
 

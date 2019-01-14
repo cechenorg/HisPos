@@ -28,10 +28,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private ObservableCollection<CooperativeClinic> cooperativeCollection;
         public ObservableCollection<CooperativeClinic> CooperativeCollection
         {
-            get
-            {
-                return cooperativeCollection;
-            }
+            get => cooperativeCollection;
             set
             {
                 cooperativeCollection = value;
@@ -41,10 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private ObservableCollection<CustomerDeclare> customerDeclaresCollection = new ObservableCollection<CustomerDeclare>();
         public ObservableCollection<CustomerDeclare> CustomerDeclaresCollection
         {
-            get
-            {
-                return customerDeclaresCollection;
-            }
+            get => customerDeclaresCollection;
             set
             {
                 customerDeclaresCollection = value;
@@ -54,10 +48,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         private ObservableCollection<Product> medicineInfo;
         public ObservableCollection<Product> MedicineInfo
         {
-            get
-            {
-                return medicineInfo;
-            }
+            get => medicineInfo;
             set
             {
                 medicineInfo = value;
@@ -158,7 +149,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             InitData();
         }
         private void InitData() {
-            CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
+            ///CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
         }
         private void ButtonSearch_Click(object sender, RoutedEventArgs e)
         {
@@ -167,7 +158,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                /// 
                 return;
             }
-            CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
+           /// CooperativeCollection = WebApi.GetXmlByDate(MainWindow.CurrentPharmacy.Id, StartDate, EndDate);//MainWindow.CurrentPharmacy.Id
         }
 
         private void start_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -183,7 +174,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
         {
             var selectitem = (sender as DataGrid).SelectedItem;
             if (selectitem is null) return;
-            WebApi.UpdateIsReadByDeclareId(((CooperativeClinic)selectitem).DeclareId);
+            ///WebApi.UpdateIsReadByDeclareId(((CooperativeClinic)selectitem).DeclareId);
             ((CooperativeClinic)selectitem).IsRead = "已讀";
             CustomerDeclaresCollection = null;///DeclareDb.GetDeclareHistoryByCusIdnum(( (CooperativeClinic)selectitem).Prescription.Customer.IcCard.IdNumber); 
             CustomerDeclaresCollection.Insert(0,(new CustomerDeclare(((CooperativeClinic)selectitem).Prescription)));
