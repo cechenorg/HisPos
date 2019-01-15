@@ -11,7 +11,7 @@ namespace His_Pos.NewClass.WareHouse
     {
         public WareHouse(DataRow row)
         {
-            ID = row.Field<string>("War_ID");
+            ID = row.Field<int>("War_ID").ToString();
             Name = row.Field<string>("War_Name");
         }
 

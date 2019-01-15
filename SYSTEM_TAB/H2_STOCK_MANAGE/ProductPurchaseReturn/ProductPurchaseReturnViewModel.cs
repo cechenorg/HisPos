@@ -62,6 +62,8 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 StoreOrderCollection.Insert(0, viewModel.NewStoreOrder);
                 CurrentStoreOrder = StoreOrderCollection[0];
+
+                RaisePropertyChanged("StoreOrderCollection");
             }
         }
         private void DeleteOrderAction()

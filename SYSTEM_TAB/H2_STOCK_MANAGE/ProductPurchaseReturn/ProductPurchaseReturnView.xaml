@@ -63,7 +63,7 @@
             </StackPanel>
             <DataGrid Grid.Row="2" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
                       ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
-                      ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                      ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="Transparent"/>

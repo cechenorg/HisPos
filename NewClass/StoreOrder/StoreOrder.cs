@@ -58,7 +58,7 @@ namespace His_Pos.NewClass.StoreOrder
             OrderEmployeeName = row.Field<string>("Emp_Name");
             Note = row.Field<string>("StoOrd_Note");
             PatientName = row.Field<string>("Cus_Name");
-            TotalPrice = row.Field<double>("Total");
+            TotalPrice = (double)row.Field<decimal>("Total");
 
             initProductCount = row.Field<int>("ProductCount");
         }
