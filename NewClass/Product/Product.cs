@@ -15,9 +15,11 @@ namespace His_Pos.NewClass.Product
 
         }
 
-        public Product(DataRow dataRow)
+        public Product(DataRow row)
         {
-
+            ID = row.Field<string>("Pro_ID");
+            ChineseName = row.Field<string>("Pro_ChineseName");
+            EnglishName = row.Field<string>("Pro_EnglishName");
         }
 
         #region ----- Define Variables -----

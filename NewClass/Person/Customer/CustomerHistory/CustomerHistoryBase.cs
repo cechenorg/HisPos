@@ -1,52 +1,34 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Data;
 using System.Runtime.CompilerServices;
+using GalaSoft.MvvmLight;
 using His_Pos.Class;
 using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person.Customer.CustomerHistory
 {
-    public class CustomerHistoryBase:INotifyPropertyChanged
+    public class CustomerHistoryBase:ObservableObject
     {
-        public SystemType Type { get; }
-        private DateTime date;//日期
-        public DateTime Date
+        public CustomerHistoryBase() { }
+        public CustomerHistoryBase(DataRow r)
         {
-            get => date;
-            set
+            switch (int.Parse(r[""].ToString()))
             {
-                date = value;
-                OnPropertyChanged(nameof(Date));
+                case 0:
+                    Type = HistoryType.Prescription;
+                    break;
+                case 1:
+                    Type = HistoryType.Prescribe;
+                    break;
             }
+            Date = (DateTime) r[""];
+            Title = r[""].ToString();
+            SubTitle = r[""].ToString();
         }
-        private string title;//標題
-        public string Title
-        {
-            get => title;
-            set
-            {
-                title = value;
-                OnPropertyChanged(nameof(Title));
-            }
-        }
-        private string subtitle;//副標題
-        public string SubTitle
-        {
-            get => subtitle;
-            set
-            {
-                subtitle = value;
-                OnPropertyChanged(nameof(SubTitle));
-            }
-        }
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
+        public HistoryType Type { get; }
+        public DateTime Date { get; set; } //日期
+        public string Title { get; set; }//標題
+        public string SubTitle { get; set; }//副標題
     }
 }

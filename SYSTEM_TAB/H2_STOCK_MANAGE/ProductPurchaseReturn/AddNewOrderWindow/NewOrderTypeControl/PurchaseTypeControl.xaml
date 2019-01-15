@@ -4,9 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow.NewOrderTypeControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             xmlns:addNewOrderWindow="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow"
+             mc:Ignorable="d" >
+    <UserControl.DataContext>
+        <addNewOrderWindow:AddNewOrderWindowViewModel/>
+    </UserControl.DataContext>
+    <Grid Background="{StaticResource GridDarkerBackGround}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
+            <Label Content="選擇廠商:" Foreground="Black" Margin="10,0,0,0" Style="{StaticResource BoldLabelHeader25}"/>
+            <ComboBox Width="200" Margin="10,0,0,0" DisplayMemberPath="Name" FontSize="20" FontFamily="Segoe UI Semibold" HorizontalContentAlignment="Center" ItemsSource="{Binding ManufactoryCollection}"
+                      ItemContainerStyle="{StaticResource ComboItemContainerStyle}" SelectedItem="{Binding PurchaseOrderManufactory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        
     </Grid>
 </UserControl>

@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.PurchaseDataGridControl
+namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl
 {
     /// <summary>
-    /// PurchaseUnProcessingControl.xaml 的互動邏輯
+    /// ReturnSingdeProcessingControl.xaml 的互動邏輯
     /// </summary>
-    public partial class PurchaseUnProcessingControl : UserControl
+    public partial class ReturnSingdeProcessingControl : UserControl
     {
-        public PurchaseUnProcessingControl()
+        public ReturnSingdeProcessingControl()
         {
             InitializeComponent();
         }

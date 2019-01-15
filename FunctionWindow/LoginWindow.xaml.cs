@@ -28,11 +28,6 @@ namespace His_Pos.FunctionWindow
                     Close();
             });
         }
-         
-        private void Exit_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
 
         private void UserName_OnKeyUp(object sender, KeyEventArgs e)
         {

@@ -7,7 +7,7 @@ namespace His_Pos.NewClass.Person.Customer
 {
     public static class CustomerDb
     {
-        public static DataTable GetData(int id)
+        public static DataTable GetData()
         {
             var table = new DataTable();
             return table;

@@ -38,6 +38,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
                 }
             }
         }
+
         private ObservableCollection<Customer> _customerCollection;
         public ObservableCollection<Customer> CustomerCollection
         {

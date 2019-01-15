@@ -18,6 +18,7 @@ using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.InventoryManagement;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.LocationManage;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchase;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseRecord;
+using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductTypeManage;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTaking;
 using His_Pos.SYSTEM_TAB.H3_STOCKTAKING.StockTakingRecord;
@@ -243,7 +244,7 @@ namespace His_Pos.ChromeTabViewModel
 
                 //處方管理
                 case nameof(FeatureItem.處方登錄):
-                    newTab = new PrescriptionDeclare() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
+                    newTab = new PrescriptionDeclareViewModel() { TabName = MainWindow.HisFeatures[0].Functions[0], Icon = MainWindow.HisFeatures[0].Icon };
                     break;
 
                 case nameof(FeatureItem.處方查詢):
@@ -267,7 +268,7 @@ namespace His_Pos.ChromeTabViewModel
                     break;
 
                 case nameof(FeatureItem.進退貨管理):
-                    newTab = new ProductPurchase() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
+                    newTab = new ProductPurchaseReturnViewModel() { TabName = MainWindow.HisFeatures[1].Functions[1], Icon = MainWindow.HisFeatures[1].Icon };
                     break;
 
                 case nameof(FeatureItem.進退貨紀錄):

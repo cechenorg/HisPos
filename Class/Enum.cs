@@ -605,5 +605,12 @@ namespace His_Pos.Class
         SqlServer = 0,
         NySql = 1
     }
-  
+
+    public enum HistoryType
+    {
+        Prescription = 0,
+        Prescribe = 1,
+        ALL = 2
+    }
+
 }

@@ -2,14 +2,13 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Forms;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.NewClass.Person.Customer.CustomerHistory;
 using His_Pos.NewClass.Prescription;
-using His_Pos.Service;
 
-namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionView
+namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionWindow
 {
     public class CooperativeSelectionViewModel : ViewModelBase
     {
@@ -19,88 +18,115 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         private CollectionViewSource CooPreCollectionViewSource
         {
             get => cooPreCollectionViewSource;
-            set { cooPreCollectionViewSource = value; RaisePropertyChanged(() => CooPreCollectionViewSource); }
+            set
+            {
+                Set(() => CooPreCollectionViewSource, ref cooPreCollectionViewSource, value);
+            }
         }
 
         private ICollectionView cooPreCollectionView;
         public ICollectionView CooPreCollectionView
         {
             get => cooPreCollectionView;
-            set { cooPreCollectionView = value; RaisePropertyChanged(() => CooPreCollectionView); }
+            private set
+            {
+                Set(() => CooPreCollectionView, ref cooPreCollectionView, value);
+            }
         }
 
         private Prescriptions cooperativePrescriptions;
         private Prescriptions CooperativePrescriptions
         {
             get => cooperativePrescriptions;
-            set { cooperativePrescriptions = value; RaisePropertyChanged(() => CooperativePrescriptions); }
+            set
+            {
+                Set(() => CooperativePrescriptions, ref cooperativePrescriptions, value);
+            }
         }
 
         private CooperativeViewHistories customerHistories;
         public CooperativeViewHistories CustomerHistories
         {
             get => customerHistories;
-            private set { customerHistories = value; RaisePropertyChanged(() => CustomerHistories); }
+            private set
+            {
+                Set(() => CustomerHistories, ref customerHistories, value);
+            }
         }
 
         private CooperativeViewHistory selectedHistory;
         public CooperativeViewHistory SelectedHistory
         {
             get => selectedHistory;
-            set { selectedHistory = value; RaisePropertyChanged(() => SelectedHistory); }
+            set
+            {
+                Set(() => SelectedHistory, ref selectedHistory, value);
+            }
         }
 
         private Prescription selectedPrescription;
         public Prescription SelectedPrescription
         {
             get => selectedPrescription;
-            set { selectedPrescription = value; RaisePropertyChanged(() => SelectedPrescription); }
+            set
+            {
+                Set(() => SelectedPrescription, ref selectedPrescription, value);
+            }
         }
 
         private DateTime? startDate = DateTime.Today;
         public DateTime? StartDate 
         {
             get => startDate;
-            set { startDate = value; RaisePropertyChanged(() => StartDate); }
+            set
+            {
+                Set(() => StartDate, ref startDate, value);
+            }
         }
 
         private DateTime? endDate = DateTime.Today;
         public DateTime? EndDate
         {
             get => endDate;
-            set { endDate = value; RaisePropertyChanged(() => EndDate); }
+            set
+            {
+                Set(() => EndDate, ref endDate, value);
+            }
         }
 
         private string idNumber;
+        // ReSharper disable once InconsistentNaming
         public string IDNumber
         {
             get => idNumber;
-            set { idNumber = value; RaisePropertyChanged(() => IDNumber); }
+            set
+            {
+                Set(() => IDNumber, ref idNumber, value);
+            }
         }
 
         private bool? isRead;
         public bool? IsRead
         {
             get => isRead;
-            set { isRead = value; RaisePropertyChanged(() => IsRead); }
+            set
+            {
+                Set(() => IsRead, ref isRead, value);
+            }
         }
 
         private bool? isNotRead;
         public bool? IsNotRead
         {
             get => isNotRead;
-            set { isNotRead = value; RaisePropertyChanged(() => IsNotRead); }
+            set
+            {
+                Set(() => IsNotRead, ref isNotRead, value);
+            }
         }
         #endregion
 
         #region Command
-        private void ExecuteWindowLoaded()
-        {
-            IsNotRead = true;
-            IsRead = false;
-            StartDate = DateTime.Today;
-            EndDate = DateTime.Today;
-        }
 
         private RelayCommand startDateChanged;
         public RelayCommand StartDateChanged
@@ -118,13 +144,13 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
                 CooPreCollectionViewSource.Filter += FilterByStartDate;
         }
 
-        private RelayCommand endDateChagned;
+        private RelayCommand endDateChanged;
         public RelayCommand EndDateChanged
         {
             get =>
-                endDateChagned ??
-                (endDateChagned = new RelayCommand(ExecuteEndDateChanged));
-            set => endDateChagned = value;
+                endDateChanged ??
+                (endDateChanged = new RelayCommand(ExecuteEndDateChanged));
+            set => endDateChanged = value;
         }
         private void ExecuteEndDateChanged()
         {
@@ -205,6 +231,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             SelectedPrescription.Treatment.MainDisease = SelectedPrescription.Treatment.MainDisease.GetDataByCodeId();
             SelectedPrescription.Treatment.SubDisease = SelectedPrescription.Treatment.SubDisease.GetDataByCodeId();
             MainWindow.ServerConnection.CloseConnection();
+            Messenger.Default.Send<Prescription>(SelectedPrescription, "SelectedPrescription");
             window?.Close();
         }
         #endregion

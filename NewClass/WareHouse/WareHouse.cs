@@ -9,9 +9,10 @@ namespace His_Pos.NewClass.WareHouse
 {
     public class WareHouse
     {
-        public WareHouse(DataRow dataRow)
+        public WareHouse(DataRow row)
         {
-
+            ID = row.Field<int>("War_ID").ToString();
+            Name = row.Field<string>("War_Name");
         }
 
         #region ----- Define Variables -----

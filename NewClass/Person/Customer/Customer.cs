@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
@@ -8,36 +9,17 @@ using JetBrains.Annotations;
 
 namespace His_Pos.NewClass.Person.Customer
 {
-    public class Customer:Person,INotifyPropertyChanged
+    public class Customer:Person
     {
         public Customer() {}
 
         public Customer(DataRow r) : base(r)
         { 
             ContactNote = r["Cus_UrgentNote"]?.ToString();
-        }
-         
-        private string contactNote;//連絡備註
-        public string ContactNote
-        {
-            get => contactNote;
-            set
-            {
-                contactNote = value;
-                OnPropertyChanged(nameof(ContactNote));
-            }
-        }
-
-        private ObservableCollection<CustomerHistoryBase> history;//處方.交易.自費調劑紀錄
-        public ObservableCollection<CustomerHistoryBase> History
-        {
-            get => history;
-            set
-            {
-                history = value;
-                OnPropertyChanged(nameof(History));
-            }
-        }
+        } 
+        public string ContactNote { get; set; }//連絡備註
+        public DateTime? LastEdit { get; set; }//最後編輯時間
+        public CustomerHistories Histories { get; set; }//處方.自費調劑紀錄
         #region Function
         public void Save()
         {
@@ -62,15 +44,6 @@ namespace His_Pos.NewClass.Person.Customer
             CustomerDb.UpdateEditTime(Id);
         }
 
-        #endregion
-        #region PropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         #endregion
     }
 }

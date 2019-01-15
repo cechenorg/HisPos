@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public class PurchaseReturnProduct : Product
+    public class ReturnMedicine : ReturnProduct
     {
-        public PurchaseReturnProduct(DataRow dataRow) : base(dataRow)
+        public ReturnMedicine(DataRow row) : base(row)
         {
+
         }
     }
 }
