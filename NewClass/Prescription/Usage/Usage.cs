@@ -2,32 +2,31 @@
 using System.Data;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight;
-using His_Pos.Class;
 using His_Pos.Service;
 
-namespace His_Pos.NewClass.Usage
+namespace His_Pos.NewClass.Prescription.Usage
 {
     public class Usage:ObservableObject,ICloneable
     {
         public Usage(){}
 
-        public Usage(DataRow dataRow)
+        public Usage(DataRow r)
         {
-            Id = (int)dataRow["Usa_ID"];
-            Name = dataRow["Usa_Name"].ToString();
-            QuickName = dataRow["Usa_QuickName"].ToString();
-            PrintName = dataRow["Usa_PrintName"].ToString();
-            Reg = new Regex(dataRow["Usa_Regex"].ToString());
-            Days = short.Parse(dataRow["Usa_Days"].ToString());
-            Times = short.Parse(dataRow["Usa_Times"].ToString());
-            PreDefault = bool.Parse(dataRow["Usa_Default"].ToString());
-            
-            PrintIcons[0] = bool.Parse( dataRow["UsaPri_Morning"].ToString());
-            PrintIcons[1] = bool.Parse( dataRow["UsaPri_Noon"].ToString());
-            PrintIcons[2] = bool.Parse( dataRow["UsaPri_Night"].ToString());
-            PrintIcons[3] = bool.Parse( dataRow["UsaPri_Sleep"].ToString());
-            PrintIcons[4] = bool.Parse( dataRow["UsaPri_BeforeMeal"].ToString());
-            PrintIcons[5] = bool.Parse( dataRow["UsaPri_AfterMeal"].ToString()); 
+            Id = r.Field<int>("Usa_ID");
+            Name = r.Field<string>("Usa_Name");
+            QuickName = r.Field<string>("Usa_QuickName");
+            PrintName = r.Field<string>("Usa_PrintName");
+            Reg = new Regex(r.Field<string>("Usa_Regex"));
+            Days = r.Field<byte?>("Usa_Days")??0;
+            Times = r.Field<int?>("Usa_ID")??0;
+            PreDefault = r.Field<bool>("Usa_Default");
+
+            PrintIcons[0] = r.Field<bool>("UsaPri_Morning");
+            PrintIcons[1] = r.Field<bool>("UsaPri_Noon");
+            PrintIcons[2] = r.Field<bool>("UsaPri_Night");
+            PrintIcons[3] = r.Field<bool>("UsaPri_Sleep");
+            PrintIcons[4] = r.Field<bool>("UsaPri_BeforeMeal");
+            PrintIcons[5] = r.Field<bool>("UsaPri_AfterMeal");
         }
         public int Id { get; set; }
         public string Name { get; set; }

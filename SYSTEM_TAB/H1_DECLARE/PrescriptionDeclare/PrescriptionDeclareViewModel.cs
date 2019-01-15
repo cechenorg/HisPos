@@ -1,10 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Prescription;
 using His_Pos.Service;
-using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionWindow;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CustomerSelectionWindow;
 using Prescription = His_Pos.NewClass.Prescription.Prescription;
 
@@ -17,6 +18,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             CurrentPrescription = new Prescription();
             Messenger.Default.Register<Customer>(this, "SelectedCustomer",GetSelectedCustomer);
             Messenger.Default.Register<Prescription>(this, "SelectedPrescription", GetSelectedPrescription);
+        }
+
+        ~PrescriptionDeclareViewModel()
+        {
+            Messenger.Default.Unregister(this);
         }
 
         public override TabBase getTab()
@@ -50,6 +56,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
             }
         }
 
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            private set
+            {
+                Set(() => IsBusy, ref _isBusy, value);
+            }
+        }
+        private string _busyContent;
+
+        public string BusyContent
+        {
+            get => _busyContent;
+            private set
+            {
+                Set(() => BusyContent, ref _busyContent, value);
+            }
+        }
+
         #region ShowWindowCommand
         private RelayCommand showCooperativeSelectionWindow;
         public RelayCommand ShowCooperativeSelectionWindow
@@ -65,8 +91,22 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
         }
         private void ExecuteShowCooperativeWindow()
         {
-            var cooperativeSelectionWindow = new CooperativeSelectionWindow.CooperativeSelectionWindow();
-            cooperativeSelectionWindow.ShowDialog();
+            var cooperativePrescriptions = new Prescriptions();
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = "取得合作診所處方...";
+                cooperativePrescriptions.GetCooperativePrescriptions(MainWindow.CurrentPharmacy.Id, DateTime.Today, DateTime.Today);
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+                var cooperativeSelectionWindow = new CooperativeSelectionWindow.CooperativeSelectionWindow();
+                Messenger.Default.Send(cooperativePrescriptions, "CooperativePrescriptions");
+                cooperativeSelectionWindow.ShowDialog();
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
 
         private RelayCommand showCustomerSelectionWindow;

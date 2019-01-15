@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using His_Pos.ChromeTabViewModel;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.NewClass.Usage;
 using Microsoft.VisualBasic;
 
@@ -91,15 +93,15 @@ namespace His_Pos.Class.Product
         public string Note { get; set; }
         private string GetPositionPrintName(string mPosition)
         {
-            return MainWindow.Positions.SingleOrDefault(p => p.Id.Replace(" ","").Equals(mPosition.Replace(" ", "")))?.Name;
+            return ViewModelMainWindow.Positions.SingleOrDefault(p => p.Id.Replace(" ","").Equals(mPosition.Replace(" ", "")))?.Name;
         }
 
         private string GetUsagePrintName(Usage usage)
         {
             if (!usage.PrintName.Contains("(0)")) return usage.PrintName;
-            if (MainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name)) != null)
+            if (ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name)) != null)
             {
-                var match = MainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name))?.Reg.Match(usage.Name);
+                var match = ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(usage.Name))?.Reg.Match(usage.Name);
                 var print = string.Empty;
                 var tempPrint = usage.PrintName;
                 var currentIndex = 0;

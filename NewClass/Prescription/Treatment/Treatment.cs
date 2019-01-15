@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.NewClass.CooperativeInstitution;
 using JetBrains.Annotations;
 
@@ -24,9 +25,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             Copayment = new Copayment.Copayment();
         }
         public Treatment(CooperativePrescription c) {
-             
-            Institution = MainWindow.Institutions.Count(ins => ins.Id == c.DeclareXmlDocument.Prescription.From) == 0 ? new Institution.Institution() : MainWindow.Institutions.Single(ins => ins.Id == c.DeclareXmlDocument.Prescription.From);
-            Division = MainWindow.Divisions.Count(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject) == 0 ? new Division.Division() : MainWindow.Divisions.Single(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject);
+            Institution = ViewModelMainWindow.Institutions.Count(ins => ins.Id == c.DeclareXmlDocument.Prescription.From) == 0 ? new Institution.Institution() : ViewModelMainWindow.Institutions.Single(ins => ins.Id == c.DeclareXmlDocument.Prescription.From);
+            Division = ViewModelMainWindow.Divisions.Count(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject) == 0 ? new Division.Division() : ViewModelMainWindow.Divisions.Single(div => div.Id == c.DeclareXmlDocument.Prescription.Study.Subject);
             int diseaseCount = c.DeclareXmlDocument.Prescription.Study.Diseases.Disease.Count;
             MainDisease = new DiseaseCode.DiseaseCode();
             SubDisease = new DiseaseCode.DiseaseCode();
@@ -48,7 +48,7 @@ namespace His_Pos.NewClass.Prescription.Treatment
             AdjustCase = new AdjustCase.AdjustCase();
             PaymentCategory = new PaymentCategory.PaymentCategory();
             SpecialTreat = new SpecialTreat.SpecialTreat();
-            Pharmacist = new MedicalPersonnel(); 
+            Pharmacist = new MedicalPersonnel();
         }
 
         public Treatment(DataRow r)
@@ -144,8 +144,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private int chronicTotal;//連續處方可調劑次數 D36
-        public int ChronicTotal
+        private int? chronicTotal;//連續處方可調劑次數 D36
+        public int? ChronicTotal
         {
             get => chronicTotal;
             set
@@ -155,8 +155,8 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
 
-        private int chronicSeq;
-        public int ChronicSeq
+        private int? chronicSeq;
+        public int? ChronicSeq
         {
             get => chronicSeq;
             set

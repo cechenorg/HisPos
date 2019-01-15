@@ -22,14 +22,15 @@ namespace His_Pos.NewClass.Person.Customer
         }
         public static DataTable CheckCustomer(Customer customer)
         {
-            List<SqlParameter> parameterList = new List<SqlParameter>();
+            var parameterList = new List<SqlParameter>();
             parameterList.Add(new SqlParameter("Cus_IDNumber", customer.IDNumber));
             parameterList.Add(new SqlParameter("Cus_Name", customer.Name));
-            parameterList.Add(new SqlParameter("Cus_Birthday", customer.Birthday));
-            if(string.IsNullOrEmpty(customer.Tel))
-                parameterList.Add(new SqlParameter("Cus_Telephone", DBNull.Value));
-            else
-                parameterList.Add(new SqlParameter("Cus_Telephone", customer.Tel));
+            parameterList.Add(customer.Birthday is null
+                ? new SqlParameter("Cus_Birthday", DBNull.Value)
+                : new SqlParameter("Cus_Birthday", customer.Birthday));
+            parameterList.Add(string.IsNullOrEmpty(customer.Tel)
+                ? new SqlParameter("Cus_Telephone", DBNull.Value)
+                : new SqlParameter("Cus_Telephone", customer.Tel));
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[CheckCustomer]", parameterList); 
             return table;
         }

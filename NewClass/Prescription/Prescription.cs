@@ -27,7 +27,8 @@ namespace His_Pos.NewClass.Prescription
 
         public Prescription(DataRow r)
         {
-            Id = (int)r[""];
+            Id = r.Field<int>("");
+
         }
         public Prescription(CooperativePrescription c) { 
             Source = PrescriptionSource.Cooperative;

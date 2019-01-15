@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Xml;
 using His_Pos.AbstractClass;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Manufactory;
@@ -161,43 +162,12 @@ namespace His_Pos.FunctionWindow
                 ///    Function function = new Function();
                 ///    function.GetLastYearlyHoliday();
                 ///}
-                ChangeLoadingMessage("取得醫療院所...");
-                var tmpInstitutions = new Institutions(true);
-                ChangeLoadingMessage("取得科別資料...");
-                var tmpDivisions = new Divisions();
-                ChangeLoadingMessage("取得調劑案件資料...");
-                var tmpAdjustCases = new AdjustCases();
-                ChangeLoadingMessage("取得給付類別資料...");
-                var tmpPaymentCategroies = new PaymentCategories();
-                ChangeLoadingMessage("取得部分負擔資料...");
-                var tmpCopayments = new Copayments();
-                ChangeLoadingMessage("取得處方案件資料...");
-                var tmpPrescriptionCases = new PrescriptionCases();
-                ChangeLoadingMessage("取得特定治療代碼資料...");
-                var tmpSpecialTreats = new SpecialTreats();
-                ChangeLoadingMessage("取得藥品用法資料...");
-                var tmpUsages = new Usages();
-                ChangeLoadingMessage("取得途徑/作用部位資料...");
-                var tmpPositions = new Positions();
-                Dispatcher.Invoke((Action)(() =>
-                {
-                    MainWindow.Institutions = tmpInstitutions;
-                    MainWindow.Divisions = tmpDivisions;
-                    MainWindow.AdjustCases = tmpAdjustCases;
-                    MainWindow.PaymentCategories = tmpPaymentCategroies;
-                    MainWindow.Copayments = tmpCopayments;
-                    MainWindow.PrescriptionCases = tmpPrescriptionCases;
-                    MainWindow.SpecialCode = tmpSpecialTreats;
-                    MainWindow.Usages = tmpUsages;
-                    MainWindow.Positions = tmpPositions;
-                }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
                     mainWindow.Show();
-                    MainWindow.ItemSourcesSet = true;
                     Close();
                 }));
             };
@@ -553,12 +523,12 @@ namespace His_Pos.FunctionWindow
                 prescriptionInquireView.DeclareMedicinesData = new ObservableCollection<Product>();///MedicineDb.GetDeclareMedicine();
                 Dispatcher.Invoke((Action)(() =>
                 {
-                    prescriptionInquireView.HospitalCollection = MainWindow.Institutions;
-                    prescriptionInquireView.DivisionCollection = MainWindow.Divisions;
-                    prescriptionInquireView.CopaymentCollection = MainWindow.Copayments;
-                    prescriptionInquireView.PaymentCategoryCollection = MainWindow.PaymentCategories;
-                    prescriptionInquireView.AdjustCaseCollection = MainWindow.AdjustCases;
-                    prescriptionInquireView.TreatmentCaseCollection = MainWindow.PrescriptionCases;
+                    prescriptionInquireView.HospitalCollection = ViewModelMainWindow.Institutions;
+                    prescriptionInquireView.DivisionCollection = ViewModelMainWindow.Divisions;
+                    prescriptionInquireView.CopaymentCollection = ViewModelMainWindow.Copayments;
+                    prescriptionInquireView.PaymentCategoryCollection = ViewModelMainWindow.PaymentCategories;
+                    prescriptionInquireView.AdjustCaseCollection = ViewModelMainWindow.AdjustCases;
+                    prescriptionInquireView.TreatmentCaseCollection = ViewModelMainWindow.PrescriptionCases;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -601,18 +571,18 @@ namespace His_Pos.FunctionWindow
                 ChangeLoadingMessage("申報資料處理中...");
                 exportView.DeclareFiles = null;/// DeclareFileDb.GetDeclareFilesData();
                 var tmpDeclareMedicine = "";// MedicineDb.GetDeclareFileMedicineData();
-                exportView.HospitalCollection = MainWindow.Institutions;
-                exportView.DivisionCollection = MainWindow.Divisions;
-                exportView.AdjustCaseCollection = MainWindow.AdjustCases;
-                exportView.PaymentCategoryCollection = MainWindow.PaymentCategories;
-                exportView.TreatmentCaseCollection = MainWindow.PrescriptionCases;
-                exportView.CopaymentCollection = MainWindow.Copayments;
+                exportView.HospitalCollection = ViewModelMainWindow.Institutions;
+                exportView.DivisionCollection = ViewModelMainWindow.Divisions;
+                exportView.AdjustCaseCollection = ViewModelMainWindow.AdjustCases;
+                exportView.PaymentCategoryCollection = ViewModelMainWindow.PaymentCategories;
+                exportView.TreatmentCaseCollection = ViewModelMainWindow.PrescriptionCases;
+                exportView.CopaymentCollection = ViewModelMainWindow.Copayments;
                 Dispatcher.Invoke((Action)(() =>
                 {
                     exportView.DeclareMedicinesData = null;//tmpDeclareMedicine;
                     exportView.HisPerson.ItemsSource = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
-                    exportView.ReleasePalace.ItemsSource = MainWindow.Institutions;
-                    exportView.AdjustCaseCombo.ItemsSource = MainWindow.AdjustCases;
+                    exportView.ReleasePalace.ItemsSource = ViewModelMainWindow.Institutions;
+                    exportView.AdjustCaseCombo.ItemsSource = ViewModelMainWindow.AdjustCases;
                 }));
             };
             backgroundWorker.RunWorkerCompleted += (s, args) =>
@@ -635,14 +605,14 @@ namespace His_Pos.FunctionWindow
             {
                 ChangeLoadingMessage("取得處方資料...");
                 prescriptionDec2View.DeclareMedicines = null;///MedicineDb.GetDeclareMedicine();
-                prescriptionDec2View.Hospitals = MainWindow.Institutions;
-                prescriptionDec2View.Divisions = MainWindow.Divisions;
-                prescriptionDec2View.PrescriptionCases = MainWindow.PrescriptionCases;
-                prescriptionDec2View.PaymentCategories = MainWindow.PaymentCategories;
-                prescriptionDec2View.Copayments = MainWindow.Copayments;
-                prescriptionDec2View.AdjustCases = MainWindow.AdjustCases;
-                prescriptionDec2View.SpecialCodes = MainWindow.SpecialCode;
-                prescriptionDec2View.Usages = MainWindow.Usages;
+                prescriptionDec2View.Hospitals = ViewModelMainWindow.Institutions;
+                prescriptionDec2View.Divisions = ViewModelMainWindow.Divisions;
+                prescriptionDec2View.PrescriptionCases = ViewModelMainWindow.PrescriptionCases;
+                prescriptionDec2View.PaymentCategories = ViewModelMainWindow.PaymentCategories;
+                prescriptionDec2View.Copayments = ViewModelMainWindow.Copayments;
+                prescriptionDec2View.AdjustCases = ViewModelMainWindow.AdjustCases;
+                prescriptionDec2View.SpecialCodes = ViewModelMainWindow.SpecialTreats;
+                prescriptionDec2View.Usages = ViewModelMainWindow.Usages;
                /// prescriptionDec2View.MedicalPersonnels = MainWindow.CurrentPharmacy.MedicalPersonnelCollection;
                 prescriptionDec2View.Positions = null;/// PositionDb.GetData();
                 Dispatcher.Invoke((Action)(() =>

@@ -3,7 +3,9 @@ using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Interface;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2;
@@ -108,7 +110,7 @@ namespace His_Pos.Class.Product
                     Dosage = string.IsNullOrEmpty(dataRow["HISDECDET_AMOUNT"].ToString())? 0 : double.Parse(dataRow["HISDECDET_AMOUNT"].ToString());
                     if (!string.IsNullOrEmpty(dataRow["HISFEQ_ID"].ToString()))
                     {
-                        UsageName = MainWindow.Usages.SingleOrDefault(usg => usg.Id.Equals(dataRow["HISFEQ_ID"].ToString())).Name;
+                        UsageName = ViewModelMainWindow.Usages.SingleOrDefault(usg => usg.Id.Equals(dataRow["HISFEQ_ID"].ToString())).Name;
                     }
                     Days = string.IsNullOrEmpty(dataRow["HISDECDET_DRUGDAY"].ToString())? string.Empty : dataRow["HISDECDET_DRUGDAY"].ToString();
                     Position = string.IsNullOrEmpty(dataRow["HISWAY_ID"].ToString())? string.Empty : dataRow["HISWAY_ID"].ToString();
@@ -252,7 +254,7 @@ namespace His_Pos.Class.Product
                 if (value != null)
                 {
                     _usageName = value;
-                    Usage = MainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(_usageName.ToString().Replace(" ", ""))).DeepCloneViaJson();
+                    Usage = ViewModelMainWindow.Usages.SingleOrDefault(u => u.Reg.IsMatch(_usageName.ToString().Replace(" ", ""))).DeepCloneViaJson();
                     if (Usage != null)
                     {
                         Usage.Name = _usageName;
@@ -394,7 +396,7 @@ namespace His_Pos.Class.Product
         {
             var tmpUsage = new Usage();
             var find = false;
-            foreach (var u in MainWindow.Usages)
+            foreach (var u in ViewModelMainWindow.Usages)
             {
                 if (!UsageName.Equals(u.Name)) continue;
                 tmpUsage = u;

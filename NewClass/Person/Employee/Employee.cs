@@ -12,14 +12,14 @@ namespace His_Pos.NewClass.Person.Employee
         public Employee(){}
         public Employee(DataRow r):base(r)
         {
-            Password = r["Aut_Password"]?.ToString();
-            NickName = r["Emp_NickName"]?.ToString();
-            WorkPositionId = (int)r["Emp_WorkPositionID"];
-            StartDate = (DateTime?)r["Emp_StartDate"];
-            LeaveDate = string.IsNullOrEmpty(r["Emp_LeaveDate"].ToString()) ? null :(DateTime?)r["Emp_LeaveDate"];
-            PurchaseLimit = Convert.ToInt32(r["Emp_PurchaseLimit"]);
-            IsEnable = (bool)r["Emp_IsEnable"];
-            AuthorityValue = Convert.ToInt32(r["Aut_LevelID"].ToString());
+            Password = r.Field<string>("Aut_Password");
+            NickName = r.Field<string>("Emp_NickName");
+            WorkPositionId = r.Field<int>("Emp_WorkPositionID");
+            StartDate = r.Field<DateTime?>("Emp_StartDate");
+            LeaveDate = r.Field<DateTime?>("Emp_LeaveDate");
+            PurchaseLimit = r.Field<short>("Emp_PurchaseLimit");
+            IsEnable = r.Field<bool>("Emp_IsEnable");
+            AuthorityValue = r.Field<byte>("Aut_LevelID");
         }
         private string password;//密碼
         public string Password

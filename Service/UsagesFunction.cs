@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows.Documents;
 using His_Pos.Class;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.NewClass.Usage;
 
 namespace His_Pos.Service

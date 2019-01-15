@@ -8,7 +8,7 @@ using His_Pos.NewClass.Person.Customer;
 
 namespace His_Pos.NewClass.Prescription
 {
-    public class Prescriptions:Collection<Prescription>
+    public class Prescriptions:ObservableCollection<Prescription>
     {
         public Prescriptions()
         {

@@ -10,8 +10,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
     {
         public DiseaseCode() { }
         public DiseaseCode(DataRow r) {
-            Id = r["DisCode_ID"].ToString();
-            Name = r["DisCode_ChiName"].ToString();
+            Id = r.Field<string>("DisCode_ID");
+            Name = r.Field<string>("DisCode_ChiName");
+            FullName = r.Field<string>("DisCode_FullName");
         }
         public string Id { get; set; }
         public string Name { get; set; }

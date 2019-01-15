@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
@@ -79,7 +80,7 @@ namespace His_Pos.Class
             {
                 Hospital.Doctor = new MedicalPersonnel();
                 Hospital.Doctor.IcNumber = !string.IsNullOrEmpty(d.Dhead.D24) ? d.Dhead.D24 : string.Empty;
-                Hospital.Division = MainWindow.Divisions.SingleOrDefault(div => div.Id.Equals(d.Dhead.D13))
+                Hospital.Division = ViewModelMainWindow.Divisions.SingleOrDefault(div => div.Id.Equals(d.Dhead.D13))
                     ?.DeepCloneViaJson();
             }
             SpecialCode = new SpecialTreat();
@@ -87,7 +88,7 @@ namespace His_Pos.Class
             SecondDiseaseCode = new DiseaseCode.DiseaseCode();
             MainDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D8) ? d.Dhead.D8 : string.Empty;
             SecondDiseaseCode.Id = !string.IsNullOrEmpty(d.Dhead.D9) ? d.Dhead.D9 : string.Empty;
-            TreatmentCase = MainWindow.PrescriptionCases.SingleOrDefault(t => t.Id.Equals(d.Dhead.D22))?.DeepCloneViaJson();
+            TreatmentCase = ViewModelMainWindow.PrescriptionCases.SingleOrDefault(t => t.Id.Equals(d.Dhead.D22))?.DeepCloneViaJson();
         }
 
         private Hospital _hospital;

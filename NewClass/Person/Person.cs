@@ -17,17 +17,17 @@ namespace His_Pos.NewClass.Person
 
         public Person(DataRow r)
         {
-            Id = (int)r["Person_Id"];
-            Name = r["Person_Name"]?.ToString();
-            IDNumber = r["Person_IDNumber"]?.ToString();
+            Id = r.Field<int>("Person_Id");
+            Name = r.Field<string>("Person_Name");
+            IDNumber = r.Field<string>("Person_IDNumber");
             Gender = r["Person_Gender"]?.ToString();
-            Birthday = (DateTime?)r["Person_BirthDay"];
-            Tel = r["Person_Telephone"]?.ToString();
-            CellPhone = r["Person_Cellphone"]?.ToString();
-            Address = r["Person_Address"]?.ToString();
-            Email = r["Person_Email"]?.ToString();
-            Line = r["Person_LINE"]?.ToString();
-            Note = r["Person_Note"]?.ToString();
+            Birthday = r.Field<DateTime?>("Person_BirthDay");
+            Tel = r.Field<string>("Person_Telephone");
+            CellPhone = r.Field<string>("Person_Cellphone");
+            Address = r.Field<string>("Person_Address");
+            Email = r.Field<string>("Person_Email");
+            Line = r.Field<string>("Person_LINE");
+            Note = r.Field<string>("Person_Note");
         }
         public int Id { get; set; }
         public string Name { get; set; }//姓名

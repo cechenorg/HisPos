@@ -8,9 +8,9 @@ namespace His_Pos.NewClass.Prescription.Treatment.PrescriptionCase
         public PrescriptionCase() { }
         public PrescriptionCase(DataRow r)
         {
-            Id = r["PreCase_ID"].ToString();
-            Name = r["PreCase_Name"].ToString();
-            FullName = r["PreCase_FullName"].ToString();
+            Id = r.Field<string>("PreCase_ID");
+            Name = r.Field<string>("PreCase_Name");
+            FullName = r.Field<string>("PreCase_FullName");
         }
         public string Id { get; }
         public string Name { get; }

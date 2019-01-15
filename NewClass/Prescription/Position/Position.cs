@@ -14,11 +14,11 @@ namespace His_Pos.NewClass.Prescription.Position
             Name = string.Empty;
         }
 
-        public Position(DataRow row)
+        public Position(DataRow r)
         {
-            Id = row["Pos_ID"].ToString();
-            Name = row["Pos_Name"].ToString();
-            FullName = row["Pos_FullName"].ToString();
+            Id = r.Field<string>("Pos_ID");
+            Name = r.Field<string>("Pos_Name");
+            FullName = r.Field<string>("Pos_FullName");
         }
         public string Id { get; set; }
         public string Name { get; set; }

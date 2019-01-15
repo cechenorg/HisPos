@@ -11,11 +11,11 @@ namespace His_Pos.NewClass.Prescription.Treatment.Institution
          
         public Institution(DataRow r)
         {
-            Id = r["Ins_ID"].ToString();
-            Name = r["Ins_Name"].ToString();
-            FullName = r["Ins_FullName"].ToString();
-            Common = r["Ins_IsCommon"].ToString() == "0" ? false : true;
-            IsCooperative = r["Ins_IsCooperate"].ToString() == "0" ? false : true; 
+            Id = r.Field<string>("Ins_ID");
+            Name = r.Field<string>("Ins_Name");
+            FullName = r.Field<string>("Ins_FullName");
+            Common = r.Field<bool>("Ins_IsCommon");
+            IsCooperative = r.Field<bool>("Ins_IsCooperate");
         }
         public string Id { get; }//院所代碼
         public string Name { get; set; }//院所名稱

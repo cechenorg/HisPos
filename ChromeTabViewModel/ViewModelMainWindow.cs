@@ -1,6 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using GalaSoft.MvvmLight.CommandWpf;
+using His_Pos.NewClass.Prescription.Position;
+using His_Pos.NewClass.Prescription.Treatment.AdjustCase;
+using His_Pos.NewClass.Prescription.Treatment.Copayment;
+using His_Pos.NewClass.Prescription.Treatment.Division;
+using His_Pos.NewClass.Prescription.Treatment.Institution;
+using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
+using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Treatment.SpecialTreat;
+using His_Pos.NewClass.Prescription.Usage;
 
 namespace His_Pos.ChromeTabViewModel
 {
@@ -114,17 +124,86 @@ namespace His_Pos.ChromeTabViewModel
             }
         }
 
+        private bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                Set(() => IsBusy, ref _isBusy, value);
+            }
+        }
+        private string _busyContent;
+
+        public string BusyContent
+        {
+            get => _busyContent;
+            set
+            {
+                Set(() => BusyContent, ref _busyContent, value);
+            }
+        }
+
+        public static Institutions Institutions { get; set; }
+        public static Divisions Divisions { get; set; }
+        public static AdjustCases AdjustCases { get; set; }
+        public static PaymentCategories PaymentCategories { get; set; }
+        public static PrescriptionCases PrescriptionCases { get; set; }
+        public static Copayments Copayments { get; set; }
+        public static SpecialTreats SpecialTreats { get; set; }
+        public static Usages Usages { get; set; }
+        public static Positions Positions { get; set; }
+
         public ViewModelMainWindow()
         {
             SelectedTab = ItemCollection.FirstOrDefault();
             ICollectionView view = CollectionViewSource.GetDefaultView(ItemCollection);
-
+            CanMoveTabs = true;
+            ShowAddButton = false;
             //This sort description is what keeps the source collection sorted, based on tab number. 
             //You can also use the sort description to manually sort the tabs, based on your own criterias.
             view.SortDescriptions.Add(new SortDescription("TabNumber", ListSortDirection.Ascending));
+        }
 
-            CanMoveTabs = true;
-            ShowAddButton = false;
+        private RelayCommand initialData;
+        public RelayCommand InitialData
+        {
+            get =>
+                initialData ??
+                (initialData = new RelayCommand(ExecuteInitData));
+            set => initialData = value;
+        }
+
+        private void ExecuteInitData()
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (o, ea) =>
+            {
+                BusyContent = "取得醫療院所...";
+                Institutions = new Institutions(true);
+                BusyContent = "取得科別...";
+                Divisions = new Divisions();
+                BusyContent = "取得調劑案件...";
+                AdjustCases = new AdjustCases();
+                BusyContent = "取得給付類別...";
+                PaymentCategories = new PaymentCategories();
+                BusyContent = "取得處方案件...";
+                PrescriptionCases = new PrescriptionCases();
+                BusyContent = "取得部分負擔...";
+                Copayments = new Copayments();
+                BusyContent = "取得部分負擔...";
+                SpecialTreats = new SpecialTreats();
+                BusyContent = "取得藥品用法...";
+                Usages = new Usages();
+                BusyContent = "取得藥品途徑...";
+                Positions = new Positions();
+            };
+            worker.RunWorkerCompleted += (o, ea) =>
+            {
+                IsBusy = false;
+            };
+            IsBusy = true;
+            worker.RunWorkerAsync();
         }
     }
 }

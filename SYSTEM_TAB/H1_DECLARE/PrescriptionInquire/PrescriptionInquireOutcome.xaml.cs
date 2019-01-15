@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Copayment;
 using His_Pos.Class.Declare;
@@ -26,6 +27,7 @@ using His_Pos.NewClass.Prescription.Treatment.Division;
 using His_Pos.NewClass.Prescription.Treatment.Institution;
 using His_Pos.NewClass.Prescription.Treatment.PaymentCategory;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using His_Pos.Struct.IcData;
@@ -339,7 +341,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             } 
             var declareMedicine = ((DeclareMedicine)medicineCodeAuto.SelectedItem).DeepCloneViaJson();
             if (declareMedicine != null && (declareMedicine.Id.EndsWith("00") || declareMedicine.Id.EndsWith("G0")))
-                declareMedicine.Position = MainWindow.Positions.SingleOrDefault(p => p.Id.Contains("PO"))?.Id;
+                declareMedicine.Position = ViewModelMainWindow.Positions.SingleOrDefault(p => p.Id.Contains("PO"))?.Id;
             var currentRow = GetCurrentRowIndex(sender);
 
             if (DeclareDetails.Count > 0)
@@ -525,7 +527,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionInquire
             string name = dpobj.GetValue(FrameworkElement.NameProperty) as string;
             if (name.Equals("Usage"))
             {
-                foreach (var u in MainWindow.Usages)
+                foreach (var u in ViewModelMainWindow.Usages)
                 {
                     if (t.Text.Equals(u.QuickName))
                         t.Text = u.Name;
