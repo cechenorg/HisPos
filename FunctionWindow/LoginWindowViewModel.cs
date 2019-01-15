@@ -20,6 +20,7 @@ namespace His_Pos.FunctionWindow
     {
         #region ----- Define Command -----
         public RelayCommand<object> LoginCommand { get; set; }
+        public RelayCommand LeaveCommand { get; set; }
         #endregion
 
         #region ----- Define Variables -----
@@ -34,6 +35,7 @@ namespace His_Pos.FunctionWindow
         public LoginWindowViewModel()
         {
             LoginCommand = new RelayCommand<object>(LoginAction);
+            LeaveCommand = new RelayCommand(LeaveAction);
 
             if (!IsConnectionDataValid())
             {
@@ -56,6 +58,11 @@ namespace His_Pos.FunctionWindow
             {
                 IsAccountWrong = true;
             }
+        }
+
+        private void LeaveAction()
+        {
+            Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseLogin"));
         }
         #endregion
 

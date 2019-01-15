@@ -273,7 +273,9 @@
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescription.cs" />
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescriptions.cs" />
+    <Compile Include="NewClass\Manufactory\Manufactories.cs" />
     <Compile Include="NewClass\Manufactory\Manufactory.cs" />
+    <Compile Include="NewClass\Manufactory\ManufactoryDB.cs" />
     <Compile Include="NewClass\Person\Customer\Customer.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerDb.cs" />
     <Compile Include="NewClass\Person\Customer\CustomerHistory\CooperativeViewHistoryDb.cs" />
@@ -319,9 +321,15 @@
     <Compile Include="NewClass\Prescription\Usage\Usages.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\Products.cs" />
-    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnMedicine.cs" />
-    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnOTC.cs" />
-    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnProduct.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseMedicine.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseOTC.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseProduct.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseReturnProductDB.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\PurchaseProducts.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ReturnMedicine.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ReturnOTC.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ReturnProduct.cs" />
+    <Compile Include="NewClass\Product\PurchaseReturn\ReturnProducts.cs" />
     <Compile Include="NewClass\StoreOrder\OrderStatusEnum.cs" />
     <Compile Include="NewClass\StoreOrder\OrderTypeEnum.cs" />
     <Compile Include="NewClass\StoreOrder\PurchaseOrder.cs" />
@@ -567,46 +575,50 @@
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\PurchaseTypeControl.xaml.cs">
       <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\PurchaseTypeControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControl.xaml.cs">
       <DependentUpon>ReturnTypeControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\AddNewOrderWindow\NewOrderTypeControl\ReturnTypeControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\NoDataDetailControl.xaml.cs">
+      <DependentUpon>NoDataDetailControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseNormalProcessingControl.xaml.cs">
       <DependentUpon>PurchaseNormalProcessingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseNormalProcessingControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseSingdeProcessingControl.xaml.cs">
       <DependentUpon>PurchaseSingdeProcessingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseSingdeProcessingControlViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseUnProcessingControl.xaml.cs">
-      <DependentUpon>PurchaseUnProcessingControl.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseNormalUnProcessingControl.xaml.cs">
+      <DependentUpon>PurchaseNormalUnProcessingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseUnProcessingControlViewModel.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseSingdeUnProcessingControl.xaml.cs">
+      <DependentUpon>PurchaseSingdeUnProcessingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseWaitingControl.xaml.cs">
       <DependentUpon>PurchaseWaitingControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseWaitingControlViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDetailControl.xaml.cs">
       <DependentUpon>PurchaseDetailControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDetailControlViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnProcessingControl.xaml.cs">
-      <DependentUpon>ReturnProcessingControl.xaml</DependentUpon>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnNormalProcessingControl.xaml.cs">
+      <DependentUpon>ReturnNormalProcessingControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeProcessingControl.xaml.cs">
+      <DependentUpon>ReturnSingdeProcessingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnUnProcessingControl.xaml.cs">
       <DependentUpon>ReturnUnProcessingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnWaitingControl.xaml.cs">
+      <DependentUpon>ReturnWaitingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDetailControl.xaml.cs">
       <DependentUpon>ReturnDetailControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDetailControlViewModel.cs" />
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturn.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnLocator.cs" />
+    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnView.xaml.cs">
       <DependentUpon>ProductPurchaseReturnView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\ProductPurchaseReturnViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchase\AddNewOrderTypeControl\PurchaseTypeControl.xaml.cs">
       <DependentUpon>PurchaseTypeControl.xaml</DependentUpon>
     </Compile>
@@ -1013,6 +1025,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\NoDataDetailControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseNormalProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -1021,7 +1037,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseUnProcessingControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseNormalUnProcessingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\PurchaseDataGridControl\PurchaseSingdeUnProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -1033,11 +1053,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnProcessingControl.xaml">
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnNormalProcessingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnSingdeProcessingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnUnProcessingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SYSTEM_TAB\H2_STOCK_MANAGE\ProductPurchaseReturn\OrderDetailControl\ReturnDataGridControl\ReturnWaitingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

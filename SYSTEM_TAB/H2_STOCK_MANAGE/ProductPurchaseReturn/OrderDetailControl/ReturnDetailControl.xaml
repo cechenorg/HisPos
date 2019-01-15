@@ -4,9 +4,63 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             xmlns:productPurchaseReturn="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
+             xmlns:returnDataGridControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl.ReturnDataGridControl"
+             DataContext="{Binding Source={StaticResource ProductPurchaseReturnLocator}, Path=ProductPurchaseReturn}"
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <DataTemplate x:Key="ReturnNormalProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <returnDataGridControl:ReturnNormalProcessingControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="ReturnSingdeProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <returnDataGridControl:ReturnSingdeProcessingControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="ReturnUnProcessingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <returnDataGridControl:ReturnUnProcessingControl/>
+        </DataTemplate>
+        <DataTemplate x:Key="ReturnWaitingControl" DataType="{x:Type productPurchaseReturn:ProductPurchaseReturnViewModel}">
+            <returnDataGridControl:ReturnWaitingControl/>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid DataContext="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Background="{StaticResource GridDarkerBackGround}">
+            <Label Name="ID" Content="{Binding ID}" Width="270" VerticalAlignment="Center" Foreground="Black" FontSize="40" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="20,0,0,0"/>
+            <Label Content="供應商 " VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="30" FontWeight="Bold" FontFamily="Segoe UI Semibold" Margin="10,0,0,0"/>
+            <Label Content="{Binding Path=OrderManufactory.Name}" Width="220" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+            <Label Content="{Binding Path=OrderManufactory.Telephone}" VerticalAlignment="Bottom" Foreground="{StaticResource ForeGround}" FontSize="28" FontFamily="Segoe UI Semi"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Background="{StaticResource GridDarkerBackGround}">
+            <TextBlock Text="退貨" Foreground="Red" FontFamily="Segoe UI Semibold" FontSize="22" VerticalAlignment="Center" Margin="25,0,0,0"/>
+            <Label Content="退貨人" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <Label Content="{Binding OrderEmployeeName}" Width="120" Foreground="Black" FontFamily="Segoe UI Semi" FontSize="18" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Background="{StaticResource GridDarkerBackGround}">
+            <Label Content="備註" Foreground="Black" FontFamily="Segoe UI Semibold" FontSize="18" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            <TextBox Width="980" Text="{Binding Note}" Margin="10,0,0,5" FontFamily="Segoe UI Semi" FontSize="18"/>
+        </StackPanel>
+        <ContentControl Grid.Row="3">
+            <ContentControl.Style>
+                <Style TargetType="{x:Type ContentControl}">
+                    <Setter Property="ContentTemplate" Value="{StaticResource ReturnUnProcessingControl}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderStatus}" Value="WAITING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnWaitingControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderStatus}" Value="NORMAL_PROCESSING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnNormalProcessingControl}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=CurrentStoreOrder.OrderStatus}" Value="SINGDE_PROCESSING">
+                            <Setter Property="ContentTemplate" Value="{StaticResource ReturnSingdeProcessingControl}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
     </Grid>
 </UserControl>
