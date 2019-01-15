@@ -30,8 +30,6 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         {
             GetRelatedDataCommand = new RelayCommand(GetRelatedDataAction);
             
-            InitCollection();
-
             Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
             {
                 if (notificationMessage.Notification == "AddProduct")
@@ -53,10 +51,7 @@ namespace His_Pos.FunctionWindow.AddProductWindow
         #endregion
 
         #region ----- Define Functions -----
-        private void InitCollection()
-        {
-            ProductStructCollection = ProductStructs.GetProductStructs();
-        }
+
         #endregion
 
     }
