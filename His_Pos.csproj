@@ -269,6 +269,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FunctionWindow\AddProductWindow\AddProductViewModel.cs" />
+    <Compile Include="FunctionWindow\AddProductWindow\PurchaseReturnAddProductWindow.xaml.cs">
+      <DependentUpon>PurchaseReturnAddProductWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Database\DataBaseFunction.cs" />
     <Compile Include="FunctionWindow\ConfirmWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
@@ -324,6 +328,7 @@
     <Compile Include="NewClass\Prescription\Usage\Usages.cs" />
     <Compile Include="NewClass\Product\Product.cs" />
     <Compile Include="NewClass\Product\Products.cs" />
+    <Compile Include="NewClass\Product\ProductStruct.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseMedicine.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseOTC.cs" />
     <Compile Include="NewClass\Product\PurchaseReturn\PurchaseProduct.cs" />
@@ -921,6 +926,10 @@
     <Compile Include="ChromeTabViewModel\ViewModelMainWindow.cs" />
     <Compile Include="ChromeTabViewModel\ViewModelProductDetailWindow.cs" />
     <Compile Include="ChromeTabViewModel\Win32.cs" />
+    <Page Include="FunctionWindow\AddProductWindow\PurchaseReturnAddProductWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SYSTEM_TAB\ADMIN_MANAGE\AdminFunction\AdminFunctionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
