@@ -10,6 +10,7 @@ using GalaSoft.MvvmLight;
 using His_Pos.NewClass.CooperativeInstitution;
 using His_Pos.NewClass.Person;
 using His_Pos.NewClass.Person.Customer;
+using His_Pos.NewClass.Product;
 using JetBrains.Annotations;
 using Customer = His_Pos.NewClass.Person.Customer.Customer;
 
@@ -32,8 +33,8 @@ namespace His_Pos.NewClass.Prescription
             Source = PrescriptionSource.Cooperative;
             SourceId = c.CooperativePrescriptionId;
             Remark = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Remark;
-            Treatment = new Treatment.Treatment(c);
-
+            MedicineDays = string.IsNullOrEmpty(c.DeclareXmlDocument.Prescription.MedicineOrder.Days) ? 0 : Convert.ToInt32(c.DeclareXmlDocument.Prescription.MedicineOrder.Days); 
+            Treatment = new Treatment.Treatment(c); 
             Patient = new Customer();
             Patient.IDNumber = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.IdNumber;
             Patient.Name = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Name;
@@ -43,9 +44,9 @@ namespace His_Pos.NewClass.Prescription
             Patient.Birthday = Convert.ToDateTime(birthyear + "/" + birthmonth + "/" + birthday);
             Patient.Tel = c.DeclareXmlDocument.Prescription.CustomerProfile.Customer.Phone;
             Card = new IcCard(); 
-            IsSendToSingde = false;
-            IsAdjust = false;
-            IsRead = c.IsRead == "Y" ? true : false;
+            PrescriptionStatus.IsSendToSingde = false;
+            PrescriptionStatus.IsAdjust = false;
+            PrescriptionStatus.IsRead = c.IsRead == "Y" ? true : false;
         }
         public int Id { get; }
         public Customer Patient { get; set; }//病患
@@ -55,14 +56,22 @@ namespace His_Pos.NewClass.Prescription
         public PrescriptionSource Source { get; set; }
         public string SourceId { get; }//合作診所.慢箋Id
         public string OrderNumber { get; set; }//傳送藥健康單號
-        public string Remark { get; }//回傳合作診所單號
-        public bool IsSendToSingde { get; set; }//是否傳送藥健康
-        public bool IsAdjust { get; set; }//是否調劑.扣庫
-        public bool IsRead { get; set; }//是否已讀
-
-        public void PrintMedBag()
-        {
-
+        public string Remark { get; }//回傳合作診所單號 
+        public int MedicineDays { get; set; } //給藥日份
+        public int MedicalServiceID { get; set; } //藥事服務代碼 
+        public string DeclareContent { get; set; } //申報檔內容 
+        public int DeclareFileID { get; set; } //申報檔ID
+        public PrescriptionPoint PrescriptionPoint { get; set; } = new PrescriptionPoint(); //處方點數區
+        public PrescriptionStatus PrescriptionStatus { get; set; } = new PrescriptionStatus(); //處方狀態區 = 
+        public Products Medicines { get; set; } = new Products(); //調劑用藥
+        #region Function
+        public int InsertPresription() {
+            return PrescriptionDb.InsertPrescription(this);
         }
+        public void PrintMedBag() { 
+        }
+
+        #endregion
+
     }
 }

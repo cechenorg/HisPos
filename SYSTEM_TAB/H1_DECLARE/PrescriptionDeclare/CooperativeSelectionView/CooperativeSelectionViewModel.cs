@@ -267,7 +267,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         {
             if (!(e.Item is Prescription src))
                 e.Accepted = false;
-            else if (IsRead != null && (src.IsRead && (bool)IsRead))
+            else if (IsRead != null && (src.PrescriptionStatus.IsRead && (bool)IsRead))
             {
                 if(StartDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) < 0)
                     e.Accepted = false;
@@ -276,7 +276,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
                 else
                     e.Accepted = true;
             }
-            else if (IsNotRead != null && (!src.IsRead && (bool)IsNotRead))
+            else if (IsNotRead != null && (!src.PrescriptionStatus.IsRead && (bool)IsNotRead))
             {
                 if (StartDate != null && DateTime.Compare(src.Treatment.TreatDate, (DateTime)StartDate) < 0)
                     e.Accepted = false;

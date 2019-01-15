@@ -42,6 +42,9 @@ namespace His_Pos.NewClass.Prescription.Treatment
             } 
             PrescriptionCase = MainWindow.PrescriptionCases.Count(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase) == 0 ? new PrescriptionCase.PrescriptionCase() : MainWindow.PrescriptionCases.Single(precase => precase.Id == c.DeclareXmlDocument.Prescription.Insurance.PrescriptionCase);
             Copayment = MainWindow.Copayments.Count(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode) == 0 ? new Copayment.Copayment() : MainWindow.Copayments.Single(cop => cop.Id == c.DeclareXmlDocument.Prescription.Insurance.CopaymentCode);
+            MedicalNumber = c.DeclareXmlDocument.Prescription.Insurance.MedicalNumber;
+            TreatDate = Convert.ToDateTime(c.InsertDate);
+            AdjustDate = DateTime.Today;
             AdjustCase = new AdjustCase.AdjustCase();
             PaymentCategory = new PaymentCategory.PaymentCategory();
             SpecialTreat = new SpecialTreat.SpecialTreat();
@@ -229,7 +232,6 @@ namespace His_Pos.NewClass.Prescription.Treatment
             }
         }
         
-
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 

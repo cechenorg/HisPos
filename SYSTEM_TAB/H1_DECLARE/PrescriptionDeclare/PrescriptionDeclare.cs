@@ -49,14 +49,10 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare
 
         private void ExcuteShowCooperativeWindow()
         {
-            ConfirmWindow yesNoMessageWindow = new ConfirmWindow("dfff", "123");
-            yesNoMessageWindow.ShowDialog();
-            var a = yesNoMessageWindow.DialogResult;
-
-           /// var cooperativeSelectionWindow = new CooperativeSelectionWindow();
-           /// cooperativeSelectionWindow.ShowDialog();
-           /// if(((CooperativeSelectionViewModel)cooperativeSelectionWindow.DataContext).SelectedPrescription != null)
-           ///     CurrentPrescription = ((CooperativeSelectionViewModel) cooperativeSelectionWindow.DataContext).SelectedPrescription;
+            var cooperativeSelectionWindow = new CooperativeSelectionWindow();
+            cooperativeSelectionWindow.ShowDialog();
+            if(((CooperativeSelectionViewModel)cooperativeSelectionWindow.DataContext).SelectedPrescription != null)
+                CurrentPrescription = ((CooperativeSelectionViewModel) cooperativeSelectionWindow.DataContext).SelectedPrescription;
         }
         #endregion 
     }

@@ -269,6 +269,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Database\DataBaseFunction.cs" />
     <Compile Include="FunctionWindow\ConfirmWindowViewModel.cs" />
     <Compile Include="FunctionWindow\LoginWindowViewModel.cs" />
     <Compile Include="NewClass\CooperativeInstitution\CooperativePrescription.cs" />
@@ -285,7 +286,9 @@
     <Compile Include="NewClass\Person\Employee\EmployeeDb.cs" />
     <Compile Include="NewClass\Person\Employee\Employees.cs" />
     <Compile Include="NewClass\Person\Person.cs" />
+    <Compile Include="NewClass\PrescriptionStatus.cs" />
     <Compile Include="NewClass\Prescription\IcCard.cs" />
+    <Compile Include="NewClass\Prescription\PrescriptionPoint.cs" />
     <Compile Include="NewClass\Prescription\Position\Positions.cs" />
     <Compile Include="NewClass\Prescription\Prescription.cs" />
     <Compile Include="NewClass\Prescription\PrescriptionDb.cs" />
@@ -631,6 +634,7 @@
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageView.xaml.cs">
       <DependentUpon>CustomerManageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\CustomerManage\CustomerManageViewModel.cs" />
     <Compile Include="SYSTEM_TAB\H4_BASIC_MANAGE\EmployeeManage\ChangePasswordWindow.xaml.cs">
       <DependentUpon>ChangePasswordWindow.xaml</DependentUpon>
     </Compile>
