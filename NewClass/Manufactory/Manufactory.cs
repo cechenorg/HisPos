@@ -9,11 +9,11 @@ namespace His_Pos.NewClass.Manufactory
 {
     public class Manufactory
     {
-        public Manufactory(DataRow dataRow)
+        public Manufactory(DataRow row)
         {
-            ID = dataRow["Man_ID"].ToString();
-            Name = dataRow["Man_NickName"].ToString();
-            Telephone = dataRow["Man_Telephone"].ToString();
+            ID = row.Field<string>("Man_ID");
+            Name = row.Field<string>("Man_NickName");
+            Telephone = row.Field<string>("Man_Telephone");
         }
 
         #region ----- Define Variables -----

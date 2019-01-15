@@ -17,7 +17,7 @@ namespace His_Pos.NewClass.StoreOrder
         {
             OrderManufactory = new Manufactory.Manufactory(row);
 
-            switch (row["StoOrd_Type"].ToString())
+            switch (row.Field<string>("StoOrd_Type"))
             {
                 case "P":
                     OrderType = OrderTypeEnum.PURCHASE;
@@ -27,7 +27,7 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
             }
 
-            switch (row["StoOrd_Status"].ToString())
+            switch (row.Field<string>("StoOrd_Status"))
             {
                 case "U":
                     OrderStatus = OrderManufactory.ID.Equals("0")
@@ -53,14 +53,14 @@ namespace His_Pos.NewClass.StoreOrder
                     break;
             }
 
-            ID = row["StoOrd_ID"].ToString();
+            ID = row.Field<string>("StoOrd_ID");
             OrderWarehouse = new WareHouse.WareHouse(row);
-            OrderEmployeeName = row["Emp_Name"].ToString();
-            Note = row["StoOrd_Note"].ToString();
-            PatientName = row["Cus_Name"].ToString();
-            TotalPrice = double.Parse(row["Total"].ToString());
+            OrderEmployeeName = row.Field<string>("Emp_Name");
+            Note = row.Field<string>("StoOrd_Note");
+            PatientName = row.Field<string>("Cus_Name");
+            TotalPrice = row.Field<double>("Total");
 
-            initProductCount = int.Parse(row["ProductCount"].ToString());
+            initProductCount = row.Field<int>("ProductCount");
         }
         
         #region ----- Define Variables -----
@@ -139,6 +139,13 @@ namespace His_Pos.NewClass.StoreOrder
         public void SaveOrder()
         {
 
+        }
+
+        public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)
+        {
+            DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID);
+
+            return new StoreOrder(dataTable.Rows[0]);
         }
         #endregion
     }

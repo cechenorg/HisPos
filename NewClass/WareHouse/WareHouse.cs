@@ -11,8 +11,8 @@ namespace His_Pos.NewClass.WareHouse
     {
         public WareHouse(DataRow row)
         {
-            ID = row["War_ID"].ToString();
-            Name = row["War_Name"].ToString();
+            ID = row.Field<string>("War_ID");
+            Name = row.Field<string>("War_Name");
         }
 
         #region ----- Define Variables -----
