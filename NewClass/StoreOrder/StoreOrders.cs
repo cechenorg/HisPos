@@ -14,7 +14,16 @@ namespace His_Pos.NewClass.StoreOrder
         {
             foreach (DataRow row in dataTable.Rows)
             {
-                Add(new StoreOrder(row));
+                switch (row.Field<string>("StoOrd_Type"))
+                {
+                    case "P":
+                        Add(new PurchaseOrder(row));
+                        break;
+                    case "R":
+                        Add(new ReturnOrder(row));
+                        return;
+                }
+
             }
         }
 

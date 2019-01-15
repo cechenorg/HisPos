@@ -42,7 +42,14 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public StoreOrder CurrentStoreOrder
         {
             get { return currentStoreOrder; }
-            set { Set(() => CurrentStoreOrder, ref currentStoreOrder, value); }
+            set
+            {
+                MainWindow.ServerConnection.OpenConnection();
+                currentStoreOrder?.SaveOrder();
+                value.GetOrderProducts();
+                MainWindow.ServerConnection.CloseConnection();
+                Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
+            }
         }
         #endregion
 

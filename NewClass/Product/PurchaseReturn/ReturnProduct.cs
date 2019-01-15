@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.Product.PurchaseReturn
 {
-    public class PurchaseReturnOTC : PurchaseReturnProduct
+    public class ReturnProduct : Product
     {
-        public PurchaseReturnOTC(DataRow dataRow) : base(dataRow)
+        public ReturnProduct() : base()
+        {
+
+        }
+
+        public ReturnProduct(DataRow dataRow) : base(dataRow)
         {
         }
     }

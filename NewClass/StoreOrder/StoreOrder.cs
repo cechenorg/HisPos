@@ -7,25 +7,16 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using His_Pos.NewClass.Manufactory;
 using His_Pos.NewClass.Product;
+using His_Pos.NewClass.Product.PurchaseReturn;
 using His_Pos.NewClass.WareHouse;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public class StoreOrder: ObservableObject
+    public abstract class StoreOrder: ObservableObject
     {
         public StoreOrder(DataRow row)
         {
             OrderManufactory = new Manufactory.Manufactory(row);
-
-            switch (row.Field<string>("StoOrd_Type"))
-            {
-                case "P":
-                    OrderType = OrderTypeEnum.PURCHASE;
-                    break;
-                case "R":
-                    OrderType = OrderTypeEnum.RETURN;
-                    break;
-            }
 
             switch (row.Field<string>("StoOrd_Status"))
             {
@@ -57,14 +48,13 @@ namespace His_Pos.NewClass.StoreOrder
             OrderWarehouse = new WareHouse.WareHouse(row);
             OrderEmployeeName = row.Field<string>("Emp_Name");
             Note = row.Field<string>("StoOrd_Note");
-            PatientName = row.Field<string>("Cus_Name");
             TotalPrice = (double)row.Field<decimal>("Total");
 
             initProductCount = row.Field<int>("ProductCount");
         }
         
         #region ----- Define Variables -----
-        private int initProductCount = 0;
+        protected int initProductCount = 0;
 
         public OrderTypeEnum OrderType { get; set; }
         public OrderStatusEnum OrderStatus { get; set; }
@@ -73,20 +63,13 @@ namespace His_Pos.NewClass.StoreOrder
         public WareHouse.WareHouse OrderWarehouse { get; set; }
         public string OrderEmployeeName { get; set; }
         public string Note { get; set; }
-        public string PatientName { get; set; }
-        public Products OrderProducts { get; set; }
         public double TotalPrice { get; set; }
-        public int ProductCount
-        {
-            get
-            {
-                if (OrderProducts is null) return initProductCount;
-                else return OrderProducts.Count;
-            }
-        }
         #endregion
 
         #region ----- Define Functions -----
+
+        public abstract void GetOrderProducts();
+        public abstract void SaveOrder();
 
         #region ----- Status Function -----
         public void MoveToNextStatus()
@@ -133,19 +116,22 @@ namespace His_Pos.NewClass.StoreOrder
         public bool DeleteOrder()
         {
             DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
-            return Boolean.Parse(dataTable.Rows[0][""].ToString());
+            return dataTable.Rows[0].Field<bool>("Usa_PrintName");
         }
-
-        public void SaveOrder()
-        {
-
-        }
-
+        
         public static StoreOrder AddNewStoreOrder(OrderTypeEnum orderType, Manufactory.Manufactory manufactory, int employeeID)
         {
             DataTable dataTable = StoreOrderDB.AddNewStoreOrder(orderType, manufactory, employeeID);
 
-            return new StoreOrder(dataTable.Rows[0]);
+            switch (orderType)
+            {
+                case OrderTypeEnum.PURCHASE:
+                    return new PurchaseOrder(dataTable.Rows[0]);
+                case OrderTypeEnum.RETURN:
+                    return new ReturnOrder(dataTable.Rows[0]);
+                default:
+                    return null;
+            }
         }
         #endregion
     }
