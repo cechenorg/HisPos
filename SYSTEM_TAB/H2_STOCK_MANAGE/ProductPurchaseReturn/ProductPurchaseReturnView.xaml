@@ -69,7 +69,7 @@
                 <Image Source="/Images/BlueDot.png" Width="15"/>
             </StackPanel>
             <DataGrid Grid.Row="2" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}"
+                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollection}"
                       SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="StoreOrders_OnSelectionChanged">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">

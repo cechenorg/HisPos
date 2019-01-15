@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace His_Pos.NewClass.StoreOrder
 {
-    public class StoreOrders : Collection<StoreOrder>
+    public class StoreOrders : ObservableCollection<StoreOrder>
     {
         private StoreOrders(DataTable dataTable)
         {
