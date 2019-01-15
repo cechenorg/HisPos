@@ -32,8 +32,13 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
 
         #region ----- Define Variables -----
         private StoreOrder currentStoreOrder;
+        private StoreOrders storeOrderCollection;
 
-        public StoreOrders StoreOrderCollection { get; set; }
+        public StoreOrders StoreOrderCollection
+        {
+            get { return storeOrderCollection; }
+            set { Set(() => StoreOrderCollection, ref storeOrderCollection, value); }
+        }
         public StoreOrder CurrentStoreOrder
         {
             get { return currentStoreOrder; }
@@ -46,6 +51,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             AddOrderCommand = new RelayCommand(AddOrderAction);
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
+            ReloadCommand = new RelayCommand(ReloadAction);
 
             InitVariables();
         }
@@ -61,9 +67,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             if (viewModel.NewStoreOrder != null)
             {
                 StoreOrderCollection.Insert(0, viewModel.NewStoreOrder);
-                CurrentStoreOrder = StoreOrderCollection[0];
+                RaisePropertyChanged(() => StoreOrderCollection);
 
-                RaisePropertyChanged("StoreOrderCollection");
+                CurrentStoreOrder = StoreOrderCollection[0];
             }
         }
         private void DeleteOrderAction()
@@ -79,6 +85,10 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         {
             if(CurrentStoreOrder.CheckOrder())
                 CurrentStoreOrder.MoveToNextStatus();
+        }
+        private void ReloadAction()
+        {
+            InitVariables();
         }
         #endregion
 

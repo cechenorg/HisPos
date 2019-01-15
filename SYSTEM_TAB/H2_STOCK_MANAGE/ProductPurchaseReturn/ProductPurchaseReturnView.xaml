@@ -6,8 +6,15 @@
              xmlns:local="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn"
              xmlns:gif="http://wpfanimatedgif.codeplex.com"
              xmlns:orderDetailControl="clr-namespace:His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.OrderDetailControl"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:command="http://www.galasoft.ch/mvvmlight"
              DataContext="{Binding Source={StaticResource ProductPurchaseReturnLocator}, Path=ProductPurchaseReturn}"
              mc:Ignorable="d">
+    <i:Interaction.Triggers >
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding ReloadCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <UserControl.Resources>
         <DataTemplate x:Key="PurchaseOrderDetail" DataType="{x:Type local:ProductPurchaseReturnViewModel}">
             <orderDetailControl:PurchaseDetailControl/>
@@ -61,9 +68,9 @@
                 <RadioButton Content="進退貨單" Tag="1" GroupName="OrderType" Margin="25,0,5,0" FontSize="18" FontFamily="Segoe UI Semibold" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
                 <Image Source="/Images/BlueDot.png" Width="15"/>
             </StackPanel>
-            <DataGrid Grid.Row="2" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None"
-                      ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False"
-                      ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentStoreOrder, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid Grid.Row="2" Background="Transparent" HeadersVisibility="None" HorizontalScrollBarVisibility="Hidden" GridLinesVisibility="None" ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
+                      AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" CanUserAddRows="False" ItemsSource="{Binding StoreOrderCollection, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding CurrentStoreOrder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="StoreOrders_OnSelectionChanged">
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
                         <Setter Property="Background" Value="Transparent"/>
