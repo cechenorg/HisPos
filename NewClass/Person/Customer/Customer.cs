@@ -54,12 +54,14 @@ namespace His_Pos.NewClass.Person.Customer
             return customer;
         }
         public Customer Check() {
-            MainWindow.ServerConnection.OpenConnection();
             DataTable table = CustomerDb.CheckCustomer(this);
             Customer newcustomer = table.Rows.Count == 0 ? null : new Customer(table.Rows[0]);
-            MainWindow.ServerConnection.CloseConnection();
             return newcustomer;
         }
+        public void UpdateEditTime() {
+            CustomerDb.UpdateEditTime(Id);
+        }
+
         #endregion
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

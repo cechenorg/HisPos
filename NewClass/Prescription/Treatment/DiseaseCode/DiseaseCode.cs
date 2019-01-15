@@ -19,9 +19,7 @@ namespace His_Pos.NewClass.Prescription.Treatment.DiseaseCode
         public DiseaseCode GetDataByCodeId() {
             if (string.IsNullOrEmpty(Id))
                 return new DiseaseCode();
-            MainWindow.ServerConnection.OpenConnection();
             DataTable table = DiseaseCodeDb.GetDataByCodeId(Id);
-            MainWindow.ServerConnection.CloseConnection();
             return table.Rows.Count == 0 ? null : new DiseaseCode(table.Rows[0]);
         }
     }
