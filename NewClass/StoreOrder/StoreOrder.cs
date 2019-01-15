@@ -130,9 +130,10 @@ namespace His_Pos.NewClass.StoreOrder
         }
         #endregion
 
-        public void DeleteOrder()
+        public bool DeleteOrder()
         {
-
+            DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(ID);
+            return Boolean.Parse(dataTable.Rows[0][""].ToString());
         }
 
         public void SaveOrder()

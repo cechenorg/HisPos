@@ -67,11 +67,9 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void DeleteOrderAction()
         {
             MainWindow.ServerConnection.OpenConnection();
-            DataTable dataTable = StoreOrderDB.RemoveStoreOrderByID(CurrentStoreOrder.ID);
+            bool isSuccess = CurrentStoreOrder.DeleteOrder();
             MainWindow.ServerConnection.CloseConnection();
-
-            bool isSuccess = Boolean.Parse(dataTable.Rows[0][""].ToString());
-
+            
             if (isSuccess)
                 StoreOrderCollection.Remove(CurrentStoreOrder);
         }
@@ -86,7 +84,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void InitVariables()
         {
             MainWindow.ServerConnection.OpenConnection();
-            StoreOrderCollection = new StoreOrders(StoreOrderDB.GetNotDoneStoreOrders());
+            StoreOrderCollection = StoreOrders.GetOrdersNotDone();
             MainWindow.ServerConnection.CloseConnection();
 
             if (StoreOrderCollection.Count > 0)
