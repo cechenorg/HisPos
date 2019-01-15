@@ -52,8 +52,8 @@
         </Grid.ColumnDefinitions>
         <Grid Margin="10,10,0,10" Grid.Column="0" Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="35"/>
-                <RowDefinition Height="35"/>
+                <RowDefinition Height="0"/>
+                <RowDefinition Height="0"/>
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
