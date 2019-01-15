@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace His_Pos.FunctionWindow.AddProductWindow
 {
     /// <summary>
-    /// PurchaseReturnAddProductWindow.xaml 的互動邏輯
+    /// AddProductWindow.xaml 的互動邏輯
     /// </summary>
-    public partial class PurchaseReturnAddProductWindow : Window
+    public partial class AddProductWindow : Window
     {
-        public PurchaseReturnAddProductWindow()
+        public AddProductWindow()
         {
             InitializeComponent();
         }
