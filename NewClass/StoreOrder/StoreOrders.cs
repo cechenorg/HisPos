@@ -21,7 +21,7 @@ namespace His_Pos.NewClass.StoreOrder
                         break;
                     case "R":
                         Add(new ReturnOrder(row));
-                        return;
+                        break;
                 }
 
             }

@@ -46,7 +46,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             {
                 MainWindow.ServerConnection.OpenConnection();
                 currentStoreOrder?.SaveOrder();
-                value.GetOrderProducts();
+                value?.GetOrderProducts();
                 MainWindow.ServerConnection.CloseConnection();
                 Set(() => CurrentStoreOrder, ref currentStoreOrder, value);
             }
