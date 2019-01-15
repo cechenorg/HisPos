@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using GalaSoft.MvvmLight.Messaging;
+using His_Pos.ChromeTabViewModel;
 
 namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelectionWindow
 {
@@ -12,6 +13,11 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
         {
             InitializeComponent();
             this.DataContext = new CooperativeSelectionViewModel();
+            Messenger.Default.Register<NotificationMessage>(this, (notificationMessage) =>
+            {
+                if (notificationMessage.Notification.Equals("CloseCooperativeSelection"))
+                    Close();
+            });
             this.Unloaded += (sender, e) => Messenger.Default.Unregister(this);
         }
     }

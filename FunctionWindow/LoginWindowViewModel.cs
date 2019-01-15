@@ -44,13 +44,14 @@ namespace His_Pos.FunctionWindow
         #region ----- Define Actions -----
         private void LoginAction(object sender)
         {
-            Employee user = Employee.Login(Account, (sender as PasswordBox).Password);
+            Employee user = Employee.Login(Account, (sender as PasswordBox)?.Password);
             if (user != null)
             {
-                LoadingWindow loadingWindow = new LoadingWindow();
-                loadingWindow.GetNecessaryData(user);
-
-                Messenger.Default.Send<NotificationMessage>(new NotificationMessage("CloseLogin"));
+                //LoadingWindow loadingWindow = new LoadingWindow();
+                //loadingWindow.GetNecessaryData(user);
+                MainWindow mainWindow = new MainWindow(user);
+                mainWindow.Show();
+                Messenger.Default.Send(new NotificationMessage("CloseLogin"));
             }
             else
             {

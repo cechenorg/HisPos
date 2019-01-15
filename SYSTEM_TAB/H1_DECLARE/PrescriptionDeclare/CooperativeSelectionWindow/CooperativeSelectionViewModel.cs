@@ -229,16 +229,26 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare.CooperativeSelection
             SelectedPrescription.Patient = SelectedPrescription.Patient.Check(); 
             SelectedPrescription.Treatment.MainDisease = SelectedPrescription.Treatment.MainDisease.GetDataByCodeId();
             SelectedPrescription.Treatment.SubDisease = SelectedPrescription.Treatment.SubDisease.GetDataByCodeId();
-            Messenger.Default.Send<Prescription>(SelectedPrescription, "SelectedPrescription");
-            window?.Close();
+            Messenger.Default.Send(SelectedPrescription, "SelectedPrescription");
+            Messenger.Default.Send(new NotificationMessage("CloseCooperativeSelection"));
         }
         #endregion
 
         public CooperativeSelectionViewModel()
         {
             PrescriptionSelected = new RelayCommand<Window>(ExecutePrescriptionSelected);
+            Messenger.Default.Register<Prescriptions>(this, "CooperativePrescriptions", GetCooperativePrescription);
+        }
+
+        ~CooperativeSelectionViewModel()
+        {
+            Messenger.Default.Unregister(this);
+        }
+
+        private void GetCooperativePrescription(Prescriptions receivePrescriptions)
+        {
             CooperativePrescriptions = new Prescriptions();
-            CooperativePrescriptions.GetCooperativePrescriptions( MainWindow.CurrentPharmacy.Id, (DateTime)StartDate, (DateTime)EndDate);
+            CooperativePrescriptions = receivePrescriptions;
             CooPreCollectionViewSource = new CollectionViewSource { Source = CooperativePrescriptions };
             CooPreCollectionView = CooPreCollectionViewSource.View;
             IsNotRead = true;

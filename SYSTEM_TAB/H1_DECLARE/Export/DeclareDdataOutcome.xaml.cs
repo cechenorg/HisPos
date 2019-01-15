@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.AdjustCase;
 using His_Pos.Class.Copayment;
@@ -22,6 +23,7 @@ using His_Pos.FunctionWindow;
 using His_Pos.Interface;
 using His_Pos.NewClass.Prescription.Treatment.Copayment;
 using His_Pos.NewClass.Prescription.Treatment.PrescriptionCase;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 using JetBrains.Annotations;
@@ -346,7 +348,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.Export
             string name = dpobj.GetValue(FrameworkElement.NameProperty) as string;
             if (name.Equals("Usage"))
             {
-                foreach (var u in MainWindow.Usages)
+                foreach (var u in ViewModelMainWindow.Usages)
                 {
                     if (t.Text.Equals(u.QuickName))
                         t.Text = u.Name;

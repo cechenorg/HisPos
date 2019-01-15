@@ -32,7 +32,10 @@
     xmlns:cooperativeAdjustReport="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeAdjustReport"
     xmlns:CooperativeEntry="clr-namespace:His_Pos.SYSTEM_TAB.H7_ACCOUNTANCY_REPORT.CooperativeEntry"
     xmlns:generalCustomControl="clr-namespace:His_Pos.GeneralCustomControl"
-    xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare" 
+    xmlns:prescriptionDeclare="clr-namespace:His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDeclare"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:command="http://www.galasoft.ch/mvvmlight"
     x:Class="His_Pos.MainWindow"
     Title="藥健康 HIS POS 系統"
     Width="{Binding Width, Source={x:Static SystemParameters.WorkArea}}"
@@ -184,8 +187,14 @@
     <Window.DataContext>
         <Binding Path="ViewModelMainWindow" Source="{StaticResource Locator}"/>
     </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <command:EventToCommand Command="{Binding InitialData}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Viewbox Stretch="Fill">
-        <Grid x:Name="MainGrid" Background="#FF333337">
+        <xctk:BusyIndicator IsBusy="{Binding IsBusy,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}" BusyContent="{Binding BusyContent,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}">
+            <Grid x:Name="MainGrid" Background="#FF333337">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="25"/>
@@ -369,5 +378,6 @@
                 </StatusBarItem>
             </StatusBar>
         </Grid>
+        </xctk:BusyIndicator>
     </Viewbox>
 </Window>

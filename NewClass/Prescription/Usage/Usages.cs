@@ -5,7 +5,7 @@ using His_Pos.NewClass.Usage;
 
 namespace His_Pos.NewClass.Prescription.Usage
 {
-    public class Usages:Collection<NewClass.Usage.Usage>
+    public class Usages:Collection<Usage>
     {
         public Usages()
         {
@@ -16,7 +16,7 @@ namespace His_Pos.NewClass.Prescription.Usage
             var table = UsageDb.GetData();
             foreach (DataRow row in table.Rows)
             {
-                Add(new NewClass.Usage.Usage(row));
+                Add(new Usage(row));
             }
         }
     }

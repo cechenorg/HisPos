@@ -60,16 +60,6 @@ namespace His_Pos
         }
 
         public static Pharmacy CurrentPharmacy;
-        public static bool ItemSourcesSet { get; set; }
-        public static Institutions Institutions { get; set; }
-        public static Divisions Divisions { get; set; }
-        public static AdjustCases AdjustCases { get; set; }
-        public static PaymentCategories PaymentCategories { get; set; }
-        public static PrescriptionCases PrescriptionCases { get;set; }
-        public static Copayments Copayments { get; set; }
-        public static SpecialTreats SpecialCode { get; set; }
-        public static Usages Usages { get; set; }
-        public static Positions Positions { get; set; }
         public MainWindow(Employee user)
         {
             FeatureFactory();
@@ -82,7 +72,6 @@ namespace His_Pos
             InitialUserBlock();
             StratClock();
             AddNewTab("每日作業");
-            
         }
         
         private void InitialUserBlock()

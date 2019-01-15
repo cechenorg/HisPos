@@ -45,14 +45,9 @@ namespace His_Pos.NewClass.Prescription
             Prescriptions prescriptions = new Prescriptions();
             HttpMethod httpMethod = new HttpMethod();
             List<XmlDocument> table = httpMethod.Get(@"http://kaokaodepon.singde.com.tw:59091/api/GetXmlByDate", keyValues);
-            XmlSerializer ser = new XmlSerializer(typeof(CooperativePrescription));
             foreach (XmlDocument xmlDocument in table)
             {
-                using (TextReader sr = new StringReader(xmlDocument.InnerXml))
-                {
-                    CooperativePrescription response = XmlService.Deserialize<CooperativePrescription>(sr.ReadToEnd());
-                    prescriptions.Add(new Prescription(response));
-                } 
+                prescriptions.Add(new Prescription(XmlService.Deserialize<CooperativePrescription>(xmlDocument.InnerXml)));
             }
             return prescriptions;
         }

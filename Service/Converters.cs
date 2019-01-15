@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using His_Pos.AbstractClass;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Product;
 
 namespace His_Pos.Service
@@ -201,7 +202,7 @@ namespace His_Pos.Service
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string divisionName = "";
-            foreach (var d in MainWindow.Divisions)
+            foreach (var d in ViewModelMainWindow.Divisions)
             {
                 if (d.Id.Equals(value))
                     divisionName = d.Name;
@@ -220,7 +221,7 @@ namespace His_Pos.Service
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string institutionName = "";
-            foreach (var d in MainWindow.Institutions)
+            foreach (var d in ViewModelMainWindow.Institutions)
             {
                 if (d.Id.Equals(value))
                     institutionName = d.Name;

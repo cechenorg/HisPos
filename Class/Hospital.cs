@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Xml;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Person;
 using His_Pos.Service;
@@ -28,7 +29,7 @@ namespace His_Pos.Class
                 Common = Convert.ToBoolean(dataRow["INS_IS_COMMON"]);
             else
             {
-                Common = MainWindow.Institutions.SingleOrDefault(h => h.Id.Equals(Id)).Common;
+                Common = ViewModelMainWindow.Institutions.SingleOrDefault(h => h.Id.Equals(Id)).Common;
             }
             switch (source) {
                 case DataSource.InitHospitalData:
@@ -37,7 +38,7 @@ namespace His_Pos.Class
                     break;
                 case DataSource.GetHospitalData:
                     Doctor = new MedicalPersonnel(dataRow,true);
-                    Division = MainWindow.Divisions.SingleOrDefault(d=>d.Id.Equals(dataRow["HISDIV_ID"]));
+                    Division = ViewModelMainWindow.Divisions.SingleOrDefault(d=>d.Id.Equals(dataRow["HISDIV_ID"]));
                     break;
             }
         }
@@ -51,10 +52,10 @@ namespace His_Pos.Class
         {
             Doctor = new MedicalPersonnel();
             Id = xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["doctor_id"].Value;
-            Name = MainWindow.Institutions.SingleOrDefault(hos => hos.Id == Id).Name;
-            FullName = MainWindow.Institutions.SingleOrDefault(hos => hos.Id == Id).FullName;
+            Name = ViewModelMainWindow.Institutions.SingleOrDefault(hos => hos.Id == Id).Name;
+            FullName = ViewModelMainWindow.Institutions.SingleOrDefault(hos => hos.Id == Id).FullName;
             Doctor.IcNumber = Id;
-            Division = MainWindow.Divisions.SingleOrDefault(div => div.Id == xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["subject"].Value);
+            Division = ViewModelMainWindow.Divisions.SingleOrDefault(div => div.Id == xml.SelectSingleNode("DeclareXml/DeclareXmlDocument/case/study").Attributes["subject"].Value);
         }
         public Hospital(DeclareFileDdata d)
         {

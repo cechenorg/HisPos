@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Xml;
 using His_Pos.Interface;
+using His_Pos.NewClass.Prescription.Usage;
 using His_Pos.NewClass.Usage;
 using His_Pos.Service;
 

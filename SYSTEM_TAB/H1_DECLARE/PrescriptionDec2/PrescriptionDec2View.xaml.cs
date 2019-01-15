@@ -1104,7 +1104,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             string name = dpobj.GetValue(FrameworkElement.NameProperty) as string;
             if (name.Equals("Usage"))
             {
-                foreach (var u in MainWindow.Usages)
+                foreach (var u in ViewModelMainWindow.Usages)
                 {
                     if (string.IsNullOrEmpty(t.Text)) continue;
                     if (t.Text.Equals(u.QuickName))
@@ -2432,7 +2432,7 @@ namespace His_Pos.SYSTEM_TAB.H1_DECLARE.PrescriptionDec2
             var a = sender as AutoCompleteBox;
             if (a?.SelectedItem == null) return;
             var selectedHospital =
-                MainWindow.Institutions.SingleOrDefault(h => h.Id.Equals(((Hospital) a.SelectedItem).Id));
+                ViewModelMainWindow.Institutions.SingleOrDefault(h => h.Id.Equals(((Hospital) a.SelectedItem).Id));
             if (selectedHospital == null) return;
             selectedHospital.Common = true;
            /// HospitalDb.UpdateCommonHospitalById(selectedHospital.Id, true);

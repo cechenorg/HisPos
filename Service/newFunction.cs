@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.Class.Declare;
 using His_Pos.Class.Division;
@@ -316,7 +317,7 @@ namespace His_Pos.Service
 
         public static string GetUsagePrintName(string value)
         {
-            foreach (var u in MainWindow.Usages)
+            foreach (var u in ViewModelMainWindow.Usages)
             {
                 if (u.Reg.IsMatch(value))
                     return u.PrintName;
@@ -592,7 +593,7 @@ namespace His_Pos.Service
         {
             var divisionMatch = 0;
             var divisionId = string.Empty;
-            foreach (var d in MainWindow.Divisions)
+            foreach (var d in ViewModelMainWindow.Divisions)
             {
                 var r = new Regex(d.Name);
                 if (!r.IsMatch(name)) continue;
@@ -601,11 +602,11 @@ namespace His_Pos.Service
             }
             if (divisionMatch == 0 && name.Contains("牙醫"))
             {
-                return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals("40"));
+                return ViewModelMainWindow.Divisions.SingleOrDefault(d => d.Id.Equals("40"));
             }
             if (divisionMatch != 1 || string.IsNullOrEmpty(divisionId))
                 return new NewClass.Prescription.Treatment.Division.Division();
-            return MainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
+            return ViewModelMainWindow.Divisions.SingleOrDefault(d => d.Id.Equals(divisionId));
         }
     }
 }

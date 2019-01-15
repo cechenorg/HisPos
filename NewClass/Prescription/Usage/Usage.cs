@@ -2,10 +2,9 @@
 using System.Data;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight;
-using His_Pos.Class;
 using His_Pos.Service;
 
-namespace His_Pos.NewClass.Usage
+namespace His_Pos.NewClass.Prescription.Usage
 {
     public class Usage:ObservableObject,ICloneable
     {
