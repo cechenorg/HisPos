@@ -88,7 +88,7 @@
         <DataTemplate DataType="{x:Type employeeManage:EmployeeManage}">
             <employeeManage:EmployeeManageView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type CustomerManage:CustomerManage}">
+        <DataTemplate DataType="{x:Type CustomerManage:CustomerManageViewModel}">
             <CustomerManage:CustomerManageView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type medFrequencyManage:MedFrequencyManage}">

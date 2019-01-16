@@ -9,8 +9,7 @@ namespace His_Pos.NewClass.Person.Customer
     {
         public static DataTable GetData()
         {
-            var table = new DataTable();
-            return table;
+            return MainWindow.ServerConnection.ExecuteProc("[Get].[Customer]");
         }
 
         public static DataTable GetCustomerByCusId(int cusId)
@@ -20,6 +19,7 @@ namespace His_Pos.NewClass.Person.Customer
             var table = MainWindow.ServerConnection.ExecuteProc("[Get].[CustomerByCusId]", parameterList);
             return table;
         }
+        
         public static DataTable CheckCustomer(Customer customer)
         {
             var parameterList = new List<SqlParameter>();
