@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using His_Pos.ChromeTabViewModel;
 using His_Pos.Class;
 using His_Pos.FunctionWindow;
+using His_Pos.FunctionWindow.AddProductWindow;
 using His_Pos.NewClass.StoreOrder;
 using His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn.AddNewOrderWindow;
 
@@ -25,7 +27,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         public RelayCommand AddOrderCommand { get; set; }
         public RelayCommand ReloadCommand { get; set; }
         public RelayCommand DeleteOrderCommand { get; set; }
-        public RelayCommand AddProductCommand { get; set; }
+        public RelayCommand<string> AddProductCommand { get; set; }
         public RelayCommand ToNextStatusCommand { get; set; }
         public RelayCommand AllProcessingOrderToDoneCommand { get; set; }
         #endregion
@@ -59,6 +61,7 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
             DeleteOrderCommand = new RelayCommand(DeleteOrderAction);
             ToNextStatusCommand = new RelayCommand(ToNextStatusAction);
             ReloadCommand = new RelayCommand(ReloadAction);
+            AddProductCommand = new RelayCommand<string>(AddProductAction);
 
             InitVariables();
         }
@@ -95,6 +98,18 @@ namespace His_Pos.SYSTEM_TAB.H2_STOCK_MANAGE.ProductPurchaseReturn
         private void ReloadAction()
         {
             InitVariables();
+        }
+        private void AddProductAction(string searchString)
+        {
+            ProductPurchaseReturnAddProductWindow productPurchaseReturnAddProductWindow = new ProductPurchaseReturnAddProductWindow(searchString, AddProductEnum.PruductPurchase);
+            productPurchaseReturnAddProductWindow.ShowDialog();
+
+            AddProductViewModel viewModel = productPurchaseReturnAddProductWindow.DataContext as AddProductViewModel;
+
+            if (viewModel.IsProductSelected)
+            {
+                CurrentStoreOrder.AddProductByID(viewModel.SelectedProductStruct.ID);
+            }
         }
         #endregion
 

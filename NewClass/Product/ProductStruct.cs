@@ -11,14 +11,15 @@ namespace His_Pos.NewClass.Product
     {
         public ProductStruct(DataRow row)
         {
-            ID = row.Field<string>("");
-            ChineseName = row.Field<string>("");
-            EnglishName = row.Field<string>("");
-            Inventory = row.Field<int>("");
-            SafeAmount = row.Field<int>("");
-            BasicAmount = row.Field<int>("");
-            NHIPrice = row.Field<double>("");
-            SellPrice = row.Field<double>("");
+            //Pro_ID, Pro_ChineseName, Pro_EnglishName, I.Inv_Inventory, ISNULL(I.Inv_SafeAmount, 0) AS Inv_SafeAmount, ISNULL(I.Inv_BasicAmount, 0) AS Inv_BasicAmount, ISNULL(M.Med_Price, 0) AS Med_Price, ISNULL(U.Unit_Price, 0) AS Unit_Price
+            ID = row.Field<string>("Pro_ID");
+            ChineseName = row.Field<string>("Pro_ChineseName");
+            EnglishName = row.Field<string>("Pro_EnglishName");
+            Inventory = row.Field<int>("Inv_Inventory");
+            SafeAmount = row.Field<int>("Inv_SafeAmount");
+            BasicAmount = row.Field<int>("Inv_BasicAmount");
+            NHIPrice = row.Field<double>("Med_Price");
+            SellPrice = row.Field<double>("Unit_Price");
         }
 
         public string ID { get; set; }
